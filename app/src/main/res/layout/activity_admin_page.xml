@@ -9,7 +9,6 @@
     tools:context=".screens.AdminPageActivity"
     android:padding="16dp">
 
-    <!-- גלילה לכל התוכן -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -109,10 +108,22 @@
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:backgroundTint="?attr/colorSecondary"
+                        android:layout_marginBottom="16dp"
+                        app:cornerRadius="25dp"/>
+
+                    <!-- כפתור התנתקות -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAdminPageToExit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="התנתקות"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:backgroundTint="@android:color/holo_red_dark"
                         app:cornerRadius="25dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

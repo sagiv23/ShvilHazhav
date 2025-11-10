@@ -1,6 +1,8 @@
 package com.example.sagivproject.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.AuthHelper;
+import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class AdminPageActivity extends AppCompatActivity {
+    private Button btnToUserTable, btnLogout;
     private TextView txtAdminTitle;
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
@@ -29,7 +33,6 @@ public class AdminPageActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_page);
 
-        AuthHelper.checkUserLoggedIn(this);
         AuthHelper.checkUserIsAdmin(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -41,7 +44,11 @@ public class AdminPageActivity extends AppCompatActivity {
             return insets;
         });
 
+        btnToUserTable = findViewById(R.id.btnAdminPageToUsersTablePage);
+        btnLogout = findViewById(R.id.btnAdminPageToExit);
         txtAdminTitle = findViewById(R.id.txtAdminTitle);
+        btnToUserTable.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, UsersTableActivity.class)));
+        btnLogout.setOnClickListener(view -> LogoutHelper.logout(this));
 
         User localUser = SharedPreferencesUtil.getUser(this);
         if (localUser != null) {

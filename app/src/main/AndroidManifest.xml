@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SagivProject">
         <activity
+            android:name=".screens.UsersTableActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.AdminPageActivity"
             android:exported="false" />
         <activity
