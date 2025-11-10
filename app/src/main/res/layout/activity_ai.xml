@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/aiPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.AiActivity" >
+
+    <!-- שורת הכפתורים העליונה -->
+    <LinearLayout
+        android:id="@+id/topMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/separatorLine">
+
+        <Button
+            android:id="@+id/btnAiPageToHomePage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="דף הבית"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnAiPageToDetailsAboutUserPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="משתמש"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnAiPageToContactPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="צור קשר"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnAiPageToExit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="התנתקות"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"/>
+    </LinearLayout>
+
+    <!-- קו הפרדה -->
+    <View
+        android:id="@+id/separatorLine"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/colorOnSurface"
+        app:layout_constraintTop_toBottomOf="@id/topMenu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- תוכן מרכזי עם גלילה -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:padding="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- כותרת -->
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="יועץ AI"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
+                android:layout_marginBottom="40dp" />
+
+            <!-- כרטיס -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                android:layout_marginBottom="32dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp"
+                    android:gravity="center_horizontal">
+
+                    <!-- שדה שאלה -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutQuestion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="הקלד כאן את שאלתך..."
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorOnSurfaceVariant"
+                        app:boxStrokeWidth="1dp"
+                        android:layout_marginBottom="16dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editQuestion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="80dp"
+                            android:gravity="top|start"
+                            android:textSize="18sp"
+                            android:inputType="textMultiLine"
+                            android:lines="4"
+                            android:maxLines="6"
+                            android:scrollbars="vertical"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- כפתור שליחה -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSendToAi"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:text="שלח שאלה"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        app:cornerRadius="30dp"
+                        app:icon="@drawable/ic_send"
+                        app:iconSize="28dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconTint="?attr/colorOnSecondaryContainer" />
+
+                    <!-- טעינה -->
+                    <ProgressBar
+                        android:id="@+id/progressBarAi"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:visibility="gone" />
+
+                    <!-- תיבת תשובה -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutResponse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="תשובת היועץ"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxStrokeColor="?attr/colorSecondary"
+                        app:boxStrokeWidth="1dp"
+                        android:layout_marginTop="24dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/TVtxtResponse"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="100dp"
+                            android:inputType="textMultiLine"
+                            android:gravity="top|start"
+                            android:textSize="18sp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:text="התשובה תוצג כאן..." />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

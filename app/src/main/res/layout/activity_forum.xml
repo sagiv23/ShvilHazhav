@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/forumPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.ForumActivity">
+
+    <!-- שורת הכפתורים העליונה -->
+    <LinearLayout
+        android:id="@+id/topMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/separatorLine">
+
+        <Button
+            android:id="@+id/btnForumPageToHomePage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="דף הבית"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnForumPageToDetailsAboutUserPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="משתמש"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnForumPageToContactPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="צור קשר"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnForumPageToExit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="התנתקות"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"/>
+    </LinearLayout>
+
+    <!-- קו הפרדה -->
+    <View
+        android:id="@+id/separatorLine"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/colorOnSurface"
+        app:layout_constraintTop_toBottomOf="@id/topMenu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- תוכן מרכזי -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/separatorLine"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fillViewport="true"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- כותרת -->
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="קשר קרוב"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp" />
+
+            <!-- כרטיס הפורום -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- רשימת הודעות -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerForum"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:overScrollMode="never"
+                        android:clipToPadding="false"
+                        android:paddingBottom="8dp"/>
+
+                    <!-- שדה כתיבה חדש -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutNewMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="כתוב הודעה..."
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:startIconDrawable="@drawable/ic_chat"
+                        app:startIconTint="?attr/android:textColor"
+                        android:layout_marginTop="16dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtForumNewMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="60dp"
+                            android:gravity="top|start"
+                            android:textSize="18sp"
+                            android:inputType="textMultiLine"
+                            android:lines="3"
+                            android:maxLines="5"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- כפתור שליחה -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnForumSendMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:text="שלח הודעה"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        android:layout_marginTop="12dp"
+                        app:cornerRadius="30dp"
+                        app:icon="@drawable/ic_send"
+                        app:iconSize="28dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconTint="?attr/android:textColor"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

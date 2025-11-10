@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="headline">#FF000000</color>
+    <color name="dark_headline">#FFFFFF</color>
+    <color name="nav_text_color">#FF000000</color>
+    <color name="dark_nav_text_color">#FFFFFF</color>
+    <color name="background_color_buttons">#9cf10e</color>
+    <color name="dark_background_color_buttons">#010652</color>
+    <color name="buttons_text_color">#FF000000</color>
+    <color name="dark_buttons_text_color">#FFFFFF</color>
+    <color name="background_color">#cbf2cf</color>
+    <color name="dark_background_color">#06239B</color>
+    <color name="background_color_nav">#9cf10e</color>
+    <color name="dark_background_color_nav">#010652</color>
+    <color name="text_color">#FF000000</color>
+    <color name="dark_text_color">#FFFFFF</color>
+
+    <color name="nav_kav_color">#FF000000</color>
+</resources>

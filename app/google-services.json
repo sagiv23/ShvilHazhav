@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "664035578469",
+    "firebase_url": "https://shvilhazhav-c2932-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "shvilhazhav-c2932",
+    "storage_bucket": "shvilhazhav-c2932.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664035578469:android:e12751f8b4c03b43036c8c",
+        "android_client_info": {
+          "package_name": "com.example.sagivproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664035578469-pea14se1huqubdqum9j3qik2ene88m0t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sagivproject",
+            "certificate_hash": "f19295efa400da476c74d713edfdf52fc3a75927"
+          }
+        },
+        {
+          "client_id": "664035578469-feltg09u70ktfrafgaq0cu1c021mjj4c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNP2H9e04DLxI3O6WU2Px6R27e6tirpQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664035578469-feltg09u70ktfrafgaq0cu1c021mjj4c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

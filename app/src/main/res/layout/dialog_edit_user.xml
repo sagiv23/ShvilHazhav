@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:background="?attr/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/txtEditUserDialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="עריכת פרטי משתמש"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/inputEditUserFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="שם פרטי"
+            android:textSize="18sp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/inputEditUserLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="שם משפחה"
+            android:textSize="18sp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/inputEditUserPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="סיסמה"
+            android:textSize="18sp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:inputType="textPassword" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnEditUserSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="שמור"
+                android:textColor="?attr/colorOnSecondary"
+                android:backgroundTint="?attr/colorSecondary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_margin="4dp" />
+
+            <Button
+                android:id="@+id/btnEditUserCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ביטול"
+                android:textColor="?attr/colorOnSecondary"
+                android:backgroundTint="?attr/colorSecondary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_margin="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
