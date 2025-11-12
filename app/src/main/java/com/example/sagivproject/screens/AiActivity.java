@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +15,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.sagivproject.models.AuthHelper;
 import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
@@ -55,11 +55,23 @@ public class AiActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ai);
 
-        AuthHelper.checkUserLoggedIn(this);
-        User currentUser = SharedPreferencesUtil.getUser(this);
-        if (currentUser != null && currentUser.getIsAdmin()) {
-            startActivity(new Intent(this, AdminPageActivity.class));
-            finish();
+        User savedUser = SharedPreferencesUtil.getUser(this);
+        if (savedUser == null) {
+            //לא מחובר - Login
+            Toast.makeText(this, "ניסיון יפה מנהל! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return;
+        }
+
+        if (savedUser.getIsAdmin()) {
+            //מנהל - HomePage
+            Toast.makeText(this, "ניסיון יפה מנהל! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, HomePageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             return;
         }
 

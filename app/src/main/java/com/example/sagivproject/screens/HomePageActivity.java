@@ -12,7 +12,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.sagivproject.models.AuthHelper;
 import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
@@ -36,11 +35,23 @@ public class HomePageActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference("users");
 
-        if (!AuthHelper.checkUserLoggedIn(this)) return; // בודק אם מחובר
-        User currentUser = SharedPreferencesUtil.getUser(this);
-        if (currentUser != null && currentUser.getIsAdmin()) {
-            startActivity(new Intent(this, AdminPageActivity.class));
-            finish();
+        User savedUser = SharedPreferencesUtil.getUser(this);
+        if (savedUser == null) {
+            //לא מחובר - Login
+            Toast.makeText(this, "ניסיון יפה מנהל! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return;
+        }
+
+        if (savedUser.getIsAdmin()) {
+            //מנהל - HomePage
+            Toast.makeText(this, "ניסיון יפה מנהל! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, HomePageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             return;
         }
 

@@ -14,7 +14,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sagivproject.models.AuthHelper;
 import com.example.sagivproject.adapters.ForumAdapter;
 import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.R;
@@ -52,11 +51,23 @@ public class ForumActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         dbRef = FirebaseDatabase.getInstance().getReference("forum");
 
-        AuthHelper.checkUserLoggedIn(this);
-        User currentUser = SharedPreferencesUtil.getUser(this);
-        if (currentUser != null && currentUser.getIsAdmin()) {
-            startActivity(new Intent(this, AdminPageActivity.class));
-            finish();
+        User savedUser = SharedPreferencesUtil.getUser(this);
+        if (savedUser == null) {
+            //לא מחובר - Login
+            Toast.makeText(this, "ניסיון יפה מנהל! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return;
+        }
+
+        if (savedUser.getIsAdmin()) {
+            //מנהל - HomePage
+            Toast.makeText(this, "ניסיון יפה מנהל! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, HomePageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             return;
         }
 

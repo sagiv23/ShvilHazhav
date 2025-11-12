@@ -12,7 +12,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.sagivproject.models.AuthHelper;
 import com.example.sagivproject.models.FirebaseErrorsHelper;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
@@ -29,7 +28,17 @@ public class RegisterActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
-        if (!AuthHelper.checkUserLoggedInFromspecialActivities(RegisterActivity.this)) {
+        User savedUser = SharedPreferencesUtil.getUser(this);
+        if (savedUser != null) {
+            //משתמש מחובר - נשלחים לדף שמתאים
+            Intent intent;
+            if (savedUser.getIsAdmin()) {
+                intent = new Intent(this, AdminPageActivity.class);
+            } else {
+                intent = new Intent(this, HomePageActivity.class);
+            }
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             return;
         }
 

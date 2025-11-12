@@ -11,7 +11,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.AuthHelper;
+import com.example.sagivproject.models.User;
+import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class MainActivity extends AppCompatActivity {
     Button btnToContact, btnToLogin, btnToRegister, btnNavToContact, btnNavToLogin, btnNavToRegister;
@@ -22,7 +23,17 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        if (!AuthHelper.checkUserLoggedInFromspecialActivities(MainActivity.this)) {
+        User savedUser = SharedPreferencesUtil.getUser(this);
+        if (savedUser != null) {
+            //משתמש מחובר - נשלחים לדף שמתאים
+            Intent intent;
+            if (savedUser.getIsAdmin()) {
+                intent = new Intent(this, AdminPageActivity.class);
+            } else {
+                intent = new Intent(this, HomePageActivity.class);
+            }
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             return;
         }
 

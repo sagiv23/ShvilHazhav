@@ -13,7 +13,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.AuthHelper;
 import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
@@ -33,7 +32,24 @@ public class AdminPageActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_page);
 
-        AuthHelper.checkUserIsAdmin(this);
+        User savedUser = SharedPreferencesUtil.getUser(this);
+        if (savedUser == null) {
+            //לא מחובר - Login
+            Toast.makeText(this, "ניסיון יפה! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return;
+        }
+
+        if (!savedUser.getIsAdmin()) {
+            //מחובר אבל לא מנהל - HomePage
+            Toast.makeText(this, "ניסיון יפה! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, HomePageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return;
+        }
 
         mAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference("users");
