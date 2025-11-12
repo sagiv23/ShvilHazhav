@@ -16,25 +16,18 @@ import com.example.sagivproject.models.AuthHelper;
 import com.example.sagivproject.models.FirebaseErrorsHelper;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
     private Button btnToContact, btnToMain, btnToRegister, btnLogin;
     private EditText editTextEmail, editTextPassword;
-    private FirebaseAuth mAuth;
-    private DatabaseReference usersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-
-        mAuth = FirebaseAuth.getInstance();
-        usersRef = FirebaseDatabase.getInstance().getReference("users");
 
         if (!AuthHelper.checkUserLoggedInFromspecialActivities(LoginActivity.this)) {
             return;
@@ -74,36 +67,29 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        String userId = mAuth.getCurrentUser().getUid();
+        DatabaseService.getInstance().getUserByEmailAndPassword(email, password, new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User user) {
+                if (user == null) {
+                    Toast.makeText(LoginActivity.this, "שגיאה בטעינת פרטי המשתמש", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
-                        usersRef.child(userId).get().addOnSuccessListener(snapshot -> {
-                            User user = snapshot.getValue(User.class);
+                SharedPreferencesUtil.saveUser(LoginActivity.this, user);
+                AuthHelper.checkUserIsAdmin(LoginActivity.this);
 
-                            if (user == null) {
-                                Toast.makeText(this, "שגיאה בטעינת פרטי המשתמש", Toast.LENGTH_LONG).show();
-                                return;
-                            }
+                Toast.makeText(LoginActivity.this, "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
 
-                            SharedPreferencesUtil.saveUser(LoginActivity.this, user);
-                            AuthHelper.checkUserIsAdmin(LoginActivity.this);
-
-                            Toast.makeText(this, "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
-
-                        }).addOnFailureListener(e -> {
-                            Toast.makeText(this, "שגיאה בשליפת נתוני המשתמש: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        });
-
-                    } else {
-                        String errorMessage = FirebaseErrorsHelper.getFriendlyFirebaseAuthError(task.getException());
-                        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-                    }
-                });
+            @Override
+            public void onFailed(Exception e) {
+                String errorMessage = FirebaseErrorsHelper.getFriendlyFirebaseAuthError(e);
+                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

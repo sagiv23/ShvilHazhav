@@ -42,7 +42,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
 
         holder.btnDeleteUser.setOnClickListener(v -> {
             FirebaseDatabase.getInstance().getReference("users")
-                    .child(user.getId())
+                    .child(user.getUid())
                     .removeValue()
                     .addOnSuccessListener(a -> {
                         Toast.makeText(v.getContext(), "המשתמש נמחק", Toast.LENGTH_SHORT).show();

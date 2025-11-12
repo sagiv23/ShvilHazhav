@@ -85,7 +85,7 @@ public class UsersTableActivity extends AppCompatActivity {
             for (var child : snapshot.getChildren()) {
                 User user = child.getValue(User.class);
                 if (user != null) {
-                    user.setId(child.getKey());
+                    user.setUid(child.getKey());
                     usersList.add(user);
                 }
             }

@@ -150,7 +150,7 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
     }
 
     private void updateUserInDatabase() {
-        usersRef.child(currentUser.getId()).setValue(currentUser)
+        usersRef.child(currentUser.getUid()).setValue(currentUser)
                 .addOnSuccessListener(aVoid -> {
                     txtFirstName.setText(currentUser.getFirstName());
                     txtLastName.setText(currentUser.getLastName());

@@ -3,7 +3,7 @@ package com.example.sagivproject.models;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    private String id;
+    private String uid;
     private String firstName;
     private String lastName;
     private String email;
@@ -12,8 +12,8 @@ public class User implements Serializable {
 
     public User() { }
 
-    public User(String id, String firstName, String lastName, String email, String password, boolean isAdmin) {
-        this.id = id;
+    public User(String uid, String firstName, String lastName, String email, String password, boolean isAdmin) {
+        this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -21,8 +21,8 @@ public class User implements Serializable {
         this.isAdmin = isAdmin;
     }
 
-    public String getId() { return this.id; }
-    public void setId(String id) { this.id = id; }
+    public String getUid() { return this.uid; }
+    public void setUid(String uid) { this.uid = uid; }
 
     public String getFirstName() { return this.firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -49,7 +49,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
+                "uid='" + uid + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
