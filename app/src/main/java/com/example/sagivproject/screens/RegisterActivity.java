@@ -16,26 +16,18 @@ import com.example.sagivproject.models.AuthHelper;
 import com.example.sagivproject.models.FirebaseErrorsHelper;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
     private Button btnToContact, btnToMain, btnToLogin, btnRegister;
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword;
-    private FirebaseAuth mAuth;
-    private DatabaseReference usersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
-
-        mAuth = FirebaseAuth.getInstance();
-        usersRef = FirebaseDatabase.getInstance().getReference("users");
 
         if (!AuthHelper.checkUserLoggedInFromspecialActivities(RegisterActivity.this)) {
             return;
@@ -89,35 +81,39 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        if (firebaseUser == null) {
-                            Toast.makeText(this, "שגיאה: המשתמש לא אותר", Toast.LENGTH_LONG).show();
-                            return;
+        String uid = DatabaseService.getInstance().generateUserId();
+        User newUser = new User(uid, firstName, lastName, email, password, false);
+
+        DatabaseService.getInstance().checkIfEmailExists(email, new DatabaseService.DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Boolean exists) {
+                if (exists) {
+                    Toast.makeText(RegisterActivity.this, "אימייל זה תפוס", Toast.LENGTH_SHORT).show();
+                } else {
+                    DatabaseService.getInstance().createNewUser(newUser, new DatabaseService.DatabaseCallback<Void>() {
+                        @Override
+                        public void onCompleted(Void object) {
+                            SharedPreferencesUtil.saveUser(RegisterActivity.this, newUser);
+                            Toast.makeText(RegisterActivity.this, "ההרשמה בוצעה בהצלחה!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(RegisterActivity.this, HomePageActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
 
-                        String userId = firebaseUser.getUid();
-                        User newUser = new User(userId, firstName, lastName, email, password, false);
+                        @Override
+                        public void onFailed(Exception e) {
+                            Toast.makeText(RegisterActivity.this, "שגיאה בשמירת הנתונים: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            SharedPreferencesUtil.signOutUser(RegisterActivity.this);
+                        }
+                    });
+                }
+            }
 
-                        usersRef.child(userId).setValue(newUser)
-                                .addOnSuccessListener(aVoid -> {
-                                    SharedPreferencesUtil.saveUser(this, newUser);
-
-                                    Toast.makeText(this, "ההרשמה בוצעה בהצלחה!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(this, HomePageActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                    finish();
-                                })
-                                .addOnFailureListener(e -> Toast.makeText(this,
-                                        "שגיאה בשמירת הנתונים: " + e.getMessage(),
-                                        Toast.LENGTH_LONG).show());
-                    } else {
-                        String errorMessage = FirebaseErrorsHelper.getFriendlyFirebaseAuthError(task.getException());
-                        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-                    }
-                });
+            @Override
+            public void onFailed(Exception e) {
+                String errorMessage = FirebaseErrorsHelper.getFriendlyFirebaseAuthError(e);
+                Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

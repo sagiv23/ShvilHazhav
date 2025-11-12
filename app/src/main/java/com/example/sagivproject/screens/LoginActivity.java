@@ -64,32 +64,31 @@ public class LoginActivity extends AppCompatActivity {
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "נא למלא אימייל וסיסמה", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        } else {
+            DatabaseService.getInstance().getUserByEmailAndPassword(email, password, new DatabaseService.DatabaseCallback<User>() {
+                @Override
+                public void onCompleted(User user) {
+                    if (user == null) {
+                        Toast.makeText(LoginActivity.this, "שגיאה בטעינת פרטי המשתמש", Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
-        DatabaseService.getInstance().getUserByEmailAndPassword(email, password, new DatabaseService.DatabaseCallback<User>() {
-            @Override
-            public void onCompleted(User user) {
-                if (user == null) {
-                    Toast.makeText(LoginActivity.this, "שגיאה בטעינת פרטי המשתמש", Toast.LENGTH_LONG).show();
-                    return;
+                    SharedPreferencesUtil.saveUser(LoginActivity.this, user);
+                    AuthHelper.checkUserIsAdmin(LoginActivity.this);
+
+                    Toast.makeText(LoginActivity.this, "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
 
-                SharedPreferencesUtil.saveUser(LoginActivity.this, user);
-                AuthHelper.checkUserIsAdmin(LoginActivity.this);
-
-                Toast.makeText(LoginActivity.this, "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                String errorMessage = FirebaseErrorsHelper.getFriendlyFirebaseAuthError(e);
-                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailed(Exception e) {
+                    String errorMessage = FirebaseErrorsHelper.getFriendlyFirebaseAuthError(e);
+                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                    SharedPreferencesUtil.signOutUser(LoginActivity.this);
+                }
+            });
+        }
     }
 }
