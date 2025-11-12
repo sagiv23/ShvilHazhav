@@ -3,26 +3,23 @@ package com.example.sagivproject.models;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    private String uid;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private boolean isAdmin;
+    private String uid;
 
     public User() { }
 
-    public User(String uid, String firstName, String lastName, String email, String password, boolean isAdmin) {
-        this.uid = uid;
+    public User(String firstName, String lastName, String email, String password, boolean isAdmin, String uid) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.uid = uid;
     }
-
-    public String getUid() { return this.uid; }
-    public void setUid(String uid) { this.uid = uid; }
 
     public String getFirstName() { return this.firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -40,6 +37,9 @@ public class User implements Serializable {
     public void setIsAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
 
     public void toggleAdminStatus() { this.isAdmin = !this.isAdmin; }
+
+    public String getUid() { return this.uid; }
+    public void setUid(String uid) { this.uid = uid; }
 
     // פעולה שמחזירה את השם המלא של המשתמש
     public String getFullName() {

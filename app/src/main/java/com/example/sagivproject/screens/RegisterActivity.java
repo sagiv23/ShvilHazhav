@@ -82,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         String uid = DatabaseService.getInstance().generateUserId();
-        User newUser = new User(uid, firstName, lastName, email, password, false);
+        User newUser = new User(firstName, lastName, email, password, false, uid);
 
         DatabaseService.getInstance().checkIfEmailExists(email, new DatabaseService.DatabaseCallback<>() {
             @Override
