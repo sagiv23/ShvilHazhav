@@ -46,7 +46,7 @@ public class UsersTableActivity extends AppCompatActivity {
         User savedUser = SharedPreferencesUtil.getUser(this);
         if (savedUser == null) {
             //לא מחובר - Login
-            Toast.makeText(this, "ניסיון יפה! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "אין לך גישה לדף זה - אתה לא מחובר!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -55,7 +55,7 @@ public class UsersTableActivity extends AppCompatActivity {
 
         if (!savedUser.getIsAdmin()) {
             //מחובר אבל לא מנהל - HomePage
-            Toast.makeText(this, "ניסיון יפה! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "אין לך גישה לדף זה", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, HomePageActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
