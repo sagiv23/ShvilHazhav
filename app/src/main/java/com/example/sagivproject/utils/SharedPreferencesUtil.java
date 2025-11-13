@@ -16,7 +16,7 @@ public class SharedPreferencesUtil {
 
     /// The name of the shared preferences file
     /// @see Context#getSharedPreferences(String, int)
-    private static final String PREF_NAME = "com.example.testapp.PREFERENCE_FILE_KEY";
+    private static final String PREF_NAME = "com.example.sagivproject.PREFERENCE_FILE_KEY";
 
     /// Save a string to shared preferences
     /// @param context The context to use
