@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SagivProject">
+
         <activity
             android:name=".screens.UsersTableActivity"
             android:exported="false" />
@@ -52,6 +53,9 @@
             android:exported="false" />
         <activity
             android:name=".screens.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.LandingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

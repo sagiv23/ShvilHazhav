@@ -45,7 +45,12 @@ dependencies {
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 
-    implementation 'com.google.code.gson:gson:2.10.1'
+    /*
+    Add the dependency for the GSON library
+    This dependency is used to parse JSON data.
+    This is used in the SharedPreferenceUtil.java class to parse the object to and from JSON data.
+    */
+    implementation libs.gson
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:34.3.0')
