@@ -87,7 +87,7 @@
 
         <!-- כפתורים למשתמש לא מחובר -->
         <Button
-            android:id="@+id/btnContactPageToMainPage"
+            android:id="@+id/btn_contact_to_landing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -103,7 +103,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btnContactPageToContactPage2"
+            android:id="@+id/btn_contact_to_contact2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -119,7 +119,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btnContactPageToLoginPage"
+            android:id="@+id/btn_contact_to_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -135,7 +135,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btnContactPageToRegisterPage"
+            android:id="@+id/btn_contact_to_register"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

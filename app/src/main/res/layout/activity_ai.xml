@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@id/separatorLine">
 
         <Button
-            android:id="@+id/btnAiPageToHomePage"
+            android:id="@+id/btn_Ai_to_main"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnAiPageToDetailsAboutUserPage"
+            android:id="@+id/btn_Ai_to_DetailsAboutUser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,7 +51,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnAiPageToContactPage"
+            android:id="@+id/btn_Ai_to_contact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,7 +66,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnAiPageToExit"
+            android:id="@+id/btn_Ai_to_exit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -149,7 +149,7 @@
                         android:layout_marginBottom="16dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editQuestion"
+                            android:id="@+id/edit_Ai_question"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:minHeight="80dp"
@@ -163,7 +163,7 @@
 
                     <!-- כפתור שליחה -->
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSendToAi"
+                        android:id="@+id/btn_Ai_send_to_Ai"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:text="שלח שאלה"
@@ -178,7 +178,7 @@
 
                     <!-- טעינה -->
                     <ProgressBar
-                        android:id="@+id/progressBarAi"
+                        android:id="@+id/progressBar_Ai"
                         style="?android:attr/progressBarStyleLarge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                         android:layout_marginTop="24dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/TVtxtResponse"
+                            android:id="@+id/TV_Ai_txt_response"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:minHeight="100dp"

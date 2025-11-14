@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.sagivproject.services.DatabaseService;
 
 public class BaseActivity extends AppCompatActivity {
-
     protected DatabaseService databaseService;
 
     @Override

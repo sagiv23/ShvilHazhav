@@ -3,11 +3,7 @@ package com.example.sagivproject.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +30,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class AiActivity extends AppCompatActivity {
-    Button btnToHomePage, btnToContact, btnToDetailsAboutUser, send, btnToExit;
+    Button btnToMain, btnToContact, btnToDetailsAboutUser, send, btnToExit;
     private ProgressBar progressBar;
     private EditText questionInput;
     private TextView answerView;
@@ -80,16 +76,16 @@ public class AiActivity extends AppCompatActivity {
             return insets;
         });
 
-        btnToHomePage = findViewById(R.id.btnAiPageToHomePage);
-        btnToContact = findViewById(R.id.btnAiPageToContactPage);
-        btnToDetailsAboutUser = findViewById(R.id.btnAiPageToDetailsAboutUserPage);
-        send = findViewById(R.id.btnSendToAi);
-        questionInput = findViewById(R.id.editQuestion);
-        answerView = findViewById(R.id.TVtxtResponse);
-        progressBar = findViewById(R.id.progressBarAi);
-        btnToExit = findViewById(R.id.btnAiPageToExit);
+        btnToMain = findViewById(R.id.btn_Ai_to_main);
+        btnToContact = findViewById(R.id.btn_Ai_to_contact);
+        btnToDetailsAboutUser = findViewById(R.id.btn_Ai_to_DetailsAboutUser);
+        send = findViewById(R.id.btn_Ai_send_to_Ai);
+        questionInput = findViewById(R.id.edit_Ai_question);
+        answerView = findViewById(R.id.TV_Ai_txt_response);
+        progressBar = findViewById(R.id.progressBar_Ai);
+        btnToExit = findViewById(R.id.btn_Ai_to_exit);
 
-        btnToHomePage.setOnClickListener(view -> startActivity(new Intent(AiActivity.this, HomePageActivity.class)));
+        btnToMain.setOnClickListener(view -> startActivity(new Intent(AiActivity.this, MainActivity.class)));
         btnToContact.setOnClickListener(view -> startActivity(new Intent(AiActivity.this, ContactActivity.class)));
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(AiActivity.this, DetailsAboutUserActivity.class)));
         send.setOnClickListener(view -> sendQuestion());

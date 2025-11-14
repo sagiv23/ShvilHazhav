@@ -40,10 +40,10 @@ public class ContactActivity extends AppCompatActivity {
         btnToExit = findViewById(R.id.btn_contact_to_exit);
 
         //משתמש לא מחובר
-        btnToLanding = findViewById(R.id.btnContactPageToMainPage);
-        btnToLoginPage = findViewById(R.id.btnContactPageToLoginPage);
-        btnToRegisterPage = findViewById(R.id.btnContactPageToRegisterPage);
-        btnToContactPage2 = findViewById(R.id.btnContactPageToContactPage2);
+        btnToLanding = findViewById(R.id.btn_contact_to_landing);
+        btnToContactPage2 = findViewById(R.id.btn_contact_to_contact2);
+        btnToLoginPage = findViewById(R.id.btn_contact_to_login);
+        btnToRegisterPage = findViewById(R.id.btn_contact_to_register);
 
         //בדיקה אם המשתמש מחובר
         boolean isLoggedIn = (SharedPreferencesUtil.getUser(ContactActivity.this) != null || FirebaseAuth.getInstance().getCurrentUser() != null);
