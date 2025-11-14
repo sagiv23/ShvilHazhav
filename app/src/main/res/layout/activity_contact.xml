@@ -22,7 +22,7 @@
 
         <!-- כפתורים למשתמש מחובר -->
         <Button
-            android:id="@+id/btnContactPageToHomePage"
+            android:id="@+id/btn_contact_to_main"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,7 +38,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btnContactPageToDetailsAboutUserPage"
+            android:id="@+id/btn_contact_to_DetailsAboutUser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -54,7 +54,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btnContactPageToContactPage1"
+            android:id="@+id/btn_contact_to_contact1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -70,7 +70,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btnContactPageToExit"
+            android:id="@+id/btn_contact_to_exit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

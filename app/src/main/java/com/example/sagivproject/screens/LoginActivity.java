@@ -19,7 +19,7 @@ import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class LoginActivity extends AppCompatActivity {
-    private Button btnToContact, btnToMain, btnToRegister, btnLogin;
+    private Button btnToContact, btnToLanding, btnToRegister, btnLogin;
     private EditText editTextEmail, editTextPassword;
 
     @Override
@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
             if (savedUser.getIsAdmin()) {
                 intent = new Intent(this, AdminPageActivity.class);
             } else {
-                intent = new Intent(this, HomePageActivity.class);
+                intent = new Intent(this, MainActivity.class);
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -48,16 +48,16 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        btnToContact = findViewById(R.id.btnLoginPageToContactPage);
-        btnToMain = findViewById(R.id.btnLoginPageToMainPage);
-        btnToRegister = findViewById(R.id.btnLoginPageToRegisterPage);
+        btnToContact = findViewById(R.id.btn_login_to_contact);
+        btnToLanding = findViewById(R.id.btn_login_to_landing);
+        btnToRegister = findViewById(R.id.btn_login_to_register);
         btnLogin = findViewById(R.id.btnLogin);
 
         editTextEmail = findViewById(R.id.LoginEditTextEmail);
         editTextPassword = findViewById(R.id.LoginEditTextPassword);
 
         btnToContact.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, ContactActivity.class)));
-        btnToMain.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, MainActivity.class)));
+        btnToLanding.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, MainActivity.class)));
         btnToRegister.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
         btnLogin.setOnClickListener(view -> loginUser());
 
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent = new Intent(LoginActivity.this, AdminPageActivity.class);
                     } else {
                         Toast.makeText(LoginActivity.this, "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
-                        intent = new Intent(LoginActivity.this, HomePageActivity.class);
+                        intent = new Intent(LoginActivity.this, MainActivity.class);
                     }
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

@@ -18,9 +18,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ContactActivity extends AppCompatActivity {
     //כפתורים למשתמש מחובר
-    private Button btnToHomePage, btnToDetailsAboutUser, btnToExit, btnToContactPage1;
+    private Button btnToMain, btnToDetailsAboutUser, btnToExit, btnToContactPage1;
     //כפתורים למשתמש לא מחובר
-    private Button btnToMainPage, btnToLoginPage, btnToRegisterPage, btnToContactPage2;
+    private Button btnToLanding, btnToLoginPage, btnToRegisterPage, btnToContactPage2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +34,13 @@ public class ContactActivity extends AppCompatActivity {
         });
 
         //משתמש מחובר
-        btnToHomePage = findViewById(R.id.btnContactPageToHomePage);
-        btnToContactPage1 = findViewById(R.id.btnContactPageToContactPage1);
-        btnToDetailsAboutUser = findViewById(R.id.btnContactPageToDetailsAboutUserPage);
-        btnToExit = findViewById(R.id.btnContactPageToExit);
+        btnToMain = findViewById(R.id.btn_contact_to_main);
+        btnToContactPage1 = findViewById(R.id.btn_contact_to_contact1);
+        btnToDetailsAboutUser = findViewById(R.id.btn_contact_to_DetailsAboutUser);
+        btnToExit = findViewById(R.id.btn_contact_to_exit);
 
         //משתמש לא מחובר
-        btnToMainPage = findViewById(R.id.btnContactPageToMainPage);
+        btnToLanding = findViewById(R.id.btnContactPageToMainPage);
         btnToLoginPage = findViewById(R.id.btnContactPageToLoginPage);
         btnToRegisterPage = findViewById(R.id.btnContactPageToRegisterPage);
         btnToContactPage2 = findViewById(R.id.btnContactPageToContactPage2);
@@ -50,24 +50,24 @@ public class ContactActivity extends AppCompatActivity {
 
         if (isLoggedIn) {
             //הופך את כפתורי המשתמש המחובר ל-VISIBLE
-            btnToHomePage.setVisibility(View.VISIBLE);
+            btnToLanding.setVisibility(View.VISIBLE);
             btnToContactPage1.setVisibility(View.VISIBLE);
             btnToDetailsAboutUser.setVisibility(View.VISIBLE);
             btnToExit.setVisibility(View.VISIBLE);
         }
         else {
             //הופך את כפתורי המשתמש הלא מחובר ל-VISIBLE
-            btnToMainPage.setVisibility(View.VISIBLE);
+            btnToLanding.setVisibility(View.VISIBLE);
             btnToLoginPage.setVisibility(View.VISIBLE);
             btnToRegisterPage.setVisibility(View.VISIBLE);
             btnToContactPage2.setVisibility(View.VISIBLE);
         }
 
-        btnToHomePage.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, HomePageActivity.class)));
+        btnToMain.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, MainActivity.class)));
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, DetailsAboutUserActivity.class)));
         btnToExit.setOnClickListener(view -> LogoutHelper.logout(ContactActivity.this));
 
-        btnToMainPage.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, MainActivity.class)));
+        btnToLanding.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, LandingActivity.class)));
         btnToLoginPage.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, LoginActivity.class)));
         btnToRegisterPage.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, RegisterActivity.class)));
     }

@@ -19,7 +19,7 @@ import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class RegisterActivity extends AppCompatActivity {
-    private Button btnToContact, btnToMain, btnToLogin, btnRegister;
+    private Button btnToContact, btnToLanding, btnToLogin, btnRegister;
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword;
 
     @Override
@@ -35,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (savedUser.getIsAdmin()) {
                 intent = new Intent(this, AdminPageActivity.class);
             } else {
-                intent = new Intent(this, HomePageActivity.class);
+                intent = new Intent(this, MainActivity.class);
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -48,9 +48,9 @@ public class RegisterActivity extends AppCompatActivity {
             return insets;
         });
 
-        btnToContact = findViewById(R.id.btnRegisterPageToContactPage);
-        btnToMain = findViewById(R.id.btnRegisterPageToMainPage);
-        btnToLogin = findViewById(R.id.btnRegisterPageToLoginPage);
+        btnToContact = findViewById(R.id.btn_register_to_contact);
+        btnToLanding = findViewById(R.id.btn_register_to_landing);
+        btnToLogin = findViewById(R.id.btn_register_to_login);
         btnRegister = findViewById(R.id.btnRegister);
 
         editTextFirstName = findViewById(R.id.RegisterEditTextFirstName);
@@ -59,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.RegisterEditTextPassword);
 
         btnToContact.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, ContactActivity.class)));
-        btnToMain.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, MainActivity.class)));
+        btnToLanding.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, LandingActivity.class)));
         btnToLogin.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
         btnRegister.setOnClickListener(view -> registerUser());
     }
@@ -104,7 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onCompleted(Void object) {
                             SharedPreferencesUtil.saveUser(RegisterActivity.this, newUser);
                             Toast.makeText(RegisterActivity.this, "ההרשמה בוצעה בהצלחה!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(RegisterActivity.this, HomePageActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }

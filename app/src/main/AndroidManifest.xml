@@ -40,9 +40,6 @@
             android:name=".screens.AiActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.HomePageActivity"
-            android:exported="false" />
-        <activity
             android:name=".screens.ContactActivity"
             android:exported="false" />
         <activity

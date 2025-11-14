@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/loginPage"
+    android:id="@+id/landing_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.LoginActivity" >
+    tools:context=".screens.LandingActivity">
 
     <!-- שורת הכפתורים העליונה -->
     <LinearLayout
@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@id/separatorLine">
 
         <Button
-            android:id="@+id/btn_login_to_landing"
+            android:id="@+id/btn_landing_to_landing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btn_login_to_contact"
+            android:id="@+id/btn_landing_to_contact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,7 +51,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btn_login_to_login"
+            android:id="@+id/btn_landing_to_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,7 +66,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btn_login_to_register"
+            android:id="@+id/btn_landing_to_register"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -93,102 +93,105 @@
 
     <!-- תוכן מרכזי עם גלילה -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollContent"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/separatorLine"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:fillViewport="true">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:padding="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:padding="20dp">
+            android:gravity="center_horizontal">
 
-            <!-- כותרת -->
+            <ImageView
+                android:id="@+id/mainImage"
+                android:layout_width="280dp"
+                android:layout_height="185dp"
+                android:layout_marginBottom="24dp"
+                android:contentDescription="לוגו האפליקציה"
+                android:scaleType="fitCenter"
+                android:src="@drawable/image" />
+
             <TextView
                 android:id="@+id/txtTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="התחברות"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="38sp"
+                android:text="ברוכים הבאים!"
+                android:textSize="36sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="20dp"/>
+                android:textColor="?attr/colorOnBackground"
+                android:layout_marginBottom="40dp" />
 
-            <!-- בלוק התחברות -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="30dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="8dp"
-                app:strokeColor="?attr/colorOutline">
+                android:layout_marginBottom="32dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="24dp"
+                    android:gravity="center_horizontal">
 
-                    <!-- אימייל -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:startIconDrawable="@android:drawable/ic_dialog_email"
-                        android:layout_marginBottom="14dp">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/LoginEditTextEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="כתובת אימייל"
-                            android:inputType="textEmailAddress"
-                            android:textDirection="ltr"
-                            android:textSize="18sp"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!-- סיסמה -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
-                        app:endIconMode="password_toggle"
-                        android:layout_marginBottom="24dp">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/LoginEditTextPassword"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="סיסמה"
-                            android:inputType="textPassword"
-                            android:textDirection="ltr"
-                            android:textSize="18sp"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!-- כפתור התחברות -->
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnLogin"
+                        android:id="@+id/btn_landingBody_to_login"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:text="התחברות"
-                        android:textColor="?attr/colorOnSecondary"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
                         app:cornerRadius="30dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:backgroundTint="?attr/colorSecondary"/>
+                        app:icon="@drawable/ic_login"
+                        app:iconSize="28dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconTint="?attr/colorOnSecondaryContainer" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_landingBody_to_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:text="הרשמה"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        app:cornerRadius="30dp"
+                        android:layout_marginTop="16dp"
+                        app:icon="@drawable/ic_register"
+                        app:iconSize="28dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconTint="?attr/colorOnSecondaryContainer" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_landingBody_to_contact"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:text="צור קשר"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        app:cornerRadius="30dp"
+                        android:layout_marginTop="16dp"
+                        app:icon="@drawable/ic_contact_support"
+                        app:iconSize="28dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconTint="?attr/colorOnSecondaryContainer" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="שביל הזהב"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
