@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@id/separatorLine">
 
         <Button
-            android:id="@+id/btnGameHomeScreenPageToHomePage"
+            android:id="@+id/btn_GameHomeScreen_to_main"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnGameHomeScreenPageToDetailsAboutUserPage"
+            android:id="@+id/btn_GameHomeScreen_to_DetailsAboutUser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,7 +51,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnGameHomeScreenPageToContactPage"
+            android:id="@+id/btn_GameHomeScreen_to_contact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,7 +66,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnGameHomeScreenPageToExit"
+            android:id="@+id/btn_GameHomeScreen_to_exit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -124,7 +124,7 @@
 
         <!-- תוצאות שחקן -->
         <TextView
-            android:id="@+id/TVGameVictories"
+            android:id="@+id/tv_GameHomeScreen_victories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorOnSurfaceVariant"
@@ -133,7 +133,7 @@
             android:layout_marginHorizontal="10dp" />
 
         <TextView
-            android:id="@+id/TVStatusOfFindingEnemy"
+            android:id="@+id/tv_GameHomeScreen_status_of_finding_enemy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorOnSurface"
@@ -151,7 +151,7 @@
             android:layout_marginTop="16dp">
 
             <Button
-                android:id="@+id/btnFindEnemy"
+                android:id="@+id/btn_GameHomeScreen_find_enemy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="מצא יריב"
@@ -163,7 +163,7 @@
                 android:layout_margin="12dp" />
 
             <Button
-                android:id="@+id/btnCancelFindEnemy"
+                android:id="@+id/btn_GameHomeScreen_cancel_find_enemy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="בטל חיפוש"

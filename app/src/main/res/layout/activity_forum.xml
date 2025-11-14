@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@id/separatorLine">
 
         <Button
-            android:id="@+id/btnForumPageToHomePage"
+            android:id="@+id/btn_forum_main"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnForumPageToDetailsAboutUserPage"
+            android:id="@+id/btn_forum_DetailsAboutUser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,7 +51,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnForumPageToContactPage"
+            android:id="@+id/btn_forum_contact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,7 +66,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnForumPageToExit"
+            android:id="@+id/btn_forum_exit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -132,7 +132,7 @@
 
                     <!-- רשימת הודעות -->
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerForum"
+                        android:id="@+id/recycler_forum"
                         android:layout_width="match_parent"
                         android:layout_height="400dp"
                         android:overScrollMode="never"
@@ -156,7 +156,7 @@
                         android:layout_marginTop="16dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edtForumNewMessage"
+                            android:id="@+id/edt_forum_new_message"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:minHeight="60dp"
@@ -169,7 +169,7 @@
 
                     <!-- כפתור שליחה -->
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnForumSendMessage"
+                        android:id="@+id/btn_forum_send_message"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:text="שלח הודעה"

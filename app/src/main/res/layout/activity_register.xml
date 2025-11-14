@@ -146,7 +146,7 @@
                         android:layout_marginBottom="12dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/RegisterEditTextFirstName"
+                            android:id="@+id/edt_register_first_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="שם פרטי"
@@ -163,7 +163,7 @@
                         android:layout_marginBottom="12dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/RegisterEditTextLastName"
+                            android:id="@+id/edt_register_last_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="שם משפחה"
@@ -180,7 +180,7 @@
                         android:layout_marginBottom="12dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/RegisterEditTextEmail"
+                            android:id="@+id/edt_register_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="כתובת אימייל"
@@ -199,7 +199,7 @@
                         android:layout_marginBottom="20dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/RegisterEditTextPassword"
+                            android:id="@+id/edt_register_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="סיסמה"

@@ -37,7 +37,7 @@
                 android:layout_marginBottom="10dp"/>
 
             <TextView
-                android:id="@+id/txtAdminTitle"
+                android:id="@+id/txt_admin_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="שלום מנהל יקר"
@@ -76,7 +76,7 @@
                         android:layout_marginBottom="20dp"/>
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAdminPageToUsersTablePage"
+                        android:id="@+id/btn_admin_to_UsersTablePage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="טבלת משתמשים"
@@ -88,7 +88,7 @@
                         app:cornerRadius="25dp"/>
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAdminPageToForumPage"
+                        android:id="@+id/btn_admin_to_forum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="קשר קרוב"
@@ -100,7 +100,7 @@
                         app:cornerRadius="25dp"/>
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAdminPageToDetailsAboutUserPage"
+                        android:id="@+id/btn_admin_to_DetailsAboutUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="משתמש"
@@ -113,7 +113,7 @@
 
                     <!-- כפתור התנתקות -->
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAdminPageToExit"
+                        android:id="@+id/btn_admin_to_exit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="התנתקות"

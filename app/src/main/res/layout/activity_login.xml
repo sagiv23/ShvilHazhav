@@ -146,7 +146,7 @@
                         android:layout_marginBottom="14dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/LoginEditTextEmail"
+                            android:id="@+id/edt_login_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="כתובת אימייל"
@@ -165,7 +165,7 @@
                         android:layout_marginBottom="24dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/LoginEditTextPassword"
+                            android:id="@+id/edt_login_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="סיסמה"

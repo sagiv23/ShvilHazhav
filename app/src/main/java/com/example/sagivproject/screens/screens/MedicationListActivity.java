@@ -1,4 +1,4 @@
-package com.example.sagivproject.screens;
+package com.example.sagivproject.screens.screens;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -16,19 +20,26 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sagivproject.models.LogoutHelper;
-import com.example.sagivproject.models.Medication;
-import com.example.sagivproject.adapters.MedicationAdapter;
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.User;
-import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.screens.adapters.MedicationAdapter;
+import com.example.sagivproject.screens.models.LogoutHelper;
+import com.example.sagivproject.screens.models.Medication;
+import com.example.sagivproject.screens.models.User;
+import com.example.sagivproject.screens.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.*;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MedicationListActivity extends AppCompatActivity {
     Button btnToMain, btnToContact, btnToDetailsAboutUser, btnAddMedication, btnToExit;
@@ -45,7 +56,7 @@ public class MedicationListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(com.example.sagivproject.R.layout.activity_medication_list);
+        setContentView(R.layout.activity_medication_list);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -73,7 +84,7 @@ public class MedicationListActivity extends AppCompatActivity {
                 .child(currentUser.getUid())
                 .child("medications");
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(com.example.sagivproject.R.id.medicationListPage), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.medicationListPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -198,7 +209,7 @@ public class MedicationListActivity extends AppCompatActivity {
             int textColor = ContextCompat.getColor(this, isDarkMode ? android.R.color.white : android.R.color.black);
 
             // ✅ צבע רקע לכותרת העליונה (במקום האפור הכהה במצב לילה)
-            int headerColor = ContextCompat.getColor(this, isDarkMode ? com.example.sagivproject.R.color.background_color_nav : R.color.background_color_nav);
+            int headerColor = ContextCompat.getColor(this, isDarkMode ? R.color.background_color_nav : R.color.background_color_nav);
 
             // צבע הכפתורים
             picker.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(textColor);

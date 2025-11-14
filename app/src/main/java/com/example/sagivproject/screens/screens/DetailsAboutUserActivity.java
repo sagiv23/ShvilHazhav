@@ -1,13 +1,13 @@
-package com.example.sagivproject.screens;
+package com.example.sagivproject.screens.screens;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,10 +16,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.LogoutHelper;
-import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.screens.models.LogoutHelper;
+import com.example.sagivproject.screens.models.User;
+import com.example.sagivproject.screens.services.DatabaseService;
+import com.example.sagivproject.screens.utils.SharedPreferencesUtil;
 
 public class DetailsAboutUserActivity extends AppCompatActivity {
     private Button btnToMain, btnToContact, btnToExit, btnEditUser;

@@ -14,7 +14,7 @@
 
         <!-- שם התרופה -->
         <EditText
-            android:id="@+id/edtMedicationName"
+            android:id="@+id/edt_medication_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
@@ -29,7 +29,7 @@
 
         <!-- פרטים -->
         <EditText
-            android:id="@+id/edtMedicationDetails"
+            android:id="@+id/edt_medication_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
@@ -45,7 +45,7 @@
 
         <!-- תאריך נטילה -->
         <EditText
-            android:id="@+id/edtMedicationDate"
+            android:id="@+id/edt_medication_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
@@ -71,7 +71,7 @@
             android:layout_marginTop="20dp">
 
             <Button
-                android:id="@+id/btnAddMedicationConfirm"
+                android:id="@+id/btn_add_medication_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="הוסף"
@@ -82,7 +82,7 @@
                 android:layout_margin="2dp" />
 
             <Button
-                android:id="@+id/btnAddMedicationCancel"
+                android:id="@+id/btn_add_medication_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ביטול"

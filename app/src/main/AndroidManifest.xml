@@ -13,7 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SagivProject">
-
         <activity
             android:name=".screens.UsersTableActivity"
             android:exported="false" />
@@ -61,5 +60,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

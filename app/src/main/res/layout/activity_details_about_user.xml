@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@id/separatorLine">
 
         <Button
-            android:id="@+id/btnDetailsAboutUserPageToHomePage"
+            android:id="@+id/btn_DetailsAboutUser_to_main"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnDetailsAboutUserPageToDetailsAboutUserPage"
+            android:id="@+id/btn_DetailsAboutUser_to_DetailsAboutUserPage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,7 +51,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnDetailsAboutUserPageToContactPage"
+            android:id="@+id/btn_DetailsAboutUser_to_contact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,7 +66,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnDetailsAboutUserPageToExit"
+            android:id="@+id/btn_DetailsAboutUser_to_exit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -130,7 +130,7 @@
                         app:tint="?attr/android:textColor" />
 
                     <TextView
-                        android:id="@+id/txtDetailsAboutUserTitle"
+                        android:id="@+id/txt_DetailsAboutUser_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="שם משתמש"
@@ -175,7 +175,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtDetailsAboutUserFirstName"
+                        android:id="@+id/txt_DetailsAboutUser_first_name"
                         android:textSize="16sp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginRight="8dp" />
@@ -191,7 +191,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtDetailsAboutUserLastName"
+                        android:id="@+id/txt_DetailsAboutUser_last_name"
                         android:textSize="16sp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginRight="8dp" />
@@ -207,7 +207,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtDetailsAboutUserEmail"
+                        android:id="@+id/txt_DetailsAboutUser_email"
                         android:textSize="16sp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginRight="8dp" />
@@ -223,7 +223,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtDetailsAboutUserPassword"
+                        android:id="@+id/txt_DetailsAboutUser_password"
                         android:textSize="16sp"
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="15dp"/>
@@ -232,7 +232,7 @@
 
             <!-- כפתור עריכה -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnDetailsAboutUserEditUser"
+                android:id="@+id/btn_DetailsAboutUser_edit_user"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="ערוך פרטים"

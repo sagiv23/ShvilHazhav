@@ -1,4 +1,4 @@
-package com.example.sagivproject.screens;
+package com.example.sagivproject.screens.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +14,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sagivproject.adapters.ForumAdapter;
-import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.ForumMessage;
-import com.example.sagivproject.models.User;
-import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.screens.adapters.ForumAdapter;
+import com.example.sagivproject.screens.models.ForumMessage;
+import com.example.sagivproject.screens.models.LogoutHelper;
+import com.example.sagivproject.screens.models.User;
+import com.example.sagivproject.screens.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

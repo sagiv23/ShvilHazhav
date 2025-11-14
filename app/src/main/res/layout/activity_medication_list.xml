@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@id/separatorLine">
 
         <Button
-            android:id="@+id/btnMedicationListPageToHomePage"
+            android:id="@+id/btn_MedicationList_to_main"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnMedicationListPageToDetailsAboutUserPage"
+            android:id="@+id/btn_MedicationList_to_DetailsAboutUser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,7 +51,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnMedicationListPageToContactPage"
+            android:id="@+id/btn_MedicationList_to_contact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,7 +66,7 @@
             android:paddingEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnMedicationListPageToExit"
+            android:id="@+id/btn_MedicationList_to_exit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -120,7 +120,7 @@
                 android:layout_marginBottom="16dp" />
 
             <Button
-                android:id="@+id/btnAddMedication"
+                android:id="@+id/bbtn_MedicationList_add_medication"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="הוספת תרופה"
@@ -135,7 +135,7 @@
 
             <!-- RecyclerView לרשימת התרופות -->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewMedications"
+                android:id="@+id/recyclerView_medications"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"

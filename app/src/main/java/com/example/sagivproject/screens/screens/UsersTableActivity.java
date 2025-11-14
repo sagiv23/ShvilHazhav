@@ -1,4 +1,4 @@
-package com.example.sagivproject.screens;
+package com.example.sagivproject.screens.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.adapters.UsersTableAdapter;
-import com.example.sagivproject.models.User;
-import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.screens.adapters.UsersTableAdapter;
+import com.example.sagivproject.screens.models.User;
+import com.example.sagivproject.screens.utils.SharedPreferencesUtil;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

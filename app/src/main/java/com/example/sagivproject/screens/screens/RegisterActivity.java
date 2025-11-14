@@ -1,4 +1,4 @@
-package com.example.sagivproject.screens;
+package com.example.sagivproject.screens.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +12,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.sagivproject.models.FirebaseErrorsHelper;
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.screens.models.FirebaseErrorsHelper;
+import com.example.sagivproject.screens.models.User;
+import com.example.sagivproject.screens.services.DatabaseService;
+import com.example.sagivproject.screens.utils.SharedPreferencesUtil;
 
 public class RegisterActivity extends AppCompatActivity {
     private Button btnToContact, btnToLanding, btnToLogin, btnRegister;
