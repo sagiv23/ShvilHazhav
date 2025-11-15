@@ -17,6 +17,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.utils.Validator;
 
 public class RegisterActivity extends AppCompatActivity {
     private Button btnToContact, btnToLanding, btnToLogin, btnRegister;
@@ -73,20 +74,25 @@ public class RegisterActivity extends AppCompatActivity {
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
             return;
-        } else if (firstName.length() < 2) {
+        } if (!Validator.isNameValid(firstName)) {
+            editTextFirstName.setError("שם פרטי קצר מדי");
+            editTextFirstName.requestFocus();
             Toast.makeText(this, "שם פרטי קצר מדי", Toast.LENGTH_LONG).show();
             return;
-        } else if (lastName.length() < 2) {
+        } if (!Validator.isNameValid(lastName)) {
+            editTextLastName.setError("שם פרטי קצר מדי");
+            editTextLastName.requestFocus();
             Toast.makeText(this, "שם משפחה קצר מדי", Toast.LENGTH_LONG).show();
             return;
-        } else if (!email.contains("@") || !email.contains(".")) {
+        } if (!Validator.isEmailValid(email)) {
+            editTextEmail.setError("כתובת האימייל לא תקינה");
+            editTextEmail.requestFocus();
             Toast.makeText(this, "כתובת האימייל לא תקינה", Toast.LENGTH_LONG).show();
             return;
-        } else if (password.length() < 6) {
+        } if (!Validator.isPasswordValid(password)) {
+            editTextPassword.setError("הסיסמה קצרה מדי");
+            editTextPassword.requestFocus();
             Toast.makeText(this, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
-            return;
-        } else if (password.length() > 20) {
-            Toast.makeText(this, "הסיסמה ארוכה מדי", Toast.LENGTH_LONG).show();
             return;
         }
 
