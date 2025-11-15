@@ -19,6 +19,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
+import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class DetailsAboutUserActivity extends AppCompatActivity {
@@ -32,29 +33,15 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_details_about_user);
 
-        currentUser = SharedPreferencesUtil.getUser(this);
-
-        if (currentUser == null) {
-            Toast.makeText(this, "אין לך גישה לדף זה - אתה לא מחובר!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            return;
-        }
-
-        if (currentUser.getIsAdmin()) {
-            Toast.makeText(this, "ניסיון יפה, מנהל! אבל הדף הזה מיועד רק למשתמשים רגילים.", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, AdminPageActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            return;
-        }
+        PagePermissions.checkUserPage(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detailsAboutUserPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        currentUser = SharedPreferencesUtil.getUser(this);
 
         btnToMain = findViewById(R.id.btn_DetailsAboutUser_to_main);
         btnToContact = findViewById(R.id.btn_DetailsAboutUser_to_contact);

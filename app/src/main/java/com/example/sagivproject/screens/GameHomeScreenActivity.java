@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.User;
-import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.utils.PagePermissions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -47,24 +45,7 @@ public class GameHomeScreenActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        User savedUser = SharedPreferencesUtil.getUser(this);
-        if (savedUser == null) {
-            //לא מחובר - Login
-            Toast.makeText(this, "אין לך גישה לדף זה - אתה לא מחובר!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            return;
-        }
-
-        if (savedUser.getIsAdmin()) {
-            //מנהל - HomePage
-            Toast.makeText(this, "ניסיון יפה, מנהל! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, AdminPageActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            return;
-        }
+        PagePermissions.checkUserPage(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.gameHomeScreenPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

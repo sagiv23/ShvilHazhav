@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -35,24 +36,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference("users");
 
-        User savedUser = SharedPreferencesUtil.getUser(this);
-        if (savedUser == null) {
-            //לא מחובר - Login
-            Toast.makeText(this, "אין לך גישה לדף זה - אתה לא מחובר!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            return;
-        }
-
-        if (savedUser.getIsAdmin()) {
-            //מנהל - HomePage
-            Toast.makeText(this, "ניסיון יפה, מנהל! אבל לצערנו, אין לך גישה", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, AdminPageActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            return;
-        }
+        PagePermissions.checkUserPage(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

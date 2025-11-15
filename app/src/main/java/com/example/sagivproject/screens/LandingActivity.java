@@ -11,8 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.User;
-import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.utils.PagePermissions;
 
 public class LandingActivity extends AppCompatActivity {
     Button btnToContact, btnToLogin, btnToRegister, btnNavToContact, btnNavToLogin, btnNavToRegister;
@@ -23,19 +22,7 @@ public class LandingActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_landing);
 
-        User savedUser = SharedPreferencesUtil.getUser(this);
-        if (savedUser != null) {
-            //משתמש מחובר - נשלחים לדף שמתאים
-            Intent intent;
-            if (savedUser.getIsAdmin()) {
-                intent = new Intent(this, AdminPageActivity.class);
-            } else {
-                intent = new Intent(this, MainActivity.class);
-            }
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            return;
-        }
+        PagePermissions.redirectIfLoggedIn(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.landing_page), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
