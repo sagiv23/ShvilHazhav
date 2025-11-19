@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.*;
 import com.google.firebase.database.DataSnapshot;
@@ -334,125 +335,53 @@ public class DatabaseService {
 
     // endregion User Section
 
-    /*
-    // region food section
+    // ======================
+    //   Medication Section
+    // ======================
 
-    /// create a new food in the database
-    /// @param food the food object to create
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive void
-    ///             if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see Food
-    public void createNewFood(@NotNull final Food food, @Nullable final DatabaseCallback<Void> callback) {
-        writeData(FOODS_PATH + "/" + food.getId(), food, callback);
+    private static final String MEDICATIONS_PATH = "users/%s/medications";
+
+    //יצירת ID חדש לתרופה
+    public String generateMedicationId(String userId) {
+        return databaseReference.child(
+                String.format(MEDICATIONS_PATH, userId)
+        ).push().getKey();
     }
 
-    /// get a food from the database
-    /// @param foodId the id of the food to get
-    /// @param callback the callback to call when the operation is completed
-    ///               the callback will receive the food object
-    ///              if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see Food
-    public void getFood(@NotNull final String foodId, @NotNull final DatabaseCallback<Food> callback) {
-        getData(FOODS_PATH + "/" + foodId, Food.class, callback);
+    //הוספת תרופה
+    public void addMedication(String userId, Medication medication, DatabaseCallback<Void> callback) {
+        String id = generateMedicationId(userId);
+        medication.setId(id);
+        writeData(
+                String.format(MEDICATIONS_PATH, userId) + "/" + id,
+                medication,
+                callback
+        );
     }
 
-    /// get all the foods from the database
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive a list of food objects
-    ///            if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see List
-    /// @see Food
-    public void getFoodList(@NotNull final DatabaseCallback<List<Food>> callback) {
-        getDataList(FOODS_PATH, Food.class, callback);
+    //לשמור תרופה
+    public void saveMedication(String userId, Medication med, DatabaseCallback<Void> callback) {
+        String id = generateMedicationId(userId);
+        med.setId(id);
+        writeData("users/" + userId + "/medications/" + id, med, callback);
     }
 
-    /// generate a new id for a new food in the database
-    /// @return a new id for the food
-    /// @see #generateNewId(String)
-    /// @see Food
-    public String generateFoodId() {
-        return generateNewId(FOODS_PATH);
+    //עדכון תרופה
+    public void updateMedication(String userId, Medication med, DatabaseCallback<Void> callback) {
+        writeData("users/" + userId + "/medications/" + med.getId(), med, callback);
     }
 
-    /// delete a food from the database
-    /// @param foodId the id of the food to delete
-    /// @param callback the callback to call when the operation is completed
-    public void deleteFood(@NotNull final String foodId, @Nullable final DatabaseCallback<Void> callback) {
-        deleteData(FOODS_PATH + "/" + foodId, callback);
+    //מחיקת תרופה
+    public void deleteMedication(String userId, String medId, DatabaseCallback<Void> callback) {
+        deleteData("users/" + userId + "/medications/" + medId, callback);
     }
 
-    // endregion food section
-
-    // region cart section
-
-    /// create a new cart in the database
-    /// @param cart the cart object to create
-    /// @param callback the callback to call when the operation is completed
-    ///               the callback will receive void
-    ///              if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see Cart
-    public void createNewCart(@NotNull final Cart cart, @Nullable final DatabaseCallback<Void> callback) {
-        writeData(CARTS_PATH + "/" + cart.getId(), cart, callback);
+    //שליפת רשימת תרופות
+    public void getMedicationList(String userId, DatabaseCallback<List<Medication>> callback) {
+        getDataList(
+                String.format(MEDICATIONS_PATH, userId),
+                Medication.class,
+                callback
+        );
     }
-
-    /// get a cart from the database
-    /// @param cartId the id of the cart to get
-    /// @param callback the callback to call when the operation is completed
-    ///                the callback will receive the cart object
-    ///               if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see Cart
-    public void getCart(@NotNull final String cartId, @NotNull final DatabaseCallback<Cart> callback) {
-        getData(CARTS_PATH + "/" + cartId, Cart.class, callback);
-    }
-
-    /// get all the carts from the database
-    /// @param callback the callback to call when the operation is completed
-    ///               the callback will receive a list of cart objects
-    ///
-    public void getCartList(@NotNull final DatabaseCallback<List<Cart>> callback) {
-        getDataList(CARTS_PATH, Cart.class, callback);
-    }
-
-    /// get all the carts of a specific user from the database
-    /// @param uid the id of the user to get the carts for
-    /// @param callback the callback to call when the operation is completed
-    public void getUserCartList(@NotNull String uid, @NotNull final DatabaseCallback<List<Cart>> callback) {
-        getCartList(new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(List<Cart> carts) {
-                carts.removeIf(cart -> !Objects.equals(cart.getUid(), uid));
-                callback.onCompleted(carts);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                callback.onFailed(e);
-            }
-        });
-    }
-
-
-    /// generate a new id for a new cart in the database
-    /// @return a new id for the cart
-    /// @see #generateNewId(String)
-    /// @see Cart
-    public String generateCartId() {
-        return generateNewId(CARTS_PATH);
-    }
-
-    /// delete a cart from the database
-    /// @param cartId the id of the cart to delete
-    /// @param callback the callback to call when the operation is completed
-    public void deleteCart(@NotNull final String cartId, @Nullable final DatabaseCallback<Void> callback) {
-        deleteData(CARTS_PATH + "/" + cartId, callback);
-    }
-
-    // endregion cart section
-    */
 }
