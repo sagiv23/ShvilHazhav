@@ -20,23 +20,25 @@ import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.PagePermissions;
+import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MedicationListActivity extends AppCompatActivity {
-
     Button btnToMain, btnToContact, btnToDetailsAboutUser, btnAddMedication, btnToExit;
     RecyclerView recyclerViewMedications;
 
-    MedicationAdapter adapter;
+    private MedicationAdapter adapter;
+
     ArrayList<Medication> medications = new ArrayList<>();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 
     @Override
@@ -45,12 +47,17 @@ public class MedicationListActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_medication_list);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-
         PagePermissions.checkUserPage(this);
 
-        loadMedications();
+        String uid = SharedPreferencesUtil.getUserId(this);
+        if (uid == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return;
+        }
+
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.medicationListPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -61,89 +68,99 @@ public class MedicationListActivity extends AppCompatActivity {
         btnToMain = findViewById(R.id.btn_MedicationList_to_main);
         btnToContact = findViewById(R.id.btn_MedicationList_to_contact);
         btnToDetailsAboutUser = findViewById(R.id.btn_MedicationList_to_DetailsAboutUser);
-        btnAddMedication = findViewById(R.id.bbtn_MedicationList_add_medication);
+        btnAddMedication = findViewById(R.id.btn_MedicationList_add_medication);
         btnToExit = findViewById(R.id.btn_MedicationList_to_exit);
 
         btnToMain.setOnClickListener(view -> startActivity(new Intent(MedicationListActivity.this, MainActivity.class)));
         btnToContact.setOnClickListener(view -> startActivity(new Intent(MedicationListActivity.this, ContactActivity.class)));
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(MedicationListActivity.this, DetailsAboutUserActivity.class)));
-        btnAddMedication.setOnClickListener(view -> openAddMedicationDialog());
+        btnAddMedication.setOnClickListener(view -> openMedicationDialog(null));
         btnToExit.setOnClickListener(view -> LogoutHelper.logout(MedicationListActivity.this));
 
         recyclerViewMedications = findViewById(R.id.recyclerView_medications);
         recyclerViewMedications.setLayoutManager(new LinearLayoutManager(this));
-
         adapter = new MedicationAdapter(this, medications, new MedicationAdapter.OnMedicationActionListener() {
             @Override
             public void onEdit(int position) {
-                openEditMedicationDialog(position);
+                openMedicationDialog(medications.get(position));
             }
 
             @Override
             public void onDelete(int position) {
-                deleteMedication(position);
+                deleteMedicationById(medications.get(position).getId());
             }
         });
-
         recyclerViewMedications.setAdapter(adapter);
+
+        loadMedications();
     }
 
-    // -------------------------------------------------------------
-    // ● קריאת תרופות מה־Database דרך DatabaseService
-    // -------------------------------------------------------------
     private void loadMedications() {
-        DatabaseService.getInstance().getMedicationList(currentUser.getUid(),
-                new DatabaseService.DatabaseCallback<List<Medication>>() {
+        String uid = SharedPreferencesUtil.getUserId(this);
+        if (uid == null) {
+            Toast.makeText(this, "שגיאה: משתמש לא מזוהה", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            return;
+        }
 
-                    @Override
-                    public void onCompleted(List<Medication> list) {
-
-                        medications.clear();
-                        Date today = new Date();
-
-                        for (Medication med : list) {
-                            if (med == null || med.getId() == null)
-                                continue;
-
-                            // מחיקת תרופות שפג תוקפן
-                            if (med.getDate() != null && med.getDate().before(today)) {
-                                deleteMedicationById(med.getId());
-                            } else {
-                                medications.add(med);
-                            }
-                        }
-
-                        sortMedicationsByDate();
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(MedicationListActivity.this, "שגיאה בטעינת התרופות", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    // -------------------------------------------------------------
-    // ● הוספת תרופה חדשה
-    // -------------------------------------------------------------
-    private void saveMedication(Medication med) {
-        DatabaseService.getInstance().addMedication(currentUser.getUid(), med, new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().getMedicationList(uid, new DatabaseService.DatabaseCallback<List<Medication>>() {
             @Override
-            public void onCompleted(Void object) {
-                loadMedications();
+            public void onCompleted(List<Medication> list) {
+                medications.clear();
+                Date today = new Date();
+
+                for (Medication med : list) {
+                    if (med == null || med.getId() == null) continue;
+                    if (med.getDate() != null && med.getDate().before(today)) {
+                        deleteMedicationById(med.getId());
+                    } else {
+                        medications.add(med);
+                    }
+                }
+
+                sortMedicationsByDate();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailed(Exception e) {
-                Toast.makeText(MedicationListActivity.this, "שגיאה בהוספת תרופה", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MedicationListActivity.this, "שגיאה בטעינת התרופות", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // -------------------------------------------------------------
-    // ● עדכון תרופה
-    // -------------------------------------------------------------
+
+    private void saveMedication(Medication medication) {
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user == null) {
+            Toast.makeText(this, "עליך להתחבר כדי להוסיף תרופה", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return;
+        }
+
+        String uid = user.getUid();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("medications")
+                .child(uid);
+
+        String key = ref.push().getKey();
+        ref.child(key).setValue(medication)
+                .addOnSuccessListener(a -> {
+                    Toast.makeText(this, "התרופה נשמרה", Toast.LENGTH_SHORT).show();
+                    loadMedications();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "שגיאה בשמירת תרופה", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
     private void updateMedication(Medication med) {
         DatabaseService.getInstance().updateMedication(currentUser.getUid(), med, new DatabaseService.DatabaseCallback<Void>() {
             @Override
@@ -158,14 +175,6 @@ public class MedicationListActivity extends AppCompatActivity {
         });
     }
 
-    // -------------------------------------------------------------
-    // ● מחיקת תרופה לפי מיקום ברשימה
-    // -------------------------------------------------------------
-    private void deleteMedication(int index) {
-        Medication med = medications.get(index);
-        deleteMedicationById(med.getId());
-    }
-
     private void deleteMedicationById(String id) {
         DatabaseService.getInstance().deleteMedication(currentUser.getUid(), id, new DatabaseService.DatabaseCallback<Void>() {
             @Override
@@ -178,17 +187,6 @@ public class MedicationListActivity extends AppCompatActivity {
                 Toast.makeText(MedicationListActivity.this, "שגיאה במחיקת תרופה", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    // -------------------------------------------------------------
-    // ● דיאלוג הוספה / עריכה
-    // -------------------------------------------------------------
-    private void openAddMedicationDialog() {
-        openMedicationDialog(null);
-    }
-
-    private void openEditMedicationDialog(int index) {
-        openMedicationDialog(medications.get(index));
     }
 
     private void openMedicationDialog(Medication medToEdit) {
@@ -258,22 +256,7 @@ public class MedicationListActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    // -------------------------------------------------------------
-    // ● מיון לפי תאריך
-    // -------------------------------------------------------------
     private void sortMedicationsByDate() {
-        int i = 0;
-        while (i < medications.size() - 1) {
-            int j = i + 1;
-            while (j < medications.size()) {
-                if (medications.get(i).getDate().after(medications.get(j).getDate())) {
-                    Medication temp = medications.get(i);
-                    medications.set(i, medications.get(j));
-                    medications.set(j, temp);
-                }
-                j++;
-            }
-            i++;
-        }
+        medications.sort(Comparator.comparing(Medication::getDate));
     }
 }
