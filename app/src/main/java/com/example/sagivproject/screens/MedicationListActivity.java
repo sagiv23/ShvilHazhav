@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationAdapter;
-import com.example.sagivproject.models.LogoutHelper;
+import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.PagePermissions;

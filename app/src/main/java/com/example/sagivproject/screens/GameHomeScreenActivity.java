@@ -13,7 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.sagivproject.models.LogoutHelper;
+import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.R;
 import com.example.sagivproject.utils.PagePermissions;
 import com.google.firebase.auth.FirebaseAuth;

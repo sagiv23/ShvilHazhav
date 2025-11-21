@@ -11,7 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.sagivproject.models.LogoutHelper;
+import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.R;
 import com.example.sagivproject.utils.PagePermissions;
 
@@ -49,14 +49,13 @@ public class AiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ai);
-
-        PagePermissions.checkUserPage(this);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.aiPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PagePermissions.checkUserPage(this);
 
         btnToMain = findViewById(R.id.btn_Ai_to_main);
         btnToContact = findViewById(R.id.btn_Ai_to_contact);

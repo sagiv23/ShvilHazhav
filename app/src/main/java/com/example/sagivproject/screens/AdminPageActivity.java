@@ -13,7 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.LogoutHelper;
+import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
@@ -33,8 +33,6 @@ public class AdminPageActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_page);
 
-        PagePermissions.checkAdminPage(this);
-
         mAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference("users");
 
@@ -43,6 +41,8 @@ public class AdminPageActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PagePermissions.checkAdminPage(this);
 
         btnToUserTable = findViewById(R.id.btn_admin_to_UsersTablePage);
         btnLogout = findViewById(R.id.btn_admin_to_exit);

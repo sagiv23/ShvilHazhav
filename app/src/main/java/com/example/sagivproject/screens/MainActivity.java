@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,36 +12,51 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.LogoutHelper;
+import com.example.sagivproject.services.DatabaseService;
+import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
     private TextView txtHomePageTitle;
-    private FirebaseAuth mAuth;
-    private DatabaseReference usersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
-        mAuth = FirebaseAuth.getInstance();
-        usersRef = FirebaseDatabase.getInstance().getReference("users");
-
-        PagePermissions.checkUserPage(this);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        DatabaseService.getInstance().getUser(Objects.requireNonNull(SharedPreferencesUtil.getUserId(this)), new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User updatedUser) {
+                if (updatedUser == null) {
+                    failedToGetUser();
+                    return;
+                }
+                SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
+
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                failedToGetUser();
+            }
+
+            private void failedToGetUser() {
+                SharedPreferencesUtil.signOutUser(MainActivity.this);
+            }
+        });
+
+        PagePermissions.checkUserPage(this);
 
         btnToContact = findViewById(R.id.btn_main_to_contact);
         btnToDetailsAboutUser = findViewById(R.id.btn_main_to_DetailsAboutUser);
@@ -62,13 +76,10 @@ public class MainActivity extends AppCompatActivity {
 
         txtHomePageTitle = findViewById(R.id.txt_main_Title);
 
-        User localUser = SharedPreferencesUtil.getUser(this);
+        User user = SharedPreferencesUtil.getUser(this);
 
-        if (localUser != null) {
-            showUserName(localUser);
-        } else {
-            //אחרת נטען מהשרת
-            loadUserFromFirebase();
+        if (user != null) {
+            showUserName(user);
         }
     }
 
@@ -80,22 +91,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             txtHomePageTitle.setText("שלום " + fullName);
         }
-    }
-
-    private void loadUserFromFirebase() {
-        String uid = mAuth.getCurrentUser().getUid();
-
-        usersRef.child(uid).get().addOnSuccessListener(snapshot -> {
-            User user = snapshot.getValue(User.class);
-            if (user != null) {
-                SharedPreferencesUtil.saveUser(this, user);
-                showUserName(user);
-            } else {
-                txtHomePageTitle.setText("שלום מטופל יקר");
-            }
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "שגיאה בקריאת הנתונים", Toast.LENGTH_SHORT).show();
-            txtHomePageTitle.setText("שלום מטופל יקר");
-        });
     }
 }
