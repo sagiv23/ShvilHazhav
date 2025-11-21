@@ -3,7 +3,10 @@ package com.example.sagivproject.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,22 +14,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.R;
+import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.Call;
-import okhttp3.Callback;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class AiActivity extends AppCompatActivity {
     Button btnToMain, btnToContact, btnToDetailsAboutUser, send, btnToExit;
@@ -49,14 +53,13 @@ public class AiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ai);
-
-        PagePermissions.checkUserPage(this);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.aiPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PagePermissions.checkUserPage(this);
 
         btnToMain = findViewById(R.id.btn_Ai_to_main);
         btnToContact = findViewById(R.id.btn_Ai_to_contact);

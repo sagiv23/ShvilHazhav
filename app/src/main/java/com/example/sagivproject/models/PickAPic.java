@@ -2,12 +2,12 @@ package com.example.sagivproject.models;
 
 import android.content.Context;
 import android.widget.ImageView;
+
 import java.util.Random;
 
 public class PickAPic {
     private int[] imageResIds;
     private Random rnd;
-
     public PickAPic(Context context, int totalImages) {
         imageResIds = new int[totalImages];
         rnd = new Random();

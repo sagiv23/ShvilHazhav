@@ -14,11 +14,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sagivproject.adapters.ForumAdapter;
-import com.example.sagivproject.models.LogoutHelper;
 import com.example.sagivproject.R;
+import com.example.sagivproject.adapters.ForumAdapter;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,13 +52,13 @@ public class ForumActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         dbRef = FirebaseDatabase.getInstance().getReference("forum");
 
-        PagePermissions.checkUserPage(this);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PagePermissions.checkUserPage(this);
 
         btnToMain = findViewById(R.id.btn_forum_main);
         btnToContact = findViewById(R.id.btn_forum_contact);

@@ -1,6 +1,6 @@
-package com.example.sagivproject.models;
+package com.example.sagivproject.utils;
 
-public class FirebaseErrorsHelper {
+public class ErrorTranslatorHelper {
     public static String getFriendlyFirebaseAuthError(Exception exception) {
         if (exception == null) return "הפעולה נכשלה. נסה שוב.";
 

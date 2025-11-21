@@ -12,10 +12,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.sagivproject.models.FirebaseErrorsHelper;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
+import com.example.sagivproject.utils.ErrorTranslatorHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.utils.Validator;
@@ -29,14 +29,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-
-        PagePermissions.redirectIfLoggedIn(this);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.loginPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PagePermissions.redirectIfLoggedIn(this);
 
         btnToLanding = findViewById(R.id.btn_login_to_landing);
         btnToContact = findViewById(R.id.btn_login_to_contact);
@@ -80,11 +79,10 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
                     SharedPreferencesUtil.saveUser(LoginActivity.this, user);
-                    User savedUser = SharedPreferencesUtil.getUser(LoginActivity.this);
 
                     //משתמש מחובר - נשלחים לדף שמתאים
                     Intent intent;
-                    if (savedUser.getIsAdmin()) {
+                    if (user.getIsAdmin()) {
                         Toast.makeText(LoginActivity.this, "התחברת למשתמש מנהל בהצלחה!", Toast.LENGTH_SHORT).show();
                         intent = new Intent(LoginActivity.this, AdminPageActivity.class);
                     } else {
@@ -97,8 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailed(Exception e) {
-                    String errorMessage = FirebaseErrorsHelper.getFriendlyFirebaseAuthError(e);
-                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, ErrorTranslatorHelper.getFriendlyFirebaseAuthError(e), Toast.LENGTH_LONG).show();
                     SharedPreferencesUtil.signOutUser(LoginActivity.this);
                 }
             });

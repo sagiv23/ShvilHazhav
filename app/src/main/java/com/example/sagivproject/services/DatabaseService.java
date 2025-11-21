@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.*;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

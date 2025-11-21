@@ -1,4 +1,4 @@
-package com.example.sagivproject.models;
+package com.example.sagivproject.utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.screens.LoginActivity;
-import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LogoutHelper {

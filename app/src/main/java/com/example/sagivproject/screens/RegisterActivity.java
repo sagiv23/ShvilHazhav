@@ -12,10 +12,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.sagivproject.models.FirebaseErrorsHelper;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
+import com.example.sagivproject.utils.ErrorTranslatorHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.utils.Validator;
@@ -29,14 +29,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
-
-        PagePermissions.redirectIfLoggedIn(this);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registerPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PagePermissions.redirectIfLoggedIn(this);
 
         btnToContact = findViewById(R.id.btn_register_to_contact);
         btnToLanding = findViewById(R.id.btn_register_to_landing);
@@ -115,8 +114,8 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(Exception e) {
-                String errorMessage = FirebaseErrorsHelper.getFriendlyFirebaseAuthError(e);
-                Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                SharedPreferencesUtil.signOutUser(RegisterActivity.this);
+                Toast.makeText(RegisterActivity.this, ErrorTranslatorHelper.getFriendlyFirebaseAuthError(e), Toast.LENGTH_LONG).show();
             }
         });
     }
