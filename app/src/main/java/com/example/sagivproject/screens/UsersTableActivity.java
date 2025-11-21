@@ -41,14 +41,13 @@ public class UsersTableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_users_table);
-
-        PagePermissions.checkAdminPage(this);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.usersTablePage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PagePermissions.checkAdminPage(this);
 
         btnToAdminPage = findViewById(R.id.btn_UsersTable_to_admin);
         btnToAdminPage.setOnClickListener(view -> startActivity(new Intent(UsersTableActivity.this, AdminPageActivity.class)));

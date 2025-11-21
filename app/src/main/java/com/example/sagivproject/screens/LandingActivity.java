@@ -21,14 +21,13 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_landing);
-
-        PagePermissions.redirectIfLoggedIn(this);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.landing_page), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PagePermissions.redirectIfLoggedIn(this);
 
         btnToContact = findViewById(R.id.btn_landingBody_to_contact);
         btnToLogin = findViewById(R.id.btn_landingBody_to_login);

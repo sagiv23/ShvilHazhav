@@ -47,16 +47,6 @@ public class MedicationListActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_medication_list);
 
-        PagePermissions.checkUserPage(this);
-
-        String uid = SharedPreferencesUtil.getUserId(this);
-        if (uid == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            return;
-        }
-
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.medicationListPage), (v, insets) -> {
@@ -64,6 +54,8 @@ public class MedicationListActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PagePermissions.checkUserPage(this);
 
         btnToMain = findViewById(R.id.btn_MedicationList_to_main);
         btnToContact = findViewById(R.id.btn_MedicationList_to_contact);

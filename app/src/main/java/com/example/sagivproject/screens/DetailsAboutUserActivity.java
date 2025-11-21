@@ -25,7 +25,7 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 public class DetailsAboutUserActivity extends AppCompatActivity {
     private Button btnToMain, btnToContact, btnToExit, btnEditUser;
     private TextView txtTitle, txtFirstName, txtLastName, txtEmail, txtPassword;
-    private User currentUser;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
 
         PagePermissions.checkUserPage(this);
 
-        currentUser = SharedPreferencesUtil.getUser(this);
+        user = SharedPreferencesUtil.getUser(this);
 
         btnToMain = findViewById(R.id.btn_DetailsAboutUser_to_main);
         btnToContact = findViewById(R.id.btn_DetailsAboutUser_to_contact);
@@ -62,11 +62,11 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
     }
 
     private void loadUserDetailsFromSharedPref() {
-        txtTitle.setText(currentUser.getFullName());
-        txtFirstName.setText(currentUser.getFirstName());
-        txtLastName.setText(currentUser.getLastName());
-        txtEmail.setText(currentUser.getEmail());
-        txtPassword.setText(currentUser.getPassword());
+        txtTitle.setText(user.getFullName());
+        txtFirstName.setText(user.getFirstName());
+        txtLastName.setText(user.getLastName());
+        txtEmail.setText(user.getEmail());
+        txtPassword.setText(user.getPassword());
     }
 
     private void openEditDialog() {
@@ -80,9 +80,9 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
         Button btnSave = dialogView.findViewById(R.id.btnEditUserSave);
         Button btnCancel = dialogView.findViewById(R.id.btnEditUserCancel);
 
-        inputFirstName.setText(currentUser.getFirstName());
-        inputLastName.setText(currentUser.getLastName());
-        inputPassword.setText(currentUser.getPassword());
+        inputFirstName.setText(user.getFirstName());
+        inputLastName.setText(user.getLastName());
+        inputPassword.setText(user.getPassword());
 
         AlertDialog dialog = builder.create();
 
@@ -96,9 +96,9 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
                 return;
             }
 
-            currentUser.setFirstName(newFirst);
-            currentUser.setLastName(newLast);
-            currentUser.setPassword(newPass);
+            user.setFirstName(newFirst);
+            user.setLastName(newLast);
+            user.setPassword(newPass);
 
             updateUserInDatabaseAndLocal();
             dialog.dismiss();
@@ -110,16 +110,16 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
     }
 
     private void updateUserInDatabaseAndLocal() {
-        DatabaseService.getInstance().updateUser(currentUser, new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
 
-                txtFirstName.setText(currentUser.getFirstName());
-                txtLastName.setText(currentUser.getLastName());
-                txtPassword.setText(currentUser.getPassword());
-                txtTitle.setText(currentUser.getFullName());
+                txtFirstName.setText(user.getFirstName());
+                txtLastName.setText(user.getLastName());
+                txtPassword.setText(user.getPassword());
+                txtTitle.setText(user.getFullName());
 
-                SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, currentUser);
+                SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, user);
 
                 Toast.makeText(DetailsAboutUserActivity.this, "הפרטים עודכנו בהצלחה!", Toast.LENGTH_SHORT).show();
             }
