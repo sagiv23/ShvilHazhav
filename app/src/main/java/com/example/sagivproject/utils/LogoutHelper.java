@@ -7,8 +7,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.LoginActivity;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class LogoutHelper {
     public static void logout(Context context) {
@@ -17,20 +17,18 @@ public class LogoutHelper {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(true);
 
+        User user = SharedPreferencesUtil.getUser(context);
         Button btnConfirm = dialog.findViewById(R.id.btnLogoutConfirm);
         Button btnCancel = dialog.findViewById(R.id.btnLogoutCancel);
 
         btnConfirm.setOnClickListener(v -> {
             String userEmail = "";
-            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            if (user.getEmail() != null) {
+                userEmail = user.getEmail();
             }
 
             SharedPreferencesUtil.signOutUser(context);
-
-            FirebaseAuth.getInstance().signOut();
             Toast.makeText(context, "התנתקת בהצלחה", Toast.LENGTH_SHORT).show();
-
             Intent intent = new Intent(context, LoginActivity.class);
             intent.putExtra("userEmail", userEmail);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

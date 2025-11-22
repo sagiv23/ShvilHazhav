@@ -3,12 +3,12 @@ package com.example.sagivproject.models;
 import java.io.Serializable;
 
 public class User implements Serializable {
+    private String uid;
+    private String email;
+    private boolean isAdmin;
     private String firstName;
     private String lastName;
-    private String email;
     private String password;
-    private boolean isAdmin;
-    private String uid;
 
     public User() { }
 

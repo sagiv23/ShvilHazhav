@@ -12,10 +12,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+
+import java.util.Objects;
 
 public class AdminPageActivity extends AppCompatActivity {
     private Button btnToUserTable, btnLogout;
@@ -30,6 +33,29 @@ public class AdminPageActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        DatabaseService.getInstance().getUser(Objects.requireNonNull(SharedPreferencesUtil.getUserId(this)), new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User updatedUser) {
+                if (updatedUser == null) {
+                    failedToGetUser();
+                    return;
+                }
+                SharedPreferencesUtil.saveUser(AdminPageActivity.this, updatedUser);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                failedToGetUser();
+            }
+
+            private void failedToGetUser() {
+                SharedPreferencesUtil.signOutUser(AdminPageActivity.this);
+                Intent intent = new Intent(AdminPageActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
         });
 
         PagePermissions.checkAdminPage(this);

@@ -105,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailed(Exception e) {
-                            Toast.makeText(RegisterActivity.this, "שגיאה בשמירת הנתונים: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, "שגיאה בשמירת הנתונים: " + ErrorTranslatorHelper.getFriendlyFirebaseAuthError(e), Toast.LENGTH_LONG).show();
                             SharedPreferencesUtil.signOutUser(RegisterActivity.this);
                         }
                     });

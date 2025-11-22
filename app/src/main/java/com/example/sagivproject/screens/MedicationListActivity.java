@@ -130,17 +130,8 @@ public class MedicationListActivity extends AppCompatActivity {
 
 
     private void saveMedication(Medication medication) {
-
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-
-        if (user == null) {
-            Toast.makeText(this, "עליך להתחבר כדי להוסיף תרופה", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            return;
-        }
 
         String uid = user.getUid();
 

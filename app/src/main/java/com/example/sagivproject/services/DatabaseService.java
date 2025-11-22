@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.google.firebase.database.DataSnapshot;
@@ -13,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -383,4 +385,43 @@ public class DatabaseService {
                 callback
         );
     }
+
+    // ======================
+    //      Forum Section
+    // ======================
+
+    private static final String FORUM_PATH = "forum";
+
+    //מחולל ID חדש להודעה
+    public String generateForumMessageId() {
+        return databaseReference.child(FORUM_PATH).push().getKey();
+    }
+
+    //שליחת הודעה לפורום
+    public void sendForumMessage(ForumMessage message, DatabaseCallback<Void> callback) {
+        writeData(FORUM_PATH + "/" + message.getMessageId(), message, callback);
+    }
+
+    //טעינת הודעות פורום בזמן אמת (Realtime Listener)
+    public void getForumMessagesRealtime(DatabaseCallback<List<ForumMessage>> callback) {
+        readData(FORUM_PATH)
+                .orderByChild("timestamp")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        List<ForumMessage> list = new ArrayList<>();
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            ForumMessage msg = child.getValue(ForumMessage.class);
+                            list.add(msg);
+                        }
+                        callback.onCompleted(list);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        callback.onFailed(error.toException());
+                    }
+                });
+    }
+
 }
