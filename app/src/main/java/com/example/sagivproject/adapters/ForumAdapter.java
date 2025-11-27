@@ -1,5 +1,7 @@
 package com.example.sagivproject.adapters;
 
+import android.annotation.SuppressLint;
+import android.text.format.DateFormat;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumMessage;
+import com.example.sagivproject.services.DatabaseService;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
     private final List<ForumMessage> messages;
     private final FirebaseAuth mAuth;
+    private final DatabaseService db;
 
     public ForumAdapter(List<ForumMessage> messages, FirebaseAuth mAuth) {
         this.messages = messages;
         this.mAuth = mAuth;
+        this.db = DatabaseService.getInstance();
     }
 
     @NonNull
@@ -37,12 +41,12 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ForumViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ForumViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ForumMessage msg = messages.get(position);
         holder.txtUser.setText(msg.getFullName());
         holder.txtEmail.setText(msg.getEmail());
         holder.txtMessage.setText(msg.getMessage());
-        holder.txtTime.setText(android.text.format.DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
+        holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 
         // תפריט שלוש נקודות
         if (mAuth.getCurrentUser() != null &&
@@ -51,18 +55,22 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
 
             holder.btnMenu.setVisibility(View.VISIBLE);
             holder.btnMenu.setOnClickListener(v -> {
-                // שימוש ב־ContextThemeWrapper כדי שה־PopupMenu יקבל את הצבעים מה־theme
                 ContextThemeWrapper wrapper = new ContextThemeWrapper(v.getContext(), R.style.Theme_SagivProject);
                 PopupMenu popup = new PopupMenu(wrapper, holder.btnMenu);
                 popup.getMenuInflater().inflate(R.menu.forum_message_menu, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == R.id.action_delete) {
-                        FirebaseDatabase.getInstance().getReference("forum")
+                        // מחיקה ישירות דרך FirebaseDatabase
+                        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("forum")
                                 .child(msg.getMessageId())
                                 .removeValue()
-                                .addOnSuccessListener(a ->
-                                        Toast.makeText(v.getContext(), "ההודעה נמחקה", Toast.LENGTH_SHORT).show())
+                                .addOnSuccessListener(a -> {
+                                    Toast.makeText(v.getContext(), "ההודעה נמחקה", Toast.LENGTH_SHORT).show();
+                                    messages.remove(position);
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, messages.size());
+                                })
                                 .addOnFailureListener(e ->
                                         Toast.makeText(v.getContext(), "שגיאה במחיקה", Toast.LENGTH_SHORT).show());
                         return true;

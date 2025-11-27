@@ -128,10 +128,9 @@ public class MedicationListActivity extends AppCompatActivity {
     }
 
     private void saveMedication(Medication medication) {
-        medication.setId(uid);
-        medication.setId(DatabaseService.getInstance().generateMedicationId());
+        medication.setId(DatabaseService.getInstance().generateMedicationId(uid));
 
-        DatabaseService.getInstance().createNewMedication(medication, new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().createNewMedication(uid, medication, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
                 Toast.makeText(MedicationListActivity.this, "התרופה נוספה", Toast.LENGTH_SHORT).show();
@@ -146,9 +145,10 @@ public class MedicationListActivity extends AppCompatActivity {
     }
 
     private void updateMedication(Medication med) {
-        DatabaseService.getInstance().createNewMedication(med, new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().createNewMedication(uid, med, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
+                Toast.makeText(MedicationListActivity.this, "התרופה עודכנה", Toast.LENGTH_SHORT).show();
                 loadMedications();
             }
 
@@ -160,7 +160,7 @@ public class MedicationListActivity extends AppCompatActivity {
     }
 
     private void deleteMedicationById(String id) {
-        DatabaseService.getInstance().deleteMedication(id, new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().deleteMedication(uid, id, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
                 loadMedications();

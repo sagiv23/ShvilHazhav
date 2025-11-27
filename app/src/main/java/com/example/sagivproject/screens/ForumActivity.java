@@ -39,8 +39,6 @@ public class ForumActivity extends AppCompatActivity {
 
     private boolean userAtBottom = true;
 
-    private final DatabaseService db = DatabaseService.getInstance();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +88,7 @@ public class ForumActivity extends AppCompatActivity {
     }
 
     private void loadMessages() {
-        db.getForumMessagesRealtime(new DatabaseService.DatabaseCallback<List<ForumMessage>>() {
+        DatabaseService.getInstance().getForumMessagesRealtime(new DatabaseService.DatabaseCallback<List<ForumMessage>>() {
             @Override
             public void onCompleted(List<ForumMessage> list) {
                 messageList.clear();
@@ -119,10 +117,10 @@ public class ForumActivity extends AppCompatActivity {
             return;
         }
 
-        String messageId = db.generateForumMessageId();
+        String messageId = DatabaseService.getInstance().generateForumMessageId();
         ForumMessage msg = new ForumMessage(messageId, savedUser.getFullName(), savedUser.getEmail(), text, System.currentTimeMillis(), savedUser.getUid());
 
-        db.sendForumMessage(msg, new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().sendForumMessage(msg, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void obj) {
                 edtNewMessage.setText("");

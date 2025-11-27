@@ -338,57 +338,55 @@ public class DatabaseService {
     // region medication section
 
     /// create a new medication in the database
+    /// @param uid the id of the user
     /// @param medication the medication object to create
     /// @param callback the callback to call when the operation is completed
-    public void createNewMedication(@NotNull final Medication medication, @Nullable final DatabaseCallback<Void> callback) {
-        writeData(MEDICATIONS_PATH + "/" + medication.getId(), medication, callback);
+    public void createNewMedication(@NotNull final String uid,
+                                    @NotNull final Medication medication,
+                                    @Nullable final DatabaseCallback<Void> callback) {
+
+        writeData(USERS_PATH + "/" + uid + "/medications/" + medication.getId(), medication, callback);
     }
 
     /// get a medication from the database
+    /// @param uid user's id
     /// @param medicationId the id of the medication to get
     /// @param callback the callback to call when the operation is completed
-    public void getMedication(@NotNull final String medicationId, @NotNull final DatabaseCallback<Medication> callback) {
-        getData(MEDICATIONS_PATH + "/" + medicationId, Medication.class, callback);
-    }
+    public void getMedication(@NotNull final String uid,
+                              @NotNull final String medicationId,
+                              @NotNull final DatabaseCallback<Medication> callback) {
 
-    /// get all the medications from the database
-    /// @param callback the callback
-    public void getMedicationList(@NotNull final DatabaseCallback<List<Medication>> callback) {
-        getDataList(MEDICATIONS_PATH, Medication.class, callback);
+        getData(USERS_PATH + "/" + uid + "/medications/" + medicationId, Medication.class, callback);
     }
 
     /// get all the medications of a specific user
     /// @param uid the id of the user
     /// @param callback the callback
-    public void getUserMedicationList(@NotNull final String uid, @NotNull final DatabaseCallback<List<Medication>> callback) {
-        getMedicationList(new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(List<Medication> meds) {
-                meds.removeIf(med -> !Objects.equals(med.getId(), uid));
-                callback.onCompleted(meds);
-            }
+    public void getUserMedicationList(@NotNull final String uid,
+                                      @NotNull final DatabaseCallback<List<Medication>> callback) {
 
-            @Override
-            public void onFailed(Exception e) {
-                callback.onFailed(e);
-            }
-        });
+        getDataList(USERS_PATH + "/" + uid + "/medications", Medication.class, callback);
     }
 
-    /// generate a new id for a medication
+    /// generate a new id for a medication under a specific user
     /// @return a new id for the medication
-    public String generateMedicationId() {
-        return generateNewId(MEDICATIONS_PATH);
+    public String generateMedicationId(@NotNull final String uid) {
+        return generateNewId(USERS_PATH + "/" + uid + "/medications");
     }
 
     /// delete a medication from the database
+    /// @param uid user id
     /// @param medicationId id to delete
     /// @param callback callback
-    public void deleteMedication(@NotNull final String medicationId, @Nullable final DatabaseCallback<Void> callback) {
-        deleteData(MEDICATIONS_PATH + "/" + medicationId, callback);
+    public void deleteMedication(@NotNull final String uid,
+                                 @NotNull final String medicationId,
+                                 @Nullable final DatabaseCallback<Void> callback) {
+
+        deleteData(USERS_PATH + "/" + uid + "/medications/" + medicationId, callback);
     }
 
-// endregion medication section
+    // endregion
+
 
 
     // ======================
