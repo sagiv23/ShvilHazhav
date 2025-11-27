@@ -14,7 +14,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class ContactActivity extends AppCompatActivity {
     //כפתורים למשתמש מחובר
@@ -46,7 +45,7 @@ public class ContactActivity extends AppCompatActivity {
         btnToRegisterPage = findViewById(R.id.btn_contact_to_register);
 
         //בדיקה אם המשתמש מחובר
-        boolean isLoggedIn = (SharedPreferencesUtil.getUser(ContactActivity.this) != null || FirebaseAuth.getInstance().getCurrentUser() != null);
+        boolean isLoggedIn = SharedPreferencesUtil.isUserLoggedIn(ContactActivity.this);
 
         if (isLoggedIn) {
             //הופך את כפתורי המשתמש המחובר ל-VISIBLE

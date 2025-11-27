@@ -37,8 +37,7 @@ public class DatabaseService {
     /// paths for different data types in the database
     /// @see DatabaseService#readData(String)
     private static final String USERS_PATH = "users",
-            FOODS_PATH = "foods",
-            CARTS_PATH = "carts";
+            MEDICATIONS_PATH = "medications";
 
     /// callback interface for database operations
     /// @param <T> the type of the object to return
@@ -336,55 +335,61 @@ public class DatabaseService {
 
     // endregion User Section
 
-    // ======================
-    //   Medication Section
-    // ======================
+    // region medication section
 
-    private static final String MEDICATIONS_PATH = "users/%s/medications";
-
-    //יצירת ID חדש לתרופה
-    public String generateMedicationId(String userId) {
-        return databaseReference.child(
-                String.format(MEDICATIONS_PATH, userId)
-        ).push().getKey();
+    /// create a new medication in the database
+    /// @param medication the medication object to create
+    /// @param callback the callback to call when the operation is completed
+    public void createNewMedication(@NotNull final Medication medication, @Nullable final DatabaseCallback<Void> callback) {
+        writeData(MEDICATIONS_PATH + "/" + medication.getId(), medication, callback);
     }
 
-    //הוספת תרופה
-    public void addMedication(String userId, Medication medication, DatabaseCallback<Void> callback) {
-        String id = generateMedicationId(userId);
-        medication.setId(id);
-        writeData(
-                String.format(MEDICATIONS_PATH, userId) + "/" + id,
-                medication,
-                callback
-        );
+    /// get a medication from the database
+    /// @param medicationId the id of the medication to get
+    /// @param callback the callback to call when the operation is completed
+    public void getMedication(@NotNull final String medicationId, @NotNull final DatabaseCallback<Medication> callback) {
+        getData(MEDICATIONS_PATH + "/" + medicationId, Medication.class, callback);
     }
 
-    //לשמור תרופה
-    public void saveMedication(String userId, Medication med, DatabaseCallback<Void> callback) {
-        String id = generateMedicationId(userId);
-        med.setId(id);
-        writeData("users/" + userId + "/medications/" + id, med, callback);
+    /// get all the medications from the database
+    /// @param callback the callback
+    public void getMedicationList(@NotNull final DatabaseCallback<List<Medication>> callback) {
+        getDataList(MEDICATIONS_PATH, Medication.class, callback);
     }
 
-    //עדכון תרופה
-    public void updateMedication(String userId, Medication med, DatabaseCallback<Void> callback) {
-        writeData("users/" + userId + "/medications/" + med.getId(), med, callback);
+    /// get all the medications of a specific user
+    /// @param uid the id of the user
+    /// @param callback the callback
+    public void getUserMedicationList(@NotNull final String uid, @NotNull final DatabaseCallback<List<Medication>> callback) {
+        getMedicationList(new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(List<Medication> meds) {
+                meds.removeIf(med -> !Objects.equals(med.getId(), uid));
+                callback.onCompleted(meds);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                callback.onFailed(e);
+            }
+        });
     }
 
-    //מחיקת תרופה
-    public void deleteMedication(String userId, String medId, DatabaseCallback<Void> callback) {
-        deleteData("users/" + userId + "/medications/" + medId, callback);
+    /// generate a new id for a medication
+    /// @return a new id for the medication
+    public String generateMedicationId() {
+        return generateNewId(MEDICATIONS_PATH);
     }
 
-    //שליפת רשימת תרופות
-    public void getMedicationList(String userId, DatabaseCallback<List<Medication>> callback) {
-        getDataList(
-                String.format(MEDICATIONS_PATH, userId),
-                Medication.class,
-                callback
-        );
+    /// delete a medication from the database
+    /// @param medicationId id to delete
+    /// @param callback callback
+    public void deleteMedication(@NotNull final String medicationId, @Nullable final DatabaseCallback<Void> callback) {
+        deleteData(MEDICATIONS_PATH + "/" + medicationId, callback);
     }
+
+// endregion medication section
+
 
     // ======================
     //      Forum Section

@@ -8,13 +8,14 @@ public class Medication {
     private String details;
     private Date date;
 
-    public Medication(String name, String details, Date date) {
+    public Medication() {}
+
+    public Medication(String name, String details, Date date, String uid) {
         this.name = name;
         this.details = details;
         this.date = date;
+        this.id = uid;
     }
-
-    public Medication() {}
 
     public String getId() { return this.id; }
     public void setId(String id) { this.id = id; }
