@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.sagivproject.BuildConfig;
 import com.example.sagivproject.R;
 import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
@@ -38,7 +39,7 @@ public class AiActivity extends AppCompatActivity {
     private EditText questionInput;
     private TextView answerView;
 
-    private static final String API_KEY = "AIzaSyBu7iR1_WWtsczgf3KWq38vmU85dWBL09Y";
+    private static final String API_KEY = BuildConfig.API_KEY;
     private static final String MODEL = "models/gemini-2.5-flash";
     private static final String ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/" + MODEL + ":generateContent?key=" + API_KEY;
 
