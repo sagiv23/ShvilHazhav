@@ -22,7 +22,6 @@ import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ public class ForumActivity extends AppCompatActivity {
     private EditText edtNewMessage;
     private RecyclerView recyclerForum;
 
-    private FirebaseAuth mAuth;
     private ForumAdapter adapter;
     private List<ForumMessage> messageList;
     private LinearLayoutManager layoutManager;
@@ -52,8 +50,6 @@ public class ForumActivity extends AppCompatActivity {
 
         PagePermissions.checkUserPage(this);
 
-        mAuth = FirebaseAuth.getInstance();
-
         btnToMain = findViewById(R.id.btn_forum_main);
         btnToContact = findViewById(R.id.btn_forum_contact);
         btnToDetailsAboutUser = findViewById(R.id.btn_forum_DetailsAboutUser);
@@ -70,7 +66,7 @@ public class ForumActivity extends AppCompatActivity {
         btnSendMessage.setOnClickListener(view -> sendMessage());
 
         messageList = new ArrayList<>();
-        adapter = new ForumAdapter(messageList, mAuth);
+        adapter = new ForumAdapter(messageList, SharedPreferencesUtil.getUser(ForumActivity.this));
         layoutManager = new LinearLayoutManager(this);
 
         recyclerForum.setLayoutManager(layoutManager);

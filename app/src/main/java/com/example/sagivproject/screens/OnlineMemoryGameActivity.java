@@ -70,6 +70,7 @@ public class OnlineMemoryGameActivity extends AppCompatActivity {
             return insets;
         });
 
+        /*
         db = FirebaseFirestore.getInstance();
         uid = FirebaseAuth.getInstance().getCurrentUser() != null ?
                 FirebaseAuth.getInstance().getCurrentUser().getUid() :
@@ -93,7 +94,9 @@ public class OnlineMemoryGameActivity extends AppCompatActivity {
                 leaveGameAndExit();
             }
         });
+         */
     }
+    /*
 
     // 🟢 יציאה מסודרת – מעדכן את Firestore ושולח הודעה ליריב
     private void leaveGameAndExit() {
@@ -462,4 +465,5 @@ public class OnlineMemoryGameActivity extends AppCompatActivity {
         if (roundTimer != null) roundTimer.cancel();
         if (matchListener != null) matchListener.remove();
     }
+     */
 }

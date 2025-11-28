@@ -41,6 +41,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         holder.txtUserIsAdmin.setText("מנהל: " + (user.getIsAdmin() ? "כן" : "לא"));
 
         holder.btnDeleteUser.setOnClickListener(v -> {
+            //לשנות
             FirebaseDatabase.getInstance().getReference("users")
                     .child(user.getUid())
                     .removeValue()

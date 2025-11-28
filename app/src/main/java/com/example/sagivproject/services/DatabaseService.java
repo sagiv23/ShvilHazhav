@@ -37,7 +37,8 @@ public class DatabaseService {
     /// paths for different data types in the database
     /// @see DatabaseService#readData(String)
     private static final String USERS_PATH = "users",
-            MEDICATIONS_PATH = "medications";
+            MEDICATIONS_PATH = "medications",
+            FORUM_PATH = "forum";
 
     /// callback interface for database operations
     /// @param <T> the type of the object to return
@@ -387,13 +388,7 @@ public class DatabaseService {
 
     // endregion
 
-
-
-    // ======================
-    //      Forum Section
-    // ======================
-
-    private static final String FORUM_PATH = "forum";
+    // region forum section
 
     //מחולל ID חדש להודעה
     public String generateForumMessageId() {
@@ -405,7 +400,7 @@ public class DatabaseService {
         writeData(FORUM_PATH + "/" + message.getMessageId(), message, callback);
     }
 
-    //טעינת הודעות פורום בזמן אמת (Realtime Listener)
+    //טעינת הודעות פורום בזמן אמת
     public void getForumMessagesRealtime(DatabaseCallback<List<ForumMessage>> callback) {
         readData(FORUM_PATH)
                 .orderByChild("timestamp")
@@ -427,4 +422,5 @@ public class DatabaseService {
                 });
     }
 
+    // endregion
 }

@@ -16,19 +16,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumMessage;
+import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
 public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
     private final List<ForumMessage> messages;
-    private final FirebaseAuth mAuth;
+    private final User user;
     private final DatabaseService db;
 
-    public ForumAdapter(List<ForumMessage> messages, FirebaseAuth mAuth) {
+    public ForumAdapter(List<ForumMessage> messages, User user) {
         this.messages = messages;
-        this.mAuth = mAuth;
+        this.user = user;
         this.db = DatabaseService.getInstance();
     }
 
@@ -49,9 +49,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
         holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 
         // תפריט שלוש נקודות
-        if (mAuth.getCurrentUser() != null &&
-                msg.getUserId() != null &&
-                msg.getUserId().equals(mAuth.getCurrentUser().getUid())) {
+        if (user != null && msg.getUserId() != null && msg.getUserId().equals(user.getUid())) {
 
             holder.btnMenu.setVisibility(View.VISIBLE);
             holder.btnMenu.setOnClickListener(v -> {
@@ -61,6 +59,8 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
 
                 popup.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == R.id.action_delete) {
+                        //לשנות
+
                         // מחיקה ישירות דרך FirebaseDatabase
                         com.google.firebase.database.FirebaseDatabase.getInstance().getReference("forum")
                                 .child(msg.getMessageId())
