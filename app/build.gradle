@@ -3,9 +3,7 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
-def localProps = new Properties()
-localProps.load(new FileInputStream(rootProject.file("local.properties")))
-def apiKey = localProps.getProperty("API_KEY", "")
+def apiKey = project.findProperty("API_KEY") ?: ""
 
 android {
     namespace 'com.example.sagivproject'

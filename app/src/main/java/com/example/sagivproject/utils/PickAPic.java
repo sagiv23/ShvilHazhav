@@ -1,4 +1,4 @@
-package com.example.sagivproject.models;
+package com.example.sagivproject.utils;
 
 import android.content.Context;
 import android.widget.ImageView;
