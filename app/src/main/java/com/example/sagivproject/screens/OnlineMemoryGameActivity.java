@@ -10,7 +10,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 
 public class OnlineMemoryGameActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

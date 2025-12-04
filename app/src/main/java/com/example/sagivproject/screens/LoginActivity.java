@@ -78,9 +78,9 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "שגיאה בטעינת פרטי המשתמש", Toast.LENGTH_LONG).show();
                         return;
                     }
+
                     SharedPreferencesUtil.saveUser(LoginActivity.this, user);
 
-                    //משתמש מחובר - נשלחים לדף שמתאים
                     Intent intent;
                     if (user.getIsAdmin()) {
                         Toast.makeText(LoginActivity.this, "התחברת למשתמש מנהל בהצלחה!", Toast.LENGTH_SHORT).show();

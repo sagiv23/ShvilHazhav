@@ -100,7 +100,7 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
             user.setLastName(newLast);
             user.setPassword(newPass);
 
-            updateUserInDatabaseAndLocal();
+            updateUserInDatabaseAndSharedPreference();
             dialog.dismiss();
         });
 
@@ -109,7 +109,7 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void updateUserInDatabaseAndLocal() {
+    private void updateUserInDatabaseAndSharedPreference() {
         DatabaseService.getInstance().updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
