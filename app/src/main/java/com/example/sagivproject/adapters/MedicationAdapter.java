@@ -23,7 +23,6 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
     private OnMedicationActionListener listener;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    // ממשק למאזינים (עריכה / מחיקה)
     public interface OnMedicationActionListener {
         void onEdit(int position);
         void onDelete(int position);

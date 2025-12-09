@@ -1,5 +1,6 @@
 package com.example.sagivproject.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.sagivproject.services.DatabaseService;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UserViewHolder holder, @SuppressLint("RecyclerView") int position) {
         User user = users.get(position);
 
         holder.txtUserFullName.setText(user.getFullName());
@@ -41,16 +42,19 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         holder.txtUserIsAdmin.setText("מנהל: " + (user.getIsAdmin() ? "כן" : "לא"));
 
         holder.btnDeleteUser.setOnClickListener(v -> {
-            //לשנות
-            FirebaseDatabase.getInstance().getReference("users")
-                    .child(user.getUid())
-                    .removeValue()
-                    .addOnSuccessListener(a -> {
-                        Toast.makeText(v.getContext(), "המשתמש נמחק", Toast.LENGTH_SHORT).show();
-                        users.remove(position);
-                        notifyItemRemoved(position);
-                    })
-                    .addOnFailureListener(e -> Toast.makeText(v.getContext(), "שגיאה במחיקה", Toast.LENGTH_SHORT).show());
+            DatabaseService.getInstance().deleteUser(user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
+                @Override
+                public void onCompleted(Void object) {
+                    Toast.makeText(v.getContext(), "המשתמש נמחק", Toast.LENGTH_SHORT).show();
+                    users.remove(position);
+                    notifyItemRemoved(position);
+                }
+
+                @Override
+                public void onFailed(Exception e) {
+                    Toast.makeText(v.getContext(), "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 

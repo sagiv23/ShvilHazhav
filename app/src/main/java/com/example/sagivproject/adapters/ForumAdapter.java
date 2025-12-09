@@ -24,12 +24,10 @@ import java.util.List;
 public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
     private final List<ForumMessage> messages;
     private final User user;
-    private final DatabaseService db;
 
     public ForumAdapter(List<ForumMessage> messages, User user) {
         this.messages = messages;
         this.user = user;
-        this.db = DatabaseService.getInstance();
     }
 
     @NonNull
@@ -59,20 +57,21 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
 
                 popup.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == R.id.action_delete) {
-                        //לשנות
+                        DatabaseService.getInstance().deleteForumMessage(msg.getMessageId(), new DatabaseService.DatabaseCallback<Void>() {
+                            @Override
+                            public void onCompleted(Void object) {
+                                Toast.makeText(v.getContext(), "ההודעה נמחקה", Toast.LENGTH_SHORT).show();
+                                messages.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, messages.size());
+                            }
 
-                        // מחיקה ישירות דרך FirebaseDatabase
-                        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("forum")
-                                .child(msg.getMessageId())
-                                .removeValue()
-                                .addOnSuccessListener(a -> {
-                                    Toast.makeText(v.getContext(), "ההודעה נמחקה", Toast.LENGTH_SHORT).show();
-                                    messages.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, messages.size());
-                                })
-                                .addOnFailureListener(e ->
-                                        Toast.makeText(v.getContext(), "שגיאה במחיקה", Toast.LENGTH_SHORT).show());
+                            @Override
+                            public void onFailed(Exception e) {
+                                Toast.makeText(v.getContext(), "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                         return true;
                     }
                     return false;

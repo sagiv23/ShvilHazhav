@@ -342,10 +342,7 @@ public class DatabaseService {
     /// @param uid the id of the user
     /// @param medication the medication object to create
     /// @param callback the callback to call when the operation is completed
-    public void createNewMedication(@NotNull final String uid,
-                                    @NotNull final Medication medication,
-                                    @Nullable final DatabaseCallback<Void> callback) {
-
+    public void createNewMedication(@NotNull final String uid, @NotNull final Medication medication, @Nullable final DatabaseCallback<Void> callback) {
         writeData(USERS_PATH + "/" + uid + "/medications/" + medication.getId(), medication, callback);
     }
 
@@ -353,19 +350,14 @@ public class DatabaseService {
     /// @param uid user's id
     /// @param medicationId the id of the medication to get
     /// @param callback the callback to call when the operation is completed
-    public void getMedication(@NotNull final String uid,
-                              @NotNull final String medicationId,
-                              @NotNull final DatabaseCallback<Medication> callback) {
-
+    public void getMedication(@NotNull final String uid, @NotNull final String medicationId, @NotNull final DatabaseCallback<Medication> callback) {
         getData(USERS_PATH + "/" + uid + "/medications/" + medicationId, Medication.class, callback);
     }
 
     /// get all the medications of a specific user
     /// @param uid the id of the user
     /// @param callback the callback
-    public void getUserMedicationList(@NotNull final String uid,
-                                      @NotNull final DatabaseCallback<List<Medication>> callback) {
-
+    public void getUserMedicationList(@NotNull final String uid, @NotNull final DatabaseCallback<List<Medication>> callback) {
         getDataList(USERS_PATH + "/" + uid + "/medications", Medication.class, callback);
     }
 
@@ -379,11 +371,16 @@ public class DatabaseService {
     /// @param uid user id
     /// @param medicationId id to delete
     /// @param callback callback
-    public void deleteMedication(@NotNull final String uid,
-                                 @NotNull final String medicationId,
-                                 @Nullable final DatabaseCallback<Void> callback) {
-
+    public void deleteMedication(@NotNull final String uid, @NotNull final String medicationId, @Nullable final DatabaseCallback<Void> callback) {
         deleteData(USERS_PATH + "/" + uid + "/medications/" + medicationId, callback);
+    }
+
+    /// update a medication in the database
+    /// @param uid user id
+    /// @param medication medication to update
+    /// @param callback callback
+    public void updateMedication(String uid, Medication medication, @Nullable DatabaseCallback<Void> callback) {
+        writeData(USERS_PATH + "/" + uid + "/medications/" + medication.getId(), medication, callback);
     }
 
     // endregion
@@ -392,7 +389,7 @@ public class DatabaseService {
 
     //מחולל ID חדש להודעה
     public String generateForumMessageId() {
-        return databaseReference.child(FORUM_PATH).push().getKey();
+        return generateNewId(FORUM_PATH);
     }
 
     //שליחת הודעה לפורום
@@ -420,6 +417,11 @@ public class DatabaseService {
                         callback.onFailed(error.toException());
                     }
                 });
+    }
+
+    //מחיקת הודעה
+    public void deleteForumMessage(@NotNull final String messageId, @Nullable final DatabaseCallback<Void> callback) {
+        deleteData(FORUM_PATH + "/" + messageId, callback);
     }
 
     // endregion

@@ -61,13 +61,7 @@ public class MedicationListActivity extends AppCompatActivity {
         PagePermissions.checkUserPage(this);
 
         savedUser = SharedPreferencesUtil.getUser(this);
-        uid = savedUser != null ? savedUser.getUid() : null;
-
-        if (uid == null) {
-            Toast.makeText(this, "שגיאה: המשתמש לא מזוהה", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginActivity.class));
-            return;
-        }
+        uid = savedUser.getUid();
 
         btnToMain = findViewById(R.id.btn_MedicationList_to_main);
         btnToContact = findViewById(R.id.btn_MedicationList_to_contact);
@@ -106,17 +100,27 @@ public class MedicationListActivity extends AppCompatActivity {
             @Override
             public void onCompleted(List<Medication> list) {
                 medications.clear();
-                Date today = new Date();
 
+                Date today = new Date();
+                List<String> expiredIds = new ArrayList<>();
+
+                // חלוקה בין תקינים לפגים
                 for (Medication med : list) {
                     if (med.getDate() != null && med.getDate().before(today)) {
-                        deleteMedicationById(med.getId());
+                        expiredIds.add(med.getId());
                     } else {
                         medications.add(med);
                     }
                 }
 
+                // מחיקה של פגי תוקף
+                for (String id : expiredIds) {
+                    DatabaseService.getInstance().deleteMedication(uid, id, null);
+                }
+
+                // סידור רשימת התרופות התקינות
                 medications.sort(Comparator.comparing(Medication::getDate));
+
                 adapter.notifyDataSetChanged();
             }
 
@@ -145,7 +149,7 @@ public class MedicationListActivity extends AppCompatActivity {
     }
 
     private void updateMedication(Medication med) {
-        DatabaseService.getInstance().createNewMedication(uid, med, new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().updateMedication(uid, med, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
                 Toast.makeText(MedicationListActivity.this, "התרופה עודכנה", Toast.LENGTH_SHORT).show();
