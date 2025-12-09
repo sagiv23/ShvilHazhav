@@ -28,12 +28,12 @@
             android:text="דף ראשי"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_register_to_contact"
@@ -43,12 +43,12 @@
             android:text="צור קשר"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_register_to_login"
@@ -58,12 +58,12 @@
             android:text="התחברות"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_register_to_register"
@@ -73,12 +73,12 @@
             android:text="הרשמה"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -116,10 +116,10 @@
                 android:layout_height="wrap_content"
                 android:text="הרשמה"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="38sp"
-                android:textStyle="bold"
+                android:textSize="40sp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/headline"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -150,7 +150,8 @@
                             android:layout_height="wrap_content"
                             android:hint="שם פרטי"
                             android:inputType="textPersonName"
-                            android:textSize="18sp"/>
+                            android:textSize="23sp"
+                            android:fontFamily="@font/text"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- שם משפחה -->
@@ -167,7 +168,8 @@
                             android:layout_height="wrap_content"
                             android:hint="שם משפחה"
                             android:inputType="textPersonName"
-                            android:textSize="18sp"/>
+                            android:textSize="23sp"
+                            android:fontFamily="@font/text"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- אימייל -->
@@ -185,7 +187,8 @@
                             android:hint="כתובת אימייל"
                             android:inputType="textEmailAddress"
                             android:textDirection="ltr"
-                            android:textSize="18sp"/>
+                            android:textSize="23sp"
+                            android:fontFamily="@font/text"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- סיסמה -->
@@ -204,7 +207,8 @@
                             android:hint="סיסמה"
                             android:inputType="textPassword"
                             android:textDirection="ltr"
-                            android:textSize="18sp"/>
+                            android:textSize="23sp"
+                            android:fontFamily="@font/text"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- כפתור הרשמה -->
@@ -214,10 +218,10 @@
                         android:layout_height="60dp"
                         android:text="הרשמה"
                         android:textColor="?attr/colorOnSecondary"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:textSize="25sp"
                         app:cornerRadius="30dp"
-                        android:backgroundTint="?attr/colorSecondary"/>
+                        android:backgroundTint="?attr/colorSecondary"
+                        android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

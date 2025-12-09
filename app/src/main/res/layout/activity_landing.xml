@@ -28,12 +28,12 @@
             android:text="דף ראשי"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_landing_to_contact"
@@ -43,12 +43,12 @@
             android:text="צור קשר"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_landing_to_login"
@@ -58,12 +58,12 @@
             android:text="התחברות"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_landing_to_register"
@@ -73,12 +73,12 @@
             android:text="הרשמה"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -120,9 +120,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ברוכים הבאים!"
-                android:textSize="36sp"
-                android:textStyle="bold"
+                android:textSize="45sp"
                 android:textColor="?attr/colorOnBackground"
+                android:fontFamily="@font/headline"
                 android:layout_marginBottom="40dp" />
 
             <com.google.android.material.card.MaterialCardView
@@ -145,13 +145,14 @@
                         android:layout_height="60dp"
                         android:text="התחברות"
                         android:textAllCaps="false"
-                        android:textSize="18sp"
+                        android:textSize="25sp"
                         app:cornerRadius="30dp"
                         app:icon="@drawable/ic_login"
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer" />
+                        app:iconTint="?attr/colorOnSecondaryContainer"
+                        android:fontFamily="@font/text"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_landingBody_to_register"
@@ -159,14 +160,15 @@
                         android:layout_height="60dp"
                         android:text="הרשמה"
                         android:textAllCaps="false"
-                        android:textSize="18sp"
+                        android:textSize="25sp"
                         app:cornerRadius="30dp"
                         android:layout_marginTop="16dp"
                         app:icon="@drawable/ic_register"
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer" />
+                        app:iconTint="?attr/colorOnSecondaryContainer"
+                        android:fontFamily="@font/text"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_landingBody_to_contact"
@@ -174,14 +176,15 @@
                         android:layout_height="60dp"
                         android:text="צור קשר"
                         android:textAllCaps="false"
-                        android:textSize="18sp"
+                        android:textSize="25sp"
                         app:cornerRadius="30dp"
                         android:layout_marginTop="16dp"
                         app:icon="@drawable/ic_contact_support"
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer" />
+                        app:iconTint="?attr/colorOnSecondaryContainer"
+                        android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -190,7 +193,8 @@
                 android:layout_height="wrap_content"
                 android:text="שביל הזהב"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="14sp" />
+                android:textSize="20sp"
+                android:fontFamily="@font/text"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

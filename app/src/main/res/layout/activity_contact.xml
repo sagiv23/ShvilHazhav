@@ -34,7 +34,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/nehama_webfont"
+            android:fontFamily="@font/text"
             android:visibility="gone" />
 
         <Button
@@ -50,7 +50,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/nehama_webfont"
+            android:fontFamily="@font/text"
             android:visibility="gone" />
 
         <Button
@@ -66,7 +66,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/nehama_webfont"
+            android:fontFamily="@font/text"
             android:visibility="gone" />
 
         <Button
@@ -82,7 +82,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/nehama_webfont"
+            android:fontFamily="@font/text"
             android:visibility="gone" />
 
         <!-- כפתורים למשתמש לא מחובר -->
@@ -100,7 +100,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/nehama_webfont"
+            android:fontFamily="@font/text"
             android:visibility="gone" />
 
         <Button
@@ -117,7 +117,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/nehama_webfont"
+            android:fontFamily="@font/text"
             android:visibility="gone" />
 
         <Button
@@ -134,7 +134,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/nehama_webfont"
+            android:fontFamily="@font/text"
             android:visibility="gone" />
 
         <Button
@@ -151,7 +151,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/nehama_webfont"
+            android:fontFamily="@font/text"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -191,7 +191,7 @@
                 android:textSize="40sp"
                 android:textColor="?attr/colorOnBackground"
                 android:layout_marginBottom="24dp"
-                android:fontFamily="@font/migdalfontwin_webfont"/>
+                android:fontFamily="@font/headline"/>
 
             <!-- כרטיס מידע -->
             <com.google.android.material.card.MaterialCardView
@@ -224,7 +224,7 @@
                         android:textColor="?attr/colorOnBackground"
                         android:gravity="right"
                         android:layout_marginBottom="8dp"
-                        android:fontFamily="@font/nehama_webfont"/>
+                        android:fontFamily="@font/text"/>
 
                     <TextView
                         android:id="@+id/txtEmail"
@@ -246,7 +246,7 @@
                         android:textSize="25sp"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:gravity="right"
-                        android:fontFamily="@font/nehama_webfont"/>
+                        android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

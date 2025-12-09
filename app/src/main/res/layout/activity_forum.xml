@@ -28,12 +28,12 @@
             android:text="דף הבית"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_forum_DetailsAboutUser"
@@ -43,12 +43,12 @@
             android:text="משתמש"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_forum_contact"
@@ -58,12 +58,12 @@
             android:text="צור קשר"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_forum_exit"
@@ -73,12 +73,12 @@
             android:text="התנתקות"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -113,9 +113,9 @@
                 android:layout_height="wrap_content"
                 android:text="קשר קרוב"
                 android:textColor="?attr/colorOnBackground"
-                android:textSize="36sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="24dp" />
+                android:textSize="40sp"
+                android:layout_marginBottom="24dp"
+                android:fontFamily="@font/headline"/>
 
             <!-- כרטיס הפורום -->
             <com.google.android.material.card.MaterialCardView
@@ -153,18 +153,19 @@
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:startIconDrawable="@drawable/ic_chat"
                         app:startIconTint="?attr/android:textColor"
-                        android:layout_marginTop="16dp">
+                        android:fontFamily="@font/headline">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_forum_new_message"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:minHeight="60dp"
+                            android:minHeight="40dp"
                             android:gravity="top|start"
-                            android:textSize="18sp"
+                            android:textSize="20sp"
                             android:inputType="textMultiLine"
                             android:lines="3"
-                            android:maxLines="5"/>
+                            android:maxLines="5"
+                            android:fontFamily="@font/text" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- כפתור שליחה -->
@@ -174,14 +175,15 @@
                         android:layout_height="60dp"
                         android:text="שלח הודעה"
                         android:textAllCaps="false"
-                        android:textSize="18sp"
-                        android:layout_marginTop="12dp"
+                        android:textSize="25sp"
+                        android:layout_marginTop="2dp"
                         app:cornerRadius="30dp"
                         app:icon="@drawable/ic_send"
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/android:textColor"/>
+                        app:iconTint="?attr/android:textColor"
+                        android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

@@ -28,12 +28,12 @@
             android:text="דף הבית"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_DetailsAboutUser_to_DetailsAboutUserPage"
@@ -43,12 +43,12 @@
             android:text="משתמש"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_DetailsAboutUser_to_contact"
@@ -58,12 +58,12 @@
             android:text="צור קשר"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_DetailsAboutUser_to_exit"
@@ -73,12 +73,12 @@
             android:text="התנתקות"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -134,9 +134,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="שם משתמש"
-                        android:textSize="26sp"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnBackground" />
+                        android:textSize="30sp"
+                        android:layout_marginBottom="20dp"
+                        android:fontFamily="@font/headline"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -158,8 +158,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="פרטים אישיים"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
+                        android:textSize="25sp"
+                        android:textColor="?attr/colorOnBackground"
+                        android:fontFamily="@font/headline"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginRight="8dp" />
@@ -168,15 +169,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="שם פרטי:"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:fontFamily="@font/text"
+                        android:textSize="24sp"
                         android:layout_marginRight="8dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txt_DetailsAboutUser_first_name"
-                        android:textSize="16sp"
+                        android:fontFamily="@font/text"
+                        android:textSize="24sp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginRight="8dp" />
 
@@ -184,15 +186,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="שם משפחה:"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:fontFamily="@font/text"
+                        android:textSize="24sp"
                         android:layout_marginRight="8dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txt_DetailsAboutUser_last_name"
-                        android:textSize="16sp"
+                        android:fontFamily="@font/text"
+                        android:textSize="24sp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginRight="8dp" />
 
@@ -200,15 +203,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="אימייל:"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:fontFamily="@font/text"
+                        android:textSize="24sp"
                         android:layout_marginRight="8dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txt_DetailsAboutUser_email"
-                        android:textSize="16sp"
+                        android:fontFamily="@font/text"
+                        android:textSize="24sp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginRight="8dp" />
 
@@ -216,15 +220,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="סיסמה:"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:fontFamily="@font/text"
+                        android:textSize="24sp"
                         android:layout_marginRight="8dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txt_DetailsAboutUser_password"
-                        android:textSize="16sp"
+                        android:fontFamily="@font/text"
+                        android:textSize="24sp"
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="15dp"/>
                 </LinearLayout>
@@ -236,15 +241,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="ערוך פרטים"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textSize="25sp"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
                 app:cornerRadius="30dp"
                 app:icon="@android:drawable/ic_menu_edit"
                 app:iconGravity="textStart"
                 android:textColor="?attr/colorOnSecondary"
-                app:backgroundTint="?attr/colorSecondary" />
+                app:backgroundTint="?attr/colorSecondary"
+                android:fontFamily="@font/text"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

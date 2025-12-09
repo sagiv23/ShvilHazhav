@@ -28,12 +28,12 @@
             android:text="דף הבית"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_main_to_DetailsAboutUser"
@@ -43,12 +43,12 @@
             android:text="משתמש"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_main_to_contact"
@@ -58,12 +58,12 @@
             android:text="צור קשר"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_main_to_exit"
@@ -73,12 +73,12 @@
             android:text="התנתקות"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -113,10 +113,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="שלום מטופל יקר"
-                android:textSize="28sp"
-                android:textStyle="bold"
+                android:textSize="30sp"
                 android:textColor="?attr/colorOnBackground"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/headline"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -146,8 +146,9 @@
                         android:text="רשימת התרופות שלי"
                         android:textColor="?attr/colorOnSecondary"
                         android:backgroundTint="?attr/colorSecondary"
-                        android:textSize="18sp"
-                        android:layout_margin="6dp" />
+                        android:textSize="25sp"
+                        android:layout_margin="6dp"
+                        android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -179,8 +180,9 @@
                         android:text="קשר קרוב"
                         android:textColor="?attr/colorOnSecondary"
                         android:backgroundTint="?attr/colorSecondary"
-                        android:textSize="18sp"
-                        android:layout_margin="6dp" />
+                        android:textSize="25sp"
+                        android:layout_margin="6dp"
+                        android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -212,8 +214,9 @@
                         android:text="יועץ AI"
                         android:textColor="?attr/colorOnSecondary"
                         android:backgroundTint="?attr/colorSecondary"
-                        android:textSize="18sp"
-                        android:layout_margin="6dp" />
+                        android:textSize="25sp"
+                        android:layout_margin="6dp"
+                        android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -245,8 +248,9 @@
                         android:text="משחק זיכרון"
                         android:textColor="?attr/colorOnSecondary"
                         android:backgroundTint="?attr/colorSecondary"
-                        android:textSize="18sp"
-                        android:layout_margin="6dp" />
+                        android:textSize="25sp"
+                        android:layout_margin="6dp"
+                        android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

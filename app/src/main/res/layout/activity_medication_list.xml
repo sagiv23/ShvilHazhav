@@ -28,12 +28,12 @@
             android:text="דף הבית"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_MedicationList_to_DetailsAboutUser"
@@ -43,12 +43,12 @@
             android:text="משתמש"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_MedicationList_to_contact"
@@ -58,12 +58,12 @@
             android:text="צור קשר"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_MedicationList_to_exit"
@@ -73,12 +73,12 @@
             android:text="התנתקות"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -114,10 +114,10 @@
                 android:layout_height="wrap_content"
                 android:text="רשימת התרופות שלי"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="28sp"
-                android:textStyle="bold"
+                android:textSize="35sp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/headline"/>
 
             <Button
                 android:id="@+id/btn_MedicationList_add_medication"
@@ -126,11 +126,11 @@
                 android:text="הוספת תרופה"
                 android:textColor="?attr/colorOnSecondary"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textSize="22sp"
-                android:textStyle="bold"
+                android:textSize="25sp"
                 android:layout_marginBottom="20dp"
                 android:paddingHorizontal="20dp"
-                android:paddingVertical="10dp" />
+                android:paddingVertical="10dp"
+                android:fontFamily="@font/text"/>
 
 
             <!-- RecyclerView לרשימת התרופות -->
@@ -141,8 +141,6 @@
                 android:layout_weight="1"
                 android:padding="8dp"
                 android:scrollbars="vertical" />
-
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

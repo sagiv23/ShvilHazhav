@@ -34,7 +34,7 @@
                 android:textSize="40sp"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
-                android:fontFamily="@font/migdalfontwin_webfont"/>
+                android:fontFamily="@font/headline"/>
 
             <TextView
                 android:id="@+id/txt_admin_title"
@@ -44,7 +44,7 @@
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="37sp"
                 android:layout_marginBottom="30dp"
-                android:fontFamily="@font/nehama_webfont"/>
+                android:fontFamily="@font/text"/>
 
             <!-- בלוק כפתורים -->
             <com.google.android.material.card.MaterialCardView
@@ -73,7 +73,7 @@
                         android:textSize="30sp"
                         android:gravity="center"
                         android:layout_marginBottom="20dp"
-                        android:fontFamily="@font/nehama_webfont"/>
+                        android:fontFamily="@font/text"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_UsersTablePage"
@@ -85,7 +85,7 @@
                         android:backgroundTint="?attr/colorSecondary"
                         android:layout_marginBottom="16dp"
                         app:cornerRadius="25dp"
-                        android:fontFamily="@font/nehama_webfont"/>
+                        android:fontFamily="@font/text"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_forum"
@@ -97,7 +97,7 @@
                         android:backgroundTint="?attr/colorSecondary"
                         android:layout_marginBottom="16dp"
                         app:cornerRadius="25dp"
-                        android:fontFamily="@font/nehama_webfont"/>
+                        android:fontFamily="@font/text"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_DetailsAboutUser"
@@ -109,7 +109,7 @@
                         android:backgroundTint="?attr/colorSecondary"
                         android:layout_marginBottom="16dp"
                         app:cornerRadius="25dp"
-                        android:fontFamily="@font/nehama_webfont"/>
+                        android:fontFamily="@font/text"/>
 
                     <!-- כפתור התנתקות -->
                     <com.google.android.material.button.MaterialButton
@@ -121,7 +121,7 @@
                         android:textSize="25sp"
                         android:backgroundTint="@android:color/holo_red_dark"
                         app:cornerRadius="25dp"
-                        android:fontFamily="@font/nehama_webfont"/>
+                        android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
