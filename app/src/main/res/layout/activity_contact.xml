@@ -29,12 +29,12 @@
             android:text="דף הבית"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"
             android:visibility="gone" />
 
         <Button
@@ -45,12 +45,12 @@
             android:text="משתמש"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"
             android:visibility="gone" />
 
         <Button
@@ -61,12 +61,12 @@
             android:text="צור קשר"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"
             android:visibility="gone" />
 
         <Button
@@ -77,12 +77,12 @@
             android:text="התנתקות"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"
             android:visibility="gone" />
 
         <!-- כפתורים למשתמש לא מחובר -->
@@ -94,12 +94,13 @@
             android:text="דף ראשי"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"
             android:visibility="gone" />
 
         <Button
@@ -110,12 +111,13 @@
             android:text="צור קשר"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"
             android:visibility="gone" />
 
         <Button
@@ -126,12 +128,13 @@
             android:text="התחברות"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"
             android:visibility="gone" />
 
         <Button
@@ -142,12 +145,13 @@
             android:text="הרשמה"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -184,10 +188,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="צור קשר"
-                android:textSize="36sp"
-                android:textStyle="bold"
+                android:textSize="40sp"
                 android:textColor="?attr/colorOnBackground"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="24dp"
+                android:fontFamily="@font/migdalfontwin_webfont"/>
 
             <!-- כרטיס מידע -->
             <com.google.android.material.card.MaterialCardView
@@ -216,11 +220,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="כתובת מייל לפניות:"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:textSize="30sp"
                         android:textColor="?attr/colorOnBackground"
                         android:gravity="right"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/nehama_webfont"/>
 
                     <TextView
                         android:id="@+id/txtEmail"
@@ -239,9 +243,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="הרעיון לפרויקט עלה לאור התקופה הקשה שהמדינה עוברת בשנים האחרונות ולא מעט אירועים בהם אוכלוסיות מיוחדות ונזקקות נדרשו לעזרה גם בדברים הקטנים היומיומיים."
-                        android:textSize="18sp"
+                        android:textSize="25sp"
                         android:textColor="?attr/colorOnSurfaceVariant"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:fontFamily="@font/nehama_webfont"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

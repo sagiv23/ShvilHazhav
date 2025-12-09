@@ -28,12 +28,12 @@
             android:text="דף הבית"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"/>
 
         <Button
             android:id="@+id/btn_Ai_to_DetailsAboutUser"
@@ -43,12 +43,12 @@
             android:text="משתמש"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="23sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"/>
 
         <Button
             android:id="@+id/btn_Ai_to_contact"
@@ -58,12 +58,12 @@
             android:text="צור קשר"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="23sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"/>
 
         <Button
             android:id="@+id/btn_Ai_to_exit"
@@ -73,12 +73,12 @@
             android:text="התנתקות"
             android:textColor="?attr/colorOnPrimary"
             android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="23sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/nehama_webfont"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -112,10 +112,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="יועץ AI"
-                android:textSize="36sp"
-                android:textStyle="bold"
+                android:textSize="40sp"
                 android:textColor="?attr/colorOnBackground"
-                android:layout_marginBottom="40dp" />
+                android:layout_marginBottom="40dp"
+                android:fontFamily="@font/migdalfontwin_webfont"/>
 
             <!-- כרטיס -->
             <com.google.android.material.card.MaterialCardView
@@ -146,7 +146,8 @@
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:hintTextColor="?attr/colorOnSurfaceVariant"
                         app:boxStrokeWidth="1dp"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/nehama_webfont">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edit_Ai_question"
@@ -168,13 +169,14 @@
                         android:layout_height="60dp"
                         android:text="שלח שאלה"
                         android:textAllCaps="false"
-                        android:textSize="18sp"
+                        android:textSize="25sp"
                         app:cornerRadius="30dp"
                         app:icon="@drawable/ic_send"
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer" />
+                        app:iconTint="?attr/colorOnSecondaryContainer"
+                        android:fontFamily="@font/nehama_webfont"/>
 
                     <!-- טעינה -->
                     <ProgressBar
@@ -198,7 +200,8 @@
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxStrokeColor="?attr/colorSecondary"
                         app:boxStrokeWidth="1dp"
-                        android:layout_marginTop="24dp">
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/nehama_webfont">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/TV_Ai_txt_response"
@@ -207,11 +210,12 @@
                             android:minHeight="100dp"
                             android:inputType="textMultiLine"
                             android:gravity="top|start"
-                            android:textSize="18sp"
+                            android:textSize="22sp"
                             android:textColor="?attr/colorOnSurface"
                             android:editable="false"
                             android:focusable="false"
-                            android:text="התשובה תוצג כאן..." />
+                            android:text="התשובה תוצג כאן..."
+                            android:fontFamily="@font/nehama_webfont"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

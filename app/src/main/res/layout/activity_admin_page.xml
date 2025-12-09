@@ -29,12 +29,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="דף מנהלים 😶🤐🤫"
+                android:text="דף מנהלים 🤐🤫"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="37sp"
-                android:textStyle="bold"
+                android:textSize="40sp"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/migdalfontwin_webfont"/>
 
             <TextView
                 android:id="@+id/txt_admin_title"
@@ -42,9 +42,9 @@
                 android:layout_height="wrap_content"
                 android:text="שלום מנהל יקר"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="30dp"/>
+                android:textSize="37sp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/nehama_webfont"/>
 
             <!-- בלוק כפתורים -->
             <com.google.android.material.card.MaterialCardView
@@ -70,10 +70,10 @@
                         android:layout_height="wrap_content"
                         android:text="אפשרויות ניהול"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="26sp"
-                        android:textStyle="bold"
+                        android:textSize="30sp"
                         android:gravity="center"
-                        android:layout_marginBottom="20dp"/>
+                        android:layout_marginBottom="20dp"
+                        android:fontFamily="@font/nehama_webfont"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_UsersTablePage"
@@ -81,11 +81,11 @@
                         android:layout_height="wrap_content"
                         android:text="טבלת משתמשים"
                         android:textColor="?attr/colorOnSecondary"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
+                        android:textSize="25sp"
                         android:backgroundTint="?attr/colorSecondary"
                         android:layout_marginBottom="16dp"
-                        app:cornerRadius="25dp"/>
+                        app:cornerRadius="25dp"
+                        android:fontFamily="@font/nehama_webfont"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_forum"
@@ -93,11 +93,11 @@
                         android:layout_height="wrap_content"
                         android:text="קשר קרוב"
                         android:textColor="?attr/colorOnSecondary"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
+                        android:textSize="25sp"
                         android:backgroundTint="?attr/colorSecondary"
                         android:layout_marginBottom="16dp"
-                        app:cornerRadius="25dp"/>
+                        app:cornerRadius="25dp"
+                        android:fontFamily="@font/nehama_webfont"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_DetailsAboutUser"
@@ -105,11 +105,11 @@
                         android:layout_height="wrap_content"
                         android:text="משתמש"
                         android:textColor="?attr/colorOnSecondary"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
+                        android:textSize="25sp"
                         android:backgroundTint="?attr/colorSecondary"
                         android:layout_marginBottom="16dp"
-                        app:cornerRadius="25dp"/>
+                        app:cornerRadius="25dp"
+                        android:fontFamily="@font/nehama_webfont"/>
 
                     <!-- כפתור התנתקות -->
                     <com.google.android.material.button.MaterialButton
@@ -118,10 +118,10 @@
                         android:layout_height="wrap_content"
                         android:text="התנתקות"
                         android:textColor="?attr/colorOnSecondary"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
+                        android:textSize="25sp"
                         android:backgroundTint="@android:color/holo_red_dark"
-                        app:cornerRadius="25dp"/>
+                        app:cornerRadius="25dp"
+                        android:fontFamily="@font/nehama_webfont"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
