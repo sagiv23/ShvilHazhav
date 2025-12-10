@@ -9,6 +9,7 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String password;
+    private String profileImage;
 
     public User() { }
 
@@ -40,6 +41,9 @@ public class User implements Serializable {
 
     public String getUid() { return this.uid; }
     public void setUid(String uid) { this.uid = uid; }
+
+    public String getProfileImage() { return profileImage; }
+    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
 
     // פעולה שמחזירה את השם המלא של המשתמש
     public String getFullName() {

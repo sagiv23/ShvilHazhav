@@ -2,10 +2,13 @@ package com.example.sagivproject.screens;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
+import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
@@ -25,6 +29,12 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 public class DetailsAboutUserActivity extends AppCompatActivity {
     private Button btnToMain, btnToContact, btnToExit, btnEditUser;
     private TextView txtTitle, txtFirstName, txtLastName, txtEmail, txtPassword;
+    private ImageView imgUserProfile;
+    private Button btnChangePhoto;
+
+    private static final int REQ_CAMERA = 100;
+    private static final int REQ_GALLERY = 200;
+
     private User user;
 
     @Override
@@ -47,6 +57,11 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
         btnToExit = findViewById(R.id.btn_DetailsAboutUser_to_exit);
         btnEditUser = findViewById(R.id.btn_DetailsAboutUser_edit_user);
 
+        imgUserProfile = findViewById(R.id.img_DetailsAboutUser_user_profile);
+        btnChangePhoto = findViewById(R.id.btn_DetailsAboutUser_change_photo);
+
+        btnChangePhoto.setOnClickListener(v -> openImagePicker());
+
         txtTitle = findViewById(R.id.txt_DetailsAboutUser_title);
         txtFirstName = findViewById(R.id.txt_DetailsAboutUser_first_name);
         txtLastName = findViewById(R.id.txt_DetailsAboutUser_last_name);
@@ -67,6 +82,11 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
         txtLastName.setText(user.getLastName());
         txtEmail.setText(user.getEmail());
         txtPassword.setText(user.getPassword());
+
+        if (user.getProfileImage() != null && !user.getProfileImage().isEmpty()) {
+            Bitmap bmp = ImageUtil.convertFrom64base(user.getProfileImage());
+            if (bmp != null) imgUserProfile.setImageBitmap(bmp);
+        }
     }
 
     private void openEditDialog() {
@@ -127,6 +147,72 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
             @Override
             public void onFailed(Exception e) {
                 Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון הנתונים: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void openImagePicker() {
+        ImageUtil.requestPermission(this);
+
+        String[] options = {"צלם תמונה", "בחר מהגלריה"};
+
+        new AlertDialog.Builder(this)
+                .setTitle("בחר תמונת פרופיל")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) { // Camera
+                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraIntent, REQ_CAMERA);
+                    } else { // Gallery
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+                        galleryIntent.setType("image/*");
+                        startActivityForResult(galleryIntent, REQ_GALLERY);
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_OK || data == null) return;
+
+        Bitmap bitmap = null;
+
+        if (requestCode == REQ_CAMERA) {
+            bitmap = (Bitmap) data.getExtras().get("data");
+        } else if (requestCode == REQ_GALLERY) {
+            try {
+                bitmap = BitmapFactory.decodeStream(
+                        getContentResolver().openInputStream(data.getData())
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (bitmap != null) {
+            imgUserProfile.setImageBitmap(bitmap);
+
+            // שמירה ב־Base64
+            String base64 = ImageUtil.convertTo64Base(imgUserProfile);
+            user.setProfileImage(base64);
+
+            saveProfileImageToDB(base64);
+        }
+    }
+
+    private void saveProfileImageToDB(String base64) {
+        DatabaseService.getInstance().updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void object) {
+                SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, user);
+                Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל עודכנה!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה", Toast.LENGTH_SHORT).show();
             }
         });
     }

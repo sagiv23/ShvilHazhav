@@ -122,12 +122,28 @@
                     android:gravity="center">
 
                     <ImageView
+                        android:id="@+id/img_DetailsAboutUser_user_profile"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
                         android:src="@drawable/ic_user"
                         android:contentDescription="User photo"
+                        android:scaleType="centerCrop"
                         app:tint="?attr/android:textColor" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_DetailsAboutUser_change_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="החלף תמונה"
+                        android:textSize="20sp"
+                        app:cornerRadius="20dp"
+                        app:icon="@drawable/ic_camera"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        android:padding="6dp"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/text"/>
 
                     <TextView
                         android:id="@+id/txt_DetailsAboutUser_title"
