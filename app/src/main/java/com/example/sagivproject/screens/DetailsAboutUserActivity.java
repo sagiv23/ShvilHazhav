@@ -175,44 +175,76 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode != RESULT_OK || data == null) return;
+        if (resultCode != RESULT_OK || data == null) {
+            Toast.makeText(this, "לא התקבלה תמונה", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Bitmap bitmap = null;
 
         if (requestCode == REQ_CAMERA) {
-            bitmap = (Bitmap) data.getExtras().get("data");
+            // thumbnail מהמצלמה
+            Object extra = data.getExtras() != null ? data.getExtras().get("data") : null;
+            if (extra instanceof Bitmap) {
+                bitmap = (Bitmap) extra;
+                // ודא פורמט ARGB_8888 כדי למנוע בעיות דחיסה
+                bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+            }
         } else if (requestCode == REQ_GALLERY) {
             try {
-                bitmap = BitmapFactory.decodeStream(
-                        getContentResolver().openInputStream(data.getData())
-                );
+                if (data.getData() != null) {
+                    bitmap = BitmapFactory.decodeStream(
+                            getContentResolver().openInputStream(data.getData())
+                    );
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if (bitmap != null) {
-            imgUserProfile.setImageBitmap(bitmap);
-
-            // שמירה ב־Base64
-            String base64 = ImageUtil.convertTo64Base(imgUserProfile);
-            user.setProfileImage(base64);
-
-            saveProfileImageToDB(base64);
+        if (bitmap == null) {
+            Toast.makeText(this, "לא הצלחנו לקרוא את התמונה (bitmap=null)", Toast.LENGTH_LONG).show();
+            return;
         }
+
+        // הצג למשתמש מייד
+        imgUserProfile.setImageBitmap(bitmap);
+
+        // המרת ה־Bitmap ל־Base64 בעזרת ImageUtil (שלא שינינו)
+        String base64 = ImageUtil.convertTo64Base(bitmap); // שים לב: השיטה צריכה לקבל Bitmap; בהנחה שהוספת שיטה כזו, אם לא - ראו הסבר למטה
+
+        if (base64 == null || base64.isEmpty()) {
+            Toast.makeText(this, "המרת התמונה נכשלה (Base64 ריק)", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // בדיקה שהפענוח עובד (verify roundtrip)
+        Bitmap verifyBmp = ImageUtil.convertFrom64base(base64);
+        if (verifyBmp == null) {
+            Toast.makeText(this, "המרת Base64 חזרה לביטמפ נכשלת", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // שמור במודל ובמסד
+        user.setProfileImage(base64);
+        saveProfileImageToDB(base64);
     }
 
+
     private void saveProfileImageToDB(String base64) {
+        // קודם-כל שמור מיד ב־SharedPreferences (שיקוף מיידי)
+        SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, user);
+
+        // עכשיו נסה לעדכן ב־Realtime DB
         DatabaseService.getInstance().updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
-                SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, user);
                 Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל עודכנה!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(Exception e) {
-                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
