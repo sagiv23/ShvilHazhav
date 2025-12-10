@@ -130,7 +130,7 @@
                         android:src="@drawable/ic_user"
                         android:contentDescription="User photo"
                         android:scaleType="centerCrop"
-                        app:tint="?attr/android:textColor" />
+                        />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_DetailsAboutUser_change_photo"
