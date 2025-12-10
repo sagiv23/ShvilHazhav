@@ -18,9 +18,9 @@
             android:layout_height="wrap_content"
             android:text="התנתקות"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:textSize="30sp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/headline"/>
 
         <TextView
             android:id="@+id/txtDialogMessage"
@@ -28,10 +28,9 @@
             android:layout_height="wrap_content"
             android:text="האם ברצונך להתנתק?"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp" />
+            android:fontFamily="@font/text"/>
 
         <LinearLayout
             android:id="@+id/dialogButtonsLayout"
@@ -39,7 +38,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="5dp">
 
             <Button
                 android:id="@+id/btnLogoutConfirm"
@@ -48,8 +47,8 @@
                 android:text="אישור"
                 android:textColor="?attr/colorOnSecondary"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textSize="15sp"
-                android:textStyle="bold"
+                android:textSize="20sp"
+                android:fontFamily="@font/text"
                 android:layout_margin="2dp" />
 
             <Button
@@ -59,8 +58,8 @@
                 android:text="ביטול"
                 android:textColor="?attr/colorOnSecondary"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textSize="15sp"
-                android:textStyle="bold"
+                android:textSize="20sp"
+                android:fontFamily="@font/text"
                 android:layout_margin="2dp" />
         </LinearLayout>
     </LinearLayout>

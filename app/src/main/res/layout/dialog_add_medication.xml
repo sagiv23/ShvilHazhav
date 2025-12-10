@@ -21,11 +21,13 @@
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:hint="שם התרופה"
+            android:textSize="22sp"
             android:inputType="text"
             android:textColorHint="?attr/android:textColorHint"
             android:textColor="?attr/android:textColor"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/text"/>
 
         <!-- פרטים -->
         <EditText
@@ -36,12 +38,14 @@
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:hint="פרטים"
+            android:textSize="22sp"
             android:inputType="text"
             android:textColorHint="?attr/android:textColorHint"
             android:textColor="?attr/android:textColor"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/text"/>
 
         <!-- תאריך נטילה -->
         <EditText
@@ -52,6 +56,7 @@
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:hint="תאריך אחרון"
+            android:textSize="22sp"
             android:focusable="false"
             android:clickable="true"
             android:inputType="none"
@@ -59,7 +64,8 @@
             android:textColor="?attr/android:textColor"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/text"/>
 
         <!-- כפתורים -->
         <LinearLayout
@@ -77,9 +83,9 @@
                 android:text="הוסף"
                 android:textColor="?attr/colorOnSecondary"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_margin="2dp" />
+                android:textSize="25sp"
+                android:layout_margin="2dp"
+                android:fontFamily="@font/text"/>
 
             <Button
                 android:id="@+id/btn_add_medication_cancel"
@@ -88,9 +94,9 @@
                 android:text="ביטול"
                 android:textColor="?attr/colorOnSecondary"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_margin="2dp" />
+                android:textSize="25sp"
+                android:layout_margin="2dp"
+                android:fontFamily="@font/text"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -12,9 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="פרטי תרופה"
-        android:textSize="18sp"
         android:textColor="?attr/colorOnSurface"
-        android:layout_marginBottom="8dp" />
+        android:textSize="40sp"
+        android:fontFamily="@font/headline"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_horizontal"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,23 +29,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="מחק"
-            android:textSize="19sp"
+            android:textSize="25sp"
             android:padding="10dp"
             android:layout_marginEnd="8dp"
-            android:textStyle="bold"
             android:backgroundTint="?attr/colorSecondary"
-            android:textColor="?attr/colorOnSecondary" />
+            android:textColor="?attr/colorOnSecondary"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btnEditMedication"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ערוך"
-            android:textSize="19sp"
+            android:textSize="25sp"
             android:padding="10dp"
-            android:textStyle="bold"
             android:backgroundTint="?attr/colorSecondary"
-            android:textColor="?attr/colorOnSecondary" />
+            android:textColor="?attr/colorOnSecondary"
+            android:fontFamily="@font/text"/>
     </LinearLayout>
 
 </LinearLayout>

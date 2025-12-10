@@ -49,7 +49,7 @@ public class ContactActivity extends AppCompatActivity {
 
         if (isLoggedIn) {
             //הופך את כפתורי המשתמש המחובר ל-VISIBLE
-            btnToLanding.setVisibility(View.VISIBLE);
+            btnToMain.setVisibility(View.VISIBLE);
             btnToContactPage1.setVisibility(View.VISIBLE);
             btnToDetailsAboutUser.setVisibility(View.VISIBLE);
             btnToExit.setVisibility(View.VISIBLE);

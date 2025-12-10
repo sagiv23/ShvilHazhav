@@ -28,9 +28,9 @@
                 android:layout_height="wrap_content"
                 android:text="שם מלא"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:gravity="right"/>
+                android:textSize="28sp"
+                android:gravity="right"
+                android:fontFamily="@font/text"/>
 
             <TextView
                 android:id="@+id/txtUserEmail"
@@ -38,8 +38,9 @@
                 android:layout_height="wrap_content"
                 android:text="אימייל"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="16sp"
-                android:gravity="right"/>
+                android:textSize="22sp"
+                android:gravity="right"
+                android:fontFamily="@font/text"/>
 
             <TextView
                 android:id="@+id/txtUserIsAdmin"
@@ -47,8 +48,9 @@
                 android:layout_height="wrap_content"
                 android:text="מנהל: לא"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="16sp"
-                android:gravity="right"/>
+                android:textSize="22sp"
+                android:gravity="right"
+                android:fontFamily="@font/text"/>
         </LinearLayout>
 
         <ImageButton
@@ -58,6 +60,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_delete"
             android:contentDescription="מחק משתמש"
-            app:tint="?attr/colorOnSurface" />
+            app:tint="?attr/colorOnSurface"
+            android:fontFamily="@font/text"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

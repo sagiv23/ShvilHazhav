@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:text="עריכת פרטי משתמש"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:textSize="40sp"
+            android:fontFamily="@font/headline"
             android:layout_marginBottom="16dp" />
 
         <EditText
@@ -26,30 +26,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="שם פרטי"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:layout_marginBottom="10dp"
             android:backgroundTint="?attr/colorPrimary"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:fontFamily="@font/text"/>
 
         <EditText
             android:id="@+id/inputEditUserLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="שם משפחה"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:layout_marginBottom="10dp"
             android:backgroundTint="?attr/colorPrimary"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:fontFamily="@font/text"/>
 
         <EditText
             android:id="@+id/inputEditUserPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="סיסמה"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:layout_marginBottom="20dp"
             android:backgroundTint="?attr/colorPrimary"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:fontFamily="@font/text"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,8 +67,8 @@
                 android:text="שמור"
                 android:textColor="?attr/colorOnSecondary"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:textSize="25sp"
+                android:fontFamily="@font/text"
                 android:layout_margin="4dp" />
 
             <Button
@@ -75,8 +78,8 @@
                 android:text="ביטול"
                 android:textColor="?attr/colorOnSecondary"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:textSize="25sp"
+                android:fontFamily="@font/text"
                 android:layout_margin="4dp" />
         </LinearLayout>
     </LinearLayout>

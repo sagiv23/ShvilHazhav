@@ -23,6 +23,7 @@
             android:contentDescription="אפשרויות הודעה"
             android:src="@drawable/baseline_more_vert_24"
             app:tint="?attr/colorOnSurface"
+            android:fontFamily="@font/text"
             android:layout_gravity="end" />
 
         <TextView
@@ -30,30 +31,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="?attr/colorOnSurface"/>
+            android:textSize="25sp"
+            android:textColor="?attr/colorOnSurface"
+            android:fontFamily="@font/text"/>
 
         <TextView
             android:id="@+id/ItemForumMessageTxtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="?attr/colorOnSurfaceVariant"/>
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:fontFamily="@font/text"/>
 
         <TextView
             android:id="@+id/ItemForumMessageTxtMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:textSize="16sp"
-            android:textColor="?attr/colorOnSurface"/>
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnSurface"
+            android:fontFamily="@font/text"/>
 
         <TextView
             android:id="@+id/ItemForumMessageTxtTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="20sp"
             android:textColor="?attr/colorOnSurfaceVariant"
+            android:fontFamily="@font/text"
             android:layout_marginTop="4dp"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
