@@ -7,29 +7,58 @@
     android:layout_marginBottom="10dp"
     android:background="?attr/colorSurface">
 
-    <TextView
-        android:id="@+id/txtMedication"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="פרטי תרופה"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="40sp"
-        android:fontFamily="@font/headline"
-        android:layout_marginBottom="16dp"
-        android:gravity="center_horizontal"/>
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/txtMedicationName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="שם התרופה"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
+            android:fontFamily="@font/headline"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/txtMedicationDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="פרטים"
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnSurface"
+            android:fontFamily="@font/text"
+            android:layout_marginTop="4dp"
+            android:gravity="right"/>
+
+        <TextView
+            android:id="@+id/txtMedicationDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="תוקף"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:textColor="?attr/colorOnSurface"
+            android:fontFamily="@font/text"
+            android:layout_marginTop="8dp"
+            android:gravity="right"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center">
-
         <Button
             android:id="@+id/btnDeleteMedication"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="מחק"
-            android:textSize="25sp"
+            android:textSize="23sp"
             android:padding="10dp"
             android:layout_marginEnd="8dp"
             android:backgroundTint="?attr/colorSecondary"
@@ -41,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ערוך"
-            android:textSize="25sp"
+            android:textSize="23sp"
             android:padding="10dp"
             android:backgroundTint="?attr/colorSecondary"
             android:textColor="?attr/colorOnSecondary"

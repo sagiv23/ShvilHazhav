@@ -1,9 +1,13 @@
 package com.example.sagivproject.adapters;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.format.DateFormat;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -12,12 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
+import com.example.sagivproject.utils.CustomTypefaceSpan;
 
 import java.util.List;
 
@@ -54,6 +60,17 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
                 ContextThemeWrapper wrapper = new ContextThemeWrapper(v.getContext(), R.style.Theme_SagivProject);
                 PopupMenu popup = new PopupMenu(wrapper, holder.btnMenu);
                 popup.getMenuInflater().inflate(R.menu.forum_message_menu, popup.getMenu());
+
+                //רקע
+                MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
+                if (deleteItem != null) {
+                    Typeface typeface = ResourcesCompat.getFont(v.getContext(), R.font.text);
+
+                    SpannableString s = new SpannableString(deleteItem.getTitle());
+                    s.setSpan(new CustomTypefaceSpan("", typeface), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    deleteItem.setTitle(s);
+                }
 
                 popup.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == R.id.action_delete) {

@@ -55,7 +55,7 @@
             android:minHeight="48dp"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
-            android:hint="תאריך אחרון"
+            android:hint="תאריך אחרון לשימוש"
             android:textSize="22sp"
             android:focusable="false"
             android:clickable="true"

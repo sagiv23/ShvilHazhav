@@ -14,6 +14,7 @@ import com.example.sagivproject.models.Medication;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.MedicationViewHolder> {
@@ -44,11 +45,24 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
     @Override
     public void onBindViewHolder(@NonNull MedicationViewHolder holder, int position) {
         Medication med = medications.get(position);
-        holder.txtMedication.setText(
-                "שם: " + med.getName() +
-                        "\nפרטים: " + med.getDetails() +
-                        "\nתאריך אחרון לשימוש: " + dateFormat.format(med.getDate())
-        );
+
+        holder.txtMedicationName.setText(med.getName());
+        holder.txtMedicationDetails.setText("פרטים: " + med.getDetails());
+        holder.txtMedicationDate.setText("תוקף: " + dateFormat.format(med.getDate()));
+
+        Date today = new Date();
+        int colorResId; // המשתנה רק מקבל ערך, לא משמש לקביעת הצבע עדיין
+
+        if (med.getDate() != null && med.getDate().before(today)) {
+            // פג תוקף: אדום
+            colorResId = android.R.color.holo_red_dark;
+        } else {
+            // בתוקף: צבע הניווט שלך
+            colorResId = R.color.text_color;
+        }
+
+        // קובע את הצבע פעם אחת בסוף הבלוק
+        holder.txtMedicationDate.setTextColor(context.getColor(colorResId));
 
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(position));
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(position));
@@ -60,12 +74,17 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
     }
 
     public static class MedicationViewHolder extends RecyclerView.ViewHolder {
-        TextView txtMedication;
+        // 💡 שינוי: הגדרת ה-TextViews החדשים
+        TextView txtMedicationName, txtMedicationDetails, txtMedicationDate;
         Button btnEdit, btnDelete;
 
         public MedicationViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtMedication = itemView.findViewById(R.id.txtMedication);
+            // 💡 עדכון ה-findViewById
+            txtMedicationName = itemView.findViewById(R.id.txtMedicationName);
+            txtMedicationDetails = itemView.findViewById(R.id.txtMedicationDetails);
+            txtMedicationDate = itemView.findViewById(R.id.txtMedicationDate);
+
             btnEdit = itemView.findViewById(R.id.btnEditMedication);
             btnDelete = itemView.findViewById(R.id.btnDeleteMedication);
         }

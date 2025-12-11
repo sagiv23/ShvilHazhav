@@ -108,10 +108,6 @@ public class ForumActivity extends AppCompatActivity {
         if (text.isEmpty()) return;
 
         User savedUser = SharedPreferencesUtil.getUser(this);
-        if (savedUser == null) {
-            Toast.makeText(this, "שגיאה בזיהוי המשתמש", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         String messageId = DatabaseService.getInstance().generateForumMessageId();
         ForumMessage msg = new ForumMessage(messageId, savedUser.getFullName(), savedUser.getEmail(), text, System.currentTimeMillis(), savedUser.getUid());

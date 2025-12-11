@@ -47,7 +47,7 @@
                 android:text="אישור"
                 android:textColor="?attr/colorOnSecondary"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:fontFamily="@font/text"
                 android:layout_margin="2dp" />
 
@@ -58,7 +58,7 @@
                 android:text="ביטול"
                 android:textColor="?attr/colorOnSecondary"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:fontFamily="@font/text"
                 android:layout_margin="2dp" />
         </LinearLayout>

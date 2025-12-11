@@ -37,7 +37,6 @@ public class DatabaseService {
     /// paths for different data types in the database
     /// @see DatabaseService#readData(String)
     private static final String USERS_PATH = "users",
-            MEDICATIONS_PATH = "medications",
             FORUM_PATH = "forum";
 
     /// callback interface for database operations
@@ -336,7 +335,7 @@ public class DatabaseService {
 
     // endregion User Section
 
-    // region medication section
+    // region Medication Section
 
     /// create a new medication in the database
     /// @param uid the id of the user
@@ -383,21 +382,34 @@ public class DatabaseService {
         writeData(USERS_PATH + "/" + uid + "/medications/" + medication.getId(), medication, callback);
     }
 
-    // endregion
+    // endregion Medication Section
 
-    // region forum section
+    // region Forum Section
 
-    //מחולל ID חדש להודעה
+    /// generate a new id for a new forum message
+    /// @return a new id for the forum message
+    /// @see #generateNewId(String)
+    /// @see ForumMessage
     public String generateForumMessageId() {
         return generateNewId(FORUM_PATH);
     }
 
-    //שליחת הודעה לפורום
+    /// send a new message to the forum
+    /// @param message the ForumMessage object to send
+    /// @param callback the callback to call when the operation is completed
+    ///                 the callback will receive void on success or an exception on fail
+    /// @see DatabaseCallback
+    /// @see ForumMessage
     public void sendForumMessage(ForumMessage message, DatabaseCallback<Void> callback) {
         writeData(FORUM_PATH + "/" + message.getMessageId(), message, callback);
     }
 
-    //טעינת הודעות פורום בזמן אמת
+    /// get all forum messages in realtime (live updates)
+    /// @param callback the callback that will receive a List<ForumMessage> when data changes
+    ///                 if the operation fails, the callback will receive an exception
+    /// @see DatabaseCallback
+    /// @see ForumMessage
+    /// @see ValueEventListener
     public void getForumMessagesRealtime(DatabaseCallback<List<ForumMessage>> callback) {
         readData(FORUM_PATH)
                 .orderByChild("timestamp")
@@ -419,10 +431,14 @@ public class DatabaseService {
                 });
     }
 
-    //מחיקת הודעה
+    /// delete a specific forum message from the database
+    /// @param messageId the id of the forum message to delete
+    /// @param callback the callback to call when the operation is completed
+    ///                 the callback will receive void on success or an exception on fail
+    /// @see DatabaseCallback
     public void deleteForumMessage(@NotNull final String messageId, @Nullable final DatabaseCallback<Void> callback) {
         deleteData(FORUM_PATH + "/" + messageId, callback);
     }
 
-    // endregion
+    // endregion Forum Section
 }

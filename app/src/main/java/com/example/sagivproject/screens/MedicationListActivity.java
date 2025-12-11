@@ -104,10 +104,18 @@ public class MedicationListActivity extends AppCompatActivity {
                 Date today = new Date();
                 List<String> expiredIds = new ArrayList<>();
 
-                // חלוקה בין תקינים לפגים
                 for (Medication med : list) {
-                    if (med.getDate() != null && med.getDate().before(today)) {
-                        expiredIds.add(med.getId());
+                    if (med.getDate() != null) {
+
+                        Calendar expiryCal = Calendar.getInstance();
+                        expiryCal.setTime(med.getDate());
+                        expiryCal.add(Calendar.DAY_OF_YEAR, 1);
+
+                        if (today.after(expiryCal.getTime())) {
+                            expiredIds.add(med.getId());
+                        } else {
+                            medications.add(med);
+                        }
                     } else {
                         medications.add(med);
                     }
@@ -199,9 +207,17 @@ public class MedicationListActivity extends AppCompatActivity {
             if (medToEdit != null && medToEdit.getDate() != null)
                 calendar.setTime(medToEdit.getDate());
 
-            DatePickerDialog picker = new DatePickerDialog(this, (view, y, m, d) -> {
-                edtDate.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", y, m + 1, d));
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            // 💡 השינוי הוא כאן: הוספת ה-Style ID
+            DatePickerDialog picker = new DatePickerDialog(
+                    this,
+                    R.style.CustomDatePickerDialog,
+                    (view, y, m, d) -> {
+                        edtDate.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", y, m + 1, d));
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
 
             picker.getDatePicker().setMinDate(System.currentTimeMillis());
             picker.show();

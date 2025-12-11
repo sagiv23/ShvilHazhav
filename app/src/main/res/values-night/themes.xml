@@ -1,37 +1,50 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ערכת נושא ראשית למצב כהה -->
     <style name="Theme.SagivProject.Dark" parent="Theme.Material3.DayNight.NoActionBar">
 
-        <!-- צבע רקע ראשי של חלון האפליקציה -->
-        <item name="android:windowBackground">@color/dark_background_color</item>
+        <item name="android:popupMenuStyle">@style/AppPopupMenuStyle</item>
+        <item name="popupMenuStyle">@style/AppPopupMenuStyle</item>
 
-        <!-- צבע רקע של סרגל עליון / אזור ניווט -->
-        <item name="colorPrimary">@color/dark_background_color_nav</item>
-
-        <!-- צבע טקסט בתוך סרגל עליון / כפתורי ניווט -->
-        <item name="colorOnPrimary">@color/dark_nav_text_color</item>
-
-        <!-- צבע טקסט רגיל -->
-        <item name="android:textColor">@color/dark_text_color</item>
-
-        <!-- צבע רקע של כפתורים -->
-        <item name="colorSecondary">@color/dark_background_color_buttons</item>
-
-        <!-- צבע טקסט בתוך כפתורים -->
-        <item name="colorOnSecondary">@color/dark_buttons_text_color</item>
-
-        <!-- צבע פני השטח הכללי (כמו ScrollView, כרטיסים וכו') -->
-        <item name="colorSurface">@color/dark_background_color</item>
-
-        <!-- צבע טקסט שמוצג על פני השטח -->
-        <item name="colorOnSurface">@color/dark_text_color</item>
-
+        <item name="android:windowBackground">@color/background_color</item>
+        <item name="colorPrimary">@color/background_color_nav</item>
+        <item name="colorOnPrimary">@color/nav_text_color</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="colorSecondary">@color/background_color_buttons</item>
+        <item name="colorOnSecondary">@color/buttons_text_color</item>
+        <item name="colorSurface">@color/background_color</item>
+        <item name="colorOnSurface">@color/text_color</item>
         <item name="android:forceDarkAllowed">true</item>
 
     </style>
 
-    <!-- ערכת הנושא הפעילה של האפליקציה למצב כהה -->
-    <style name="Theme.SagivProject" parent="Theme.SagivProject.Dark" />
+    <style name="AppPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/popup_background_color</item>
+        <item name="android:textAppearance">@style/PopupMenuTextAppearance</item>
+    </style>
+
+    <style name="PopupMenuTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog.MinWidth">
+        <item name="colorAccent">@color/background_color_nav</item>
+        <item name="colorPrimary">@color/background_color_nav</item>
+        <item name="android:textColorAlertDialogListItem">@color/background_color_nav</item>
+        <item name="android:datePickerDialogTheme">@style/DatePickerStyle</item>
+        <item name="android:fontFamily">@font/text</item>
+        <item name="android:textColorPrimary">@color/text_color</item>
+        <item name="android:textColorPrimaryInverse">@color/nav_text_color</item>
+        <item name="android:windowBackground">@color/background_color</item>
+    </style>
+
+    <style name="DatePickerStyle" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:background">@color/background_color</item>
+        <item name="android:headerBackground">@color/background_color_nav</item>
+        <item name="android:textColorPrimary">@color/text_color</item>
+        <item name="android:textColorPrimaryInverse">@color/nav_text_color</item>
+        <item name="android:datePickerMode">calendar</item>
+    </style>
+
+    <style name="Theme.SagivProject" parent="Theme.SagivProject.Light" />
 
 </resources>
