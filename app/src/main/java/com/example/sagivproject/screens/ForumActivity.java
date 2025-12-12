@@ -65,6 +65,10 @@ public class ForumActivity extends AppCompatActivity {
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(this, DetailsAboutUserActivity.class)));
         btnToExit.setOnClickListener(view -> LogoutHelper.logout(this));
 
+        /* ------------
+            Forum Logic
+           ------------ */
+
         messageList = new ArrayList<>();
         layoutManager = new LinearLayoutManager(this);
         recyclerForum.setLayoutManager(layoutManager);

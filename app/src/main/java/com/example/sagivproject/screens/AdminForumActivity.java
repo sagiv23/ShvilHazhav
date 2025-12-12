@@ -57,6 +57,10 @@ public class AdminForumActivity extends AppCompatActivity {
         edtNewMessage = findViewById(R.id.edt_AdminForum_new_message);
         recyclerForum = findViewById(R.id.recycler_AdminForum);
 
+        /* ------------
+            Forum Logic
+           ------------ */
+
         messageList = new ArrayList<>();
         layoutManager = new LinearLayoutManager(this);
         recyclerForum.setLayoutManager(layoutManager);
@@ -71,12 +75,11 @@ public class AdminForumActivity extends AppCompatActivity {
         adapter.setForumMessageListener(new ForumAdapter.ForumMessageListener() {
             @Override
             public void onClick(ForumMessage message) {
-                // עכשיו מוחק רק אחרי שהמשתמש בחר "מחק"
                 forumHelper.deleteMessage(message);
             }
 
             @Override
-            public boolean isShowMenuOptions(ForumMessage message) { return true; }
+            public boolean isShowMenuOptions(ForumMessage message) { return true; } //מנהל בוודאות
         });
 
         btnSendMessage.setOnClickListener(v -> forumHelper.sendMessage(edtNewMessage));

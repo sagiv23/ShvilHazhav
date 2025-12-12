@@ -20,6 +20,8 @@ import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.utils.Validator;
 
+import java.util.HashMap;
+
 public class RegisterActivity extends AppCompatActivity {
     private Button btnToContact, btnToLanding, btnToLogin, btnRegister;
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword;
@@ -88,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
         User newUser = new User(uid, firstName, lastName, email, password
                 , false
                 , "PHZlY3RvciB4bWxuczphbmRyb2lkPSJodHRwOi8vc2NoZW1hcy5hbmRyb2lkLmNvbS9hcGsvcmVzL2FuZHJvaWQiCiAgICBhb mRyb2lkOndpZHRoPSIyNGRwIgogICAgYW5kcm9pZDpoZWlnaHQ9IjI0ZHAiCiAgICBhb mRyb2lkOnZpZXdwb3J0V2lkdGg9Ijk2MCIKICAgIGFuZHJvaWQ6dmlld3BvcnRIZWlnaHQ9Ijk2MCI+CiAgPHBhdGgKICAgICAgYW5kcm9pZDpwYXRoRGF0YT0iTTQ4MCw0ODBxLTY2LDAgLTExMywtNDd0LTQ3LC0xMTNxMCwtNjYgNDcsLTExM3QxMT MsLTQ3cTY2LDAgMTEzLDQ3dDQ3LDExM3EwLDY2IC00NywxMTN0LTExMyw0N1pNMTYwLDgwMHYtMTEycTAsLTM0IDE3LjUsLTYyLjVUMjI0LDU4MnE2MiwtMzEgMTI2LC00Ni41VDQ4MCw1MjBxNjYsMCAxMzAsMTUuNVRlNzM2LDU4MnEyOSwxNSA0Ni41LDQzLj VUNzAwLDY4OHYxMTJMMTYwLDgwMFpNMjQwLDcyMGg0ODB2LT MycTAsLTExIC01LjUsLTIwVDcwMCw2NTRxLTU0LC0yNyAtMTA5LC00MC41VDQ4MCw2MDBxLTU2LDAgLTExMSwxMy41VDI2MCw2NTRxLTksNSAtMTQuNSwxNHQtNS41LDIwdjMyWk00ODAsNDAwcTMzLDAgNTYuNSwtMjMuNUg1NjBxMCwtMzMgLTIzLjUsLTU2 LjVUNDgwLDI0MHEtMzMsMCAtNTYuNSwyMy41VDQwMCwzMjBxMCwzMyAyMy41LDU2LjVUNDgwLDQwMFpNNDgwLDMyMFpNNDgwLDcyMFoiCiAgICAgIGFuZHJvaWQ6ZmlsbENvbG9yPSJAY29sb3IvYnV0dG9uc190ZXh0X2NvbG9yIi8+CjwvdmVjdG9yPg=="
-                , null
+                , new HashMap<>()
                 , 0);
 
         DatabaseService.getInstance().checkIfEmailExists(email, new DatabaseService.DatabaseCallback<>() {
