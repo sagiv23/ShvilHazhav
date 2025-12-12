@@ -78,9 +78,6 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
                             @Override
                             public void onCompleted(Void object) {
                                 Toast.makeText(v.getContext(), "ההודעה נמחקה", Toast.LENGTH_SHORT).show();
-                                messages.remove(position);
-                                notifyItemRemoved(position);
-                                notifyItemRangeChanged(position, messages.size());
                             }
 
                             @Override
