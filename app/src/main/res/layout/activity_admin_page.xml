@@ -88,7 +88,7 @@
                         android:fontFamily="@font/text"/>
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_admin_to_forum"
+                        android:id="@+id/btn_admin_to_AdminForum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="קשר קרוב"

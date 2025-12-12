@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -22,18 +21,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.CustomTypefaceSpan;
+import com.example.sagivproject.utils.ForumHelper;
 
 import java.util.List;
 
 public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
+    private ForumHelper forumHelper;
     private final List<ForumMessage> messages;
     private final User user;
 
-    public ForumAdapter(List<ForumMessage> messages, User user) {
+    public ForumAdapter(List<ForumMessage> messages, User user, ForumHelper forumHelper) {
         this.messages = messages;
         this.user = user;
+        this.forumHelper = forumHelper;
+    }
+
+    public void setForumHelper(ForumHelper helper) {
+        this.forumHelper = helper;
     }
 
     @NonNull
@@ -47,44 +52,39 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
     @Override
     public void onBindViewHolder(@NonNull ForumViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ForumMessage msg = messages.get(position);
+
         holder.txtUser.setText(msg.getFullName());
         holder.txtEmail.setText(msg.getEmail());
         holder.txtMessage.setText(msg.getMessage());
         holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 
-        // תפריט שלוש נקודות
-        if (user != null && msg.getUserId() != null && msg.getUserId().equals(user.getUid())) {
+        boolean isOwner = (user != null && msg.getUserId() != null && msg.getUserId().equals(user.getUid()));
+        boolean isAdmin = (user != null && user.getIsAdmin());
 
+        // אם המנהל → להראות תפריט מחיקה לכל הודעה
+        // אם המשתמש רגיל → רק להודעות שהוא כתב
+        if (isAdmin || isOwner) {
             holder.btnMenu.setVisibility(View.VISIBLE);
+
             holder.btnMenu.setOnClickListener(v -> {
                 ContextThemeWrapper wrapper = new ContextThemeWrapper(v.getContext(), R.style.Theme_SagivProject);
                 PopupMenu popup = new PopupMenu(wrapper, holder.btnMenu);
                 popup.getMenuInflater().inflate(R.menu.forum_message_menu, popup.getMenu());
 
-                //רקע
+                // עיצוב פונט של כפתור מחיקה
                 MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
                 if (deleteItem != null) {
                     Typeface typeface = ResourcesCompat.getFont(v.getContext(), R.font.text);
-
                     SpannableString s = new SpannableString(deleteItem.getTitle());
                     s.setSpan(new CustomTypefaceSpan("", typeface), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
                     deleteItem.setTitle(s);
                 }
 
                 popup.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == R.id.action_delete) {
-                        DatabaseService.getInstance().deleteForumMessage(msg.getMessageId(), new DatabaseService.DatabaseCallback<Void>() {
-                            @Override
-                            public void onCompleted(Void object) {
-                                Toast.makeText(v.getContext(), "ההודעה נמחקה", Toast.LENGTH_SHORT).show();
-                            }
 
-                            @Override
-                            public void onFailed(Exception e) {
-                                Toast.makeText(v.getContext(), "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        // מחיקה דרך ForumHelper!
+                        forumHelper.deleteMessage(msg);
 
                         return true;
                     }
@@ -93,6 +93,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
 
                 popup.show();
             });
+
         } else {
             holder.btnMenu.setVisibility(View.INVISIBLE);
         }

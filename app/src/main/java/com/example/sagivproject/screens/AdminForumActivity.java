@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,18 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.ForumAdapter;
 import com.example.sagivproject.models.ForumMessage;
-import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.ForumHelper;
-import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForumActivity extends AppCompatActivity {
-    private Button btnToMain, btnToContact, btnToDetailsAboutUser, btnToExit, btnSendMessage;
+public class AdminForumActivity extends AppCompatActivity {
+    private Button btnToAdminPage, btnSendMessage;
     private ForumHelper forumHelper;
     private EditText edtNewMessage;
     private RecyclerView recyclerForum;
@@ -43,27 +39,21 @@ public class ForumActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_forum);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumPage), (v, insets) -> {
+        setContentView(R.layout.activity_admin_forum);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.adminForumPage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        PagePermissions.checkUserPage(this);
+        PagePermissions.checkAdminPage(this);
 
-        btnToMain = findViewById(R.id.btn_forum_main);
-        btnToContact = findViewById(R.id.btn_forum_contact);
-        btnToDetailsAboutUser = findViewById(R.id.btn_forum_DetailsAboutUser);
-        btnToExit = findViewById(R.id.btn_forum_exit);
-        btnSendMessage = findViewById(R.id.btn_forum_send_message);
-        edtNewMessage = findViewById(R.id.edt_forum_new_message);
-        recyclerForum = findViewById(R.id.recycler_forum);
+        btnToAdminPage = findViewById(R.id.btn_AdminForum_to_admin);
+        btnToAdminPage.setOnClickListener(view -> startActivity(new Intent(AdminForumActivity.this, AdminPageActivity.class)));
 
-        btnToMain.setOnClickListener(view -> startActivity(new Intent(this, MainActivity.class)));
-        btnToContact.setOnClickListener(view -> startActivity(new Intent(this, ContactActivity.class)));
-        btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(this, DetailsAboutUserActivity.class)));
-        btnToExit.setOnClickListener(view -> LogoutHelper.logout(this));
+        btnSendMessage = findViewById(R.id.btn_AdminForum_send_message);
+        edtNewMessage = findViewById(R.id.edt_AdminForum_new_message);
+        recyclerForum = findViewById(R.id.recycler_AdminForum);
 
         messageList = new ArrayList<>();
         layoutManager = new LinearLayoutManager(this);

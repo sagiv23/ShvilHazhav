@@ -21,7 +21,7 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 import java.util.Objects;
 
 public class AdminPageActivity extends AppCompatActivity {
-    private Button btnToUserTable, btnLogout;
+    private Button btnToUserTable, btnToForum, btnLogout;
     private TextView txtAdminTitle;
 
     @Override
@@ -61,9 +61,12 @@ public class AdminPageActivity extends AppCompatActivity {
         PagePermissions.checkAdminPage(this);
 
         btnToUserTable = findViewById(R.id.btn_admin_to_UsersTablePage);
+        btnToForum = findViewById(R.id.btn_admin_to_AdminForum);
         btnLogout = findViewById(R.id.btn_admin_to_exit);
         txtAdminTitle = findViewById(R.id.txt_admin_title);
+
         btnToUserTable.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, UsersTableActivity.class)));
+        btnToForum.setOnClickListener(v -> startActivity(new Intent(AdminPageActivity.this, AdminForumActivity.class)));
         btnLogout.setOnClickListener(view -> LogoutHelper.logout(this));
 
         User localUser = SharedPreferencesUtil.getUser(this);
