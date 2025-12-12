@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.Objects;
-//import java.util.HashMap;
+import java.util.HashMap;
 
 public class User implements Serializable {
     private String uid;
@@ -15,17 +15,21 @@ public class User implements Serializable {
     private String password;
     private String profileImage;
 
-//    private HashMap<String, Medication> medications;
+    private HashMap<String, Medication> medications;
+    private int count_wins;
 
     public User() { }
 
-    public User(String firstName, String lastName, String email, String password, boolean isAdmin, String uid) {
+    public User(String uid, String firstName, String lastName, String email, String password, boolean isAdmin, String profileImage, HashMap<String, Medication> medications, int count_wins) {
+        this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.isAdmin = isAdmin;
-        this.uid = uid;
+        this.profileImage = profileImage;
+        this.medications = medications;
+        this.count_wins = count_wins;
     }
 
     public String getFirstName() { return this.firstName; }
@@ -51,7 +55,12 @@ public class User implements Serializable {
     public String getProfileImage() { return profileImage; }
     public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
 
-    // פעולה שמחזירה את השם המלא של המשתמש
+    public HashMap<String, Medication> getMedications() { return this.medications; }
+    public void setMedications(HashMap<String, Medication> medications) { this.medications = medications; }
+
+    public int getCountWins() { return this.count_wins; }
+    public void setCountWins(int count_wins) { this.count_wins = count_wins; }
+
     public String getFullName() {
         return this.firstName + " " + this.lastName;
     }

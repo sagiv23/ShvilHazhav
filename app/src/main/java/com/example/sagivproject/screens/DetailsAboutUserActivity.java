@@ -209,7 +209,6 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
         DatabaseService.getInstance().updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
-
                 SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, user);
 
                 Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל עודכנה!", Toast.LENGTH_SHORT).show();
