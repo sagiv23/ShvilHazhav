@@ -82,7 +82,8 @@ public class ForumHelper {
                 savedUser.getEmail(),
                 text,
                 System.currentTimeMillis(),
-                savedUser.getUid()
+                savedUser.getUid(),
+                savedUser.getIsAdmin()
         );
 
         DatabaseService.getInstance().sendForumMessage(msg, new DatabaseService.DatabaseCallback<Void>() {

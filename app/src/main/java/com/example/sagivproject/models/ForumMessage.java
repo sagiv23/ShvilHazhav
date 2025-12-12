@@ -1,7 +1,5 @@
 package com.example.sagivproject.models;
 
-import androidx.annotation.NonNull;
-
 public class ForumMessage {
     private String messageId;
     private String fullName;
@@ -9,16 +7,18 @@ public class ForumMessage {
     private String message;
     private long timestamp;
     private String userId;
+    private boolean isUserAdmin;
 
     public ForumMessage() {}
 
-    public ForumMessage(String messageId, String fullName, String email, String message, long timestamp, String userId) {
+    public ForumMessage(String messageId, String fullName, String email, String message, long timestamp, String userId, boolean isUserAdmin) {
         this.messageId = messageId;
         this.fullName = fullName;
         this.email = email;
         this.message = message;
         this.timestamp = timestamp;
         this.userId = userId;
+        this.isUserAdmin = isUserAdmin;
     }
 
     public String getMessageId() { return messageId; }
@@ -39,7 +39,10 @@ public class ForumMessage {
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
 
-    @NonNull
+    public boolean getIsUserAdmin() { return isUserAdmin; }
+
+    public void setUserAdmin(Boolean admin) { isUserAdmin = admin; }
+
     @Override
     public String toString() {
         return "ForumMessage{" +
@@ -49,6 +52,7 @@ public class ForumMessage {
                 ", message='" + message + '\'' +
                 ", timestamp=" + timestamp +
                 ", userId='" + userId + '\'' +
+                ", isUserAdmin=" + isUserAdmin +
                 '}';
     }
 }

@@ -149,7 +149,7 @@
                         app:cornerRadius="30dp"
                         app:icon="@drawable/ic_login"
                         app:iconSize="28dp"
-                        app:iconGravity="textStart"
+                        app:iconGravity="textEnd"
                         app:iconPadding="12dp"
                         app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text"/>
@@ -165,7 +165,7 @@
                         android:layout_marginTop="16dp"
                         app:icon="@drawable/ic_register"
                         app:iconSize="28dp"
-                        app:iconGravity="textStart"
+                        app:iconGravity="textEnd"
                         app:iconPadding="12dp"
                         app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text"/>
@@ -181,7 +181,7 @@
                         android:layout_marginTop="16dp"
                         app:icon="@drawable/ic_contact_support"
                         app:iconSize="28dp"
-                        app:iconGravity="textStart"
+                        app:iconGravity="textEnd"
                         app:iconPadding="12dp"
                         app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text"/>

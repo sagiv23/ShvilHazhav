@@ -55,6 +55,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
 
         holder.txtUser.setText(msg.getFullName());
         holder.txtEmail.setText(msg.getEmail());
+        holder.txtIsAdmin.setText(msg.getIsUserAdmin() ? "מנהל" : "משתמש רגיל");
         holder.txtMessage.setText(msg.getMessage());
         holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 
@@ -87,13 +88,14 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
     }
 
     public static class ForumViewHolder extends RecyclerView.ViewHolder {
-        TextView txtUser, txtEmail, txtMessage, txtTime;
+        TextView txtUser, txtEmail, txtIsAdmin, txtMessage, txtTime;
         ImageButton btnMenu;
 
         public ForumViewHolder(@NonNull View itemView) {
             super(itemView);
             txtUser = itemView.findViewById(R.id.ItemForumMessageTxtUser);
             txtEmail = itemView.findViewById(R.id.ItemForumMessageTxtEmail);
+            txtIsAdmin = itemView.findViewById(R.id.ItemForumMessageTxtIsAdmin);
             txtMessage = itemView.findViewById(R.id.ItemForumMessageTxtMessage);
             txtTime = itemView.findViewById(R.id.ItemForumMessageTxtTime);
             btnMenu = itemView.findViewById(R.id.ItemForumMessageBtnMenu);
