@@ -1,6 +1,10 @@
 package com.example.sagivproject.models;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
+import java.util.Objects;
+//import java.util.HashMap;
 
 public class User implements Serializable {
     private String uid;
@@ -10,6 +14,8 @@ public class User implements Serializable {
     private String lastName;
     private String password;
     private String profileImage;
+
+//    private HashMap<String, Medication> medications;
 
     public User() { }
 
@@ -50,6 +56,7 @@ public class User implements Serializable {
         return this.firstName + " " + this.lastName;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "User{" +
@@ -60,5 +67,17 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(uid, user.uid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(uid);
     }
 }

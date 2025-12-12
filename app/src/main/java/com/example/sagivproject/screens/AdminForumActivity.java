@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -75,7 +76,7 @@ public class AdminForumActivity extends AppCompatActivity {
         // Scroll listener
         recyclerForum.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView rv, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
                 int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
                 userAtBottom = (lastVisible == adapter.getItemCount() - 1);
             }

@@ -29,11 +29,21 @@ import java.util.List;
 public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
     private ForumHelper forumHelper;
     private final List<ForumMessage> messages;
-    private final User user;
+//    private final User user;
+
+
+    public interface Bla {
+        public void onClick(ForumMessage message);
+
+
+        public boolean isShowMenuOptions(ForumMessage message);
+    }
+
+    Bla bla;
 
     public ForumAdapter(List<ForumMessage> messages, User user, ForumHelper forumHelper) {
         this.messages = messages;
-        this.user = user;
+//        this.user = user;
         this.forumHelper = forumHelper;
     }
 
@@ -58,40 +68,42 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
         holder.txtMessage.setText(msg.getMessage());
         holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 
-        boolean isOwner = (user != null && msg.getUserId() != null && msg.getUserId().equals(user.getUid()));
-        boolean isAdmin = (user != null && user.getIsAdmin());
+//        boolean isOwner = (user != null && msg.getUserId() != null && msg.getUserId().equals(user.getUid()));
+//        boolean isAdmin = (user != null && user.getIsAdmin());
 
         // אם המנהל → להראות תפריט מחיקה לכל הודעה
         // אם המשתמש רגיל → רק להודעות שהוא כתב
-        if (isAdmin || isOwner) {
+//        if (isAdmin || isOwner) {
+          if (bla.isShowMenuOptions(msg)) {
             holder.btnMenu.setVisibility(View.VISIBLE);
 
             holder.btnMenu.setOnClickListener(v -> {
-                ContextThemeWrapper wrapper = new ContextThemeWrapper(v.getContext(), R.style.Theme_SagivProject);
-                PopupMenu popup = new PopupMenu(wrapper, holder.btnMenu);
-                popup.getMenuInflater().inflate(R.menu.forum_message_menu, popup.getMenu());
-
-                // עיצוב פונט של כפתור מחיקה
-                MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
-                if (deleteItem != null) {
-                    Typeface typeface = ResourcesCompat.getFont(v.getContext(), R.font.text);
-                    SpannableString s = new SpannableString(deleteItem.getTitle());
-                    s.setSpan(new CustomTypefaceSpan("", typeface), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    deleteItem.setTitle(s);
-                }
-
-                popup.setOnMenuItemClickListener(item -> {
-                    if (item.getItemId() == R.id.action_delete) {
-
-                        // מחיקה דרך ForumHelper!
-                        forumHelper.deleteMessage(msg);
-
-                        return true;
-                    }
-                    return false;
-                });
-
-                popup.show();
+                bla.onClick(msg);
+//                ContextThemeWrapper wrapper = new ContextThemeWrapper(v.getContext(), R.style.Theme_SagivProject);
+//                PopupMenu popup = new PopupMenu(wrapper, holder.btnMenu);
+//                popup.getMenuInflater().inflate(R.menu.forum_message_menu, popup.getMenu());
+//
+//                // עיצוב פונט של כפתור מחיקה
+//                MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
+//                if (deleteItem != null) {
+//                    Typeface typeface = ResourcesCompat.getFont(v.getContext(), R.font.text);
+//                    SpannableString s = new SpannableString(deleteItem.getTitle());
+//                    s.setSpan(new CustomTypefaceSpan("", typeface), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    deleteItem.setTitle(s);
+//                }
+//
+//                popup.setOnMenuItemClickListener(item -> {
+//                    if (item.getItemId() == R.id.action_delete) {
+//
+//                        // מחיקה דרך ForumHelper!
+//                        forumHelper.deleteMessage(msg);
+//
+//                        return true;
+//                    }
+//                    return false;
+//                });
+//
+//                popup.show();
             });
 
         } else {
@@ -104,7 +116,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
         return messages.size();
     }
 
-    static class ForumViewHolder extends RecyclerView.ViewHolder {
+    public static class ForumViewHolder extends RecyclerView.ViewHolder {
         TextView txtUser, txtEmail, txtMessage, txtTime;
         ImageButton btnMenu;
 

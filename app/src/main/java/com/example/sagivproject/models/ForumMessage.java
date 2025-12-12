@@ -1,5 +1,7 @@
 package com.example.sagivproject.models;
 
+import androidx.annotation.NonNull;
+
 public class ForumMessage {
     private String messageId;
     private String fullName;
@@ -36,4 +38,17 @@ public class ForumMessage {
 
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ForumMessage{" +
+                "messageId='" + messageId + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", message='" + message + '\'' +
+                ", timestamp=" + timestamp +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }
