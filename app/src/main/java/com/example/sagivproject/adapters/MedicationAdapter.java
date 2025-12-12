@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.MedicationViewHolder> {
-
     private Context context;
     private ArrayList<Medication> medications;
     private OnMedicationActionListener listener;
@@ -51,17 +50,14 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
         holder.txtMedicationDate.setText("תוקף: " + dateFormat.format(med.getDate()));
 
         Date today = new Date();
-        int colorResId; // המשתנה רק מקבל ערך, לא משמש לקביעת הצבע עדיין
+        int colorResId;
 
         if (med.getDate() != null && med.getDate().before(today)) {
-            // פג תוקף: אדום
             colorResId = android.R.color.holo_red_dark;
         } else {
-            // בתוקף: צבע הניווט שלך
             colorResId = R.color.text_color;
         }
 
-        // קובע את הצבע פעם אחת בסוף הבלוק
         holder.txtMedicationDate.setTextColor(context.getColor(colorResId));
 
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(position));
@@ -74,13 +70,11 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
     }
 
     public static class MedicationViewHolder extends RecyclerView.ViewHolder {
-        // 💡 שינוי: הגדרת ה-TextViews החדשים
         TextView txtMedicationName, txtMedicationDetails, txtMedicationDate;
         Button btnEdit, btnDelete;
 
         public MedicationViewHolder(@NonNull View itemView) {
             super(itemView);
-            // 💡 עדכון ה-findViewById
             txtMedicationName = itemView.findViewById(R.id.txtMedicationName);
             txtMedicationDetails = itemView.findViewById(R.id.txtMedicationDetails);
             txtMedicationDate = itemView.findViewById(R.id.txtMedicationDate);
