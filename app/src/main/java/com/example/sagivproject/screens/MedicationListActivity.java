@@ -207,7 +207,6 @@ public class MedicationListActivity extends AppCompatActivity {
             if (medToEdit != null && medToEdit.getDate() != null)
                 calendar.setTime(medToEdit.getDate());
 
-            // 💡 השינוי הוא כאן: הוספת ה-Style ID
             DatePickerDialog picker = new DatePickerDialog(
                     this,
                     R.style.CustomDatePickerDialog,

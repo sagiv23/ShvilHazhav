@@ -14,7 +14,6 @@ public class User implements Serializable {
     private String lastName;
     private String password;
     private String profileImage;
-
     private HashMap<String, Medication> medications;
     private int count_wins;
 

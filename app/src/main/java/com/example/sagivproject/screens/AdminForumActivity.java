@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.ForumAdapter;
 import com.example.sagivproject.models.ForumMessage;
+import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.ForumHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
@@ -58,28 +59,32 @@ public class AdminForumActivity extends AppCompatActivity {
 
         messageList = new ArrayList<>();
         layoutManager = new LinearLayoutManager(this);
-
         recyclerForum.setLayoutManager(layoutManager);
 
-        // יוצרים ForumHelper לוקאלי אחרי Adapter
-        adapter = new ForumAdapter(messageList, SharedPreferencesUtil.getUser(this), null);
+        adapter = new ForumAdapter(messageList, null);
         recyclerForum.setAdapter(adapter);
 
         forumHelper = new ForumHelper(this, messageList, recyclerForum, adapter, layoutManager);
 
-        // עכשיו מחברים את ForumHelper ל־Adapter
-        adapter.setForumHelper(forumHelper); // <-- צריך להוסיף setter ב־Adapter
+        adapter.setForumHelper(forumHelper);
 
-        forumHelper.loadMessages();
-        btnSendMessage.setOnClickListener(v -> forumHelper.sendMessage(edtNewMessage));
-
-        // Scroll listener
-        recyclerForum.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        adapter.setForumMessageListener(new ForumAdapter.ForumMessageListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
-                int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
-                userAtBottom = (lastVisible == adapter.getItemCount() - 1);
+            public void onClick(ForumMessage message) {
+                // עכשיו מוחק רק אחרי שהמשתמש בחר "מחק"
+                forumHelper.deleteMessage(message);
             }
+
+            @Override
+            public boolean isShowMenuOptions(ForumMessage message) { return true; }
         });
+
+        btnSendMessage.setOnClickListener(v -> forumHelper.sendMessage(edtNewMessage));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        forumHelper.loadMessages();
     }
 }

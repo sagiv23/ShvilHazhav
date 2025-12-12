@@ -67,28 +67,36 @@ public class ForumActivity extends AppCompatActivity {
 
         messageList = new ArrayList<>();
         layoutManager = new LinearLayoutManager(this);
-
         recyclerForum.setLayoutManager(layoutManager);
 
-        // יוצרים ForumHelper לוקאלי אחרי Adapter
-        adapter = new ForumAdapter(messageList, SharedPreferencesUtil.getUser(this), null);
+        adapter = new ForumAdapter(messageList, null);
         recyclerForum.setAdapter(adapter);
 
         forumHelper = new ForumHelper(this, messageList, recyclerForum, adapter, layoutManager);
 
-        // עכשיו מחברים את ForumHelper ל־Adapter
-        adapter.setForumHelper(forumHelper); // <-- צריך להוסיף setter ב־Adapter
+        adapter.setForumHelper(forumHelper);
 
-        forumHelper.loadMessages();
-        btnSendMessage.setOnClickListener(v -> forumHelper.sendMessage(edtNewMessage));
+        adapter.setForumMessageListener(new ForumAdapter.ForumMessageListener() {
 
-        // Scroll listener
-        recyclerForum.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView rv, int dx, int dy) {
-                int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
-                userAtBottom = (lastVisible == adapter.getItemCount() - 1);
+            public void onClick(ForumMessage message) {
+                forumHelper.deleteMessage(message);
+            }
+
+            @Override
+            public boolean isShowMenuOptions(ForumMessage message) {
+                User user = SharedPreferencesUtil.getUser(ForumActivity.this);
+                boolean isOwner = message.getUserId() != null && message.getUserId().equals(user.getUid()); //משתמש רגיל - רק את שלו
+                return isOwner;
             }
         });
+
+        btnSendMessage.setOnClickListener(v -> forumHelper.sendMessage(edtNewMessage));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        forumHelper.loadMessages();
     }
 }
