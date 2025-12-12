@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="end">
+            android:gravity="right">
 
             <TextView
                 android:id="@+id/txtUserFullName"
@@ -53,14 +53,24 @@
                 android:fontFamily="@font/text"/>
         </LinearLayout>
 
+        <!-- כפתור הפיכת משתמש למנהל -->
+        <ImageButton
+            android:id="@+id/btnMakeAdmin"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_admin_status"
+            android:contentDescription="הפוך למנהל"
+            app:tint="?attr/colorOnSurface" />
+
+        <!-- כפתור מחיקת משתמש -->
         <ImageButton
             android:id="@+id/btnDeleteUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_delete"
             android:contentDescription="מחק משתמש"
-            app:tint="?attr/colorOnSurface"
-            android:fontFamily="@font/text"/>
+            app:tint="?attr/colorOnSurface" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -82,9 +82,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="הקלד כאן..."
-                android:fontFamily="@font/text"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxStrokeColor="?attr/colorSecondary"
+                app:boxStrokeWidth="1dp"
                 android:layout_marginTop="10dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:fontFamily="@font/text">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_UsersTable_search"
@@ -92,7 +98,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:fontFamily="@font/text"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

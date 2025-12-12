@@ -30,5 +30,7 @@
         <item>שם פרטי</item>
         <item>שם משפחה</item>
         <item>אימייל</item>
+        <item>מנהלים</item>
+        <item>משתמשים רגילים</item>
     </string-array>
 </resources>

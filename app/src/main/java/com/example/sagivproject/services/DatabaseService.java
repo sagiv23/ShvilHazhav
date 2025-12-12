@@ -315,6 +315,9 @@ public class DatabaseService {
         });
     }
 
+    /// update a user in the database
+    /// @param user the user object to update
+    /// @param callback the callback to call when the operation is completed
     public void updateUser(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
         runTransaction(USERS_PATH + "/" + user.getUid(), User.class, currentUser -> user, new DatabaseCallback<User>() {
             @Override
@@ -331,6 +334,21 @@ public class DatabaseService {
                 }
             }
         });
+    }
+
+    /// update only the admin status of a user
+    /// @param uid user id
+    /// @param isAdmin new admin value (true/false)
+    /// @param callback result callback
+    public void updateUserAdminStatus(@NotNull final String uid, boolean isAdmin, @Nullable final DatabaseCallback<Void> callback) {
+        readData(USERS_PATH + "/" + uid + "/isAdmin")
+                .setValue(isAdmin, (error, ref) -> {
+                    if (error != null) {
+                        if (callback != null) callback.onFailed(error.toException());
+                    } else {
+                        if (callback != null) callback.onCompleted(null);
+                    }
+                });
     }
 
     // endregion User Section

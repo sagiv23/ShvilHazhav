@@ -1,16 +1,22 @@
 package com.example.sagivproject.screens;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,6 +28,7 @@ import com.example.sagivproject.adapters.UsersTableAdapter;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.PagePermissions;
+import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,15 +58,65 @@ public class UsersTableActivity extends AppCompatActivity {
         btnToAdminPage = findViewById(R.id.btn_UsersTable_to_admin);
         btnToAdminPage.setOnClickListener(view -> startActivity(new Intent(UsersTableActivity.this, AdminPageActivity.class)));
 
+        User currentUser = SharedPreferencesUtil.getUser(UsersTableActivity.this);
+
+        adapter = new UsersTableAdapter(filteredList, currentUser, new UsersTableAdapter.OnUserActionListener() {
+            @Override
+            public void onToggleAdmin(User user) {
+                boolean newRole = !user.getIsAdmin();
+
+                DatabaseService.getInstance().updateUserAdminStatus(
+                        user.getUid(),
+                        newRole,
+                        new DatabaseService.DatabaseCallback<Void>() {
+                            @Override
+                            public void onCompleted(Void object) {
+                                Toast.makeText(UsersTableActivity.this,
+                                        "הסטטוס עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                loadUsers(); //רענון
+                            }
+
+                            @Override
+                            public void onFailed(Exception e) {
+                                Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון סטטוס", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            }
+
+            @Override
+            public void onDeleteUser(User user) {
+
+                boolean isSelf = user.equals(currentUser);
+                DatabaseService.getInstance().deleteUser(user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
+                    @Override
+                    public void onCompleted(Void object) {
+                        if (isSelf) {
+                            SharedPreferencesUtil.signOutUser(UsersTableActivity.this);
+                            Intent intent = new Intent(UsersTableActivity.this, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            return;
+                        }
+
+                        Toast.makeText(UsersTableActivity.this, "המשתמש נמחק", Toast.LENGTH_SHORT).show();
+                        loadUsers();
+                    }
+
+                    @Override
+                    public void onFailed(Exception e) {
+                        Toast.makeText(UsersTableActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
         recyclerView = findViewById(R.id.recycler_UsersTable);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new UsersTableAdapter(filteredList);
         recyclerView.setAdapter(adapter);
 
         editSearch = findViewById(R.id.edit_UsersTable_search);
         spinnerSearchType = findViewById(R.id.spinner_UsersTable_search_type);
-
-        loadUsers();
 
         editSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -69,6 +126,50 @@ public class UsersTableActivity extends AppCompatActivity {
                 filterUsers(s.toString().trim());
             }
         });
+
+        /*------ שינוי צבעים בבחירה לחיפוש -----*/
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_item, // layout פנימי בסיסי
+                getResources().getStringArray(R.array.search_types)
+        ) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                Typeface typeface = ResourcesCompat.getFont(UsersTableActivity.this, R.font.text);
+                tv.setTypeface(typeface);
+                tv.setTextColor(getResources().getColor(R.color.text_color, null));
+                tv.setBackgroundColor(getResources().getColor(R.color.background_color_buttons, null));
+
+                tv.setTextSize(22);
+                tv.setPadding(24, 24, 24, 24);
+                return tv;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                Typeface typeface = ResourcesCompat.getFont(UsersTableActivity.this, R.font.text);
+                tv.setTypeface(typeface);
+                tv.setTextColor(getResources().getColor(R.color.text_color, null));
+                tv.setBackgroundColor(getResources().getColor(R.color.background_color_buttons, null));
+
+                tv.setTextSize(22);
+                tv.setPadding(24, 24, 24, 24);
+                return tv;
+            }
+        };
+
+        spinnerSearchType.setAdapter(adapter);
+        /*------ סוף -----*/
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUsers();
     }
 
     private void loadUsers() {
@@ -113,6 +214,14 @@ public class UsersTableActivity extends AppCompatActivity {
             } else if (searchType.equals("אימייל") &&
                     user.getEmail() != null &&
                     user.getEmail().contains(query)) {
+                filteredList.add(user);
+            } else if (searchType.equals("מנהלים") &&
+                    query.equals("כן") &&
+                    user.getIsAdmin()) {
+                filteredList.add(user);
+            } else if (searchType.equals("משתמשים רגילים") &&
+                    query.equals("לא") &&
+                    !user.getIsAdmin()) {
                 filteredList.add(user);
             }
         }

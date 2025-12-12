@@ -18,19 +18,18 @@ import com.example.sagivproject.utils.ForumHelper;
 import java.util.List;
 
 public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
+    private ForumHelper forumHelper;
+    private final List<ForumMessage> messages;
+    private ForumMessageListener listener;
+
     public interface ForumMessageListener {
         void onClick(ForumMessage message);
         boolean isShowMenuOptions(ForumMessage message);
     }
 
-    private ForumMessageListener listener;
-
     public void setForumMessageListener(ForumMessageListener listener) {
         this.listener = listener;
     }
-
-    private ForumHelper forumHelper;
-    private final List<ForumMessage> messages;
 
     public ForumAdapter(List<ForumMessage> messages, ForumHelper forumHelper) {
         this.messages = messages;
