@@ -44,8 +44,10 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         User user = users.get(position);
 
         holder.txtUserFullName.setText(user.getFullName());
-        holder.txtUserEmail.setText(user.getEmail());
+        holder.txtUserEmail.setText("אימייל: " + user.getEmail());
+        holder.txtUserPassword.setText("סיסמה: " + user.getPassword());
         holder.txtUserIsAdmin.setText("מנהל: " + (user.getIsAdmin() ? "כן" : "לא"));
+        holder.txtUserWins.setText("ניצחונות: " + user.getCountWins());
 
         boolean isSelf = user.equals(currentUser);
 
@@ -72,17 +74,19 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         return users.size();
     }
 
-    static class UserViewHolder extends RecyclerView.ViewHolder {
-        TextView txtUserFullName, txtUserEmail, txtUserIsAdmin;
+    public static class UserViewHolder extends RecyclerView.ViewHolder {
+        TextView txtUserFullName, txtUserEmail, txtUserPassword, txtUserIsAdmin, txtUserWins;
         ImageButton btnDeleteUser, btnToggleAdmin;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             txtUserFullName = itemView.findViewById(R.id.txtUserFullName);
-            txtUserEmail = itemView.findViewById(R.id.txtUserEmail);
-            txtUserIsAdmin = itemView.findViewById(R.id.txtUserIsAdmin);
-            btnDeleteUser = itemView.findViewById(R.id.btnDeleteUser);
-            btnToggleAdmin = itemView.findViewById(R.id.btnMakeAdmin);
+            txtUserEmail = itemView.findViewById(R.id.txt_UserRow_email);
+            txtUserPassword = itemView.findViewById(R.id.txt_UserRow_password);
+            txtUserIsAdmin = itemView.findViewById(R.id.txt_UserRow_IsAdmin);
+            txtUserWins = itemView.findViewById(R.id.txt_UserRow_wins);
+            btnDeleteUser = itemView.findViewById(R.id.btn_UserRow_DeleteUser);
+            btnToggleAdmin = itemView.findViewById(R.id.btn_UserRow_MakeAdmin);
         }
     }
 }

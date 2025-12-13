@@ -33,7 +33,7 @@
                 android:fontFamily="@font/text"/>
 
             <TextView
-                android:id="@+id/txtUserEmail"
+                android:id="@+id/txt_UserRow_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="אימייל"
@@ -43,19 +43,39 @@
                 android:fontFamily="@font/text"/>
 
             <TextView
-                android:id="@+id/txtUserIsAdmin"
+                android:id="@+id/txt_UserRow_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="מנהל: לא"
+                android:text="סיסמה"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="20sp"
+                android:gravity="right"
+                android:fontFamily="@font/text"/>
+
+            <TextView
+                android:id="@+id/txt_UserRow_IsAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="מנהל: "
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="22sp"
+                android:gravity="right"
+                android:fontFamily="@font/text"/>
+
+            <TextView
+                android:id="@+id/txt_UserRow_wins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ניצחונות: "
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="20sp"
                 android:gravity="right"
                 android:fontFamily="@font/text"/>
         </LinearLayout>
 
         <!-- כפתור הפיכת משתמש למנהל -->
         <ImageButton
-            android:id="@+id/btnMakeAdmin"
+            android:id="@+id/btn_UserRow_MakeAdmin"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -65,7 +85,7 @@
 
         <!-- כפתור מחיקת משתמש -->
         <ImageButton
-            android:id="@+id/btnDeleteUser"
+            android:id="@+id/btn_UserRow_DeleteUser"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"

@@ -6,8 +6,11 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.Nullable;
 
+import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.google.gson.Gson;
+
+import java.util.HashMap;
 
 /// Utility class for shared preferences operations
 /// Contains methods for saving and retrieving data from shared preferences
@@ -157,6 +160,18 @@ public class SharedPreferencesUtil {
         User user = getUser(context);
         if (user != null) {
             return user.getUid();
+        }
+        return null;
+    }
+
+     /// Get the list of medications from the currently saved user.
+     /// @param context The context to use
+     /// @return HashMap of Medications, or null if user/medications not found.
+    @Nullable
+    public static HashMap<String, Medication> getMedications(Context context) {
+        User user = getUser(context);
+        if (user != null) {
+            return user.getMedications();
         }
         return null;
     }

@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -127,10 +128,9 @@ public class UsersTableActivity extends AppCompatActivity {
             }
         });
 
-        /*------ שינוי צבעים בבחירה לחיפוש -----*/
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
-                android.R.layout.simple_spinner_item, // layout פנימי בסיסי
+                android.R.layout.simple_spinner_item,
                 getResources().getStringArray(R.array.search_types)
         ) {
             @Override
@@ -163,6 +163,16 @@ public class UsersTableActivity extends AppCompatActivity {
         };
 
         spinnerSearchType.setAdapter(adapter);
+
+        spinnerSearchType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                filterUsers(editSearch.getText().toString().trim());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
         /*------ סוף -----*/
     }
 
@@ -199,31 +209,65 @@ public class UsersTableActivity extends AppCompatActivity {
     private void filterUsers(String query) {
         filteredList.clear();
         String searchType = spinnerSearchType.getSelectedItem().toString();
+        String lowerQuery = query.toLowerCase();
 
-        for (User user : usersList) {
-            if (query.isEmpty()) {
-                filteredList.add(user);
-            } else if (searchType.equals("שם פרטי") &&
-                    user.getFirstName() != null &&
-                    user.getFirstName().contains(query)) {
-                filteredList.add(user);
-            } else if (searchType.equals("שם משפחה") &&
-                    user.getLastName() != null &&
-                    user.getLastName().contains(query)) {
-                filteredList.add(user);
-            } else if (searchType.equals("אימייל") &&
-                    user.getEmail() != null &&
-                    user.getEmail().contains(query)) {
-                filteredList.add(user);
-            } else if (searchType.equals("מנהלים") &&
-                    query.equals("כן") &&
-                    user.getIsAdmin()) {
-                filteredList.add(user);
-            } else if (searchType.equals("משתמשים רגילים") &&
-                    query.equals("לא") &&
-                    !user.getIsAdmin()) {
-                filteredList.add(user);
-            }
+        switch (searchType) {
+
+            case "מנהלים":
+                for (User user : usersList) {
+                    if (user.getIsAdmin() &&
+                            user.getFullName().toLowerCase().contains(lowerQuery)) {
+                        filteredList.add(user);
+                    }
+                }
+                break;
+
+            case "משתמשים רגילים":
+                for (User user : usersList) {
+                    if (!user.getIsAdmin() &&
+                            user.getFullName().toLowerCase().contains(lowerQuery)) {
+                        filteredList.add(user);
+                    }
+                }
+                break;
+
+            case "ניצחונות":
+                for (User user : usersList) {
+                    if (user.getFullName().toLowerCase().contains(lowerQuery)) {
+                        filteredList.add(user);
+                    }
+                }
+                filteredList.sort(
+                        (u1, u2) -> Integer.compare(u2.getCountWins(), u1.getCountWins())
+                );
+                break;
+
+            case "שם פרטי":
+                for (User user : usersList) {
+                    if (user.getFirstName() != null &&
+                            user.getFirstName().toLowerCase().contains(lowerQuery)) {
+                        filteredList.add(user);
+                    }
+                }
+                break;
+
+            case "שם משפחה":
+                for (User user : usersList) {
+                    if (user.getLastName() != null &&
+                            user.getLastName().toLowerCase().contains(lowerQuery)) {
+                        filteredList.add(user);
+                    }
+                }
+                break;
+
+            case "אימייל":
+                for (User user : usersList) {
+                    if (user.getEmail() != null &&
+                            user.getEmail().toLowerCase().contains(lowerQuery)) {
+                        filteredList.add(user);
+                    }
+                }
+                break;
         }
 
         adapter.notifyDataSetChanged();

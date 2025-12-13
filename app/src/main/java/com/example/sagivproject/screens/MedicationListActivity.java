@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,7 +43,7 @@ public class MedicationListActivity extends AppCompatActivity {
     private ArrayList<Medication> medications = new ArrayList<>();
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    private User savedUser;
+    private User user;
     private String uid;
 
     @Override
@@ -60,8 +61,8 @@ public class MedicationListActivity extends AppCompatActivity {
 
         PagePermissions.checkUserPage(this);
 
-        savedUser = SharedPreferencesUtil.getUser(this);
-        uid = savedUser.getUid();
+        user = SharedPreferencesUtil.getUser(this);
+        uid = user.getUid();
 
         btnToMain = findViewById(R.id.btn_MedicationList_to_main);
         btnToContact = findViewById(R.id.btn_MedicationList_to_contact);
@@ -96,17 +97,28 @@ public class MedicationListActivity extends AppCompatActivity {
     }
 
     private void loadMedications() {
+        if(user.getMedications() != null) {
+            List<Medication> cachedList = new ArrayList<>(user.getMedications().values());
+
+            medications.clear();
+            medications.addAll(cachedList);
+
+            medications.sort(Comparator.comparing(Medication::getDate));
+            adapter.notifyDataSetChanged();
+        }
+
         DatabaseService.getInstance().getUserMedicationList(uid, new DatabaseService.DatabaseCallback<List<Medication>>() {
             @Override
             public void onCompleted(List<Medication> list) {
                 medications.clear();
+
+                HashMap<String, Medication> updatedMedicationsMap = new HashMap<>();
 
                 Date today = new Date();
                 List<String> expiredIds = new ArrayList<>();
 
                 for (Medication med : list) {
                     if (med.getDate() != null) {
-
                         Calendar expiryCal = Calendar.getInstance();
                         expiryCal.setTime(med.getDate());
                         expiryCal.add(Calendar.DAY_OF_YEAR, 1);
@@ -115,21 +127,31 @@ public class MedicationListActivity extends AppCompatActivity {
                             expiredIds.add(med.getId());
                         } else {
                             medications.add(med);
+                            updatedMedicationsMap.put(med.getId(), med);
                         }
                     } else {
                         medications.add(med);
+                        updatedMedicationsMap.put(med.getId(), med);
                     }
                 }
 
-                // מחיקה של פגי תוקף
+                //מחיקה של פגי תוקף
                 for (String id : expiredIds) {
                     DatabaseService.getInstance().deleteMedication(uid, id, null);
+                }
+
+                //אם נמחקו תרופות, להציג Toast
+                if (!expiredIds.isEmpty()) {
+                    Toast.makeText(MedicationListActivity.this, "נמחקו תרופות שפגו תוקפן", Toast.LENGTH_SHORT).show();
                 }
 
                 // סידור רשימת התרופות התקינות
                 medications.sort(Comparator.comparing(Medication::getDate));
 
                 adapter.notifyDataSetChanged();
+
+                user.setMedications(updatedMedicationsMap);
+                SharedPreferencesUtil.saveUser(MedicationListActivity.this, user);
             }
 
             @Override
@@ -141,10 +163,16 @@ public class MedicationListActivity extends AppCompatActivity {
 
     private void saveMedication(Medication medication) {
         medication.setId(DatabaseService.getInstance().generateMedicationId(uid));
-
         DatabaseService.getInstance().createNewMedication(uid, medication, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
+                HashMap<String, Medication> medsMap = user.getMedications();
+                if (medsMap == null) {
+                    medsMap = new HashMap<>();
+                }
+                medsMap.put(medication.getId(), medication);
+                user.setMedications(medsMap);
+                SharedPreferencesUtil.saveUser(MedicationListActivity.this, user);
                 Toast.makeText(MedicationListActivity.this, "התרופה נוספה", Toast.LENGTH_SHORT).show();
                 loadMedications();
             }
@@ -160,6 +188,12 @@ public class MedicationListActivity extends AppCompatActivity {
         DatabaseService.getInstance().updateMedication(uid, med, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
+                HashMap<String, Medication> medsMap = user.getMedications();
+                if (medsMap != null) {
+                    medsMap.put(med.getId(), med);
+                    user.setMedications(medsMap);
+                    SharedPreferencesUtil.saveUser(MedicationListActivity.this, user);
+                }
                 Toast.makeText(MedicationListActivity.this, "התרופה עודכנה", Toast.LENGTH_SHORT).show();
                 loadMedications();
             }
@@ -175,6 +209,12 @@ public class MedicationListActivity extends AppCompatActivity {
         DatabaseService.getInstance().deleteMedication(uid, id, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
+                HashMap<String, Medication> medsMap = user.getMedications();
+                if (medsMap != null) {
+                    medsMap.remove(id);
+                    user.setMedications(medsMap);
+                    SharedPreferencesUtil.saveUser(MedicationListActivity.this, user);
+                }
                 loadMedications();
             }
 
