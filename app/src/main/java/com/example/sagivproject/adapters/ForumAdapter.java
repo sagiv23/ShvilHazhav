@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumMessage;
-import com.example.sagivproject.utils.ForumHelper;
 
 import java.util.List;
 
 public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
-    private ForumHelper forumHelper;
     private final List<ForumMessage> messages;
     private ForumMessageListener listener;
 
@@ -31,13 +29,8 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
         this.listener = listener;
     }
 
-    public ForumAdapter(List<ForumMessage> messages, ForumHelper forumHelper) {
+    public ForumAdapter(List<ForumMessage> messages) {
         this.messages = messages;
-        this.forumHelper = forumHelper;
-    }
-
-    public void setForumHelper(ForumHelper helper) {
-        this.forumHelper = helper;
     }
 
     @NonNull

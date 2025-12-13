@@ -18,7 +18,8 @@
         android:theme="@style/Theme.SagivProject">
         <activity
             android:name=".screens.AdminForumActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".screens.UsersTableActivity"
             android:exported="false" />

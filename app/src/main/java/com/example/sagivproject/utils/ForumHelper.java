@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.adapters.ForumAdapter;
@@ -15,50 +14,39 @@ import com.example.sagivproject.services.DatabaseService;
 import java.util.List;
 
 public class ForumHelper {
-
     private final Context context;
     private final ForumAdapter adapter;
     private final List<ForumMessage> messageList;
-    private final RecyclerView recycler;
-    private final LinearLayoutManager layoutManager;
+    private final RecyclerView recycler;;
 
     private boolean userAtBottom = true;
 
     public ForumHelper(Context context,
                        List<ForumMessage> messageList,
                        RecyclerView recycler,
-                       ForumAdapter adapter,
-                       LinearLayoutManager layoutManager) {
+                       ForumAdapter adapter) {
 
         this.context = context;
         this.messageList = messageList;
         this.recycler = recycler;
         this.adapter = adapter;
-        this.layoutManager = layoutManager;
-
-        initScrollListener();
-    }
-
-    private void initScrollListener() {
-        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView rv, int dx, int dy) {
-                int last = layoutManager.findLastCompletelyVisibleItemPosition();
-                userAtBottom = (last == adapter.getItemCount() - 1);
-            }
-        });
     }
 
     public void loadMessages() {
         DatabaseService.getInstance().getForumMessagesRealtime(new DatabaseService.DatabaseCallback<List<ForumMessage>>() {
             @Override
             public void onCompleted(List<ForumMessage> list) {
+                int oldSize = messageList.size();
+
                 messageList.clear();
                 messageList.addAll(list);
                 adapter.notifyDataSetChanged();
 
-                if (userAtBottom || messageList.size() <= 2) {
-                    recycler.scrollToPosition(messageList.size() - 1);
+                //אם נוספה הודעה חדשה והמשתמש היה בתחתית - נגלול אליה
+                if (userAtBottom && messageList.size() > oldSize) {
+                    recycler.post(() ->
+                            recycler.smoothScrollToPosition(messageList.size() - 1)
+                    );
                 }
             }
 

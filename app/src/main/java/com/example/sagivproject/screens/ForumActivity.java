@@ -2,9 +2,9 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +18,6 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.ForumAdapter;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.ForumHelper;
 import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
@@ -35,9 +34,6 @@ public class ForumActivity extends AppCompatActivity {
 
     private ForumAdapter adapter;
     private List<ForumMessage> messageList;
-    private LinearLayoutManager layoutManager;
-
-    private boolean userAtBottom = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,20 +64,30 @@ public class ForumActivity extends AppCompatActivity {
         /* ------------
             Forum Logic
            ------------ */
+        View root = findViewById(R.id.forumPage);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            v.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    imeInsets.bottom
+            );
+            return insets;
+        });
+
+        recyclerForum.setLayoutManager(new LinearLayoutManager(this));
 
         messageList = new ArrayList<>();
-        layoutManager = new LinearLayoutManager(this);
-        recyclerForum.setLayoutManager(layoutManager);
-
-        adapter = new ForumAdapter(messageList, null);
+        adapter = new ForumAdapter(messageList);
         recyclerForum.setAdapter(adapter);
 
-        forumHelper = new ForumHelper(this, messageList, recyclerForum, adapter, layoutManager);
-
-        adapter.setForumHelper(forumHelper);
+        forumHelper = new ForumHelper(this, messageList, recyclerForum, adapter);
 
         adapter.setForumMessageListener(new ForumAdapter.ForumMessageListener() {
-
             @Override
             public void onClick(ForumMessage message) {
                 forumHelper.deleteMessage(message);
