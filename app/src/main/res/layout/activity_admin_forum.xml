@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".screens.AdminForumActivity">
 
-    <!-- כפתור חזרה - זהה לעיצוב של UsersTable -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_AdminForum_to_admin"
         android:layout_width="wrap_content"
@@ -17,7 +16,6 @@
         android:textColor="?attr/colorOnSecondary"
         android:backgroundTint="?attr/colorSecondary"
         android:textSize="25sp"
-        android:textStyle="bold"
         android:fontFamily="@font/text"
         app:cornerRadius="25dp"
         app:icon="@android:drawable/ic_media_previous"

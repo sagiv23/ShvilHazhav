@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,9 @@ import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class DetailsAboutUserActivity extends AppCompatActivity {
-    private Button btnToMain, btnToContact, btnToExit, btnEditUser;
+    private Button btnToMain, btnToDetailsAboutUser, btnToContact, btnToExit, btnToAdmin, btnEditUser;
+    private View separatorLine;
+    private LinearLayout topMenu;
     private TextView txtTitle, txtFirstName, txtLastName, txtEmail, txtPassword;
     private ImageView imgUserProfile;
     private Button btnChangePhoto;
@@ -49,31 +52,57 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
             return insets;
         });
 
-        PagePermissions.checkUserPage(this);
+        PagePermissions.onlyUserAndAdmin(this);
 
         user = SharedPreferencesUtil.getUser(this);
 
+        topMenu = findViewById(R.id.topMenuDetailsAboutUser);
+        //משתמש מחובר
         btnToMain = findViewById(R.id.btn_DetailsAboutUser_to_main);
+        btnToDetailsAboutUser = findViewById(R.id.btn_DetailsAboutUser_to_DetailsAboutUserPage);
         btnToContact = findViewById(R.id.btn_DetailsAboutUser_to_contact);
         btnToExit = findViewById(R.id.btn_DetailsAboutUser_to_exit);
+        separatorLine = findViewById(R.id.separatorLine_DetailsAboutUser);
+
+        //מנהל
+        btnToAdmin = findViewById(R.id.btn_DetailsAboutUser_to_admin);
+
+        boolean isAdmin = user.getIsAdmin();
+
+        if (isAdmin) {
+            //הופך את כפתורי המנהל ל-VISIBLE
+            btnToAdmin.setVisibility(View.VISIBLE);
+            topMenu.setVisibility(View.GONE);
+            separatorLine.setVisibility(View.GONE);
+        }
+        else {
+            //הופך את כפתורי המשתמש המחובר ל-VISIBLE
+            btnToMain.setVisibility(View.VISIBLE);
+            btnToDetailsAboutUser.setVisibility(View.VISIBLE);
+            btnToContact.setVisibility(View.VISIBLE);
+            btnToExit.setVisibility(View.VISIBLE);
+            separatorLine.setVisibility(View.VISIBLE);
+            topMenu.setVisibility(View.VISIBLE);
+        }
+
+        btnToMain.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
+        btnToContact.setOnClickListener(v -> startActivity(new Intent(this, ContactActivity.class)));
+        btnToExit.setOnClickListener(v -> LogoutHelper.logout(this));
+        btnToAdmin.setOnClickListener(v -> startActivity(new Intent(this, AdminPageActivity.class)));
+
         btnEditUser = findViewById(R.id.btn_DetailsAboutUser_edit_user);
+        btnEditUser.setOnClickListener(v -> openEditDialog());
 
         imgUserProfile = findViewById(R.id.img_DetailsAboutUser_user_profile);
         btnChangePhoto = findViewById(R.id.btn_DetailsAboutUser_change_photo);
+        btnChangePhoto.setOnClickListener(v -> openImagePicker());
+        imgUserProfile.setOnClickListener(v -> showFullImageDialog());
 
         txtTitle = findViewById(R.id.txt_DetailsAboutUser_title);
         txtFirstName = findViewById(R.id.txt_DetailsAboutUser_first_name);
         txtLastName = findViewById(R.id.txt_DetailsAboutUser_last_name);
         txtEmail = findViewById(R.id.txt_DetailsAboutUser_email);
         txtPassword = findViewById(R.id.txt_DetailsAboutUser_password);
-
-        btnToMain.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
-        btnToContact.setOnClickListener(v -> startActivity(new Intent(this, ContactActivity.class)));
-        btnToExit.setOnClickListener(v -> LogoutHelper.logout(this));
-        btnEditUser.setOnClickListener(v -> openEditDialog());
-
-        btnChangePhoto.setOnClickListener(v -> openImagePicker());
-        imgUserProfile.setOnClickListener(v -> showFullImageDialog());
 
         loadUserDetailsFromSharedPref();
     }
@@ -227,10 +256,10 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
 
         ImageView dialogImage = dialog.findViewById(R.id.dialogImage);
 
-        // מציב את התמונה שיש בתמונה המקורית
+        //מציב את התמונה שיש בתמונה המקורית
         dialogImage.setImageDrawable(imgUserProfile.getDrawable());
 
-        // לוחצים על התמונה → יוצא
+        //לוחצים על התמונה → יוצא
         dialogImage.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();

@@ -58,4 +58,13 @@ public class PagePermissions {
             activity.startActivity(intent);
         }
     }
+
+    //4) דף מיועד רק למנהלים ולמשתמשים רגילים
+    public static void onlyUserAndAdmin(Activity activity) {
+        if (!SharedPreferencesUtil.isUserLoggedIn(activity)) {
+            Intent intent = new Intent(activity, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            activity.startActivity(intent);
+        }
+    }
 }

@@ -16,7 +16,6 @@
         android:textColor="?attr/colorOnSecondary"
         android:backgroundTint="?attr/colorSecondary"
         android:textSize="25sp"
-        android:textStyle="bold"
         android:fontFamily="@font/text"
         app:cornerRadius="25dp"
         app:icon="@android:drawable/ic_media_previous"
