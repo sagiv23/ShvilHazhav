@@ -12,8 +12,11 @@ preference = "1.2.0"
 annotation = "1.6.0"
 lifecycleLivedataKtx = "2.6.1"
 lifecycleViewmodelKtx = "2.6.1"
+firebaseBom = "34.3.0"
 
 [libraries]
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+google-firebase-database = { module = "com.google.firebase:firebase-database" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
@@ -29,4 +32,3 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-
