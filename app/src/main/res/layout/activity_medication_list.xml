@@ -113,7 +113,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="רשימת התרופות שלי"
-                android:textColor="?attr/colorOnSurface"
                 android:textSize="35sp"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"

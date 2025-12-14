@@ -88,7 +88,6 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text" />
 
                     <com.google.android.material.button.MaterialButton
@@ -102,7 +101,6 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text" />
 
                     <com.google.android.material.button.MaterialButton
@@ -116,7 +114,6 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text" />
 
                     <!-- כפתור התנתקות -->

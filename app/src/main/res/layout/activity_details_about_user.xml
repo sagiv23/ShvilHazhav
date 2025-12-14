@@ -118,14 +118,14 @@
             android:textSize="25sp"
             android:fontFamily="@font/text"
             app:cornerRadius="25dp"
-            app:icon="@android:drawable/ic_media_previous"
+            app:icon="@drawable/ic_back"
             app:iconGravity="textStart"
             app:iconPadding="8dp"
             android:layout_marginTop="20dp"
             android:layout_marginStart="16dp"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -215,7 +215,6 @@
                         android:layout_height="wrap_content"
                         android:text="פרטים אישיים"
                         android:textSize="25sp"
-                        android:textColor="?attr/colorOnBackground"
                         android:fontFamily="@font/headline"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="10dp"
@@ -301,10 +300,9 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
                 app:cornerRadius="30dp"
-                app:icon="@android:drawable/ic_menu_edit"
+                app:icon="@drawable/ic_edit"
                 app:iconGravity="textStart"
                 android:textColor="?attr/colorOnSecondary"
-                app:backgroundTint="?attr/colorSecondary"
                 android:fontFamily="@font/text"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

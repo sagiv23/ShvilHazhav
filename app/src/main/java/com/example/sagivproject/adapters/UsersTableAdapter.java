@@ -55,15 +55,22 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
             holder.btnToggleAdmin.setVisibility(View.GONE);
         } else {
             holder.btnToggleAdmin.setVisibility(View.VISIBLE);
-            holder.btnToggleAdmin.setOnClickListener(v -> listener.onToggleAdmin(user));
+            holder.btnDeleteUser.setVisibility(View.VISIBLE);
+
+            //שינוי אייקון לפי הסטטוס
+            if (user.getIsAdmin()) {
+                holder.btnToggleAdmin.setImageResource(R.drawable.ic_remove_admin);
+                holder.btnToggleAdmin.setContentDescription("הסר מנהל");
+            } else {
+                holder.btnToggleAdmin.setImageResource(R.drawable.ic_add_admin);
+                holder.btnToggleAdmin.setContentDescription("הפוך למנהל");
+            }
+
+            holder.btnToggleAdmin.setOnClickListener(v ->
+                    listener.onToggleAdmin(user)
+            );
         }
 
-        // כפתור החלפת מנהל
-        holder.btnToggleAdmin.setOnClickListener(v ->
-                listener.onToggleAdmin(user)
-        );
-
-        // כפתור מחיקה
         holder.btnDeleteUser.setOnClickListener(v ->
                 listener.onDeleteUser(user)
         );

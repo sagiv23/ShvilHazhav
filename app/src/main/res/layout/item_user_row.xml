@@ -27,7 +27,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="שם מלא"
-                android:textColor="?attr/colorOnSurface"
                 android:textSize="28sp"
                 android:gravity="right"
                 android:fontFamily="@font/text"/>
@@ -37,7 +36,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="אימייל"
-                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="22sp"
                 android:gravity="right"
                 android:fontFamily="@font/text"/>
@@ -47,7 +45,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="סיסמה"
-                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="20sp"
                 android:gravity="right"
                 android:fontFamily="@font/text"/>
@@ -57,7 +54,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="מנהל: "
-                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="22sp"
                 android:gravity="right"
                 android:fontFamily="@font/text"/>
@@ -67,7 +63,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ניצחונות: "
-                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="20sp"
                 android:gravity="right"
                 android:fontFamily="@font/text"/>
@@ -79,9 +74,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_admin_status"
-            android:contentDescription="הפוך למנהל"
-            app:tint="?attr/colorOnSurface" />
+            android:src="@drawable/ic_add_admin"
+            android:contentDescription="הפוך למנהל" />
 
         <!-- כפתור מחיקת משתמש -->
         <ImageButton
@@ -89,8 +83,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_delete"
-            android:contentDescription="מחק משתמש"
-            app:tint="?attr/colorOnSurface" />
+            android:src="@drawable/ic_delete"
+            android:contentDescription="מחק משתמש" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

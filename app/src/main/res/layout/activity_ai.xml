@@ -113,7 +113,6 @@
                 android:layout_height="wrap_content"
                 android:text="יועץ AI"
                 android:textSize="40sp"
-                android:textColor="?attr/colorOnBackground"
                 android:layout_marginBottom="40dp"
                 android:fontFamily="@font/headline"/>
 
@@ -176,7 +175,6 @@
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text"/>
 
                     <!-- טעינה -->

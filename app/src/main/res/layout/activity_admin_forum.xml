@@ -18,7 +18,7 @@
         android:textSize="25sp"
         android:fontFamily="@font/text"
         app:cornerRadius="25dp"
-        app:icon="@android:drawable/ic_media_previous"
+        app:icon="@drawable/ic_back"
         app:iconGravity="textStart"
         app:iconPadding="8dp"
         android:layout_marginTop="20dp"
@@ -122,7 +122,6 @@
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/android:textColor"
                         android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

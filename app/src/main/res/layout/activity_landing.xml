@@ -119,9 +119,8 @@
                 android:id="@+id/txtTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ברוכים הבאים!"
-                android:textSize="45sp"
-                android:textColor="?attr/colorOnBackground"
+                android:text="ברוכים הבאים"
+                android:textSize="50sp"
                 android:fontFamily="@font/headline"
                 android:layout_marginBottom="40dp" />
 
@@ -151,7 +150,6 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text"/>
 
                     <com.google.android.material.button.MaterialButton
@@ -167,7 +165,6 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text"/>
 
                     <com.google.android.material.button.MaterialButton
@@ -183,7 +180,6 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/colorOnSecondaryContainer"
                         android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

@@ -112,7 +112,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="קשר קרוב"
-                android:textColor="?attr/colorOnBackground"
                 android:textSize="40sp"
                 android:layout_marginBottom="24dp"
                 android:fontFamily="@font/headline"/>

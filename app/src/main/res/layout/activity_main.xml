@@ -114,7 +114,6 @@
                 android:layout_height="wrap_content"
                 android:text="שלום מטופל יקר"
                 android:textSize="30sp"
-                android:textColor="?attr/colorOnBackground"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/headline"/>
 
@@ -136,7 +135,6 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/ic_medication"
-                        app:tint="?attr/android:textColor"
                         android:layout_marginBottom="6dp" />
 
                     <Button
@@ -170,7 +168,6 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/ic_forum"
-                        app:tint="?attr/android:textColor"
                         android:layout_marginBottom="6dp" />
 
                     <Button
@@ -204,7 +201,6 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/ic_ai_assistant"
-                        app:tint="?attr/android:textColor"
                         android:layout_marginBottom="6dp" />
 
                     <Button
@@ -238,7 +234,6 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/ic_memory_game"
-                        app:tint="?attr/android:textColor"
                         android:layout_marginBottom="6dp" />
 
                     <Button

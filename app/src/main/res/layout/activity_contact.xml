@@ -209,8 +209,7 @@
                         android:layout_height="72dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="16dp"
-                        android:src="@drawable/ic_contact_support"
-                        app:tint="?attr/android:textColor" />
+                        android:src="@drawable/ic_contact_support" />
 
                     <TextView
                         android:id="@+id/txtEmailTitle"
@@ -218,7 +217,6 @@
                         android:layout_height="wrap_content"
                         android:text="כתובת מייל לפניות:"
                         android:textSize="30sp"
-                        android:textColor="?attr/colorOnBackground"
                         android:gravity="right"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/text"/>
@@ -230,7 +228,6 @@
                         android:text="shvilhazhav23contact@gmail.com"
                         android:autoLink="email"
                         android:textSize="18sp"
-                        android:textColor="?attr/android:textColor"
                         android:textStyle="bold"
                         android:layout_marginBottom="24dp"
                         android:layout_gravity="center_horizontal" />
@@ -241,7 +238,6 @@
                         android:layout_height="wrap_content"
                         android:text="הרעיון לפרויקט עלה לאור התקופה הקשה שהמדינה עוברת בשנים האחרונות ולא מעט אירועים בהם אוכלוסיות מיוחדות ונזקקות נדרשו לעזרה גם בדברים הקטנים היומיומיים."
                         android:textSize="25sp"
-                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:gravity="right"
                         android:fontFamily="@font/text"/>
                 </LinearLayout>
