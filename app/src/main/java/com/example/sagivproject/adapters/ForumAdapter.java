@@ -1,6 +1,7 @@
 package com.example.sagivproject.adapters;
 
 import android.text.format.DateFormat;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumMessage;
+
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.view.MenuItem;
+
+import androidx.core.content.res.ResourcesCompat;
+
+import com.example.sagivproject.utils.CustomTypefaceSpan;
 
 import java.util.List;
 
@@ -58,6 +68,31 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
                 PopupMenu popup = new PopupMenu(v.getContext(), holder.btnMenu);
                 popup.getMenuInflater().inflate(R.menu.forum_message_menu, popup.getMenu());
 
+                Typeface typeface = ResourcesCompat.getFont(
+                        v.getContext(),
+                        R.font.text
+                );
+
+                MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
+                if (deleteItem != null) {
+                    SpannableString title = new SpannableString(deleteItem.getTitle());
+                    title.setSpan(
+                            new CustomTypefaceSpan("", typeface),
+                            0,
+                            title.length(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    );
+
+                    title.setSpan(
+                            new AbsoluteSizeSpan(20, true),
+                            0,
+                            title.length(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    );
+
+                    deleteItem.setTitle(title);
+                }
+
                 popup.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == R.id.action_delete) {
                         listener.onClick(msg);
@@ -68,7 +103,6 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
 
                 popup.show();
             });
-
         } else {
             holder.btnMenu.setVisibility(View.INVISIBLE);
         }

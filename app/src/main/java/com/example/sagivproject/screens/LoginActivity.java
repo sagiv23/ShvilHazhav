@@ -63,11 +63,9 @@ public class LoginActivity extends AppCompatActivity {
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "נא למלא אימייל וסיסמה", Toast.LENGTH_SHORT).show();
         } else if (!Validator.isEmailValid(email)) {
-            editTextEmail.setError("כתובת האימייל לא תקינה");
             editTextEmail.requestFocus();
             Toast.makeText(this, "כתובת האימייל לא תקינה", Toast.LENGTH_LONG).show();
         } else if (!Validator.isPasswordValid(password)) {
-            editTextPassword.setError("הסיסמה קצרה מדי");
             editTextPassword.requestFocus();
             Toast.makeText(this, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
         } else {

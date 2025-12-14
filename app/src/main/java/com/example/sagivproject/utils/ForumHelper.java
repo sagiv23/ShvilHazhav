@@ -18,7 +18,6 @@ public class ForumHelper {
     private final ForumAdapter adapter;
     private final List<ForumMessage> messageList;
     private final RecyclerView recycler;;
-
     private boolean userAtBottom = true;
 
     public ForumHelper(Context context,

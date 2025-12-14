@@ -143,7 +143,6 @@
                         app:boxCornerRadiusBottomStart="16dp"
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorOnSurfaceVariant"
                         app:boxStrokeWidth="1dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text">

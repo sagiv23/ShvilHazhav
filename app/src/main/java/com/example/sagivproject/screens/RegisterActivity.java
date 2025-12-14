@@ -65,22 +65,18 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
             return;
         } if (!Validator.isNameValid(firstName)) {
-            editTextFirstName.setError("שם פרטי קצר מדי");
             editTextFirstName.requestFocus();
             Toast.makeText(this, "שם פרטי קצר מדי", Toast.LENGTH_LONG).show();
             return;
         } if (!Validator.isNameValid(lastName)) {
-            editTextLastName.setError("שם פרטי קצר מדי");
             editTextLastName.requestFocus();
             Toast.makeText(this, "שם משפחה קצר מדי", Toast.LENGTH_LONG).show();
             return;
         } if (!Validator.isEmailValid(email)) {
-            editTextEmail.setError("כתובת האימייל לא תקינה");
             editTextEmail.requestFocus();
             Toast.makeText(this, "כתובת האימייל לא תקינה", Toast.LENGTH_LONG).show();
             return;
         } if (!Validator.isPasswordValid(password)) {
-            editTextPassword.setError("הסיסמה קצרה מדי");
             editTextPassword.requestFocus();
             Toast.makeText(this, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
             return;

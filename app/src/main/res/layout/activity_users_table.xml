@@ -85,10 +85,11 @@
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeColor="?attr/colorSecondary"
+                app:boxStrokeColor="?attr/colorPrimary"
                 app:boxStrokeWidth="1dp"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/text">
+                android:fontFamily="@font/text"
+                android:layout_marginBottom="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_UsersTable_search"

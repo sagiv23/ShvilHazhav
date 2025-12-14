@@ -212,7 +212,12 @@
                         android:layout_height="wrap_content"
                         app:startIconDrawable="@drawable/ic_password"
                         app:endIconMode="password_toggle"
-                        android:layout_marginBottom="20dp">
+                        android:layout_marginBottom="20dp"
+                        app:boxBackgroundMode="outline"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorOnSurfaceVariant"
+                        app:boxStrokeWidth="1dp"
+                        android:fontFamily="@font/text">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_password"
@@ -223,8 +228,6 @@
                             android:textDirection="ltr"
                             android:textSize="23sp"
                             app:boxBackgroundMode="outline"
-                            app:boxStrokeColor="?attr/colorPrimary"
-                            app:hintTextColor="?attr/colorOnSurfaceVariant"
                             app:boxStrokeWidth="1dp"
                             android:fontFamily="@font/text"/>
                     </com.google.android.material.textfield.TextInputLayout>
