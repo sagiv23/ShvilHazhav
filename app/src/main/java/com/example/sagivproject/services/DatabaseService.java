@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.ForumMessage;
+import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +38,8 @@ public class DatabaseService {
     /// paths for different data types in the database
     /// @see DatabaseService#readData(String)
     private static final String USERS_PATH = "users",
-            FORUM_PATH = "forum";
+            FORUM_PATH = "forum",
+            ROOMS_PATH = "rooms";
 
     /// callback interface for database operations
     /// @param <T> the type of the object to return
@@ -459,4 +461,141 @@ public class DatabaseService {
     }
 
     // endregion Forum Section
+
+    // region Rooms Section
+
+    /// callback interface for room status realtime updates
+    /// used to notify when a room starts playing or is deleted
+    /// @see GameRoom
+    public interface RoomStatusCallback {
+        /// called when the room status changes to "playing"
+        /// @param room the updated room object
+        void onRoomStarted(GameRoom room);
+
+        /// called when the room is deleted from the database
+        void onRoomDeleted();
+
+        /// called when the listener fails
+        /// @param e the exception
+        void onFailed(Exception e);
+    }
+
+    /// create a new game room and save it in the database
+    /// @param user the user creating the room (player1)
+    /// @param callback callback that returns the created GameRoom
+    /// @see GameRoom
+    /// @see DatabaseCallback
+    public void createRoom(@NotNull User user,
+                           @NotNull DatabaseCallback<GameRoom> callback) {
+        String roomId = generateNewId(ROOMS_PATH);
+        GameRoom room = new GameRoom(roomId, user);
+
+        writeData(ROOMS_PATH + "/" + roomId, room, new DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void object) {
+                callback.onCompleted(room);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                callback.onFailed(e);
+            }
+        });
+    }
+
+
+    public void findOrCreateRoom(User user, DatabaseCallback<GameRoom> callback) {
+        String newRoomId = generateNewId(ROOMS_PATH);
+
+        readData(ROOMS_PATH).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+
+                for (MutableData roomData : currentData.getChildren()) {
+                    GameRoom room = roomData.getValue(GameRoom.class);
+
+                    if (room != null
+                            && "waiting".equals(room.getStatus())
+                            && room.getPlayer2() == null) {
+
+                        room.setPlayer2(user);
+                        room.setStatus("playing");
+                        roomData.setValue(room);
+                        return Transaction.success(currentData);
+                    }
+                }
+
+                GameRoom newRoom = new GameRoom(newRoomId, user);
+                currentData.child(newRoomId).setValue(newRoom);
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError error, boolean committed, DataSnapshot snapshot) {
+                if (!committed || error != null) {
+                    callback.onFailed(error != null ? error.toException() : new Exception("Match failed"));
+                    return;
+                }
+
+                // מציאת החדר שבו המשתמש נמצא
+                for (DataSnapshot snap : snapshot.getChildren()) {
+                    GameRoom room = snap.getValue(GameRoom.class);
+                    if (room != null &&
+                            (user.getUid().equals(room.getPlayer1().getUid()) ||
+                                    (room.getPlayer2() != null && user.getUid().equals(room.getPlayer2().getUid())))) {
+
+                        callback.onCompleted(room);
+                        return;
+                    }
+                }
+            }
+        });
+    }
+
+    /// listen for realtime updates on a specific room
+    /// used to detect when the game starts or the room is deleted
+    /// @param roomId the id of the room to listen to
+    /// @param callback realtime room status callback
+    /// @see ValueEventListener
+    /// @see RoomStatusCallback
+    public void listenToRoomStatus(@NotNull String roomId,
+                                   @NotNull RoomStatusCallback callback) {
+        readData(ROOMS_PATH + "/" + roomId)
+                .addValueEventListener(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        if (!snapshot.exists()) {
+                            callback.onRoomDeleted();
+                            return;
+                        }
+
+                        GameRoom room = snapshot.getValue(GameRoom.class);
+                        if (room == null) return;
+
+                        if ("playing".equals(room.getStatus())) {
+                            callback.onRoomStarted(room);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        callback.onFailed(error.toException());
+                    }
+                });
+    }
+
+    /// cancel a room and remove it from the database
+    /// usually called when the room creator leaves
+    /// @param roomId the id of the room to delete
+    /// @param callback callback for operation result
+    /// @see DatabaseCallback
+    public void cancelRoom(@NotNull String roomId,
+                           @Nullable DatabaseCallback<Void> callback) {
+        deleteData(ROOMS_PATH + "/" + roomId, callback);
+    }
+
+    // endregion Rooms Section
 }

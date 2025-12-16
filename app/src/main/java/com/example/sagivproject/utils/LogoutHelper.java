@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sagivproject.R;
@@ -13,13 +14,17 @@ import com.example.sagivproject.screens.LoginActivity;
 public class LogoutHelper {
     public static void logout(Context context) {
         Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.dialog_logout);
+        dialog.setContentView(R.layout.dialog_exit);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(true);
 
         User user = SharedPreferencesUtil.getUser(context);
-        Button btnConfirm = dialog.findViewById(R.id.btnLogoutConfirm);
-        Button btnCancel = dialog.findViewById(R.id.btnLogoutCancel);
+
+        TextView txtTitle = dialog.findViewById(R.id.txt_DialogExit_title), txtMessage = dialog.findViewById(R.id.txt_DialogExit_message);
+        Button btnConfirm = dialog.findViewById(R.id.btn_DialogExit_confirm), btnCancel = dialog.findViewById(R.id.btn_DialogExit_cancel);
+
+        txtTitle.setText("התנתקות");
+        txtMessage.setText("האם ברצונך להתנתק?");
 
         btnConfirm.setOnClickListener(v -> {
             String userEmail = "";

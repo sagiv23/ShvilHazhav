@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" /> <!-- For Android 13+ -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- For older Android -->
@@ -30,7 +34,7 @@
             android:name=".screens.DetailsAboutUserActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.OnlineMemoryGameActivity"
+            android:name=".screens.MemoryGameActivity"
             android:exported="false" />
         <activity
             android:name=".screens.GameHomeScreenActivity"

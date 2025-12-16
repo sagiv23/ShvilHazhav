@@ -13,26 +13,26 @@
         android:gravity="center_horizontal">
 
         <TextView
-            android:id="@+id/txtDialogTitle"
+            android:id="@+id/txt_DialogExit_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="התנתקות"
+            android:text=""
             android:textSize="30sp"
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/headline"/>
 
         <TextView
-            android:id="@+id/txtDialogMessage"
+            android:id="@+id/txt_DialogExit_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="האם ברצונך להתנתק?"
+            android:text=""
             android:textColor="?attr/colorOnSurface"
             android:textSize="25sp"
             android:gravity="center"
             android:fontFamily="@font/text"/>
 
         <LinearLayout
-            android:id="@+id/dialogButtonsLayout"
+            android:id="@+id/linearLayout_DialogExit_ButtonsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -40,7 +40,7 @@
             android:layout_marginTop="5dp">
 
             <Button
-                android:id="@+id/btnLogoutConfirm"
+                android:id="@+id/btn_DialogExit_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="אישור"
@@ -51,7 +51,7 @@
                 android:layout_margin="2dp" />
 
             <Button
-                android:id="@+id/btnLogoutCancel"
+                android:id="@+id/btn_DialogExit_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ביטול"

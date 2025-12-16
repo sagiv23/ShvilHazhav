@@ -1,36 +1,34 @@
 package com.example.sagivproject.utils;
 
 import android.content.Context;
-import android.widget.ImageView;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PickAPic {
-    private int[] imageResIds;
-    private Random rnd;
-    public PickAPic(Context context, int totalImages) {
-        imageResIds = new int[totalImages];
-        rnd = new Random();
+    private final List<Integer> availableImages;
 
-        //לולאה שמכניסה את כל ההתמונות למערך
+    public PickAPic(Context context, int totalImages) {
+        availableImages = new ArrayList<>();
+
         for (int i = 0; i < totalImages; i++) {
             //שם הקובץ כפי שהוא ב-drawable
             String name = "pics_for_game_" + (i + 1);
-
             int resId = context.getResources().getIdentifier(name, "drawable", context.getPackageName());
-            imageResIds[i] = resId;
+
+            if (resId != 0) {
+                availableImages.add(resId);
+            }
         }
+
+        Collections.shuffle(availableImages);
     }
 
-    //מחזיר ID של תמונה רנדומלית
-    public int getRandomImageResId() {
-        int idx = rnd.nextInt(imageResIds.length);
-        return imageResIds[idx];
-    }
-
-    // שם תמונה רנדומלית ב-ImageView
-    public void setRandomImage(ImageView imageView) {
-        int resId = getRandomImageResId();
-        imageView.setImageResource(resId);
+    public List<Integer> getUniqueImages(int count) {
+        if (count > availableImages.size()) {
+            throw new IllegalArgumentException("אין מספיק תמונות ייחודיות");
+        }
+        return new ArrayList<>(availableImages.subList(0, count));
     }
 }

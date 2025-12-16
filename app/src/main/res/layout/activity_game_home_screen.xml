@@ -26,14 +26,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="דף הבית"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_GameHomeScreen_to_DetailsAboutUser"
@@ -41,14 +39,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="משתמש"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="23sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_GameHomeScreen_to_contact"
@@ -56,14 +52,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="צור קשר"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="23sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
 
         <Button
             android:id="@+id/btn_GameHomeScreen_to_exit"
@@ -71,14 +65,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="התנתקות"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="23sp"
             android:singleLine="true"
             android:ellipsize="none"
             android:paddingStart="4dp"
-            android:paddingEnd="4dp"/>
+            android:paddingEnd="4dp"
+            android:fontFamily="@font/text"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -93,284 +85,211 @@
 
     <!-- תוכן מרכזי עם גלילה -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollContent"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/separatorLine"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:fillViewport="true"
         android:clipToPadding="false"
-        android:fillViewport="true">
+        android:padding="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:padding="16dp">
+            android:gravity="center_horizontal">
 
-        <!-- כותרת -->
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="משחק הזיכרון"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="38sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="20dp" />
-
-        <!-- תוצאות שחקן -->
-        <TextView
-            android:id="@+id/tv_GameHomeScreen_victories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="20sp"
-            android:gravity="right"
-            android:layout_marginHorizontal="10dp" />
-
-        <TextView
-            android:id="@+id/tv_GameHomeScreen_status_of_finding_enemy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            android:gravity="center" />
-
-        <!-- כפתורים -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="16dp">
-
-            <Button
-                android:id="@+id/btn_GameHomeScreen_find_enemy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="מצא יריב"
-                android:textColor="?attr/colorOnSecondary"
-                android:backgroundTint="?attr/colorSecondary"
-                android:textStyle="bold"
-                android:textSize="22sp"
-                android:paddingHorizontal="20dp"
-                android:layout_margin="12dp" />
-
-            <Button
-                android:id="@+id/btn_GameHomeScreen_cancel_find_enemy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="בטל חיפוש"
-                android:textColor="?attr/colorOnSecondary"
-                android:backgroundTint="?attr/colorSecondary"
-                android:textStyle="bold"
-                android:textSize="22sp"
-                android:paddingHorizontal="20dp"
-                android:layout_marginBottom="20dp"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <!-- הוראות -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="6dp"
-            app:strokeColor="?attr/colorOutline">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="9dp">
-
+            <!-- כותרת -->
             <TextView
-                android:id="@+id/txtInstructionsTitle"
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="משחק הזיכרון"
+                android:textSize="40sp"
+                android:fontFamily="@font/headline"/>
+
+            <!-- תוצאות שחקן -->
+            <TextView
+                android:id="@+id/tv_GameHomeScreen_victories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="הוראות המשחק"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="26sp"
-                android:textStyle="bold"
+                android:text="ניצחונות: "
+                android:textSize="25sp"
+                android:gravity="right"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/text"/>
+
+            <TextView
+                android:id="@+id/tv_GameHomeScreen_status_of_finding_enemy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="מחפש יריב..."
+                android:textSize="25sp"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:layout_marginBottom="10dp" />
+                android:visibility="gone"
+                android:fontFamily="@font/text"/>
 
-            <TextView
-                android:id="@+id/txtInstructionsIntro"
+            <!-- כפתורים -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_GameHomeScreen_find_enemy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="מצא יריב"
+                    android:textAllCaps="false"
+                    android:textSize="25sp"
+                    app:cornerRadius="30dp"
+                    app:icon="@drawable/ic_search"
+                    app:iconSize="28dp"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    android:fontFamily="@font/text"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_GameHomeScreen_cancel_find_enemy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="בטל חיפוש"
+                    android:textAllCaps="false"
+                    android:textSize="25sp"
+                    app:cornerRadius="30dp"
+                    app:icon="@drawable/ic_cancel"
+                    app:iconSize="28dp"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    android:fontFamily="@font/text"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <!-- הוראות -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_GameHomeScreen_instructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="משחק זיכרון זה הוא תחרות אונליין ראש בראש שנועדה לשפר ולחזק את הזיכרון שלכם. המשחק מתנהל בשיטה של שלושה סבבים, כאשר המנצח נקבע על פי סך הנקודות הגבוה ביותר שנצבר לאורך כל המשחק."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                app:strokeColor="?attr/colorOutline"
+                app:strokeWidth="1dp">
 
-            <!-- מטרת המשחק -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="מטרת המשחק"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                <LinearLayout
+                    android:id="@+id/layout_GameHomeScreen_instructions_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="לנצח את היריב על ידי צבירת מירב הנקודות לאורך שלושת הסבבים."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <!-- כותרת -->
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_instructions_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="הוראות המשחק"
+                        android:textSize="30sp"
+                        android:fontFamily="@font/headline"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
 
-            <!-- כללי המשחק הבסיסיים -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="כללי המשחק הבסיסיים"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <!-- פתיח -->
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_instructions_intro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="משחק זיכרון תחרותי אונליין ראש בראש, המיועד לשיפור וחיזוק הזיכרון. המשחק כולל שלושה סבבים, והמנצח נקבע לפי סך הנקודות הגבוה ביותר."
+                        android:textSize="22sp"
+                        android:fontFamily="@font/text"
+                        android:gravity="right"
+                        android:layout_marginBottom="16dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\u2022 מבנה הסבב: כל סבב מתחיל עם סט קלפים הפוכים. כל שחקן בתורו יחשוף שני קלפים."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <!-- מטרת המשחק -->
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_goal_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="מטרת המשחק"
+                        android:textSize="22sp"
+                        android:fontFamily="@font/headline"
+                        android:gravity="right"
+                        android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\u2022 התאמה (זוג): אם שני הקלפים תואמים, השחקן מקבל נקודה והוא מקבל תור נוסף. אם שני הקלפים אינם תואמים, הקלפים מוחזרים למצבם ההפוך (מוסתר), והתור עובר ליריב."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_goal_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="לנצח את היריב באמצעות צבירת מספר הנקודות הגבוה ביותר לאורך שלושת הסבבים."
+                        android:textSize="22sp"
+                        android:fontFamily="@font/text"
+                        android:gravity="right"
+                        android:layout_marginBottom="16dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\u2022 סיום סבב: הסבב נמשך עד שכל הקלפים נחשפים (נמצאו כל הזוגות)."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <!-- כללים -->
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_rules_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="כללי המשחק"
+                        android:textSize="22sp"
+                        android:fontFamily="@font/headline"
+                        android:gravity="right"
+                        android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\u2022 מהלך המשחק: משחקים שלושה סבבים רצופים. בתום הסבב השלישי, מסתיים המשחק."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_rules_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="• בכל תור נחשפים שני קלפים."
+                        android:textSize="22sp"
+                        android:fontFamily="@font/text"
+                        android:gravity="right" />
 
-            <!-- שיטת הניקוד -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="שיטת הניקוד"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_rules_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="• זוג תואם מזכה בנקודה ובתור נוסף."
+                        android:textSize="22sp"
+                        android:fontFamily="@font/text"
+                        android:gravity="right" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\u2022 התאמה נכונה (זוג): כל פעם ששחקן מוצא זוג תואם, הוא מקבל +1 נקודה."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_rules_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="• זוג לא תואם מחזיר את הקלפים ומעביר את התור."
+                        android:textSize="22sp"
+                        android:fontFamily="@font/text"
+                        android:gravity="right"
+                        android:layout_marginBottom="16dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\u2022 טעות (אי-התאמה): כל פעם ששחקן חושף זוג לא תואם, מנוכה לו 1 נקודה מניקודו הנוכחי."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <!-- ניקוד -->
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_score_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="שיטת הניקוד"
+                        android:textSize="22sp"
+                        android:fontFamily="@font/headline"
+                        android:gravity="right"
+                        android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\u2022 מינימום נקודות: הניקוד של שחקן אינו יכול לרדת מתחת ל-0. אם לשחקן יש 0 נקודות, טעות לא תנכה לו נקודה נוספת."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
+                    <TextView
+                        android:id="@+id/txt_GameHomeScreen_score_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="• התאמה נכונה: 1+ נקודה.\n• טעות: 1- נקודה (המינימום הוא 0).\n• הניקוד מצטבר בין הסבבים."
+                        android:textSize="22sp"
+                        android:fontFamily="@font/text"
+                        android:gravity="right" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\u2022 ניקוד מצטבר: הנקודות שנצברות בכל סבב מתווספות לניקוד הכללי של השחקן ונשמרות בין הסבבים."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
-
-            <!-- קביעת המנצח -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="קביעת המנצח"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="בתום הסבב השלישי, סופרים את סך הנקודות הכלליות שצבר כל שחקן. השחקן שצבר את מספר הנקודות המרבי הוא המנצח במשחק."
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginRight="7dp"
-                android:gravity="right"/>
-        </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
