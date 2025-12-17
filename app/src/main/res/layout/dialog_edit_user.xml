@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="20dp"
@@ -16,69 +17,83 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="עריכת פרטי משתמש"
-            android:textColor="?attr/colorOnSurface"
             android:textSize="30sp"
             android:fontFamily="@font/headline"
             android:layout_marginBottom="16dp" />
 
-        <EditText
-            android:id="@+id/inputEditUserFirstName"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="שם פרטי"
-            android:textSize="22sp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="?attr/colorPrimary"
-            android:inputType="textPersonName"
-            android:fontFamily="@font/text"/>
+            app:boxBackgroundMode="outline">
 
-        <EditText
-            android:id="@+id/inputEditUserLastName"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputEditUserFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="שם פרטי"
+                android:textSize="22sp"
+                android:inputType="textPersonName"
+                android:fontFamily="@font/text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="שם משפחה"
-            android:textSize="22sp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="?attr/colorPrimary"
-            android:inputType="textPersonName"
-            android:fontFamily="@font/text"/>
+            app:boxBackgroundMode="outline">
 
-        <EditText
-            android:id="@+id/inputEditUserPassword"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputEditUserLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="שם משפחה"
+                android:textSize="22sp"
+                android:inputType="textPersonName"
+                android:fontFamily="@font/text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="סיסמה"
-            android:textSize="22sp"
-            android:backgroundTint="?attr/colorPrimary"
-            android:inputType="textPassword"
-            android:fontFamily="@font/text"/>
+            android:layout_marginBottom="10dp"
+            app:boxBackgroundMode="outline">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputEditUserPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="סיסמה"
+                android:textSize="22sp"
+                android:inputType="textPassword"
+                android:fontFamily="@font/text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="10dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditUserSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="80dp"
                 android:text="שמור"
-                android:textColor="?attr/colorOnSecondary"
-                android:backgroundTint="?attr/colorSecondary"
-                android:textSize="25sp"
+                android:textSize="22sp"
                 android:fontFamily="@font/text"
                 android:layout_margin="4dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditUserCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="80dp"
                 android:text="ביטול"
-                android:textColor="?attr/colorOnSecondary"
-                android:backgroundTint="?attr/colorSecondary"
-                android:textSize="25sp"
+                android:textSize="22sp"
                 android:fontFamily="@font/text"
                 android:layout_margin="4dp" />
         </LinearLayout>

@@ -26,8 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="דף ראשי"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -41,8 +39,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="צור קשר"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -56,8 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="התחברות"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -71,8 +65,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="הרשמה"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -193,5 +185,4 @@
                 android:fontFamily="@font/text"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

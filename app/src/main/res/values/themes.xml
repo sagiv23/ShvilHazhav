@@ -13,6 +13,10 @@
         <item name="colorOnSecondary">@color/buttons_text_color</item>
         <item name="colorSurface">@color/background_color</item>
         <item name="colorOnSurface">@color/text_color</item>
+        <item name="colorOutline">@color/black</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnSurfaceVariant">@color/black</item>
+        <item name="colorPrimaryContainer">@color/black</item>
         <item name="android:forceDarkAllowed">true</item>
 
     </style>

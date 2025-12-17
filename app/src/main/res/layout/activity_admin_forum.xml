@@ -13,8 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="חזרה"
-        android:textColor="?attr/colorOnSecondary"
-        android:backgroundTint="?attr/colorSecondary"
         android:textSize="25sp"
         android:fontFamily="@font/text"
         app:cornerRadius="25dp"
@@ -50,7 +48,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="קשר קרוב - מנהל"
-                android:textColor="?attr/colorOnBackground"
                 android:textSize="40sp"
                 android:layout_marginBottom="24dp"
                 android:fontFamily="@font/headline"
@@ -89,8 +86,6 @@
                         app:boxCornerRadiusTopEnd="16dp"
                         app:boxCornerRadiusBottomStart="16dp"
                         app:boxCornerRadiusBottomEnd="16dp"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorOnSurfaceVariant"
                         app:boxStrokeWidth="1dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text">
@@ -127,5 +122,4 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

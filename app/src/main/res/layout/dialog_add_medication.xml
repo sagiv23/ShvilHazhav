@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
@@ -13,89 +14,83 @@
         android:gravity="center_horizontal">
 
         <!-- שם התרופה -->
-        <EditText
-            android:id="@+id/edt_medication_name"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:hint="שם התרופה"
-            android:textSize="22sp"
-            android:inputType="text"
-            android:textColorHint="?attr/android:textColorHint"
-            android:textColor="?attr/android:textColor"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/text"/>
+            android:layout_marginBottom="10dp"
+            app:boxBackgroundMode="outline">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_medication_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="שם התרופה"
+                android:textSize="22sp"
+                android:inputType="text"
+                android:fontFamily="@font/text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- פרטים -->
-        <EditText
-            android:id="@+id/edt_medication_details"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:hint="פרטים"
-            android:textSize="22sp"
-            android:inputType="text"
-            android:textColorHint="?attr/android:textColorHint"
-            android:textColor="?attr/android:textColor"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/text"/>
+            android:layout_marginBottom="10dp"
+            app:boxBackgroundMode="outline">
 
-        <!-- תאריך נטילה -->
-        <EditText
-            android:id="@+id/edt_medication_date"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_medication_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="פרטים"
+                android:textSize="22sp"
+                android:inputType="text"
+                android:fontFamily="@font/text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- תאריך -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:hint="תאריך אחרון לשימוש"
-            android:textSize="22sp"
-            android:focusable="false"
-            android:clickable="true"
-            android:inputType="none"
-            android:textColorHint="?attr/android:textColorHint"
-            android:textColor="?attr/android:textColor"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/text"/>
+            android:layout_marginBottom="20dp"
+            app:boxBackgroundMode="outline">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_medication_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="תאריך אחרון לשימוש"
+                android:textSize="22sp"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:fontFamily="@font/text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- כפתורים -->
         <LinearLayout
-            android:id="@+id/dialogButtonsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="20dp">
+            android:gravity="center">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_medication_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="80dp"
                 android:text="הוסף"
-                android:textColor="?attr/colorOnSecondary"
-                android:backgroundTint="?attr/colorSecondary"
-                android:textSize="25sp"
-                android:layout_margin="2dp"
+                android:textSize="22sp"
+                android:layout_margin="4dp"
                 android:fontFamily="@font/text"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_medication_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="80dp"
                 android:text="ביטול"
-                android:textColor="?attr/colorOnSecondary"
-                android:backgroundTint="?attr/colorSecondary"
-                android:textSize="25sp"
-                android:layout_margin="2dp"
+                android:textSize="22sp"
+                android:layout_margin="4dp"
                 android:fontFamily="@font/text"/>
         </LinearLayout>
     </LinearLayout>

@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="error">#8C1A00</color>
     <color name="headline">#FF000000</color>
     <color name="nav_text_color">#FF000000</color>
     <color name="background_color_buttons">#9cf10e</color>

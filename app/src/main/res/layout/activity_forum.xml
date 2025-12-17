@@ -26,8 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="דף הבית"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -41,8 +39,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="משתמש"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -56,8 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="צור קשר"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -71,8 +65,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="התנתקות"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -149,8 +141,6 @@
                         app:boxCornerRadiusTopEnd="16dp"
                         app:boxCornerRadiusBottomStart="16dp"
                         app:boxCornerRadiusBottomEnd="16dp"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorOnSurfaceVariant"
                         app:boxStrokeWidth="1dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text">
@@ -182,7 +172,6 @@
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        app:iconTint="?attr/android:textColor"
                         android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

@@ -31,7 +31,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="דף מנהלים 🤐🤫"
-                android:textColor="?attr/colorOnSurface"
                 android:textSize="40sp"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
@@ -42,7 +41,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="שלום מנהל יקר"
-                android:textColor="?attr/colorOnSurface"
                 android:textSize="37sp"
                 android:layout_marginBottom="30dp"
                 android:fontFamily="@font/text"/>
@@ -56,8 +54,7 @@
                 android:layout_marginBottom="20dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="6dp"
-                app:strokeColor="?attr/colorOutline"
-                app:cardBackgroundColor="?attr/colorSurface">
+                app:strokeColor="?attr/colorOutline">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -71,7 +68,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="אפשרויות ניהול"
-                        android:textColor="?attr/colorOnSurface"
                         android:textSize="30sp"
                         android:gravity="center"
                         android:layout_marginBottom="20dp"
@@ -124,7 +120,7 @@
                         android:layout_height="wrap_content"
                         android:text="התנתקות"
                         android:textSize="25sp"
-                        android:backgroundTint="?attr/colorError"/>
+                        android:backgroundTint="@color/error"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

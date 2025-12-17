@@ -22,7 +22,6 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="אפשרויות הודעה"
             android:src="@drawable/ic_more"
-            app:tint="?attr/colorOnSurface"
             android:fontFamily="@font/text"
             android:layout_gravity="end" />
 

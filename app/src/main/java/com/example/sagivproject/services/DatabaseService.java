@@ -464,25 +464,30 @@ public class DatabaseService {
 
     // region Rooms Section
 
-    /// callback interface for room status realtime updates
-    /// used to notify when a room starts playing or is deleted
+    /// callback interface for realtime room status updates
+    /// used to notify listeners when a room starts playing, is deleted,
+    /// or when an error occurs while listening
     /// @see GameRoom
     public interface RoomStatusCallback {
         /// called when the room status changes to "playing"
-        /// @param room the updated room object
+        /// usually means that both players are connected and the game can start
+        /// @param room the updated GameRoom object
         void onRoomStarted(GameRoom room);
 
-        /// called when the room is deleted from the database
+        /// called when the room no longer exists in the database
+        /// usually happens when the room is cancelled or deleted
         void onRoomDeleted();
 
-        /// called when the listener fails
-        /// @param e the exception
+        /// called when the listener fails due to a database error
+        /// @param e the exception describing the failure
         void onFailed(Exception e);
     }
 
     /// create a new game room and save it in the database
-    /// @param user the user creating the room (player1)
-    /// @param callback callback that returns the created GameRoom
+    /// the creating user is set as player1 and the room status is "waiting"
+    /// @param user the user who creates the room (player1)
+    /// @param callback callback that returns the created GameRoom on success
+    ///                 or an exception on failure
     /// @see GameRoom
     /// @see DatabaseCallback
     public void createRoom(@NotNull User user,
@@ -503,31 +508,41 @@ public class DatabaseService {
         });
     }
 
-
+    /// find an existing waiting room or create a new one if none is available
+    /// this operation is done using a Firebase transaction to avoid race conditions
+    /// <br>
+    /// logic:
+    /// - search for a room with status "waiting" and no second player
+    /// - if found: set the user as player2 and change status to "playing"
+    /// - if not found: create a new room with the user as player1
+    /// @param user the user trying to join or create a room
+    /// @param callback callback that returns the matched or created GameRoom
+    ///                 or an exception on failure
+    /// @see Transaction
+    /// @see GameRoom
     public void findOrCreateRoom(User user, DatabaseCallback<GameRoom> callback) {
         String newRoomId = generateNewId(ROOMS_PATH);
+        final String[] matchedRoomId = new String[1];
 
         readData(ROOMS_PATH).runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-
                 for (MutableData roomData : currentData.getChildren()) {
                     GameRoom room = roomData.getValue(GameRoom.class);
 
-                    if (room != null
-                            && "waiting".equals(room.getStatus())
-                            && room.getPlayer2() == null) {
-
+                    if (room != null && "waiting".equals(room.getStatus()) && room.getPlayer2() == null) {
                         room.setPlayer2(user);
                         room.setStatus("playing");
                         roomData.setValue(room);
+                        matchedRoomId[0] = room.getRoomId();
                         return Transaction.success(currentData);
                     }
                 }
 
                 GameRoom newRoom = new GameRoom(newRoomId, user);
                 currentData.child(newRoomId).setValue(newRoom);
+                matchedRoomId[0] = newRoomId;
                 return Transaction.success(currentData);
             }
 
@@ -538,59 +553,69 @@ public class DatabaseService {
                     return;
                 }
 
-                // מציאת החדר שבו המשתמש נמצא
-                for (DataSnapshot snap : snapshot.getChildren()) {
-                    GameRoom room = snap.getValue(GameRoom.class);
-                    if (room != null &&
-                            (user.getUid().equals(room.getPlayer1().getUid()) ||
-                                    (room.getPlayer2() != null && user.getUid().equals(room.getPlayer2().getUid())))) {
-
-                        callback.onCompleted(room);
-                        return;
-                    }
+                if (matchedRoomId[0] != null) {
+                    GameRoom room = snapshot.child(matchedRoomId[0]).getValue(GameRoom.class);
+                    callback.onCompleted(room);
+                    return;
                 }
             }
         });
     }
 
     /// listen for realtime updates on a specific room
-    /// used to detect when the game starts or the room is deleted
+    /// used to detect when:
+    /// - the room starts playing
+    /// - the room is deleted
     /// @param roomId the id of the room to listen to
-    /// @param callback realtime room status callback
+    /// @param callback callback for room status events
+    /// @return the ValueEventListener so it can later be removed
     /// @see ValueEventListener
     /// @see RoomStatusCallback
-    public void listenToRoomStatus(@NotNull String roomId,
-                                   @NotNull RoomStatusCallback callback) {
-        readData(ROOMS_PATH + "/" + roomId)
-                .addValueEventListener(new ValueEventListener() {
+    public ValueEventListener listenToRoomStatus(
+            @NotNull String roomId,
+            @NotNull RoomStatusCallback callback) {
+        ValueEventListener listener = new ValueEventListener() {
 
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    callback.onRoomDeleted();
+                    return;
+                }
 
-                        if (!snapshot.exists()) {
-                            callback.onRoomDeleted();
-                            return;
-                        }
+                GameRoom room = snapshot.getValue(GameRoom.class);
+                if (room == null) return;
 
-                        GameRoom room = snapshot.getValue(GameRoom.class);
-                        if (room == null) return;
+                if ("playing".equals(room.getStatus())) {
+                    callback.onRoomStarted(room);
+                }
+            }
 
-                        if ("playing".equals(room.getStatus())) {
-                            callback.onRoomStarted(room);
-                        }
-                    }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailed(error.toException());
+            }
+        };
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        callback.onFailed(error.toException());
-                    }
-                });
+        readData(ROOMS_PATH + "/" + roomId).addValueEventListener(listener);
+        return listener;
     }
 
-    /// cancel a room and remove it from the database
-    /// usually called when the room creator leaves
+    /// remove a previously registered room status listener
+    /// should be called when the screen is destroyed or no longer needed
+    /// to prevent memory leaks
+    /// @param roomId the id of the room
+    /// @param listener the listener returned from listenToRoomStatus
+    /// @see ValueEventListener
+    public void removeRoomListener(@NotNull String roomId,
+                                   @NotNull ValueEventListener listener) {
+        readData(ROOMS_PATH + "/" + roomId).removeEventListener(listener);
+    }
+
+    /// cancel a room and remove it completely from the database
+    /// usually called when the room creator leaves before the game starts
     /// @param roomId the id of the room to delete
-    /// @param callback callback for operation result
+    /// @param callback callback for operation result (success or failure)
     /// @see DatabaseCallback
     public void cancelRoom(@NotNull String roomId,
                            @Nullable DatabaseCallback<Void> callback) {

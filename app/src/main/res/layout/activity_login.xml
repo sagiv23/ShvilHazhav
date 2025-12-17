@@ -26,8 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="דף ראשי"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -41,8 +39,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="צור קשר"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -56,8 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="התחברות"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -71,8 +65,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="הרשמה"
-            android:textColor="?attr/colorOnPrimary"
-            android:backgroundTint="?attr/colorPrimary"
             android:textSize="22sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -144,8 +136,6 @@
                         app:startIconDrawable="@drawable/ic_email"
                         android:layout_marginBottom="14dp"
                         app:boxBackgroundMode="outline"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorOnSurfaceVariant"
                         app:boxStrokeWidth="1dp"
                         android:fontFamily="@font/text">
 
@@ -169,8 +159,6 @@
                         app:endIconMode="password_toggle"
                         android:layout_marginBottom="14dp"
                         app:boxBackgroundMode="outline"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorOnSurfaceVariant"
                         app:boxStrokeWidth="1dp"
                         android:fontFamily="@font/text">
 
@@ -191,12 +179,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:text="התחברות"
-                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="25sp"
                         app:cornerRadius="30dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:backgroundTint="?attr/colorSecondary"
                         android:fontFamily="@font/text"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

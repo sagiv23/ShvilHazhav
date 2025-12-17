@@ -26,7 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="?attr/colorOnSurface"
             android:textSize="25sp"
             android:gravity="center"
             android:fontFamily="@font/text"/>
@@ -44,8 +43,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="אישור"
-                android:textColor="?attr/colorOnSecondary"
-                android:backgroundTint="?attr/colorSecondary"
                 android:textSize="18sp"
                 android:fontFamily="@font/text"
                 android:layout_margin="2dp" />
@@ -55,8 +52,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ביטול"
-                android:textColor="?attr/colorOnSecondary"
-                android:backgroundTint="?attr/colorSecondary"
                 android:textSize="18sp"
                 android:fontFamily="@font/text"
                 android:layout_margin="2dp" />
