@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.Medication;
@@ -620,6 +621,40 @@ public class DatabaseService {
     public void cancelRoom(@NotNull String roomId,
                            @Nullable DatabaseCallback<Void> callback) {
         deleteData(ROOMS_PATH + "/" + roomId, callback);
+    }
+
+    public void initGameBoard(String roomId, List<Card> cards, String firstTurnUid, DatabaseCallback<Void> callback) {
+        readData(ROOMS_PATH + "/" + roomId + "/cards").setValue(cards);
+        readData(ROOMS_PATH + "/" + roomId + "/currentTurnUid").setValue(firstTurnUid);
+        readData(ROOMS_PATH + "/" + roomId + "/status").setValue("playing",
+                (error, ref) -> {
+                    if (callback == null) return;
+                    if (error != null) callback.onFailed(error.toException());
+                    else callback.onCompleted(null);
+                });
+    }
+
+    public ValueEventListener listenToGame(String roomId, DatabaseCallback<GameRoom> callback) {
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GameRoom room = snapshot.getValue(GameRoom.class);
+                callback.onCompleted(room);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailed(error.toException());
+            }
+        };
+
+        readData(ROOMS_PATH + "/" + roomId).addValueEventListener(listener);
+        return listener;
+    }
+
+    public void revealCard(String roomId, int index, boolean revealed) {
+        readData(ROOMS_PATH + "/" + roomId + "/cards/" + index + "/isRevealed")
+                .setValue(revealed);
     }
 
     // endregion Rooms Section

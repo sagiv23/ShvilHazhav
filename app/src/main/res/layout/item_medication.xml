@@ -14,7 +14,7 @@
         android:paddingBottom="16dp">
 
         <TextView
-            android:id="@+id/txtMedicationName"
+            android:id="@+id/txt_MedicationRow_Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="שם התרופה"
@@ -24,7 +24,7 @@
             android:gravity="center"/>
 
         <TextView
-            android:id="@+id/txtMedicationDetails"
+            android:id="@+id/txt_MedicationRow_Details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="פרטים"
@@ -34,7 +34,7 @@
             android:gravity="right"/>
 
         <TextView
-            android:id="@+id/txtMedicationDate"
+            android:id="@+id/txt_MedicationRow_Date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="תוקף"
@@ -51,7 +51,7 @@
         android:orientation="horizontal"
         android:gravity="center">
         <Button
-            android:id="@+id/btnDeleteMedication"
+            android:id="@+id/btn_MedicationRow_Delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="מחק"
@@ -62,7 +62,7 @@
             android:fontFamily="@font/text"/>
 
         <Button
-            android:id="@+id/btnEditMedication"
+            android:id="@+id/btn_MedicationRow_Edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ערוך"
@@ -70,5 +70,4 @@
             android:padding="10dp"
             android:fontFamily="@font/text"/>
     </LinearLayout>
-
 </LinearLayout>

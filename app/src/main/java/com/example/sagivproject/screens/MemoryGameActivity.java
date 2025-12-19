@@ -21,7 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.models.Card;
+import com.example.sagivproject.models.GameRoom;
+import com.example.sagivproject.models.User;
+import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.PickAPic;
+import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,10 +36,10 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
     private RecyclerView recyclerCards;
     private Button btnExit;
 
-    private Card firstSelected = null;
-    private View firstSelectedView = null;
-    private ImageView firstSelectedImage = null;
-    private boolean isBusy = false;
+    private String roomId;
+    private User user;
+    private ValueEventListener gameListener;
+    private GameRoom currentRoom;
 
     private MemoryGameAdapter adapter;
 
@@ -49,10 +54,15 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
             return insets;
         });
 
+        roomId = getIntent().getStringExtra("roomId");
+        user = SharedPreferencesUtil.getUser(this);
+
+        listenToGame();
+
         recyclerCards = findViewById(R.id.recycler_OnlineMemoryGame);
         recyclerCards.setLayoutManager(new GridLayoutManager(this, 3));
 
-        adapter = new MemoryGameAdapter(createCards(), this);
+        adapter = new MemoryGameAdapter(new ArrayList<>(), this);
         recyclerCards.setAdapter(adapter);
 
         btnExit = findViewById(R.id.btn_OnlineMemoryGame_to_exit);
@@ -85,102 +95,15 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
 
     @Override
     public void onCardClicked(Card card, View itemView, ImageView imageView) {
-        if (isBusy || card.isMatched() || card.isRevealed()) return;
+        /*
+        //לא התור שלך
+        if (!user.getUid().equals(currentRoom.getCurrentTurnUid())) return;
 
-        card.setRevealed(true);
-        flipCard(imageView, card.getImageResId());
+        //קלף כבר פתוח / מותאם
+        if (card.isMatched() || card.isRevealed()) return;
 
-        if (firstSelected == null) {
-            firstSelected = card;
-            firstSelectedView = itemView;
-            firstSelectedImage = imageView;
-            return;
-        }
-
-        isBusy = true;
-
-        if (firstSelected.getImageResId() == card.getImageResId()) {
-            firstSelected.setMatched(true);
-            card.setMatched(true);
-
-            animateCorrectMatch(firstSelectedView);
-            animateCorrectMatch(itemView);
-
-            new Handler(Looper.getMainLooper()).postDelayed(this::resetTurn, 350);
-        } else {
-            animateWrongMatch(firstSelectedView);
-            animateWrongMatch(itemView);
-
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-
-                flipCard(firstSelectedImage, R.drawable.fold_card_img);
-                flipCard(imageView, R.drawable.fold_card_img);
-
-                firstSelected.setRevealed(false);
-                card.setRevealed(false);
-
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    resetTurn();
-                    adapter.notifyDataSetChanged();
-                }, 300);
-            }, 600);
-        }
-    }
-
-    private void resetTurn() {
-        firstSelected = null;
-        firstSelectedView = null;
-        firstSelectedImage = null;
-        isBusy = false;
-    }
-
-    private void flipCard(ImageView imageView, int newImageRes) {
-        imageView.animate()
-                .rotationY(90f)
-                .setDuration(150)
-                .withEndAction(() -> {
-                    imageView.setImageResource(newImageRes);
-                    imageView.setRotationY(-90f);
-                    imageView.animate()
-                            .rotationY(0f)
-                            .setDuration(150)
-                            .start();
-                })
-                .start();
-    }
-
-    private void animateWrongMatch(View view) {
-        view.animate()
-                .translationX(20)
-                .setDuration(50)
-                .withEndAction(() -> view.animate()
-                        .translationX(-20)
-                        .setDuration(50)
-                        .withEndAction(() -> view.animate()
-                                .translationX(10)
-                                .setDuration(50)
-                                .withEndAction(() -> view.animate()
-                                        .translationX(0)
-                                        .setDuration(50)
-                                        .start())
-                                .start())
-                        .start())
-                .start();
-    }
-
-    private void animateCorrectMatch(View view) {
-        view.animate()
-                .scaleX(1.15f)
-                .scaleY(1.15f)
-                .alpha(0.85f)
-                .setDuration(150)
-                .withEndAction(() -> view.animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .alpha(1f)
-                        .setDuration(150)
-                        .start())
-                .start();
+        DatabaseService.getInstance().selectCard(roomId, user.getUid(), card);
+         */
     }
 
     private List<Card> createCards() {
@@ -196,5 +119,37 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
 
         Collections.shuffle(cards);
         return cards;
+    }
+
+    private void listenToGame() {
+        gameListener = DatabaseService.getInstance()
+                .listenToGame(roomId, new DatabaseService.DatabaseCallback<GameRoom>() {
+                    @Override
+                    public void onCompleted(GameRoom room) {
+                        if (room == null) return;
+                        currentRoom = room;
+
+                        // init board – רק player1
+                        if (room.getCards() == null &&
+                                user.getUid().equals(room.getPlayer1().getUid())) {
+
+                            List<Card> cards = createCards();
+                            DatabaseService.getInstance()
+                                    .initGameBoard(roomId, cards,
+                                            room.getPlayer1().getUid(), null);
+                            return;
+                        }
+
+                        if (room.getCards() == null) return;
+
+                        adapter.getCards().clear();
+                        adapter.getCards().addAll(room.getCards());
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailed(Exception e) {
+                    }
+                });
     }
 }

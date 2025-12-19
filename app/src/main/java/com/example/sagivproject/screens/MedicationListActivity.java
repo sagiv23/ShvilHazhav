@@ -216,6 +216,7 @@ public class MedicationListActivity extends AppCompatActivity {
                     SharedPreferencesUtil.saveUser(MedicationListActivity.this, user);
                 }
                 loadMedications();
+                Toast.makeText(MedicationListActivity.this, "התרופה נמחקה בהצלחה", Toast.LENGTH_SHORT).show();
             }
 
             @Override

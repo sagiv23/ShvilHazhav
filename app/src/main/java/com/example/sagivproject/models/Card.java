@@ -4,6 +4,7 @@ public class Card {
     public int imageResId;
     public boolean isRevealed = false;
     public boolean isMatched = false;
+    private boolean wasRevealed;
 
     public Card() {}
 
@@ -19,4 +20,7 @@ public class Card {
 
     public boolean isMatched() { return isMatched; }
     public void setMatched(boolean matched) { isMatched = matched; }
+
+    public boolean getWasRevealed() { return wasRevealed; }
+    public void setWasRevealed(boolean wasRevealed) { this.wasRevealed = wasRevealed; }
 }

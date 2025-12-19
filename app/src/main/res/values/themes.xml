@@ -13,10 +13,12 @@
         <item name="colorOnSecondary">@color/buttons_text_color</item>
         <item name="colorSurface">@color/background_color</item>
         <item name="colorOnSurface">@color/text_color</item>
-        <item name="colorOutline">@color/black</item>
+        <item name="colorOutline">@color/text_color</item>
+        <item name="textInputStyle">@style/AppTextInputLayoutStyle</item>
+        <item name="editTextStyle">@style/AppTextInputEditTextStyle</item>
         <item name="colorError">@color/error</item>
-        <item name="colorOnSurfaceVariant">@color/black</item>
-        <item name="colorPrimaryContainer">@color/black</item>
+        <item name="colorOnSurfaceVariant">@color/text_color</item>
+        <item name="colorPrimaryContainer">@color/text_color</item>
         <item name="android:forceDarkAllowed">true</item>
 
     </style>
@@ -47,6 +49,19 @@
         <item name="android:textColorPrimary">@color/text_color</item>
         <item name="android:textColorPrimaryInverse">@color/nav_text_color</item>
         <item name="android:datePickerMode">calendar</item>
+    </style>
+
+    <style name="AppTextInputLayoutStyle"
+        parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_color</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="hintTextColor">@color/text_color</item>
+    </style>
+
+    <style name="AppTextInputEditTextStyle"
+        parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:fontFamily">@font/text</item>
     </style>
 
     <style name="Theme.SagivProject" parent="Theme.SagivProject.Light" />

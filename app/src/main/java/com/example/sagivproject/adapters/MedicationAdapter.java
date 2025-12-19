@@ -75,12 +75,12 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
 
         public MedicationViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtMedicationName = itemView.findViewById(R.id.txtMedicationName);
-            txtMedicationDetails = itemView.findViewById(R.id.txtMedicationDetails);
-            txtMedicationDate = itemView.findViewById(R.id.txtMedicationDate);
+            txtMedicationName = itemView.findViewById(R.id.txt_MedicationRow_Name);
+            txtMedicationDetails = itemView.findViewById(R.id.txt_MedicationRow_Details);
+            txtMedicationDate = itemView.findViewById(R.id.txt_MedicationRow_Date);
 
-            btnEdit = itemView.findViewById(R.id.btnEditMedication);
-            btnDelete = itemView.findViewById(R.id.btnDeleteMedication);
+            btnEdit = itemView.findViewById(R.id.btn_MedicationRow_Edit);
+            btnDelete = itemView.findViewById(R.id.btn_MedicationRow_Delete);
         }
     }
 }

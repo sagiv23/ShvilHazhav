@@ -121,7 +121,8 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="8dp"
-                android:layout_marginBottom="32dp">
+                android:layout_marginBottom="32dp"
+                app:strokeColor="?attr/colorOutline">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -180,7 +181,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="שביל הזהב"
-                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="20sp"
                 android:fontFamily="@font/text"/>
         </LinearLayout>
