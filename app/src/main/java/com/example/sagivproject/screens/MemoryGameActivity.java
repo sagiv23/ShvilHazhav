@@ -57,8 +57,6 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
         roomId = getIntent().getStringExtra("roomId");
         user = SharedPreferencesUtil.getUser(this);
 
-        listenToGame();
-
         recyclerCards = findViewById(R.id.recycler_OnlineMemoryGame);
         recyclerCards.setLayoutManager(new GridLayoutManager(this, 3));
 
@@ -67,6 +65,8 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
 
         btnExit = findViewById(R.id.btn_OnlineMemoryGame_to_exit);
         btnExit.setOnClickListener(v -> showExitGameDialog());
+
+        listenToGame();
     }
 
     private void showExitGameDialog() {
@@ -82,6 +82,7 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
         txtMessage.setText("האם ברצונך לצאת מהמשחק?");
 
         btnConfirm.setOnClickListener(v -> {
+            DatabaseService.getInstance().updateRoomField(roomId, "status", "finished");
             Intent intent = new Intent(MemoryGameActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -95,15 +96,84 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
 
     @Override
     public void onCardClicked(Card card, View itemView, ImageView imageView) {
-        /*
-        //לא התור שלך
+        if (currentRoom == null) return;
+
+        // 1. בדיקה אם זה התור שלי
         if (!user.getUid().equals(currentRoom.getCurrentTurnUid())) return;
 
-        //קלף כבר פתוח / מותאם
-        if (card.isMatched() || card.isRevealed()) return;
+        // 2. בדיקה אם המשחק כרגע ב"המתנה" (אנימציית סגירה של זוג לא תואם)
+        if (currentRoom.isProcessingMatch()) return;
 
-        DatabaseService.getInstance().selectCard(roomId, user.getUid(), card);
-         */
+        // 3. בדיקה אם הקלף כבר פתוח או נמצא
+        int cardIndex = adapter.getCards().indexOf(card);
+        if (card.getIsMatched() || card.getIsRevealed()) return;
+
+        handleCardSelection(cardIndex);
+    }
+
+    private void handleCardSelection(int clickedIndex) {
+        List<Card> cards = currentRoom.getCards();
+        Integer firstIndex = currentRoom.getFirstSelectedCardIndex();
+
+        if (firstIndex == null) {
+            // --- בחירת קלף ראשון ---
+            DatabaseService.getInstance().updateCardStatus(roomId, clickedIndex, true, false);
+            DatabaseService.getInstance().updateRoomField(roomId, "firstSelectedCardIndex", clickedIndex);
+        } else {
+            // --- בחירת קלף שני ---
+            if (firstIndex == clickedIndex) return; // לחיצה על אותו קלף
+
+            DatabaseService.getInstance().setProcessing(roomId, true); // חסימת לחיצות נוספות
+            DatabaseService.getInstance().updateCardStatus(roomId, clickedIndex, true, false);
+
+            // בדיקה אם יש התאמה
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                checkMatch(firstIndex, clickedIndex);
+            }, 1000); // השהייה כדי שהשחקן יראה את הקלף השני
+        }
+    }
+
+    private void checkMatch(int idx1, int idx2) {
+        Card c1 = currentRoom.getCards().get(idx1);
+        Card c2 = currentRoom.getCards().get(idx2);
+
+        if (c1.getImageResId() == c2.getImageResId()) {
+            // --- הצלחה ---
+            adapter.animateSuccess(idx1, recyclerCards);
+            adapter.animateSuccess(idx2, recyclerCards);
+
+            // כאן אין צורך בהשהייה גדולה כי הקלפים נשארים פתוחים
+            DatabaseService.getInstance().updateCardStatus(roomId, idx1, true, true);
+            DatabaseService.getInstance().updateCardStatus(roomId, idx2, true, true);
+
+            int newScore = user.getUid().equals(currentRoom.getPlayer1().getUid()) ?
+                    currentRoom.getPlayer1Score() + 1 : currentRoom.getPlayer2Score() + 1;
+            String scoreField = user.getUid().equals(currentRoom.getPlayer1().getUid()) ? "player1Score" : "player2Score";
+            DatabaseService.getInstance().updateRoomField(roomId, scoreField, newScore);
+
+        } else {
+            // --- טעות ---
+            adapter.animateError(idx1, recyclerCards);
+            adapter.animateError(idx2, recyclerCards);
+
+            // חשוב! השהייה של חצי שנייה כדי שהשחקן יראה את הרעד לפני שהקלפים נסגרים ב-DB
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                DatabaseService.getInstance().updateCardStatus(roomId, idx1, false, false);
+                DatabaseService.getInstance().updateCardStatus(roomId, idx2, false, false);
+
+                String nextTurn = user.getUid().equals(currentRoom.getPlayer1().getUid())
+                        ? currentRoom.getPlayer2().getUid()
+                        : currentRoom.getPlayer1().getUid();
+                DatabaseService.getInstance().updateRoomField(roomId, "currentTurnUid", nextTurn);
+            }, 600);
+        }
+
+        DatabaseService.getInstance().updateRoomField(roomId, "firstSelectedCardIndex", null);
+
+        // משחררים את ה-Processing רק אחרי שהעדכונים הסתיימו
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            DatabaseService.getInstance().setProcessing(roomId, false);
+        }, 700);
     }
 
     private List<Card> createCards() {

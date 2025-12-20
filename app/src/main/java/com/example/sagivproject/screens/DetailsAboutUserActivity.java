@@ -226,7 +226,7 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
         if (bitmap != null) {
             imgUserProfile.setImageBitmap(bitmap);
 
-            // המרה ל־Base64 ושמירה
+            //המרה ל־Base64 ושמירה
             String base64 = ImageUtil.convertTo64Base(imgUserProfile);
             user.setProfileImage(base64);
 
@@ -259,7 +259,7 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
         //מציב את התמונה שיש בתמונה המקורית
         dialogImage.setImageDrawable(imgUserProfile.getDrawable());
 
-        //לוחצים על התמונה → יוצא
+        //לוחצים על התמונה - יוצא
         dialogImage.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();

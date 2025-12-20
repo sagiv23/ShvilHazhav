@@ -657,5 +657,18 @@ public class DatabaseService {
                 .setValue(revealed);
     }
 
+    public void updateRoomField(String roomId, String field, Object value) {
+        readData(ROOMS_PATH + "/" + roomId + "/" + field).setValue(value);
+    }
+
+    public void updateCardStatus(String roomId, int index, boolean revealed, boolean matched) {
+        readData(ROOMS_PATH + "/" + roomId + "/cards/" + index + "/isRevealed").setValue(revealed);
+        readData(ROOMS_PATH + "/" + roomId + "/cards/" + index + "/isMatched").setValue(matched);
+    }
+
+    public void setProcessing(String roomId, boolean isProcessing) {
+        updateRoomField(roomId, "processingMatch", isProcessing);
+    }
+
     // endregion Rooms Section
 }

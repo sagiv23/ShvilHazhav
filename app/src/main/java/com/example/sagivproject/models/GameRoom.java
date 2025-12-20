@@ -15,6 +15,9 @@ public class GameRoom {
     private int player1Score;
     private int player2Score;
 
+    private Integer firstSelectedCardIndex; //אינדקס הקלף הראשון שנבחר
+    private boolean processingMatch; //דגל למניעת לחיצות בזמן אנימציית סגירה
+
     public GameRoom() {}
 
     public GameRoom(String roomId, User player1) {
@@ -24,6 +27,8 @@ public class GameRoom {
         this.status = "waiting";
         this.player1Score = 0;
         this.player2Score = 0;
+        this.firstSelectedCardIndex = null;
+        this.processingMatch = false;
     }
 
     public String getRoomId() { return roomId; }
@@ -55,4 +60,9 @@ public class GameRoom {
     public void setPlayer2Score(int player2Score) {
         this.player2Score = player2Score;
     }
+
+    public Integer getFirstSelectedCardIndex() { return firstSelectedCardIndex; }
+    public void setFirstSelectedCardIndex(Integer index) { this.firstSelectedCardIndex = index; }
+    public boolean isProcessingMatch() { return processingMatch; }
+    public void setProcessingMatch(boolean processingMatch) { this.processingMatch = processingMatch; }
 }

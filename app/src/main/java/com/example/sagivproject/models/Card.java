@@ -12,13 +12,13 @@ public class Card {
         this.imageResId = imageResId;
     }
 
-    public boolean isRevealed() { return isRevealed; }
+    public boolean getIsRevealed() { return isRevealed; }
     public void setRevealed(boolean revealed) { isRevealed = revealed; }
 
     public int getImageResId() { return imageResId; }
     public void setImageResId(int imageResId) { this.imageResId = imageResId; }
 
-    public boolean isMatched() { return isMatched; }
+    public boolean getIsMatched() { return isMatched; }
     public void setMatched(boolean matched) { isMatched = matched; }
 
     public boolean getWasRevealed() { return wasRevealed; }

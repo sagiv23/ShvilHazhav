@@ -20,6 +20,7 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
 
     private final List<Card> cards;
     private final MemoryGameListener listener;
+    private static final int CAMERA_DISTANCE = 8000;
 
     public MemoryGameAdapter(List<Card> cards, MemoryGameListener listener) {
         this.cards = cards;
@@ -48,24 +49,26 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         holder.itemView.setScaleY(1f);
         holder.itemView.setAlpha(1f);
 
-        if (card.isRevealed() && !card.getWasRevealed()) {
+        // לוגיקת הצגת הקלף
+        if (card.getIsMatched()) {
+            holder.cardImage.setImageResource(card.getImageResId());
+            holder.itemView.setScaleX(0.9f);
+            holder.itemView.setScaleY(0.9f);
+            holder.itemView.setAlpha(0.6f);
+        } else if (card.getIsRevealed()) {
+            holder.cardImage.setImageResource(card.getImageResId());
+        } else {
+            holder.cardImage.setImageResource(R.drawable.fold_card_img);
+        }
+
+        // אנימציות הפיכה מבוססות שינוי סטטוס
+        if (card.getIsRevealed() && !card.getWasRevealed()) {
             animateFlipOpen(holder.cardImage, card.getImageResId());
-        }
-
-        if (!card.isRevealed() && card.getWasRevealed()) {
+            card.setWasRevealed(true);
+        } else if (!card.getIsRevealed() && card.getWasRevealed()) {
             animateFlipClose(holder.cardImage);
+            card.setWasRevealed(false);
         }
-
-        if (card.isMatched()) {
-            holder.itemView.animate()
-                    .scaleX(0.9f)
-                    .scaleY(0.9f)
-                    .alpha(0.6f)
-                    .setDuration(300)
-                    .start();
-        }
-
-        card.setWasRevealed(card.isRevealed());
 
         holder.itemView.setOnClickListener(v -> listener.onCardClicked(card, holder.itemView, holder.cardImage));
     }
@@ -75,34 +78,46 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         return cards.size();
     }
 
+    // אנימציית הפיכה לפתיחה
     private void animateFlipOpen(ImageView imageView, int imageResId) {
-        imageView.animate()
-                .rotationY(90f)
-                .setDuration(150)
-                .withEndAction(() -> {
-                    imageView.setImageResource(imageResId);
-                    imageView.setRotationY(-90f);
-                    imageView.animate()
-                            .rotationY(0f)
-                            .setDuration(150)
-                            .start();
-                })
-                .start();
+        imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
+            imageView.setImageResource(imageResId);
+            imageView.setRotationY(-90f);
+            imageView.animate().rotationY(0f).setDuration(150).start();
+        }).start();
     }
 
+    // אנימציית הפיכה לסגירה
     private void animateFlipClose(ImageView imageView) {
-        imageView.animate()
-                .rotationY(90f)
-                .setDuration(150)
-                .withEndAction(() -> {
-                    imageView.setImageResource(R.drawable.fold_card_img);
-                    imageView.setRotationY(-90f);
-                    imageView.animate()
-                            .rotationY(0f)
-                            .setDuration(150)
-                            .start();
-                })
-                .start();
+        imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
+            imageView.setImageResource(R.drawable.fold_card_img);
+            imageView.setRotationY(-90f);
+            imageView.animate().rotationY(0f).setDuration(150).start();
+        }).start();
+    }
+
+    // אנימציית שגיאה (רעד)
+    public void animateError(int position, RecyclerView recyclerView) {
+        CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+        if (holder != null) {
+            View view = holder.itemView;
+            view.animate().translationXBy(-20f).setDuration(50).withEndAction(() ->
+                    view.animate().translationXBy(40f).setDuration(50).withEndAction(() ->
+                            view.animate().translationX(0f).setDuration(50).start()
+                    ).start()
+            ).start();
+        }
+    }
+
+    // אנימציית הצלחה (פעימה)
+    public void animateSuccess(int position, RecyclerView recyclerView) {
+        CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+        if (holder != null) {
+            View view = holder.itemView;
+            view.animate().scaleX(1.1f).scaleY(1.1f).setDuration(150).withEndAction(() ->
+                    view.animate().scaleX(0.9f).scaleY(0.9f).setDuration(150).start()
+            ).start();
+        }
     }
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
@@ -112,7 +127,7 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
             super(itemView);
             cardImage = itemView.findViewById(R.id.img_ItemCard_card_image);
             float scale = itemView.getResources().getDisplayMetrics().density;
-            cardImage.setCameraDistance(8000 * scale);
+            cardImage.setCameraDistance(CAMERA_DISTANCE * scale);
         }
     }
 }
