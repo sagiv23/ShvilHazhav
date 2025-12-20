@@ -8,12 +8,12 @@ line-height:1.7;
 ">
 
   <h1 style="color:#0f766e; text-align:center; margin-top:0;">
-    🌿 Shvil Hazhav – שביל הזהב
+    🌿 Shvil Hazhav - שביל הזהב
   </h1>
 
   <p style="font-size:16px;">
     אפליקציית <b>Android חכמה וידידותית</b> שנועדה לסייע לאנשים מבוגרים (60+) ובעלי מוגבלויות
-    בניהול תרופות, חיזוק הזיכרון, תקשורת חברתית וקבלת מידע רפואי – במקום אחד.
+    בניהול תרופות, חיזוק הזיכרון, תקשורת חברתית וקבלת מידע רפואי - במקום אחד.
   </p>
 
   <hr style="border:0; height:1px; background:#cbd5e1; margin:24px 0;">
@@ -61,7 +61,7 @@ line-height:1.7;
       ניקוד:
       <ul>
         <li>התאמה = +1 נקודה</li>
-        <li>טעות = −1 נקודה</li>
+        <li>טעות = -1 נקודה</li>
       </ul>
     </li>
     <li>3 סבבים בכל משחק</li>
@@ -137,8 +137,8 @@ git clone https://github.com/sagiv23/ShvilHazhav.git
 
   <h2 style="color:#155e75;">👨‍💻 מפתח</h2>
   <p>
-    <b>שגיב יוסילבסקי</b><br>
-    פרויקט גמר – שביל הזהב
+    <b>שגיב 23</b><br>
+    פרויקט גמר - שביל הזהב
   </p>
 
 </div>
