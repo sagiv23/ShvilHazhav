@@ -31,7 +31,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_Ai_to_DetailsAboutUser"
@@ -44,7 +44,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_Ai_to_contact"
@@ -57,7 +57,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_Ai_to_exit"
@@ -70,7 +70,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -106,7 +106,7 @@
                 android:text="יועץ AI"
                 android:textSize="40sp"
                 android:layout_marginBottom="40dp"
-                android:fontFamily="@font/headline"/>
+                android:fontFamily="@font/headline_hebrew"/>
 
             <!-- כרטיס -->
             <com.google.android.material.card.MaterialCardView
@@ -137,7 +137,7 @@
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxStrokeWidth="1dp"
                         android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/text">
+                        android:fontFamily="@font/text_hebrew">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edit_Ai_question"
@@ -150,7 +150,7 @@
                             android:lines="4"
                             android:maxLines="6"
                             android:scrollbars="vertical"
-                            android:fontFamily="@font/text"/>
+                            android:fontFamily="@font/text_hebrew"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- כפתור שליחה -->
@@ -166,7 +166,7 @@
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
 
                     <!-- טעינה -->
                     <ProgressBar
@@ -190,7 +190,7 @@
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxStrokeWidth="1dp"
                         android:layout_marginTop="24dp"
-                        android:fontFamily="@font/text">
+                        android:fontFamily="@font/text_hebrew">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/TV_Ai_txt_response"
@@ -203,7 +203,7 @@
                             android:editable="false"
                             android:focusable="false"
                             android:text="התשובה תוצג כאן..."
-                            android:fontFamily="@font/text"/>
+                            android:fontFamily="@font/text_hebrew"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

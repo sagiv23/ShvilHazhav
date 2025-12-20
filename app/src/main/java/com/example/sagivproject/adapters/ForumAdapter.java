@@ -70,7 +70,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
 
                 Typeface typeface = ResourcesCompat.getFont(
                         v.getContext(),
-                        R.font.text
+                        R.font.text_hebrew
                 );
 
                 MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);

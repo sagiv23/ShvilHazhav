@@ -31,7 +31,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_register_to_contact"
@@ -44,7 +44,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_register_to_login"
@@ -57,7 +57,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_register_to_register"
@@ -70,7 +70,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -110,7 +110,7 @@
                 android:textSize="40sp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="20dp"
-                android:fontFamily="@font/headline"/>
+                android:fontFamily="@font/headline_hebrew"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -135,7 +135,7 @@
                         android:layout_marginBottom="12dp"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        android:fontFamily="@font/text">
+                        android:fontFamily="@font/text_hebrew">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_first_name"
@@ -144,7 +144,7 @@
                             android:hint="שם פרטי"
                             android:inputType="textPersonName"
                             android:textSize="23sp"
-                            android:fontFamily="@font/text"/>
+                            android:fontFamily="@font/text_hebrew"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- שם משפחה -->
@@ -155,7 +155,7 @@
                         android:layout_marginBottom="12dp"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        android:fontFamily="@font/text">
+                        android:fontFamily="@font/text_hebrew">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_last_name"
@@ -164,7 +164,7 @@
                             android:hint="שם משפחה"
                             android:inputType="textPersonName"
                             android:textSize="23sp"
-                            android:fontFamily="@font/text"/>
+                            android:fontFamily="@font/text_hebrew"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- אימייל -->
@@ -175,7 +175,7 @@
                         android:layout_marginBottom="12dp"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        android:fontFamily="@font/text">
+                        android:fontFamily="@font/text_hebrew">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_email"
@@ -185,7 +185,7 @@
                             android:inputType="textEmailAddress"
                             android:textDirection="ltr"
                             android:textSize="23sp"
-                            android:fontFamily="@font/text"/>
+                            android:fontFamily="@font/text_hebrew"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- סיסמה -->
@@ -197,7 +197,7 @@
                         android:layout_marginBottom="20dp"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        android:fontFamily="@font/text">
+                        android:fontFamily="@font/text_hebrew">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_password"
@@ -209,7 +209,7 @@
                             android:textSize="23sp"
                             app:boxBackgroundMode="outline"
                             app:boxStrokeWidth="1dp"
-                            android:fontFamily="@font/text"/>
+                            android:fontFamily="@font/text_hebrew"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- כפתור הרשמה -->
@@ -220,7 +220,7 @@
                         android:text="הרשמה"
                         android:textSize="25sp"
                         app:cornerRadius="30dp"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

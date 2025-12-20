@@ -33,7 +33,7 @@
                 android:textSize="40sp"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
-                android:fontFamily="@font/headline"/>
+                android:fontFamily="@font/headline_hebrew"/>
 
             <TextView
                 android:id="@+id/txt_admin_title"
@@ -42,7 +42,7 @@
                 android:text="שלום מנהל יקר"
                 android:textSize="37sp"
                 android:layout_marginBottom="30dp"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
 
             <!-- בלוק כפתורים -->
             <com.google.android.material.card.MaterialCardView
@@ -70,7 +70,7 @@
                         android:textSize="30sp"
                         android:gravity="center"
                         android:layout_marginBottom="20dp"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_UsersTablePage"
@@ -83,7 +83,7 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        android:fontFamily="@font/text" />
+                        android:fontFamily="@font/text_hebrew" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_AdminForum"
@@ -96,7 +96,7 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        android:fontFamily="@font/text" />
+                        android:fontFamily="@font/text_hebrew" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_DetailsAboutUser"
@@ -109,12 +109,12 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        android:fontFamily="@font/text" />
+                        android:fontFamily="@font/text_hebrew" />
 
                     <!-- כפתור התנתקות -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_exit"
-                        android:fontFamily="@font/text"
+                        android:fontFamily="@font/text_hebrew"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="התנתקות"

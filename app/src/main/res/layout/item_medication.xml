@@ -20,7 +20,7 @@
             android:text="שם התרופה"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:fontFamily="@font/headline"
+            android:fontFamily="@font/headline_hebrew"
             android:gravity="center"/>
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="פרטים"
             android:textSize="23sp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:layout_marginTop="4dp"
             android:gravity="right"/>
 
@@ -40,7 +40,7 @@
             android:text="תוקף"
             android:textSize="23sp"
             android:textStyle="italic"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:layout_marginTop="8dp"
             android:gravity="right"/>
     </LinearLayout>
@@ -59,7 +59,7 @@
             android:padding="10dp"
             android:layout_marginEnd="8dp"
 
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_MedicationRow_Edit"
@@ -68,6 +68,6 @@
             android:text="ערוך"
             android:textSize="23sp"
             android:padding="10dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
     </LinearLayout>
 </LinearLayout>

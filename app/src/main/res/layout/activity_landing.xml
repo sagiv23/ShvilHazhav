@@ -31,7 +31,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_landing_to_contact"
@@ -44,7 +44,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_landing_to_login"
@@ -57,7 +57,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_landing_to_register"
@@ -70,7 +70,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:text="ברוכים הבאים"
                 android:textSize="50sp"
-                android:fontFamily="@font/headline"
+                android:fontFamily="@font/headline_hebrew"
                 android:layout_marginBottom="40dp" />
 
             <com.google.android.material.card.MaterialCardView
@@ -143,7 +143,7 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_landingBody_to_register"
@@ -158,7 +158,7 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_landingBody_to_contact"
@@ -173,7 +173,7 @@
                         app:iconSize="28dp"
                         app:iconGravity="textEnd"
                         app:iconPadding="12dp"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -182,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:text="שביל הזהב"
                 android:textSize="20sp"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

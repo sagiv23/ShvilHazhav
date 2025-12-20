@@ -137,7 +137,7 @@ public class UsersTableActivity extends AppCompatActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView tv = (TextView) view;
-                Typeface typeface = ResourcesCompat.getFont(UsersTableActivity.this, R.font.text);
+                Typeface typeface = ResourcesCompat.getFont(UsersTableActivity.this, R.font.text_hebrew);
                 tv.setTypeface(typeface);
                 tv.setTextColor(getResources().getColor(R.color.text_color, null));
                 tv.setBackgroundColor(getResources().getColor(R.color.background_color_buttons, null));
@@ -151,7 +151,7 @@ public class UsersTableActivity extends AppCompatActivity {
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
-                Typeface typeface = ResourcesCompat.getFont(UsersTableActivity.this, R.font.text);
+                Typeface typeface = ResourcesCompat.getFont(UsersTableActivity.this, R.font.text_hebrew);
                 tv.setTypeface(typeface);
                 tv.setTextColor(getResources().getColor(R.color.text_color, null));
                 tv.setBackgroundColor(getResources().getColor(R.color.background_color_buttons, null));

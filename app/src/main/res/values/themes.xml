@@ -37,7 +37,7 @@
         <item name="colorPrimary">@color/background_color_nav</item>
         <item name="android:textColorAlertDialogListItem">@color/background_color_nav</item>
         <item name="android:datePickerDialogTheme">@style/DatePickerStyle</item>
-        <item name="android:fontFamily">@font/text</item>
+        <item name="android:fontFamily">@font/text_hebrew</item>
         <item name="android:textColorPrimary">@color/text_color</item>
         <item name="android:textColorPrimaryInverse">@color/nav_text_color</item>
         <item name="android:windowBackground">@color/background_color</item>
@@ -61,7 +61,7 @@
     <style name="AppTextInputEditTextStyle"
         parent="Widget.Material3.TextInputEditText.OutlinedBox">
         <item name="android:textColor">@color/text_color</item>
-        <item name="android:fontFamily">@font/text</item>
+        <item name="android:fontFamily">@font/text_hebrew</item>
     </style>
 
     <style name="Theme.SagivProject" parent="Theme.SagivProject.Light" />

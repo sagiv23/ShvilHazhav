@@ -31,7 +31,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_GameHomeScreen_to_DetailsAboutUser"
@@ -44,7 +44,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_GameHomeScreen_to_contact"
@@ -57,7 +57,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_GameHomeScreen_to_exit"
@@ -70,7 +70,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:text="משחק הזיכרון"
                 android:textSize="40sp"
-                android:fontFamily="@font/headline"/>
+                android:fontFamily="@font/headline_hebrew"/>
 
             <!-- תוצאות שחקן -->
             <TextView
@@ -116,7 +116,7 @@
                 android:textSize="25sp"
                 android:gravity="right"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
 
             <TextView
                 android:id="@+id/tv_GameHomeScreen_status_of_finding_enemy"
@@ -127,7 +127,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:visibility="gone"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
 
             <!-- כפתורים -->
             <LinearLayout
@@ -149,7 +149,7 @@
                     app:iconSize="28dp"
                     app:iconGravity="textStart"
                     app:iconPadding="12dp"
-                    android:fontFamily="@font/text"/>
+                    android:fontFamily="@font/text_hebrew"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_GameHomeScreen_cancel_find_enemy"
@@ -164,7 +164,7 @@
                     app:iconSize="28dp"
                     app:iconGravity="textStart"
                     app:iconPadding="12dp"
-                    android:fontFamily="@font/text"
+                    android:fontFamily="@font/text_hebrew"
                     android:visibility="gone"/>
             </LinearLayout>
 
@@ -193,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:text="הוראות המשחק"
                         android:textSize="30sp"
-                        android:fontFamily="@font/headline"
+                        android:fontFamily="@font/headline_hebrew"
                         android:gravity="center"
                         android:layout_marginBottom="16dp" />
 
@@ -204,7 +204,7 @@
                         android:layout_height="wrap_content"
                         android:text="משחק זיכרון תחרותי אונליין ראש בראש, המיועד לשיפור וחיזוק הזיכרון. המשחק כולל שלושה סבבים, והמנצח נקבע לפי סך הנקודות הגבוה ביותר."
                         android:textSize="22sp"
-                        android:fontFamily="@font/text"
+                        android:fontFamily="@font/text_hebrew"
                         android:gravity="right"
                         android:layout_marginBottom="16dp" />
 
@@ -215,7 +215,7 @@
                         android:layout_height="wrap_content"
                         android:text="מטרת המשחק"
                         android:textSize="22sp"
-                        android:fontFamily="@font/headline"
+                        android:fontFamily="@font/headline_hebrew"
                         android:gravity="right"
                         android:layout_marginBottom="8dp" />
 
@@ -225,7 +225,7 @@
                         android:layout_height="wrap_content"
                         android:text="לנצח את היריב באמצעות צבירת מספר הנקודות הגבוה ביותר לאורך שלושת הסבבים."
                         android:textSize="22sp"
-                        android:fontFamily="@font/text"
+                        android:fontFamily="@font/text_hebrew"
                         android:gravity="right"
                         android:layout_marginBottom="16dp" />
 
@@ -236,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:text="כללי המשחק"
                         android:textSize="22sp"
-                        android:fontFamily="@font/headline"
+                        android:fontFamily="@font/headline_hebrew"
                         android:gravity="right"
                         android:layout_marginBottom="8dp" />
 
@@ -246,7 +246,7 @@
                         android:layout_height="wrap_content"
                         android:text="• בכל תור נחשפים שני קלפים."
                         android:textSize="22sp"
-                        android:fontFamily="@font/text"
+                        android:fontFamily="@font/text_hebrew"
                         android:gravity="right" />
 
                     <TextView
@@ -255,7 +255,7 @@
                         android:layout_height="wrap_content"
                         android:text="• זוג תואם מזכה בנקודה ובתור נוסף."
                         android:textSize="22sp"
-                        android:fontFamily="@font/text"
+                        android:fontFamily="@font/text_hebrew"
                         android:gravity="right" />
 
                     <TextView
@@ -264,7 +264,7 @@
                         android:layout_height="wrap_content"
                         android:text="• זוג לא תואם מחזיר את הקלפים ומעביר את התור."
                         android:textSize="22sp"
-                        android:fontFamily="@font/text"
+                        android:fontFamily="@font/text_hebrew"
                         android:gravity="right"
                         android:layout_marginBottom="16dp" />
 
@@ -275,7 +275,7 @@
                         android:layout_height="wrap_content"
                         android:text="שיטת הניקוד"
                         android:textSize="22sp"
-                        android:fontFamily="@font/headline"
+                        android:fontFamily="@font/headline_hebrew"
                         android:gravity="right"
                         android:layout_marginBottom="8dp" />
 
@@ -285,7 +285,7 @@
                         android:layout_height="wrap_content"
                         android:text="• התאמה נכונה: 1+ נקודה.\n• טעות: 1- נקודה (המינימום הוא 0).\n• הניקוד מצטבר בין הסבבים."
                         android:textSize="22sp"
-                        android:fontFamily="@font/text"
+                        android:fontFamily="@font/text_hebrew"
                         android:gravity="right" />
 
                 </LinearLayout>

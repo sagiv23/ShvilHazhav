@@ -27,7 +27,7 @@
                 android:hint="שם התרופה"
                 android:textSize="22sp"
                 android:inputType="text"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- פרטים -->
@@ -44,7 +44,7 @@
                 android:hint="פרטים"
                 android:textSize="22sp"
                 android:inputType="text"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- תאריך -->
@@ -63,7 +63,7 @@
                 android:focusable="false"
                 android:clickable="true"
                 android:inputType="none"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- כפתורים -->
@@ -81,7 +81,7 @@
                 android:text="הוסף"
                 android:textSize="22sp"
                 android:layout_margin="4dp"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_medication_cancel"
@@ -91,7 +91,7 @@
                 android:text="ביטול"
                 android:textSize="22sp"
                 android:layout_margin="4dp"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="חזרה"
         android:textSize="25sp"
-        android:fontFamily="@font/text"
+        android:fontFamily="@font/text_hebrew"
         app:cornerRadius="25dp"
         app:icon="@drawable/ic_back"
         app:iconGravity="textStart"
@@ -50,7 +50,7 @@
                 android:text="קשר קרוב - מנהל"
                 android:textSize="40sp"
                 android:layout_marginBottom="24dp"
-                android:fontFamily="@font/headline"
+                android:fontFamily="@font/headline_hebrew"
                 android:gravity="center"/>
 
             <!-- כרטיס הפורום -->
@@ -89,7 +89,7 @@
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxStrokeWidth="1dp"
                         android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/text">
+                        android:fontFamily="@font/text_hebrew">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_AdminForum_new_message"
@@ -101,7 +101,7 @@
                             android:inputType="textMultiLine"
                             android:lines="3"
                             android:maxLines="5"
-                            android:fontFamily="@font/text"/>
+                            android:fontFamily="@font/text_hebrew"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- כפתור שליחה -->
@@ -118,7 +118,7 @@
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="עריכת פרטי משתמש"
             android:textSize="30sp"
-            android:fontFamily="@font/headline"
+            android:fontFamily="@font/headline_hebrew"
             android:layout_marginBottom="16dp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -34,7 +34,7 @@
                 android:hint="שם פרטי"
                 android:textSize="22sp"
                 android:inputType="textPersonName"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -51,7 +51,7 @@
                 android:hint="שם משפחה"
                 android:textSize="22sp"
                 android:inputType="textPersonName"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -67,7 +67,7 @@
                 android:hint="סיסמה"
                 android:textSize="22sp"
                 android:inputType="textPassword"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -84,7 +84,7 @@
                 android:minWidth="80dp"
                 android:text="שמור"
                 android:textSize="22sp"
-                android:fontFamily="@font/text"
+                android:fontFamily="@font/text_hebrew"
                 android:layout_margin="4dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -94,7 +94,7 @@
                 android:minWidth="80dp"
                 android:text="ביטול"
                 android:textSize="22sp"
-                android:fontFamily="@font/text"
+                android:fontFamily="@font/text_hebrew"
                 android:layout_margin="4dp" />
         </LinearLayout>
     </LinearLayout>

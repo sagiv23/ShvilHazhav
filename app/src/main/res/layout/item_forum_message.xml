@@ -23,7 +23,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="אפשרויות הודעה"
             android:src="@drawable/ic_more"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:layout_gravity="end" />
 
         <TextView
@@ -31,21 +31,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="25sp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <TextView
             android:id="@+id/ItemForumMessageTxtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <TextView
             android:id="@+id/ItemForumMessageTxtIsAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <TextView
             android:id="@+id/ItemForumMessageTxtMessage"
@@ -53,14 +53,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:textSize="22sp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <TextView
             android:id="@+id/ItemForumMessageTxtTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:layout_marginTop="4dp"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

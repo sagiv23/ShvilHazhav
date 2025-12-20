@@ -31,7 +31,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_forum_DetailsAboutUser"
@@ -44,7 +44,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_forum_contact"
@@ -57,7 +57,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <Button
             android:id="@+id/btn_forum_exit"
@@ -70,7 +70,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
     </LinearLayout>
 
     <!-- קו הפרדה -->
@@ -106,7 +106,7 @@
                 android:text="קשר קרוב"
                 android:textSize="40sp"
                 android:layout_marginBottom="24dp"
-                android:fontFamily="@font/headline"/>
+                android:fontFamily="@font/headline_hebrew"/>
 
             <!-- כרטיס הפורום -->
             <com.google.android.material.card.MaterialCardView
@@ -144,7 +144,7 @@
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxStrokeWidth="1dp"
                         android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/text">
+                        android:fontFamily="@font/text_hebrew">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_forum_new_message"
@@ -156,7 +156,7 @@
                             android:inputType="textMultiLine"
                             android:lines="3"
                             android:maxLines="5"
-                            android:fontFamily="@font/text" />
+                            android:fontFamily="@font/text_hebrew" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- כפתור שליחה -->
@@ -173,7 +173,7 @@
                         app:iconSize="28dp"
                         app:iconGravity="textStart"
                         app:iconPadding="12dp"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

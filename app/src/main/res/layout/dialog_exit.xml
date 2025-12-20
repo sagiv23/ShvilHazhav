@@ -19,7 +19,7 @@
             android:text=""
             android:textSize="30sp"
             android:layout_marginBottom="16dp"
-            android:fontFamily="@font/headline"/>
+            android:fontFamily="@font/headline_hebrew"/>
 
         <TextView
             android:id="@+id/txt_DialogExit_message"
@@ -28,7 +28,7 @@
             android:text=""
             android:textSize="25sp"
             android:gravity="center"
-            android:fontFamily="@font/text"/>
+            android:fontFamily="@font/text_hebrew"/>
 
         <LinearLayout
             android:id="@+id/linearLayout_DialogExit_ButtonsLayout"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="אישור"
                 android:textSize="18sp"
-                android:fontFamily="@font/text"
+                android:fontFamily="@font/text_hebrew"
                 android:layout_margin="2dp" />
 
             <Button
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:text="ביטול"
                 android:textSize="18sp"
-                android:fontFamily="@font/text"
+                android:fontFamily="@font/text_hebrew"
                 android:layout_margin="2dp" />
         </LinearLayout>
     </LinearLayout>

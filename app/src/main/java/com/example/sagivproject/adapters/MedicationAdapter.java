@@ -53,7 +53,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
         int colorResId;
 
         if (med.getDate() != null && med.getDate().before(today)) {
-            colorResId = android.R.color.holo_red_dark;
+            colorResId = R.color.error;
         } else {
             colorResId = R.color.text_color;
         }

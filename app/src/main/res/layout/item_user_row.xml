@@ -29,7 +29,7 @@
                 android:text="שם מלא"
                 android:textSize="28sp"
                 android:gravity="right"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
 
             <TextView
                 android:id="@+id/txt_UserRow_email"
@@ -38,7 +38,7 @@
                 android:text="אימייל"
                 android:textSize="22sp"
                 android:gravity="right"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
 
             <TextView
                 android:id="@+id/txt_UserRow_password"
@@ -47,7 +47,7 @@
                 android:text="סיסמה"
                 android:textSize="20sp"
                 android:gravity="right"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
 
             <TextView
                 android:id="@+id/txt_UserRow_IsAdmin"
@@ -56,7 +56,7 @@
                 android:text="מנהל: "
                 android:textSize="22sp"
                 android:gravity="right"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
 
             <TextView
                 android:id="@+id/txt_UserRow_wins"
@@ -65,7 +65,7 @@
                 android:text="ניצחונות: "
                 android:textSize="20sp"
                 android:gravity="right"
-                android:fontFamily="@font/text"/>
+                android:fontFamily="@font/text_hebrew"/>
         </LinearLayout>
 
         <!-- כפתור הפיכת משתמש למנהל -->

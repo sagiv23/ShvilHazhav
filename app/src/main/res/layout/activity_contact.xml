@@ -32,7 +32,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:visibility="gone" />
 
         <Button
@@ -46,7 +46,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:visibility="gone" />
 
         <Button
@@ -60,7 +60,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:visibility="gone" />
 
         <Button
@@ -74,7 +74,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:visibility="gone" />
 
         <!-- כפתורים למשתמש לא מחובר -->
@@ -89,7 +89,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:visibility="gone" />
 
         <Button
@@ -103,7 +103,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:visibility="gone" />
 
         <Button
@@ -117,7 +117,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:visibility="gone" />
 
         <Button
@@ -132,7 +132,7 @@
             android:ellipsize="none"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:fontFamily="@font/text"
+            android:fontFamily="@font/text_hebrew"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -171,7 +171,7 @@
                 android:text="צור קשר"
                 android:textSize="40sp"
                 android:layout_marginBottom="24dp"
-                android:fontFamily="@font/headline"/>
+                android:fontFamily="@font/headline_hebrew"/>
 
             <!-- כרטיס מידע -->
             <com.google.android.material.card.MaterialCardView
@@ -203,7 +203,7 @@
                         android:textSize="30sp"
                         android:gravity="right"
                         android:layout_marginBottom="8dp"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
 
                     <TextView
                         android:id="@+id/txtEmail"
@@ -223,7 +223,7 @@
                         android:text="הרעיון לפרויקט עלה לאור התקופה הקשה שהמדינה עוברת בשנים האחרונות ולא מעט אירועים בהם אוכלוסיות מיוחדות ונזקקות נדרשו לעזרה גם בדברים הקטנים היומיומיים."
                         android:textSize="25sp"
                         android:gravity="right"
-                        android:fontFamily="@font/text"/>
+                        android:fontFamily="@font/text_hebrew"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
