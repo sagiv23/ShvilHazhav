@@ -58,7 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:boxBackgroundMode="outline">
+            app:boxBackgroundMode="outline"
+            android:fontFamily="@font/text_english">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputEditUserPassword"

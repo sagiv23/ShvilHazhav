@@ -99,14 +99,29 @@
             android:gravity="center_horizontal">
 
             <!-- כותרת -->
-            <TextView
-                android:id="@+id/txtTitle"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="יועץ AI"
-                android:textSize="40sp"
-                android:layout_marginBottom="40dp"
-                android:fontFamily="@font/headline_hebrew"/>
+                android:orientation="horizontal"
+                android:layout_marginBottom="40dp">
+
+                <TextView
+                    android:id="@+id/txtTitleHebrew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="יועץ"
+                    android:textSize="40sp"
+                    android:fontFamily="@font/headline_hebrew"/>
+
+                <TextView
+                    android:id="@+id/txtTitleAI"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" AI"
+                    android:textStyle="bold"
+                    android:textSize="40sp"
+                    android:fontFamily="@font/headline_english"/>
+            </LinearLayout>
 
             <!-- כרטיס -->
             <com.google.android.material.card.MaterialCardView

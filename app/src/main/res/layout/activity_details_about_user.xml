@@ -180,7 +180,7 @@
                         android:id="@+id/txt_DetailsAboutUser_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="שם משתמש"
+                        android:text="שם פרטי + משפחה"
                         android:textSize="30sp"
                         android:layout_marginBottom="20dp"
                         android:fontFamily="@font/headline_hebrew"/>
@@ -258,8 +258,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txt_DetailsAboutUser_email"
-                        android:fontFamily="@font/text_hebrew"
-                        android:textSize="24sp"
+                        android:fontFamily="@font/text_english"
+                        android:textSize="20sp"
+                        android:text="hiiiiii"
                         android:layout_marginBottom="10dp"
                         android:layout_marginRight="8dp" />
 
@@ -275,8 +276,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txt_DetailsAboutUser_password"
-                        android:fontFamily="@font/text_hebrew"
-                        android:textSize="24sp"
+                        android:fontFamily="@font/text_english"
+                        android:textSize="20sp"
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="15dp"/>
                 </LinearLayout>

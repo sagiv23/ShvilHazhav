@@ -175,7 +175,7 @@
                         android:layout_marginBottom="12dp"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        android:fontFamily="@font/text_hebrew">
+                        android:fontFamily="@font/text_english">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_email"
@@ -197,7 +197,7 @@
                         android:layout_marginBottom="20dp"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        android:fontFamily="@font/text_hebrew">
+                        android:fontFamily="@font/text_english">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_password"
