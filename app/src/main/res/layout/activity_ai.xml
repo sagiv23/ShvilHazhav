@@ -117,7 +117,7 @@
                     android:id="@+id/txtTitleAI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" AI"
+                    android:text="AI "
                     android:textStyle="bold"
                     android:textSize="40sp"
                     android:fontFamily="@font/headline_english"/>
