@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
@@ -17,8 +20,11 @@ import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.workers.MedicationWorker;
 
+import java.util.Calendar;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
@@ -59,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         PagePermissions.checkUserPage(this);
+        setupDailyNotifications();
 
         btnToContact = findViewById(R.id.btn_main_to_contact);
         btnToDetailsAboutUser = findViewById(R.id.btn_main_to_DetailsAboutUser);
@@ -92,5 +99,37 @@ public class MainActivity extends AppCompatActivity {
         } else {
             txtHomePageTitle.setText("שלום " + fullName);
         }
+    }
+
+    //התראות לגבי התרופות
+    private void setupDailyNotifications() {
+        // הגדרת השעה הרצויה - למשל 08:00 בבוקר
+        Calendar currentDate = Calendar.getInstance();
+        Calendar dueDate = Calendar.getInstance();
+
+        dueDate.set(Calendar.HOUR_OF_DAY, 8);
+        dueDate.set(Calendar.MINUTE, 0);
+        dueDate.set(Calendar.SECOND, 0);
+
+        // אם השעה 08:00 כבר עברה היום, נתזמן למחר
+        if (dueDate.before(currentDate)) {
+            dueDate.add(Calendar.HOUR_OF_DAY, 24);
+        }
+
+        // חישוב כמה זמן נשאר מעכשיו ועד השעה היעודה (במילישניות)
+        long timeDiff = dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
+
+        PeriodicWorkRequest notificationRequest =
+                new PeriodicWorkRequest.Builder(
+                        MedicationWorker.class,
+                        24, TimeUnit.HOURS)
+                        .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS) // הדילוי שחישבנו
+                        .build();
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "MedicationDailyWork",
+                ExistingPeriodicWorkPolicy.KEEP,
+                notificationRequest
+        );
     }
 }
