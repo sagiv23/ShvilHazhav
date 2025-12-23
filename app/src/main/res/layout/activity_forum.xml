@@ -126,7 +126,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_forum"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp"
+                        android:layout_height="350dp"
                         android:overScrollMode="never"
                         android:clipToPadding="false"
                         android:paddingBottom="8dp"/>

@@ -164,7 +164,6 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
         DatabaseService.getInstance().updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
-
                 txtFirstName.setText(user.getFirstName());
                 txtLastName.setText(user.getLastName());
                 txtPassword.setText(user.getPassword());

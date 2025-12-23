@@ -11,6 +11,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -65,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         PagePermissions.checkUserPage(this);
+        checkNotificationPermission();
         setupDailyNotifications();
 
         btnToContact = findViewById(R.id.btn_main_to_contact);
@@ -86,9 +92,7 @@ public class MainActivity extends AppCompatActivity {
         txtHomePageTitle = findViewById(R.id.txt_main_Title);
 
         User user = SharedPreferencesUtil.getUser(this);
-        if (user != null) {
-            showUserName(user);
-        }
+        showUserName(user);
     }
 
     private void showUserName(User user) {
@@ -103,33 +107,45 @@ public class MainActivity extends AppCompatActivity {
 
     //התראות לגבי התרופות
     private void setupDailyNotifications() {
-        // הגדרת השעה הרצויה - למשל 08:00 בבוקר
         Calendar currentDate = Calendar.getInstance();
         Calendar dueDate = Calendar.getInstance();
 
-        dueDate.set(Calendar.HOUR_OF_DAY, 8);
-        dueDate.set(Calendar.MINUTE, 0);
+        //קביעת השעה ל-09:00 בדיוק
+        dueDate.set(Calendar.HOUR_OF_DAY, 9);
+        dueDate.set(Calendar.MINUTE, 15);
         dueDate.set(Calendar.SECOND, 0);
 
-        // אם השעה 08:00 כבר עברה היום, נתזמן למחר
+        //אם השעה 09:00 כבר עברה היום, נתזמן למחר ב-09:00
         if (dueDate.before(currentDate)) {
             dueDate.add(Calendar.HOUR_OF_DAY, 24);
         }
 
-        // חישוב כמה זמן נשאר מעכשיו ועד השעה היעודה (במילישניות)
         long timeDiff = dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
 
         PeriodicWorkRequest notificationRequest =
                 new PeriodicWorkRequest.Builder(
                         MedicationWorker.class,
-                        24, TimeUnit.HOURS)
-                        .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS) // הדילוי שחישבנו
+                        24, TimeUnit.HOURS) //חזרה כל 24 שעות
+                        .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
                         .build();
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 "MedicationDailyWork",
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.UPDATE, //מעדכן את התזמון הקיים אם יש שינוי
                 notificationRequest
         );
+    }
+
+    private void checkNotificationPermission() {
+        //הרשאה זו נדרשת רק עבור אנדרואיד 13 (API 33) ומעלה
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                //הצגת הדיאלוג של המערכת למשתמש
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
     }
 }

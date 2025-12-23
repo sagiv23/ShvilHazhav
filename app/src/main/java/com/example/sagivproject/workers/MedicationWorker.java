@@ -6,12 +6,13 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.NotificationHelper;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 
 public class MedicationWorker extends Worker {
     public MedicationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -23,53 +24,63 @@ public class MedicationWorker extends Worker {
     public Result doWork() {
         Context context = getApplicationContext();
 
-        //שליפת רשימת התרופות מהזיכרון המקומי
-        HashMap<String, Medication> medicationsMap = SharedPreferencesUtil.getMedications(context);
-
-        //בדיקה אם קיימות תרופות ברשימה
-        if (medicationsMap == null || medicationsMap.isEmpty()) {
-            return Result.success(); //אין תרופות, אין צורך בהתראה
+        //בדיקה אם המשתמש מחובר - אם לא, לא עושים כלום
+        if (!SharedPreferencesUtil.isUserLoggedIn(context)) {
+            return Result.success();
         }
 
-        //לוגיקה לבדיקת תוקף ושליחת התראה
-        int expiredCount = 0;
+        String userId = SharedPreferencesUtil.getUserId(context);
 
-        //קבלת התאריך של היום ואיפוס השעה לחצות
-        Calendar todayCal = Calendar.getInstance();
-        todayCal.set(Calendar.HOUR_OF_DAY, 0);
-        todayCal.set(Calendar.MINUTE, 0);
-        todayCal.set(Calendar.SECOND, 0);
-        todayCal.set(Calendar.MILLISECOND, 0);
-        Date today = todayCal.getTime();
+        //שליפת התרופות מה-Firebase כדי לבצע מחיקה אמיתית ברקע
+        DatabaseService.getInstance().getUserMedicationList(userId, new DatabaseService.DatabaseCallback<>() {
+            @Override
+            public void onCompleted(List<Medication> medications) {
+                if (medications == null || medications.isEmpty()) return;
 
-        for (Medication med : medicationsMap.values()) {
-            if (med.getDate() != null) {
-                //יצירת לוח שנה עבור תאריך התרופה
-                Calendar expiryCal = Calendar.getInstance();
-                expiryCal.setTime(med.getDate());
+                int expiredCount = 0;
+                Calendar todayCal = Calendar.getInstance();
+                //איפוס שעה לחצות כדי להשוות רק תאריכים
+                todayCal.set(Calendar.HOUR_OF_DAY, 0);
+                todayCal.set(Calendar.MINUTE, 0);
+                todayCal.set(Calendar.SECOND, 0);
+                todayCal.set(Calendar.MILLISECOND, 0);
+                Date today = todayCal.getTime();
 
-                //הוספת יום אחד - התרופה פגה רק ביום למחרת
-                expiryCal.add(Calendar.DAY_OF_YEAR, 1);
+                for (Medication med : medications) {
+                    if (med.getDate() != null) {
+                        Calendar expiryCal = Calendar.getInstance();
+                        expiryCal.setTime(med.getDate());
 
-                //איפוס השעה של תאריך התרופה לחצות (ליתר ביטחון)
-                expiryCal.set(Calendar.HOUR_OF_DAY, 0);
-                expiryCal.set(Calendar.MINUTE, 0);
-                expiryCal.set(Calendar.SECOND, 0);
-                expiryCal.set(Calendar.MILLISECOND, 0);
+                        //תרופה פגה ביום שאחרי התאריך הרשום
+                        expiryCal.add(Calendar.DAY_OF_YEAR, 1);
 
-                //אם "היום" הוא אחרי (או שווה) ליום שאחרי התפוגה - היא פגה
-                if (today.after(expiryCal.getTime()) || today.equals(expiryCal.getTime())) {
-                    expiredCount++;
+                        //אם היום הוא יום אחרי פקיעת התוקף
+                        if (today.after(expiryCal.getTime()) || today.equals(expiryCal.getTime())) {
+                            expiredCount++;
+                            //מחיקה מה-Firebase בזמן אמת
+                            DatabaseService.getInstance().deleteMedication(userId, med.getId(), null);
+                        }
+                    }
+                }
+
+                //התראה על מחיקת תרופות פגות תוקף
+                if (expiredCount > 0) {
+                    NotificationHelper.showNotification(context, "עדכון רשימת תרופות",
+                            expiredCount + " תרופות שפג תוקפן נמחקו מהמערכת.");
+                }
+
+                //התראה יומית על נטילת תרופות (רק אם נשארו תרופות ברשימה)
+                if (medications.size() > expiredCount) {
+                    NotificationHelper.showNotification(context, "תזכורת נטילת תרופות",
+                            "בוקר טוב! יש לך תרופות ליטול היום. בדוק את הרשימה באפליקציה.");
                 }
             }
-        }
 
-        //שליחת התראות (רק אם יש תרופות במערכת)
-        if (expiredCount > 0) {
-            NotificationHelper.showNotification(context, "תרופות פגות תוקף", "יש לך " + expiredCount + " תרופות שפג תוקפן!");
-        }
-
-        NotificationHelper.showNotification(context, "תזכורת יומית", "אל תשכח לבדוק את רשימת התרופות היומית שלך.");
+            @Override
+            public void onFailed(Exception e) {
+                //שגיאה בתקשורת עם Firebase
+            }
+        });
 
         return Result.success();
     }
