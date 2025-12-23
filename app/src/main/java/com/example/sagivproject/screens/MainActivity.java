@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar currentDate = Calendar.getInstance();
         Calendar dueDate = Calendar.getInstance();
 
-        //קביעת השעה ל-09:00 בדיוק
+        //קביעת השעה ל-09:15 בדיוק
         dueDate.set(Calendar.HOUR_OF_DAY, 9);
         dueDate.set(Calendar.MINUTE, 15);
         dueDate.set(Calendar.SECOND, 0);
