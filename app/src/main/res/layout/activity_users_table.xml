@@ -6,9 +6,11 @@
     android:id="@+id/usersTablePage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16sp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
     tools:context=".screens.UsersTableActivity">
 
+    <!-- כפתור חזרה -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_UsersTable_to_admin"
         android:layout_width="wrap_content"
@@ -20,11 +22,12 @@
         app:icon="@drawable/ic_back"
         app:iconGravity="textStart"
         app:iconPadding="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <!-- כותרת -->
     <TextView
         android:id="@+id/txtUsersTableTitle"
         android:layout_width="wrap_content"
@@ -32,25 +35,25 @@
         android:text="טבלת משתמשים"
         android:textSize="40sp"
         android:fontFamily="@font/headline_hebrew"
-        android:gravity="center"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/btn_UsersTable_to_admin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- בלוק חיפוש -->
+    <!-- כרטיס חיפוש -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/searchCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="8dp"
         app:cardCornerRadius="18dp"
         app:cardElevation="4dp"
+        app:strokeColor="?attr/colorOutline"
         app:layout_constraintTop_toBottomOf="@id/txtUsersTableTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:strokeColor="?attr/colorOutline">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:text="חפש לפי:"
                 android:textSize="25sp"
-                android:gravity="right"
                 android:fontFamily="@font/text_hebrew"/>
 
             <Spinner
@@ -71,12 +73,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:entries="@array/search_types"
-                android:spinnerMode="dropdown"/>
+                android:entries="@array/search_types"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
                 android:hint="הקלד כאן..."
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="16dp"
@@ -84,32 +87,32 @@
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxStrokeWidth="1dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/text_hebrew"
-                android:layout_marginBottom="16dp">
+                android:fontFamily="@font/text_hebrew">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_UsersTable_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:fontFamily="@font/text_hebrew"
                     android:textSize="20sp"
-                    />
+                    android:inputType="text"
+                    android:fontFamily="@font/text_hebrew"/>
             </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- רשימת המשתמשים -->
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_UsersTable"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
+        android:paddingBottom="32dp"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/searchCard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        android:clipToPadding="false"
-        android:paddingBottom="50dp" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
