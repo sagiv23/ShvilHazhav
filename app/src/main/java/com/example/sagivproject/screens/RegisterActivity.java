@@ -18,7 +18,7 @@ import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.ErrorTranslatorHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-import com.example.sagivproject.utils.Validator;
+import com.example.sagivproject.utils.InputValidator;
 
 import java.util.HashMap;
 
@@ -64,19 +64,19 @@ public class RegisterActivity extends AppCompatActivity {
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
             return;
-        } if (!Validator.isNameValid(firstName)) {
+        } if (!InputValidator.isNameValid(firstName)) {
             editTextFirstName.requestFocus();
             Toast.makeText(this, "שם פרטי קצר מדי", Toast.LENGTH_LONG).show();
             return;
-        } if (!Validator.isNameValid(lastName)) {
+        } if (!InputValidator.isNameValid(lastName)) {
             editTextLastName.requestFocus();
             Toast.makeText(this, "שם משפחה קצר מדי", Toast.LENGTH_LONG).show();
             return;
-        } if (!Validator.isEmailValid(email)) {
+        } if (!InputValidator.isEmailValid(email)) {
             editTextEmail.requestFocus();
             Toast.makeText(this, "כתובת האימייל לא תקינה", Toast.LENGTH_LONG).show();
             return;
-        } if (!Validator.isPasswordValid(password)) {
+        } if (!InputValidator.isPasswordValid(password)) {
             editTextPassword.requestFocus();
             Toast.makeText(this, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
             return;

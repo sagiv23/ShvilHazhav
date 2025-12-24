@@ -6,21 +6,20 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.Objects;
 
-public class AdminPageActivity extends AppCompatActivity {
+public class AdminPageActivity extends BaseActivity {
     private Button btnToUserTable, btnToForum, btnToDetailsAboutUser, btnLogout;
     private TextView txtAdminTitle;
 
@@ -69,7 +68,7 @@ public class AdminPageActivity extends AppCompatActivity {
         btnToUserTable.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, UsersTableActivity.class)));
         btnToForum.setOnClickListener(v -> startActivity(new Intent(AdminPageActivity.this, AdminForumActivity.class)));
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, DetailsAboutUserActivity.class)));
-        btnLogout.setOnClickListener(view -> LogoutHelper.logout(this));
+        btnLogout.setOnClickListener(view -> logout());
 
         User localUser = SharedPreferencesUtil.getUser(this);
         if (localUser != null) {

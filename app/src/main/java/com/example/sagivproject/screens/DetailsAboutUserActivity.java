@@ -15,20 +15,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.ImageUtil;
-import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
-public class DetailsAboutUserActivity extends AppCompatActivity {
+public class DetailsAboutUserActivity extends BaseActivity {
     private Button btnToMain, btnToDetailsAboutUser, btnToContact, btnToExit, btnToAdmin, btnEditUser;
     private View separatorLine;
     private LinearLayout topMenu;
@@ -87,7 +86,7 @@ public class DetailsAboutUserActivity extends AppCompatActivity {
 
         btnToMain.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
         btnToContact.setOnClickListener(v -> startActivity(new Intent(this, ContactActivity.class)));
-        btnToExit.setOnClickListener(v -> LogoutHelper.logout(this));
+        btnToExit.setOnClickListener(v -> logout());
         btnToAdmin.setOnClickListener(v -> startActivity(new Intent(this, AdminPageActivity.class)));
 
         btnEditUser = findViewById(R.id.btn_DetailsAboutUser_edit_user);

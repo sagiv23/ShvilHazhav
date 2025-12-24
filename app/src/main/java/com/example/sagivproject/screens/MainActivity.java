@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,7 +23,7 @@ import androidx.work.WorkManager;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.LogoutHelper;
+import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.workers.MedicationWorker;
@@ -33,7 +32,7 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
     private TextView txtHomePageTitle;
 
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         btnToForum.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, ForumActivity.class)));
         btnToAi.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AiActivity.class)));
         btnToGameHomeScreen.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, GameHomeScreenActivity.class)));
-        btnToExit.setOnClickListener(view -> LogoutHelper.logout(MainActivity.this));
+        btnToExit.setOnClickListener(view -> logout());
 
         txtHomePageTitle = findViewById(R.id.txt_main_Title);
 

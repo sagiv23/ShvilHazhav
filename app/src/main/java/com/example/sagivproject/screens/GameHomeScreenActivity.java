@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,13 +14,13 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.firebase.database.ValueEventListener;
 
-public class GameHomeScreenActivity extends AppCompatActivity {
+public class GameHomeScreenActivity extends BaseActivity {
     private Button btnToMain, btnToContact, btnToDetailsAboutUser,btnFindEnemy, btnCancelFindEnemy, btnToExit;
     private TextView TVictories, TVStatusOfFindingEnemy;
     private GameRoom currentRoom;
@@ -57,7 +56,7 @@ public class GameHomeScreenActivity extends AppCompatActivity {
         btnToMain.setOnClickListener(view -> startActivity(new Intent(GameHomeScreenActivity.this, MainActivity.class)));
         btnToContact.setOnClickListener(view -> startActivity(new Intent(GameHomeScreenActivity.this, ContactActivity.class)));
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(GameHomeScreenActivity.this, DetailsAboutUserActivity.class)));
-        btnToExit.setOnClickListener(view -> LogoutHelper.logout(GameHomeScreenActivity.this));
+        btnToExit.setOnClickListener(view -> logout());
 
         btnFindEnemy.setOnClickListener(view -> findEnemy());
         btnCancelFindEnemy.setOnClickListener(view -> cancel());

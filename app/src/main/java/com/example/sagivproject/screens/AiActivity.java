@@ -9,15 +9,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.BuildConfig;
 import com.example.sagivproject.R;
+import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.utils.EncryptionAPIKey;
-import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 
 import org.json.JSONArray;
@@ -34,7 +33,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class AiActivity extends AppCompatActivity {
+public class AiActivity extends BaseActivity {
     Button btnToMain, btnToContact, btnToDetailsAboutUser, send, btnToExit;
     private ProgressBar progressBar;
     private EditText questionInput;
@@ -76,7 +75,7 @@ public class AiActivity extends AppCompatActivity {
         btnToContact.setOnClickListener(view -> startActivity(new Intent(AiActivity.this, ContactActivity.class)));
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(AiActivity.this, DetailsAboutUserActivity.class)));
         send.setOnClickListener(view -> sendQuestion());
-        btnToExit.setOnClickListener(view ->  LogoutHelper.logout(AiActivity.this));
+        btnToExit.setOnClickListener(view ->  logout());
     }
 
     private void displayTextWithAnimation(TextView textView, String fullText) {

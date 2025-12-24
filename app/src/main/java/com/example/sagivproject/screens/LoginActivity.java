@@ -18,7 +18,7 @@ import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.ErrorTranslatorHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-import com.example.sagivproject.utils.Validator;
+import com.example.sagivproject.utils.InputValidator;
 
 public class LoginActivity extends AppCompatActivity {
     private Button btnToContact, btnToLanding, btnToRegister, btnLogin;
@@ -62,10 +62,10 @@ public class LoginActivity extends AppCompatActivity {
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "נא למלא אימייל וסיסמה", Toast.LENGTH_SHORT).show();
-        } else if (!Validator.isEmailValid(email)) {
+        } else if (!InputValidator.isEmailValid(email)) {
             editTextEmail.requestFocus();
             Toast.makeText(this, "כתובת האימייל לא תקינה", Toast.LENGTH_LONG).show();
-        } else if (!Validator.isPasswordValid(password)) {
+        } else if (!InputValidator.isPasswordValid(password)) {
             editTextPassword.requestFocus();
             Toast.makeText(this, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
         } else {

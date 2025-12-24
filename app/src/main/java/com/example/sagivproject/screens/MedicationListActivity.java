@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -20,8 +19,8 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationAdapter;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.LogoutHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
@@ -35,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class MedicationListActivity extends AppCompatActivity {
+public class MedicationListActivity extends BaseActivity {
     Button btnToMain, btnToContact, btnToDetailsAboutUser, btnAddMedication, btnToExit;
     RecyclerView recyclerViewMedications;
 
@@ -74,7 +73,7 @@ public class MedicationListActivity extends AppCompatActivity {
         btnToContact.setOnClickListener(view -> startActivity(new Intent(MedicationListActivity.this, ContactActivity.class)));
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(MedicationListActivity.this, DetailsAboutUserActivity.class)));
         btnAddMedication.setOnClickListener(view -> openMedicationDialog(null));
-        btnToExit.setOnClickListener(view -> LogoutHelper.logout(MedicationListActivity.this));
+        btnToExit.setOnClickListener(view -> logout());
 
         recyclerViewMedications = findViewById(R.id.recyclerView_medications);
         recyclerViewMedications.setLayoutManager(new LinearLayoutManager(this));

@@ -6,16 +6,15 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.utils.LogoutHelper;
+import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
-public class ContactActivity extends AppCompatActivity {
+public class ContactActivity extends BaseActivity {
     //כפתורים למשתמש מחובר
     private Button btnToMain, btnToDetailsAboutUser, btnToExit, btnToContactPage1;
     //כפתורים למשתמש לא מחובר
@@ -64,7 +63,7 @@ public class ContactActivity extends AppCompatActivity {
 
         btnToMain.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, MainActivity.class)));
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, DetailsAboutUserActivity.class)));
-        btnToExit.setOnClickListener(view -> LogoutHelper.logout(ContactActivity.this));
+        btnToExit.setOnClickListener(view -> logout());
 
         btnToLanding.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, LandingActivity.class)));
         btnToLoginPage.setOnClickListener(view -> startActivity(new Intent(ContactActivity.this, LoginActivity.class)));

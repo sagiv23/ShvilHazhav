@@ -4,9 +4,11 @@ import android.util.Patterns;
 
 import androidx.annotation.Nullable;
 
-public class Validator {
+public final class InputValidator {
+    private InputValidator() {} // מונע יצירה
+
     public static boolean isNameValid(@Nullable String name) {
-        return name != null && name.length() >= 3;
+        return name != null && name.trim().length() >= 3;
     }
 
     public static boolean isEmailValid(@Nullable String email) {
