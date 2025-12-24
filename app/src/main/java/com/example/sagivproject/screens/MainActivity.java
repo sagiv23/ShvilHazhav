@@ -10,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -110,39 +112,47 @@ public class MainActivity extends AppCompatActivity {
         Calendar currentDate = Calendar.getInstance();
         Calendar dueDate = Calendar.getInstance();
 
-        //קביעת השעה ל-09:15 בדיוק
-        dueDate.set(Calendar.HOUR_OF_DAY, 9);
-        dueDate.set(Calendar.MINUTE, 15);
+        // קביעת השעה הרצויה להתראה (למשל: 09:00 בבוקר)
+        dueDate.set(Calendar.HOUR_OF_DAY, 8);
+        dueDate.set(Calendar.MINUTE, 0);
         dueDate.set(Calendar.SECOND, 0);
+        dueDate.set(Calendar.MILLISECOND, 0);
 
-        //אם השעה 09:00 כבר עברה היום, נתזמן למחר ב-09:00
+        // אם השעה 09:00 כבר עברה היום, נוסיף יום אחד
         if (dueDate.before(currentDate)) {
-            dueDate.add(Calendar.HOUR_OF_DAY, 24);
+            dueDate.add(Calendar.DAY_OF_YEAR, 1);
         }
 
+        // חישוב הזמן שנותר עד לשעת היעד
         long timeDiff = dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
 
+        // יצירת בקשת עבודה מחזורית (כל 24 שעות)
         PeriodicWorkRequest notificationRequest =
                 new PeriodicWorkRequest.Builder(
                         MedicationWorker.class,
-                        24, TimeUnit.HOURS) //חזרה כל 24 שעות
+                        24, TimeUnit.HOURS)
                         .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+                        .addTag("MedicationWorkTag")
+                        // הוספת אילוץ שהמשימה תרוץ רק כשיש אינטרנט (כי אנחנו צריכים את Firebase)
+                        .setConstraints(new Constraints.Builder()
+                                .setRequiredNetworkType(NetworkType.CONNECTED)
+                                .build())
                         .build();
 
+        // שליחת המשימה
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 "MedicationDailyWork",
-                ExistingPeriodicWorkPolicy.UPDATE, //מעדכן את התזמון הקיים אם יש שינוי
+                ExistingPeriodicWorkPolicy.UPDATE,
                 notificationRequest
         );
     }
 
     private void checkNotificationPermission() {
-        //הרשאה זו נדרשת רק עבור אנדרואיד 13 (API 33) ומעלה
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
 
-                //הצגת הדיאלוג של המערכת למשתמש
+                // זה יקפיץ את הדיאלוג הרשמי של אנדרואיד
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
             }

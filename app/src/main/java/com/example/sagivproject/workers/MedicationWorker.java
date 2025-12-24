@@ -1,6 +1,7 @@
 package com.example.sagivproject.workers;
 
 import android.content.Context;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -13,8 +14,12 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class MedicationWorker extends Worker {
+    private static final String TAG = "MedicationWorker";
+
     public MedicationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -23,65 +28,83 @@ public class MedicationWorker extends Worker {
     @Override
     public Result doWork() {
         Context context = getApplicationContext();
+        Log.d(TAG, "ה-Worker התחיל לפעול ברקע...");
 
-        //בדיקה אם המשתמש מחובר - אם לא, לא עושים כלום
+        // בדיקה שהמשתמש מחובר
         if (!SharedPreferencesUtil.isUserLoggedIn(context)) {
+            Log.d(TAG, "משתמש לא מחובר - מבטל התראה.");
             return Result.success();
         }
 
         String userId = SharedPreferencesUtil.getUserId(context);
 
-        //שליפת התרופות מה-Firebase כדי לבצע מחיקה אמיתית ברקע
-        DatabaseService.getInstance().getUserMedicationList(userId, new DatabaseService.DatabaseCallback<>() {
+        // יצירת "מחסום" לסנכרון מול Firebase
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        DatabaseService.getInstance().getUserMedicationList(userId, new DatabaseService.DatabaseCallback<List<Medication>>() {
             @Override
             public void onCompleted(List<Medication> medications) {
-                if (medications == null || medications.isEmpty()) return;
-
-                int expiredCount = 0;
-                Calendar todayCal = Calendar.getInstance();
-                //איפוס שעה לחצות כדי להשוות רק תאריכים
-                todayCal.set(Calendar.HOUR_OF_DAY, 0);
-                todayCal.set(Calendar.MINUTE, 0);
-                todayCal.set(Calendar.SECOND, 0);
-                todayCal.set(Calendar.MILLISECOND, 0);
-                Date today = todayCal.getTime();
-
-                for (Medication med : medications) {
-                    if (med.getDate() != null) {
-                        Calendar expiryCal = Calendar.getInstance();
-                        expiryCal.setTime(med.getDate());
-
-                        //תרופה פגה ביום שאחרי התאריך הרשום
-                        expiryCal.add(Calendar.DAY_OF_YEAR, 1);
-
-                        //אם היום הוא יום אחרי פקיעת התוקף
-                        if (today.after(expiryCal.getTime()) || today.equals(expiryCal.getTime())) {
-                            expiredCount++;
-                            //מחיקה מה-Firebase בזמן אמת
-                            DatabaseService.getInstance().deleteMedication(userId, med.getId(), null);
-                        }
-                    }
-                }
-
-                //התראה על מחיקת תרופות פגות תוקף
-                if (expiredCount > 0) {
-                    NotificationHelper.showNotification(context, "עדכון רשימת תרופות",
-                            expiredCount + " תרופות שפג תוקפן נמחקו מהמערכת.");
-                }
-
-                //התראה יומית על נטילת תרופות (רק אם נשארו תרופות ברשימה)
-                if (medications.size() > expiredCount) {
-                    NotificationHelper.showNotification(context, "תזכורת נטילת תרופות",
-                            "בוקר טוב! יש לך תרופות ליטול היום. בדוק את הרשימה באפליקציה.");
-                }
+                Log.d(TAG, "נתונים התקבלו מ-Firebase.");
+                processMedications(context, userId, medications);
+                latch.countDown(); // משחרר את המחסום
             }
 
             @Override
             public void onFailed(Exception e) {
-                //שגיאה בתקשורת עם Firebase
+                Log.e(TAG, "שגיאה במשיכת נתונים: " + e.getMessage());
+                latch.countDown(); // משחרר כדי לא לתקוע את המערכת
             }
         });
 
+        try {
+            // מחכה עד דקה שהנתונים יחזרו מ-Firebase
+            latch.await(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            return Result.retry();
+        }
+
         return Result.success();
+    }
+
+    private void processMedications(Context context, String userId, List<Medication> medications) {
+        // שלב 1: בדיקה אם יש תרופות ברשימה (דרישת המשתמש)
+        if (medications == null || medications.isEmpty()) {
+            Log.d(TAG, "רשימת התרופות ריקה - לא תישלח התראה.");
+            return;
+        }
+
+        int expiredCount = 0;
+        Calendar todayCal = Calendar.getInstance();
+        // איפוס שעות להשוואה נקייה
+        todayCal.set(Calendar.HOUR_OF_DAY, 0);
+        todayCal.set(Calendar.MINUTE, 0);
+        todayCal.set(Calendar.SECOND, 0);
+        todayCal.set(Calendar.MILLISECOND, 0);
+        Date today = todayCal.getTime();
+
+        for (Medication med : medications) {
+            if (med.getDate() != null) {
+                Calendar expiryLimit = Calendar.getInstance();
+                expiryLimit.setTime(med.getDate());
+                // פג תוקף = יום אחרי התאריך שהוזן
+                expiryLimit.add(Calendar.DAY_OF_YEAR, 1);
+
+                if (today.after(expiryLimit.getTime()) || today.equals(expiryLimit.getTime())) {
+                    expiredCount++;
+                    DatabaseService.getInstance().deleteMedication(userId, med.getId(), null);
+                    Log.d(TAG, "תרופה פגה תוקף נמחקה: " + med.getName());
+                }
+            }
+        }
+
+        // שלב 2: שליחת ההתראה המתאימה
+        if (expiredCount > 0) {
+            NotificationHelper.showNotification(context, "עדכון תרופות",
+                    "ניקינו מהרשימה " + expiredCount + " תרופות שפג תוקפן.");
+        } else {
+            // התראה כללית - נשלחת רק כי הרשימה לא ריקה
+            NotificationHelper.showNotification(context, "תזכורת תרופות",
+                    "בוקר טוב! יש לך תרופות ברשימה שממתינות לנטילה.");
+        }
     }
 }
