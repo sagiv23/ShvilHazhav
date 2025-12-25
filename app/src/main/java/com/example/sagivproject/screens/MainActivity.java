@@ -131,7 +131,6 @@ public class MainActivity extends BaseActivity {
                         24, TimeUnit.HOURS)
                         .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
                         .addTag("MedicationWorkTag")
-                        // הוספת אילוץ שהמשימה תרוץ רק כשיש אינטרנט (כי אנחנו צריכים את Firebase)
                         .setConstraints(new Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
                                 .build())

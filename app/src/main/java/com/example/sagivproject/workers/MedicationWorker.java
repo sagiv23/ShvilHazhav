@@ -1,7 +1,6 @@
 package com.example.sagivproject.workers;
 
 import android.content.Context;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -28,36 +27,28 @@ public class MedicationWorker extends Worker {
     @Override
     public Result doWork() {
         Context context = getApplicationContext();
-        Log.d(TAG, "ה-Worker התחיל לפעול ברקע...");
 
-        // בדיקה שהמשתמש מחובר
         if (!SharedPreferencesUtil.isUserLoggedIn(context)) {
-            Log.d(TAG, "משתמש לא מחובר - מבטל התראה.");
             return Result.success();
         }
 
         String userId = SharedPreferencesUtil.getUserId(context);
-
-        // יצירת "מחסום" לסנכרון מול Firebase
         final CountDownLatch latch = new CountDownLatch(1);
 
         DatabaseService.getInstance().getUserMedicationList(userId, new DatabaseService.DatabaseCallback<List<Medication>>() {
             @Override
             public void onCompleted(List<Medication> medications) {
-                Log.d(TAG, "נתונים התקבלו מ-Firebase.");
                 processMedications(context, userId, medications);
-                latch.countDown(); // משחרר את המחסום
+                latch.countDown();
             }
 
             @Override
             public void onFailed(Exception e) {
-                Log.e(TAG, "שגיאה במשיכת נתונים: " + e.getMessage());
-                latch.countDown(); // משחרר כדי לא לתקוע את המערכת
+                latch.countDown();
             }
         });
 
         try {
-            // מחכה עד דקה שהנתונים יחזרו מ-Firebase
             latch.await(1, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             return Result.retry();
@@ -67,49 +58,55 @@ public class MedicationWorker extends Worker {
     }
 
     private void processMedications(Context context, String userId, List<Medication> medications) {
-        // שלב 1: בדיקה אם יש תרופות ברשימה (דרישת המשתמש)
-        if (medications == null || medications.isEmpty()) {
-            Log.d(TAG, "רשימת התרופות ריקה - לא תישלח התראה.");
-            return;
-        }
+        //אין תרופות ברשימה
+        if (medications == null || medications.isEmpty()) return;
 
         int expiredCount = 0;
-        Calendar todayCal = Calendar.getInstance();
-        // איפוס שעות להשוואה נקייה
-        todayCal.set(Calendar.HOUR_OF_DAY, 0);
-        todayCal.set(Calendar.MINUTE, 0);
-        todayCal.set(Calendar.SECOND, 0);
-        todayCal.set(Calendar.MILLISECOND, 0);
-        Date today = todayCal.getTime();
+
+        //קבלת התאריך של היום (מאופס לשעה 00:00)
+        Calendar calToday = Calendar.getInstance();
+        resetTime(calToday);
+        Date today = calToday.getTime();
 
         for (Medication med : medications) {
             if (med.getDate() != null) {
                 Calendar expiryLimit = Calendar.getInstance();
                 expiryLimit.setTime(med.getDate());
-                // פג תוקף = יום אחרי התאריך שהוזן
+                //הגדרת פג תוקף: התאריך שהוזן + יום אחד
                 expiryLimit.add(Calendar.DAY_OF_YEAR, 1);
+                resetTime(expiryLimit);
 
+                //אם היום הוא אחרי (או שווה) לתאריך היעד (הזנת המשתמש + 1)
                 if (today.after(expiryLimit.getTime()) || today.equals(expiryLimit.getTime())) {
                     expiredCount++;
+                    //מחיקה מהדאטה בייס
                     DatabaseService.getInstance().deleteMedication(userId, med.getId(), null);
-                    Log.d(TAG, "תרופה פגה תוקף נמחקה: " + med.getName());
                 }
             }
         }
 
         NotificationService notificationService = new NotificationService(context);
 
+        //שליחת התראות לפי המצב
         if (expiredCount > 0) {
+            //התראה על מחיקת תרופות שפגו
             notificationService.show(
-                    "עדכון תרופות",
-                    "מחקנו מהרשימה " + expiredCount + " תרופות שפג תוקפן."
+                    "עדכון רשימת תרופות",
+                    "מחקנו " + expiredCount + " תרופות שפג תוקפן מהרשימה שלך."
             );
         } else {
-            //התראה כללית - נשלחת רק כי הרשימה לא ריקה
+            //התראה כללית אם יש תרופות ברשימה ולא נמחקו חדשות
             notificationService.show(
-                    "תזכורת תרופות",
-                    "בוקר טוב! יש לך תרופות ברשימה שממתינות לנטילה."
+                    "תזכורת יומית",
+                    "יש לך תרופות ברשימה שממתינות לנטילה."
             );
         }
+    }
+
+    private void resetTime(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
     }
 }
