@@ -17,7 +17,7 @@ import com.example.sagivproject.screens.forum.BaseForumActivity;
 import com.example.sagivproject.utils.PagePermissions;
 
 public class AdminForumActivity extends BaseForumActivity {
-    private Button btnToAdminPage, btnSendMessage;
+    private Button btnToAdminPage, btnSendMessage, btnNewMessages;
     private EditText edtNewMessage;
     private RecyclerView recyclerForum;
 
@@ -39,10 +39,11 @@ public class AdminForumActivity extends BaseForumActivity {
 
         btnSendMessage = findViewById(R.id.btn_AdminForum_send_message);
         edtNewMessage = findViewById(R.id.edt_AdminForum_new_message);
+        btnNewMessages = findViewById(R.id.btn_AdminForum_new_messages_indicator);
         recyclerForum = findViewById(R.id.recycler_AdminForum);
         btnSendMessage.setOnClickListener(v -> sendMessage());
 
-        initForumViews(recyclerForum, edtNewMessage);
+        initForumViews(recyclerForum, edtNewMessage, btnNewMessages);
         permissions = new AdminForumPermissions();
         setupForum();
     }

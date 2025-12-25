@@ -11,7 +11,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class ContactActivity extends BaseActivity {

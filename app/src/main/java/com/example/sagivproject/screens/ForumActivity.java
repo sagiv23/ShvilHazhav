@@ -18,7 +18,7 @@ import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class ForumActivity extends BaseForumActivity {
-    private Button btnToMain, btnToContact, btnToDetailsAboutUser, btnToExit, btnSendMessage;
+    private Button btnToMain, btnToContact, btnToDetailsAboutUser, btnToExit, btnSendMessage, btnNewMessages;
     private EditText edtNewMessage;
     private RecyclerView recyclerForum;
 
@@ -41,6 +41,7 @@ public class ForumActivity extends BaseForumActivity {
         btnToExit = findViewById(R.id.btn_forum_exit);
         btnSendMessage = findViewById(R.id.btn_forum_send_message);
         edtNewMessage = findViewById(R.id.edt_forum_new_message);
+        btnNewMessages = findViewById(R.id.btn_forum_new_messages_indicator);
         recyclerForum = findViewById(R.id.recycler_forum);
 
         btnToMain.setOnClickListener(view -> startActivity(new Intent(this, MainActivity.class)));
@@ -49,7 +50,7 @@ public class ForumActivity extends BaseForumActivity {
         btnToExit.setOnClickListener(view -> logout());
         btnSendMessage.setOnClickListener(v -> sendMessage());
 
-        initForumViews(recyclerForum, edtNewMessage);
+        initForumViews(recyclerForum, edtNewMessage, btnNewMessages);
         permissions = new UserForumPermissions(SharedPreferencesUtil.getUser(this));
         setupForum();
     }

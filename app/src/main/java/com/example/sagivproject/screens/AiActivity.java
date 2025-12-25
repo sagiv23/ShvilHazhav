@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.BuildConfig;
 import com.example.sagivproject.R;
-import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.utils.EncryptionAPIKey;
 import com.example.sagivproject.utils.PagePermissions;
 

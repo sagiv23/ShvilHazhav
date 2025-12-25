@@ -10,7 +10,6 @@
     android:paddingBottom="16dp"
     tools:context=".screens.UsersTableActivity">
 
-    <!-- כפתור חזרה -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_UsersTable_to_admin"
         android:layout_width="wrap_content"

@@ -23,7 +23,6 @@ import androidx.work.WorkManager;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.screens.base.BaseActivity;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.workers.MedicationWorker;
@@ -111,21 +110,21 @@ public class MainActivity extends BaseActivity {
         Calendar currentDate = Calendar.getInstance();
         Calendar dueDate = Calendar.getInstance();
 
-        // קביעת השעה הרצויה להתראה (למשל: 09:00 בבוקר)
+        //קביעת השעה הרצויה להתראה
         dueDate.set(Calendar.HOUR_OF_DAY, 8);
         dueDate.set(Calendar.MINUTE, 0);
         dueDate.set(Calendar.SECOND, 0);
         dueDate.set(Calendar.MILLISECOND, 0);
 
-        // אם השעה 09:00 כבר עברה היום, נוסיף יום אחד
+        //אם השעה 08:00 כבר עברה היום, נוסיף יום אחד
         if (dueDate.before(currentDate)) {
             dueDate.add(Calendar.DAY_OF_YEAR, 1);
         }
 
-        // חישוב הזמן שנותר עד לשעת היעד
+        //חישוב הזמן שנותר עד לשעת היעד
         long timeDiff = dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
 
-        // יצירת בקשת עבודה מחזורית (כל 24 שעות)
+        //יצירת בקשת עבודה מחזורית (כל 24 שעות)
         PeriodicWorkRequest notificationRequest =
                 new PeriodicWorkRequest.Builder(
                         MedicationWorker.class,
@@ -138,7 +137,7 @@ public class MainActivity extends BaseActivity {
                                 .build())
                         .build();
 
-        // שליחת המשימה
+        //שליחת המשימה
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 "MedicationDailyWork",
                 ExistingPeriodicWorkPolicy.UPDATE,

@@ -1,11 +1,10 @@
-package com.example.sagivproject.screens.base;
+package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.sagivproject.screens.LoginActivity;
 import com.example.sagivproject.screens.dialogs.LogoutDialog;
 import com.example.sagivproject.services.AuthService;
 

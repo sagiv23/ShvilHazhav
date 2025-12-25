@@ -72,8 +72,7 @@ public class UsersTableActivity extends AppCompatActivity {
                         new DatabaseService.DatabaseCallback<Void>() {
                             @Override
                             public void onCompleted(Void object) {
-                                Toast.makeText(UsersTableActivity.this,
-                                        "הסטטוס עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UsersTableActivity.this, "הסטטוס עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                                 loadUsers(); //רענון
                             }
 

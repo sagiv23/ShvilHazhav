@@ -12,7 +12,6 @@ public class UserForumPermissions implements ForumPermissions {
 
     @Override
     public boolean canDelete(ForumMessage message) {
-        return message.getUserId() != null &&
-                message.getUserId().equals(user.getUid());
+        return message.getUserId() != null && message.getUserId().equals(user.getUid());
     }
 }

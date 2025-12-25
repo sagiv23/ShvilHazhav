@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.ErrorTranslatorHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.utils.InputValidator;
@@ -93,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailed(Exception e) {
-                    Toast.makeText(LoginActivity.this, ErrorTranslatorHelper.getFriendlyFirebaseAuthError(e), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "שגיאה בהתחברות המשתמש", Toast.LENGTH_LONG).show();
                     SharedPreferencesUtil.signOutUser(LoginActivity.this);
                 }
             });

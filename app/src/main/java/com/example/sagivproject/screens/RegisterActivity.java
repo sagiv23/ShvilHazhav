@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.ErrorTranslatorHelper;
 import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.utils.InputValidator;
@@ -107,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailed(Exception e) {
-                            Toast.makeText(RegisterActivity.this, "שגיאה בשמירת הנתונים: " + ErrorTranslatorHelper.getFriendlyFirebaseAuthError(e), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, "שגיאה בשמירת הנתונים", Toast.LENGTH_LONG).show();
                             SharedPreferencesUtil.signOutUser(RegisterActivity.this);
                         }
                     });
@@ -117,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailed(Exception e) {
                 SharedPreferencesUtil.signOutUser(RegisterActivity.this);
-                Toast.makeText(RegisterActivity.this, ErrorTranslatorHelper.getFriendlyFirebaseAuthError(e), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "שגיאה בהרשמת המשתמש", Toast.LENGTH_LONG).show();
             }
         });
     }

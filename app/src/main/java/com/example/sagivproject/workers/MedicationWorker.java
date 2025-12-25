@@ -8,7 +8,7 @@ import androidx.work.WorkerParameters;
 
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.NotificationHelper;
+import com.example.sagivproject.services.NotificationService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.Calendar;
@@ -97,14 +97,19 @@ public class MedicationWorker extends Worker {
             }
         }
 
-        // שלב 2: שליחת ההתראה המתאימה
+        NotificationService notificationService = new NotificationService(context);
+
         if (expiredCount > 0) {
-            NotificationHelper.showNotification(context, "עדכון תרופות",
-                    "ניקינו מהרשימה " + expiredCount + " תרופות שפג תוקפן.");
+            notificationService.show(
+                    "עדכון תרופות",
+                    "מחקנו מהרשימה " + expiredCount + " תרופות שפג תוקפן."
+            );
         } else {
-            // התראה כללית - נשלחת רק כי הרשימה לא ריקה
-            NotificationHelper.showNotification(context, "תזכורת תרופות",
-                    "בוקר טוב! יש לך תרופות ברשימה שממתינות לנטילה.");
+            //התראה כללית - נשלחת רק כי הרשימה לא ריקה
+            notificationService.show(
+                    "תזכורת תרופות",
+                    "בוקר טוב! יש לך תרופות ברשימה שממתינות לנטילה."
+            );
         }
     }
 }
