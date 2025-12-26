@@ -1,6 +1,5 @@
 package com.example.sagivproject.screens;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +7,6 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -19,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
+import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;

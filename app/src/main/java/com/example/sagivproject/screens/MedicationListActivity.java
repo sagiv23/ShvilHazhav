@@ -1,11 +1,8 @@
 package com.example.sagivproject.screens;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,12 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationAdapter;
+import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.dialogs.MedicationDialog;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -222,72 +220,16 @@ public class MedicationListActivity extends BaseActivity {
     }
 
     private void openMedicationDialog(Medication medToEdit) {
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_add_medication);
-
-        EditText edtName = dialog.findViewById(R.id.edt_medication_name);
-        EditText edtDetails = dialog.findViewById(R.id.edt_medication_details);
-        EditText edtDate = dialog.findViewById(R.id.edt_medication_date);
-        Button btnConfirm = dialog.findViewById(R.id.btn_add_medication_confirm);
-        Button btnCancel = dialog.findViewById(R.id.btn_add_medication_cancel);
-
-        if (medToEdit != null) {
-            edtName.setText(medToEdit.getName());
-            edtDetails.setText(medToEdit.getDetails());
-            edtDate.setText(dateFormat.format(medToEdit.getDate()));
-        }
-
-        edtDate.setOnClickListener(v -> {
-            final Calendar calendar = Calendar.getInstance();
-
-            if (medToEdit != null && medToEdit.getDate() != null)
-                calendar.setTime(medToEdit.getDate());
-
-            DatePickerDialog picker = new DatePickerDialog(
-                    this,
-                    R.style.CustomDatePickerDialog,
-                    (view, y, m, d) -> {
-                        edtDate.setText(String.format(Locale.getDefault(), "%04d-%02d-%02d", y, m + 1, d));
-                    },
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)
-            );
-
-            picker.getDatePicker().setMinDate(System.currentTimeMillis());
-            picker.show();
-        });
-
-        btnConfirm.setOnClickListener(v -> {
-            String name = edtName.getText().toString().trim();
-            String details = edtDetails.getText().toString().trim();
-            String dateString = edtDate.getText().toString().trim();
-
-            if (name.isEmpty() || details.isEmpty() || dateString.isEmpty()) {
-                Toast.makeText(this, "אנא מלא את כל השדות", Toast.LENGTH_SHORT).show();
-                return;
+        new MedicationDialog(this, medToEdit, uid, dateFormat, new MedicationDialog.OnMedicationSubmitListener() {
+            @Override
+            public void onAdd(Medication medication) {
+                saveMedication(medication);
             }
 
-            try {
-                Date date = dateFormat.parse(dateString);
-
-                if (medToEdit == null) {
-                    saveMedication(new Medication(name, details, date, uid));
-                } else {
-                    medToEdit.setName(name);
-                    medToEdit.setDetails(details);
-                    medToEdit.setDate(date);
-                    updateMedication(medToEdit);
-                }
-
-                dialog.dismiss();
-
-            } catch (ParseException e) {
-                Toast.makeText(this, "תאריך לא תקין", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onEdit(Medication medication) {
+                updateMedication(medication);
             }
-        });
-
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-        dialog.show();
+        }).show();
     }
 }

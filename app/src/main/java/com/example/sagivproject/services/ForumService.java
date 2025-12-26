@@ -2,7 +2,7 @@ package com.example.sagivproject.services;
 
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.BaseActivity;
+import com.example.sagivproject.bases.BaseActivity;
 
 import java.util.List;
 

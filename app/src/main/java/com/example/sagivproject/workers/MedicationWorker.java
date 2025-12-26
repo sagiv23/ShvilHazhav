@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.work.WorkerParameters;
 
+import com.example.sagivproject.bases.BaseWorkerActivity;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.services.NotificationService;

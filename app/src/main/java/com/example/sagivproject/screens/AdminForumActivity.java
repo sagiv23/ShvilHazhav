@@ -12,10 +12,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.screens.forum.AdminForumPermissions;
-import com.example.sagivproject.screens.forum.BaseForumActivity;
+import com.example.sagivproject.models.ForumMessage;
+import com.example.sagivproject.bases.BaseForumActivity;
 
-public class AdminForumActivity extends BaseForumActivity {
+public class AdminForumActivity extends BaseForumActivity implements BaseForumActivity.ForumPermissions {
     private Button btnToAdminPage, btnSendMessage, btnNewMessages;
     private EditText edtNewMessage;
     private RecyclerView recyclerForum;
@@ -41,8 +41,13 @@ public class AdminForumActivity extends BaseForumActivity {
         btnSendMessage.setOnClickListener(v -> sendMessage());
 
         initForumViews(recyclerForum, edtNewMessage, btnNewMessages);
-        permissions = new AdminForumPermissions();
+        this.permissions = this;
         setupForum();
+    }
+
+    @Override
+    public boolean canDelete(ForumMessage message) {
+        return true;
     }
 
     @Override

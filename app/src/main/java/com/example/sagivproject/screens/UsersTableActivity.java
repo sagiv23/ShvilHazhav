@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.UsersTableAdapter;
+import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.services.DatabaseService;

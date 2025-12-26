@@ -1,4 +1,4 @@
-package com.example.sagivproject.screens;
+package com.example.sagivproject.bases;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sagivproject.screens.LoginActivity;
 import com.example.sagivproject.screens.dialogs.LogoutDialog;
 import com.example.sagivproject.services.AuthService;
 import com.example.sagivproject.services.DatabaseService;

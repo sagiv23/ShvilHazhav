@@ -1,4 +1,4 @@
-package com.example.sagivproject.screens.forum;
+package com.example.sagivproject.bases;
 
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.adapters.ForumAdapter;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.BaseActivity;
 import com.example.sagivproject.services.ForumService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
@@ -20,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseForumActivity extends BaseActivity {
+    public interface ForumPermissions {
+        boolean canDelete(ForumMessage message);
+    }
+
     protected RecyclerView recycler;
     protected EditText edtMessage;
     protected Button btnNewMessagesIndicator;

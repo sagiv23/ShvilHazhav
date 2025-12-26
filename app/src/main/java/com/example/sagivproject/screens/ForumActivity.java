@@ -12,14 +12,16 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.screens.forum.BaseForumActivity;
-import com.example.sagivproject.screens.forum.UserForumPermissions;
+import com.example.sagivproject.models.ForumMessage;
+import com.example.sagivproject.models.User;
+import com.example.sagivproject.bases.BaseForumActivity;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
-public class ForumActivity extends BaseForumActivity {
+public class ForumActivity extends BaseForumActivity implements BaseForumActivity.ForumPermissions {
     private Button btnToMain, btnToContact, btnToDetailsAboutUser, btnToExit, btnSendMessage, btnNewMessages;
     private EditText edtNewMessage;
     private RecyclerView recyclerForum;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,8 @@ public class ForumActivity extends BaseForumActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        user = SharedPreferencesUtil.getUser(this);
 
         btnToMain = findViewById(R.id.btn_forum_main);
         btnToContact = findViewById(R.id.btn_forum_contact);
@@ -48,8 +52,13 @@ public class ForumActivity extends BaseForumActivity {
         btnSendMessage.setOnClickListener(v -> sendMessage());
 
         initForumViews(recyclerForum, edtNewMessage, btnNewMessages);
-        permissions = new UserForumPermissions(SharedPreferencesUtil.getUser(this));
+        this.permissions = this;
         setupForum();
+    }
+
+    @Override
+    public boolean canDelete(ForumMessage message) {
+        return message.getUserId() != null && message.getUserId().equals(user.getUid());
     }
 
     @Override

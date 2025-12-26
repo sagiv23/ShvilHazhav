@@ -23,6 +23,7 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.workers.MedicationWorker;

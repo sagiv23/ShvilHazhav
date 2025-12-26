@@ -5,16 +5,16 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
-public class LandingActivity extends AppCompatActivity {
+public class LandingActivity extends BaseActivity {
     Button btnToContact, btnToLogin, btnToRegister, btnNavToContact, btnNavToLogin, btnNavToRegister;
 
     @Override

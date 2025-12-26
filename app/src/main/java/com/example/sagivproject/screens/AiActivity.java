@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.BuildConfig;
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.utils.EncryptionAPIKey;
 
 import org.json.JSONArray;

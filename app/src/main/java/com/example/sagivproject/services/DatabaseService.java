@@ -1,7 +1,5 @@
 package com.example.sagivproject.services;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -25,17 +23,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-
 /// a service to interact with the Firebase Realtime Database.
 /// this class is a singleton, use getInstance() to get an instance of this class
 /// @see #getInstance()
 /// @see FirebaseDatabase
 public class DatabaseService {
-
-    /// tag for logging
-    /// @see Log
-    private static final String TAG = "DatabaseService";
-
     /// paths for different data types in the database
     /// @see DatabaseService#readData(String)
     private static final String USERS_PATH = "users",
@@ -136,7 +128,6 @@ public class DatabaseService {
     private <T> void getData(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull final DatabaseCallback<T> callback) {
         readData(path).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task.getException());
                 callback.onFailed(task.getException());
                 return;
             }
@@ -152,7 +143,6 @@ public class DatabaseService {
     private <T> void getDataList(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull final DatabaseCallback<List<T>> callback) {
         readData(path).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task.getException());
                 callback.onFailed(task.getException());
                 return;
             }
@@ -202,7 +192,6 @@ public class DatabaseService {
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
                 if (error != null) {
-                    Log.e(TAG, "Transaction failed", error.toException());
                     callback.onFailed(error.toException());
                     return;
                 }
