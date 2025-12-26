@@ -66,6 +66,7 @@ public class GameHomeScreenActivity extends BaseActivity {
     private void findEnemy() {
         TVStatusOfFindingEnemy.setVisibility(View.VISIBLE);
         btnCancelFindEnemy.setVisibility(View.VISIBLE);
+        btnFindEnemy.setVisibility(View.GONE);
 
         databaseService.findOrCreateRoom(user, new DatabaseService.DatabaseCallback<GameRoom>() {
             @Override

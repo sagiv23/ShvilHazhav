@@ -91,7 +91,9 @@ public class DetailsAboutUserActivity extends BaseActivity {
         imgUserProfile = findViewById(R.id.img_DetailsAboutUser_user_profile);
         btnChangePhoto = findViewById(R.id.btn_DetailsAboutUser_change_photo);
         btnChangePhoto.setOnClickListener(v -> openImagePicker());
-        imgUserProfile.setOnClickListener(v -> showFullImageDialog());
+        imgUserProfile.setOnClickListener(v -> {
+            if (user.getProfileImage() != null) showFullImageDialog();
+        });
 
         txtTitle = findViewById(R.id.txt_DetailsAboutUser_title);
         txtFirstName = findViewById(R.id.txt_DetailsAboutUser_first_name);
@@ -111,7 +113,11 @@ public class DetailsAboutUserActivity extends BaseActivity {
 
         if (user.getProfileImage() != null && !user.getProfileImage().isEmpty()) {
             Bitmap bmp = ImageUtil.convertFrom64base(user.getProfileImage());
-            if (bmp != null) imgUserProfile.setImageBitmap(bmp);
+            if (bmp != null) {
+                imgUserProfile.setImageBitmap(bmp);
+            }
+        } else {
+            imgUserProfile.setImageResource(R.drawable.ic_user);
         }
     }
 
@@ -179,21 +185,49 @@ public class DetailsAboutUserActivity extends BaseActivity {
     private void openImagePicker() {
         ImageUtil.requestPermission(this);
 
-        String[] options = {"צלם תמונה", "בחר מהגלריה"};
+        boolean hasImage = user.getProfileImage() != null && !user.getProfileImage().isEmpty();
+
+        String[] options = hasImage
+                ? new String[]{"צלם תמונה", "בחר מהגלריה", "מחק תמונת פרופיל"}
+                : new String[]{"צלם תמונה", "בחר מהגלריה"};
 
         new AlertDialog.Builder(this)
                 .setTitle("בחר תמונת פרופיל")
                 .setItems(options, (dialog, which) -> {
+
                     if (which == 0) { // Camera
                         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(cameraIntent, REQ_CAMERA);
-                    } else { // Gallery
+
+                    } else if (which == 1) { // Gallery
                         Intent galleryIntent = new Intent(Intent.ACTION_PICK);
                         galleryIntent.setType("image/*");
                         startActivityForResult(galleryIntent, REQ_GALLERY);
+
+                    } else if (hasImage && which == 2) { // Delete image
+                        deleteProfileImage();
                     }
                 })
                 .show();
+    }
+
+    private void deleteProfileImage() {
+        user.setProfileImage(null);
+
+        imgUserProfile.setImageResource(R.drawable.ic_user);
+
+        databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void object) {
+                SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, user);
+                Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל נמחקה", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
