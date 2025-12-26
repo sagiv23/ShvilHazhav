@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumMessage;
+import com.example.sagivproject.ui.CustomTypefaceSpan;
 
 import android.graphics.Typeface;
 import android.text.SpannableString;
@@ -21,8 +22,6 @@ import android.text.Spanned;
 import android.view.MenuItem;
 
 import androidx.core.content.res.ResourcesCompat;
-
-import com.example.sagivproject.utils.CustomTypefaceSpan;
 
 import java.util.List;
 

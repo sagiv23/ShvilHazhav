@@ -1,4 +1,4 @@
-package com.example.sagivproject.utils;
+package com.example.sagivproject.ui;
 
 import android.graphics.Paint;
 import android.graphics.Typeface;
