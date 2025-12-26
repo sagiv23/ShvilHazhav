@@ -15,7 +15,6 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.firebase.database.ValueEventListener;
 
@@ -38,8 +37,6 @@ public class GameHomeScreenActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        PagePermissions.checkUserPage(this);
 
         user = SharedPreferencesUtil.getUser(this);
 

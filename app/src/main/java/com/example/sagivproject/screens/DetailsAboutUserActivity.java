@@ -23,7 +23,6 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.ImageUtil;
-import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class DetailsAboutUserActivity extends BaseActivity {
@@ -49,8 +48,6 @@ public class DetailsAboutUserActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        PagePermissions.onlyUserAndAdmin(this);
 
         user = SharedPreferencesUtil.getUser(this);
 

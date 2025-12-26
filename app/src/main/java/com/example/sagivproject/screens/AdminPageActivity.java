@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -13,7 +14,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.Objects;
@@ -56,7 +56,18 @@ public class AdminPageActivity extends BaseActivity {
             }
         });
 
-        PagePermissions.checkAdminPage(this);
+        User user = SharedPreferencesUtil.getUser(this);
+
+        if (!SharedPreferencesUtil.isUserLoggedIn(this)) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            this.startActivity(intent);
+        } else if (!user.getIsAdmin()) {
+            Toast.makeText(this, "אין לך גישה לדף זה", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            this.startActivity(intent);
+        }
 
         btnToUserTable = findViewById(R.id.btn_admin_to_UsersTablePage);
         btnToForum = findViewById(R.id.btn_admin_to_AdminForum);

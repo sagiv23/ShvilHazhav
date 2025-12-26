@@ -11,7 +11,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.utils.PagePermissions;
+import com.example.sagivproject.models.User;
+import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class LandingActivity extends AppCompatActivity {
     Button btnToContact, btnToLogin, btnToRegister, btnNavToContact, btnNavToLogin, btnNavToRegister;
@@ -27,7 +28,20 @@ public class LandingActivity extends AppCompatActivity {
             return insets;
         });
 
-        PagePermissions.redirectIfLoggedIn(this);
+        User user = SharedPreferencesUtil.getUser(this);
+
+        if (SharedPreferencesUtil.isUserLoggedIn(this)) {
+            Intent intent;
+            if (user.getIsAdmin()) {
+                intent = new Intent(this, AdminPageActivity.class);
+            } else {
+                intent = new Intent(this, MainActivity.class);
+            }
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+
 
         btnToContact = findViewById(R.id.btn_landingBody_to_contact);
         btnToLogin = findViewById(R.id.btn_landingBody_to_login);

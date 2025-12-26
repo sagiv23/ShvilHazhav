@@ -20,7 +20,6 @@ import com.example.sagivproject.adapters.MedicationAdapter;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.text.ParseException;
@@ -56,8 +55,6 @@ public class MedicationListActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        PagePermissions.checkUserPage(this);
 
         user = SharedPreferencesUtil.getUser(this);
         uid = user.getUid();

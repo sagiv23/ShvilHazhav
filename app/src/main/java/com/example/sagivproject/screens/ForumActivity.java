@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.screens.forum.BaseForumActivity;
 import com.example.sagivproject.screens.forum.UserForumPermissions;
-import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class ForumActivity extends BaseForumActivity {
@@ -32,8 +31,6 @@ public class ForumActivity extends BaseForumActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        PagePermissions.checkUserPage(this);
 
         btnToMain = findViewById(R.id.btn_forum_main);
         btnToContact = findViewById(R.id.btn_forum_contact);

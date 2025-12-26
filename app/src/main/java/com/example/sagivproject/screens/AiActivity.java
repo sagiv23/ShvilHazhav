@@ -16,7 +16,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.BuildConfig;
 import com.example.sagivproject.R;
 import com.example.sagivproject.utils.EncryptionAPIKey;
-import com.example.sagivproject.utils.PagePermissions;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -58,8 +57,6 @@ public class AiActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        PagePermissions.checkUserPage(this);
 
         btnToMain = findViewById(R.id.btn_Ai_to_main);
         btnToContact = findViewById(R.id.btn_Ai_to_contact);

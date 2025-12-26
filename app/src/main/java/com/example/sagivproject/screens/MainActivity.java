@@ -14,6 +14,8 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.widget.Toast;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.work.NetworkType;
@@ -23,7 +25,6 @@ import androidx.work.WorkManager;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.workers.MedicationWorker;
 
@@ -69,7 +70,19 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        PagePermissions.checkUserPage(this);
+        User user = SharedPreferencesUtil.getUser(this);
+
+        if (!SharedPreferencesUtil.isUserLoggedIn(this)) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            this.startActivity(intent);
+        } else if (user.getIsAdmin()) {
+            Toast.makeText(this, "הדף מיועד למשתמשים רגילים בלבד", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, AdminPageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            this.startActivity(intent);
+        }
+
         checkNotificationPermission();
         setupDailyNotifications();
 
@@ -91,7 +104,6 @@ public class MainActivity extends BaseActivity {
 
         txtHomePageTitle = findViewById(R.id.txt_main_Title);
 
-        User user = SharedPreferencesUtil.getUser(this);
         showUserName(user);
     }
 

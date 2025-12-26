@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.screens.forum.AdminForumPermissions;
 import com.example.sagivproject.screens.forum.BaseForumActivity;
-import com.example.sagivproject.utils.PagePermissions;
 
 public class AdminForumActivity extends BaseForumActivity {
     private Button btnToAdminPage, btnSendMessage, btnNewMessages;
@@ -31,8 +30,6 @@ public class AdminForumActivity extends BaseForumActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        PagePermissions.checkAdminPage(this);
 
         btnToAdminPage = findViewById(R.id.btn_AdminForum_to_admin);
         btnToAdminPage.setOnClickListener(view -> startActivity(new Intent(AdminForumActivity.this, AdminPageActivity.class)));

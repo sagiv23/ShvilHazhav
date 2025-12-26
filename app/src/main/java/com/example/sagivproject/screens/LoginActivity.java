@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.PagePermissions;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.utils.InputValidator;
 
@@ -33,8 +32,6 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        PagePermissions.redirectIfLoggedIn(this);
 
         btnToLanding = findViewById(R.id.btn_login_to_landing);
         btnToContact = findViewById(R.id.btn_login_to_contact);
