@@ -24,7 +24,6 @@ import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.PickAPic;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.firebase.database.ValueEventListener;
 
@@ -98,13 +97,13 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
     public void onCardClicked(Card card, View itemView, ImageView imageView) {
         if (currentRoom == null) return;
 
-        // 1. בדיקה אם זה התור שלי
+        //בדיקה אם זה התור שלי
         if (!user.getUid().equals(currentRoom.getCurrentTurnUid())) return;
 
-        // 2. בדיקה אם המשחק כרגע ב"המתנה" (אנימציית סגירה של זוג לא תואם)
+        //בדיקה אם המשחק כרגע ב"המתנה" (אנימציית סגירה של זוג לא תואם)
         if (currentRoom.isProcessingMatch()) return;
 
-        // 3. בדיקה אם הקלף כבר פתוח או נמצא
+        //בדיקה אם הקלף כבר פתוח או נמצא
         int cardIndex = adapter.getCards().indexOf(card);
         if (card.getIsMatched() || card.getIsRevealed()) return;
 
@@ -121,15 +120,15 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
             DatabaseService.getInstance().updateRoomField(roomId, "firstSelectedCardIndex", clickedIndex);
         } else {
             // --- בחירת קלף שני ---
-            if (firstIndex == clickedIndex) return; // לחיצה על אותו קלף
+            if (firstIndex == clickedIndex) return; //לחיצה על אותו קלף
 
-            DatabaseService.getInstance().setProcessing(roomId, true); // חסימת לחיצות נוספות
+            DatabaseService.getInstance().setProcessing(roomId, true); //חסימת לחיצות נוספות
             DatabaseService.getInstance().updateCardStatus(roomId, clickedIndex, true, false);
 
-            // בדיקה אם יש התאמה
+            //בדיקה אם יש התאמה
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 checkMatch(firstIndex, clickedIndex);
-            }, 1000); // השהייה כדי שהשחקן יראה את הקלף השני
+            }, 1000); //השהייה כדי שהשחקן יראה את הקלף השני
         }
     }
 
@@ -142,7 +141,6 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
             adapter.animateSuccess(idx1, recyclerCards);
             adapter.animateSuccess(idx2, recyclerCards);
 
-            // כאן אין צורך בהשהייה גדולה כי הקלפים נשארים פתוחים
             DatabaseService.getInstance().updateCardStatus(roomId, idx1, true, true);
             DatabaseService.getInstance().updateCardStatus(roomId, idx2, true, true);
 
@@ -177,16 +175,32 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
     }
 
     private List<Card> createCards() {
-        PickAPic pickAPic = new PickAPic(this, 60);
+        int totalImagesInResources = 60; // כמה תמונות קיימות לך בתיקיית ה-drawable
+        int pairsNeeded = 6;            // כמה זוגות צריך (ללוח של 12 קלפים)
 
-        List<Integer> images = pickAPic.getUniqueImages(6);
-        List<Card> cards = new ArrayList<>();
+        List<Integer> allAvailableResIds = new ArrayList<>();
 
-        for (int img : images) {
-            cards.add(new Card(img));
-            cards.add(new Card(img));
+        // 1. סריקת ה-Drawables ומציאת ה-IDs שלהם לפי השם
+        for (int i = 1; i <= totalImagesInResources; i++) {
+            String name = "pics_for_game_" + i;
+            int resId = getResources().getIdentifier(name, "drawable", getPackageName());
+            if (resId != 0) {
+                allAvailableResIds.add(resId);
+            }
         }
 
+        // 2. ערבוב כל התמונות ובחירת כמות הזוגות הנדרשת
+        Collections.shuffle(allAvailableResIds);
+        List<Integer> selectedImages = allAvailableResIds.subList(0, Math.min(pairsNeeded, allAvailableResIds.size()));
+
+        // 3. יצירת רשימת קלפים (כל תמונה מופיעה פעמיים)
+        List<Card> cards = new ArrayList<>();
+        for (int imgResId : selectedImages) {
+            cards.add(new Card(imgResId));
+            cards.add(new Card(imgResId));
+        }
+
+        // 4. ערבוב סופי של הלוח
         Collections.shuffle(cards);
         return cards;
     }
@@ -199,14 +213,10 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
                         if (room == null) return;
                         currentRoom = room;
 
-                        // init board – רק player1
-                        if (room.getCards() == null &&
-                                user.getUid().equals(room.getPlayer1().getUid())) {
-
+                        //רק השחקן הראשון יוצר את הלוח פעם אחת בתחילת המשחק
+                        if (room.getCards() == null && user.getUid().equals(room.getPlayer1().getUid())) {
                             List<Card> cards = createCards();
-                            DatabaseService.getInstance()
-                                    .initGameBoard(roomId, cards,
-                                            room.getPlayer1().getUid(), null);
+                            DatabaseService.getInstance().initGameBoard(roomId, cards, room.getPlayer1().getUid(), null);
                             return;
                         }
 
@@ -218,8 +228,7 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
                     }
 
                     @Override
-                    public void onFailed(Exception e) {
-                    }
+                    public void onFailed(Exception e) {}
                 });
     }
 }
