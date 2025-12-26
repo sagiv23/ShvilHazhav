@@ -67,24 +67,22 @@ public class GameHomeScreenActivity extends BaseActivity {
         TVStatusOfFindingEnemy.setVisibility(View.VISIBLE);
         btnCancelFindEnemy.setVisibility(View.VISIBLE);
 
-        DatabaseService.getInstance().findOrCreateRoom(user,
-                new DatabaseService.DatabaseCallback<GameRoom>() {
-                    @Override
-                    public void onCompleted(GameRoom room) {
-                        currentRoom = room;
-                        listenToRoom(room.getRoomId());
-                    }
+        databaseService.findOrCreateRoom(user, new DatabaseService.DatabaseCallback<GameRoom>() {
+            @Override
+            public void onCompleted(GameRoom room) {
+                currentRoom = room;
+                listenToRoom(room.getRoomId());
+            }
 
-                    @Override
-                    public void onFailed(Exception e) {
-                    }
-                }
-        );
+            @Override
+            public void onFailed(Exception e) {
+            }
+        });
     }
 
     private void cancel() {
         if (currentRoom != null && "waiting".equals(currentRoom.getStatus()) && user.getUid().equals(currentRoom.getPlayer1().getUid())) {
-            DatabaseService.getInstance().cancelRoom(currentRoom.getRoomId(), null);
+            databaseService.cancelRoom(currentRoom.getRoomId(), null);
             currentRoom = null;
         }
 
@@ -93,33 +91,28 @@ public class GameHomeScreenActivity extends BaseActivity {
     }
 
     private void listenToRoom(String roomId) {
-        roomListener = DatabaseService.getInstance()
-                .listenToRoomStatus(roomId,
-                        new DatabaseService.RoomStatusCallback() {
+        roomListener = databaseService.listenToRoomStatus(roomId, new DatabaseService.RoomStatusCallback() {
+            @Override
+            public void onRoomStarted(GameRoom startedRoom) {
+                if (gameStarted) return;
+                gameStarted = true;
+                startGame(startedRoom);
+            }
 
-                            @Override
-                            public void onRoomStarted(GameRoom startedRoom) {
-                                if (gameStarted) return;
-                                gameStarted = true;
-                                startGame(startedRoom);
-                            }
+            @Override
+            public void onRoomDeleted() {
+                cancel();
+            }
 
-                            @Override
-                            public void onRoomDeleted() {
-                                cancel();
-                            }
-
-                            @Override
-                            public void onFailed(Exception e) {
-                            }
-                        }
-                );
+            @Override
+            public void onFailed(Exception e) {
+            }
+        });
     }
 
     private void startGame(GameRoom room) {
         if (roomListener != null) {
-            DatabaseService.getInstance()
-                    .removeRoomListener(room.getRoomId(), roomListener);
+            databaseService.removeRoomListener(room.getRoomId(), roomListener);
             roomListener = null;
         }
 

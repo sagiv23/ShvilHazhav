@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -33,7 +32,7 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersTableActivity extends AppCompatActivity {
+public class UsersTableActivity extends BaseActivity {
     private Button btnToAdminPage;
     private RecyclerView recyclerView;
     private UsersTableAdapter adapter;
@@ -63,29 +62,25 @@ public class UsersTableActivity extends AppCompatActivity {
             public void onToggleAdmin(User user) {
                 boolean newRole = !user.getIsAdmin();
 
-                DatabaseService.getInstance().updateUserAdminStatus(
-                        user.getUid(),
-                        newRole,
-                        new DatabaseService.DatabaseCallback<Void>() {
-                            @Override
-                            public void onCompleted(Void object) {
-                                Toast.makeText(UsersTableActivity.this, "הסטטוס עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                loadUsers(); //רענון
-                            }
+                databaseService.updateUserAdminStatus(user.getUid(), newRole, new DatabaseService.DatabaseCallback<Void>() {
+                    @Override
+                    public void onCompleted(Void object) {
+                        Toast.makeText(UsersTableActivity.this, "הסטטוס עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                        loadUsers(); //רענון
+                    }
 
-                            @Override
-                            public void onFailed(Exception e) {
-                                Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון סטטוס", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                );
+                    @Override
+                    public void onFailed(Exception e) {
+                        Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון סטטוס", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onDeleteUser(User user) {
 
                 boolean isSelf = user.equals(currentUser);
-                DatabaseService.getInstance().deleteUser(user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
+                databaseService.deleteUser(user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
                     @Override
                     public void onCompleted(Void object) {
                         if (isSelf) {
@@ -179,7 +174,7 @@ public class UsersTableActivity extends AppCompatActivity {
     }
 
     private void loadUsers() {
-        DatabaseService.getInstance().getUserList(new DatabaseService.DatabaseCallback<List<User>>() {
+        databaseService.getUserList(new DatabaseService.DatabaseCallback<List<User>>() {
             @Override
             public void onCompleted(List<User> list) {
                 usersList.clear();

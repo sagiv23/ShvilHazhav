@@ -2,7 +2,6 @@ package com.example.sagivproject.workers;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
-import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.sagivproject.models.Medication;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class MedicationWorker extends Worker {
+public class MedicationWorker extends BaseWorkerActivity {
     private static final String TAG = "MedicationWorker";
 
     public MedicationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -35,7 +34,7 @@ public class MedicationWorker extends Worker {
         String userId = SharedPreferencesUtil.getUserId(context);
         final CountDownLatch latch = new CountDownLatch(1);
 
-        DatabaseService.getInstance().getUserMedicationList(userId, new DatabaseService.DatabaseCallback<List<Medication>>() {
+        databaseService.getUserMedicationList(userId, new DatabaseService.DatabaseCallback<List<Medication>>() {
             @Override
             public void onCompleted(List<Medication> medications) {
                 processMedications(context, userId, medications);
@@ -80,7 +79,7 @@ public class MedicationWorker extends Worker {
                 if (today.after(expiryLimit.getTime()) || today.equals(expiryLimit.getTime())) {
                     expiredCount++;
                     //מחיקה מהדאטה בייס
-                    DatabaseService.getInstance().deleteMedication(userId, med.getId(), null);
+                    databaseService.deleteMedication(userId, med.getId(), null);
                 }
             }
         }

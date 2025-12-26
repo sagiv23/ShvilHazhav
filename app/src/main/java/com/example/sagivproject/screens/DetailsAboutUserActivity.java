@@ -156,7 +156,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
     }
 
     private void updateUserInDatabaseAndSharedPreference() {
-        DatabaseService.getInstance().updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
+        databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
                 txtFirstName.setText(user.getFirstName());
@@ -209,8 +209,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         }
         else if (requestCode == REQ_GALLERY && data != null) {
             try {
-                bitmap = BitmapFactory.decodeStream(
-                        getContentResolver().openInputStream(data.getData())
+                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData())
                 );
             } catch (Exception e) {
                 e.printStackTrace();
@@ -229,7 +228,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
     }
 
     private void saveProfileImage() {
-        DatabaseService.getInstance().updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
+        databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
                 SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, user);

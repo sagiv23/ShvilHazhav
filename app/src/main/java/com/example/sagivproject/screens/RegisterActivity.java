@@ -7,7 +7,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -20,7 +19,7 @@ import com.example.sagivproject.utils.InputValidator;
 
 import java.util.HashMap;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
     private Button btnToContact, btnToLanding, btnToLogin, btnRegister;
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword;
 
@@ -78,20 +77,20 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        String uid = DatabaseService.getInstance().generateUserId();
+        String uid = databaseService.generateUserId();
         User newUser = new User(uid, firstName, lastName, email, password
                 , false
                 , "PHZlY3RvciB4bWxuczphbmRyb2lkPSJodHRwOi8vc2NoZW1hcy5hbmRyb2lkLmNvbS9hcGsvcmVzL2FuZHJvaWQiCiAgICBhb mRyb2lkOndpZHRoPSIyNGRwIgogICAgYW5kcm9pZDpoZWlnaHQ9IjI0ZHAiCiAgICBhb mRyb2lkOnZpZXdwb3J0V2lkdGg9Ijk2MCIKICAgIGFuZHJvaWQ6dmlld3BvcnRIZWlnaHQ9Ijk2MCI+CiAgPHBhdGgKICAgICAgYW5kcm9pZDpwYXRoRGF0YT0iTTQ4MCw0ODBxLTY2LDAgLTExMywtNDd0LTQ3LC0xMTNxMCwtNjYgNDcsLTExM3QxMT MsLTQ3cTY2LDAgMTEzLDQ3dDQ3LDExM3EwLDY2IC00NywxMTN0LTExMyw0N1pNMTYwLDgwMHYtMTEycTAsLTM0IDE3LjUsLTYyLjVUMjI0LDU4MnE2MiwtMzEgMTI2LC00Ni41VDQ4MCw1MjBxNjYsMCAxMzAsMTUuNVRlNzM2LDU4MnEyOSwxNSA0Ni41LDQzLj VUNzAwLDY4OHYxMTJMMTYwLDgwMFpNMjQwLDcyMGg0ODB2LT MycTAsLTExIC01LjUsLTIwVDcwMCw2NTRxLTU0LC0yNyAtMTA5LC00MC41VDQ4MCw2MDBxLTU2LDAgLTExMSwxMy41VDI2MCw2NTRxLTksNSAtMTQuNSwxNHQtNS41LDIwdjMyWk00ODAsNDAwcTMzLDAgNTYuNSwtMjMuNUg1NjBxMCwtMzMgLTIzLjUsLTU2 LjVUNDgwLDI0MHEtMzMsMCAtNTYuNSwyMy41VDQwMCwzMjBxMCwzMyAyMy41LDU2LjVUNDgwLDQwMFpNNDgwLDMyMFpNNDgwLDcyMFoiCiAgICAgIGFuZHJvaWQ6ZmlsbENvbG9yPSJAY29sb3IvYnV0dG9uc190ZXh0X2NvbG9yIi8+CjwvdmVjdG9yPg=="
                 , new HashMap<>()
                 , 0);
 
-        DatabaseService.getInstance().checkIfEmailExists(email, new DatabaseService.DatabaseCallback<>() {
+        databaseService.checkIfEmailExists(email, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Boolean exists) {
                 if (exists) {
                     Toast.makeText(RegisterActivity.this, "אימייל זה תפוס", Toast.LENGTH_SHORT).show();
                 } else {
-                    DatabaseService.getInstance().createNewUser(newUser, new DatabaseService.DatabaseCallback<Void>() {
+                    databaseService.createNewUser(newUser, new DatabaseService.DatabaseCallback<Void>() {
                         @Override
                         public void onCompleted(Void object) {
                             SharedPreferencesUtil.saveUser(RegisterActivity.this, newUser);

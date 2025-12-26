@@ -102,7 +102,7 @@ public class MedicationListActivity extends BaseActivity {
             adapter.notifyDataSetChanged();
         }
 
-        DatabaseService.getInstance().getUserMedicationList(uid, new DatabaseService.DatabaseCallback<List<Medication>>() {
+        databaseService.getUserMedicationList(uid, new DatabaseService.DatabaseCallback<List<Medication>>() {
             @Override
             public void onCompleted(List<Medication> list) {
                 medications.clear();
@@ -132,7 +132,7 @@ public class MedicationListActivity extends BaseActivity {
 
                 //מחיקה של פגי תוקף
                 for (String id : expiredIds) {
-                    DatabaseService.getInstance().deleteMedication(uid, id, null);
+                    databaseService.deleteMedication(uid, id, null);
                 }
 
                 //אם נמחקו תרופות, להציג Toast
@@ -157,8 +157,8 @@ public class MedicationListActivity extends BaseActivity {
     }
 
     private void saveMedication(Medication medication) {
-        medication.setId(DatabaseService.getInstance().generateMedicationId(uid));
-        DatabaseService.getInstance().createNewMedication(uid, medication, new DatabaseService.DatabaseCallback<Void>() {
+        medication.setId(databaseService.generateMedicationId(uid));
+        databaseService.createNewMedication(uid, medication, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
                 HashMap<String, Medication> medsMap = user.getMedications();
@@ -180,7 +180,7 @@ public class MedicationListActivity extends BaseActivity {
     }
 
     private void updateMedication(Medication med) {
-        DatabaseService.getInstance().updateMedication(uid, med, new DatabaseService.DatabaseCallback<Void>() {
+        databaseService.updateMedication(uid, med, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
                 HashMap<String, Medication> medsMap = user.getMedications();
@@ -201,7 +201,7 @@ public class MedicationListActivity extends BaseActivity {
     }
 
     private void deleteMedicationById(String id) {
-        DatabaseService.getInstance().deleteMedication(uid, id, new DatabaseService.DatabaseCallback<Void>() {
+        databaseService.deleteMedication(uid, id, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
                 HashMap<String, Medication> medsMap = user.getMedications();

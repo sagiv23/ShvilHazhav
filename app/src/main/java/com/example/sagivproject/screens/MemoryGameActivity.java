@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MemoryGameActivity extends AppCompatActivity implements MemoryGameAdapter.MemoryGameListener {
+public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapter.MemoryGameListener {
     private RecyclerView recyclerCards;
     private Button btnExit;
 
@@ -81,7 +80,7 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
         txtMessage.setText("האם ברצונך לצאת מהמשחק?");
 
         btnConfirm.setOnClickListener(v -> {
-            DatabaseService.getInstance().updateRoomField(roomId, "status", "finished");
+            databaseService.updateRoomField(roomId, "status", "finished");
             Intent intent = new Intent(MemoryGameActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -116,14 +115,14 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
 
         if (firstIndex == null) {
             // --- בחירת קלף ראשון ---
-            DatabaseService.getInstance().updateCardStatus(roomId, clickedIndex, true, false);
-            DatabaseService.getInstance().updateRoomField(roomId, "firstSelectedCardIndex", clickedIndex);
+            databaseService.updateCardStatus(roomId, clickedIndex, true, false);
+            databaseService.updateRoomField(roomId, "firstSelectedCardIndex", clickedIndex);
         } else {
             // --- בחירת קלף שני ---
             if (firstIndex == clickedIndex) return; //לחיצה על אותו קלף
 
-            DatabaseService.getInstance().setProcessing(roomId, true); //חסימת לחיצות נוספות
-            DatabaseService.getInstance().updateCardStatus(roomId, clickedIndex, true, false);
+            databaseService.setProcessing(roomId, true); //חסימת לחיצות נוספות
+            databaseService.updateCardStatus(roomId, clickedIndex, true, false);
 
             //בדיקה אם יש התאמה
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -141,13 +140,13 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
             adapter.animateSuccess(idx1, recyclerCards);
             adapter.animateSuccess(idx2, recyclerCards);
 
-            DatabaseService.getInstance().updateCardStatus(roomId, idx1, true, true);
-            DatabaseService.getInstance().updateCardStatus(roomId, idx2, true, true);
+            databaseService.updateCardStatus(roomId, idx1, true, true);
+            databaseService.updateCardStatus(roomId, idx2, true, true);
 
             int newScore = user.getUid().equals(currentRoom.getPlayer1().getUid()) ?
                     currentRoom.getPlayer1Score() + 1 : currentRoom.getPlayer2Score() + 1;
             String scoreField = user.getUid().equals(currentRoom.getPlayer1().getUid()) ? "player1Score" : "player2Score";
-            DatabaseService.getInstance().updateRoomField(roomId, scoreField, newScore);
+            databaseService.updateRoomField(roomId, scoreField, newScore);
 
         } else {
             // --- טעות ---
@@ -156,21 +155,21 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
 
             // חשוב! השהייה של חצי שנייה כדי שהשחקן יראה את הרעד לפני שהקלפים נסגרים ב-DB
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                DatabaseService.getInstance().updateCardStatus(roomId, idx1, false, false);
-                DatabaseService.getInstance().updateCardStatus(roomId, idx2, false, false);
+                databaseService.updateCardStatus(roomId, idx1, false, false);
+                databaseService.updateCardStatus(roomId, idx2, false, false);
 
                 String nextTurn = user.getUid().equals(currentRoom.getPlayer1().getUid())
                         ? currentRoom.getPlayer2().getUid()
                         : currentRoom.getPlayer1().getUid();
-                DatabaseService.getInstance().updateRoomField(roomId, "currentTurnUid", nextTurn);
+                databaseService.updateRoomField(roomId, "currentTurnUid", nextTurn);
             }, 600);
         }
 
-        DatabaseService.getInstance().updateRoomField(roomId, "firstSelectedCardIndex", null);
+        databaseService.updateRoomField(roomId, "firstSelectedCardIndex", null);
 
         // משחררים את ה-Processing רק אחרי שהעדכונים הסתיימו
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            DatabaseService.getInstance().setProcessing(roomId, false);
+            databaseService.setProcessing(roomId, false);
         }, 700);
     }
 
@@ -206,29 +205,28 @@ public class MemoryGameActivity extends AppCompatActivity implements MemoryGameA
     }
 
     private void listenToGame() {
-        gameListener = DatabaseService.getInstance()
-                .listenToGame(roomId, new DatabaseService.DatabaseCallback<GameRoom>() {
-                    @Override
-                    public void onCompleted(GameRoom room) {
-                        if (room == null) return;
-                        currentRoom = room;
+        gameListener = databaseService.listenToGame(roomId, new DatabaseService.DatabaseCallback<GameRoom>() {
+            @Override
+            public void onCompleted(GameRoom room) {
+                if (room == null) return;
+                currentRoom = room;
 
-                        //רק השחקן הראשון יוצר את הלוח פעם אחת בתחילת המשחק
-                        if (room.getCards() == null && user.getUid().equals(room.getPlayer1().getUid())) {
-                            List<Card> cards = createCards();
-                            DatabaseService.getInstance().initGameBoard(roomId, cards, room.getPlayer1().getUid(), null);
-                            return;
-                        }
+                //רק השחקן הראשון יוצר את הלוח פעם אחת בתחילת המשחק
+                if (room.getCards() == null && user.getUid().equals(room.getPlayer1().getUid())) {
+                    List<Card> cards = createCards();
+                    databaseService.initGameBoard(roomId, cards, room.getPlayer1().getUid(), null);
+                    return;
+                }
 
-                        if (room.getCards() == null) return;
+                if (room.getCards() == null) return;
 
-                        adapter.getCards().clear();
-                        adapter.getCards().addAll(room.getCards());
-                        adapter.notifyDataSetChanged();
-                    }
+                adapter.getCards().clear();
+                adapter.getCards().addAll(room.getCards());
+                adapter.notifyDataSetChanged();
+            }
 
-                    @Override
-                    public void onFailed(Exception e) {}
-                });
+            @Override
+            public void onFailed(Exception e) {}
+        });
     }
 }

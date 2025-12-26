@@ -1,14 +1,26 @@
 package com.example.sagivproject.screens;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sagivproject.screens.dialogs.LogoutDialog;
 import com.example.sagivproject.services.AuthService;
+import com.example.sagivproject.services.DatabaseService;
 
 public abstract class BaseActivity extends AppCompatActivity {
+    protected DatabaseService databaseService;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //קיצור ל - ()DatabaseService.getInstance()
+        databaseService = DatabaseService.getInstance();
+    }
+
     //התנתקות
     protected void logout() {
         AuthService authService = new AuthService(this);

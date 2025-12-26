@@ -33,7 +33,7 @@ public class AdminPageActivity extends BaseActivity {
             return insets;
         });
 
-        DatabaseService.getInstance().getUser(Objects.requireNonNull(SharedPreferencesUtil.getUserId(this)), new DatabaseService.DatabaseCallback<User>() {
+        databaseService.getUser(Objects.requireNonNull(SharedPreferencesUtil.getUserId(this)), new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User updatedUser) {
                 if (updatedUser == null) {
