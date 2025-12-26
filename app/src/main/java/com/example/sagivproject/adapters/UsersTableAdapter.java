@@ -20,6 +20,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
     public interface OnUserActionListener {
         void onToggleAdmin(User user);
         void onDeleteUser(User user);
+        void onUserClicked(User user);
     }
 
     private final List<User> users;
@@ -74,6 +75,12 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         holder.btnDeleteUser.setOnClickListener(v ->
                 listener.onDeleteUser(user)
         );
+
+        holder.itemView.setOnClickListener(v -> {
+            if (!user.getIsAdmin()) {
+                listener.onUserClicked(user);
+            }
+        });
     }
 
     @Override

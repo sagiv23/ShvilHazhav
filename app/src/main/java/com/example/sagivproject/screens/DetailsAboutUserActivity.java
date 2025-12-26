@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
@@ -122,64 +123,10 @@ public class DetailsAboutUserActivity extends BaseActivity {
     }
 
     private void openEditDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_user, null);
-        builder.setView(dialogView);
-
-        EditText inputFirstName = dialogView.findViewById(R.id.inputEditUserFirstName);
-        EditText inputLastName = dialogView.findViewById(R.id.inputEditUserLastName);
-        EditText inputPassword = dialogView.findViewById(R.id.inputEditUserPassword);
-        Button btnSave = dialogView.findViewById(R.id.btnEditUserSave);
-        Button btnCancel = dialogView.findViewById(R.id.btnEditUserCancel);
-
-        inputFirstName.setText(user.getFirstName());
-        inputLastName.setText(user.getLastName());
-        inputPassword.setText(user.getPassword());
-
-        AlertDialog dialog = builder.create();
-
-        btnSave.setOnClickListener(v -> {
-            String newFirst = inputFirstName.getText().toString().trim();
-            String newLast = inputLastName.getText().toString().trim();
-            String newPass = inputPassword.getText().toString().trim();
-
-            if (newFirst.isEmpty() || newLast.isEmpty() || newPass.isEmpty()) {
-                Toast.makeText(this, "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            user.setFirstName(newFirst);
-            user.setLastName(newLast);
-            user.setPassword(newPass);
-
-            updateUserInDatabaseAndSharedPreference();
-            dialog.dismiss();
-        });
-
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
-    }
-
-    private void updateUserInDatabaseAndSharedPreference() {
-        databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
-            @Override
-            public void onCompleted(Void object) {
-                txtFirstName.setText(user.getFirstName());
-                txtLastName.setText(user.getLastName());
-                txtPassword.setText(user.getPassword());
-                txtTitle.setText(user.getFullName());
-
-                SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, user);
-
-                Toast.makeText(DetailsAboutUserActivity.this, "הפרטים עודכנו בהצלחה!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון הנתונים: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        new EditUserDialog(this, user, () -> {
+            SharedPreferencesUtil.saveUser(DetailsAboutUserActivity.this, user);
+            loadUserDetailsFromSharedPref();
+        }).show();
     }
 
     private void openImagePicker() {

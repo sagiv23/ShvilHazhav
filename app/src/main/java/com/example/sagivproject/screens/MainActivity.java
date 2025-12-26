@@ -24,12 +24,10 @@ import androidx.work.WorkManager;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.workers.MedicationWorker;
 
 import java.util.Calendar;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends BaseActivity {
@@ -45,29 +43,6 @@ public class MainActivity extends BaseActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
-
-        databaseService.getUser(Objects.requireNonNull(SharedPreferencesUtil.getUserId(this)), new DatabaseService.DatabaseCallback<User>() {
-            @Override
-            public void onCompleted(User updatedUser) {
-                if (updatedUser == null) {
-                    failedToGetUser();
-                    return;
-                }
-                SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                failedToGetUser();
-            }
-
-            private void failedToGetUser() {
-                SharedPreferencesUtil.signOutUser(MainActivity.this);
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
         });
 
         User user = SharedPreferencesUtil.getUser(this);

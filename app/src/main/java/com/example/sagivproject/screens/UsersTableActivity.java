@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.UsersTableAdapter;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
@@ -40,6 +41,7 @@ public class UsersTableActivity extends BaseActivity {
     private final List<User> filteredList = new ArrayList<>();
     private EditText editSearch;
     private Spinner spinnerSearchType;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,51 +57,22 @@ public class UsersTableActivity extends BaseActivity {
         btnToAdminPage = findViewById(R.id.btn_UsersTable_to_admin);
         btnToAdminPage.setOnClickListener(view -> startActivity(new Intent(UsersTableActivity.this, AdminPageActivity.class)));
 
-        User currentUser = SharedPreferencesUtil.getUser(UsersTableActivity.this);
+        currentUser = SharedPreferencesUtil.getUser(UsersTableActivity.this);
 
         adapter = new UsersTableAdapter(filteredList, currentUser, new UsersTableAdapter.OnUserActionListener() {
             @Override
             public void onToggleAdmin(User user) {
-                boolean newRole = !user.getIsAdmin();
-
-                databaseService.updateUserAdminStatus(user.getUid(), newRole, new DatabaseService.DatabaseCallback<Void>() {
-                    @Override
-                    public void onCompleted(Void object) {
-                        Toast.makeText(UsersTableActivity.this, "הסטטוס עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                        loadUsers(); //רענון
-                    }
-
-                    @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון סטטוס", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                handleToggleAdmin(user);
             }
 
             @Override
             public void onDeleteUser(User user) {
+                handleDeleteUser(user);
+            }
 
-                boolean isSelf = user.equals(currentUser);
-                databaseService.deleteUser(user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
-                    @Override
-                    public void onCompleted(Void object) {
-                        if (isSelf) {
-                            SharedPreferencesUtil.signOutUser(UsersTableActivity.this);
-                            Intent intent = new Intent(UsersTableActivity.this, LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            return;
-                        }
-
-                        Toast.makeText(UsersTableActivity.this, "המשתמש נמחק", Toast.LENGTH_SHORT).show();
-                        loadUsers();
-                    }
-
-                    @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(UsersTableActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onUserClicked(User clickedUser) {
+                new EditUserDialog(UsersTableActivity.this, clickedUser, () -> { loadUsers(); }).show();
             }
         });
 
@@ -164,7 +137,6 @@ public class UsersTableActivity extends BaseActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-        /*------ סוף -----*/
     }
 
     @Override
@@ -193,6 +165,47 @@ public class UsersTableActivity extends BaseActivity {
             @Override
             public void onFailed(Exception e) {
                 Toast.makeText(UsersTableActivity.this, "שגיאה בהעלאת משתמשים", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void handleToggleAdmin(User user) {
+        boolean newRole = !user.getIsAdmin();
+
+        databaseService.updateUserAdminStatus(user.getUid(), newRole, new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void object) {
+                Toast.makeText(UsersTableActivity.this, "הסטטוס עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                loadUsers(); //רענון
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון סטטוס", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void handleDeleteUser(User user) {
+        boolean isSelf = user.equals(currentUser);
+        databaseService.deleteUser(user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void object) {
+                if (isSelf) {
+                    SharedPreferencesUtil.signOutUser(UsersTableActivity.this);
+                    Intent intent = new Intent(UsersTableActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    return;
+                }
+
+                Toast.makeText(UsersTableActivity.this, "המשתמש נמחק", Toast.LENGTH_SHORT).show();
+                loadUsers();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(UsersTableActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
             }
         });
     }
