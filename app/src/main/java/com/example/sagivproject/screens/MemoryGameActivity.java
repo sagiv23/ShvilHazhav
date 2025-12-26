@@ -22,6 +22,7 @@ import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.dialogs.ExitGameDialog;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.firebase.database.ValueEventListener;
@@ -68,28 +69,12 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     }
 
     private void showExitGameDialog() {
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_exit);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.setCancelable(true);
-
-        TextView txtTitle = dialog.findViewById(R.id.txt_DialogExit_title), txtMessage = dialog.findViewById(R.id.txt_DialogExit_message);
-        Button btnConfirm = dialog.findViewById(R.id.btn_DialogExit_confirm), btnCancel = dialog.findViewById(R.id.btn_DialogExit_cancel);
-
-        txtTitle.setText("יציאה מהמשחק");
-        txtMessage.setText("האם ברצונך לצאת מהמשחק?");
-
-        btnConfirm.setOnClickListener(v -> {
+        new ExitGameDialog(this, () -> {
             databaseService.updateRoomField(roomId, "status", "finished");
-            Intent intent = new Intent(MemoryGameActivity.this, LoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            dialog.dismiss();
-        });
-
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
+        }).show();
     }
 
     @Override
