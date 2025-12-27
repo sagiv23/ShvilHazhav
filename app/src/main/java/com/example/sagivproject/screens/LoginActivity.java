@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity {
                 @Override
                 public void onCompleted(User user) {
                     if (user == null) {
-                        Toast.makeText(LoginActivity.this, "שגיאה בטעינת פרטי המשתמש", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "שגיאה בהתחברות המשתמש", Toast.LENGTH_LONG).show();
                         return;
                     }
 

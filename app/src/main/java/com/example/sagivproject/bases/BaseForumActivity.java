@@ -1,5 +1,6 @@
 package com.example.sagivproject.bases;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +29,14 @@ public abstract class BaseForumActivity extends BaseActivity {
     protected Button btnNewMessagesIndicator;
     protected ForumAdapter adapter;
     protected List<ForumMessage> messages = new ArrayList<>();
-    protected ForumService forumService = new ForumService();
+    protected ForumService forumService;
     protected ForumPermissions permissions;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        forumService = new ForumService(databaseService);
+    }
 
     protected void initForumViews(RecyclerView recycler, EditText edtMessage, Button btnNewMessages) {
         this.recycler = recycler;

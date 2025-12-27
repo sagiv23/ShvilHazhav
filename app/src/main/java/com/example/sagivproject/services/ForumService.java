@@ -2,14 +2,19 @@ package com.example.sagivproject.services;
 
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.bases.BaseActivity;
 
 import java.util.List;
 
-public class ForumService extends BaseActivity {
+public class ForumService {
+    private final DatabaseService databaseService;
+
     public interface ForumCallback<T> {
         void onSuccess(T data);
         void onError(Exception e);
+    }
+
+    public ForumService(DatabaseService databaseService) {
+        this.databaseService = databaseService;
     }
 
     public void listenToMessages(ForumCallback<List<ForumMessage>> callback) {
