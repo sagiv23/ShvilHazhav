@@ -98,21 +98,17 @@ public class MainActivity extends BaseActivity {
         Calendar currentDate = Calendar.getInstance();
         Calendar dueDate = Calendar.getInstance();
 
-        //קביעת השעה הרצויה להתראה
         dueDate.set(Calendar.HOUR_OF_DAY, 8);
         dueDate.set(Calendar.MINUTE, 0);
         dueDate.set(Calendar.SECOND, 0);
         dueDate.set(Calendar.MILLISECOND, 0);
 
-        //אם השעה 08:00 כבר עברה היום, נוסיף יום אחד
         if (dueDate.before(currentDate)) {
             dueDate.add(Calendar.DAY_OF_YEAR, 1);
         }
 
-        //חישוב הזמן שנותר עד לשעת היעד
         long timeDiff = dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
 
-        //יצירת בקשת עבודה מחזורית (כל 24 שעות)
         PeriodicWorkRequest notificationRequest =
                 new PeriodicWorkRequest.Builder(
                         MedicationWorker.class,
@@ -121,13 +117,13 @@ public class MainActivity extends BaseActivity {
                         .addTag("MedicationWorkTag")
                         .setConstraints(new Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
+                                .setRequiresBatteryNotLow(true)
                                 .build())
                         .build();
 
-        //שליחת המשימה
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 "MedicationDailyWork",
-                ExistingPeriodicWorkPolicy.UPDATE,
+                ExistingPeriodicWorkPolicy.KEEP,
                 notificationRequest
         );
     }

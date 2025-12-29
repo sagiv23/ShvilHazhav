@@ -14,129 +14,110 @@
         android:id="@+id/btn_AdminForum_to_admin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/text_hebrew"
         android:text="חזרה"
         android:textSize="25sp"
-        android:fontFamily="@font/text_hebrew"
         app:cornerRadius="25dp"
         app:icon="@drawable/ic_back"
         app:iconGravity="textStart"
         app:iconPadding="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/adminForumScroll"
+    <TextView
+        android:id="@+id/txtAdminForumTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/headline_hebrew"
+        android:text="קשר קרוב - מנהל"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_AdminForum_to_admin" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/btn_AdminForum_to_admin"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/layoutNewAdminMessage"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/txtAdminForumTitle"
+        app:strokeColor="?attr/colorOutline">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="24dp"
-            android:gravity="center_horizontal">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/txtAdminForumTitle"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_AdminForum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="8dp"
+                tools:listitem="@android:layout/simple_list_item_1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_AdminForum_new_messages_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="קשר קרוב - מנהל"
-                android:textSize="40sp"
-                android:fontFamily="@font/headline_hebrew"
-                android:gravity="center"/>
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/text_hebrew"
+                android:text="התקבלו הודעות חדשות ↓"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:cornerRadius="20dp" />
+        </FrameLayout>
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
-                app:strokeColor="?attr/colorOutline">
+    </com.google.android.material.card.MaterialCardView>
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutNewAdminMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:hint="כתוב הודעה..."
+        app:boxCornerRadiusBottomEnd="25dp"
+        app:boxCornerRadiusBottomStart="25dp"
+        app:boxCornerRadiusTopEnd="25dp"
+        app:boxCornerRadiusTopStart="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_AdminForum_send_message"
+        app:layout_constraintStart_toStartOf="parent">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_AdminForum_new_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/text_hebrew"
+            android:inputType="textMultiLine"
+            android:maxLines="3"
+            android:textSize="20sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recycler_AdminForum"
-                            android:layout_width="match_parent"
-                            android:layout_height="350dp"
-                            android:overScrollMode="never"
-                            android:clipToPadding="false"
-                            android:paddingBottom="8dp"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_AdminForum_send_message"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="16dp"
+        app:cornerRadius="30dp"
+        app:iconGravity="textEnd"
+        app:iconPadding="0dp"
+        app:icon="@drawable/ic_send"
+        app:iconSize="28dp"
+        app:layout_constraintBottom_toBottomOf="@id/layoutNewAdminMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/layoutNewAdminMessage" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/layoutNewAdminMessage"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginBottom="12dp"
-                            android:hint="כתוב הודעה..."
-                            app:boxBackgroundMode="outline"
-                            app:boxCornerRadiusTopStart="16dp"
-                            app:boxCornerRadiusTopEnd="16dp"
-                            app:boxCornerRadiusBottomStart="16dp"
-                            app:boxCornerRadiusBottomEnd="16dp"
-                            app:boxStrokeWidth="1dp"
-                            android:fontFamily="@font/text_hebrew">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/edt_AdminForum_new_message"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:minHeight="48dp"
-                                android:gravity="top|start"
-                                android:textSize="20sp"
-                                android:inputType="textMultiLine"
-                                android:maxLines="5"
-                                android:fontFamily="@font/text_hebrew"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_AdminForum_send_message"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:text="שלח הודעה"
-                            android:textAllCaps="false"
-                            android:textSize="25sp"
-                            app:cornerRadius="30dp"
-                            app:icon="@drawable/ic_send"
-                            app:iconSize="28dp"
-                            app:iconGravity="textStart"
-                            app:iconPadding="12dp"
-                            android:fontFamily="@font/text_hebrew"/>
-                    </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_AdminForum_new_messages_indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginBottom="180dp"
-                        android:text="התקבלו הודעות חדשות ↓"
-                        android:visibility="gone"
-                        app:cornerRadius="20dp"
-                        android:fontFamily="@font/text_hebrew"
-                        android:textSize="18sp" />
-
-                </FrameLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

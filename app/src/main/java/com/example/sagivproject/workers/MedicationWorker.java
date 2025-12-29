@@ -58,55 +58,49 @@ public class MedicationWorker extends BaseWorkerActivity {
     }
 
     private void processMedications(Context context, String userId, List<Medication> medications) {
-        //אין תרופות ברשימה
         if (medications == null || medications.isEmpty()) return;
 
         int expiredCount = 0;
+        int remainingCount = 0;
 
-        //קבלת התאריך של היום (מאופס לשעה 00:00)
-        Calendar calToday = Calendar.getInstance();
-        resetTime(calToday);
-        Date today = calToday.getTime();
+        Date today = new Date();
 
         for (Medication med : medications) {
             if (med.getDate() != null) {
                 Calendar expiryLimit = Calendar.getInstance();
                 expiryLimit.setTime(med.getDate());
-                //הגדרת פג תוקף: התאריך שהוזן + יום אחד
                 expiryLimit.add(Calendar.DAY_OF_YEAR, 1);
-                resetTime(expiryLimit);
 
-                //אם היום הוא אחרי (או שווה) לתאריך היעד (הזנת המשתמש + 1)
-                if (today.after(expiryLimit.getTime()) || today.equals(expiryLimit.getTime())) {
+                if (today.after(expiryLimit.getTime())) {
+                    // תרופה פגת תוקף
                     expiredCount++;
-                    //מחיקה מהדאטה בייס
                     databaseService.deleteMedication(userId, med.getId(), null);
+                } else {
+                    // תרופה תקינה שנותרה ברשימה
+                    remainingCount++;
                 }
+            } else {
+                // תרופה ללא תאריך נחשבת כתרופה שנותרה
+                remainingCount++;
             }
         }
 
         NotificationService notificationService = new NotificationService(context);
 
-        //שליחת התראות לפי המצב
+        // התראה 1: רק אם יש תרופות שנמחקו
         if (expiredCount > 0) {
-            //התראה על מחיקת תרופות שפגו
             notificationService.show(
                     "עדכון רשימת תרופות",
                     "מחקנו " + expiredCount + " תרופות שפג תוקפן מהרשימה שלך."
             );
-        } else {
-            //התראה כללית אם יש תרופות ברשימה ולא נמחקו חדשות
+        }
+
+        // התראה 2: רק אם נשארו תרופות לנטילה (אחרי המחיקה)
+        if (remainingCount > 0) {
             notificationService.show(
                     "תזכורת יומית",
-                    "יש לך תרופות ברשימה שממתינות לנטילה."
+                    "יש לך " + remainingCount + " תרופות ברשימה שממתינות לנטילה."
             );
         }
-    }
-
-    private void resetTime(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
     }
 }
