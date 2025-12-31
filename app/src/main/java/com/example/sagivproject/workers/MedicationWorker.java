@@ -17,8 +17,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class MedicationWorker extends BaseWorkerActivity {
-    private static final String TAG = "MedicationWorker";
-
     public MedicationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }

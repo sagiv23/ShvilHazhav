@@ -81,6 +81,9 @@ public class MainActivity extends BaseActivity {
         txtHomePageTitle = findViewById(R.id.txt_main_Title);
 
         showUserName(user);
+
+        //להעלאת תמונות - למחוק בסוף הפרויקט!
+        //uploadGameImagesIfNeeded();
     }
 
     private void showUserName(User user) {
@@ -139,4 +142,140 @@ public class MainActivity extends BaseActivity {
             }
         }
     }
+
+
+
+
+    //העלאת כל התמונות - למחוק בסוף הפרויקט!
+    /*
+    private void uploadGameImagesIfNeeded() {
+        DatabaseService.getInstance().imagesExist(new DatabaseService.DatabaseCallback<Boolean>() {
+            @Override
+            public void onCompleted(Boolean exists) {
+                if (exists) {
+                    // כבר קיימות תמונות – לא עושים כלום
+                    return;
+                }
+
+                uploadAllImages();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(MainActivity.this,
+                        "שגיאה בבדיקת תמונות", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void uploadAllImages() {
+
+        int[] imageIds = {
+                R.drawable.pics_for_game_1,
+                R.drawable.pics_for_game_2,
+                R.drawable.pics_for_game_3,
+                R.drawable.pics_for_game_4,
+                R.drawable.pics_for_game_5,
+                R.drawable.pics_for_game_6,
+                R.drawable.pics_for_game_7,
+                R.drawable.pics_for_game_8,
+                R.drawable.pics_for_game_9,
+                R.drawable.pics_for_game_10,
+                R.drawable.pics_for_game_11,
+                R.drawable.pics_for_game_12,
+                R.drawable.pics_for_game_13,
+                R.drawable.pics_for_game_14,
+                R.drawable.pics_for_game_15,
+                R.drawable.pics_for_game_16,
+                R.drawable.pics_for_game_17,
+                R.drawable.pics_for_game_18,
+                R.drawable.pics_for_game_19,
+                R.drawable.pics_for_game_20,
+                R.drawable.pics_for_game_21,
+                R.drawable.pics_for_game_22,
+                R.drawable.pics_for_game_23,
+                R.drawable.pics_for_game_24,
+                R.drawable.pics_for_game_25,
+                R.drawable.pics_for_game_26,
+                R.drawable.pics_for_game_27,
+                R.drawable.pics_for_game_28,
+                R.drawable.pics_for_game_29,
+                R.drawable.pics_for_game_30,
+                R.drawable.pics_for_game_31,
+                R.drawable.pics_for_game_32,
+                R.drawable.pics_for_game_33,
+                R.drawable.pics_for_game_34,
+                R.drawable.pics_for_game_35,
+                R.drawable.pics_for_game_36,
+                R.drawable.pics_for_game_37,
+                R.drawable.pics_for_game_38,
+                R.drawable.pics_for_game_39,
+                R.drawable.pics_for_game_40,
+                R.drawable.pics_for_game_41,
+                R.drawable.pics_for_game_42,
+                R.drawable.pics_for_game_43,
+                R.drawable.pics_for_game_44,
+                R.drawable.pics_for_game_45,
+                R.drawable.pics_for_game_46,
+                R.drawable.pics_for_game_47,
+                R.drawable.pics_for_game_48,
+                R.drawable.pics_for_game_49,
+                R.drawable.pics_for_game_50,
+                R.drawable.pics_for_game_51,
+                R.drawable.pics_for_game_52,
+                R.drawable.pics_for_game_53,
+                R.drawable.pics_for_game_54,
+                R.drawable.pics_for_game_55,
+                R.drawable.pics_for_game_56,
+                R.drawable.pics_for_game_57,
+                R.drawable.pics_for_game_58,
+                R.drawable.pics_for_game_59,
+                R.drawable.pics_for_game_60
+        };
+
+        DatabaseService db = DatabaseService.getInstance();
+
+        for (int i = 0; i < imageIds.length; i++) {
+
+            Bitmap original = BitmapFactory.decodeResource(
+                    getResources(),
+                    imageIds[i]
+            );
+
+            Bitmap resized = resize(original, 512);
+            String base64 = bitmapToBase64(resized);
+
+            String cardId = "card" + (i + 1);
+            ImageData image = new ImageData(cardId, base64);
+
+            db.createImage(image, null);
+        }
+    }
+
+    private Bitmap resize(Bitmap bitmap, int maxSize) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        float ratio = (float) width / height;
+
+        if (ratio > 1) {
+            width = maxSize;
+            height = (int) (width / ratio);
+        } else {
+            height = maxSize;
+            width = (int) (height * ratio);
+        }
+
+        return Bitmap.createScaledBitmap(bitmap, width, height, true);
+    }
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        // JPEG + איכות 70% = חיסכון משמעותי
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+
+        byte[] bytes = baos.toByteArray();
+        return Base64.encodeToString(bytes, Base64.NO_WRAP);
+    }
+     */
 }

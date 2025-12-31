@@ -102,6 +102,7 @@ public class AiActivity extends BaseActivity {
         if (q.isEmpty()) return;
 
         progressBar.setVisibility(View.VISIBLE);
+        send.setVisibility(View.GONE);
         answerView.setText("");
 
         try {
@@ -136,6 +137,7 @@ public class AiActivity extends BaseActivity {
                     final String r = response.body().string();
                     runOnUiThread(() -> {
                         progressBar.setVisibility(View.GONE);
+                        send.setVisibility(View.VISIBLE);
                         if (!response.isSuccessful()) {
                             answerView.setText("קוד שגיאה: " + response.code() + "\n" + r);
                             return;
@@ -160,6 +162,7 @@ public class AiActivity extends BaseActivity {
 
         } catch (Exception e) {
             progressBar.setVisibility(View.GONE);
+            send.setVisibility(View.VISIBLE);
             answerView.setText("שגיאה: " + e.getMessage());
         }
     }

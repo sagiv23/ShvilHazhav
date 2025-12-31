@@ -17,6 +17,7 @@ public class GameRoom {
 
     private Integer firstSelectedCardIndex; //אינדקס הקלף הראשון שנבחר
     private boolean processingMatch; //דגל למניעת לחיצות בזמן אנימציית סגירה
+    private String winnerUid; //
 
     public GameRoom() {}
 
@@ -65,4 +66,8 @@ public class GameRoom {
     public void setFirstSelectedCardIndex(Integer index) { this.firstSelectedCardIndex = index; }
     public boolean isProcessingMatch() { return processingMatch; }
     public void setProcessingMatch(boolean processingMatch) { this.processingMatch = processingMatch; }
+
+    public String getWinnerUid() {return winnerUid;}
+
+    public void setWinnerUid(String winnerUid) {this.winnerUid = winnerUid;}
 }

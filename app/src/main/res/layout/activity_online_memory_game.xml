@@ -38,6 +38,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+        android:id="@+id/tv_OnlineMemoryGame_turn_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ממתין לתחילת משחק..."
+        android:textSize="22sp"
+        android:fontFamily="@font/text_hebrew"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/txtTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_OnlineMemoryGame_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15"
+        android:textSize="30sp"
+        android:textColor="@color/error"
+        android:fontFamily="@font/text_hebrew"
+        app:layout_constraintTop_toBottomOf="@id/tv_OnlineMemoryGame_turn_status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- גריד הקלפים -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_OnlineMemoryGame"
@@ -45,7 +69,7 @@
         android:layout_height="0dp"
         android:padding="16dp"
         android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/txtTitle"
+        app:layout_constraintTop_toBottomOf="@id/tv_OnlineMemoryGame_timer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

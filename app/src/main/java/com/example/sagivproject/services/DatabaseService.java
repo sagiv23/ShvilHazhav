@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.GameRoom;
+import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +33,8 @@ public class DatabaseService {
     /// @see DatabaseService#readData(String)
     private static final String USERS_PATH = "users",
             FORUM_PATH = "forum",
-            ROOMS_PATH = "rooms";
+            ROOMS_PATH = "rooms",
+            IMAGES_PATH = "images";
 
     /// callback interface for database operations
     /// @param <T> the type of the object to return
@@ -54,6 +56,11 @@ public class DatabaseService {
     /// @see DatabaseReference
     /// @see FirebaseDatabase#getReference()
     private final DatabaseReference databaseReference;
+
+    /// the listener for realtime updates on the active game
+    /// @see DatabaseService#listenToGame(String, DatabaseCallback)
+    /// @see DatabaseCallback
+    private ValueEventListener activeGameListener;
 
     /// use getInstance() to get an instance of this class
     /// @see DatabaseService#getInstance()
@@ -165,7 +172,6 @@ public class DatabaseService {
     private String generateNewId(@NotNull final String path) {
         return databaseReference.child(path).push().getKey();
     }
-
 
     /// run a transaction on the data at a specific path </br>
     /// good for incrementing a value or modifying an object in the database
@@ -623,8 +629,13 @@ public class DatabaseService {
                 });
     }
 
-    public ValueEventListener listenToGame(String roomId, DatabaseCallback<GameRoom> callback) {
-        ValueEventListener listener = new ValueEventListener() {
+    /// listen for realtime updates on a specific game room
+    /// @param roomId the id of the room to listen to
+    public void listenToGame(String roomId, DatabaseCallback<GameRoom> callback) {
+        // אם כבר יש מאזין פעיל, נסיר אותו קודם כדי למנוע כפל האזנות
+        stopListeningToGame(roomId);
+
+        activeGameListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GameRoom room = snapshot.getValue(GameRoom.class);
@@ -637,8 +648,19 @@ public class DatabaseService {
             }
         };
 
-        readData(ROOMS_PATH + "/" + roomId).addValueEventListener(listener);
-        return listener;
+        readData(ROOMS_PATH + "/" + roomId).addValueEventListener(activeGameListener);
+    }
+
+    /// remove a previously registered game listener
+    /// should be called when the screen is destroyed or no longer needed
+    /// to prevent memory leaks
+    /// @param roomId the id of the room
+    /// @see ValueEventListener
+    public void stopListeningToGame(String roomId) {
+        if (activeGameListener != null) {
+            readData(ROOMS_PATH + "/" + roomId).removeEventListener(activeGameListener);
+            activeGameListener = null;
+        }
     }
 
     public void revealCard(String roomId, int index, boolean revealed) {
@@ -659,5 +681,56 @@ public class DatabaseService {
         updateRoomField(roomId, "processingMatch", isProcessing);
     }
 
+    public void addUserWin(String uid) {
+        if (uid == null || uid.isEmpty() || uid.equals("draw")) return;
+
+        runTransaction(USERS_PATH + "/" + uid + "/countWins", Integer.class,
+                currentWins -> (currentWins == null) ? 1 : currentWins + 1,
+                new DatabaseCallback<Integer>() {
+                    @Override public void onCompleted(Integer object) {}
+                    @Override public void onFailed(Exception e) {}
+                });
+    }
+
+    public void setupForfeitOnDisconnect(String roomId, String opponentUid) {
+        // הגדרת הערכים שישתנו ב-DB ברגע שהשרת מזהה ניתוק
+        readData(ROOMS_PATH + "/" + roomId + "/status").onDisconnect().setValue("finished");
+        readData(ROOMS_PATH + "/" + roomId + "/winnerUid").onDisconnect().setValue(opponentUid);
+    }
+
+    public void removeForfeitOnDisconnect(String roomId) {
+        readData(ROOMS_PATH + "/" + roomId + "/status").onDisconnect().cancel();
+        readData(ROOMS_PATH + "/" + roomId + "/winnerUid").onDisconnect().cancel();
+    }
+
     // endregion Rooms Section
+
+
+
+    //העלאת תמונות למסד נתונים - למחוק בסוף הפרויקט!
+    public void getAllImages(DatabaseCallback<List<ImageData>> callback) {
+        getDataList(IMAGES_PATH, ImageData.class, callback);
+    }
+    public String generateImageId() {
+        return generateNewId(IMAGES_PATH);
+    }
+    public void createImage(
+            @NonNull ImageData image,
+            @Nullable DatabaseCallback<Void> callback
+    ) {
+        writeData(IMAGES_PATH + "/" + image.getId(), image, callback);
+    }
+    public void getImage(
+            @NotNull String imageId,
+            @NotNull DatabaseCallback<ImageData> callback
+    ) {
+        getData(IMAGES_PATH + "/" + imageId, ImageData.class, callback);
+    }
+
+    public void imagesExist(DatabaseCallback<Boolean> callback) {
+        readData(IMAGES_PATH).limitToFirst(1).get()
+                .addOnSuccessListener(snapshot ->
+                        callback.onCompleted(snapshot.exists()))
+                .addOnFailureListener(callback::onFailed);
+    }
 }
