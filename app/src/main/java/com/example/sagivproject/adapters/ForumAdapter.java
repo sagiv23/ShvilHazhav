@@ -54,7 +54,19 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
     public void onBindViewHolder(@NonNull ForumViewHolder holder, int position) {
         ForumMessage msg = messages.get(position);
 
-        holder.txtUser.setText(msg.getFullName());
+        Typeface customFont = ResourcesCompat.getFont(holder.itemView.getContext(), R.font.text_hebrew);
+        SpannableString userNameSpannable = new SpannableString(msg.getFullName());
+
+        if (customFont != null) {
+            userNameSpannable.setSpan(
+                    new CustomTypefaceSpan("", customFont),
+                    0,
+                    userNameSpannable.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            );
+        }
+        holder.txtUser.setText(userNameSpannable);
+
         holder.txtEmail.setText(msg.getEmail());
         holder.txtIsAdmin.setText(msg.getIsUserAdmin() ? "מנהל" : "משתמש רגיל");
         holder.txtMessage.setText(msg.getMessage());
@@ -62,21 +74,16 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
 
         if (listener != null && listener.isShowMenuOptions(msg)) {
             holder.btnMenu.setVisibility(View.VISIBLE);
-
             holder.btnMenu.setOnClickListener(v -> {
                 PopupMenu popup = new PopupMenu(v.getContext(), holder.btnMenu);
                 popup.getMenuInflater().inflate(R.menu.forum_message_menu, popup.getMenu());
 
-                Typeface typeface = ResourcesCompat.getFont(
-                        v.getContext(),
-                        R.font.text_hebrew
-                );
-
                 MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
-                if (deleteItem != null) {
+                if (deleteItem != null && customFont != null) {
                     SpannableString title = new SpannableString(deleteItem.getTitle());
+
                     title.setSpan(
-                            new CustomTypefaceSpan("", typeface),
+                            new CustomTypefaceSpan("", customFont),
                             0,
                             title.length(),
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -99,7 +106,6 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
                     }
                     return false;
                 });
-
                 popup.show();
             });
         } else {
