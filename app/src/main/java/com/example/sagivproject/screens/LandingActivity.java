@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class LandingActivity extends BaseActivity {
@@ -28,20 +29,26 @@ public class LandingActivity extends BaseActivity {
             return insets;
         });
 
-        User user = SharedPreferencesUtil.getUser(this);
-
+        User current = SharedPreferencesUtil.getUser(this);
         if (SharedPreferencesUtil.isUserLoggedIn(this)) {
-            Intent intent;
-            if (user.getIsAdmin()) {
-                intent = new Intent(this, AdminPageActivity.class);
-            } else {
-                intent = new Intent(this, MainActivity.class);
-            }
+            databaseService.getUser(current.getUid(), new DatabaseService.DatabaseCallback<User>() {
+                @Override
+                public void onCompleted(User user) {
+                    Intent intent;
+                    if (user.getIsAdmin()) {
+                        intent = new Intent(LandingActivity.this, AdminPageActivity.class);
+                    } else {
+                        intent = new Intent(LandingActivity.this, MainActivity.class);
+                    }
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
 
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+                @Override
+                public void onFailed(Exception e) {
+                }
+            });
         }
-
 
         btnToContact = findViewById(R.id.btn_landingBody_to_contact);
         btnToLogin = findViewById(R.id.btn_landingBody_to_login);

@@ -35,7 +35,7 @@ import java.util.List;
 
 public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapter.MemoryGameListener {
     private RecyclerView recyclerCards;
-    private Button btnExit;
+    Button btnExit;
     private boolean endDialogShown = false;
     private boolean localLock = false;
     private String roomId;
@@ -83,9 +83,8 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                 String opponentUid = myUid.equals(currentRoom.getPlayer1().getUid()) ?
                         currentRoom.getPlayer2().getUid() : currentRoom.getPlayer1().getUid();
 
-                databaseService.updateRoomField(roomId, "status", "finished");
                 databaseService.updateRoomField(roomId, "winnerUid", opponentUid);
-                databaseService.addUserWin(opponentUid);
+                databaseService.updateRoomField(roomId, "status", "finished");
             }
 
             Intent intent = new Intent(this, GameHomeScreenActivity.class);
@@ -251,11 +250,18 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
         // אנחנו בודקים אם הגענו ל-6 זוגות
         if (totalPairsFound >= 6) {
-            // רק השחקן הראשון מעדכן את הסטטוס ל-finished כדי למנוע כפילויות
-            if (user.getUid().equals(currentRoom.getPlayer1().getUid())) {
-                finishGame(currentRoom);
-            }
+            finishGame(currentRoom);
         }
+    }
+
+    private void finishGame(GameRoom room) {
+        if ("finished".equals(room.getStatus())) return;
+
+        String winnerUid = calculateWinner(room);
+
+        // עדכון ה-DB שהמשחק נגמר
+        databaseService.updateRoomField(roomId, "winnerUid", winnerUid);
+        databaseService.updateRoomField(roomId, "status", "finished");
     }
 
     private void listenToGame() {
@@ -357,21 +363,5 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                 databaseService.updateRoomField(roomId, "currentTurnUid", opponentUid);
             }
         }.start();
-    }
-
-    private void finishGame(GameRoom room) {
-        if (!user.getUid().equals(room.getPlayer1().getUid())) return;
-        if ("finished".equals(room.getStatus())) return;
-
-        String winnerUid = calculateWinner(room);
-
-        // עדכון ה-DB שהמשחק נגמר
-        databaseService.updateRoomField(roomId, "status", "finished");
-        databaseService.updateRoomField(roomId, "winnerUid", winnerUid);
-
-        // הוספת ניצחון למנצח (אם זה לא תיקו)
-        if (!"draw".equals(winnerUid)) {
-            databaseService.addUserWin(winnerUid);
-        }
     }
 }

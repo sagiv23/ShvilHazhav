@@ -458,7 +458,7 @@ public class DatabaseService {
 
     // endregion Forum Section
 
-    // region Rooms Section
+    // region Game Section
 
     /// callback interface for realtime room status updates
     /// used to notify listeners when a room starts playing, is deleted,
@@ -479,43 +479,18 @@ public class DatabaseService {
         void onFailed(Exception e);
     }
 
-    /// create a new game room and save it in the database
-    /// the creating user is set as player1 and the room status is "waiting"
-    /// @param user the user who creates the room (player1)
-    /// @param callback callback that returns the created GameRoom on success
-    ///                 or an exception on failure
-    /// @see GameRoom
-    /// @see DatabaseCallback
-    public void createRoom(@NotNull User user,
-                           @NotNull DatabaseCallback<GameRoom> callback) {
-        String roomId = generateNewId(ROOMS_PATH);
-        GameRoom room = new GameRoom(roomId, user);
-
-        writeData(ROOMS_PATH + "/" + roomId, room, new DatabaseCallback<Void>() {
-            @Override
-            public void onCompleted(Void object) {
-                callback.onCompleted(room);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                callback.onFailed(e);
-            }
-        });
-    }
-
     /// find an existing waiting room or create a new one if none is available
-    /// this operation is done using a Firebase transaction to avoid race conditions
-    /// <br>
-    /// logic:
-    /// - search for a room with status "waiting" and no second player
-    /// - if found: set the user as player2 and change status to "playing"
-    /// - if not found: create a new room with the user as player1
-    /// @param user the user trying to join or create a room
-    /// @param callback callback that returns the matched or created GameRoom
-    ///                 or an exception on failure
-    /// @see Transaction
+    /// tries to match the given user with another waiting player atomically
+    /// if a waiting room is found:
+    ///     - the user is set as player2
+    ///     - the room status changes to "playing"
+    /// if no waiting room exists:
+    ///     - a new room is created with the user as player1
+    /// @param user the user who wants to join or create a game room
+    /// @param callback callback that returns the matched or newly created GameRoom
+    ///                 or an exception if the transaction fails
     /// @see GameRoom
+    /// @see Transaction
     public void findOrCreateRoom(User user, DatabaseCallback<GameRoom> callback) {
         String newRoomId = generateNewId(ROOMS_PATH);
         final String[] matchedRoomId = new String[1];
@@ -558,15 +533,15 @@ public class DatabaseService {
         });
     }
 
-    /// listen for realtime updates on a specific room
-    /// used to detect when:
-    /// - the room starts playing
-    /// - the room is deleted
+    /// listen in realtime to changes in a specific room status
+    /// used mainly before the game starts, to detect:
+    ///     - when the room status becomes "playing"
+    ///     - when the room is deleted or cancelled
     /// @param roomId the id of the room to listen to
-    /// @param callback callback for room status events
-    /// @return the ValueEventListener so it can later be removed
-    /// @see ValueEventListener
+    /// @param callback callback to notify about room start, deletion or errors
+    /// @return the ValueEventListener instance so it can later be removed
     /// @see RoomStatusCallback
+    /// @see ValueEventListener
     public ValueEventListener listenToRoomStatus(
             @NotNull String roomId,
             @NotNull RoomStatusCallback callback) {
@@ -598,26 +573,36 @@ public class DatabaseService {
     }
 
     /// remove a previously registered room status listener
-    /// should be called when the screen is destroyed or no longer needed
-    /// to prevent memory leaks
+    /// should be called when leaving the waiting screen
+    /// to prevent memory leaks and unnecessary updates
     /// @param roomId the id of the room
-    /// @param listener the listener returned from listenToRoomStatus
+    /// @param listener the listener instance returned from listenToRoomStatus
     /// @see ValueEventListener
     public void removeRoomListener(@NotNull String roomId,
                                    @NotNull ValueEventListener listener) {
         readData(ROOMS_PATH + "/" + roomId).removeEventListener(listener);
     }
 
-    /// cancel a room and remove it completely from the database
-    /// usually called when the room creator leaves before the game starts
-    /// @param roomId the id of the room to delete
-    /// @param callback callback for operation result (success or failure)
-    /// @see DatabaseCallback
+    /// cancel and delete a game room from the database
+    /// usually called when a player leaves before the game starts
+    /// @param roomId the id of the room to cancel
+    /// @param callback optional callback for success or failure
     public void cancelRoom(@NotNull String roomId,
                            @Nullable DatabaseCallback<Void> callback) {
         deleteData(ROOMS_PATH + "/" + roomId, callback);
     }
 
+    /// initialize the game board data for a room
+    /// sets:
+    ///     - the list of cards
+    ///     - the UID of the player whose turn is first
+    ///     - the room status to "playing"
+    /// should be called once both players are connected
+    /// @param roomId the id of the game room
+    /// @param cards the shuffled list of cards for the game
+    /// @param firstTurnUid the UID of the player who starts the game
+    /// @param callback callback for success or failure
+    /// @see Card
     public void initGameBoard(String roomId, List<Card> cards, String firstTurnUid, DatabaseCallback<Void> callback) {
         readData(ROOMS_PATH + "/" + roomId + "/cards").setValue(cards);
         readData(ROOMS_PATH + "/" + roomId + "/currentTurnUid").setValue(firstTurnUid);
@@ -629,8 +614,14 @@ public class DatabaseService {
                 });
     }
 
-    /// listen for realtime updates on a specific game room
-    /// @param roomId the id of the room to listen to
+    /// listen in realtime to all changes in a game room
+    /// receives full GameRoom updates whenever any field changes
+    /// only one active game listener is kept at a time
+    /// if a listener already exists, it will be removed before adding a new one
+    /// @param roomId the id of the game room
+    /// @param callback callback that receives updated GameRoom objects
+    /// @see GameRoom
+    /// @see ValueEventListener
     public void listenToGame(String roomId, DatabaseCallback<GameRoom> callback) {
         // אם כבר יש מאזין פעיל, נסיר אותו קודם כדי למנוע כפל האזנות
         stopListeningToGame(roomId);
@@ -651,11 +642,10 @@ public class DatabaseService {
         readData(ROOMS_PATH + "/" + roomId).addValueEventListener(activeGameListener);
     }
 
-    /// remove a previously registered game listener
-    /// should be called when the screen is destroyed or no longer needed
-    /// to prevent memory leaks
-    /// @param roomId the id of the room
-    /// @see ValueEventListener
+    /// stop listening to realtime game updates
+    /// removes the active game listener if one exists
+    /// should be called when leaving the game screen
+    /// @param roomId the id of the game room
     public void stopListeningToGame(String roomId) {
         if (activeGameListener != null) {
             readData(ROOMS_PATH + "/" + roomId).removeEventListener(activeGameListener);
@@ -663,24 +653,42 @@ public class DatabaseService {
         }
     }
 
-    public void revealCard(String roomId, int index, boolean revealed) {
-        readData(ROOMS_PATH + "/" + roomId + "/cards/" + index + "/isRevealed")
-                .setValue(revealed);
-    }
-
+    /// update a single field inside a game room
+    /// useful for lightweight updates such as:
+    ///     - currentTurnUid
+    ///     - status
+    ///     - winnerUid
+    /// @param roomId the id of the game room
+    /// @param field the field name to update
+    /// @param value the new value for the field
     public void updateRoomField(String roomId, String field, Object value) {
         readData(ROOMS_PATH + "/" + roomId + "/" + field).setValue(value);
     }
 
+    /// update the reveal and match state of a specific card in the game board
+    /// typically called after a player flips or matches cards
+    /// @param roomId the id of the game room
+    /// @param index the index of the card in the cards list
+    /// @param revealed whether the card is currently revealed
+    /// @param matched whether the card has been successfully matched
+    /// @see Card
     public void updateCardStatus(String roomId, int index, boolean revealed, boolean matched) {
         readData(ROOMS_PATH + "/" + roomId + "/cards/" + index + "/isRevealed").setValue(revealed);
         readData(ROOMS_PATH + "/" + roomId + "/cards/" + index + "/isMatched").setValue(matched);
     }
 
+    /// set the processing state of the game
+    /// used to prevent players from acting while a match is being evaluated
+    /// @param roomId the id of the game room
+    /// @param isProcessing true if the game is currently processing a move
     public void setProcessing(String roomId, boolean isProcessing) {
         updateRoomField(roomId, "processingMatch", isProcessing);
     }
 
+    /// increment the win counter of a user
+    /// uses a transaction to safely increase the value
+    /// ignored if the uid is null, empty or represents a draw
+    /// @param uid the UID of the winning user
     public void addUserWin(String uid) {
         if (uid == null || uid.isEmpty() || uid.equals("draw")) return;
 
@@ -692,18 +700,29 @@ public class DatabaseService {
                 });
     }
 
+    /// define automatic forfeit behavior when a player disconnects unexpectedly
+    /// if the client disconnects:
+    ///     - room status is set to "finished"
+    ///     - the opponent is declared as the winner
+    /// uses Firebase onDisconnect handlers
+    /// @param roomId the id of the game room
+    /// @param opponentUid the UID of the opponent who will win by forfeit
     public void setupForfeitOnDisconnect(String roomId, String opponentUid) {
         // הגדרת הערכים שישתנו ב-DB ברגע שהשרת מזהה ניתוק
         readData(ROOMS_PATH + "/" + roomId + "/status").onDisconnect().setValue("finished");
         readData(ROOMS_PATH + "/" + roomId + "/winnerUid").onDisconnect().setValue(opponentUid);
     }
 
+    /// cancel previously defined onDisconnect forfeit actions
+    /// should be called when the game ends normally
+    /// to prevent incorrect forfeit handling
+    /// @param roomId the id of the game room
     public void removeForfeitOnDisconnect(String roomId) {
         readData(ROOMS_PATH + "/" + roomId + "/status").onDisconnect().cancel();
         readData(ROOMS_PATH + "/" + roomId + "/winnerUid").onDisconnect().cancel();
     }
 
-    // endregion Rooms Section
+    // endregion Game Section
 
 
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -17,7 +16,7 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class AdminPageActivity extends BaseActivity {
-    private Button btnToUserTable, btnToForum, btnToDetailsAboutUser, btnLogout;
+    Button btnToUserTable, btnToForum, btnToDetailsAboutUser, btnLogout;
     private TextView txtAdminTitle;
 
     @Override
@@ -31,19 +30,6 @@ public class AdminPageActivity extends BaseActivity {
             return insets;
         });
 
-        User user = SharedPreferencesUtil.getUser(this);
-
-        if (!SharedPreferencesUtil.isUserLoggedIn(this)) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            this.startActivity(intent);
-        } else if (!user.getIsAdmin()) {
-            Toast.makeText(this, "אין לך גישה לדף זה", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            this.startActivity(intent);
-        }
-
         btnToUserTable = findViewById(R.id.btn_admin_to_UsersTablePage);
         btnToForum = findViewById(R.id.btn_admin_to_AdminForum);
         btnToDetailsAboutUser = findViewById(R.id.btn_admin_to_DetailsAboutUser);
@@ -55,19 +41,11 @@ public class AdminPageActivity extends BaseActivity {
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, DetailsAboutUserActivity.class)));
         btnLogout.setOnClickListener(view -> logout());
 
-        User localUser = SharedPreferencesUtil.getUser(this);
-        if (localUser != null) {
-            showUserName(localUser);
-        }
-    }
-
-    private void showUserName(User user) {
-        String fullName = user.getFullName();
-
-        if (fullName == null || fullName.trim().isEmpty()) {
+        User user = SharedPreferencesUtil.getUser(this);
+        if (user.getFullName() == null || user.getFullName().trim().isEmpty()) {
             txtAdminTitle.setText("שלום מנהל יקר");
         } else {
-            txtAdminTitle.setText("שלום " + fullName);
+            txtAdminTitle.setText("שלום " + user.getFullName());
         }
     }
 }

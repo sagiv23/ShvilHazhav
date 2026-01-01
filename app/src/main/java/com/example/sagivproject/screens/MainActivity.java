@@ -14,7 +14,6 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -32,7 +31,7 @@ import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends BaseActivity {
-    private Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
+    Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
     private TextView txtHomePageTitle;
 
     @Override
@@ -47,17 +46,6 @@ public class MainActivity extends BaseActivity {
         });
 
         User user = SharedPreferencesUtil.getUser(this);
-
-        if (!SharedPreferencesUtil.isUserLoggedIn(this)) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            this.startActivity(intent);
-        } else if (user.getIsAdmin()) {
-            Toast.makeText(this, "הדף מיועד למשתמשים רגילים בלבד", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, AdminPageActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            this.startActivity(intent);
-        }
 
         checkNotificationPermission();
         setupDailyNotifications();
@@ -79,21 +67,14 @@ public class MainActivity extends BaseActivity {
         btnToExit.setOnClickListener(view -> logout());
 
         txtHomePageTitle = findViewById(R.id.txt_main_Title);
-
-        showUserName(user);
+        if (user.getFullName() == null || user.getFullName().trim().isEmpty()) {
+            txtHomePageTitle.setText("שלום מטופל יקר");
+        } else {
+            txtHomePageTitle.setText("שלום " + user.getFullName());
+        }
 
         //להעלאת תמונות - למחוק בסוף הפרויקט!
         //uploadGameImagesIfNeeded();
-    }
-
-    private void showUserName(User user) {
-        String fullName = user.getFullName();
-
-        if (fullName == null || fullName.trim().isEmpty()) {
-            txtHomePageTitle.setText("שלום מטופל יקר");
-        } else {
-            txtHomePageTitle.setText("שלום " + fullName);
-        }
     }
 
     //התראות לגבי התרופות
