@@ -5,7 +5,10 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,7 +26,9 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.EditUserDialog;
+import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
 import com.example.sagivproject.services.DatabaseService;
+import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
@@ -134,28 +140,25 @@ public class DetailsAboutUserActivity extends BaseActivity {
 
         boolean hasImage = user.getProfileImage() != null && !user.getProfileImage().isEmpty();
 
-        String[] options = hasImage
-                ? new String[]{"צלם תמונה", "בחר מהגלריה", "מחק תמונת פרופיל"}
-                : new String[]{"צלם תמונה", "בחר מהגלריה"};
+        new ProfileImageDialog(this, hasImage, new ProfileImageDialog.ImagePickerListener() {
+            @Override
+            public void onCamera() {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, REQ_CAMERA);
+            }
 
-        new AlertDialog.Builder(this)
-                .setTitle("בחר תמונת פרופיל")
-                .setItems(options, (dialog, which) -> {
+            @Override
+            public void onGallery() {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, REQ_GALLERY);
+            }
 
-                    if (which == 0) { // Camera
-                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, REQ_CAMERA);
-
-                    } else if (which == 1) { // Gallery
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-                        galleryIntent.setType("image/*");
-                        startActivityForResult(galleryIntent, REQ_GALLERY);
-
-                    } else if (hasImage && which == 2) { // Delete image
-                        deleteProfileImage();
-                    }
-                })
-                .show();
+            @Override
+            public void onDelete() {
+                deleteProfileImage();
+            }
+        }).show();
     }
 
     private void deleteProfileImage() {

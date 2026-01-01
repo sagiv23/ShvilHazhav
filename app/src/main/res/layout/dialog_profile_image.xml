@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:background="?attr/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/txt_profileImageDialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/headline_hebrew"
+            android:text="בחר תמונת פרופיל" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="5dp">
+
+            <Button
+                android:id="@+id/btn_profileImageDialog_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="150sp"
+                android:text="צלם תמונה"
+                android:textSize="22sp"
+                android:fontFamily="@font/text_hebrew"
+                android:layout_margin="4dp" />
+
+            <Button
+                android:id="@+id/btn_profileImageDialog_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="150sp"
+                android:text="בחר מהגלריה"
+                android:textSize="22sp"
+                android:fontFamily="@font/text_hebrew"
+                android:layout_margin="4dp" />
+
+            <Button
+                android:id="@+id/btn_profileImageDialog_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="150sp"
+                android:text="מחיקת תמונה"
+                android:textSize="22sp"
+                android:fontFamily="@font/text_hebrew"
+                android:textColor="@color/error"
+                android:layout_margin="4dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btn_profileImageDialog_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="150sp"
+                android:text="ביטול"
+                android:textSize="22sp"
+                android:fontFamily="@font/text_hebrew"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
