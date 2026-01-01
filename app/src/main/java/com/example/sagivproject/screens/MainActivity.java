@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -14,13 +13,11 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
@@ -29,6 +26,17 @@ import com.example.sagivproject.workers.MedicationWorker;
 
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+
+//למחוק בסיום הפרויקט
+/*
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.widget.Toast;
+import com.example.sagivproject.models.ImageData;
+import com.example.sagivproject.services.DatabaseService;
+import java.io.ByteArrayOutputStream;
+ */
 
 public class MainActivity extends BaseActivity {
     Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
@@ -130,7 +138,7 @@ public class MainActivity extends BaseActivity {
     //העלאת כל התמונות - למחוק בסוף הפרויקט!
     /*
     private void uploadGameImagesIfNeeded() {
-        DatabaseService.getInstance().imagesExist(new DatabaseService.DatabaseCallback<Boolean>() {
+        databaseService.imagesExist(new DatabaseService.DatabaseCallback<Boolean>() {
             @Override
             public void onCompleted(Boolean exists) {
                 if (exists) {
@@ -211,10 +219,16 @@ public class MainActivity extends BaseActivity {
                 R.drawable.pics_for_game_57,
                 R.drawable.pics_for_game_58,
                 R.drawable.pics_for_game_59,
-                R.drawable.pics_for_game_60
+                R.drawable.pics_for_game_60,
+                R.drawable.pics_for_game_61,
+                R.drawable.pics_for_game_62,
+                R.drawable.pics_for_game_63,
+                R.drawable.pics_for_game_64,
+                R.drawable.pics_for_game_65,
+                R.drawable.pics_for_game_66,
+                R.drawable.pics_for_game_67
         };
 
-        DatabaseService db = DatabaseService.getInstance();
 
         for (int i = 0; i < imageIds.length; i++) {
 
@@ -229,7 +243,7 @@ public class MainActivity extends BaseActivity {
             String cardId = "card" + (i + 1);
             ImageData image = new ImageData(cardId, base64);
 
-            db.createImage(image, null);
+            databaseService.createImage(image, null);
         }
     }
 

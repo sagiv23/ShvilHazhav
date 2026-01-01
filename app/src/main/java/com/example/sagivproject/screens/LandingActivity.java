@@ -34,14 +34,16 @@ public class LandingActivity extends BaseActivity {
             databaseService.getUser(current.getUid(), new DatabaseService.DatabaseCallback<User>() {
                 @Override
                 public void onCompleted(User user) {
-                    Intent intent;
-                    if (user.getIsAdmin()) {
-                        intent = new Intent(LandingActivity.this, AdminPageActivity.class);
-                    } else {
-                        intent = new Intent(LandingActivity.this, MainActivity.class);
+                    if (user != null) {
+                        Intent intent;
+                        if (user.getIsAdmin()) {
+                            intent = new Intent(LandingActivity.this, AdminPageActivity.class);
+                        } else {
+                            intent = new Intent(LandingActivity.this, MainActivity.class);
+                        }
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
                 }
 
                 @Override
