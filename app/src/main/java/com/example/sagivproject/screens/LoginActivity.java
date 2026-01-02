@@ -19,7 +19,7 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.utils.InputValidator;
 
 public class LoginActivity extends BaseActivity {
-    private Button btnToContact, btnToLanding, btnToRegister, btnLogin;
+    Button btnToContact, btnToLanding, btnToRegister, btnLogin;
     private EditText editTextEmail, editTextPassword;
 
     @Override

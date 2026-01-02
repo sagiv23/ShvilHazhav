@@ -76,10 +76,12 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
                 listener.onDeleteUser(user)
         );
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnLongClickListener(v -> {
             if (!user.getIsAdmin()) {
                 listener.onUserClicked(user);
+                return true;
             }
+            return false;
         });
     }
 

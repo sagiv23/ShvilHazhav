@@ -16,9 +16,9 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class ContactActivity extends BaseActivity {
     //כפתורים למשתמש מחובר
-    private Button btnToMain, btnToDetailsAboutUser, btnToExit, btnToContactPage1;
+    Button btnToMain, btnToDetailsAboutUser, btnToExit, btnToContactPage1;
     //כפתורים למשתמש לא מחובר
-    private Button btnToLanding, btnToLoginPage, btnToRegisterPage, btnToContactPage2;
+    Button btnToLanding, btnToLoginPage, btnToRegisterPage, btnToContactPage2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

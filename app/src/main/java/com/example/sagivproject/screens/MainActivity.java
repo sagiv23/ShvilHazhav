@@ -21,6 +21,7 @@ import androidx.work.WorkManager;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.workers.MedicationWorker;
 
@@ -40,7 +41,7 @@ import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends BaseActivity {
     Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
-    private TextView txtHomePageTitle;
+    TextView txtHomePageTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,8 @@ public class MainActivity extends BaseActivity {
         } else {
             txtHomePageTitle.setText("שלום " + user.getFullName());
         }
+
+        ImageUtil.requestPermission(this);
 
         //להעלאת תמונות - למחוק בסוף הפרויקט!
         //uploadGameImagesIfNeeded();

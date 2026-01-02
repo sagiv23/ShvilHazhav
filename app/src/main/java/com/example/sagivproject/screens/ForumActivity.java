@@ -18,9 +18,9 @@ import com.example.sagivproject.bases.BaseForumActivity;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class ForumActivity extends BaseForumActivity implements BaseForumActivity.ForumPermissions {
-    private Button btnToMain, btnToContact, btnToDetailsAboutUser, btnToExit, btnSendMessage, btnNewMessages;
-    private EditText edtNewMessage;
-    private RecyclerView recyclerForum;
+    Button btnToMain, btnToContact, btnToDetailsAboutUser, btnToExit, btnSendMessage, btnNewMessages;
+    EditText edtNewMessage;
+    RecyclerView recyclerForum;
     private User user;
 
     @Override

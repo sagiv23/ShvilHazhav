@@ -1,14 +1,10 @@
 package com.example.sagivproject.screens;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -28,17 +23,16 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class DetailsAboutUserActivity extends BaseActivity {
-    private Button btnToMain, btnToDetailsAboutUser, btnToContact, btnToExit, btnToAdmin, btnEditUser;
-    private View separatorLine;
-    private LinearLayout topMenu;
+    Button btnToMain, btnToDetailsAboutUser, btnToContact, btnToExit, btnToAdmin, btnEditUser;
+    View separatorLine;
+    LinearLayout topMenu;
     private TextView txtTitle, txtFirstName, txtLastName, txtEmail, txtPassword;
     private ImageView imgUserProfile;
-    private Button btnChangePhoto;
+    Button btnChangePhoto;
 
     private static final int REQ_CAMERA = 100;
     private static final int REQ_GALLERY = 200;
@@ -136,8 +130,6 @@ public class DetailsAboutUserActivity extends BaseActivity {
     }
 
     private void openImagePicker() {
-        ImageUtil.requestPermission(this);
-
         boolean hasImage = user.getProfileImage() != null && !user.getProfileImage().isEmpty();
 
         new ProfileImageDialog(this, hasImage, new ProfileImageDialog.ImagePickerListener() {

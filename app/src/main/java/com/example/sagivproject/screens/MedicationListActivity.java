@@ -35,9 +35,9 @@ public class MedicationListActivity extends BaseActivity {
     RecyclerView recyclerViewMedications;
 
     private MedicationAdapter adapter;
-    private ArrayList<Medication> medications = new ArrayList<>();
+    ArrayList<Medication> medications = new ArrayList<>();
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private User user;
     private String uid;
 
