@@ -42,7 +42,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     private User user;
     private GameRoom currentRoom;
     private MemoryGameAdapter adapter;
-    private TextView tvTimer, tvTurnStatus;
+    private TextView tvTimer, tvTurnStatus, tvScore;
     private CountDownTimer turnTimer;
     private static final long TURN_TIME_LIMIT = 15000; //15 שניות
     private boolean isWinRecorded = false; // דגל למניעת כפל ניצחונות
@@ -66,6 +66,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
         tvTimer = findViewById(R.id.tv_OnlineMemoryGame_timer);
         tvTurnStatus = findViewById(R.id.tv_OnlineMemoryGame_turn_status);
+        tvScore = findViewById(R.id.tv_OnlineMemoryGame_score);
 
         adapter = new MemoryGameAdapter(new ArrayList<>(), this);
         recyclerCards.setAdapter(adapter);
@@ -115,6 +116,15 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             startActivity(intent);
             finish();
         }).show();
+    }
+
+    private void updateScoreUI(GameRoom room) {
+        boolean amIPlayer1 = user.getUid().equals(room.getPlayer1().getUid());
+
+        int myScore = amIPlayer1 ? room.getPlayer1Score() : room.getPlayer2Score();
+        int opponentScore = amIPlayer1 ? room.getPlayer2Score() : room.getPlayer1Score();
+
+        tvScore.setText("אני: " + myScore + " | יריב: " + opponentScore);
     }
 
     private void setupGameBoard(GameRoom room) {
@@ -270,6 +280,8 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             public void onCompleted(GameRoom room) {
                 if (room == null) return;
                 currentRoom = room;
+
+                updateScoreUI(room);
 
                 if (room.getCards() == null || room.getCards().isEmpty()) {
                     setupGameBoard(room);

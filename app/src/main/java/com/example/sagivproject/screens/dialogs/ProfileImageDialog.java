@@ -39,6 +39,7 @@ public class ProfileImageDialog {
         Button btnCamera = dialog.findViewById(R.id.btn_profileImageDialog_camera);
         Button btnGallery = dialog.findViewById(R.id.btn_profileImageDialog_gallery);
         Button btnDelete = dialog.findViewById(R.id.btn_profileImageDialog_delete);
+        Button btnCancel = dialog.findViewById(R.id.btn_profileImageDialog_cancel);
 
         // הצגת/הסתרת כפתור המחיקה
         btnDelete.setVisibility(hasImage ? View.VISIBLE : View.GONE);
@@ -58,6 +59,8 @@ public class ProfileImageDialog {
             listener.onDelete();
             dialog.dismiss();
         });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
     }
