@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:background="?attr/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- כותרת -->
+        <TextView
+            android:id="@+id/txtAddUserDialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="הוספת משתמש חדש"
+            android:textSize="30sp"
+            android:fontFamily="@font/headline_hebrew"
+            android:layout_marginBottom="16dp" />
+
+        <!-- שם פרטי -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/ic_edit"
+            android:layout_marginBottom="12dp"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeWidth="1dp"
+            android:fontFamily="@font/text_hebrew">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputAddUserFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="שם פרטי"
+                android:inputType="textPersonName"
+                android:textSize="23sp"
+                android:fontFamily="@font/text_hebrew"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- שם משפחה -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/ic_edit"
+            android:layout_marginBottom="12dp"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeWidth="1dp"
+            android:fontFamily="@font/text_hebrew">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputAddUserLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="שם משפחה"
+                android:inputType="textPersonName"
+                android:textSize="23sp"
+                android:fontFamily="@font/text_hebrew"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- אימייל -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/ic_email"
+            android:layout_marginBottom="12dp"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeWidth="1dp"
+            android:fontFamily="@font/text_english">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputAddUserEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="כתובת אימייל"
+                android:inputType="textEmailAddress"
+                android:textDirection="ltr"
+                android:textSize="23sp"
+                android:fontFamily="@font/text_hebrew"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- סיסמה -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/ic_password"
+            app:endIconMode="password_toggle"
+            android:layout_marginBottom="20dp"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeWidth="1dp"
+            android:fontFamily="@font/text_english">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputAddUserPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="סיסמה"
+                android:inputType="textPassword"
+                android:textDirection="ltr"
+                android:textSize="23sp"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeWidth="1dp"
+                android:fontFamily="@font/text_hebrew"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- כפתורים -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddUserSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="80dp"
+                android:text="הוסף"
+                android:textSize="22sp"
+                android:fontFamily="@font/text_hebrew"
+                android:layout_margin="4dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddUserCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="80dp"
+                android:text="ביטול"
+                android:textSize="22sp"
+                android:fontFamily="@font/text_hebrew"
+                android:layout_margin="4dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

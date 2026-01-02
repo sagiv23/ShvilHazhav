@@ -27,6 +27,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.UsersTableAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.dialogs.AddUserDialog;
 import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsersTableActivity extends BaseActivity {
-    Button btnToAdminPage;
+    Button btnToAdminPage, btnAddUser;
     RecyclerView recyclerView;
     private UsersTableAdapter adapter;
     private final List<User> usersList = new ArrayList<>();
@@ -55,10 +56,17 @@ public class UsersTableActivity extends BaseActivity {
             return insets;
         });
 
+        currentUser = SharedPreferencesUtil.getUser(UsersTableActivity.this);
+
         btnToAdminPage = findViewById(R.id.btn_UsersTable_to_admin);
         btnToAdminPage.setOnClickListener(view -> startActivity(new Intent(UsersTableActivity.this, AdminPageActivity.class)));
 
-        currentUser = SharedPreferencesUtil.getUser(UsersTableActivity.this);
+        btnAddUser = findViewById(R.id.btn_UsersTable_add_user);
+        btnAddUser.setOnClickListener(v -> {
+            new AddUserDialog(this, newUser -> {
+                loadUsers();
+            }).show();
+        });
 
         adapter = new UsersTableAdapter(filteredList, currentUser, new UsersTableAdapter.OnUserActionListener() {
             @Override

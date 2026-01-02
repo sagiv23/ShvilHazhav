@@ -10,18 +10,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.workers.MedicationWorker;
 
@@ -55,8 +49,6 @@ public class MainActivity extends BaseActivity {
         });
 
         User user = SharedPreferencesUtil.getUser(this);
-
-        checkNotificationPermission();
         setupDailyNotifications();
 
         btnToContact = findViewById(R.id.btn_main_to_contact);
@@ -82,10 +74,8 @@ public class MainActivity extends BaseActivity {
             txtHomePageTitle.setText("שלום " + user.getFullName());
         }
 
-        ImageUtil.requestPermission(this);
-
         //להעלאת תמונות - למחוק בסוף הפרויקט!
-        //uploadGameImagesIfNeeded();
+        //uploadAllImages();
     }
 
     //התראות לגבי התרופות
@@ -123,43 +113,10 @@ public class MainActivity extends BaseActivity {
         );
     }
 
-    private void checkNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                // זה יקפיץ את הדיאלוג הרשמי של אנדרואיד
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
-            }
-        }
-    }
-
-
 
 
     //העלאת כל התמונות - למחוק בסוף הפרויקט!
     /*
-    private void uploadGameImagesIfNeeded() {
-        databaseService.imagesExist(new DatabaseService.DatabaseCallback<Boolean>() {
-            @Override
-            public void onCompleted(Boolean exists) {
-                if (exists) {
-                    // כבר קיימות תמונות – לא עושים כלום
-                    return;
-                }
-
-                uploadAllImages();
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(MainActivity.this,
-                        "שגיאה בבדיקת תמונות", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void uploadAllImages() {
 
         int[] imageIds = {

@@ -745,11 +745,4 @@ public class DatabaseService {
     ) {
         getData(IMAGES_PATH + "/" + imageId, ImageData.class, callback);
     }
-
-    public void imagesExist(DatabaseCallback<Boolean> callback) {
-        readData(IMAGES_PATH).limitToFirst(1).get()
-                .addOnSuccessListener(snapshot ->
-                        callback.onCompleted(snapshot.exists()))
-                .addOnFailureListener(callback::onFailed);
-    }
 }

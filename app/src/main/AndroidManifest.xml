@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -22,7 +22,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SagivProject">
+        android:theme="@style/Theme.SagivProject" >
+        <activity
+            android:name=".screens.MedicationImagesTableActivity"
+            android:exported="false" />
         <activity
             android:name=".screens.AdminForumActivity"
             android:exported="false"
@@ -66,7 +69,7 @@
             android:exported="false" />
         <activity
             android:name=".screens.LandingActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

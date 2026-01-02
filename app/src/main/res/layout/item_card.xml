@@ -9,12 +9,31 @@
     app:cardElevation="4dp"
     app:strokeColor="?attr/colorOutline">
 
-    <ImageView
-        android:id="@+id/img_ItemCard_card_image"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/fold_card_img" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/img_ItemCard_card_image"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/fold_card_img" />
+
+        <TextView
+            android:id="@+id/txt_ItemCard_image_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="ID: card1"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/text_english"
+            android:visibility="gone"/>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

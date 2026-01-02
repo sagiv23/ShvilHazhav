@@ -113,7 +113,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onFailed(Exception e) {
                 SharedPreferencesUtil.signOutUser(RegisterActivity.this);
-                Toast.makeText(RegisterActivity.this, "שגיאה בהרשמת המשתמש", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "שגיאה בבדיקת אימייל", Toast.LENGTH_LONG).show();
             }
         });
     }
