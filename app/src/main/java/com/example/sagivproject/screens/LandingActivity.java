@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 
-public class LandingActivity extends BaseActivity {
+public class LandingActivity extends BaseActivity implements BaseActivity.RequiresPermissions {
     Button btnToContact, btnToLogin, btnToRegister, btnNavToContact, btnNavToLogin, btnNavToRegister;
 
     @Override

@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseActivity extends AppCompatActivity {
+    public interface RequiresPermissions {
+    }
+
     protected DatabaseService databaseService;
 
     @Override
@@ -29,7 +32,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         //קיצור ל - ()DatabaseService.getInstance()
         databaseService = DatabaseService.getInstance();
 
-        checkPermissionsOncePerRun();
+        if (this instanceof RequiresPermissions) {
+            requestPermissions();
+        }
     }
 
     //התנתקות
@@ -48,11 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     //הרשאות
-    protected void checkPermissionsOncePerRun() {
-        if (permissionsAlreadyRequested()) {
-            return;
-        }
-
+    protected void requestPermissions() {
         List<String> permissions = new ArrayList<>();
         permissions.add(Manifest.permission.CAMERA);
         permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -65,37 +66,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             permissions.add(Manifest.permission.POST_NOTIFICATIONS);
         }
 
-        boolean allGranted = true;
-
-        for (int i = 0; i < permissions.size(); i++) {
-            String p = permissions.get(i);
-            boolean granted =
-                    ContextCompat.checkSelfPermission(this, p)
-                            == PackageManager.PERMISSION_GRANTED;
-
-            allGranted = allGranted && granted;
-        }
-
-        if (!allGranted) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    permissions.toArray(new String[0]),
-                    1001
-            );
-        }
-
-        markPermissionsRequested();
-    }
-
-    private boolean permissionsAlreadyRequested() {
-        return getSharedPreferences("app_prefs", MODE_PRIVATE)
-                .getBoolean("permissions_requested_this_run", false);
-    }
-
-    private void markPermissionsRequested() {
-        getSharedPreferences("app_prefs", MODE_PRIVATE)
-                .edit()
-                .putBoolean("permissions_requested_this_run", true)
-                .apply();
+        ActivityCompat.requestPermissions(
+                this,
+                permissions.toArray(new String[0]),
+                1001
+        );
     }
 }

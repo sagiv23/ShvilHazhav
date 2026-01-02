@@ -49,20 +49,25 @@ public class SplashActivity extends AppCompatActivity {
                                     SharedPreferencesUtil.signOutUser(SplashActivity.this);
                                     intent = new Intent(SplashActivity.this, LandingActivity.class);
                                 }
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
                             }
 
                             @Override
                             public void onFailed(Exception e) {
                                 SharedPreferencesUtil.signOutUser(SplashActivity.this);
+                                intent = new Intent(SplashActivity.this, LandingActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
                             }
                         });
                     }
                 }
                 else {
                     intent = new Intent(SplashActivity.this, LandingActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
             }
         });
         splashThread.start();

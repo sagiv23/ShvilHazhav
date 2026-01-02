@@ -35,7 +35,7 @@ import com.example.sagivproject.services.DatabaseService;
 import java.io.ByteArrayOutputStream;
  */
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements BaseActivity.RequiresPermissions {
     Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
     TextView txtHomePageTitle;
 
