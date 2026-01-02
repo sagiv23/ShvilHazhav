@@ -12,8 +12,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.bases.BaseForumActivity;
+import com.example.sagivproject.models.ForumMessage;
 
 public class AdminForumActivity extends BaseForumActivity implements BaseForumActivity.ForumPermissions {
     Button btnToAdminPage, btnSendMessage, btnNewMessages;

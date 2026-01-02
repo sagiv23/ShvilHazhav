@@ -1,8 +1,8 @@
 package com.example.sagivproject.models;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class User implements Serializable {
     private String uid;

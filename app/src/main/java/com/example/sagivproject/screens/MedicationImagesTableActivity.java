@@ -42,13 +42,13 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
     //פתיחת גלריה לבחירת תמונה
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    Uri imageUri = result.getData().getData();
-                    uploadImage(imageUri);
-                }
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                Uri imageUri = result.getData().getData();
+                uploadImage(imageUri);
             }
+        }
     );
 
     @Override

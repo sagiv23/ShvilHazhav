@@ -86,7 +86,7 @@
                         android:fontFamily="@font/text_hebrew" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_admin_to_GameLogsTable"
+                        android:id="@+id/btn_admin_to_MemoryGameLogsTable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="טבלת תיעוד המשחקים"

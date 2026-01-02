@@ -15,8 +15,8 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.DatabaseService;
-import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.utils.InputValidator;
+import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.HashMap;
 

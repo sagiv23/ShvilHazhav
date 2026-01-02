@@ -45,14 +45,14 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     private TextView tvTimer, tvTurnStatus, tvScore;
     private CountDownTimer turnTimer;
     private static final long TURN_TIME_LIMIT = 15000; //15 שניות
-    private boolean isWinRecorded = false; // דגל למניעת כפל ניצחונות
+    private boolean isWinRecorded = false; //דגל למניעת כפל ניצחונות
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_online_memory_game);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.onlineMemoryGamePage), (v, insets) -> {
+        setContentView(R.layout.activity_memory_game);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.memoryGamePage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

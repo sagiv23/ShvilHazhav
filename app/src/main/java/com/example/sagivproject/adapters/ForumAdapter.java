@@ -1,8 +1,12 @@
 package com.example.sagivproject.adapters;
 
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.format.DateFormat;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -10,18 +14,12 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
-
-import android.graphics.Typeface;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.view.MenuItem;
-
-import androidx.core.content.res.ResourcesCompat;
 
 import java.util.List;
 

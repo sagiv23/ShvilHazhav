@@ -2,7 +2,6 @@ package com.example.sagivproject.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 
 import androidx.annotation.Nullable;
 
