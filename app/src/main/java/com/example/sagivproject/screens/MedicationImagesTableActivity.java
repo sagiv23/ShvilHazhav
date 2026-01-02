@@ -127,12 +127,14 @@ public class MedicationImagesTableActivity extends BaseActivity {
             String base64 = ImageUtil.convertTo64Base(tempIv);
 
             if (base64 != null) {
-                String newId = databaseService.generateImageId();
+                int nextNumber = allImages.size() + 1;
+                String newId = "card" + nextNumber;
+
                 ImageData newImg = new ImageData(newId, base64);
                 databaseService.createImage(newImg, new DatabaseService.DatabaseCallback<Void>() {
                     @Override
                     public void onCompleted(Void object) {
-                        Toast.makeText(MedicationImagesTableActivity.this, "התמונה נוספה!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MedicationImagesTableActivity.this, "התמונה נוספה כ-" + newId, Toast.LENGTH_SHORT).show();
                         loadImages();
                     }
                     @Override
@@ -142,5 +144,27 @@ public class MedicationImagesTableActivity extends BaseActivity {
                 });
             }
         } catch (IOException e) { e.printStackTrace(); }
+    }
+
+    private void deleteImageAndReorder(ImageData imageToDelete) {
+        allImages.remove(imageToDelete);
+
+        for (int i = 0; i < allImages.size(); i++) {
+            allImages.get(i).setId("card" + (i + 1));
+        }
+
+        // 3. עדכון ה-Firebase (מחיקה וכתיבה מחדש)
+        databaseService.updateAllImages(allImages, new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void object) {
+                Toast.makeText(MedicationImagesTableActivity.this, "התמונה נמחקה והרשימה סודרה מחדש", Toast.LENGTH_SHORT).show();
+                loadImages();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בעדכון הרשימה", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

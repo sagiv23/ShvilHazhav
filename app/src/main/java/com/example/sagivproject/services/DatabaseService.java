@@ -724,21 +724,34 @@ public class DatabaseService {
 
     // endregion Game Section
 
-
-
-    //העלאת תמונות למסד נתונים - למחוק בסוף הפרויקט!
+    // region ImageMedication section
     public void getAllImages(DatabaseCallback<List<ImageData>> callback) {
         getDataList(IMAGES_PATH, ImageData.class, callback);
     }
     public String generateImageId() {
         return generateNewId(IMAGES_PATH);
     }
-    public void createImage(
-            @NonNull ImageData image,
-            @Nullable DatabaseCallback<Void> callback
-    ) {
+    public void createImage(@NonNull ImageData image, @Nullable DatabaseCallback<Void> callback) {
         writeData(IMAGES_PATH + "/" + image.getId(), image, callback);
     }
+
+    public void updateAllImages(List<ImageData> list, DatabaseCallback<Void> callback) {
+        //נמחוק את כל התמונות הקיימות ונכתוב את הרשימה המעודכנת
+        readData(IMAGES_PATH).removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (int i = 0; i < list.size(); i++) {
+                    ImageData img = list.get(i);
+                    writeData(IMAGES_PATH + "/" + img.getId(), img, null);
+                }
+                if (callback != null) callback.onCompleted(null);
+            } else if (callback != null) {
+                callback.onFailed(task.getException());
+            }
+        });
+    }
+
+    //העלאת תמונות למסד נתונים - למחוק בסוף הפרויקט!
+
     public void getImage(
             @NotNull String imageId,
             @NotNull DatabaseCallback<ImageData> callback
