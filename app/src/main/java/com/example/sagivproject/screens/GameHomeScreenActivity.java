@@ -122,6 +122,7 @@ public class GameHomeScreenActivity extends BaseActivity {
 
         TVStatusOfFindingEnemy.setVisibility(View.GONE);
         btnCancelFindEnemy.setVisibility(View.GONE);
+        btnFindEnemy.setVisibility(View.VISIBLE);
     }
 
     private void listenToRoom(String roomId) {

@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:text="שם פרטי + משפחה"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:fontFamily="@font/text_hebrew"
             android:gravity="right"
             android:ellipsize="end"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:text="email@example.com"
-            android:textSize="13sp"
+            android:textSize="17sp"
             android:fontFamily="@font/text_english"
             android:gravity="center"
             android:paddingHorizontal="4dp"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="משתמש"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:gravity="center"
             android:fontFamily="@font/text_hebrew" />
 
@@ -60,9 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="5"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textSize="25sp"
             android:textColor="@color/error"
+            android:fontFamily="@font/text_hebrew"
             android:gravity="center" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -35,14 +35,13 @@ import java.util.List;
 
 public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapter.MemoryGameListener {
     private RecyclerView recyclerCards;
-    Button btnExit;
     private boolean endDialogShown = false;
     private boolean localLock = false;
     private String roomId;
     private User user;
     private GameRoom currentRoom;
     private MemoryGameAdapter adapter;
-    private TextView tvTimer, tvTurnStatus, tvScore;
+    private TextView tvTimer, tvTurnStatus, tvScore, tvOpponentName;
     private CountDownTimer turnTimer;
     private static final long TURN_TIME_LIMIT = 15000; //15 שניות
     private boolean isWinRecorded = false; //דגל למניעת כפל ניצחונות
@@ -67,11 +66,12 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         tvTimer = findViewById(R.id.tv_OnlineMemoryGame_timer);
         tvTurnStatus = findViewById(R.id.tv_OnlineMemoryGame_turn_status);
         tvScore = findViewById(R.id.tv_OnlineMemoryGame_score);
+        tvOpponentName = findViewById(R.id.tv_OnlineMemoryGame_opponent_name);
 
         adapter = new MemoryGameAdapter(new ArrayList<>(), this);
         recyclerCards.setAdapter(adapter);
 
-        btnExit = findViewById(R.id.btn_OnlineMemoryGame_to_exit);
+        Button btnExit = findViewById(R.id.btn_OnlineMemoryGame_to_exit);
         btnExit.setOnClickListener(v -> showExitGameDialog());
 
         listenToGame();
@@ -180,7 +180,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     }
 
     private void handleCardSelection(int clickedIndex) {
-        List<Card> cards = currentRoom.getCards();
         Integer firstIndex = currentRoom.getFirstSelectedCardIndex();
 
         if (firstIndex == null) {
@@ -280,6 +279,12 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             public void onCompleted(GameRoom room) {
                 if (room == null) return;
                 currentRoom = room;
+
+                if (room.getPlayer1() != null && room.getPlayer2() != null) {
+                    String opponentName = user.getUid().equals(room.getPlayer1().getUid()) ?
+                            room.getPlayer2().getFullName() : room.getPlayer1().getFullName();
+                    tvOpponentName.setText("משחק נגד: " + opponentName);
+                }
 
                 updateScoreUI(room);
 

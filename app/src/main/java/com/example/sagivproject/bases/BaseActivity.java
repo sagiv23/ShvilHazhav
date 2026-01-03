@@ -2,7 +2,6 @@ package com.example.sagivproject.bases;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -10,7 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.sagivproject.screens.LoginActivity;
 import com.example.sagivproject.screens.dialogs.LogoutDialog;
@@ -66,10 +64,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             permissions.add(Manifest.permission.POST_NOTIFICATIONS);
         }
 
-        ActivityCompat.requestPermissions(
-                this,
-                permissions.toArray(new String[0]),
-                1001
-        );
+        ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), 1001);
     }
 }
