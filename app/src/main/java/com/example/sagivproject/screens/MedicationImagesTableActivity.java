@@ -33,11 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MedicationImagesTableActivity extends BaseActivity {
-    Button btnToAdminPage, btnAdd;
-    RecyclerView recyclerView;
+    private Button btnToAdminPage, btnAdd;
+    private RecyclerView recyclerView;
     private MedicationImagesTableAdapter adapter;
-    List<ImageData> allImages = new ArrayList<>();
-    List<ImageData> filteredList = new ArrayList<>();
+    private List<ImageData> allImages = new ArrayList<>(), filteredList = new ArrayList<>();
     private TextInputEditText etSearch;
 
     //פתיחת גלריה לבחירת תמונה

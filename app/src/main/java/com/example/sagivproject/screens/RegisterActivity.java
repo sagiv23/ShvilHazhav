@@ -21,8 +21,8 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 import java.util.HashMap;
 
 public class RegisterActivity extends BaseActivity {
-    Button btnToContact, btnToLanding, btnToLogin, btnRegister;
-    EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword;
+    private Button btnToContact, btnToLanding, btnToLogin, btnRegister;
+    private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

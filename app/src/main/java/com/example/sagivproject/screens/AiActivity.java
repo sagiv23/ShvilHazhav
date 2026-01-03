@@ -33,7 +33,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AiActivity extends BaseActivity implements BaseActivity.RequiresPermissions {
-    Button btnToMain, btnToContact, btnToDetailsAboutUser, send, btnToExit;
+    private Button btnToMain, btnToContact, btnToDetailsAboutUser, send, btnToExit;
     private ProgressBar progressBar;
     private EditText questionInput;
     private TextView answerView;

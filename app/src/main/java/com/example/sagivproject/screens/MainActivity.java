@@ -36,8 +36,8 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class MainActivity extends BaseActivity implements BaseActivity.RequiresPermissions {
-    Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
-    TextView txtHomePageTitle;
+    private Button btnToContact, btnToDetailsAboutUser, btnToMedicationList, btnToForum, btnToAi, btnToGameHomeScreen, btnToExit;
+    private TextView txtHomePageTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

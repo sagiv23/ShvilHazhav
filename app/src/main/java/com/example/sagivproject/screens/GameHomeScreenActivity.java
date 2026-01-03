@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 
 public class GameHomeScreenActivity extends BaseActivity {
-    Button btnToMain, btnToContact, btnToDetailsAboutUser,btnFindEnemy, btnCancelFindEnemy, btnToExit;
+    private Button btnToMain, btnToContact, btnToDetailsAboutUser,btnFindEnemy, btnCancelFindEnemy, btnToExit;
     private TextView TVictories, TVStatusOfFindingEnemy;
     private GameRoom currentRoom;
     private boolean gameStarted = false;

@@ -35,8 +35,8 @@ import java.util.List;
 
 public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapter.MemoryGameListener {
     private RecyclerView recyclerCards;
-    private boolean endDialogShown = false;
-    private boolean localLock = false;
+    private boolean endDialogShown = false, localLock = false;
+    private boolean isWinRecorded = false; //דגל למניעת כפל ניצחונות
     private String roomId;
     private User user;
     private GameRoom currentRoom;
@@ -44,7 +44,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     private TextView tvTimer, tvTurnStatus, tvScore, tvOpponentName;
     private CountDownTimer turnTimer;
     private static final long TURN_TIME_LIMIT = 15000; //15 שניות
-    private boolean isWinRecorded = false; //דגל למניעת כפל ניצחונות
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

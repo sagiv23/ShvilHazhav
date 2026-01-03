@@ -16,9 +16,9 @@ import com.example.sagivproject.bases.BaseForumActivity;
 import com.example.sagivproject.models.ForumMessage;
 
 public class AdminForumActivity extends BaseForumActivity implements BaseForumActivity.ForumPermissions {
-    Button btnToAdminPage, btnSendMessage, btnNewMessages;
-    EditText edtNewMessage;
-    RecyclerView recyclerForum;
+    private Button btnToAdminPage, btnSendMessage, btnNewMessages;
+    private EditText edtNewMessage;
+    private RecyclerView recyclerForum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

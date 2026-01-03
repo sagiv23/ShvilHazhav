@@ -13,7 +13,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 
 public class LandingActivity extends BaseActivity implements BaseActivity.RequiresPermissions {
-    Button btnToContact, btnToLogin, btnToRegister, btnNavToContact, btnNavToLogin, btnNavToRegister;
+    private Button btnToContact, btnToLogin, btnToRegister, btnNavToContact, btnNavToLogin, btnNavToRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -10,9 +10,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.sagivproject.R;
 
 public class NotificationService {
-    private static final String CHANNEL_ID = "medication_notifications";
-    private static final String CHANNEL_NAME = "תזכורות תרופות";
-
+    private static final String CHANNEL_ID = "medication_notifications", CHANNEL_NAME = "תזכורות תרופות";
     private final Context context;
     private final NotificationManager manager;
 

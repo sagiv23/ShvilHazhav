@@ -27,12 +27,12 @@ import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class DetailsAboutUserActivity extends BaseActivity {
-    Button btnToMain, btnToDetailsAboutUser, btnToContact, btnToExit, btnToAdmin, btnEditUser;
-    View separatorLine;
-    LinearLayout topMenu;
+    private Button btnToMain, btnToDetailsAboutUser, btnToContact, btnToExit, btnToAdmin, btnEditUser;
+    private View separatorLine;
+    private LinearLayout topMenu;
     private TextView txtTitle, txtFirstName, txtLastName, txtEmail, txtPassword;
     private ImageView imgUserProfile;
-    Button btnChangePhoto;
+    private Button btnChangePhoto;
 
     private static final int REQ_CAMERA = 100;
     private static final int REQ_GALLERY = 200;

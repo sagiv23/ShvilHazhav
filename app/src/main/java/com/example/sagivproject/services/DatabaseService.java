@@ -750,6 +750,8 @@ public class DatabaseService {
         });
     }
 
+    // endregion ImageMedication section
+
     //העלאת תמונות למסד נתונים - למחוק בסוף הפרויקט!
 
     public void getImage(

@@ -1,6 +1,8 @@
 package com.example.sagivproject.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 
 public class MemoryGameLogsTableActivity extends AppCompatActivity {
+    private Button btnToAdminPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +25,8 @@ public class MemoryGameLogsTableActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        btnToAdminPage = findViewById(R.id.btn_MemoryGameLogsTable_to_admin);
+        btnToAdminPage.setOnClickListener(view -> startActivity(new Intent(MemoryGameLogsTableActivity.this, AdminPageActivity.class)));
     }
 }

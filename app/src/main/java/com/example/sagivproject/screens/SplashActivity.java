@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
 
         Thread splashThread = new Thread(() -> {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(2000);
             } catch (InterruptedException ignored) {
             } finally {
                 if (SharedPreferencesUtil.isUserLoggedIn(this)) {

@@ -283,7 +283,7 @@
                         android:id="@+id/txt_GameHomeScreen_score_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="• התאמה נכונה: 1+ נקודה.\n• טעות: 1- נקודה (המינימום הוא 0)."
+                        android:text="• התאמה נכונה: 1+ נקודה."
                         android:textSize="22sp"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="right" />
@@ -305,8 +305,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="8dp"
+                android:paddingHorizontal="1dp"
+                android:paddingVertical="10dp"
                 android:layout_marginTop="15dp"
                 android:weightSum="10">
 
@@ -314,8 +314,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:text="שם פרטי + משפחה"
-                    android:gravity="right"
+                    android:text="שם מלא"
+                    android:gravity="center"
                     android:textSize="18sp"
                     android:fontFamily="@font/headline_hebrew"/>
                 <TextView
@@ -347,7 +347,8 @@
                 android:id="@+id/recyclerView_GameHomeScreen_leaderboard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="5dp"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

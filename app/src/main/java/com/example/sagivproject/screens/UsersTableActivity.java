@@ -36,11 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsersTableActivity extends BaseActivity {
-    Button btnToAdminPage, btnAddUser;
-    RecyclerView recyclerView;
+    private Button btnToAdminPage, btnAddUser;
+    private RecyclerView recyclerView;
     private UsersTableAdapter adapter;
-    private final List<User> usersList = new ArrayList<>();
-    private final List<User> filteredList = new ArrayList<>();
+    private final List<User> usersList = new ArrayList<>(), filteredList = new ArrayList<>();
     private EditText editSearch;
     private Spinner spinnerSearchType;
     private User currentUser;

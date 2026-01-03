@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class MedicationListActivity extends BaseActivity {
-    Button btnToMain, btnToContact, btnToDetailsAboutUser, btnAddMedication, btnToExit;
-    RecyclerView recyclerViewMedications;
+    private Button btnToMain, btnToContact, btnToDetailsAboutUser, btnAddMedication, btnToExit;
+    private RecyclerView recyclerViewMedications;
 
     private MedicationAdapter adapter;
     ArrayList<Medication> medications = new ArrayList<>();

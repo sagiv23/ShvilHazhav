@@ -16,8 +16,8 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class AdminPageActivity extends BaseActivity {
-    Button btnToUserTable, btnToMedicationsTable, btnToMemoryGameLogsTable, btnToForum, btnToDetailsAboutUser, btnLogout;
-    TextView txtAdminTitle;
+    private Button btnToUserTable, btnToMedicationsTable, btnToMemoryGameLogsTable, btnToForum, btnToDetailsAboutUser, btnLogout;
+    private TextView txtAdminTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
