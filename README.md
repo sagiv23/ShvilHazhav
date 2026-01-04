@@ -55,7 +55,7 @@ line-height:1.7;
 
   <h3 style="color:#0f766e;">🧠 משחק זיכרון אונליין</h3>
   <ul>
-    <li>משחק התאמות (Memory Game)</li>
+    <li>משחק זיכרון (Memory Game)</li>
     <li>משחק אונליין אחד-על-אחד</li>
     <li>
       ניקוד:
