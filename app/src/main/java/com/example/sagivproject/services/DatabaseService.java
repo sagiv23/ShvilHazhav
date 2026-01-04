@@ -533,6 +533,29 @@ public class DatabaseService {
         });
     }
 
+    /// Listen to all game rooms in real-time
+    /// @param callback the callback that will receive the updated list of rooms
+    public void getAllRoomsRealtime(@NotNull final DatabaseCallback<List<GameRoom>> callback) {
+        readData(ROOMS_PATH).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<GameRoom> roomList = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    GameRoom room = child.getValue(GameRoom.class);
+                    if (room != null) {
+                        roomList.add(room);
+                    }
+                }
+                callback.onCompleted(roomList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailed(error.toException());
+            }
+        });
+    }
+
     /// listen in realtime to changes in a specific room status
     /// used mainly before the game starts, to detect:
     ///     - when the room status becomes "playing"

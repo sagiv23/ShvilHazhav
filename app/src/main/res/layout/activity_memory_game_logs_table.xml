@@ -39,82 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_MemoryGameLogsTable_add_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="הוספת משתמש"
-        android:textSize="22sp"
-        android:fontFamily="@font/text_hebrew"
-        app:cornerRadius="20dp"
-        app:icon="@drawable/ic_add"
-        app:iconGravity="textStart"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/txt_MemoryGameLogsTable_Title"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- כרטיס חיפוש -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/searchCard_MemoryGameLogsTable"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="20dp"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="4dp"
-        app:strokeColor="?attr/colorOutline"
-        app:layout_constraintTop_toBottomOf="@id/btn_MemoryGameLogsTable_add_user"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="חפש לפי:"
-                android:textSize="25sp"
-                android:fontFamily="@font/text_hebrew"/>
-
-            <Spinner
-                android:id="@+id/spinner_MemoryGameLogsTable_search_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:entries="@array/search_types"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="8dp"
-                android:hint="הקלד כאן..."
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="1dp"
-                android:fontFamily="@font/text_hebrew">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_MemoryGameLogsTable_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:inputType="text"
-                    android:fontFamily="@font/text_hebrew"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_MemoryGameLogsTable"
@@ -125,7 +49,7 @@
         android:layout_marginTop="12dp"
         android:paddingBottom="32dp"
         android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/searchCard_MemoryGameLogsTable"
+        app:layout_constraintTop_toBottomOf="@id/txt_MemoryGameLogsTable_Title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

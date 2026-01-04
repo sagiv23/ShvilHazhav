@@ -51,9 +51,10 @@
         app:iconGravity="textStart"
         app:iconPadding="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="80dp"
         app:layout_constraintTop_toBottomOf="@id/txtMedicineImagesTablePageTitle"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <!-- כרטיס חיפוש -->
     <com.google.android.material.card.MaterialCardView

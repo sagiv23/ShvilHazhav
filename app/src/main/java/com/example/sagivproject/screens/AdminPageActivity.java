@@ -32,7 +32,7 @@ public class AdminPageActivity extends BaseActivity {
 
         btnToUserTable = findViewById(R.id.btn_admin_to_UsersTablePage);
         btnToMedicationsTable = findViewById(R.id.btn_admin_to_MedicineImagesTablePage);
-        btnToMemoryGameLogsTable = findViewById(R.id.btn_admin_to_MemoryGameLogsTable);
+        btnToMemoryGameLogsTable = findViewById(R.id.btn_admin_to_MemoryGameLogsTablePage);
         btnToForum = findViewById(R.id.btn_admin_to_AdminForum);
         btnToDetailsAboutUser = findViewById(R.id.btn_admin_to_DetailsAboutUser);
         btnLogout = findViewById(R.id.btn_admin_to_exit);
