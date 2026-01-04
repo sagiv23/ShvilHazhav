@@ -9,7 +9,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -53,9 +52,6 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
             @Override
             public void onCompleted(List<GameRoom> allRooms) {
                 if (allRooms == null) return;
-
-                // ניתן לבחור האם להציג את כל המשחקים או רק כאלו שהסתיימו
-                // בדוגמה זו נציג את כולם כדי שתראה את השינויים בזמן אמת
                 adapter.updateData(allRooms);
             }
 

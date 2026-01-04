@@ -16,7 +16,7 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 public class AdminPageActivity extends BaseActivity {
-    private Button btnToUserTable, btnToMedicationsTable, btnToMemoryGameLogsTable, btnToForum, btnToDetailsAboutUser, btnLogout;
+    private Button btnToUserTable, btnToMemoryGameLogsTable, btnToMedicationsTable, btnToSystemFunctions, btnToForum, btnToDetailsAboutUser, btnLogout;
     private TextView txtAdminTitle;
 
     @Override
@@ -33,6 +33,7 @@ public class AdminPageActivity extends BaseActivity {
         btnToUserTable = findViewById(R.id.btn_admin_to_UsersTablePage);
         btnToMedicationsTable = findViewById(R.id.btn_admin_to_MedicineImagesTablePage);
         btnToMemoryGameLogsTable = findViewById(R.id.btn_admin_to_MemoryGameLogsTablePage);
+        btnToSystemFunctions = findViewById(R.id.btn_admin_to_SystemFunctionsPage);
         btnToForum = findViewById(R.id.btn_admin_to_AdminForum);
         btnToDetailsAboutUser = findViewById(R.id.btn_admin_to_DetailsAboutUser);
         btnLogout = findViewById(R.id.btn_admin_to_exit);
@@ -41,6 +42,7 @@ public class AdminPageActivity extends BaseActivity {
         btnToUserTable.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, UsersTableActivity.class)));
         btnToMedicationsTable.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, MedicationImagesTableActivity.class)));
         btnToMemoryGameLogsTable.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, MemoryGameLogsTableActivity.class)));
+        btnToSystemFunctions.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, SystemFunctionsActivity.class)));
         btnToForum.setOnClickListener(v -> startActivity(new Intent(AdminPageActivity.this, AdminForumActivity.class)));
         btnToDetailsAboutUser.setOnClickListener(view -> startActivity(new Intent(AdminPageActivity.this, DetailsAboutUserActivity.class)));
         btnLogout.setOnClickListener(view -> logout());

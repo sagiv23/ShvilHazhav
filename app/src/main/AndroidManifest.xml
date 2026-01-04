@@ -23,6 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SagivProject">
         <activity
+            android:name=".screens.SystemFunctionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.MemoryGameLogsTableActivity"
             android:exported="false" />
         <activity
