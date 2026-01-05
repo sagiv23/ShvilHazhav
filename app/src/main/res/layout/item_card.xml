@@ -4,36 +4,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="1dp"
     app:strokeColor="?attr/colorOutline">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="12dp">
 
+        <!-- תמונה -->
         <ImageView
             android:id="@+id/img_ItemCard_card_image"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/fold_card_img" />
+            android:scaleType="centerInside"
+            android:src="@drawable/fold_card_img"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="1:1" />
 
+        <!-- ID -->
         <TextView
             android:id="@+id/txt_ItemCard_image_id"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:gravity="center"
             android:text="ID: card1"
-            android:textSize="17sp"
-            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="#555"
             android:fontFamily="@font/text_english"
+            app:layout_constraintTop_toBottomOf="@id/img_ItemCard_card_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:visibility="gone"/>
-    </LinearLayout>
+
+        <!-- כפתור מחיקה -->
+        <ImageButton
+            android:id="@+id/btn_ItemCard_delete"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

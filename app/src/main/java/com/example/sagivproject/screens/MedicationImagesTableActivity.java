@@ -67,7 +67,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recycler_MedicineImagesTablePage);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        adapter = new MedicationImagesTableAdapter(filteredList);
+        adapter = new MedicationImagesTableAdapter(filteredList, this::deleteImageAndReorder);
         recyclerView.setAdapter(adapter);
 
         etSearch = findViewById(R.id.edit_MedicineImagesTablePage_search);
@@ -152,7 +152,6 @@ public class MedicationImagesTableActivity extends BaseActivity {
             allImages.get(i).setId("card" + (i + 1));
         }
 
-        // 3. עדכון ה-Firebase (מחיקה וכתיבה מחדש)
         databaseService.updateAllImages(allImages, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {

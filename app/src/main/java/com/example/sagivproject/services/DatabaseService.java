@@ -751,9 +751,7 @@ public class DatabaseService {
     public void getAllImages(DatabaseCallback<List<ImageData>> callback) {
         getDataList(IMAGES_PATH, ImageData.class, callback);
     }
-    public String generateImageId() {
-        return generateNewId(IMAGES_PATH);
-    }
+
     public void createImage(@NonNull ImageData image, @Nullable DatabaseCallback<Void> callback) {
         writeData(IMAGES_PATH + "/" + image.getId(), image, callback);
     }

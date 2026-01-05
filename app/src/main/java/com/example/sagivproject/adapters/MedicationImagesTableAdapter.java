@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,9 +19,15 @@ import java.util.List;
 
 public class MedicationImagesTableAdapter extends RecyclerView.Adapter<MedicationImagesTableAdapter.ViewHolder> {
     private List<ImageData> imageList;
+    private OnDeleteClickListener deleteListener;
 
-    public MedicationImagesTableAdapter(List<ImageData> imageList) {
+    public interface OnDeleteClickListener {
+        void onDeleteClick(ImageData imageData);
+    }
+
+    public MedicationImagesTableAdapter(List<ImageData> imageList, OnDeleteClickListener listener) {
         this.imageList = imageList;
+        this.deleteListener = listener;
     }
 
     @NonNull
@@ -36,6 +43,7 @@ public class MedicationImagesTableAdapter extends RecyclerView.Adapter<Medicatio
 
         if (data.getId() != null) {
             holder.txtId.setVisibility(View.VISIBLE);
+            holder.btnDelete.setVisibility(View.VISIBLE);
             holder.txtId.setText("ID: " + data.getId());
         }
 
@@ -43,6 +51,10 @@ public class MedicationImagesTableAdapter extends RecyclerView.Adapter<Medicatio
             Bitmap bitmap = ImageUtil.convertFrom64base(data.getBase64());
             holder.imgView.setImageBitmap(bitmap);
         }
+
+        holder.btnDelete.setOnClickListener(v -> {
+            if (deleteListener != null) deleteListener.onDeleteClick(data);
+        });
     }
 
     @Override
@@ -51,10 +63,13 @@ public class MedicationImagesTableAdapter extends RecyclerView.Adapter<Medicatio
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgView;
         TextView txtId;
+        ImageButton btnDelete;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imgView = itemView.findViewById(R.id.img_ItemCard_card_image);
             txtId = itemView.findViewById(R.id.txt_ItemCard_image_id);
+            btnDelete = itemView.findViewById(R.id.btn_ItemCard_delete);
         }
     }
 }
