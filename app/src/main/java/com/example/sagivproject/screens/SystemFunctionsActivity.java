@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -38,6 +39,7 @@ import okhttp3.Response;
 
 public class SystemFunctionsActivity extends BaseActivity {
     private Button btnToAdminPage, btnCheckAi, btnCheckMedications, btnCheckGame;
+    private TextView txtDescription;
 
     private static final String API_KEY = EncryptionAPIKey.decode(BuildConfig.API_KEY);
     private static final String MODEL = "models/gemini-2.5-flash";
@@ -61,6 +63,7 @@ public class SystemFunctionsActivity extends BaseActivity {
         });
 
         btnToAdminPage = findViewById(R.id.btn_SystemFunctionsPage_to_admin);
+        txtDescription = findViewById(R.id.txt_SystemFunctionsPage_description);
         btnCheckAi = findViewById(R.id.btn_SystemFunctionsPage_ai);
         btnCheckMedications = findViewById(R.id.btn_SystemFunctionsPage_medicationList);
         btnCheckGame = findViewById(R.id.btn_SystemFunctionsPage_memoryGame);
@@ -69,6 +72,12 @@ public class SystemFunctionsActivity extends BaseActivity {
         btnCheckAi.setOnClickListener(v -> { checkAi(); });
         btnCheckMedications.setOnClickListener(v -> { checkMedications(); });
         btnCheckGame.setOnClickListener(v -> { checkGame(); });
+    }
+
+    private void showSystemErrors(String text) {
+        runOnUiThread(() -> {
+            txtDescription.setText(text);
+        });
     }
 
     private void checkAi() {
@@ -98,6 +107,11 @@ public class SystemFunctionsActivity extends BaseActivity {
                 public void onFailure(Call call, IOException e) {
                     runOnUiThread(() -> {
                         Log.e("SystemFunctionsActivity", "AI Check failed", e);
+                        showSystemErrors(
+                                "שגיאה ביועץ AI:\n" +
+                                        "• כשל בתקשורת עם השרת\n" +
+                                        "• מפתח API לא תקין או תגובת שרת שגויה"
+                        );
                         Toast.makeText(SystemFunctionsActivity.this, "בדיקת AI נכשלה: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     });
                 }
@@ -108,10 +122,16 @@ public class SystemFunctionsActivity extends BaseActivity {
                     runOnUiThread(() -> {
                         if (!response.isSuccessful()) {
                             Log.e("SystemFunctionsActivity", "AI Check failed with code: " + response.code() + " " + r);
-                            Toast.makeText(SystemFunctionsActivity.this, "בדיקת AI נכשלה עם קוד: " + response.code(), Toast.LENGTH_LONG).show();
+                            showSystemErrors(
+                                    "שגיאה ביועץ AI:\n" +
+                                            "• כשל בתקשורת עם השרת\n" +
+                                            "• מפתח API לא תקין או תגובת שרת שגויה"
+                            );
+                            Toast.makeText(SystemFunctionsActivity.this, "בדיקת AI נכשלה: " + response.code(), Toast.LENGTH_LONG).show();
                         } else {
                             Log.d("SystemFunctionsActivity", "AI Check successful");
-                            Toast.makeText(SystemFunctionsActivity.this, "בדיקת AI עברה בהצלחה", Toast.LENGTH_SHORT).show();
+                            showSystemErrors("בדיקת יועץ ה-AI עברה בהצלחה ללא שגיאות");
+                            Toast.makeText(SystemFunctionsActivity.this, "בדיקת יועץ ה-AI עברה בהצלחה ללא שגיאות", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -165,9 +185,13 @@ public class SystemFunctionsActivity extends BaseActivity {
                             if (usersProcessed.incrementAndGet() == userList.size()) {
                                 runOnUiThread(() -> {
                                     if (errors.isEmpty()) {
+                                        showSystemErrors(
+                                                "בדיקת רשימת התרופות הסתיימה ללא שגיאות"
+                                        );
                                         Toast.makeText(SystemFunctionsActivity.this, "בדיקת התרופות הסתיימה ללא שגיאות", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        String errorString = String.join("\n", errors);
+                                        String errorString = "נמצאו שגיאות ברשימת התרופות:\n\n• " + String.join("\n• ", errors);
+                                        showSystemErrors(errorString);
                                         Toast.makeText(SystemFunctionsActivity.this, "נמצאו שגיאות:\n" + errorString, Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -181,7 +205,8 @@ public class SystemFunctionsActivity extends BaseActivity {
                             errors.add(errorMsg);
                             if (usersProcessed.incrementAndGet() == userList.size()) {
                                 runOnUiThread(() -> {
-                                    String errorString = String.join("\n", errors);
+                                    String errorString = "נמצאו שגיאות ברשימת התרופות:\n\n• " + String.join("\n• ", errors);
+                                    showSystemErrors(errorString);
                                     Toast.makeText(SystemFunctionsActivity.this, "נמצאו שגיאות:\n" + errorString, Toast.LENGTH_LONG).show();
                                 });
                             }
@@ -200,6 +225,10 @@ public class SystemFunctionsActivity extends BaseActivity {
 
     private void checkGame() {
         Log.d("SystemFunctionsActivity", "Checking Game...");
+        showSystemErrors(
+                "בדיקת משחק הזיכרון טרם מומשה\n" +
+                        "ייתכן וקיימות תקלות שאינן מזוהות כרגע"
+        );
         // TODO: Implement game check
         Toast.makeText(this, "בודק את המשחקים...", Toast.LENGTH_SHORT).show();
     }
