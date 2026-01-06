@@ -1,9 +1,14 @@
 package com.example.sagivproject.adapters;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.utils.ImageUtil;
 
 import java.util.List;
 
@@ -50,6 +56,17 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         holder.txtUserIsAdmin.setText("מנהל: " + (user.getIsAdmin() ? "כן" : "לא"));
         holder.txtUserWins.setText("ניצחונות: " + user.getCountWins());
 
+        String base64Image = user.getProfileImage();
+
+        if (base64Image != null && !base64Image.isEmpty()) {
+            Bitmap bmp = ImageUtil.convertFrom64base(base64Image);
+
+            if (bmp != null) {
+                holder.imgUserProfile.setImageBitmap(bmp);
+                holder.imgUserProfile.setVisibility(View.VISIBLE);
+            }
+        }
+
         boolean isSelf = user.equals(currentUser);
 
         if (isSelf) {
@@ -83,6 +100,17 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
             }
             return false;
         });
+
+        holder.imgUserProfile.setOnClickListener(v -> {
+            Drawable drawable = holder.imgUserProfile.getDrawable();
+
+            if (drawable != null) {
+                showFullImageDialog(
+                        holder.itemView.getContext(),
+                        drawable
+                );
+            }
+        });
     }
 
     @Override
@@ -90,16 +118,36 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         return users.size();
     }
 
+    public static void showFullImageDialog(Context context, Drawable drawable) {
+        if (drawable == null) return;
+
+        Dialog dialog = new Dialog(
+                context,
+                android.R.style.Theme_Black_NoTitleBar_Fullscreen
+        );
+
+        dialog.setContentView(R.layout.dialog_full_image);
+
+        ImageView dialogImage = dialog.findViewById(R.id.dialogImage);
+        dialogImage.setImageDrawable(drawable);
+
+        dialogImage.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         TextView txtUserFullName, txtUserEmail, txtUserPassword, txtUserIsAdmin, txtUserWins;
         ImageButton btnDeleteUser, btnToggleAdmin;
+        ImageView imgUserProfile;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtUserFullName = itemView.findViewById(R.id.txtUserFullName);
+            txtUserFullName = itemView.findViewById(R.id.txt_UserRow_fullName);
             txtUserEmail = itemView.findViewById(R.id.txt_UserRow_email);
             txtUserPassword = itemView.findViewById(R.id.txt_UserRow_password);
             txtUserIsAdmin = itemView.findViewById(R.id.txt_UserRow_IsAdmin);
+            imgUserProfile = itemView.findViewById(R.id.img_UserRow_userProfile);
             txtUserWins = itemView.findViewById(R.id.txt_UserRow_wins);
             btnDeleteUser = itemView.findViewById(R.id.btn_UserRow_DeleteUser);
             btnToggleAdmin = itemView.findViewById(R.id.btn_UserRow_MakeAdmin);
