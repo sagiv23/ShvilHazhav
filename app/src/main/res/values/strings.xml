@@ -26,6 +26,8 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 
+    <string name="splash_quote">\"מנגינות מדומות, משטות, מזייפות, מטשטשות לי את שביל הזהב...\"</string>
+
     <string-array name="search_types">
         <item>שם פרטי</item>
         <item>שם משפחה</item>

@@ -102,15 +102,9 @@ public class UsersTableActivity extends BaseActivity {
                         Bitmap bitmap = ImageUtil.convertFrom64base(base64Image);
                         if (bitmap == null) return;
 
-                        Drawable drawable = new BitmapDrawable(
-                                getResources(),
-                                bitmap
-                        );
+                        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
 
-                        new FullImageDialog(
-                                UsersTableActivity.this,
-                                drawable
-                        ).show();
+                        new FullImageDialog(UsersTableActivity.this, drawable).show();
                     }
                 });
 

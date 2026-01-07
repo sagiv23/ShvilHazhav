@@ -55,9 +55,7 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         holder.itemView.setScaleY(1f);
         holder.itemView.setAlpha(1f);
 
-        // לוגיקת הצגת הקלף
         if (card.getIsMatched() || card.getIsRevealed()) {
-            // המרה של מחרוזת ה-Base64 ל-Bitmap והצגתו
             if (card.getBase64Content() != null) {
                 byte[] decodedString = Base64.decode(card.getBase64Content(), Base64.DEFAULT);
                 Bitmap decodedByte = android.graphics.BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -68,7 +66,6 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
                 holder.itemView.setAlpha(0.6f);
             }
         } else {
-            // הצגת גב הקלף מה-drawable המקומי
             holder.cardImage.setImageResource(R.drawable.fold_card_img);
         }
 
