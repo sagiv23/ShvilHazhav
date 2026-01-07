@@ -1,7 +1,10 @@
 package com.example.sagivproject.screens;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,7 +32,9 @@ import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.AddUserDialog;
 import com.example.sagivproject.screens.dialogs.EditUserDialog;
+import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.services.DatabaseService;
+import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -67,22 +72,47 @@ public class UsersTableActivity extends BaseActivity {
             }).show();
         });
 
-        adapter = new UsersTableAdapter(filteredList, currentUser, new UsersTableAdapter.OnUserActionListener() {
-            @Override
-            public void onToggleAdmin(User user) {
-                handleToggleAdmin(user);
-            }
+        adapter = new UsersTableAdapter(filteredList, currentUser,
+                new UsersTableAdapter.OnUserActionListener() {
 
-            @Override
-            public void onDeleteUser(User user) {
-                handleDeleteUser(user);
-            }
+                    @Override
+                    public void onToggleAdmin(User user) {
+                        handleToggleAdmin(user);
+                    }
 
-            @Override
-            public void onUserClicked(User clickedUser) {
-                new EditUserDialog(UsersTableActivity.this, clickedUser, () -> { loadUsers(); }).show();
-            }
-        });
+                    @Override
+                    public void onDeleteUser(User user) {
+                        handleDeleteUser(user);
+                    }
+
+                    @Override
+                    public void onUserClicked(User clickedUser) {
+                        new EditUserDialog(
+                                UsersTableActivity.this,
+                                clickedUser,
+                                () -> loadUsers()
+                        ).show();
+                    }
+
+                    @Override
+                    public void onUserImageClicked(User user) {
+                        String base64Image = user.getProfileImage();
+                        if (base64Image == null || base64Image.isEmpty()) return;
+
+                        Bitmap bitmap = ImageUtil.convertFrom64base(base64Image);
+                        if (bitmap == null) return;
+
+                        Drawable drawable = new BitmapDrawable(
+                                getResources(),
+                                bitmap
+                        );
+
+                        new FullImageDialog(
+                                UsersTableActivity.this,
+                                drawable
+                        ).show();
+                    }
+                });
 
         recyclerView = findViewById(R.id.recycler_UsersTable);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

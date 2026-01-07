@@ -18,22 +18,24 @@ import com.example.sagivproject.utils.ImageUtil;
 import java.util.List;
 
 public class MedicationImagesTableAdapter extends RecyclerView.Adapter<MedicationImagesTableAdapter.ViewHolder> {
-    private List<ImageData> imageList;
-    private OnDeleteClickListener deleteListener;
+    private final List<ImageData> imageList;
+    private final OnImageActionListener listener;
 
-    public interface OnDeleteClickListener {
-        void onDeleteClick(ImageData imageData);
+    public interface OnImageActionListener {
+        void onDeleteImage(ImageData image);
+        void onImageClicked(ImageData image);
     }
 
-    public MedicationImagesTableAdapter(List<ImageData> imageList, OnDeleteClickListener listener) {
+    public MedicationImagesTableAdapter(List<ImageData> imageList, OnImageActionListener listener) {
         this.imageList = imageList;
-        this.deleteListener = listener;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_card, parent, false);
         return new ViewHolder(view);
     }
 
@@ -43,24 +45,37 @@ public class MedicationImagesTableAdapter extends RecyclerView.Adapter<Medicatio
 
         if (data.getId() != null) {
             holder.txtId.setVisibility(View.VISIBLE);
-            holder.btnDelete.setVisibility(View.VISIBLE);
             holder.txtId.setText("ID: " + data.getId());
+        } else {
+            holder.txtId.setVisibility(View.GONE);
         }
+
+        holder.btnDelete.setVisibility(View.VISIBLE);
 
         if (data.getBase64() != null) {
             Bitmap bitmap = ImageUtil.convertFrom64base(data.getBase64());
             holder.imgView.setImageBitmap(bitmap);
         }
 
+        holder.imgView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onImageClicked(data);
+            }
+        });
+
         holder.btnDelete.setOnClickListener(v -> {
-            if (deleteListener != null) deleteListener.onDeleteClick(data);
+            if (listener != null) {
+                listener.onDeleteImage(data);
+            }
         });
     }
 
     @Override
-    public int getItemCount() { return imageList.size(); }
+    public int getItemCount() {
+        return imageList.size();
+    }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgView;
         TextView txtId;
         ImageButton btnDelete;

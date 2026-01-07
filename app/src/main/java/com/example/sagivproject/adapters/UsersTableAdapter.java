@@ -1,9 +1,6 @@
 package com.example.sagivproject.adapters;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +24,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         void onToggleAdmin(User user);
         void onDeleteUser(User user);
         void onUserClicked(User user);
+        void onUserImageClicked(User user);
     }
 
     private final List<User> users;
@@ -102,13 +100,8 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         });
 
         holder.imgUserProfile.setOnClickListener(v -> {
-            Drawable drawable = holder.imgUserProfile.getDrawable();
-
-            if (drawable != null) {
-                showFullImageDialog(
-                        holder.itemView.getContext(),
-                        drawable
-                );
+            if (listener != null) {
+                listener.onUserImageClicked(user);
             }
         });
     }
@@ -116,24 +109,6 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
     @Override
     public int getItemCount() {
         return users.size();
-    }
-
-    public static void showFullImageDialog(Context context, Drawable drawable) {
-        if (drawable == null) return;
-
-        Dialog dialog = new Dialog(
-                context,
-                android.R.style.Theme_Black_NoTitleBar_Fullscreen
-        );
-
-        dialog.setContentView(R.layout.dialog_full_image);
-
-        ImageView dialogImage = dialog.findViewById(R.id.dialogImage);
-        dialogImage.setImageDrawable(drawable);
-
-        dialogImage.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {

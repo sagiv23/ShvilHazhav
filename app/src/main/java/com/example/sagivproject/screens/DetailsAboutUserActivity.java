@@ -1,6 +1,5 @@
 package com.example.sagivproject.screens;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +20,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.EditUserDialog;
+import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.ImageUtil;
@@ -220,17 +220,9 @@ public class DetailsAboutUserActivity extends BaseActivity {
     }
 
     private void showFullImageDialog() {
-        Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-        dialog.setContentView(R.layout.dialog_full_image);
-
-        ImageView dialogImage = dialog.findViewById(R.id.dialogImage);
-
-        //מציב את התמונה שיש בתמונה המקורית
-        dialogImage.setImageDrawable(imgUserProfile.getDrawable());
-
-        //לוחצים על התמונה - יוצא
-        dialogImage.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
+        new FullImageDialog(
+                this,
+                imgUserProfile.getDrawable()
+        ).show();
     }
 }

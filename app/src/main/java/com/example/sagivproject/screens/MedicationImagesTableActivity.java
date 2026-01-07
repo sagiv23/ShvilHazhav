@@ -2,6 +2,8 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +26,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationImagesTableAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ImageData;
+import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.textfield.TextInputEditText;
@@ -67,7 +70,27 @@ public class MedicationImagesTableActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recycler_MedicineImagesTablePage);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        adapter = new MedicationImagesTableAdapter(filteredList, this::deleteImageAndReorder);
+        adapter = new MedicationImagesTableAdapter(
+                filteredList,
+                new MedicationImagesTableAdapter.OnImageActionListener() {
+
+                    @Override
+                    public void onDeleteImage(ImageData image) {
+                        deleteImageAndReorder(image);
+                    }
+
+                    @Override
+                    public void onImageClicked(ImageData image) {
+                        Bitmap bitmap = ImageUtil.convertFrom64base(image.getBase64());
+                        if (bitmap == null) return;
+
+                        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+
+                        new FullImageDialog(MedicationImagesTableActivity.this, drawable).show();
+                    }
+                }
+        );
+
         recyclerView.setAdapter(adapter);
 
         etSearch = findViewById(R.id.edit_MedicineImagesTablePage_search);
