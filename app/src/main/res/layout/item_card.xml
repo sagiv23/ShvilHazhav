@@ -36,7 +36,6 @@
             android:layout_marginTop="8dp"
             android:text="ID: card1"
             android:textSize="14sp"
-            android:textColor="#555"
             android:fontFamily="@font/text_english"
             app:layout_constraintTop_toBottomOf="@id/img_ItemCard_card_image"
             app:layout_constraintStart_toStartOf="parent"

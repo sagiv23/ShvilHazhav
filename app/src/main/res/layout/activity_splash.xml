@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/splash_quote"
-        android:textSize="19sp"
+        android:textSize="22sp"
         android:fontFamily="@font/text_hebrew"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/tv_Splash_Title"
