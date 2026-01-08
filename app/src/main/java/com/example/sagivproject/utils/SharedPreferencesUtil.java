@@ -16,7 +16,6 @@ import java.util.HashMap;
 /// Also contains methods for clearing and removing data from shared preferences
 /// @see SharedPreferences
 public class SharedPreferencesUtil {
-
     /// The name of the shared preferences file
     /// @see Context#getSharedPreferences(String, int)
     private static final String PREF_NAME = "com.example.sagivproject.PREFERENCE_FILE_KEY";
@@ -66,8 +65,6 @@ public class SharedPreferencesUtil {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(key, defaultValue);
     }
-
-    // Add more methods for other data types as needed
 
     /// Clear all data from shared preferences
     /// @param context The context to use

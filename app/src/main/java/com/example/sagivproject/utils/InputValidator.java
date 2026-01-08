@@ -5,7 +5,7 @@ import android.util.Patterns;
 import androidx.annotation.Nullable;
 
 public final class InputValidator {
-    private InputValidator() {} // מונע יצירה
+    private InputValidator() {} //מונע יצירה
 
     public static boolean isNameValid(@Nullable String name) {
         return name != null && name.trim().length() >= 3;

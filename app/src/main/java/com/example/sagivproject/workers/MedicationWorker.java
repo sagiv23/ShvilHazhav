@@ -86,7 +86,7 @@ public class MedicationWorker extends BaseWorkerActivity {
 
         NotificationService notificationService = new NotificationService(context);
 
-        // התראה 1: רק אם יש תרופות שנמחקו
+        //התראה 1: רק אם יש תרופות שנמחקו
         if (expiredCount > 0) {
             notificationService.show(
                     "עדכון רשימת תרופות",
@@ -94,7 +94,7 @@ public class MedicationWorker extends BaseWorkerActivity {
             );
         }
 
-        // התראה 2: רק אם נשארו תרופות לנטילה (אחרי המחיקה)
+        //התראה 2: רק אם נשארו תרופות לנטילה (אחרי המחיקה)
         if (remainingCount > 0) {
             notificationService.show(
                     "תזכורת יומית",

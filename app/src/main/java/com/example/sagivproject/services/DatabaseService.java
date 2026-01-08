@@ -748,6 +748,7 @@ public class DatabaseService {
     // endregion Game Section
 
     // region ImageMedication section
+
     public void getAllImages(DatabaseCallback<List<ImageData>> callback) {
         getDataList(IMAGES_PATH, ImageData.class, callback);
     }
@@ -772,13 +773,4 @@ public class DatabaseService {
     }
 
     // endregion ImageMedication section
-
-    //העלאת תמונות למסד נתונים - למחוק בסוף הפרויקט!
-
-    public void getImage(
-            @NotNull String imageId,
-            @NotNull DatabaseCallback<ImageData> callback
-    ) {
-        getData(IMAGES_PATH + "/" + imageId, ImageData.class, callback);
-    }
 }
