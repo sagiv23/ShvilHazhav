@@ -74,7 +74,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
             holder.btnMenu.setVisibility(View.VISIBLE);
             holder.btnMenu.setOnClickListener(v -> {
                 PopupMenu popup = new PopupMenu(v.getContext(), holder.btnMenu);
-                popup.getMenuInflater().inflate(R.menu.forum_message_menu, popup.getMenu());
+                popup.getMenuInflater().inflate(R.menu.menu_forum_message, popup.getMenu());
 
                 MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
                 if (deleteItem != null && customFont != null) {
