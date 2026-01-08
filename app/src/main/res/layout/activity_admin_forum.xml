@@ -33,6 +33,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/headline_hebrew"
         android:text="קשר קרוב - מנהל"
+        android:textColor="@color/headline"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="35sp"
+            android:textColor="@color/headline"
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/headline_hebrew"
             android:text="בחר תמונת פרופיל" />

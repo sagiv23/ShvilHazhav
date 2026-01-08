@@ -86,6 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="קשר קרוב"
+        android:textColor="@color/headline"
         android:textSize="40sp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/headline_hebrew"

@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="עריכת פרטי משתמש"
+            android:textColor="@color/headline"
             android:textSize="30sp"
             android:fontFamily="@font/headline_hebrew"
             android:layout_marginBottom="16dp" />
