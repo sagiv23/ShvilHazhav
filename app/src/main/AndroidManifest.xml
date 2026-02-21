@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- For Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".MainApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SagivProject">
+
+        <receiver
+            android:name=".services.notifications.AlarmReceiver"
+            android:exported="false" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                tools:node="remove" />
+        </provider>
+
+        <activity
+            android:name=".screens.TipOfTheDayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.ForumCategoriesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MathProblemsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.SettingsActivity"
+            android:exported="false"
+            android:label="@string/הגדרות" />
+        <activity
+            android:name=".screens.MemoryGameLogsTableActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MedicationImagesTableActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AdminForumActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".screens.AdminForumCategoriesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.UsersTableActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AdminPageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.DetailsAboutUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MemoryGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.GameHomeScreenActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.ForumActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".screens.MedicationListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.ContactActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.LandingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

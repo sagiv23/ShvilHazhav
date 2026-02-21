@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:strokeColor="?attr/colorOutline">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_UserRow_userProfile"
+            android:layout_width="68dp"
+            android:layout_height="78dp"
+            android:contentDescription="@string/תמונתפרופיל"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_user"
+            app:strokeWidth="2dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
+
+            <TextView
+                android:id="@+id/txt_UserRow_fullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/text_hebrew"
+                android:textSize="25sp"
+                tools:text="שם מלא" />
+
+            <TextView
+                android:id="@+id/txt_UserRow_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/text_english"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="email@example.com" />
+
+            <TextView
+                android:id="@+id/txt_UserRow_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/text_hebrew"
+                android:textSize="20sp"
+                tools:text="סיסמה: *****" />
+
+            <TextView
+                android:id="@+id/txt_UserRow_birthDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/text_hebrew"
+                android:textSize="20sp"
+                tools:text="תאריך לידה: 01/01/2000" />
+
+            <TextView
+                android:id="@+id/txt_UserRow_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/text_hebrew"
+                android:textSize="20sp"
+                tools:text="גיל: 0" />
+
+            <TextView
+                android:id="@+id/txt_UserRow_wins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/text_hebrew"
+                android:textSize="20sp"
+                tools:text="ניצחונות: 0" />
+
+            <TextView
+                android:id="@+id/txt_UserRow_IsAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/text_hebrew"
+                android:textSize="20sp"
+                tools:text="מנהל: לא" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btn_UserRow_DeleteUser"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/מחק"
+                android:src="@drawable/ic_delete" />
+
+            <ImageButton
+                android:id="@+id/btn_UserRow_MakeAdmin"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/הפוךלמנהל"
+                android:src="@drawable/ic_add_admin" />
+        </LinearLayout>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

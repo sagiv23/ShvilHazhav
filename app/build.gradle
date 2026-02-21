@@ -1,0 +1,65 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.hilt.android)
+}
+
+android {
+    namespace 'com.example.sagivproject'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.example.sagivproject"
+        minSdk 35
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+}
+
+dependencies {
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    implementation libs.preference
+    implementation libs.annotation
+    implementation libs.lifecycle.livedata.ktx
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.localagents.fc
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+    implementation libs.work.runtime
+    implementation libs.gson
+    implementation platform(libs.firebase.bom)
+    implementation libs.google.firebase.database
+    implementation libs.okhttp
+    implementation libs.hilt.android
+    annotationProcessor libs.hilt.compiler
+    implementation libs.hilt.work
+    annotationProcessor libs.hilt.work
+
+    // Firebase AI dependencies
+    implementation libs.firebase.ai
+    implementation libs.guava
+    implementation libs.reactive.streams
+}

@@ -1,0 +1,56 @@
+<resources>
+
+    <style name="Theme.SagivProject.Light" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:popupMenuStyle">@style/AppPopupMenuStyle</item>
+        <item name="popupMenuStyle">@style/AppPopupMenuStyle</item>
+
+        <item name="android:windowBackground">@color/background_color</item>
+        <item name="colorPrimary">@color/background_color_nav</item>
+        <item name="colorOnPrimary">@color/nav_text_color</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="colorSecondary">@color/background_color_buttons</item>
+        <item name="colorOnSecondary">@color/buttons_text_color</item>
+        <item name="colorSurface">@color/background_color</item>
+        <item name="colorOnSurface">@color/text_color</item>
+        <item name="colorOutline">@color/text_color</item>
+        <item name="textInputStyle">@style/AppTextInputLayoutStyle</item>
+        <item name="editTextStyle">@style/AppTextInputEditTextStyle</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnSurfaceVariant">@color/text_color</item>
+        <item name="colorPrimaryContainer">@color/text_color</item>
+        <item name="android:forceDarkAllowed">true</item>
+    </style>
+
+    <style name="AppPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/popup_background_color</item>
+        <item name="android:textAppearance">@style/PopupMenuTextAppearance</item>
+    </style>
+
+    <style name="PopupMenuTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="AppTextInputLayoutStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_color</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="hintTextColor">@color/text_color</item>
+    </style>
+
+    <style name="AppTextInputEditTextStyle" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:fontFamily">@font/text_hebrew</item>
+    </style>
+
+    <style name="TimePickerCustomTheme" parent="ThemeOverlay.Material3.MaterialTimePicker">
+        <item name="android:background">@color/background_color</item>
+        <item name="colorSurface">@color/background_color_buttons</item>
+        <item name="colorSurfaceContainer">@color/background_color_buttons</item>
+        <item name="colorSurfaceContainerHigh">@color/background_color_buttons</item>
+
+        <item name="colorPrimary">@color/text_color</item>
+        <item name="colorOnSurface">@color/text_color</item>
+    </style>
+
+    <style name="Theme.SagivProject" parent="Theme.SagivProject.Light" />
+
+</resources>

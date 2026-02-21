@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/memoryGamePage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.MemoryGameActivity">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_OnlineMemoryGame_to_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/text_hebrew"
+        android:text="@string/יציאה"
+        android:textSize="22sp"
+        app:cornerRadius="25dp"
+        app:icon="@drawable/ic_back"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/headline_hebrew"
+        android:text="@string/משחקזיכרון"
+        android:textColor="@color/headline"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_OnlineMemoryGame_to_exit" />
+
+    <LinearLayout
+        android:id="@+id/layout_info_row"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtTitle">
+
+        <TextView
+            android:id="@+id/tv_OnlineMemoryGame_opponent_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/text_hebrew"
+            android:textSize="20sp"
+            tools:text="משחק נגד: טוען..." />
+
+        <TextView
+            android:id="@+id/tv_OnlineMemoryGame_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/text_hebrew"
+            android:textSize="20sp"
+            tools:text="אני: 0 | יריב: 0" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_OnlineMemoryGame_turn_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/text_hebrew"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_info_row"
+        tools:text="ממתין לתחילת משחק..." />
+
+    <TextView
+        android:id="@+id/tv_OnlineMemoryGame_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/text_hebrew"
+        android:textColor="@color/headline"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_OnlineMemoryGame_turn_status"
+        tools:text="15" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_OnlineMemoryGame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_OnlineMemoryGame_timer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
