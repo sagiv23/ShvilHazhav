@@ -326,25 +326,6 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
         roomsReference.child(roomId).child(field).setValue(value);
     }
 
-    /**
-     * Updates the status (revealed and matched) of a specific card on the board.
-     *
-     * @param roomId   The ID of the room.
-     * @param index    The index of the card in the list.
-     * @param revealed The new revealed status.
-     * @param matched  The new matched status.
-     */
-    @Override
-    public void updateCardStatus(String roomId, int index, boolean revealed, boolean matched) {
-        if (index < 0) {
-            Log.e(TAG, "Attempted to update card with invalid index: " + index);
-            return;
-        }
-        DatabaseReference cardRef = roomsReference.child(roomId).child("cards").child(String.valueOf(index));
-        cardRef.child("isRevealed").setValue(revealed);
-        cardRef.child("isMatched").setValue(matched);
-    }
-
     @Override
     public void incrementScore(String roomId, String playerUid, @Nullable DatabaseCallback<Void> callback) {
         roomsReference.child(roomId).runTransaction(new Transaction.Handler() {
@@ -377,6 +358,25 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
                 }
             }
         });
+    }
+
+    /**
+     * Updates the status (revealed and matched) of a specific card on the board.
+     *
+     * @param roomId   The ID of the room.
+     * @param index    The index of the card in the list.
+     * @param revealed The new revealed status.
+     * @param matched  The new matched status.
+     */
+    @Override
+    public void updateCardStatus(String roomId, int index, boolean revealed, boolean matched) {
+        if (index < 0) {
+            Log.e(TAG, "Attempted to update card with invalid index: " + index);
+            return;
+        }
+        DatabaseReference cardRef = roomsReference.child(roomId).child("cards").child(String.valueOf(index));
+        cardRef.child("isRevealed").setValue(revealed);
+        cardRef.child("isMatched").setValue(matched);
     }
 
     /**

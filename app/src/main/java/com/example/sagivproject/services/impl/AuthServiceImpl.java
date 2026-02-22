@@ -117,35 +117,6 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     /**
-     * A generic handler for creating a new user. It first checks if the email already exists.
-     *
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
-     * @param birthDateMillis The user's birthdate.
-     * @param email           The user's email.
-     * @param password        The user's password.
-     * @param successCallback The callback to invoke on successful user creation.
-     * @param errorCallback   The callback to invoke on failure.
-     */
-    private void handleUserCreation(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> successCallback, java.util.function.Consumer<String> errorCallback) {
-        userService.checkIfEmailExists(email, new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(Boolean exists) {
-                if (exists) {
-                    errorCallback.accept("אימייל זה תפוס");
-                } else {
-                    createUser(firstName, lastName, birthDateMillis, email, password, successCallback);
-                }
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                errorCallback.accept("שגיאה בבדיקת אימייל");
-            }
-        });
-    }
-
-    /**
      * Updates an existing user's profile information. Checks for email availability if it's changed.
      *
      * @param user               The original user object.
@@ -179,6 +150,21 @@ public class AuthServiceImpl implements IAuthService {
         } else {
             applyUserUpdate(user, newFirstName, newLastName, newBirthDateMillis, newEmail, newPassword, callback);
         }
+    }
+
+    /**
+     * Logs out the current user by clearing their data from SharedPreferences.
+     *
+     * @return The email of the logged-out user, or an empty string if no user was logged in.
+     */
+    @Override
+    public String logout() {
+        User user = sharedPreferencesUtil.getUser();
+
+        String email = user != null ? user.getEmail() : "";
+        sharedPreferencesUtil.signOutUser();
+
+        return email;
     }
 
     /**
@@ -242,17 +228,31 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     /**
-     * Logs out the current user by clearing their data from SharedPreferences.
+     * A generic handler for creating a new user. It first checks if the email already exists.
      *
-     * @return The email of the logged-out user, or an empty string if no user was logged in.
+     * @param firstName       The user's first name.
+     * @param lastName        The user's last name.
+     * @param birthDateMillis The user's birthdate.
+     * @param email           The user's email.
+     * @param password        The user's password.
+     * @param successCallback The callback to invoke on successful user creation.
+     * @param errorCallback   The callback to invoke on failure.
      */
-    @Override
-    public String logout() {
-        User user = sharedPreferencesUtil.getUser();
+    private void handleUserCreation(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> successCallback, java.util.function.Consumer<String> errorCallback) {
+        userService.checkIfEmailExists(email, new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Boolean exists) {
+                if (exists) {
+                    errorCallback.accept("אימייל זה תפוס");
+                } else {
+                    createUser(firstName, lastName, birthDateMillis, email, password, successCallback);
+                }
+            }
 
-        String email = user != null ? user.getEmail() : "";
-        sharedPreferencesUtil.signOutUser();
-
-        return email;
+            @Override
+            public void onFailed(Exception e) {
+                errorCallback.accept("שגיאה בבדיקת אימייל");
+            }
+        });
     }
 }

@@ -7,6 +7,13 @@ import com.example.sagivproject.models.TipOfTheDay;
  */
 public interface ITipOfTheDayService {
     /**
+     * Generates a new, unique ID for a tip.
+     *
+     * @return A new unique ID string for the tip.
+     */
+    String generateTipId();
+
+    /**
      * Retrieves the tip for the current day.
      *
      * @param callback The callback to be invoked with the tip or an error.
@@ -20,11 +27,4 @@ public interface ITipOfTheDayService {
      * @param callback The callback to be invoked upon completion.
      */
     void saveTipForToday(String tip, IDatabaseService.DatabaseCallback<Void> callback);
-
-    /**
-     * Generates a new, unique ID for a tip.
-     *
-     * @return A new unique ID string for the tip.
-     */
-    String generateTipId();
 }

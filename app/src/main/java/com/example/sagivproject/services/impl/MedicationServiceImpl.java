@@ -34,16 +34,6 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
     }
 
     /**
-     * Constructs the full database path for a user's medication list.
-     *
-     * @param uid The user's ID.
-     * @return The full path to the user's medications.
-     */
-    private String getMedicationPath(String uid) {
-        return USERS_PATH + "/" + uid + "/" + MEDICATIONS_PATH;
-    }
-
-    /**
      * Generates a new unique ID for a medication.
      *
      * @return A new unique ID string.
@@ -115,5 +105,15 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
                 }
             }
         });
+    }
+
+    /**
+     * Constructs the full database path for a user's medication list.
+     *
+     * @param uid The user's ID.
+     * @return The full path to the user's medications.
+     */
+    private String getMedicationPath(String uid) {
+        return USERS_PATH + "/" + uid + "/" + MEDICATIONS_PATH;
     }
 }

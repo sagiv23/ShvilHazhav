@@ -34,36 +34,6 @@ public class StatsServiceImpl implements IStatsService {
     }
 
     /**
-     * A generic helper method to increment a numeric statistic for a user using a transaction.
-     *
-     * @param uid The user's ID.
-     * @param key The specific statistic key to increment (e.g., "correctAnswers").
-     */
-    private void addAnswer(String uid, String key) {
-        if (uid == null) {
-            return;
-        }
-        databaseReference.child(uid).child("mathProblemsStats").child(key).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                Integer current = currentData.getValue(Integer.class);
-                if (current == null) {
-                    currentData.setValue(1);
-                } else {
-                    currentData.setValue(current + 1);
-                }
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                // Transaction completed. Can add logging here if needed.
-            }
-        });
-    }
-
-    /**
      * Increments the count of correct answers for a user.
      *
      * @param uid The user's ID.
@@ -92,5 +62,36 @@ public class StatsServiceImpl implements IStatsService {
     public void resetMathStats(@NonNull String uid) {
         databaseReference.child(uid).child("mathProblemsStats").child("correctAnswers").setValue(0);
         databaseReference.child(uid).child("mathProblemsStats").child("wrongAnswers").setValue(0);
+    }
+
+    /**
+     * A generic helper method to increment a numeric statistic for a user using a transaction.
+     *
+     * @param uid The user's ID.
+     * @param key The specific statistic key to increment (e.g., "correctAnswers").
+     */
+    private void addAnswer(String uid, String key) {
+        if (uid == null) {
+            return;
+        }
+
+        databaseReference.child(uid).child("mathProblemsStats").child(key).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                Integer current = currentData.getValue(Integer.class);
+                if (current == null) {
+                    currentData.setValue(1);
+                } else {
+                    currentData.setValue(current + 1);
+                }
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                // Transaction completed. Can add logging here if needed.
+            }
+        });
     }
 }

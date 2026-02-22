@@ -17,6 +17,13 @@ import java.util.List;
  */
 public interface IMedicationService {
     /**
+     * Generates a new, unique ID for a medication.
+     *
+     * @return A new unique ID string for the medication.
+     */
+    String generateMedicationId();
+
+    /**
      * Creates a new medication record in the database for a specific user.
      *
      * @param uid        The ID of the user to whom the medication belongs.
@@ -32,13 +39,6 @@ public interface IMedicationService {
      * @param callback The callback to be invoked with the list of medications.
      */
     void getUserMedicationList(@NonNull String uid, @NonNull DatabaseCallback<List<Medication>> callback);
-
-    /**
-     * Generates a new, unique ID for a medication.
-     *
-     * @return A new unique ID string for the medication.
-     */
-    String generateMedicationId();
 
     /**
      * Deletes a medication from the database.

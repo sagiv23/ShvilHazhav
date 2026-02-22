@@ -38,26 +38,6 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
     }
 
     /**
-     * Constructs the full database path for the messages of a specific category.
-     *
-     * @param categoryId The ID of the category.
-     * @return The full path to the messages.
-     */
-    private String getCategoryPath(String categoryId) {
-        return FORUM_PATH + "/" + categoryId + "/messages";
-    }
-
-    /**
-     * Gets a {@link DatabaseReference} to the messages of a specific category.
-     *
-     * @param categoryId The ID of the category.
-     * @return The database reference for the category's messages.
-     */
-    private DatabaseReference getCategoryMessagesRef(String categoryId) {
-        return databaseReference.child(getCategoryPath(categoryId));
-    }
-
-    /**
      * Sends a new message to a forum category.
      *
      * @param user       The user sending the message.
@@ -119,5 +99,25 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
     @Override
     public void deleteMessage(@NonNull String messageId, String categoryId, @Nullable DatabaseCallback<Void> callback) {
         deleteData(getCategoryPath(categoryId) + "/" + messageId, callback);
+    }
+
+    /**
+     * Constructs the full database path for the messages of a specific category.
+     *
+     * @param categoryId The ID of the category.
+     * @return The full path to the messages.
+     */
+    private String getCategoryPath(String categoryId) {
+        return FORUM_PATH + "/" + categoryId + "/messages";
+    }
+
+    /**
+     * Gets a {@link DatabaseReference} to the messages of a specific category.
+     *
+     * @param categoryId The ID of the category.
+     * @return The database reference for the category's messages.
+     */
+    private DatabaseReference getCategoryMessagesRef(String categoryId) {
+        return databaseReference.child(getCategoryPath(categoryId));
     }
 }

@@ -32,6 +32,16 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
     }
 
     /**
+     * Generates a new, unique ID for a tip.
+     *
+     * @return A new unique ID string for the tip.
+     */
+    @Override
+    public String generateTipId() {
+        return super.generateId();
+    }
+
+    /**
      * Retrieves the tip for the current day from the database.
      *
      * @param callback The callback to be invoked with the tip or an error.
@@ -74,15 +84,5 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
         TipOfTheDay tipOfTheDay = new TipOfTheDay(tip, today);
         tipOfTheDay.setId(tipId);
         create(tipOfTheDay, callback);
-    }
-
-    /**
-     * Generates a new, unique ID for a tip.
-     *
-     * @return A new unique ID string for the tip.
-     */
-    @Override
-    public String generateTipId() {
-        return super.generateId();
     }
 }
