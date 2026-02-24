@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.ContactActivity;
 import com.example.sagivproject.screens.DetailsAboutUserActivity;
 import com.example.sagivproject.screens.LandingActivity;
@@ -25,7 +25,6 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -63,58 +62,73 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Inflates and configures the appropriate top menu based on the user's login status and role.
+     * Determines which top menu to show based on user state and inflates it.
      *
      * @param menuContainer The ViewGroup into which the menu will be inflated.
      */
     protected void setupTopMenu(ViewGroup menuContainer) {
-        boolean isUserLoggedIn = sharedPreferencesUtil.isUserLoggedIn();
+        User currentUser = sharedPreferencesUtil.getUser();
 
-        if (isUserLoggedIn) {
-            if (Objects.requireNonNull(sharedPreferencesUtil.getUser()).isAdmin()) {
-                @LayoutRes int menuLayout = R.layout.top_menu_admin;
-                getLayoutInflater().inflate(menuLayout, menuContainer, true);
-
-                Button btnAdmin = findViewById(R.id.btn_menu_admin_back);
-                btnAdmin.setOnClickListener(v -> finish());
+        if (currentUser != null) {
+            if (currentUser.isAdmin()) {
+                setupAdminMenu(menuContainer);
             } else {
-                @LayoutRes int menuLayout = R.layout.top_menu_logged_in;
-                getLayoutInflater().inflate(menuLayout, menuContainer, true);
-
-                Button btnMain = findViewById(R.id.btn_menu_main);
-                Button btnContact = findViewById(R.id.btn_menu_contact);
-                Button btnDetailsAboutUser = findViewById(R.id.btn_menu_details);
-                ImageButton btnSettings = findViewById(R.id.btn_menu_settings);
-
-                btnMain.setOnClickListener(v -> navigateIfNotCurrent(MainActivity.class));
-                btnContact.setOnClickListener(v -> navigateIfNotCurrent(ContactActivity.class));
-                btnDetailsAboutUser.setOnClickListener(v -> navigateIfNotCurrent(DetailsAboutUserActivity.class));
-                btnSettings.setOnClickListener(v -> {
-                    Intent intent = new Intent(this, SettingsActivity.class);
-                    intent.putExtra("isFromLoggedIn", true);
-                    startActivity(intent);
-                });
+                setupLoggedInMenu(menuContainer);
             }
         } else {
-            @LayoutRes int menuLayout = R.layout.top_menu_logged_out;
-            getLayoutInflater().inflate(menuLayout, menuContainer, true);
-
-            Button btnLanding = findViewById(R.id.btn_menu_main);
-            Button btnContact = findViewById(R.id.btn_menu_contact);
-            Button btnLogin = findViewById(R.id.btn_menu_login);
-            Button btnRegister = findViewById(R.id.btn_menu_register);
-            ImageButton btnSettings = findViewById(R.id.btn_menu_settings);
-
-            btnLanding.setOnClickListener(v -> navigateIfNotCurrent(LandingActivity.class));
-            btnContact.setOnClickListener(v -> navigateIfNotCurrent(ContactActivity.class));
-            btnLogin.setOnClickListener(v -> navigateIfNotCurrent(LoginActivity.class));
-            btnRegister.setOnClickListener(v -> navigateIfNotCurrent(RegisterActivity.class));
-            btnSettings.setOnClickListener(v -> {
-                Intent intent = new Intent(this, SettingsActivity.class);
-                intent.putExtra("isFromLoggedIn", false);
-                startActivity(intent);
-            });
+            setupLoggedOutMenu(menuContainer);
         }
+    }
+
+    /**
+     * Inflates and configures the top menu for an admin user.
+     */
+    private void setupAdminMenu(ViewGroup menuContainer) {
+        getLayoutInflater().inflate(R.layout.top_menu_admin, menuContainer, true);
+        Button btnAdmin = findViewById(R.id.btn_menu_admin_back);
+        btnAdmin.setOnClickListener(v -> finish());
+    }
+
+    /**
+     * Inflates and configures the top menu for a regular (non-admin) logged-in user.
+     */
+    private void setupLoggedInMenu(ViewGroup menuContainer) {
+        getLayoutInflater().inflate(R.layout.top_menu_logged_in, menuContainer, true);
+        setupNavigationButton(R.id.btn_menu_main, MainActivity.class);
+        setupNavigationButton(R.id.btn_menu_contact, ContactActivity.class);
+        setupNavigationButton(R.id.btn_menu_details, DetailsAboutUserActivity.class);
+        setupSettingsButton(R.id.btn_menu_settings, true);
+    }
+
+    /**
+     * Inflates and configures the top menu for a logged-out user.
+     */
+    private void setupLoggedOutMenu(ViewGroup menuContainer) {
+        getLayoutInflater().inflate(R.layout.top_menu_logged_out, menuContainer, true);
+        setupNavigationButton(R.id.btn_menu_main, LandingActivity.class);
+        setupNavigationButton(R.id.btn_menu_contact, ContactActivity.class);
+        setupNavigationButton(R.id.btn_menu_login, LoginActivity.class);
+        setupNavigationButton(R.id.btn_menu_register, RegisterActivity.class);
+        setupSettingsButton(R.id.btn_menu_settings, false);
+    }
+
+    /**
+     * Helper method to set up a navigation button's click listener.
+     */
+    private void setupNavigationButton(int buttonId, Class<?> targetActivity) {
+        findViewById(buttonId).setOnClickListener(v -> navigateIfNotCurrent(targetActivity));
+    }
+
+    /**
+     * Helper method to set up the settings button's click listener with the correct intent extra.
+     */
+    private void setupSettingsButton(int buttonId, boolean isFromLoggedIn) {
+        ImageButton btnSettings = findViewById(buttonId);
+        btnSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            intent.putExtra("isFromLoggedIn", isFromLoggedIn);
+            startActivity(intent);
+        });
     }
 
     /**
@@ -123,14 +137,14 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param targetActivity The class of the activity to navigate to.
      */
     protected void navigateIfNotCurrent(Class<?> targetActivity) {
-        if (this.getClass().equals(targetActivity)) {
-            return;
+        if (!this.getClass().equals(targetActivity)) {
+            startActivity(new Intent(this, targetActivity));
         }
-        startActivity(new Intent(this, targetActivity));
     }
 
     /**
      * Requests a standard set of required permissions for the application.
+     * NOTE: This does not handle the result of the permission request (e.g., if the user denies them).
      */
     protected void requestPermissions() {
         List<String> permissions = new ArrayList<>();

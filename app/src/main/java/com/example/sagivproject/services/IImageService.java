@@ -41,4 +41,12 @@ public interface IImageService {
      * @param callback A callback to be invoked upon completion.
      */
     void updateAllImages(List<ImageData> list, DatabaseCallback<Void> callback);
+
+    /**
+     * Deletes a specific image from the database.
+     *
+     * @param imageId  The ID of the image to delete.
+     * @param callback An optional callback to be invoked upon completion.
+     */
+    void deleteImage(@NonNull String imageId, @Nullable DatabaseCallback<Void> callback);
 }

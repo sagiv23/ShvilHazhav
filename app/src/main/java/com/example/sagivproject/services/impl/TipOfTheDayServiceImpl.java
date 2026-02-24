@@ -3,7 +3,6 @@ package com.example.sagivproject.services.impl;
 import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.ITipOfTheDayService;
-import com.google.firebase.database.DataSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,8 +19,8 @@ import javax.inject.Inject;
  * </p>
  */
 public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> implements ITipOfTheDayService {
-
     private static final String TIP_OF_THE_DAY_PATH = "tip_of_the_day";
+    private static final String DATE_FORMAT = "yyyyMMdd";
 
     /**
      * Constructs a new TipOfTheDayServiceImpl.
@@ -48,27 +47,8 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      */
     @Override
     public void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
-        String today = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-
-        databaseReference.child(TIP_OF_THE_DAY_PATH).get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                callback.onFailed(task.getException());
-                return;
-            }
-
-            if (task.getResult() != null) {
-                for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                    TipOfTheDay tip = snapshot.getValue(TipOfTheDay.class);
-                    if (tip != null && today.equals(tip.getDate())) {
-                        callback.onCompleted(tip);
-                        return;
-                    }
-                }
-            }
-
-            // If loop completes, no tip was found for today
-            callback.onCompleted(null);
-        });
+        String today = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date());
+        get(today, callback);
     }
 
     /**
@@ -79,7 +59,7 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      */
     @Override
     public void saveTipForToday(String tip, IDatabaseService.DatabaseCallback<Void> callback) {
-        String today = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+        String today = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date());
         String tipId = generateTipId();
         TipOfTheDay tipOfTheDay = new TipOfTheDay(tip, today);
         tipOfTheDay.setId(tipId);

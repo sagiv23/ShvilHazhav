@@ -71,4 +71,9 @@ public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements 
         // Use the protected writeData helper to overwrite the entire images' collection.
         writeData(IMAGES_PATH, map, callback);
     }
+
+    @Override
+    public void deleteImage(@NonNull String imageId, @Nullable DatabaseCallback<Void> callback) {
+        super.delete(imageId, callback);
+    }
 }

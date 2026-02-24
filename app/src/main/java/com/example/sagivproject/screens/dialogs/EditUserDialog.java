@@ -13,6 +13,7 @@ import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.Validator;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * A dialog for editing an existing user's profile information.
@@ -44,7 +45,7 @@ public class EditUserDialog {
     }
 
     /**
-     * Creates and displays the dialog.
+     * Creates and displays the dialog, handling user input and validation.
      */
     public void show() {
         Dialog dialog = new Dialog(context);
@@ -78,7 +79,8 @@ public class EditUserDialog {
             String email = inputEmail.getText().toString().trim();
             String pass = inputPassword.getText().toString().trim();
 
-            if (!validateInput(fName, lName, email, pass, inputFirstName, inputLastName, inputEmail, inputPassword, inputBirthDate)) {
+            // Validate all fields before proceeding
+            if (!areAllFieldsValid(fName, lName, email, pass, inputFirstName, inputLastName, inputEmail, inputPassword, inputBirthDate)) {
                 return;
             }
 
@@ -104,55 +106,39 @@ public class EditUserDialog {
     }
 
     /**
-     * Validates all the input fields in the dialog.
+     * Sequentially validates all user input fields.
      *
-     * @param fName        First name string.
-     * @param lName        Last name string.
-     * @param email        Email string.
-     * @param pass         Password string.
-     * @param firstName    First name EditText for focusing on error.
-     * @param lastName     Last name EditText for focusing on error.
-     * @param emailEdt     Email EditText for focusing on error.
-     * @param passEdt      Password EditText for focusing on error.
-     * @param birthDateEdt Birthdate EditText for focusing on error.
-     * @return True if all inputs are valid, false otherwise.
+     * @return True if all fields are valid, false otherwise.
      */
-    private boolean validateInput(String fName, String lName, String email, String pass, EditText firstName, EditText lastName, EditText emailEdt, EditText passEdt, EditText birthDateEdt) {
-        if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || pass.isEmpty()) {
+    private boolean areAllFieldsValid(String fName, String lName, String email, String pass, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passEdt, EditText birthDateEdt) {
+        // Check for empty fields first
+        if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || pass.isEmpty() || birthDateMillis <= 0) {
             Toast.makeText(context, "כל השדות חובה", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (Validator.isNameNotValid(fName)) {
-            firstName.requestFocus();
-            Toast.makeText(context, "שם פרטי קצר מדי", Toast.LENGTH_LONG).show();
+        // Chain validation checks
+        return isFieldValid(firstNameEdt, Validator::isNameNotValid, "שם פרטי קצר מדי") &&
+                isFieldValid(lastNameEdt, Validator::isNameNotValid, "שם משפחה קצר מדי") &&
+                isFieldValid(birthDateEdt, val -> Validator.isAgeNotValid(birthDateMillis), "הגיל המינימלי הוא 12") &&
+                isFieldValid(emailEdt, Validator::isEmailNotValid, "כתובת האימייל לא תקינה") &&
+                isFieldValid(passEdt, Validator::isPasswordNotValid, "הסיסמה קצרה מדי");
+    }
+
+    /**
+     * Validates a single EditText field using a predicate.
+     *
+     * @param editText  The EditText to validate.
+     * @param predicate The validation logic to apply.
+     * @param errorMsg  The error message to show if validation fails.
+     * @return True if valid, false otherwise.
+     */
+    private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
+        if (predicate.test(editText.getText().toString().trim())) {
+            editText.requestFocus();
+            Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();
             return false;
         }
-
-        if (Validator.isNameNotValid(lName)) {
-            lastName.requestFocus();
-            Toast.makeText(context, "שם משפחה קצר מדי", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        if (Validator.isAgeNotValid(birthDateMillis)) {
-            birthDateEdt.requestFocus();
-            Toast.makeText(context, "הגיל המינימלי הוא 12", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        if (Validator.isEmailNotValid(email)) {
-            emailEdt.requestFocus();
-            Toast.makeText(context, "כתובת האימייל לא תקינה", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        if (Validator.isPasswordNotValid(pass)) {
-            passEdt.requestFocus();
-            Toast.makeText(context, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
         return true;
     }
 

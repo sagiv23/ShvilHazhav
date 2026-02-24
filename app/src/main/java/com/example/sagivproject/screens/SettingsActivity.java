@@ -16,7 +16,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
-import com.example.sagivproject.screens.dialogs.LogoutDialog;
+import com.example.sagivproject.screens.dialogs.ConfirmDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -95,7 +95,7 @@ public class SettingsActivity extends BaseActivity {
      * Logs out the current user, clears their session data, and navigates to the Login screen.
      */
     private void logout() {
-        new LogoutDialog(this, () -> {
+        Runnable onConfirm = () -> {
             String email = databaseService.getAuthService().logout();
             Toast.makeText(this, "התנתקת בהצלחה", Toast.LENGTH_SHORT).show();
 
@@ -103,6 +103,8 @@ public class SettingsActivity extends BaseActivity {
             intent.putExtra("userEmail", email);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-        }).show();
+        };
+
+        new ConfirmDialog(this, "התנתקות", "האם ברצונך להתנתק?", "התנתק", "בטל", onConfirm).show();
     }
 }

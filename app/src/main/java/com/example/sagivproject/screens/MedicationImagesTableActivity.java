@@ -206,14 +206,30 @@ public class MedicationImagesTableActivity extends BaseActivity {
     }
 
     /**
-     * Deletes the specified image and re-orders the IDs of all remaining images
-     * to maintain a gapless sequence.
+     * Deletes an image from the database and then triggers the re-ordering of the remaining images.
      *
      * @param imageToDelete The image to be deleted.
      */
     private void deleteImageAndReorder(ImageData imageToDelete) {
-        allImages.remove(imageToDelete);
+        databaseService.getImageService().deleteImage(imageToDelete.getId(), new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Void object) {
+                allImages.remove(imageToDelete);
+                reorderImages();
+            }
 
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationImagesTableActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * Re-orders the IDs of all remaining images to maintain a gapless sequence (e.g., card1, card2, ...).
+     * This method is called after an image has been successfully deleted.
+     */
+    private void reorderImages() {
         for (int i = 0; i < allImages.size(); i++) {
             allImages.get(i).setId("card" + (i + 1));
         }
@@ -221,7 +237,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
         databaseService.getImageService().updateAllImages(allImages, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                Toast.makeText(MedicationImagesTableActivity.this, "התמונה נמחקה והרשימה סודרה מחדש", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MedicationImagesTableActivity.this, "הרשימה סודרה מחדש", Toast.LENGTH_SHORT).show();
                 loadImages();
             }
 

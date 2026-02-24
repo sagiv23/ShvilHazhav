@@ -17,7 +17,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.Operation;
-import com.example.sagivproject.screens.dialogs.ResetMathStatsDialog;
+import com.example.sagivproject.screens.dialogs.ConfirmDialog;
 
 import java.text.MessageFormat;
 
@@ -70,7 +70,7 @@ public class MathProblemsActivity extends BaseActivity {
         tvQuestion = findViewById(R.id.tv_MathProblemsPage_question);
         tvAnswer = findViewById(R.id.tv_MathProblemsPage_user_answer);
 
-        btnResetStats.setOnClickListener(v -> new ResetMathStatsDialog(this, this::resetStats).show());
+        btnResetStats.setOnClickListener(v -> new ConfirmDialog(this, "איפוס נתונים", "האם לאפס את הנתונים?", "אפס", "בטל", this::resetStats).show());
 
         generateProblem();
         setupKeypad();

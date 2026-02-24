@@ -23,8 +23,7 @@ import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.dialogs.ExitGameDialog;
-import com.example.sagivproject.screens.dialogs.GameEndDialog;
+import com.example.sagivproject.screens.dialogs.ConfirmDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 import java.text.MessageFormat;
@@ -93,7 +92,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * Shows a confirmation dialog for exiting the game. If confirmed, the opponent is declared the winner.
      */
     private void showExitGameDialog() {
-        new ExitGameDialog(this, () -> {
+        Runnable onConfirm = () -> {
             if (currentRoom != null && !"finished".equals(currentRoom.getStatus())) {
                 String myUid = user.getId();
                 String opponentUid = myUid.equals(currentRoom.getPlayer1Uid()) ?
@@ -106,7 +105,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             Intent intent = new Intent(this, GameHomeScreenActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-        }).show();
+        };
+
+        new ConfirmDialog(this, "יציאה מהמשחק", "האם ברצונך לצאת מהמשחק?", "צא", "בטל", onConfirm).show();
     }
 
     /**
@@ -129,12 +130,14 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             message = "הפעם הפסדת... לא נורא!";
         }
 
-        new GameEndDialog(this, message, () -> {
+        Runnable onExit = () -> {
             Intent intent = new Intent(MemoryGameActivity.this, GameHomeScreenActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
-        }).show();
+        };
+
+        new ConfirmDialog(this, "המשחק הסתיים", message, onExit).show();
     }
 
     /**

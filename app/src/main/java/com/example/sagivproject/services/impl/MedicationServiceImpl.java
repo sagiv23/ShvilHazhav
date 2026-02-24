@@ -52,7 +52,7 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
      */
     @Override
     public void createNewMedication(@NonNull String uid, @NonNull Medication medication, @Nullable DatabaseCallback<Void> callback) {
-        writeData(getMedicationPath(uid) + "/" + medication.getId(), medication, callback);
+        writeData(getMedicationItemPath(uid, medication.getId()), medication, callback);
     }
 
     /**
@@ -75,7 +75,7 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
      */
     @Override
     public void deleteMedication(@NonNull String uid, @NonNull String medicationId, @Nullable DatabaseCallback<Void> callback) {
-        deleteData(getMedicationPath(uid) + "/" + medicationId, callback);
+        deleteData(getMedicationItemPath(uid, medicationId), callback);
     }
 
     /**
@@ -90,7 +90,7 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
         // This defines the update logic. It simply replaces the old medication with the new one.
         UnaryOperator<Medication> updateFunction = oldMedication -> medication;
 
-        runTransaction(getMedicationPath(uid) + "/" + medication.getId(), updateFunction, new DatabaseCallback<>() {
+        runTransaction(getMedicationItemPath(uid, medication.getId()), updateFunction, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Medication result) {
                 if (callback != null) {
@@ -115,5 +115,9 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
      */
     private String getMedicationPath(String uid) {
         return USERS_PATH + "/" + uid + "/" + MEDICATIONS_PATH;
+    }
+
+    private String getMedicationItemPath(String uid, String medicationId) {
+        return getMedicationPath(uid) + "/" + medicationId;
     }
 }

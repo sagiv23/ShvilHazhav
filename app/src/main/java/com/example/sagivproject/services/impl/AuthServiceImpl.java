@@ -8,6 +8,7 @@ import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -22,6 +23,13 @@ import javax.inject.Inject;
 public class AuthServiceImpl implements IAuthService {
     private final IUserService userService;
     private final SharedPreferencesUtil sharedPreferencesUtil;
+
+    // Error Messages
+    private static final String ERROR_INVALID_CREDENTIALS = "אימייל או סיסמה שגויים";
+    private static final String ERROR_LOGIN = "שגיאה בהתחברות המשתמש";
+    private static final String ERROR_EMAIL_TAKEN = "אימייל זה תפוס";
+    private static final String ERROR_CHECKING_EMAIL = "שגיאה בבדיקת אימייל";
+    private static final String ERROR_UPDATING_DETAILS = "שגיאה בעדכון הפרטים";
 
     /**
      * Constructs a new AuthServiceImpl.
@@ -48,7 +56,7 @@ public class AuthServiceImpl implements IAuthService {
             @Override
             public void onCompleted(User user) {
                 if (user == null) {
-                    callback.onError("אימייל או סיסמה שגויים");
+                    callback.onError(ERROR_INVALID_CREDENTIALS);
                     return;
                 }
 
@@ -59,7 +67,7 @@ public class AuthServiceImpl implements IAuthService {
             @Override
             public void onFailed(Exception e) {
                 sharedPreferencesUtil.signOutUser();
-                callback.onError("שגיאה בהתחברות המשתמש");
+                callback.onError(ERROR_LOGIN);
             }
         });
     }
@@ -136,7 +144,7 @@ public class AuthServiceImpl implements IAuthService {
                 @Override
                 public void onCompleted(Boolean exists) {
                     if (exists) {
-                        callback.onError("אימייל זה תפוס");
+                        callback.onError(ERROR_EMAIL_TAKEN);
                     } else {
                         applyUserUpdate(user, newFirstName, newLastName, newBirthDateMillis, newEmail, newPassword, callback);
                     }
@@ -144,7 +152,7 @@ public class AuthServiceImpl implements IAuthService {
 
                 @Override
                 public void onFailed(Exception e) {
-                    callback.onError("שגיאה בבדיקת אימייל");
+                    callback.onError(ERROR_CHECKING_EMAIL);
                 }
             });
         } else {
@@ -160,10 +168,8 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public String logout() {
         User user = sharedPreferencesUtil.getUser();
-
         String email = user != null ? user.getEmail() : "";
         sharedPreferencesUtil.signOutUser();
-
         return email;
     }
 
@@ -179,7 +185,6 @@ public class AuthServiceImpl implements IAuthService {
      */
     private void createUser(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> callback) {
         String uid = userService.generateUserId();
-
         User user = new User(uid, firstName, lastName, birthDateMillis, email, password, UserRole.REGULAR, null, new HashMap<>());
 
         userService.createNewUser(user, new DatabaseCallback<>() {
@@ -222,7 +227,7 @@ public class AuthServiceImpl implements IAuthService {
 
             @Override
             public void onFailed(Exception e) {
-                callback.onError("שגיאה בעדכון הפרטים");
+                callback.onError(ERROR_UPDATING_DETAILS);
             }
         });
     }
@@ -238,12 +243,12 @@ public class AuthServiceImpl implements IAuthService {
      * @param successCallback The callback to invoke on successful user creation.
      * @param errorCallback   The callback to invoke on failure.
      */
-    private void handleUserCreation(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> successCallback, java.util.function.Consumer<String> errorCallback) {
+    private void handleUserCreation(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> successCallback, Consumer<String> errorCallback) {
         userService.checkIfEmailExists(email, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Boolean exists) {
                 if (exists) {
-                    errorCallback.accept("אימייל זה תפוס");
+                    errorCallback.accept(ERROR_EMAIL_TAKEN);
                 } else {
                     createUser(firstName, lastName, birthDateMillis, email, password, successCallback);
                 }
@@ -251,7 +256,7 @@ public class AuthServiceImpl implements IAuthService {
 
             @Override
             public void onFailed(Exception e) {
-                errorCallback.accept("שגיאה בבדיקת אימייל");
+                errorCallback.accept(ERROR_CHECKING_EMAIL);
             }
         });
     }

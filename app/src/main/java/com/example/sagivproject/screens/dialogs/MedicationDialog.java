@@ -100,21 +100,9 @@ public class MedicationDialog {
             String typeString = spinnerType.getText().toString();
             String details = edtDetails.getText().toString().trim();
 
-            if (name.isEmpty() || typeString.isEmpty() || details.isEmpty() || selectedHours.isEmpty()) {
-                Toast.makeText(context, "אנא מלא את כל השדות ובחר לפחות שעת תזכורת אחת", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            MedicationType selectedType = getTypeFromString(typeString);
 
-            MedicationType selectedType = null;
-            for (MedicationType type : MedicationType.values()) {
-                if (type.getDisplayName().equals(typeString)) {
-                    selectedType = type;
-                    break;
-                }
-            }
-
-            if (selectedType == null) {
-                Toast.makeText(context, "אנא בחר סוג תרופה", Toast.LENGTH_SHORT).show();
+            if (!validateInputs(name, typeString, details, selectedType)) {
                 return;
             }
 
@@ -137,6 +125,46 @@ public class MedicationDialog {
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
+    }
+
+    /**
+     * Validates all the required input fields.
+     *
+     * @param name        The medication name.
+     * @param typeString  The selected medication type as a string.
+     * @param details     The medication details.
+     * @param selectedType The parsed MedicationType enum.
+     * @return True if all inputs are valid, false otherwise.
+     */
+    private boolean validateInputs(String name, String typeString, String details, MedicationType selectedType) {
+        if (name.isEmpty() || typeString.isEmpty() || details.isEmpty()) {
+            showToast("אנא מלא את כל השדות");
+            return false;
+        }
+        if (selectedHours.isEmpty()) {
+            showToast("אנא בחר לפחות שעת תזכורת אחת");
+            return false;
+        }
+        if (selectedType == null) {
+            showToast("אנא בחר סוג תרופה");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Converts a string representation of a medication type to the corresponding enum.
+     *
+     * @param typeString The string to convert.
+     * @return The MedicationType enum, or null if not found.
+     */
+    private MedicationType getTypeFromString(String typeString) {
+        for (MedicationType type : MedicationType.values()) {
+            if (type.getDisplayName().equals(typeString)) {
+                return type;
+            }
+        }
+        return null;
     }
 
     /**
@@ -229,6 +257,15 @@ public class MedicationDialog {
                     context.getColor(R.color.background_color_buttons)
             );
         }
+    }
+
+    /**
+     * Shows a simple Toast message.
+     *
+     * @param message The message to display.
+     */
+    private void showToast(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     /**

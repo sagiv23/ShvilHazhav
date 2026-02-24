@@ -38,6 +38,23 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
     private static final String ROOMS_PATH = "rooms";
     private static final String USERS_PATH = "users";
     private static final String TAG = "GameServiceImpl"; // Added TAG for logging
+
+    // Field names in database
+    private static final String FIELD_STATUS = "status";
+    private static final String FIELD_CARDS = "cards";
+    private static final String FIELD_CURRENT_TURN_UID = "currentTurnUid";
+    private static final String FIELD_IS_REVEALED = "isRevealed";
+    private static final String FIELD_IS_MATCHED = "isMatched";
+    private static final String FIELD_PROCESSING_MATCH = "processingMatch";
+    private static final String FIELD_WINNER_UID = "winnerUid";
+    private static final String FIELD_COUNT_WINS = "countWins";
+
+    // Status values
+    private static final String STATUS_WAITING = "waiting";
+    private static final String STATUS_PLAYING = "playing";
+    private static final String STATUS_FINISHED = "finished";
+    private static final String VALUE_DRAW = "draw";
+
     private final DatabaseReference roomsReference;
     private final DatabaseReference usersReference;
     private ValueEventListener activeGameListener;
@@ -77,9 +94,9 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
                 for (MutableData roomData : currentData.getChildren()) {
                     try {
                         GameRoom room = roomData.getValue(GameRoom.class);
-                        if (room != null && "waiting".equals(room.getStatus()) && room.getPlayer2Uid() == null) {
+                        if (room != null && STATUS_WAITING.equals(room.getStatus()) && room.getPlayer2Uid() == null) {
                             room.setPlayer2Uid(user.getId());
-                            room.setStatus("playing");
+                            room.setStatus(STATUS_PLAYING);
                             roomData.setValue(room);
                             roomIdForUser = room.getId();
                             return Transaction.success(currentData);
@@ -176,9 +193,9 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
                 GameRoom room = snapshot.getValue(GameRoom.class);
                 if (room == null) return;
 
-                if ("playing".equals(room.getStatus())) {
+                if (STATUS_PLAYING.equals(room.getStatus())) {
                     callback.onRoomStarted(room);
-                } else if ("finished".equals(room.getStatus())) {
+                } else if (STATUS_FINISHED.equals(room.getStatus())) {
                     callback.onRoomFinished(room);
                 }
             }
@@ -217,7 +234,7 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                 GameRoom room = currentData.getValue(GameRoom.class);
-                if (room != null && "waiting".equals(room.getStatus()) && room.getPlayer2Uid() == null) {
+                if (room != null && STATUS_WAITING.equals(room.getStatus()) && room.getPlayer2Uid() == null) {
                     currentData.setValue(null); // Delete the room
                 }
                 return Transaction.success(currentData);
@@ -247,10 +264,10 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
     @Override
     public void initGameBoard(String roomId, List<Card> cards, String firstTurnUid, DatabaseCallback<Void> callback) {
         Map<String, Object> roomUpdates = new HashMap<>();
-        roomUpdates.put("currentTurnUid", firstTurnUid);
-        roomUpdates.put("status", "playing");
+        roomUpdates.put(FIELD_CURRENT_TURN_UID, firstTurnUid);
+        roomUpdates.put(FIELD_STATUS, STATUS_PLAYING);
 
-        roomsReference.child(roomId).child("cards").setValue(cards)
+        roomsReference.child(roomId).child(FIELD_CARDS).setValue(cards)
                 .addOnSuccessListener(aVoid -> roomsReference.child(roomId).updateChildren(roomUpdates, (error, ref) -> {
                     if (callback != null) {
                         if (error != null) {
@@ -374,9 +391,9 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
             Log.e(TAG, "Attempted to update card with invalid index: " + index);
             return;
         }
-        DatabaseReference cardRef = roomsReference.child(roomId).child("cards").child(String.valueOf(index));
-        cardRef.child("isRevealed").setValue(revealed);
-        cardRef.child("isMatched").setValue(matched);
+        DatabaseReference cardRef = roomsReference.child(roomId).child(FIELD_CARDS).child(String.valueOf(index));
+        cardRef.child(FIELD_IS_REVEALED).setValue(revealed);
+        cardRef.child(FIELD_IS_MATCHED).setValue(matched);
     }
 
     /**
@@ -387,7 +404,7 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
      */
     @Override
     public void setProcessing(String roomId, boolean isProcessing) {
-        updateRoomField(roomId, "processingMatch", isProcessing);
+        updateRoomField(roomId, FIELD_PROCESSING_MATCH, isProcessing);
     }
 
     /**
@@ -397,9 +414,9 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
      */
     @Override
     public void addUserWin(String uid) {
-        if (uid == null || uid.isEmpty() || uid.equals("draw")) return;
+        if (uid == null || uid.isEmpty() || VALUE_DRAW.equals(uid)) return;
 
-        usersReference.child(uid).child("countWins").runTransaction(new Transaction.Handler() {
+        usersReference.child(uid).child(FIELD_COUNT_WINS).runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
@@ -424,8 +441,8 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
     @Override
     public void setupForfeitOnDisconnect(String roomId, String opponentUid) {
         DatabaseReference roomRef = roomsReference.child(roomId);
-        roomRef.child("status").onDisconnect().setValue("finished");
-        roomRef.child("winnerUid").onDisconnect().setValue(opponentUid);
+        roomRef.child(FIELD_STATUS).onDisconnect().setValue(STATUS_FINISHED);
+        roomRef.child(FIELD_WINNER_UID).onDisconnect().setValue(opponentUid);
     }
 
     /**
@@ -436,7 +453,7 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
     @Override
     public void removeForfeitOnDisconnect(String roomId) {
         DatabaseReference roomRef = roomsReference.child(roomId);
-        roomRef.child("status").onDisconnect().cancel();
-        roomRef.child("winnerUid").onDisconnect().cancel();
+        roomRef.child(FIELD_STATUS).onDisconnect().cancel();
+        roomRef.child(FIELD_WINNER_UID).onDisconnect().cancel();
     }
 }

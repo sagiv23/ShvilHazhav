@@ -21,6 +21,10 @@ import javax.inject.Inject;
  */
 public class StatsServiceImpl implements IStatsService {
     private static final String USERS_PATH = "users";
+    private static final String FIELD_MATH_PROBLEMS_STATS = "mathProblemsStats";
+    private static final String FIELD_CORRECT_ANSWERS = "correctAnswers";
+    private static final String FIELD_WRONG_ANSWERS = "wrongAnswers";
+
     private final DatabaseReference databaseReference;
 
     /**
@@ -40,7 +44,7 @@ public class StatsServiceImpl implements IStatsService {
      */
     @Override
     public void addCorrectAnswer(String uid) {
-        addAnswer(uid, "correctAnswers");
+        addAnswer(uid, FIELD_CORRECT_ANSWERS);
     }
 
     /**
@@ -50,7 +54,7 @@ public class StatsServiceImpl implements IStatsService {
      */
     @Override
     public void addWrongAnswer(String uid) {
-        addAnswer(uid, "wrongAnswers");
+        addAnswer(uid, FIELD_WRONG_ANSWERS);
     }
 
     /**
@@ -60,8 +64,9 @@ public class StatsServiceImpl implements IStatsService {
      */
     @Override
     public void resetMathStats(@NonNull String uid) {
-        databaseReference.child(uid).child("mathProblemsStats").child("correctAnswers").setValue(0);
-        databaseReference.child(uid).child("mathProblemsStats").child("wrongAnswers").setValue(0);
+        DatabaseReference statsRef = databaseReference.child(uid).child(FIELD_MATH_PROBLEMS_STATS);
+        statsRef.child(FIELD_CORRECT_ANSWERS).setValue(0);
+        statsRef.child(FIELD_WRONG_ANSWERS).setValue(0);
     }
 
     /**
@@ -75,16 +80,12 @@ public class StatsServiceImpl implements IStatsService {
             return;
         }
 
-        databaseReference.child(uid).child("mathProblemsStats").child(key).runTransaction(new Transaction.Handler() {
+        databaseReference.child(uid).child(FIELD_MATH_PROBLEMS_STATS).child(key).runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                 Integer current = currentData.getValue(Integer.class);
-                if (current == null) {
-                    currentData.setValue(1);
-                } else {
-                    currentData.setValue(current + 1);
-                }
+                currentData.setValue(current == null ? 1 : current + 1);
                 return Transaction.success(currentData);
             }
 
