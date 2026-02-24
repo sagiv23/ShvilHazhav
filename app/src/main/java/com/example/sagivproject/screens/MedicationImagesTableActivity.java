@@ -214,6 +214,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
         databaseService.getImageService().deleteImage(imageToDelete.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                Toast.makeText(MedicationImagesTableActivity.this, "התמונה נמחקה בהצלחה", Toast.LENGTH_SHORT).show();
                 allImages.remove(imageToDelete);
                 reorderImages();
             }

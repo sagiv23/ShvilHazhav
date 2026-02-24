@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -21,20 +21,19 @@ import java.util.Map;
  * <p>
  * This adapter is intended for administrative or debugging purposes, showing a real-time
  * list of all game rooms and their current state, including players, score, and status.
- * It uses {@link DiffUtil} to efficiently update the list as game data changes.
+ * It uses {@link ListAdapter} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
-public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdapter.ViewHolder> {
-    private final List<GameRoom> gameRooms;
-    private final Map<String, String> uidToNameMap;
+public class MemoryGameLogAdapter extends ListAdapter<GameRoom, MemoryGameLogAdapter.ViewHolder> {
+    private Map<String, String> uidToNameMap;
 
     /**
      * Constructs a new MemoryGameLogAdapter.
      *
-     * @param gameRooms The initial list of game rooms.
+     * @param uidToNameMap A map to resolve user UIDs to displayable names.
      */
-    public MemoryGameLogAdapter(List<GameRoom> gameRooms, Map<String, String> uidToNameMap) {
-        this.gameRooms = gameRooms;
+    public MemoryGameLogAdapter(Map<String, String> uidToNameMap) {
+        super(new GenericDiffCallback<>());
         this.uidToNameMap = uidToNameMap;
     }
 
@@ -47,7 +46,7 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GameRoom room = gameRooms.get(position);
+        GameRoom room = getItem(position);
 
         String p1Name = uidToNameMap.getOrDefault(room.getPlayer1Uid(), "שחקן לא ידוע");
         String p2Name = uidToNameMap.getOrDefault(room.getPlayer2Uid(), "ממתין...");
@@ -57,25 +56,15 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
         holder.txtStatus.setText(String.format("סטטוס: %s", room.getStatus()));
     }
 
-    @Override
-    public int getItemCount() {
-        return gameRooms.size();
-    }
-
     /**
-     * Updates the data in the adapter with a new list of game rooms and calculates the difference.
+     * Submits a new list of rooms and an updated UID-to-name map to the adapter.
      *
      * @param newRooms The new list of game rooms.
+     * @param newMap   The new map of UIDs to names.
      */
-    public void updateData(List<GameRoom> newRooms, Map<String, String> uidToNameMap) {
-        final GenericDiffCallback<GameRoom> diffCallback = new GenericDiffCallback<>(this.gameRooms, newRooms);
-        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-
-        this.gameRooms.clear();
-        this.gameRooms.addAll(newRooms);
-        this.uidToNameMap.clear();
-        this.uidToNameMap.putAll(uidToNameMap);
-        diffResult.dispatchUpdatesTo(this);
+    public void submitData(List<GameRoom> newRooms, Map<String, String> newMap) {
+        this.uidToNameMap = newMap;
+        submitList(newRooms);
     }
 
     /**

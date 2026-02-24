@@ -21,15 +21,14 @@ import javax.inject.Inject;
  * </p>
  */
 public class AuthServiceImpl implements IAuthService {
-    private final IUserService userService;
-    private final SharedPreferencesUtil sharedPreferencesUtil;
-
     // Error Messages
     private static final String ERROR_INVALID_CREDENTIALS = "אימייל או סיסמה שגויים";
     private static final String ERROR_LOGIN = "שגיאה בהתחברות המשתמש";
     private static final String ERROR_EMAIL_TAKEN = "אימייל זה תפוס";
     private static final String ERROR_CHECKING_EMAIL = "שגיאה בבדיקת אימייל";
     private static final String ERROR_UPDATING_DETAILS = "שגיאה בעדכון הפרטים";
+    private final IUserService userService;
+    private final SharedPreferencesUtil sharedPreferencesUtil;
 
     /**
      * Constructs a new AuthServiceImpl.

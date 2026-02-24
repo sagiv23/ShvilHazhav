@@ -17,7 +17,6 @@ import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +60,7 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recycler_MemoryGameLogsTable);
         recyclerView.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
-        adapter = new MemoryGameLogAdapter(new ArrayList<>(), new HashMap<>());
+        adapter = new MemoryGameLogAdapter(uidToNameMap);
         recyclerView.setAdapter(adapter);
 
         fetchUsersAndListenToGames();
@@ -100,7 +99,7 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
             @Override
             public void onCompleted(List<GameRoom> allRooms) {
                 if (allRooms == null) return;
-                adapter.updateData(allRooms, uidToNameMap);
+                adapter.submitData(allRooms, uidToNameMap);
             }
 
             @Override

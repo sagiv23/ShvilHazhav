@@ -62,18 +62,12 @@ public class AdminForumCategoriesActivity extends BaseActivity {
         adapter = new ForumCategoryAdapter(new ForumCategoryAdapter.OnCategoryInteractionListener() {
             @Override
             public void onDelete(ForumCategory category) {
-                databaseService.getForumCategoriesService().deleteCategory(category.getId(), new DatabaseCallback<>() {
-                    @Override
-                    public void onCompleted(Void data) {
-                        loadCategories();
-                        Toast.makeText(AdminForumCategoriesActivity.this, "הקטגוריה נמחקה", Toast.LENGTH_SHORT).show();
-                    }
+                deleteCategory(category);
+            }
 
-                    @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(AdminForumCategoriesActivity.this, "שגיאה במחיקת הקטגוריה", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onLongClick(ForumCategory category) {
+                ///TODO: implement
             }
 
             @Override
@@ -125,6 +119,21 @@ public class AdminForumCategoriesActivity extends BaseActivity {
             @Override
             public void onFailed(Exception e) {
                 Toast.makeText(AdminForumCategoriesActivity.this, "שגיאה בטעינת קטגוריות", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void deleteCategory(ForumCategory category) {
+        databaseService.getForumCategoriesService().deleteCategory(category.getId(), new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Void data) {
+                loadCategories();
+                Toast.makeText(AdminForumCategoriesActivity.this, "הקטגוריה נמחקה", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(AdminForumCategoriesActivity.this, "שגיאה במחיקת הקטגוריה", Toast.LENGTH_SHORT).show();
             }
         });
     }

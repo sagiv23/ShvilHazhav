@@ -34,4 +34,13 @@ public interface IForumCategoriesService {
      * @param callback   A callback to be invoked upon completion.
      */
     void deleteCategory(String categoryId, DatabaseCallback<Void> callback);
+
+    /**
+     * Updates the name of a forum category.
+     *
+     * @param categoryId The ID of the category to update.
+     * @param newName    The new name for the category.
+     * @param callback   A callback to be invoked upon completion.
+     */
+    void updateCategoryName(String categoryId, String newName, DatabaseCallback<Void> callback);
 }

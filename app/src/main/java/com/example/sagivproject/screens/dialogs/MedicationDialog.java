@@ -130,9 +130,9 @@ public class MedicationDialog {
     /**
      * Validates all the required input fields.
      *
-     * @param name        The medication name.
-     * @param typeString  The selected medication type as a string.
-     * @param details     The medication details.
+     * @param name         The medication name.
+     * @param typeString   The selected medication type as a string.
+     * @param details      The medication details.
      * @param selectedType The parsed MedicationType enum.
      * @return True if all inputs are valid, false otherwise.
      */

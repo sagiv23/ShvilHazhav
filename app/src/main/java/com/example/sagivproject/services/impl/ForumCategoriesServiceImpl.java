@@ -97,4 +97,29 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
             }
         });
     }
+
+    /**
+     * Updates the name of a forum category.
+     *
+     * @param categoryId The ID of the category to update.
+     * @param newName    The new name for the category.
+     * @param callback   A callback to be invoked upon completion.
+     */
+    @Override
+    public void updateCategoryName(String categoryId, String newName, IDatabaseService.DatabaseCallback<Void> callback) {
+        update(categoryId, category -> {
+            category.setName(newName);
+            return category;
+        }, new IDatabaseService.DatabaseCallback<>() {
+            @Override
+            public void onCompleted(ForumCategory result) {
+                if (callback != null) callback.onCompleted(null);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                if (callback != null) callback.onFailed(e);
+            }
+        });
+    }
 }

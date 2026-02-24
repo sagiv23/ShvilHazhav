@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -14,24 +14,23 @@ import com.example.sagivproject.models.Card;
 import com.example.sagivproject.screens.MemoryGameActivity;
 import com.example.sagivproject.utils.ImageUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.CardViewHolder> {
+/**
+ * A RecyclerView adapter for displaying the cards in the memory game.
+ * <p>
+ * This adapter manages the visual representation of each {@link Card}, including its flipped state
+ * and animations for revealing, hiding, matching, and error states. It communicates user
+ * interactions, such as card clicks, back to the hosting activity or fragment through the
+ * {@link MemoryGameListener}.
+ * It uses {@link ListAdapter} with a {@link GenericDiffCallback} for efficient list updates.
+ * </p>
+ */
+public class MemoryGameAdapter extends ListAdapter<Card, MemoryGameAdapter.CardViewHolder> {
     private static final int CAMERA_DISTANCE = 8000;
-    private final List<Card> cards = new ArrayList<>();
     private final MemoryGameListener listener;
 
     public MemoryGameAdapter(MemoryGameListener listener) {
+        super(new GenericDiffCallback<>());
         this.listener = listener;
-    }
-
-    public void submitList(List<Card> newCards) {
-        GenericDiffCallback<Card> diffCallback = new GenericDiffCallback<>(this.cards, newCards);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-        this.cards.clear();
-        this.cards.addAll(newCards);
-        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -43,9 +42,9 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        Card card = cards.get(position);
+        Card card = getItem(position);
 
-        //איפוס אנימציות
+        // Reset animations
         holder.itemView.animate().cancel();
         holder.itemView.setTranslationX(0f);
         holder.itemView.setScaleX(1f);
@@ -62,7 +61,7 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
             holder.cardImage.setImageResource(R.drawable.fold_card_img);
         }
 
-        // אנימציות הפיכה מבוססות שינוי סטטוס
+        // Handle flip animations based on state changes
         if (card.getIsRevealed() && !card.wasRevealed()) {
             animateFlipOpen(holder.cardImage, card.getBase64Content());
             card.setWasRevealed(true);
@@ -72,23 +71,19 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         }
 
         boolean isMyTurn = listener instanceof MemoryGameActivity && ((MemoryGameActivity) listener).isMyTurn();
-
         holder.itemView.setClickable(isMyTurn && !card.getIsMatched() && !card.getIsRevealed());
 
         holder.itemView.setOnClickListener(v -> {
             int currentPosition = holder.getBindingAdapterPosition();
             if (currentPosition != RecyclerView.NO_POSITION) {
-                listener.onCardClicked(cards.get(currentPosition), currentPosition);
+                listener.onCardClicked(getItem(currentPosition), currentPosition);
             }
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return cards.size();
-    }
-
-    // אנימציית הפיכה לפתיחה
+    /**
+     * Animates a card flipping open to reveal its content.
+     */
     private void animateFlipOpen(ImageView imageView, String base64) {
         imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
             Runnable flipIn = () -> {
@@ -106,7 +101,9 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         }).start();
     }
 
-    // אנימציית הפיכה לסגירה
+    /**
+     * Animates a card flipping closed to hide its content.
+     */
     private void animateFlipClose(ImageView imageView) {
         imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
             imageView.setImageResource(R.drawable.fold_card_img);
@@ -115,7 +112,9 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         }).start();
     }
 
-    // אנימציית שגיאה (רעד)
+    /**
+     * Triggers a shake animation to indicate an incorrect match.
+     */
     public void animateError(int position, RecyclerView recyclerView) {
         CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
@@ -128,7 +127,9 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         }
     }
 
-    // אנימציית הצלחה (פעימה)
+    /**
+     * Triggers a pulse animation to indicate a successful match.
+     */
     public void animateSuccess(int position, RecyclerView recyclerView) {
         CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
@@ -139,10 +140,16 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         }
     }
 
+    /**
+     * An interface for listeners that handle card click events.
+     */
     public interface MemoryGameListener {
         void onCardClicked(Card card, int position);
     }
 
+    /**
+     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
+     */
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         final ImageView cardImage;
 

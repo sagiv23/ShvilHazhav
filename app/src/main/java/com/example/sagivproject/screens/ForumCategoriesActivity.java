@@ -64,6 +64,12 @@ public class ForumCategoriesActivity extends BaseActivity {
             }
 
             @Override
+            public void onLongClick(ForumCategory category) {
+                // Not used in this activity
+
+            }
+
+            @Override
             public void onClick(ForumCategory category) {
                 Intent intent = new Intent(ForumCategoriesActivity.this, ForumActivity.class);
                 intent.putExtra("categoryId", category.getId());

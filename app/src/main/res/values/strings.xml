@@ -115,6 +115,8 @@
     <string name="מצבבהיר">מצב בהיר</string>
     <string name="בחרשעותתזכורת">בחר שעות תזכורת</string>
     <string name="טיפיומי">טיפ יומי</string>
+    <string name="עריכתשםקטגוריה">עריכת שם קטגוריה</string>
+    <string name="שםקטגוריה">שם קטגוריה</string>
 
     <string-array name="search_types">
         <item>שם פרטי</item>

@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -16,8 +16,7 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.ImageUtil;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -26,12 +25,11 @@ import java.util.Locale;
  * This adapter binds detailed user information to a row layout. It provides controls for
  * administrators to perform actions such as deleting a user or toggling their admin status.
  * It also handles click events for editing a user or viewing their profile picture.
- * It uses {@link DiffUtil} to efficiently update the list as user data changes.
+ * It uses {@link ListAdapter} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
-public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.UserViewHolder> {
+public class UsersTableAdapter extends ListAdapter<User, UsersTableAdapter.UserViewHolder> {
     private final User currentUser;
-    private final List<User> users = new ArrayList<>();
     private final OnUserActionListener listener;
 
     /**
@@ -41,25 +39,9 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
      * @param listener    The listener for user action events.
      */
     public UsersTableAdapter(User currentUser, OnUserActionListener listener) {
+        super(new GenericDiffCallback<>());
         this.currentUser = currentUser;
         this.listener = listener;
-    }
-
-    /**
-     * Updates the list of users displayed by the adapter.
-     * <p>
-     * It uses {@link DiffUtil} to calculate the difference between the old and new lists,
-     * and dispatches the update operations to the adapter, resulting in efficient updates
-     * and animations.
-     *
-     * @param newUsers The new list of users to display.
-     */
-    public void submitList(List<User> newUsers) {
-        GenericDiffCallback<User> diffCallback = new GenericDiffCallback<>(this.users, newUsers);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-        this.users.clear();
-        this.users.addAll(newUsers);
-        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -71,7 +53,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        User user = users.get(position);
+        User user = getItem(position);
 
         // Bind user data to views
         holder.txtUserFullName.setText(user.getFullName());
@@ -81,23 +63,20 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         holder.txtUserIsAdmin.setText(String.format("מנהל: %s", user.isAdmin() ? "כן" : "לא"));
         holder.txtUserWins.setText(MessageFormat.format("ניצחונות: {0}", user.getCountWins()));
 
-        java.util.Calendar cal = java.util.Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(user.getBirthDateMillis());
         String birthDateStr = String.format(Locale.ROOT, "%02d/%02d/%04d",
-                cal.get(java.util.Calendar.DAY_OF_MONTH), cal.get(java.util.Calendar.MONTH) + 1, cal.get(java.util.Calendar.YEAR));
+                cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
         holder.txtUserBirthDate.setText(String.format("תאריך לידה: %s", birthDateStr));
 
         ImageUtil.loadImage(user.getProfileImage(), holder.imgUserProfile);
 
         // Configure admin actions
         boolean isSelf = user.equals(currentUser);
-        if (isSelf) {
-            // Admin cannot toggle their own admin status or delete themselves from this screen
-            holder.btnToggleAdmin.setVisibility(View.GONE);
-        } else {
-            holder.btnToggleAdmin.setVisibility(View.VISIBLE);
-            holder.btnDeleteUser.setVisibility(View.VISIBLE);
+        holder.btnToggleAdmin.setVisibility(isSelf ? View.GONE : View.VISIBLE);
+        holder.btnDeleteUser.setVisibility(isSelf ? View.GONE : View.VISIBLE);
 
+        if (!isSelf) {
             // Set icon based on current admin status
             if (user.isAdmin()) {
                 holder.btnToggleAdmin.setImageResource(R.drawable.ic_remove_admin);
@@ -108,9 +87,8 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
             }
 
             holder.btnToggleAdmin.setOnClickListener(v -> listener.onToggleAdmin(user));
+            holder.btnDeleteUser.setOnClickListener(v -> listener.onDeleteUser(user));
         }
-
-        holder.btnDeleteUser.setOnClickListener(v -> listener.onDeleteUser(user));
 
         // Set long-click listener to edit user details
         holder.itemView.setOnLongClickListener(v -> {
@@ -119,11 +97,6 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         });
 
         holder.imgUserProfile.setOnClickListener(v -> listener.onUserImageClicked(user, holder.imgUserProfile));
-    }
-
-    @Override
-    public int getItemCount() {
-        return users.size();
     }
 
     /**
