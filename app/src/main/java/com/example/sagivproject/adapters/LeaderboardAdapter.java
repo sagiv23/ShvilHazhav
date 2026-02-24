@@ -6,12 +6,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,18 +21,27 @@ import java.util.List;
  * <p>
  * This adapter takes a list of {@link User} objects, sorted by win count, and displays them.
  * It gives a special visual treatment (a trophy emoji) to the top-ranked player.
+ * It uses {@link DiffUtil} to efficiently update the list as user data changes.
  * </p>
  */
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
-    private final List<User> userList;
+    private final List<User> usersList = new ArrayList<>();
 
     /**
-     * Constructs a new LeaderboardAdapter.
+     * Updates the list of users displayed by the adapter.
+     * <p>
+     * It uses {@link DiffUtil} to calculate the difference between the old and new lists,
+     * and dispatches the update operations to the adapter, resulting in efficient updates
+     * and animations.
      *
-     * @param userList The list of users to display, expected to be pre-sorted.
+     * @param newUserList The new list of users to display.
      */
-    public LeaderboardAdapter(List<User> userList) {
-        this.userList = userList;
+    public void submitList(List<User> newUserList) {
+        GenericDiffCallback<User> diffCallback = new GenericDiffCallback<>(this.usersList, newUserList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        this.usersList.clear();
+        this.usersList.addAll(newUserList);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -42,7 +53,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = userList.get(position);
+        User user = usersList.get(position);
         holder.tvName.setText(user.getFullName());
 
         // Add a trophy for the first place user
@@ -55,7 +66,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
     @Override
     public int getItemCount() {
-        return userList.size();
+        return usersList.size();
     }
 
     /**

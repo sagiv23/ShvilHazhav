@@ -15,13 +15,11 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationListAdapter;
-import com.example.sagivproject.adapters.diffUtils.MedicationDiffCallback;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
@@ -50,7 +48,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MedicationListActivity extends BaseActivity {
     private final ArrayList<Medication> medications = new ArrayList<>();
-    private final ArrayList<Medication> filteredMedications = new ArrayList<>();
     @Inject
     AlarmScheduler alarmScheduler;
     private MedicationListAdapter adapter;
@@ -89,15 +86,15 @@ public class MedicationListActivity extends BaseActivity {
         RecyclerView recyclerViewMedications = findViewById(R.id.recyclerView_medications);
         recyclerViewMedications.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new MedicationListAdapter(this, filteredMedications, new MedicationListAdapter.OnMedicationActionListener() {
+        adapter = new MedicationListAdapter(this, new MedicationListAdapter.OnMedicationActionListener() {
             @Override
-            public void onEdit(int position) {
-                openMedicationDialog(filteredMedications.get(position));
+            public void onEdit(Medication medication) {
+                openMedicationDialog(medication);
             }
 
             @Override
-            public void onDelete(int position) {
-                deleteMedicationById(filteredMedications.get(position));
+            public void onDelete(Medication medication) {
+                deleteMedicationById(medication);
             }
         });
         recyclerViewMedications.setAdapter(adapter);
@@ -326,8 +323,7 @@ public class MedicationListActivity extends BaseActivity {
      * @param query The search text entered by the user.
      */
     private void filterMedications(String query) {
-        List<Medication> oldList = new ArrayList<>(filteredMedications);
-        filteredMedications.clear();
+        List<Medication> filteredMedications = new ArrayList<>();
         String selectedType = spinnerSearchType.getSelectedItem().toString();
 
         if (query.isEmpty() && selectedType.equals("הכל")) {
@@ -349,8 +345,6 @@ public class MedicationListActivity extends BaseActivity {
             }
         }
 
-        MedicationDiffCallback diffCallback = new MedicationDiffCallback(oldList, filteredMedications);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-        diffResult.dispatchUpdatesTo(adapter);
+        adapter.submitList(filteredMedications);
     }
 }

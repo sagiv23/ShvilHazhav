@@ -44,7 +44,6 @@ public class GameHomeScreenActivity extends BaseActivity {
     private GameRoom currentRoom;
     private boolean gameStarted = false;
     private ValueEventListener roomListener;
-    private RecyclerView rvLeaderboard;
     private LeaderboardAdapter adapter;
     private User user;
 
@@ -76,11 +75,13 @@ public class GameHomeScreenActivity extends BaseActivity {
         btnCancelFindEnemy = findViewById(R.id.btn_GameHomeScreen_cancel_find_enemy);
         TVictories = findViewById(R.id.tv_GameHomeScreen_victories);
         TVStatusOfFindingEnemy = findViewById(R.id.tv_GameHomeScreen_status_of_finding_enemy);
-        rvLeaderboard = findViewById(R.id.recyclerView_GameHomeScreen_leaderboard);
+        RecyclerView rvLeaderboard = findViewById(R.id.recyclerView_GameHomeScreen_leaderboard);
 
         btnFindEnemy.setOnClickListener(view -> findEnemy());
         btnCancelFindEnemy.setOnClickListener(view -> cancelSearch());
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new LeaderboardAdapter();
+        rvLeaderboard.setAdapter(adapter);
         setupLeaderboard();
 
         updateUI(SearchState.IDLE);
@@ -142,8 +143,7 @@ public class GameHomeScreenActivity extends BaseActivity {
                     users.removeIf(User::isAdmin);
                     users.removeIf(user -> user.getCountWins() < 1);
                     users.sort((u1, u2) -> Integer.compare(u2.getCountWins(), u1.getCountWins()));
-                    adapter = new LeaderboardAdapter(users);
-                    rvLeaderboard.setAdapter(adapter);
+                    adapter.submitList(users);
                 }
             }
 

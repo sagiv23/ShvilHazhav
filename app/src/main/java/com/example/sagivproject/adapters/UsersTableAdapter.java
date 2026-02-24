@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -15,6 +16,7 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.ImageUtil;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,24 +26,40 @@ import java.util.Locale;
  * This adapter binds detailed user information to a row layout. It provides controls for
  * administrators to perform actions such as deleting a user or toggling their admin status.
  * It also handles click events for editing a user or viewing their profile picture.
+ * It uses {@link DiffUtil} to efficiently update the list as user data changes.
  * </p>
  */
 public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.UserViewHolder> {
     private final User currentUser;
-    private final List<User> users;
+    private final List<User> users = new ArrayList<>();
     private final OnUserActionListener listener;
 
     /**
      * Constructs a new UsersTableAdapter.
      *
-     * @param users       The list of users to display.
      * @param currentUser The currently logged-in admin user, used to prevent self-modification.
      * @param listener    The listener for user action events.
      */
-    public UsersTableAdapter(List<User> users, User currentUser, OnUserActionListener listener) {
-        this.users = users;
+    public UsersTableAdapter(User currentUser, OnUserActionListener listener) {
         this.currentUser = currentUser;
         this.listener = listener;
+    }
+
+    /**
+     * Updates the list of users displayed by the adapter.
+     * <p>
+     * It uses {@link DiffUtil} to calculate the difference between the old and new lists,
+     * and dispatches the update operations to the adapter, resulting in efficient updates
+     * and animations.
+     *
+     * @param newUsers The new list of users to display.
+     */
+    public void submitList(List<User> newUsers) {
+        GenericDiffCallback<User> diffCallback = new GenericDiffCallback<>(this.users, newUsers);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        this.users.clear();
+        this.users.addAll(newUsers);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -31,24 +32,40 @@ import java.util.List;
  * This adapter binds medication data to the item view, displaying details like name, type,
  * dosage, and reminder times. It also provides an options menu for each item to allow
  * for editing and deleting the medication.
+ * It uses {@link DiffUtil} to efficiently update the list as medication data changes.
  * </p>
  */
 public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
-    private final ArrayList<Medication> medications;
+    private final ArrayList<Medication> medications = new ArrayList<>();
     private final OnMedicationActionListener listener;
 
     /**
      * Constructs a new MedicationListAdapter.
      *
-     * @param context     The context of the calling activity.
-     * @param medications The list of medications to display.
-     * @param listener    The listener for medication item actions (edit, delete).
+     * @param context  The context of the calling activity.
+     * @param listener The listener for medication item actions (edit, delete).
      */
-    public MedicationListAdapter(Context context, ArrayList<Medication> medications, OnMedicationActionListener listener) {
+    public MedicationListAdapter(Context context, OnMedicationActionListener listener) {
         this.context = context;
-        this.medications = medications;
         this.listener = listener;
+    }
+
+    /**
+     * Updates the list of medications displayed by the adapter.
+     * <p>
+     * It uses {@link DiffUtil} to calculate the difference between the old and new lists,
+     * and dispatches the update operations to the adapter, resulting in efficient updates
+     * and animations.
+     *
+     * @param newMedications The new list of medications to display.
+     */
+    public void submitList(List<Medication> newMedications) {
+        GenericDiffCallback<Medication> diffCallback = new GenericDiffCallback<>(this.medications, newMedications);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        this.medications.clear();
+        this.medications.addAll(newMedications);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -110,10 +127,10 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
                 if (currentPos == RecyclerView.NO_POSITION) return false;
 
                 if (item.getItemId() == R.id.action_edit) {
-                    listener.onEdit(currentPos);
+                    listener.onEdit(medications.get(currentPos));
                     return true;
                 } else if (item.getItemId() == R.id.action_delete) {
-                    listener.onDelete(currentPos);
+                    listener.onDelete(medications.get(currentPos));
                     return true;
                 }
                 return false;
@@ -135,16 +152,16 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
         /**
          * Called when the edit action is selected for a medication.
          *
-         * @param position The position of the item in the adapter.
+         * @param medication The medication to edit.
          */
-        void onEdit(int position);
+        void onEdit(Medication medication);
 
         /**
          * Called when the delete action is selected for a medication.
          *
-         * @param position The position of the item in the adapter.
+         * @param medication The medication to delete.
          */
-        void onDelete(int position);
+        void onDelete(Medication medication);
     }
 
     /**

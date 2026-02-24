@@ -14,14 +14,17 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.adapters.diffUtils.ForumDiffCallback;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A RecyclerView adapter for displaying a list of {@link ForumMessage} objects.
@@ -29,17 +32,12 @@ import com.example.sagivproject.ui.CustomTypefaceSpan;
  * This adapter handles the binding of forum message data to the corresponding views in the
  * item layout. It also manages a popup menu for message actions, such as deletion,
  * based on permissions determined by a {@link ForumMessageListener}.
+ * It uses {@link DiffUtil} to efficiently update the list as message data changes.
  * </p>
  */
-public class ForumAdapter extends ListAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
+public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
+    private final List<ForumMessage> messages = new ArrayList<>();
     private ForumMessageListener listener;
-
-    /**
-     * Constructs a new ForumAdapter.
-     */
-    public ForumAdapter() {
-        super(new ForumDiffCallback());
-    }
 
     /**
      * Sets the listener for message actions.
@@ -48,6 +46,26 @@ public class ForumAdapter extends ListAdapter<ForumMessage, ForumAdapter.ForumVi
      */
     public void setForumMessageListener(ForumMessageListener listener) {
         this.listener = listener;
+    }
+
+    /**
+     * Updates the list of messages displayed by the adapter.
+     * <p>
+     * It uses {@link DiffUtil} to calculate the difference between the old and new lists,
+     * and dispatches the update operations to the adapter, resulting in efficient updates
+     * and animations.
+     *
+     * @param newMessages The new list of messages to display.
+     */
+    public void submitList(List<ForumMessage> newMessages, @Nullable Runnable commitCallback) {
+        GenericDiffCallback<ForumMessage> diffCallback = new GenericDiffCallback<>(messages, newMessages);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        messages.clear();
+        messages.addAll(newMessages);
+        diffResult.dispatchUpdatesTo(this);
+        if (commitCallback != null) {
+            commitCallback.run();
+        }
     }
 
     @NonNull
@@ -60,7 +78,7 @@ public class ForumAdapter extends ListAdapter<ForumMessage, ForumAdapter.ForumVi
 
     @Override
     public void onBindViewHolder(@NonNull ForumViewHolder holder, int position) {
-        ForumMessage msg = getItem(position);
+        ForumMessage msg = messages.get(position);
 
         Typeface customFont = ResourcesCompat.getFont(holder.itemView.getContext(), R.font.text_hebrew);
         SpannableString userNameSpannable = new SpannableString(msg.getFullName());
@@ -108,6 +126,11 @@ public class ForumAdapter extends ListAdapter<ForumMessage, ForumAdapter.ForumVi
         } else {
             holder.btnMenu.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return messages.size();
     }
 
     /**

@@ -8,12 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.utils.ImageUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,21 +24,37 @@ import java.util.List;
  * This adapter is used to manage the images for the memory game. It displays each image
  * along with its ID and provides a delete button for each. It also handles click events
  * for viewing a full-size image.
+ * It uses {@link DiffUtil} to efficiently update the list as image data changes.
  * </p>
  */
 public class MedicationImagesTableAdapter extends RecyclerView.Adapter<MedicationImagesTableAdapter.ViewHolder> {
-    private final List<ImageData> imageList;
+    private final List<ImageData> imageList = new ArrayList<>();
     private final OnImageActionListener listener;
 
     /**
      * Constructs a new MedicationImagesTableAdapter.
      *
-     * @param imageList The list of images to display.
-     * @param listener  The listener for image actions (delete, click).
+     * @param listener The listener for image actions (delete, click).
      */
-    public MedicationImagesTableAdapter(List<ImageData> imageList, OnImageActionListener listener) {
-        this.imageList = imageList;
+    public MedicationImagesTableAdapter(OnImageActionListener listener) {
         this.listener = listener;
+    }
+
+    /**
+     * Updates the list of images displayed by the adapter.
+     * <p>
+     * It uses {@link DiffUtil} to calculate the difference between the old and new lists,
+     * and dispatches the update operations to the adapter, resulting in efficient updates
+     * and animations.
+     *
+     * @param newImageList The new list of images to display.
+     */
+    public void submitList(List<ImageData> newImageList) {
+        GenericDiffCallback<ImageData> diffCallback = new GenericDiffCallback<>(this.imageList, newImageList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        this.imageList.clear();
+        this.imageList.addAll(newImageList);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull

@@ -18,13 +18,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationImagesTableAdapter;
-import com.example.sagivproject.adapters.diffUtils.ImageDiffCallback;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.screens.dialogs.FullImageDialog;
@@ -50,7 +48,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MedicationImagesTableActivity extends BaseActivity {
     private final List<ImageData> allImages = new ArrayList<>();
-    private final List<ImageData> filteredList = new ArrayList<>();
     private MedicationImagesTableAdapter adapter;
     private TextInputEditText etSearch;
     private ActivityResultLauncher<androidx.activity.result.PickVisualMediaRequest> photoPickerLauncher;
@@ -80,7 +77,6 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new MedicationImagesTableAdapter(
-                filteredList,
                 new MedicationImagesTableAdapter.OnImageActionListener() {
 
                     @Override
@@ -161,8 +157,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
      * @param query The text to search for in the image IDs.
      */
     private void filterImages(String query) {
-        final List<ImageData> oldList = new ArrayList<>(filteredList);
-        final List<ImageData> newList = new ArrayList<>();
+        List<ImageData> newList = new ArrayList<>();
         String lowerQuery = query.toLowerCase().trim();
         for (ImageData img : allImages) {
             if (img.getId() != null && img.getId().toLowerCase().contains(lowerQuery)) {
@@ -170,12 +165,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             }
         }
 
-        final ImageDiffCallback diffCallback = new ImageDiffCallback(oldList, newList);
-        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-
-        filteredList.clear();
-        filteredList.addAll(newList);
-        diffResult.dispatchUpdatesTo(adapter);
+        adapter.submitList(newList);
     }
 
     /**

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.adapters.diffUtils.GameRoomDiffCallback;
 import com.example.sagivproject.models.GameRoom;
 
 import java.text.MessageFormat;
@@ -69,7 +68,7 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
      * @param newRooms The new list of game rooms.
      */
     public void updateData(List<GameRoom> newRooms, Map<String, String> uidToNameMap) {
-        final GameRoomDiffCallback diffCallback = new GameRoomDiffCallback(this.gameRooms, newRooms);
+        final GenericDiffCallback<GameRoom> diffCallback = new GenericDiffCallback<>(this.gameRooms, newRooms);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
         this.gameRooms.clear();

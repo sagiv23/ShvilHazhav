@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -13,20 +14,24 @@ import com.example.sagivproject.models.Card;
 import com.example.sagivproject.screens.MemoryGameActivity;
 import com.example.sagivproject.utils.ImageUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.CardViewHolder> {
     private static final int CAMERA_DISTANCE = 8000;
-    private final List<Card> cards;
+    private final List<Card> cards = new ArrayList<>();
     private final MemoryGameListener listener;
 
-    public MemoryGameAdapter(List<Card> cards, MemoryGameListener listener) {
-        this.cards = cards;
+    public MemoryGameAdapter(MemoryGameListener listener) {
         this.listener = listener;
     }
 
-    public List<Card> getCards() {
-        return cards;
+    public void submitList(List<Card> newCards) {
+        GenericDiffCallback<Card> diffCallback = new GenericDiffCallback<>(this.cards, newCards);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        this.cards.clear();
+        this.cards.addAll(newCards);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull

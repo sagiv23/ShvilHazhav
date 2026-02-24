@@ -13,13 +13,11 @@ import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
-import com.example.sagivproject.adapters.diffUtils.CardDiffCallback;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
@@ -82,7 +80,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         tvScore = findViewById(R.id.tv_OnlineMemoryGame_score);
         tvOpponentName = findViewById(R.id.tv_OnlineMemoryGame_opponent_name);
 
-        adapter = new MemoryGameAdapter(new ArrayList<>(), this);
+        adapter = new MemoryGameAdapter(this);
         recyclerCards.setAdapter(adapter);
 
         Button btnExit = findViewById(R.id.btn_OnlineMemoryGame_to_exit);
@@ -355,15 +353,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                 }
 
                 if (room.getCards() != null) {
-                    List<Card> oldCards = new ArrayList<>(adapter.getCards());
-                    List<Card> newCards = room.getCards();
-
-                    CardDiffCallback diffCallback = new CardDiffCallback(oldCards, newCards);
-                    DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-
-                    adapter.getCards().clear();
-                    adapter.getCards().addAll(newCards);
-                    diffResult.dispatchUpdatesTo(adapter);
+                    adapter.submitList(room.getCards());
                 }
 
                 String myUid = user.getId();

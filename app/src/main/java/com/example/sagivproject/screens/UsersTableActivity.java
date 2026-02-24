@@ -23,13 +23,11 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.UsersTableAdapter;
-import com.example.sagivproject.adapters.diffUtils.UserDiffCallback;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.UserRole;
@@ -55,7 +53,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class UsersTableActivity extends BaseActivity {
     private final List<User> usersList = new ArrayList<>();
-    private final List<User> filteredList = new ArrayList<>();
     private UsersTableAdapter adapter;
     private EditText editSearch;
     private Spinner spinnerSearchType;
@@ -90,7 +87,7 @@ public class UsersTableActivity extends BaseActivity {
         Button btnAddUser = findViewById(R.id.btn_UsersTable_add_user);
         btnAddUser.setOnClickListener(v -> new AddUserDialog(this, newUser -> loadUsers(), databaseService.getAuthService()).show());
 
-        adapter = new UsersTableAdapter(filteredList, currentUser,
+        adapter = new UsersTableAdapter(currentUser,
                 new UsersTableAdapter.OnUserActionListener() {
 
                     @Override
@@ -289,8 +286,6 @@ public class UsersTableActivity extends BaseActivity {
      * @param query The search text entered by the admin.
      */
     private void filterUsers(String query) {
-        List<User> oldList = new ArrayList<>(filteredList);
-        filteredList.clear();
         String searchType = spinnerSearchType.getSelectedItem().toString();
         String lowerQuery = query.toLowerCase();
 
@@ -342,10 +337,6 @@ public class UsersTableActivity extends BaseActivity {
                 break;
         }
 
-        UserDiffCallback diffCallback = new UserDiffCallback(oldList, newFilteredList);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-        filteredList.clear();
-        filteredList.addAll(newFilteredList);
-        diffResult.dispatchUpdatesTo(adapter);
+        adapter.submitList(newFilteredList);
     }
 }
