@@ -8,12 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.utils.ImageUtil;
+
+import java.util.List;
 
 /**
  * A RecyclerView adapter for displaying a table of {@link ImageData} objects, intended for admin use.
@@ -21,11 +23,12 @@ import com.example.sagivproject.utils.ImageUtil;
  * This adapter is used to manage the images for the memory game. It displays each image
  * along with its ID and provides a delete button for each. It also handles click events
  * for viewing a full-size image.
- * It uses {@link ListAdapter} with a {@link GenericDiffCallback} for efficient list updates.
+ * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
-public class MedicationImagesTableAdapter extends ListAdapter<ImageData, MedicationImagesTableAdapter.ViewHolder> {
+public class MedicationImagesTableAdapter extends RecyclerView.Adapter<MedicationImagesTableAdapter.ViewHolder> {
     private final OnImageActionListener listener;
+    private final AsyncListDiffer<ImageData> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
 
     /**
      * Constructs a new MedicationImagesTableAdapter.
@@ -33,8 +36,11 @@ public class MedicationImagesTableAdapter extends ListAdapter<ImageData, Medicat
      * @param listener The listener for image actions (delete, click).
      */
     public MedicationImagesTableAdapter(OnImageActionListener listener) {
-        super(new GenericDiffCallback<>());
         this.listener = listener;
+    }
+
+    public void submitList(List<ImageData> images) {
+        differ.submitList(images);
     }
 
     @NonNull
@@ -47,7 +53,7 @@ public class MedicationImagesTableAdapter extends ListAdapter<ImageData, Medicat
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ImageData data = getItem(position);
+        ImageData data = differ.getCurrentList().get(position);
 
         if (data.getId() != null) {
             holder.txtId.setVisibility(View.VISIBLE);
@@ -72,6 +78,11 @@ public class MedicationImagesTableAdapter extends ListAdapter<ImageData, Medicat
                 listener.onDeleteImage(data);
             }
         });
+    }
+
+    @Override
+    public int getItemCount() {
+        return differ.getCurrentList().size();
     }
 
     /**

@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -17,6 +17,7 @@ import com.example.sagivproject.utils.ImageUtil;
 
 import java.text.MessageFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -25,12 +26,13 @@ import java.util.Locale;
  * This adapter binds detailed user information to a row layout. It provides controls for
  * administrators to perform actions such as deleting a user or toggling their admin status.
  * It also handles click events for editing a user or viewing their profile picture.
- * It uses {@link ListAdapter} with a {@link GenericDiffCallback} for efficient list updates.
+ * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
-public class UsersTableAdapter extends ListAdapter<User, UsersTableAdapter.UserViewHolder> {
+public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.UserViewHolder> {
     private final User currentUser;
     private final OnUserActionListener listener;
+    private final AsyncListDiffer<User> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
 
     /**
      * Constructs a new UsersTableAdapter.
@@ -39,9 +41,12 @@ public class UsersTableAdapter extends ListAdapter<User, UsersTableAdapter.UserV
      * @param listener    The listener for user action events.
      */
     public UsersTableAdapter(User currentUser, OnUserActionListener listener) {
-        super(new GenericDiffCallback<>());
         this.currentUser = currentUser;
         this.listener = listener;
+    }
+
+    public void submitList(List<User> users) {
+        differ.submitList(users);
     }
 
     @NonNull
@@ -53,7 +58,7 @@ public class UsersTableAdapter extends ListAdapter<User, UsersTableAdapter.UserV
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        User user = getItem(position);
+        User user = differ.getCurrentList().get(position);
 
         // Bind user data to views
         holder.txtUserFullName.setText(user.getFullName());
@@ -97,6 +102,11 @@ public class UsersTableAdapter extends ListAdapter<User, UsersTableAdapter.UserV
         });
 
         holder.imgUserProfile.setOnClickListener(v -> listener.onUserImageClicked(user, holder.imgUserProfile));
+    }
+
+    @Override
+    public int getItemCount() {
+        return differ.getCurrentList().size();
     }
 
     /**

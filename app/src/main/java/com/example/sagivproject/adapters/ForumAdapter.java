@@ -15,12 +15,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
+
+import java.util.List;
 
 /**
  * A RecyclerView adapter for displaying a list of {@link ForumMessage} objects.
@@ -28,14 +30,14 @@ import com.example.sagivproject.ui.CustomTypefaceSpan;
  * This adapter handles the binding of forum message data to the corresponding views in the
  * item layout. It also manages a popup menu for message actions, such as deletion,
  * based on permissions determined by a {@link ForumMessageListener}.
- * It uses {@link ListAdapter} with a {@link GenericDiffCallback} for efficient list updates.
+ * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
-public class ForumAdapter extends ListAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
+public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
     private ForumMessageListener listener;
+    private final AsyncListDiffer<ForumMessage> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
 
     public ForumAdapter() {
-        super(new GenericDiffCallback<>());
     }
 
     /**
@@ -45,6 +47,10 @@ public class ForumAdapter extends ListAdapter<ForumMessage, ForumAdapter.ForumVi
      */
     public void setForumMessageListener(ForumMessageListener listener) {
         this.listener = listener;
+    }
+
+    public void submitList(List<ForumMessage> newMessages) {
+        differ.submitList(newMessages);
     }
 
     @NonNull
@@ -57,7 +63,7 @@ public class ForumAdapter extends ListAdapter<ForumMessage, ForumAdapter.ForumVi
 
     @Override
     public void onBindViewHolder(@NonNull ForumViewHolder holder, int position) {
-        ForumMessage msg = getItem(position);
+        ForumMessage msg = differ.getCurrentList().get(position);
 
         Typeface customFont = ResourcesCompat.getFont(holder.itemView.getContext(), R.font.text_hebrew);
         SpannableString userNameSpannable = new SpannableString(msg.getFullName());
@@ -105,6 +111,11 @@ public class ForumAdapter extends ListAdapter<ForumMessage, ForumAdapter.ForumVi
         } else {
             holder.btnMenu.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return differ.getCurrentList().size();
     }
 
     /**

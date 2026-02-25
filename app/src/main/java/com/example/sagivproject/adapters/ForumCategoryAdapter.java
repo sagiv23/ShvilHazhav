@@ -7,11 +7,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumCategory;
+
+import java.util.List;
 
 /**
  * A RecyclerView adapter for displaying a list of {@link ForumCategory} objects.
@@ -19,12 +21,13 @@ import com.example.sagivproject.models.ForumCategory;
  * This adapter handles the binding of category data to the corresponding views.
  * It supports different appearances and actions based on whether the user is an admin,
  * such as showing a delete button for each category.
- * It uses {@link ListAdapter} with a {@link GenericDiffCallback} for efficient list updates.
+ * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
-public class ForumCategoryAdapter extends ListAdapter<ForumCategory, ForumCategoryAdapter.CategoryViewHolder> {
+public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdapter.CategoryViewHolder> {
     private final OnCategoryInteractionListener listener;
     private final boolean isAdmin;
+    private final AsyncListDiffer<ForumCategory> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
 
     /**
      * Constructs a new ForumCategoryAdapter.
@@ -33,9 +36,12 @@ public class ForumCategoryAdapter extends ListAdapter<ForumCategory, ForumCatego
      * @param isAdmin  True if the adapter should be in admin mode, false otherwise.
      */
     public ForumCategoryAdapter(@NonNull OnCategoryInteractionListener listener, boolean isAdmin) {
-        super(new GenericDiffCallback<>());
         this.listener = listener;
         this.isAdmin = isAdmin;
+    }
+
+    public void submitList(List<ForumCategory> newCategories) {
+        differ.submitList(newCategories);
     }
 
     @NonNull
@@ -47,7 +53,7 @@ public class ForumCategoryAdapter extends ListAdapter<ForumCategory, ForumCatego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        ForumCategory category = getItem(position);
+        ForumCategory category = differ.getCurrentList().get(position);
         holder.categoryName.setText(category.getName());
 
         // Configure visibility and actions based on admin status
@@ -63,6 +69,11 @@ public class ForumCategoryAdapter extends ListAdapter<ForumCategory, ForumCatego
         }
 
         holder.itemView.setOnClickListener(v -> listener.onClick(category));
+    }
+
+    @Override
+    public int getItemCount() {
+        return differ.getCurrentList().size();
     }
 
     /**

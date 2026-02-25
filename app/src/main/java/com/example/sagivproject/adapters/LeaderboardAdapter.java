@@ -6,29 +6,34 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 /**
  * A RecyclerView adapter for displaying a leaderboard of users based on their game wins.
  * <p>
  * This adapter takes a list of {@link User} objects, sorted by win count, and displays them.
  * It gives a special visual treatment (a trophy emoji) to the top-ranked player.
- * It uses {@link ListAdapter} with a {@link GenericDiffCallback} for efficient list updates.
+ * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
-public class LeaderboardAdapter extends ListAdapter<User, LeaderboardAdapter.ViewHolder> {
+public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
+    private final AsyncListDiffer<User> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
 
     /**
      * Constructs a new LeaderboardAdapter.
      */
     public LeaderboardAdapter() {
-        super(new GenericDiffCallback<>());
+    }
+
+    public void submitList(List<User> users) {
+        differ.submitList(users);
     }
 
     @NonNull
@@ -40,7 +45,7 @@ public class LeaderboardAdapter extends ListAdapter<User, LeaderboardAdapter.Vie
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = getItem(position);
+        User user = differ.getCurrentList().get(position);
         holder.tvName.setText(user.getFullName());
 
         // Add a trophy for the first place user
@@ -49,6 +54,11 @@ public class LeaderboardAdapter extends ListAdapter<User, LeaderboardAdapter.Vie
         } else {
             holder.tvWins.setText(String.valueOf(user.getCountWins()));
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return differ.getCurrentList().size();
     }
 
     /**

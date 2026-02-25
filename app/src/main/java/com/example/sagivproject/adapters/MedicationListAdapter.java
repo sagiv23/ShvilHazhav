@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -31,12 +31,13 @@ import java.util.List;
  * This adapter binds medication data to the item view, displaying details like name, type,
  * dosage, and reminder times. It also provides an options menu for each item to allow
  * for editing and deleting the medication.
- * It uses {@link ListAdapter} with a {@link GenericDiffCallback} for efficient list updates.
+ * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
-public class MedicationListAdapter extends ListAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
+public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
     private final OnMedicationActionListener listener;
+    private final AsyncListDiffer<Medication> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
 
     /**
      * Constructs a new MedicationListAdapter.
@@ -45,9 +46,12 @@ public class MedicationListAdapter extends ListAdapter<Medication, MedicationLis
      * @param listener The listener for medication item actions (edit, delete).
      */
     public MedicationListAdapter(Context context, OnMedicationActionListener listener) {
-        super(new GenericDiffCallback<>());
         this.context = context;
         this.listener = listener;
+    }
+
+    public void submitList(List<Medication> medications) {
+        differ.submitList(medications);
     }
 
     @NonNull
@@ -59,7 +63,7 @@ public class MedicationListAdapter extends ListAdapter<Medication, MedicationLis
 
     @Override
     public void onBindViewHolder(@NonNull MedicationViewHolder holder, int position) {
-        Medication med = getItem(position);
+        Medication med = differ.getCurrentList().get(position);
 
         Typeface typeface = ResourcesCompat.getFont(context, R.font.text_hebrew);
 
@@ -108,7 +112,7 @@ public class MedicationListAdapter extends ListAdapter<Medication, MedicationLis
                 int currentPos = holder.getBindingAdapterPosition();
                 if (currentPos == RecyclerView.NO_POSITION) return false;
 
-                Medication currentMed = getItem(currentPos);
+                Medication currentMed = differ.getCurrentList().get(currentPos);
                 if (item.getItemId() == R.id.action_edit) {
                     listener.onEdit(currentMed);
                     return true;
@@ -121,6 +125,11 @@ public class MedicationListAdapter extends ListAdapter<Medication, MedicationLis
 
             menu.show();
         });
+    }
+
+    @Override
+    public int getItemCount() {
+        return differ.getCurrentList().size();
     }
 
     /**
