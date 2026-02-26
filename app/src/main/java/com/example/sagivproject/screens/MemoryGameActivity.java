@@ -369,8 +369,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                     databaseService.getGameService().removeForfeitOnDisconnect(roomId);
 
                     if (!endDialogShown) {
-                        endDialogShown = true;
-
                         if (myUid.equals(room.getWinnerUid())) {
                             databaseService.getGameService().addUserWin(myUid);
                         }

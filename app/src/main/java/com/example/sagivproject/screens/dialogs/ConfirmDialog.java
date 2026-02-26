@@ -46,7 +46,7 @@ public class ConfirmDialog {
         this.context = context;
         this.title = title;
         this.message = message;
-        this.confirmText = "OK"; // Default confirm text
+        this.confirmText = "אישור"; // Default confirm text
         this.cancelText = null; // No cancel button
         this.onConfirm = onConfirm;
         this.isSingleAction = true;
