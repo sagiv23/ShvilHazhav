@@ -65,7 +65,7 @@ public class BirthdayWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        if (!sharedPreferencesUtil.isUserLoggedIn()) return Result.success();
+        if (sharedPreferencesUtil.isUserLoggedIn()) return Result.success();
 
         String userId = sharedPreferencesUtil.getUserId();
         final CountDownLatch latch = new CountDownLatch(1); // Used to wait for async database call

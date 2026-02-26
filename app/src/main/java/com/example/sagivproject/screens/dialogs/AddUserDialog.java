@@ -7,8 +7,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.Validator;
 
@@ -19,27 +17,23 @@ import java.util.function.Predicate;
  * A dialog for administrators to add a new user to the application.
  * <p>
  * This dialog provides a form for entering the new user's details, including first name,
- * last name, birthdate, email, and password. It includes input validation and uses the
- * {@link IAuthService} to create the new user.
+ * last name, birthdate, email, and password. It includes input validation.
  * </p>
  */
 public class AddUserDialog {
     private final Context context;
-    private final AddUserListener listener;
-    private final IAuthService authService;
+    private final AddUserDialogListener listener;
     private long birthDateMillis = -1;
 
     /**
      * Constructs a new AddUserDialog.
      *
-     * @param context     The context in which the dialog should be shown.
-     * @param listener    A listener to be notified when a user is successfully added.
-     * @param authService The authentication service to handle user creation.
+     * @param context  The context in which the dialog should be shown.
+     * @param listener A listener to be notified when the add button is clicked.
      */
-    public AddUserDialog(Context context, AddUserListener listener, IAuthService authService) {
+    public AddUserDialog(Context context, AddUserDialogListener listener) {
         this.context = context;
         this.listener = listener;
-        this.authService = authService;
     }
 
     /**
@@ -73,21 +67,10 @@ public class AddUserDialog {
                 return;
             }
 
-            authService.addUser(fName, lName, birthDateMillis, email, password, new IAuthService.AddUserCallback() {
-                @Override
-                public void onSuccess(User user) {
-                    if (listener != null) {
-                        listener.onUserAdded(user);
-                    }
-                    Toast.makeText(context, "משתמש נוסף בהצלחה", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-
-                @Override
-                public void onError(String message) {
-                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                }
-            });
+            if (listener != null) {
+                listener.onAddUser(fName, lName, birthDateMillis, email, password);
+            }
+            dialog.dismiss();
         });
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
@@ -132,14 +115,18 @@ public class AddUserDialog {
     }
 
     /**
-     * An interface to listen for the successful addition of a new user.
+     * An interface to listen for the add user action.
      */
-    public interface AddUserListener {
+    public interface AddUserDialogListener {
         /**
-         * Called when a new user has been successfully added.
+         * Called when the user clicks the add button and all fields are valid.
          *
-         * @param newUser The newly created user object.
+         * @param fName           The user's first name.
+         * @param lName           The user's last name.
+         * @param birthDateMillis The user's birthdate in milliseconds.
+         * @param email           The user's email.
+         * @param password        The user's password.
          */
-        void onUserAdded(User newUser);
+        void onAddUser(String fName, String lName, long birthDateMillis, String email, String password);
     }
 }

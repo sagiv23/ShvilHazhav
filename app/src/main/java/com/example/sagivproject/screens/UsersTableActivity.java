@@ -34,6 +34,7 @@ import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.screens.dialogs.AddUserDialog;
 import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.screens.dialogs.FullImageDialog;
+import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
 
 import java.util.ArrayList;
@@ -85,10 +86,19 @@ public class UsersTableActivity extends BaseActivity {
         setupTopMenu(topMenuContainer);
 
         Button btnAddUser = findViewById(R.id.btn_UsersTable_add_user);
-        btnAddUser.setOnClickListener(v -> new AddUserDialog(this, newUser -> {
-            usersList.add(newUser);
-            filterUsers(editSearch.getText().toString().trim());
-        }, databaseService.getAuthService()).show());
+        btnAddUser.setOnClickListener(v -> new AddUserDialog(this, (fName, lName, birthDateMillis, email, password) -> databaseService.getAuthService().addUser(fName, lName, birthDateMillis, email, password, new IAuthService.AddUserCallback() {
+            @Override
+            public void onSuccess(User user) {
+                usersList.add(user);
+                filterUsers(editSearch.getText().toString().trim());
+                Toast.makeText(UsersTableActivity.this, "משתמש נוסף בהצלחה", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(UsersTableActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        })).show());
 
         adapter = new UsersTableAdapter(currentUser,
                 new UsersTableAdapter.OnUserActionListener() {

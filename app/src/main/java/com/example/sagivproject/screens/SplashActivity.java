@@ -55,7 +55,7 @@ public class SplashActivity extends BaseActivity {
      */
     private void navigateNext() {
         User cachedUser = sharedPreferencesUtil.getUser();
-        if (cachedUser == null || !sharedPreferencesUtil.isUserLoggedIn()) {
+        if (cachedUser == null || sharedPreferencesUtil.isUserLoggedIn()) {
             goTo(LandingActivity.class);
             return;
         }
