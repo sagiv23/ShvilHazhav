@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -14,6 +13,7 @@ import com.example.sagivproject.models.Card;
 import com.example.sagivproject.screens.MemoryGameActivity;
 import com.example.sagivproject.utils.ImageUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,20 +23,22 @@ import java.util.List;
  * and animations for revealing, hiding, matching, and error states. It communicates user
  * interactions, such as card clicks, back to the hosting activity or fragment through the
  * {@link MemoryGameListener}.
- * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
 public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.CardViewHolder> {
     private static final int CAMERA_DISTANCE = 8000;
     private final MemoryGameListener listener;
-    private final AsyncListDiffer<Card> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
+    private final List<Card> cardList;
 
     public MemoryGameAdapter(MemoryGameListener listener) {
         this.listener = listener;
+        this.cardList = new ArrayList<>();
     }
 
-    public void submitList(List<Card> cards) {
-        differ.submitList(cards);
+    public void setCards(List<Card> cards) {
+        cardList.clear();
+        cardList.addAll(cards);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -48,7 +50,7 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        Card card = differ.getCurrentList().get(position);
+        Card card = cardList.get(position);
 
         // Reset animations
         holder.itemView.animate().cancel();
@@ -82,14 +84,14 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         holder.itemView.setOnClickListener(v -> {
             int currentPosition = holder.getBindingAdapterPosition();
             if (currentPosition != RecyclerView.NO_POSITION) {
-                listener.onCardClicked(differ.getCurrentList().get(currentPosition), currentPosition);
+                listener.onCardClicked(cardList.get(currentPosition), currentPosition);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return differ.getCurrentList().size();
+        return cardList.size();
     }
 
     /**

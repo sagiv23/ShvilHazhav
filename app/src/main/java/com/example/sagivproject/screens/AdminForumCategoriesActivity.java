@@ -90,7 +90,7 @@ public class AdminForumCategoriesActivity extends BaseActivity {
                     @Override
                     public void onCompleted(Void data) {
                         edtNewCategoryName.setText("");
-                        loadCategories();
+                        loadCategories(); // Have to reload because we don't get the new category object back
                         Toast.makeText(AdminForumCategoriesActivity.this, "קטגוריה נוספה", Toast.LENGTH_SHORT).show();
                     }
 
@@ -113,7 +113,7 @@ public class AdminForumCategoriesActivity extends BaseActivity {
         databaseService.getForumCategoriesService().getCategories(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ForumCategory> data) {
-                adapter.submitList(data);
+                adapter.setCategories(data);
             }
 
             @Override
@@ -127,7 +127,7 @@ public class AdminForumCategoriesActivity extends BaseActivity {
         databaseService.getForumCategoriesService().deleteCategory(category.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void data) {
-                loadCategories();
+                adapter.removeCategory(category);
                 Toast.makeText(AdminForumCategoriesActivity.this, "הקטגוריה נמחקה", Toast.LENGTH_SHORT).show();
             }
 

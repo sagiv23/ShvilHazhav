@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.GameRoom;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +21,11 @@ import java.util.Map;
  * <p>
  * This adapter is intended for administrative or debugging purposes, showing a real-time
  * list of all game rooms and their current state, including players, score, and status.
- * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
 public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdapter.ViewHolder> {
+    private final List<GameRoom> roomList;
     private Map<String, String> uidToNameMap;
-    private final AsyncListDiffer<GameRoom> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
 
     /**
      * Constructs a new MemoryGameLogAdapter.
@@ -35,6 +34,7 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
      */
     public MemoryGameLogAdapter(Map<String, String> uidToNameMap) {
         this.uidToNameMap = uidToNameMap;
+        this.roomList = new ArrayList<>();
     }
 
     @NonNull
@@ -46,7 +46,7 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GameRoom room = differ.getCurrentList().get(position);
+        GameRoom room = roomList.get(position);
 
         String p1Name = uidToNameMap.getOrDefault(room.getPlayer1Uid(), "שחקן לא ידוע");
         String p2Name = uidToNameMap.getOrDefault(room.getPlayer2Uid(), "ממתין...");
@@ -58,7 +58,7 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
 
     @Override
     public int getItemCount() {
-        return differ.getCurrentList().size();
+        return roomList.size();
     }
 
     /**
@@ -66,8 +66,10 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
      *
      * @param newRooms The new list of game rooms.
      */
-    public void submitList(List<GameRoom> newRooms) {
-        differ.submitList(newRooms);
+    public void setRooms(List<GameRoom> newRooms) {
+        roomList.clear();
+        roomList.addAll(newRooms);
+        notifyDataSetChanged();
     }
 
     /**
@@ -78,7 +80,7 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
      */
     public void submitData(List<GameRoom> newRooms, Map<String, String> newMap) {
         this.uidToNameMap = newMap;
-        submitList(newRooms);
+        setRooms(newRooms);
     }
 
     /**

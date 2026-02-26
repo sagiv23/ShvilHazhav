@@ -242,7 +242,8 @@ public class MedicationListActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 alarmScheduler.schedule(medication);
-                fetchMedicationsFromServer(); // Refresh list from server
+                medications.add(medication);
+                updateMedicationList(medications);
                 Toast.makeText(MedicationListActivity.this, "התרופה נוספה", Toast.LENGTH_SHORT).show();
             }
 
@@ -265,7 +266,13 @@ public class MedicationListActivity extends BaseActivity {
             public void onCompleted(Void object) {
                 alarmScheduler.cancel(med); // Cancel old alarms
                 alarmScheduler.schedule(med); // Schedule new alarms
-                fetchMedicationsFromServer(); // Refresh list from server
+                for (int i = 0; i < medications.size(); i++) {
+                    if (medications.get(i).getId().equals(med.getId())) {
+                        medications.set(i, med);
+                        break;
+                    }
+                }
+                updateMedicationList(medications);
                 Toast.makeText(MedicationListActivity.this, "התרופה עודכנה", Toast.LENGTH_SHORT).show();
             }
 
@@ -286,7 +293,8 @@ public class MedicationListActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 alarmScheduler.cancel(medication);
-                fetchMedicationsFromServer(); // Refresh list from server
+                medications.remove(medication);
+                updateMedicationList(medications);
                 Toast.makeText(MedicationListActivity.this, "התרופה נמחקה", Toast.LENGTH_SHORT).show();
             }
 
@@ -345,6 +353,6 @@ public class MedicationListActivity extends BaseActivity {
             }
         }
 
-        adapter.submitList(filteredMedications);
+        adapter.setMedications(filteredMedications);
     }
 }

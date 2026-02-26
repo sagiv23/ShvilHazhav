@@ -7,12 +7,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.ForumCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,13 +21,12 @@ import java.util.List;
  * This adapter handles the binding of category data to the corresponding views.
  * It supports different appearances and actions based on whether the user is an admin,
  * such as showing a delete button for each category.
- * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
 public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdapter.CategoryViewHolder> {
     private final OnCategoryInteractionListener listener;
     private final boolean isAdmin;
-    private final AsyncListDiffer<ForumCategory> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
+    private final List<ForumCategory> categoryList;
 
     /**
      * Constructs a new ForumCategoryAdapter.
@@ -38,10 +37,29 @@ public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdap
     public ForumCategoryAdapter(@NonNull OnCategoryInteractionListener listener, boolean isAdmin) {
         this.listener = listener;
         this.isAdmin = isAdmin;
+        this.categoryList = new ArrayList<>();
     }
 
-    public void submitList(List<ForumCategory> newCategories) {
-        differ.submitList(newCategories);
+    public void setCategories(List<ForumCategory> newCategories) {
+        categoryList.clear();
+        categoryList.addAll(newCategories);
+        notifyDataSetChanged();
+    }
+
+    public void removeCategory(ForumCategory category) {
+        int index = categoryList.indexOf(category);
+        if (index != -1) {
+            categoryList.remove(index);
+            notifyItemRemoved(index);
+        }
+    }
+
+    public void updateCategory(ForumCategory category) {
+        int index = categoryList.indexOf(category);
+        if (index != -1) {
+            categoryList.set(index, category);
+            notifyItemChanged(index);
+        }
     }
 
     @NonNull
@@ -53,7 +71,7 @@ public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdap
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        ForumCategory category = differ.getCurrentList().get(position);
+        ForumCategory category = categoryList.get(position);
         holder.categoryName.setText(category.getName());
 
         // Configure visibility and actions based on admin status
@@ -73,7 +91,7 @@ public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdap
 
     @Override
     public int getItemCount() {
-        return differ.getCurrentList().size();
+        return categoryList.size();
     }
 
     /**

@@ -90,7 +90,7 @@ public class ForumCategoriesActivity extends BaseActivity {
         databaseService.getForumCategoriesService().getCategories(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ForumCategory> data) {
-                adapter.submitList(data);
+                adapter.setCategories(data);
             }
 
             @Override

@@ -1,5 +1,6 @@
 package com.example.sagivproject.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
@@ -16,6 +16,7 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.ImageUtil;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -26,13 +27,12 @@ import java.util.Locale;
  * This adapter binds detailed user information to a row layout. It provides controls for
  * administrators to perform actions such as deleting a user or toggling their admin status.
  * It also handles click events for editing a user or viewing their profile picture.
- * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
 public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.UserViewHolder> {
     private final User currentUser;
     private final OnUserActionListener listener;
-    private final AsyncListDiffer<User> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
+    private final List<User> userList;
 
     /**
      * Constructs a new UsersTableAdapter.
@@ -43,10 +43,14 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
     public UsersTableAdapter(User currentUser, OnUserActionListener listener) {
         this.currentUser = currentUser;
         this.listener = listener;
+        this.userList = new ArrayList<>();
     }
 
-    public void submitList(List<User> users) {
-        differ.submitList(users);
+    @SuppressLint("NotifyDataSetChanged")
+    public void setUserList(List<User> users) {
+        userList.clear();
+        userList.addAll(users);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -58,7 +62,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        User user = differ.getCurrentList().get(position);
+        User user = userList.get(position);
 
         // Bind user data to views
         holder.txtUserFullName.setText(user.getFullName());
@@ -106,7 +110,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
 
     @Override
     public int getItemCount() {
-        return differ.getCurrentList().size();
+        return userList.size();
     }
 
     /**

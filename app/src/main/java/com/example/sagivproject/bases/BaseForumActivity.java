@@ -97,6 +97,7 @@ public abstract class BaseForumActivity extends BaseActivity {
                 databaseService.getForumService().deleteMessage(message.getId(), categoryId, new DatabaseCallback<>() {
                     @Override
                     public void onCompleted(Void data) {
+                        adapter.removeMessage(message);
                         Toast.makeText(BaseForumActivity.this, "ההודעה נמחקה", Toast.LENGTH_SHORT).show();
                     }
 
@@ -126,13 +127,13 @@ public abstract class BaseForumActivity extends BaseActivity {
                 boolean wasAtBottom = isLastItemVisible();
                 int previousItemCount = adapter.getItemCount();
 
-                adapter.submitList(list, () -> {
-                    if (wasAtBottom) {
-                        scrollToBottom(false);
-                    } else if (list.size() > previousItemCount && btnNewMessagesIndicator != null) {
-                        btnNewMessagesIndicator.setVisibility(View.VISIBLE);
-                    }
-                });
+                adapter.setMessages(list);
+
+                if (wasAtBottom) {
+                    scrollToBottom(false);
+                } else if (list.size() > previousItemCount && btnNewMessagesIndicator != null) {
+                    btnNewMessagesIndicator.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

@@ -85,7 +85,10 @@ public class UsersTableActivity extends BaseActivity {
         setupTopMenu(topMenuContainer);
 
         Button btnAddUser = findViewById(R.id.btn_UsersTable_add_user);
-        btnAddUser.setOnClickListener(v -> new AddUserDialog(this, newUser -> loadUsers(), databaseService.getAuthService()).show());
+        btnAddUser.setOnClickListener(v -> new AddUserDialog(this, newUser -> {
+            usersList.add(newUser);
+            filterUsers(editSearch.getText().toString().trim());
+        }, databaseService.getAuthService()).show());
 
         adapter = new UsersTableAdapter(currentUser,
                 new UsersTableAdapter.OnUserActionListener() {
@@ -105,7 +108,13 @@ public class UsersTableActivity extends BaseActivity {
                         new EditUserDialog(
                                 UsersTableActivity.this,
                                 clickedUser,
-                                () -> loadUsers(),
+                                () -> {
+                                    int index = usersList.indexOf(clickedUser);
+                                    if (index != -1) {
+                                        usersList.set(index, clickedUser);
+                                        filterUsers(editSearch.getText().toString().trim());
+                                    }
+                                },
                                 databaseService.getAuthService()
                         ).show();
                     }
@@ -237,7 +246,8 @@ public class UsersTableActivity extends BaseActivity {
                         "הסטטוס עודכן בהצלחה",
                         Toast.LENGTH_SHORT
                 ).show();
-                loadUsers(); // Refresh list
+                user.setRole(newRole);
+                filterUsers(editSearch.getText().toString().trim());
             }
 
             @Override
@@ -270,7 +280,8 @@ public class UsersTableActivity extends BaseActivity {
                 }
 
                 Toast.makeText(UsersTableActivity.this, "המשתמש נמחק", Toast.LENGTH_SHORT).show();
-                loadUsers();
+                usersList.remove(user);
+                filterUsers(editSearch.getText().toString().trim());
             }
 
             @Override
@@ -337,6 +348,6 @@ public class UsersTableActivity extends BaseActivity {
                 break;
         }
 
-        adapter.submitList(newFilteredList);
+        adapter.setUserList(newFilteredList);
     }
 }

@@ -165,7 +165,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             }
         }
 
-        adapter.submitList(newList);
+        adapter.setImages(newList);
     }
 
     /**
@@ -191,7 +191,8 @@ public class MedicationImagesTableActivity extends BaseActivity {
                     @Override
                     public void onCompleted(Void object) {
                         Toast.makeText(MedicationImagesTableActivity.this, "התמונה נוספה כ-" + newId, Toast.LENGTH_SHORT).show();
-                        loadImages();
+                        allImages.add(newImg);
+                        filterImages(Objects.requireNonNull(etSearch.getText()).toString());
                     }
 
                     @Override
@@ -239,7 +240,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 Toast.makeText(MedicationImagesTableActivity.this, "הרשימה סודרה מחדש", Toast.LENGTH_SHORT).show();
-                loadImages();
+                filterImages(Objects.requireNonNull(etSearch.getText()).toString());
             }
 
             @Override

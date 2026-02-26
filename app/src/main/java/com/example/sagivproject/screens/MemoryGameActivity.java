@@ -356,7 +356,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                 }
 
                 if (room.getCards() != null) {
-                    adapter.submitList(room.getCards());
+                    adapter.setCards(room.getCards());
                 }
 
                 String myUid = user.getId();

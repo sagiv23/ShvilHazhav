@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,20 +20,22 @@ import java.util.List;
  * <p>
  * This adapter takes a list of {@link User} objects, sorted by win count, and displays them.
  * It gives a special visual treatment (a trophy emoji) to the top-ranked player.
- * It uses {@link AsyncListDiffer} with a {@link GenericDiffCallback} for efficient list updates.
  * </p>
  */
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
-    private final AsyncListDiffer<User> differ = new AsyncListDiffer<>(this, new GenericDiffCallback<>());
+    private final List<User> userList;
 
     /**
      * Constructs a new LeaderboardAdapter.
      */
     public LeaderboardAdapter() {
+        this.userList = new ArrayList<>();
     }
 
-    public void submitList(List<User> users) {
-        differ.submitList(users);
+    public void setUsers(List<User> users) {
+        userList.clear();
+        userList.addAll(users);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -45,7 +47,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = differ.getCurrentList().get(position);
+        User user = userList.get(position);
         holder.tvName.setText(user.getFullName());
 
         // Add a trophy for the first place user
@@ -58,7 +60,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
     @Override
     public int getItemCount() {
-        return differ.getCurrentList().size();
+        return userList.size();
     }
 
     /**
