@@ -52,13 +52,10 @@ dependencies {
     implementation libs.gson
     implementation platform(libs.firebase.bom)
     implementation libs.google.firebase.database
-    implementation libs.okhttp
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
     implementation libs.hilt.work
     annotationProcessor libs.hilt.work
-
-    // Firebase AI dependencies
     implementation libs.firebase.ai
     implementation libs.guava
     implementation libs.reactive.streams
