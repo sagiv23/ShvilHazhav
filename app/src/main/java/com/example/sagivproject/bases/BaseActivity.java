@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +20,7 @@ import com.example.sagivproject.screens.RegisterActivity;
 import com.example.sagivproject.screens.SettingsActivity;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     private void setupAdminMenu(ViewGroup menuContainer) {
         getLayoutInflater().inflate(R.layout.top_menu_admin, menuContainer, true);
-        Button btnAdmin = findViewById(R.id.btn_menu_admin_back);
+        MaterialButton btnAdmin = findViewById(R.id.btn_menu_admin_back);
         btnAdmin.setOnClickListener(v -> finish());
     }
 
@@ -123,7 +122,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * Helper method to set up the settings button's click listener with the correct intent extra.
      */
     private void setupSettingsButton(int buttonId, boolean isFromLoggedIn) {
-        ImageButton btnSettings = findViewById(buttonId);
+        MaterialButton btnSettings = findViewById(buttonId);
         btnSettings.setOnClickListener(v -> {
             Intent intent = new Intent(this, SettingsActivity.class);
             intent.putExtra("isFromLoggedIn", isFromLoggedIn);

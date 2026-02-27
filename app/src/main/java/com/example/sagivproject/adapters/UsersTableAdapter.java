@@ -1,6 +1,5 @@
 package com.example.sagivproject.adapters;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.ImageUtil;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -29,10 +27,9 @@ import java.util.Locale;
  * It also handles click events for editing a user or viewing their profile picture.
  * </p>
  */
-public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.UserViewHolder> {
+public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserViewHolder> {
     private final User currentUser;
     private final OnUserActionListener listener;
-    private final List<User> userList;
 
     /**
      * Constructs a new UsersTableAdapter.
@@ -43,14 +40,10 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
     public UsersTableAdapter(User currentUser, OnUserActionListener listener) {
         this.currentUser = currentUser;
         this.listener = listener;
-        this.userList = new ArrayList<>();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void setUserList(List<User> users) {
-        userList.clear();
-        userList.addAll(users);
-        notifyDataSetChanged();
+        setData(users);
     }
 
     @NonNull
@@ -62,7 +55,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        User user = userList.get(position);
+        User user = getItem(position);
 
         // Bind user data to views
         holder.txtUserFullName.setText(user.getFullName());
@@ -108,11 +101,6 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         holder.imgUserProfile.setOnClickListener(v -> listener.onUserImageClicked(user, holder.imgUserProfile));
     }
 
-    @Override
-    public int getItemCount() {
-        return userList.size();
-    }
-
     /**
      * An interface for handling administrative actions on a user item.
      */
@@ -147,10 +135,7 @@ public class UsersTableAdapter extends RecyclerView.Adapter<UsersTableAdapter.Us
         void onUserImageClicked(User user, ImageView imageView);
     }
 
-    /**
-     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
-     */
-    public static class UserViewHolder extends RecyclerView.ViewHolder {
+    public static class UserViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView txtUserFullName, txtUserEmail, txtUserPassword, txtUserIsAdmin, txtUserWins, txtUserAge, txtUserBirthDate;
         final ImageButton btnDeleteUser, btnToggleAdmin;
         final ImageView imgUserProfile;

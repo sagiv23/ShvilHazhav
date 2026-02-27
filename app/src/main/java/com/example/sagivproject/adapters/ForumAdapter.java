@@ -15,30 +15,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A RecyclerView adapter for displaying a list of {@link ForumMessage} objects.
- * <p>
- * This adapter handles the binding of forum message data to the corresponding views in the
- * item layout. It also manages a popup menu for message actions, such as deletion,
- * based on permissions determined by a {@link ForumMessageListener}.
- * </p>
  */
-public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
-    private final List<ForumMessage> messageList;
+public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
     private ForumMessageListener listener;
-
-    public ForumAdapter() {
-        this.messageList = new ArrayList<>();
-    }
 
     /**
      * Sets the listener for message actions.
@@ -50,15 +39,13 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
     }
 
     public void setMessages(List<ForumMessage> newMessages) {
-        messageList.clear();
-        messageList.addAll(newMessages);
-        notifyDataSetChanged();
+        setData(newMessages);
     }
 
     public void removeMessage(ForumMessage message) {
-        int index = messageList.indexOf(message);
+        int index = dataList.indexOf(message);
         if (index != -1) {
-            messageList.remove(index);
+            dataList.remove(index);
             notifyItemRemoved(index);
         }
     }
@@ -73,7 +60,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ForumViewHolder holder, int position) {
-        ForumMessage msg = messageList.get(position);
+        ForumMessage msg = getItem(position);
 
         Typeface customFont = ResourcesCompat.getFont(holder.itemView.getContext(), R.font.text_hebrew);
         SpannableString userNameSpannable = new SpannableString(msg.getFullName());
@@ -123,20 +110,10 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return messageList.size();
-    }
-
     /**
      * An interface for handling actions on a forum message item.
      */
     public interface ForumMessageListener {
-        /**
-         * Called when a message action (e.g., delete) is clicked.
-         *
-         * @param message The message that was acted upon.
-         */
         void onClick(ForumMessage message);
 
         /**
@@ -148,10 +125,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
         boolean isShowMenuOptions(ForumMessage message);
     }
 
-    /**
-     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
-     */
-    public static class ForumViewHolder extends RecyclerView.ViewHolder {
+    public static class ForumViewHolder extends BaseViewHolder {
         final TextView txtUser, txtEmail, txtIsAdmin, txtMessage, txtTime;
         final ImageButton btnMenu;
 
@@ -163,6 +137,12 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
             txtMessage = itemView.findViewById(R.id.ItemForumMessageTxtMessage);
             txtTime = itemView.findViewById(R.id.ItemForumMessageTxtTime);
             btnMenu = itemView.findViewById(R.id.ItemForumMessageBtnMenu);
+        }
+    }
+
+    private abstract static class BaseViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+        public BaseViewHolder(@NonNull View itemView) {
+            super(itemView);
         }
     }
 }

@@ -7,12 +7,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumCategory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,10 +22,9 @@ import java.util.List;
  * such as showing a delete button for each category.
  * </p>
  */
-public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdapter.CategoryViewHolder> {
+public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCategoryAdapter.CategoryViewHolder> {
     private final OnCategoryInteractionListener listener;
     private final boolean isAdmin;
-    private final List<ForumCategory> categoryList;
 
     /**
      * Constructs a new ForumCategoryAdapter.
@@ -37,28 +35,17 @@ public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdap
     public ForumCategoryAdapter(@NonNull OnCategoryInteractionListener listener, boolean isAdmin) {
         this.listener = listener;
         this.isAdmin = isAdmin;
-        this.categoryList = new ArrayList<>();
     }
 
     public void setCategories(List<ForumCategory> newCategories) {
-        categoryList.clear();
-        categoryList.addAll(newCategories);
-        notifyDataSetChanged();
+        setData(newCategories);
     }
 
     public void removeCategory(ForumCategory category) {
-        int index = categoryList.indexOf(category);
+        int index = dataList.indexOf(category);
         if (index != -1) {
-            categoryList.remove(index);
+            dataList.remove(index);
             notifyItemRemoved(index);
-        }
-    }
-
-    public void updateCategory(ForumCategory category) {
-        int index = categoryList.indexOf(category);
-        if (index != -1) {
-            categoryList.set(index, category);
-            notifyItemChanged(index);
         }
     }
 
@@ -71,7 +58,7 @@ public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdap
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        ForumCategory category = categoryList.get(position);
+        ForumCategory category = getItem(position);
         holder.categoryName.setText(category.getName());
 
         // Configure visibility and actions based on admin status
@@ -87,11 +74,6 @@ public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdap
         }
 
         holder.itemView.setOnClickListener(v -> listener.onClick(category));
-    }
-
-    @Override
-    public int getItemCount() {
-        return categoryList.size();
     }
 
     /**
@@ -123,7 +105,7 @@ public class ForumCategoryAdapter extends RecyclerView.Adapter<ForumCategoryAdap
     /**
      * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
      */
-    public static class CategoryViewHolder extends RecyclerView.ViewHolder {
+    public static class CategoryViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView categoryName;
         final ImageButton deleteButton;
 

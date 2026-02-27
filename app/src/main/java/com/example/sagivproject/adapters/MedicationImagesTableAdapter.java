@@ -8,13 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.utils.ImageUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,9 +24,8 @@ import java.util.List;
  * for viewing a full-size image.
  * </p>
  */
-public class MedicationImagesTableAdapter extends RecyclerView.Adapter<MedicationImagesTableAdapter.ViewHolder> {
+public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, MedicationImagesTableAdapter.ViewHolder> {
     private final OnImageActionListener listener;
-    private final List<ImageData> imageList;
 
     /**
      * Constructs a new MedicationImagesTableAdapter.
@@ -36,13 +34,10 @@ public class MedicationImagesTableAdapter extends RecyclerView.Adapter<Medicatio
      */
     public MedicationImagesTableAdapter(OnImageActionListener listener) {
         this.listener = listener;
-        this.imageList = new ArrayList<>();
     }
 
     public void setImages(List<ImageData> images) {
-        imageList.clear();
-        imageList.addAll(images);
-        notifyDataSetChanged();
+        setData(images);
     }
 
     @NonNull
@@ -55,7 +50,7 @@ public class MedicationImagesTableAdapter extends RecyclerView.Adapter<Medicatio
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ImageData data = imageList.get(position);
+        ImageData data = getItem(position);
 
         if (data.getId() != null) {
             holder.txtId.setVisibility(View.VISIBLE);
@@ -66,7 +61,6 @@ public class MedicationImagesTableAdapter extends RecyclerView.Adapter<Medicatio
 
         // The delete button is always visible in this admin-focused adapter.
         holder.btnDelete.setVisibility(View.VISIBLE);
-
         ImageUtil.loadImage(data.getBase64(), holder.imgView);
 
         holder.imgView.setOnClickListener(v -> {
@@ -80,11 +74,6 @@ public class MedicationImagesTableAdapter extends RecyclerView.Adapter<Medicatio
                 listener.onDeleteImage(data);
             }
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return imageList.size();
     }
 
     /**
@@ -107,10 +96,7 @@ public class MedicationImagesTableAdapter extends RecyclerView.Adapter<Medicatio
         void onImageClicked(ImageData image, ImageView imageView);
     }
 
-    /**
-     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final ImageView imgView;
         final TextView txtId;
         final ImageButton btnDelete;

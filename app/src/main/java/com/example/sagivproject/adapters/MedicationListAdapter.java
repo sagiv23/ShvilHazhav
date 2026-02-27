@@ -19,10 +19,10 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,10 +33,9 @@ import java.util.List;
  * for editing and deleting the medication.
  * </p>
  */
-public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAdapter.MedicationViewHolder> {
+public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
     private final OnMedicationActionListener listener;
-    private final List<Medication> medicationList;
 
     /**
      * Constructs a new MedicationListAdapter.
@@ -47,13 +46,10 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
     public MedicationListAdapter(Context context, OnMedicationActionListener listener) {
         this.context = context;
         this.listener = listener;
-        this.medicationList = new ArrayList<>();
     }
 
     public void setMedications(List<Medication> medications) {
-        medicationList.clear();
-        medicationList.addAll(medications);
-        notifyDataSetChanged();
+        setData(medications);
     }
 
     @NonNull
@@ -65,7 +61,7 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
 
     @Override
     public void onBindViewHolder(@NonNull MedicationViewHolder holder, int position) {
-        Medication med = medicationList.get(position);
+        Medication med = getItem(position);
 
         Typeface typeface = ResourcesCompat.getFont(context, R.font.text_hebrew);
 
@@ -114,7 +110,7 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
                 int currentPos = holder.getBindingAdapterPosition();
                 if (currentPos == RecyclerView.NO_POSITION) return false;
 
-                Medication currentMed = medicationList.get(currentPos);
+                Medication currentMed = getItem(currentPos);
                 if (item.getItemId() == R.id.action_edit) {
                     listener.onEdit(currentMed);
                     return true;
@@ -127,11 +123,6 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
 
             menu.show();
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return medicationList.size();
     }
 
     /**
@@ -153,10 +144,7 @@ public class MedicationListAdapter extends RecyclerView.Adapter<MedicationListAd
         void onDelete(Medication medication);
     }
 
-    /**
-     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
-     */
-    public static class MedicationViewHolder extends RecyclerView.ViewHolder {
+    public static class MedicationViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView txtMedicationName, txtMedicationType, txtMedicationDetails, txtMedicationHours;
         final ImageButton btnMenu;
 

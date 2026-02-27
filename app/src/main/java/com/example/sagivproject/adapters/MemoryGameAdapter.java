@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.screens.MemoryGameActivity;
 import com.example.sagivproject.utils.ImageUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,20 +25,16 @@ import java.util.List;
  * {@link MemoryGameListener}.
  * </p>
  */
-public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.CardViewHolder> {
+public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardViewHolder> {
     private static final int CAMERA_DISTANCE = 8000;
     private final MemoryGameListener listener;
-    private final List<Card> cardList;
 
     public MemoryGameAdapter(MemoryGameListener listener) {
         this.listener = listener;
-        this.cardList = new ArrayList<>();
     }
 
     public void setCards(List<Card> cards) {
-        cardList.clear();
-        cardList.addAll(cards);
-        notifyDataSetChanged();
+        setData(cards);
     }
 
     @NonNull
@@ -50,7 +46,7 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        Card card = cardList.get(position);
+        Card card = getItem(position);
 
         // Reset animations
         holder.itemView.animate().cancel();
@@ -84,14 +80,9 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         holder.itemView.setOnClickListener(v -> {
             int currentPosition = holder.getBindingAdapterPosition();
             if (currentPosition != RecyclerView.NO_POSITION) {
-                listener.onCardClicked(cardList.get(currentPosition), currentPosition);
+                listener.onCardClicked(getItem(currentPosition), currentPosition);
             }
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return cardList.size();
     }
 
     /**
@@ -160,10 +151,7 @@ public class MemoryGameAdapter extends RecyclerView.Adapter<MemoryGameAdapter.Ca
         void onCardClicked(Card card, int position);
     }
 
-    /**
-     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
-     */
-    public static class CardViewHolder extends RecyclerView.ViewHolder {
+    public static class CardViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final ImageView cardImage;
 
         public CardViewHolder(@NonNull View itemView) {

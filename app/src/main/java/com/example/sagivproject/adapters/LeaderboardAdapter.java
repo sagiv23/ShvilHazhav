@@ -6,13 +6,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.User;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,20 +21,10 @@ import java.util.List;
  * It gives a special visual treatment (a trophy emoji) to the top-ranked player.
  * </p>
  */
-public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
-    private final List<User> userList;
-
-    /**
-     * Constructs a new LeaderboardAdapter.
-     */
-    public LeaderboardAdapter() {
-        this.userList = new ArrayList<>();
-    }
+public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.ViewHolder> {
 
     public void setUsers(List<User> users) {
-        userList.clear();
-        userList.addAll(users);
-        notifyDataSetChanged();
+        setData(users);
     }
 
     @NonNull
@@ -47,7 +36,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = userList.get(position);
+        User user = getItem(position);
         holder.tvName.setText(user.getFullName());
 
         // Add a trophy for the first place user
@@ -58,15 +47,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return userList.size();
-    }
-
-    /**
-     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView tvName, tvWins;
 
         public ViewHolder(@NonNull View itemView) {

@@ -6,13 +6,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.GameRoom;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +22,7 @@ import java.util.Map;
  * list of all game rooms and their current state, including players, score, and status.
  * </p>
  */
-public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdapter.ViewHolder> {
-    private final List<GameRoom> roomList;
+public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAdapter.ViewHolder> {
     private Map<String, String> uidToNameMap;
 
     /**
@@ -34,7 +32,15 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
      */
     public MemoryGameLogAdapter(Map<String, String> uidToNameMap) {
         this.uidToNameMap = uidToNameMap;
-        this.roomList = new ArrayList<>();
+    }
+
+    public void setRooms(List<GameRoom> newRooms) {
+        setData(newRooms);
+    }
+
+    public void submitData(List<GameRoom> newRooms, Map<String, String> newMap) {
+        this.uidToNameMap = newMap;
+        setRooms(newRooms);
     }
 
     @NonNull
@@ -46,7 +52,7 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GameRoom room = roomList.get(position);
+        GameRoom room = getItem(position);
 
         String p1Name = uidToNameMap.getOrDefault(room.getPlayer1Uid(), "שחקן לא ידוע");
         String p2Name = uidToNameMap.getOrDefault(room.getPlayer2Uid(), "ממתין...");
@@ -56,37 +62,7 @@ public class MemoryGameLogAdapter extends RecyclerView.Adapter<MemoryGameLogAdap
         holder.txtStatus.setText(String.format("סטטוס: %s", room.getStatus()));
     }
 
-    @Override
-    public int getItemCount() {
-        return roomList.size();
-    }
-
-    /**
-     * Submits a new list of rooms to the adapter.
-     *
-     * @param newRooms The new list of game rooms.
-     */
-    public void setRooms(List<GameRoom> newRooms) {
-        roomList.clear();
-        roomList.addAll(newRooms);
-        notifyDataSetChanged();
-    }
-
-    /**
-     * Submits a new list of rooms and an updated UID-to-name map to the adapter.
-     *
-     * @param newRooms The new list of game rooms.
-     * @param newMap   The new map of UIDs to names.
-     */
-    public void submitData(List<GameRoom> newRooms, Map<String, String> newMap) {
-        this.uidToNameMap = newMap;
-        setRooms(newRooms);
-    }
-
-    /**
-     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView txtPlayers, txtScore, txtStatus;
 
         public ViewHolder(@NonNull View itemView) {

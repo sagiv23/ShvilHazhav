@@ -1,8 +1,11 @@
 package com.example.sagivproject.screens;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -47,7 +50,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MedicationListActivity extends BaseActivity {
-    private final ArrayList<Medication> medications = new ArrayList<>();
+    private final List<Medication> fullMedicationList = new ArrayList<>();
     @Inject
     AlarmScheduler alarmScheduler;
     private MedicationListAdapter adapter;
@@ -103,10 +106,9 @@ public class MedicationListActivity extends BaseActivity {
         spinnerSearchType = findViewById(R.id.spinner_Medication_search_type);
 
         ArrayAdapter<String> spinnerAdapter = getStringArrayAdapter();
-
         spinnerSearchType.setAdapter(spinnerAdapter);
 
-        editSearch.addTextChangedListener(new android.text.TextWatcher() {
+        editSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -117,23 +119,20 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void afterTextChanged(android.text.Editable s) {
+            public void afterTextChanged(Editable s) {
             }
         });
 
-        spinnerSearchType.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+        spinnerSearchType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 filterMedications(editSearch.getText().toString());
             }
 
             @Override
-            public void onNothingSelected(android.widget.AdapterView<?> parent) {
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSearchType.setAdapter(spinnerAdapter);
 
         loadMedicationsFromCache();
         fetchMedicationsFromServer();
@@ -144,8 +143,7 @@ public class MedicationListActivity extends BaseActivity {
      */
     private void loadMedicationsFromCache() {
         if (user.getMedications() != null) {
-            List<Medication> cachedList = new ArrayList<>(user.getMedications().values());
-            updateMedicationList(cachedList);
+            updateMedicationList(new ArrayList<>(user.getMedications().values()));
         }
     }
 
@@ -157,7 +155,6 @@ public class MedicationListActivity extends BaseActivity {
             @Override
             public void onCompleted(List<Medication> list) {
                 updateMedicationList(list);
-                updateUserCache(list);
             }
 
             @Override
@@ -187,9 +184,10 @@ public class MedicationListActivity extends BaseActivity {
      * @param medicationList The new list of medications.
      */
     private void updateMedicationList(List<Medication> medicationList) {
-        medications.clear();
-        medications.addAll(medicationList);
-        medications.sort(Comparator.comparing(Medication::getName)); // Sort by name
+        fullMedicationList.clear();
+        fullMedicationList.addAll(medicationList);
+        fullMedicationList.sort(Comparator.comparing(Medication::getName));
+        updateUserCache(fullMedicationList);
         filterMedications(editSearch.getText().toString());
     }
 
@@ -200,7 +198,7 @@ public class MedicationListActivity extends BaseActivity {
      */
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
-        String[] searchOptions = {"שם תרופה", "סוג תרופה", "הכל"};
+        String[] searchOptions = {"הכל", "שם תרופה", "סוג תרופה"};
 
         return new ArrayAdapter<>(MedicationListActivity.this, android.R.layout.simple_spinner_item, searchOptions) {
             @NonNull
@@ -220,9 +218,7 @@ public class MedicationListActivity extends BaseActivity {
                 tv.setTypeface(ResourcesCompat.getFont(MedicationListActivity.this, R.font.text_hebrew));
                 tv.setTextSize(22);
                 tv.setTextColor(getColor(R.color.text_color));
-                tv.setBackgroundColor(
-                        getColor(R.color.background_color_buttons)
-                );
+                tv.setBackgroundColor(getColor(R.color.background_color_buttons));
                 tv.setPadding(24, 24, 24, 24);
                 return tv;
             }
@@ -242,8 +238,9 @@ public class MedicationListActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 alarmScheduler.schedule(medication);
-                medications.add(medication);
-                updateMedicationList(medications);
+                List<Medication> newList = new ArrayList<>(fullMedicationList);
+                newList.add(medication);
+                updateMedicationList(newList);
                 Toast.makeText(MedicationListActivity.this, "התרופה נוספה", Toast.LENGTH_SHORT).show();
             }
 
@@ -264,15 +261,16 @@ public class MedicationListActivity extends BaseActivity {
         databaseService.getMedicationService().updateMedication(uid, med, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                alarmScheduler.cancel(med); // Cancel old alarms
-                alarmScheduler.schedule(med); // Schedule new alarms
-                for (int i = 0; i < medications.size(); i++) {
-                    if (medications.get(i).getId().equals(med.getId())) {
-                        medications.set(i, med);
+                alarmScheduler.cancel(med);
+                alarmScheduler.schedule(med);
+                List<Medication> newList = new ArrayList<>(fullMedicationList);
+                for (int i = 0; i < newList.size(); i++) {
+                    if (newList.get(i).getId().equals(med.getId())) {
+                        newList.set(i, med);
                         break;
                     }
                 }
-                updateMedicationList(medications);
+                updateMedicationList(newList);
                 Toast.makeText(MedicationListActivity.this, "התרופה עודכנה", Toast.LENGTH_SHORT).show();
             }
 
@@ -293,8 +291,9 @@ public class MedicationListActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 alarmScheduler.cancel(medication);
-                medications.remove(medication);
-                updateMedicationList(medications);
+                List<Medication> newList = new ArrayList<>(fullMedicationList);
+                newList.removeIf(m -> m.getId().equals(medication.getId()));
+                updateMedicationList(newList);
                 Toast.makeText(MedicationListActivity.this, "התרופה נמחקה", Toast.LENGTH_SHORT).show();
             }
 
@@ -332,21 +331,26 @@ public class MedicationListActivity extends BaseActivity {
      */
     private void filterMedications(String query) {
         List<Medication> filteredMedications = new ArrayList<>();
-        String selectedType = spinnerSearchType.getSelectedItem().toString();
+        String selectedType = spinnerSearchType.getSelectedItem() != null ? spinnerSearchType.getSelectedItem().toString() : "הכל";
 
         if (query.isEmpty() && selectedType.equals("הכל")) {
-            filteredMedications.addAll(medications);
+            filteredMedications.addAll(fullMedicationList);
         } else {
-            for (Medication med : medications) {
-                boolean matches = true;
-                if (!query.isEmpty()) {
-                    if (selectedType.equals("שם תרופה") && !med.getName().toLowerCase().contains(query.toLowerCase())) {
-                        matches = false;
-                    }
-                    if (selectedType.equals("סוג תרופה") && (med.getType() == null || !med.getType().getDisplayName().toLowerCase().contains(query.toLowerCase()))) {
-                        matches = false;
-                    }
+            for (Medication med : fullMedicationList) {
+                boolean matches = false;
+                switch (selectedType) {
+                    case "הכל":
+                        matches = med.getName().toLowerCase().contains(query.toLowerCase()) ||
+                                (med.getType() != null && med.getType().getDisplayName().toLowerCase().contains(query.toLowerCase()));
+                        break;
+                    case "שם תרופה":
+                        matches = med.getName().toLowerCase().contains(query.toLowerCase());
+                        break;
+                    case "סוג תרופה":
+                        matches = med.getType() != null && med.getType().getDisplayName().toLowerCase().contains(query.toLowerCase());
+                        break;
                 }
+
                 if (matches) {
                     filteredMedications.add(med);
                 }
