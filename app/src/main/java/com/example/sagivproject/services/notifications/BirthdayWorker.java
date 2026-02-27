@@ -14,6 +14,7 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -114,7 +115,8 @@ public class BirthdayWorker extends Worker {
         birthDate.setTimeInMillis(user.getBirthDateMillis());
 
         if (today.get(Calendar.DAY_OF_MONTH) == birthDate.get(Calendar.DAY_OF_MONTH) && today.get(Calendar.MONTH) == birthDate.get(Calendar.MONTH)) {
-            notificationService.showBirthdayNotification(user.getFirstName());
+            int notificationId = UUID.randomUUID().hashCode();
+            notificationService.showBirthdayNotification(user.getFirstName(), notificationId);
         }
     }
 }

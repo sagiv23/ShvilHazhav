@@ -20,10 +20,8 @@ import com.example.sagivproject.adapters.LeaderboardAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.models.enums.SearchState;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IGameService;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -43,9 +41,26 @@ public class GameHomeScreenActivity extends BaseActivity {
     private TextView TVictories, TVStatusOfFindingEnemy;
     private GameRoom currentRoom;
     private boolean gameStarted = false;
-    private ValueEventListener roomListener;
     private LeaderboardAdapter adapter;
     private User user;
+
+    /**
+     * Represents the possible states when searching for a memory game opponent.
+     */
+    private enum SearchState {
+        /**
+         * The initial state, not currently searching for a game.
+         */
+        IDLE,
+        /**
+         * Actively searching for an opponent.
+         */
+        SEARCHING,
+        /**
+         * An opponent has been found and the game is about to start.
+         */
+        GAME_FOUND
+    }
 
     /**
      * Initializes the activity, setting up the UI, and listeners.
@@ -182,9 +197,8 @@ public class GameHomeScreenActivity extends BaseActivity {
      * Cancels the ongoing search for an opponent and resets the UI.
      */
     private void cancelSearch() {
-        if (roomListener != null && currentRoom != null) {
-            databaseService.getGameService().removeRoomListener(currentRoom.getId(), roomListener);
-            roomListener = null;
+        if (currentRoom != null) {
+            databaseService.getGameService().removeRoomListener(currentRoom.getId());
         }
 
         if (currentRoom != null && "waiting".equals(currentRoom.getStatus()) && user.getId().equals(currentRoom.getPlayer1Uid())) {
@@ -204,7 +218,7 @@ public class GameHomeScreenActivity extends BaseActivity {
             cancelSearch();
             return;
         }
-        roomListener = databaseService.getGameService().listenToRoomStatus(roomId, new IGameService.IRoomStatusCallback() {
+        databaseService.getGameService().listenToRoomStatus(roomId, new IGameService.IRoomStatusCallback() {
             @Override
             public void onRoomStarted(GameRoom startedRoom) {
                 if (gameStarted) return;
@@ -239,9 +253,8 @@ public class GameHomeScreenActivity extends BaseActivity {
      * @param room The game room containing opponent details.
      */
     private void startGame(GameRoom room) {
-        if (roomListener != null) {
-            databaseService.getGameService().removeRoomListener(room.getId(), roomListener);
-            roomListener = null;
+        if (currentRoom != null) {
+            databaseService.getGameService().removeRoomListener(room.getId());
         }
 
         Intent intent = new Intent(this, MemoryGameActivity.class);

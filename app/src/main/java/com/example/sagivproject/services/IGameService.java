@@ -7,7 +7,6 @@ import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -40,17 +39,15 @@ public interface IGameService {
      *
      * @param roomId   The ID of the room to listen to.
      * @param callback A callback to notify about room status changes.
-     * @return The {@link ValueEventListener} instance so it can later be removed.
      */
-    ValueEventListener listenToRoomStatus(@NonNull String roomId, @NonNull IRoomStatusCallback callback);
+    void listenToRoomStatus(@NonNull String roomId, @NonNull IRoomStatusCallback callback);
 
     /**
      * Removes a previously registered room status listener.
      *
      * @param roomId   The ID of the room.
-     * @param listener The listener instance returned from {@link #listenToRoomStatus(String, IRoomStatusCallback)}.
      */
-    void removeRoomListener(@NonNull String roomId, @NonNull ValueEventListener listener);
+    void removeRoomListener(@NonNull String roomId);
 
     /**
      * Cancels and deletes a game room from the database, typically if the host leaves before it starts.

@@ -31,7 +31,6 @@ public class NotificationService {
     private static final String MEDICATIONS_CHANNEL_NAME = "תזכורות תרופות";
     private static final String BIRTHDAYS_CHANNEL_NAME = "תזכורות יום הולדת";
     private static final String MEDICATIONS_GROUP = "medications_group";
-    private static final int BIRTHDAY_NOTIFICATION_ID = 1234; // Constant ID for birthday notifications
 
     private final Context context;
     private final NotificationManager manager;
@@ -95,15 +94,16 @@ public class NotificationService {
      * Displays a birthday notification to the user.
      *
      * @param firstName The first name of the user.
+     * @param notificationId A unique ID for the notification.
      */
-    public void showBirthdayNotification(String firstName) {
+    public void showBirthdayNotification(String firstName, int notificationId) {
         String title = "מזל טוב!";
         String message = "יום הולדת שמח, " + firstName + "! מאחלים לך בריאות ואושר.";
 
         Intent intent = new Intent(context, SplashActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        show(BIRTHDAYS_CHANNEL_ID, title, message, pendingIntent, BIRTHDAY_NOTIFICATION_ID, null);
+        show(BIRTHDAYS_CHANNEL_ID, title, message, pendingIntent, notificationId, null);
     }
 
     /**

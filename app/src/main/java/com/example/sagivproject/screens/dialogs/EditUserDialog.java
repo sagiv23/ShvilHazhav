@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.Validator;
 
@@ -19,29 +18,42 @@ import java.util.function.Predicate;
  * A dialog for editing an existing user's profile information.
  * <p>
  * This dialog pre-fills a form with the user's current details and allows for modification.
- * It includes input validation and uses the {@link IAuthService} to save the changes.
+ * It includes input validation and notifies a listener of the update request.
  * </p>
  */
 public class EditUserDialog {
     private final Context context;
     private final User user;
-    private final Runnable onSuccess;
-    private final IAuthService authService;
+    private final EditUserDialogListener listener;
     private long birthDateMillis = -1;
+
+    /**
+     * An interface to listen for the update user action.
+     */
+    public interface EditUserDialogListener {
+        /**
+         * Called when the user clicks the update button and all fields are valid.
+         *
+         * @param fName           The user's updated first name.
+         * @param lName           The user's updated last name.
+         * @param birthDateMillis The user's updated birthdate in milliseconds.
+         * @param email           The user's updated email.
+         * @param password        The user's updated password.
+         */
+        void onUpdateUser(String fName, String lName, long birthDateMillis, String email, String password);
+    }
 
     /**
      * Constructs a new EditUserDialog.
      *
-     * @param context     The context in which the dialog should be shown.
-     * @param user        The user object to be edited.
-     * @param onSuccess   A runnable to be executed when the user is successfully updated.
-     * @param authService The authentication service to handle the update.
+     * @param context  The context in which the dialog should be shown.
+     * @param user     The user object to be edited.
+     * @param listener A listener to be notified when the update button is clicked.
      */
-    public EditUserDialog(Context context, User user, Runnable onSuccess, IAuthService authService) {
+    public EditUserDialog(Context context, User user, EditUserDialogListener listener) {
         this.context = context;
         this.user = user;
-        this.onSuccess = onSuccess;
-        this.authService = authService;
+        this.listener = listener;
     }
 
     /**
@@ -79,26 +91,14 @@ public class EditUserDialog {
             String email = inputEmail.getText().toString().trim();
             String pass = inputPassword.getText().toString().trim();
 
-            // Validate all fields before proceeding
             if (!areAllFieldsValid(fName, lName, email, pass, inputFirstName, inputLastName, inputEmail, inputPassword, inputBirthDate)) {
                 return;
             }
 
-            authService.updateUser(user, fName, lName, birthDateMillis, email, pass, new IAuthService.UpdateUserCallback() {
-                @Override
-                public void onSuccess(User updatedUser) {
-                    Toast.makeText(context, "הפרטים עודכנו!", Toast.LENGTH_SHORT).show();
-                    if (onSuccess != null) {
-                        onSuccess.run();
-                    }
-                    dialog.dismiss();
-                }
-
-                @Override
-                public void onError(String message) {
-                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                }
-            });
+            if (listener != null) {
+                listener.onUpdateUser(fName, lName, birthDateMillis, email, pass);
+            }
+            dialog.dismiss();
         });
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
@@ -111,13 +111,11 @@ public class EditUserDialog {
      * @return True if all fields are valid, false otherwise.
      */
     private boolean areAllFieldsValid(String fName, String lName, String email, String pass, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passEdt, EditText birthDateEdt) {
-        // Check for empty fields first
         if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || pass.isEmpty() || birthDateMillis <= 0) {
             Toast.makeText(context, "כל השדות חובה", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        // Chain validation checks
         return isFieldValid(firstNameEdt, Validator::isNameNotValid, "שם פרטי קצר מדי") &&
                 isFieldValid(lastNameEdt, Validator::isNameNotValid, "שם משפחה קצר מדי") &&
                 isFieldValid(birthDateEdt, val -> Validator.isAgeNotValid(birthDateMillis), "הגיל המינימלי הוא 12") &&

@@ -23,6 +23,7 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
+import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -199,10 +200,19 @@ public class DetailsAboutUserActivity extends BaseActivity {
      * Opens a dialog to allow the user to edit their profile information.
      */
     private void openEditDialog() {
-        new EditUserDialog(this, user, () -> {
-            sharedPreferencesUtil.saveUser(user);
-            loadUserDetailsToUI();
-        }, databaseService.getAuthService()).show();
+        new EditUserDialog(this, user, (fName, lName, birthDate, email, password) -> databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
+            @Override
+            public void onSuccess(User updatedUser) {
+                Toast.makeText(DetailsAboutUserActivity.this, "הפרטים עודכנו!", Toast.LENGTH_SHORT).show();
+                sharedPreferencesUtil.saveUser(updatedUser);
+                loadUserDetailsToUI();
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        })).show();
     }
 
     /**

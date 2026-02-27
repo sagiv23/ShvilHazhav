@@ -118,14 +118,18 @@ public class UsersTableActivity extends BaseActivity {
                         new EditUserDialog(
                                 UsersTableActivity.this,
                                 clickedUser,
-                                () -> {
-                                    int index = usersList.indexOf(clickedUser);
-                                    if (index != -1) {
-                                        usersList.set(index, clickedUser);
-                                        filterUsers(editSearch.getText().toString().trim());
+                                (fName, lName, birthDate, email, password) -> databaseService.getAuthService().updateUser(clickedUser, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
+                                    @Override
+                                    public void onSuccess(User updatedUser) {
+                                        Toast.makeText(UsersTableActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
+                                        loadUsers();
                                     }
-                                },
-                                databaseService.getAuthService()
+
+                                    @Override
+                                    public void onError(String message) {
+                                        Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון: " + message, Toast.LENGTH_LONG).show();
+                                    }
+                                })
                         ).show();
                     }
 
@@ -346,7 +350,7 @@ public class UsersTableActivity extends BaseActivity {
 
             case "אימייל":
                 newFilteredList = usersList.stream()
-                        .filter(user -> user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery))
+                        .filter(user -> String.valueOf(user.getCountWins()).contains(lowerQuery))
                         .collect(Collectors.toList());
                 break;
 

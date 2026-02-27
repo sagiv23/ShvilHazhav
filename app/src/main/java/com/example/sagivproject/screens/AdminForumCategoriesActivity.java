@@ -18,6 +18,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.ForumCategoryAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ForumCategory;
+import com.example.sagivproject.screens.dialogs.EditForumCategoryDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 import java.util.List;
@@ -67,7 +68,19 @@ public class AdminForumCategoriesActivity extends BaseActivity {
 
             @Override
             public void onLongClick(ForumCategory category) {
-                ///TODO: implement
+                EditForumCategoryDialog dialog = new EditForumCategoryDialog(AdminForumCategoriesActivity.this, category, newName -> databaseService.getForumCategoriesService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
+                    @Override
+                    public void onCompleted(Void data) {
+                        Toast.makeText(AdminForumCategoriesActivity.this, "שם הקטגוריה עודכן", Toast.LENGTH_SHORT).show();
+                        loadCategories();
+                    }
+
+                    @Override
+                    public void onFailed(Exception e) {
+                        Toast.makeText(AdminForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show();
+                    }
+                }));
+                dialog.show();
             }
 
             @Override

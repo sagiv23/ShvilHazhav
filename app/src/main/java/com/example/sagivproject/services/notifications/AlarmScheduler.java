@@ -24,7 +24,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
  */
 @Singleton
 public class AlarmScheduler {
-
     private final Context context;
     private final AlarmManager alarmManager;
 

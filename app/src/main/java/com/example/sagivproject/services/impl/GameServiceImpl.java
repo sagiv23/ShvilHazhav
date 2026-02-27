@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
@@ -58,6 +59,8 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
     private final DatabaseReference roomsReference;
     private final DatabaseReference usersReference;
     private ValueEventListener activeGameListener;
+    private final Map<String, ValueEventListener> roomStatusListeners = new ConcurrentHashMap<>();
+
 
     /**
      * Constructs a new GameServiceImpl.
@@ -178,10 +181,9 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
      *
      * @param roomId   The ID of the room to listen to.
      * @param callback The callback to handle room status changes.
-     * @return The {@link ValueEventListener} used for listening.
      */
     @Override
-    public ValueEventListener listenToRoomStatus(@NonNull String roomId, @NonNull IRoomStatusCallback callback) {
+    public void listenToRoomStatus(@NonNull String roomId, @NonNull IRoomStatusCallback callback) {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -207,18 +209,21 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
         };
 
         roomsReference.child(roomId).addValueEventListener(listener);
-        return listener;
+        roomStatusListeners.put(roomId, listener);
     }
+
 
     /**
      * Removes a previously attached room status listener.
      *
      * @param roomId   The ID of the room.
-     * @param listener The listener to remove.
      */
     @Override
-    public void removeRoomListener(@NonNull String roomId, @NonNull ValueEventListener listener) {
-        roomsReference.child(roomId).removeEventListener(listener);
+    public void removeRoomListener(@NonNull String roomId) {
+        ValueEventListener listener = roomStatusListeners.remove(roomId);
+        if (listener != null) {
+            roomsReference.child(roomId).removeEventListener(listener);
+        }
     }
 
     /**
