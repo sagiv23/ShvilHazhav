@@ -45,24 +45,6 @@ public class GameHomeScreenActivity extends BaseActivity {
     private User user;
 
     /**
-     * Represents the possible states when searching for a memory game opponent.
-     */
-    private enum SearchState {
-        /**
-         * The initial state, not currently searching for a game.
-         */
-        IDLE,
-        /**
-         * Actively searching for an opponent.
-         */
-        SEARCHING,
-        /**
-         * An opponent has been found and the game is about to start.
-         */
-        GAME_FOUND
-    }
-
-    /**
      * Initializes the activity, setting up the UI, and listeners.
      *
      * @param savedInstanceState If the activity is being re-initialized after
@@ -287,5 +269,23 @@ public class GameHomeScreenActivity extends BaseActivity {
                 btnFindEnemy.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    /**
+     * Represents the possible states when searching for a memory game opponent.
+     */
+    private enum SearchState {
+        /**
+         * The initial state, not currently searching for a game.
+         */
+        IDLE,
+        /**
+         * Actively searching for an opponent.
+         */
+        SEARCHING,
+        /**
+         * An opponent has been found and the game is about to start.
+         */
+        GAME_FOUND
     }
 }

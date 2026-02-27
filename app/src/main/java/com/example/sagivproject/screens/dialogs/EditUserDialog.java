@@ -28,22 +28,6 @@ public class EditUserDialog {
     private long birthDateMillis = -1;
 
     /**
-     * An interface to listen for the update user action.
-     */
-    public interface EditUserDialogListener {
-        /**
-         * Called when the user clicks the update button and all fields are valid.
-         *
-         * @param fName           The user's updated first name.
-         * @param lName           The user's updated last name.
-         * @param birthDateMillis The user's updated birthdate in milliseconds.
-         * @param email           The user's updated email.
-         * @param password        The user's updated password.
-         */
-        void onUpdateUser(String fName, String lName, long birthDateMillis, String email, String password);
-    }
-
-    /**
      * Constructs a new EditUserDialog.
      *
      * @param context  The context in which the dialog should be shown.
@@ -150,5 +134,21 @@ public class EditUserDialog {
         if (millis > 0) {
             editText.setText(CalendarUtil.formatDate(millis));
         }
+    }
+
+    /**
+     * An interface to listen for the update user action.
+     */
+    public interface EditUserDialogListener {
+        /**
+         * Called when the user clicks the update button and all fields are valid.
+         *
+         * @param fName           The user's updated first name.
+         * @param lName           The user's updated last name.
+         * @param birthDateMillis The user's updated birthdate in milliseconds.
+         * @param email           The user's updated email.
+         * @param password        The user's updated password.
+         */
+        void onUpdateUser(String fName, String lName, long birthDateMillis, String email, String password);
     }
 }

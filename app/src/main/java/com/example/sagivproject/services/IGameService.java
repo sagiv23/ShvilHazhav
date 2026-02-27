@@ -45,7 +45,7 @@ public interface IGameService {
     /**
      * Removes a previously registered room status listener.
      *
-     * @param roomId   The ID of the room.
+     * @param roomId The ID of the room.
      */
     void removeRoomListener(@NonNull String roomId);
 

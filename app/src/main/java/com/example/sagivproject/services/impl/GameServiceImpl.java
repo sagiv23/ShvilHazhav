@@ -58,8 +58,8 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
 
     private final DatabaseReference roomsReference;
     private final DatabaseReference usersReference;
-    private ValueEventListener activeGameListener;
     private final Map<String, ValueEventListener> roomStatusListeners = new ConcurrentHashMap<>();
+    private ValueEventListener activeGameListener;
 
 
     /**
@@ -216,7 +216,7 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
     /**
      * Removes a previously attached room status listener.
      *
-     * @param roomId   The ID of the room.
+     * @param roomId The ID of the room.
      */
     @Override
     public void removeRoomListener(@NonNull String roomId) {

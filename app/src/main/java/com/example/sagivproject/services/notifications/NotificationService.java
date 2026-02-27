@@ -93,7 +93,7 @@ public class NotificationService {
     /**
      * Displays a birthday notification to the user.
      *
-     * @param firstName The first name of the user.
+     * @param firstName      The first name of the user.
      * @param notificationId A unique ID for the notification.
      */
     public void showBirthdayNotification(String firstName, int notificationId) {
