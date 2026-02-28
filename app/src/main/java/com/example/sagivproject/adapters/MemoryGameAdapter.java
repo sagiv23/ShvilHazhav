@@ -51,7 +51,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         // Reset animations and state to avoid issues with recycling
         holder.itemView.animate().cancel();
         holder.cardImage.animate().cancel();
-        
+
         holder.itemView.setTranslationX(0f);
         holder.itemView.setScaleX(1f);
         holder.itemView.setScaleY(1f);

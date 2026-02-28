@@ -12,7 +12,7 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import com.example.sagivproject.services.notifications.BirthdayWorker;
+import com.example.sagivproject.services.notifications.DailyCheckWorker;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.Calendar;
@@ -24,10 +24,6 @@ import dagger.hilt.android.HiltAndroidApp;
 
 /**
  * The main {@link Application} class for the application.
- * <p>
- * This class is the entry point of the application. It initializes Hilt for dependency injection,
- * sets the initial dark mode state, and schedules the daily birthday notification worker.
- * </p>
  */
 @HiltAndroidApp
 public class MainApplication extends Application implements Configuration.Provider {
@@ -39,18 +35,12 @@ public class MainApplication extends Application implements Configuration.Provid
     @Override
     public void onCreate() {
         super.onCreate();
-        // Set the app's theme based on the saved preference.
         boolean isDarkMode = sharedPreferencesUtil.isDarkMode();
         AppCompatDelegate.setDefaultNightMode(isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
-        setupBirthdayNotification();
+        setupDailyChecks();
     }
 
-    /**
-     * Provides a custom WorkManager configuration that uses the Hilt worker factory.
-     *
-     * @return The WorkManager configuration.
-     */
     @NonNull
     @Override
     public Configuration getWorkManagerConfiguration() {
@@ -59,11 +49,7 @@ public class MainApplication extends Application implements Configuration.Provid
                 .build();
     }
 
-    /**
-     * Schedules a periodic background worker to check for the user's birthday each day.
-     */
-    private void setupBirthdayNotification() {
-        // Calculate the initial delay to the next 9:00 AM.
+    private void setupDailyChecks() {
         Calendar currentDate = Calendar.getInstance();
         Calendar dueDate = Calendar.getInstance();
         dueDate.set(Calendar.HOUR_OF_DAY, 9);
@@ -74,20 +60,18 @@ public class MainApplication extends Application implements Configuration.Provid
         }
         long timeDiff = dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
 
-        // Create a periodic work request.
-        PeriodicWorkRequest birthdayRequest =
-                new PeriodicWorkRequest.Builder(BirthdayWorker.class, 24, TimeUnit.HOURS)
+        PeriodicWorkRequest dailyRequest =
+                new PeriodicWorkRequest.Builder(DailyCheckWorker.class, 24, TimeUnit.HOURS)
                         .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
                         .setConstraints(new Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
                                 .build())
                         .build();
 
-        // Enqueue the unique periodic work.
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                "BirthdayDailyWork",
+                "DailyChecksWork",
                 ExistingPeriodicWorkPolicy.KEEP,
-                birthdayRequest
+                dailyRequest
         );
     }
 }

@@ -1,12 +1,16 @@
 package com.example.sagivproject.services.notifications;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.screens.MedicationListActivity;
@@ -19,114 +23,102 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**
  * A singleton service responsible for creating and displaying notifications.
- * <p>
- * This class manages notification channels for different types of alerts (e.g., medications, birthdays)
- * and provides methods to build and show specific notifications to the user.
- * </p>
  */
 @Singleton
 public class NotificationService {
     public static final String MEDICATIONS_CHANNEL_ID = "medication_notifications";
     public static final String BIRTHDAYS_CHANNEL_ID = "birthday_notifications";
-    private static final String MEDICATIONS_CHANNEL_NAME = "תזכורות תרופות";
-    private static final String BIRTHDAYS_CHANNEL_NAME = "תזכורות יום הולדת";
-    private static final String MEDICATIONS_GROUP = "medications_group";
+    private static final String MEDICATIONS_GROUP = "com.example.sagivproject.MEDICATIONS_GROUP";
+    private static final String BIRTHDAYS_GROUP = "com.example.sagivproject.BIRTHDAYS_GROUP";
 
     private final Context context;
-    private final NotificationManager manager;
+    private final NotificationManagerCompat manager;
 
-    /**
-     * Constructs a new NotificationService and creates the necessary notification channels.
-     *
-     * @param context The application context.
-     */
     @Inject
     public NotificationService(@ApplicationContext Context context) {
-        this.context = context.getApplicationContext();
-        this.manager = (NotificationManager)
-                this.context.getSystemService(Context.NOTIFICATION_SERVICE);
+        this.context = context;
+        this.manager = NotificationManagerCompat.from(context);
 
-        createMedicationChannelIfNeeded();
-        createBirthdayChannelIfNeeded();
+        createChannels();
     }
 
-    /**
-     * Creates the notification channel for medication reminders if it doesn't already exist.
-     */
-    private void createMedicationChannelIfNeeded() {
-        NotificationChannel channel = new NotificationChannel(
+    private void createChannels() {
+        NotificationChannel medChannel = new NotificationChannel(
                 MEDICATIONS_CHANNEL_ID,
-                MEDICATIONS_CHANNEL_NAME,
+                context.getString(R.string.medication_channel_name),
                 NotificationManager.IMPORTANCE_DEFAULT
         );
-        manager.createNotificationChannel(channel);
-    }
 
-    /**
-     * Creates the notification channel for birthday reminders if it doesn't already exist.
-     */
-    private void createBirthdayChannelIfNeeded() {
-        NotificationChannel channel = new NotificationChannel(
+        NotificationChannel bdayChannel = new NotificationChannel(
                 BIRTHDAYS_CHANNEL_ID,
-                BIRTHDAYS_CHANNEL_NAME,
+                context.getString(R.string.birthday_channel_name),
                 NotificationManager.IMPORTANCE_LOW
         );
-        manager.createNotificationChannel(channel);
+
+        NotificationManager systemManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (systemManager != null) {
+            systemManager.createNotificationChannel(medChannel);
+            systemManager.createNotificationChannel(bdayChannel);
+        }
     }
 
-    /**
-     * Displays a notification to remind the user to take a specific medication.
-     *
-     * @param medicationName The name of the medication.
-     * @param notificationId A unique ID for the notification.
-     */
     public void showMedicationNotification(String medicationName, int notificationId) {
-        String title = "תזכורת תרופה";
-        String message = "הגיע הזמן לקחת את התרופה: " + medicationName;
+        String title = context.getString(R.string.medication_notif_title);
+        String message = context.getString(R.string.medication_notif_body, medicationName);
 
         Intent intent = new Intent(context, MedicationListActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
 
         show(MEDICATIONS_CHANNEL_ID, title, message, pendingIntent, notificationId, MEDICATIONS_GROUP);
+        showSummaryNotification(MEDICATIONS_CHANNEL_ID, MEDICATIONS_GROUP);
     }
 
-    /**
-     * Displays a birthday notification to the user.
-     *
-     * @param firstName      The first name of the user.
-     * @param notificationId A unique ID for the notification.
-     */
     public void showBirthdayNotification(String firstName, int notificationId) {
-        String title = "מזל טוב!";
-        String message = "יום הולדת שמח, " + firstName + "! מאחלים לך בריאות ואושר.";
+        String title = context.getString(R.string.birthday_notif_title);
+        String message = context.getString(R.string.birthday_notif_body, firstName);
 
         Intent intent = new Intent(context, SplashActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
 
-        show(BIRTHDAYS_CHANNEL_ID, title, message, pendingIntent, notificationId, null);
+        show(BIRTHDAYS_CHANNEL_ID, title, message, pendingIntent, notificationId, BIRTHDAYS_GROUP);
+        showSummaryNotification(BIRTHDAYS_CHANNEL_ID, BIRTHDAYS_GROUP);
     }
 
-    /**
-     * A generic method to build and display a notification.
-     *
-     * @param channelId      The ID of the channel to post the notification to.
-     * @param title          The title of the notification.
-     * @param message        The main text of the notification.
-     * @param pendingIntent  The intent to fire when the notification is tapped.
-     * @param notificationId The ID for this notification.
-     * @param group          The group key for stacking notifications.
-     */
-    private void show(String channelId, String title, String message, PendingIntent pendingIntent, int notificationId, String group) {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context, channelId)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(title)
-                        .setContentText(message)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .setGroup(group)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+    private void showSummaryNotification(String channelId, String groupKey) {
+        NotificationCompat.Builder summaryBuilder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.ic_medication)
+                .setStyle(new NotificationCompat.InboxStyle())
+                .setGroup(groupKey)
+                .setGroupSummary(true)
+                .setAutoCancel(true);
 
-        manager.notify(notificationId, builder.build());
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            manager.notify(groupKey.hashCode(), summaryBuilder.build());
+        }
+    }
+
+    private void show(String channelId, String title, String message, PendingIntent pendingIntent, int notificationId, String group) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.ic_medication)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setGroup(group)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            manager.notify(notificationId, builder.build());
+        }
     }
 }

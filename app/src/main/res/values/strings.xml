@@ -117,6 +117,13 @@
     <string name="טיפיומי">טיפ יומי</string>
     <string name="עריכתשםקטגוריה">עריכת שם קטגוריה</string>
     <string name="שםקטגוריה">שם קטגוריה</string>
+    <string name="medication_channel_name">תזכורות תרופות</string>
+    <string name="birthday_channel_name">תזכורות יום הולדת</string>
+    <string name="medication_notif_title">תזכורת תרופה</string>
+    <string name="medication_notif_body">הגיע הזמן לקחת את התרופה: %1$s</string>
+    <string name="birthday_notif_title">מזל טוב!</string>
+    <string name="birthday_notif_body">יום הולדת שמח, %1$s! מאחלים לך בריאות ואושר.</string>
+    <string name="medication_summary_title">תזכורות לתרופות</string>
 
     <string-array name="search_types">
         <item>שם פרטי</item>
