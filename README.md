@@ -1,4 +1,4 @@
-# 🌿 Shvil Hazhav (The Golden Path)
+# Shvil Hazhav (The Golden Path)
 
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
 [![Language](https://img.shields.io/badge/Language-Java-orange.svg)](https://www.java.com)
