@@ -48,12 +48,15 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         Card card = getItem(position);
 
-        // Reset animations
+        // Reset animations and state to avoid issues with recycling
         holder.itemView.animate().cancel();
+        holder.cardImage.animate().cancel();
+        
         holder.itemView.setTranslationX(0f);
         holder.itemView.setScaleX(1f);
         holder.itemView.setScaleY(1f);
         holder.itemView.setAlpha(1f);
+        holder.cardImage.setRotationY(0f);
 
         if (card.getIsMatched() || card.getIsRevealed()) {
             ImageUtil.loadImage(card.getBase64Content(), holder.cardImage);
@@ -83,6 +86,14 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
                 listener.onCardClicked(getItem(currentPosition), currentPosition);
             }
         });
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull CardViewHolder holder) {
+        super.onViewRecycled(holder);
+        // Cancel all animations when the view is recycled to prevent the "Tmp detached view" exception
+        holder.itemView.animate().cancel();
+        holder.cardImage.animate().cancel();
     }
 
     /**

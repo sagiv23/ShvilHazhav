@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents a single card in the memory game.
@@ -80,6 +81,22 @@ public class Card implements Serializable, Idable {
     @Exclude
     public void setWasRevealed(boolean wasRevealed) {
         this.wasRevealed = wasRevealed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return isRevealed == card.isRevealed &&
+                isMatched == card.isMatched &&
+                Objects.equals(id, card.id) &&
+                Objects.equals(base64Content, card.base64Content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, base64Content, isRevealed, isMatched);
     }
 
     @NonNull
