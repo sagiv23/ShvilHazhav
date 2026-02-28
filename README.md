@@ -86,8 +86,7 @@ This project follows a modular package structure for organized development.
    git clone https://github.com/sagiv23/ShvilHazhav.git
    ```
 2. Open the project in Android Studio.
-3. Add your `google-services.json` to the `app/` directory.
-4. Sync Gradle and run the application on an emulator or physical device.
+3. Sync Gradle and run the application on an emulator or physical device.
 
 ---
 
