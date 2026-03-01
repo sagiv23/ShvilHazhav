@@ -1,7 +1,6 @@
 package com.example.sagivproject.screens;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -58,8 +57,6 @@ public class UsersTableActivity extends BaseActivity {
     private EditText editSearch;
     private Spinner spinnerSearchType;
     private User currentUser;
-    private Typeface textFont;
-    private int textColor, backgroundColor;
 
     /**
      * Initializes the activity, sets up the UI, RecyclerView, search/filter functionality,
@@ -152,6 +149,9 @@ public class UsersTableActivity extends BaseActivity {
         editSearch = findViewById(R.id.edit_UsersTable_search);
         spinnerSearchType = findViewById(R.id.spinner_UsersTable_search_type);
 
+        ArrayAdapter<String> spinnerAdapter = getStringArrayAdapter();
+        spinnerSearchType.setAdapter(spinnerAdapter);
+
         editSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -167,43 +167,6 @@ public class UsersTableActivity extends BaseActivity {
             }
         });
 
-        textFont = ResourcesCompat.getFont(this, R.font.text_hebrew);
-        textColor = getResources().getColor(R.color.text_color, null);
-        backgroundColor = getResources().getColor(R.color.background_color_buttons, null);
-
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.search_types)
-        ) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                tv.setTypeface(textFont);
-                tv.setTextColor(textColor);
-                tv.setBackgroundColor(backgroundColor);
-                tv.setTextSize(22);
-                tv.setPadding(24, 24, 24, 24);
-                return tv;
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                tv.setTypeface(textFont);
-                tv.setTextColor(textColor);
-                tv.setBackgroundColor(backgroundColor);
-                tv.setTextSize(22);
-                tv.setPadding(24, 24, 24, 24);
-                return tv;
-            }
-        };
-
-        spinnerSearchType.setAdapter(spinnerAdapter);
-
         spinnerSearchType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -214,6 +177,40 @@ public class UsersTableActivity extends BaseActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    /**
+     * Creates and configures the ArrayAdapter for the search filter spinner.
+     *
+     * @return A customized ArrayAdapter for the spinner.
+     */
+    @NonNull
+    private ArrayAdapter<String> getStringArrayAdapter() {
+        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "משתמשים רגילים", "ניצחונות"};
+
+        return new ArrayAdapter<>(UsersTableActivity.this, android.R.layout.simple_spinner_item, searchOptions) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                TextView tv = (TextView) super.getView(position, convertView, parent);
+                tv.setTypeface(ResourcesCompat.getFont(UsersTableActivity.this, R.font.text_hebrew));
+                tv.setTextSize(22);
+                tv.setTextColor(getColor(R.color.text_color));
+                tv.setPadding(24, 24, 24, 24);
+                return tv;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+                TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
+                tv.setTypeface(ResourcesCompat.getFont(UsersTableActivity.this, R.font.text_hebrew));
+                tv.setTextSize(22);
+                tv.setTextColor(getColor(R.color.text_color));
+                tv.setBackgroundColor(getColor(R.color.background_color_buttons));
+                tv.setPadding(24, 24, 24, 24);
+                return tv;
+            }
+        };
     }
 
     /**
@@ -234,6 +231,7 @@ public class UsersTableActivity extends BaseActivity {
             public void onCompleted(List<User> list) {
                 usersList.clear();
                 usersList.addAll(list.stream().filter(u -> u != null && u.getId() != null).collect(Collectors.toList()));
+                usersList.sort((u1, u2) -> u1.getFullName().compareToIgnoreCase(u2.getFullName()));
                 filterUsers(editSearch.getText().toString().trim());
             }
 
@@ -311,57 +309,50 @@ public class UsersTableActivity extends BaseActivity {
      * @param query The search text entered by the admin.
      */
     private void filterUsers(String query) {
-        String searchType = spinnerSearchType.getSelectedItem().toString();
+        List<User> filteredUsers = new ArrayList<>();
+        String selectedType = spinnerSearchType.getSelectedItem() != null ? spinnerSearchType.getSelectedItem().toString() : "הכל";
         String lowerQuery = query.toLowerCase();
 
-        List<User> newFilteredList;
+        if (query.isEmpty() && selectedType.equals("הכל")) {
+            filteredUsers.addAll(usersList);
+        } else {
+            for (User user : usersList) {
+                boolean matches = false;
+                switch (selectedType) {
+                    case "הכל":
+                        matches = user.getFullName().toLowerCase().contains(lowerQuery) ||
+                                (user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery));
+                        break;
+                    case "שם פרטי":
+                        matches = user.getFirstName() != null && user.getFirstName().toLowerCase().contains(lowerQuery);
+                        break;
+                    case "שם משפחה":
+                        matches = user.getLastName() != null && user.getLastName().toLowerCase().contains(lowerQuery);
+                        break;
+                    case "אימייל":
+                        matches = user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery);
+                        break;
+                    case "מנהלים":
+                        matches = user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
+                        break;
+                    case "משתמשים רגילים":
+                        matches = !user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
+                        break;
+                    case "ניצחונות":
+                        matches = user.getFullName().toLowerCase().contains(lowerQuery);
+                        break;
+                }
 
-        switch (searchType) {
-            case "מנהלים":
-                newFilteredList = usersList.stream()
-                        .filter(user -> user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery))
-                        .collect(Collectors.toList());
-                break;
-
-            case "משתמשים רגילים":
-                newFilteredList = usersList.stream()
-                        .filter(user -> !user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery))
-                        .collect(Collectors.toList());
-                break;
-
-            case "ניצחונות":
-                newFilteredList = usersList.stream()
-                        .filter(user -> user.getFullName().toLowerCase().contains(lowerQuery))
-                        .sorted((u1, u2) -> Integer.compare(u2.getCountWins(), u1.getCountWins()))
-                        .collect(Collectors.toList());
-                break;
-
-            case "שם פרטי":
-                newFilteredList = usersList.stream()
-                        .filter(user -> user.getFirstName() != null && user.getFirstName().toLowerCase().contains(lowerQuery))
-                        .collect(Collectors.toList());
-                break;
-
-            case "שם משפחה":
-                newFilteredList = usersList.stream()
-                        .filter(user -> user.getLastName() != null && user.getLastName().toLowerCase().contains(lowerQuery))
-                        .collect(Collectors.toList());
-                break;
-
-            case "אימייל":
-                newFilteredList = usersList.stream()
-                        .filter(user -> String.valueOf(user.getCountWins()).contains(lowerQuery))
-                        .collect(Collectors.toList());
-                break;
-
-            case "הכל":
-            default:
-                newFilteredList = usersList.stream()
-                        .filter(user -> user.getFullName().toLowerCase().contains(lowerQuery))
-                        .collect(Collectors.toList());
-                break;
+                if (matches) {
+                    filteredUsers.add(user);
+                }
+            }
         }
 
-        adapter.setUserList(newFilteredList);
+        if (selectedType.equals("ניצחונות")) {
+            filteredUsers.sort((u1, u2) -> Integer.compare(u2.getCountWins(), u1.getCountWins()));
+        }
+
+        adapter.setUserList(filteredUsers);
     }
 }

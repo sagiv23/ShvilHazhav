@@ -132,7 +132,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         holder.txtUser.setText(userNameSpannable);
 
         holder.txtEmail.setText(msg.getEmail());
-        holder.txtIsAdmin.setText(msg.isSentByAdmin() ? "מנהל" : "מטופל");
+        holder.txtIsAdmin.setText(msg.isSentByAdmin() ? "מנהל" : "משתמש");
         holder.txtMessage.setText(msg.getMessage());
         holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 

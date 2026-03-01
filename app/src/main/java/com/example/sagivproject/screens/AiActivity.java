@@ -135,9 +135,9 @@ public class AiActivity extends BaseActivity {
     private void updateSpeakButton(boolean speaking) {
         isSpeaking = speaking;
         if (speaking) {
-            speakBtn.setText(R.string.בטלהשמעה);
+            speakBtn.setText(R.string.cancel_playback);
         } else {
-            speakBtn.setText(R.string.השמעתתשובה);
+            speakBtn.setText(R.string.playback_answer);
         }
     }
 

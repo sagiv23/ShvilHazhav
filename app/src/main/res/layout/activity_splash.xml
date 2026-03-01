@@ -11,7 +11,7 @@
         android:id="@+id/img_Splash_logo"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:contentDescription="@string/אייקון"
+        android:contentDescription="@string/icon"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintBottom_toTopOf="@id/tv_Splash_Title"
         app:layout_constraintEnd_toEndOf="parent"

@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:hint="@string/שםהתרופה"
+                android:hint="@string/medication_name"
                 android:inputType="text"
                 android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:hint="@string/סוגההתרופה"
+                android:hint="@string/medication_type"
                 android:inputType="none"
                 android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:hint="@string/פרטים"
+                android:hint="@string/details"
                 android:inputType="text"
                 android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="@font/text_hebrew"
-                android:text="@string/בחרשעותתזכורת"
+                android:text="@string/choose_hours_reminders"
                 android:textSize="18sp" />
 
             <com.google.android.material.chip.ChipGroup
@@ -98,7 +98,7 @@
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="80dp"
-                android:text="@string/הוסף"
+                android:text="@string/add"
                 android:textSize="22sp" />
 
             <com.google.android.material.button.MaterialButton
@@ -108,7 +108,7 @@
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="80dp"
-                android:text="@string/ביטול"
+                android:text="@string/cancel"
                 android:textSize="22sp" />
         </LinearLayout>
     </LinearLayout>

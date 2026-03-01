@@ -8,7 +8,7 @@
         android:id="@+id/dialogImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:contentDescription="@string/תמונתפרופיל"
+        android:contentDescription="@string/profile_img"
         android:padding="20dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"

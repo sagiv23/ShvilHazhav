@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".screens.SettingsActivity">
 
-    <!-- שורת כותרת עליונה זהה לתפריט מנהלים -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settings_header"
         android:layout_width="match_parent"
@@ -22,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/text_hebrew"
-            android:text="@string/חזרה"
+            android:text="@string/back"
             android:textSize="20sp"
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_back"
@@ -48,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/headline_hebrew"
-        android:text="@string/הגדרות"
+        android:text="@string/settings"
         android:textColor="@color/headline"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +90,7 @@
                     android:paddingEnd="20dp"
                     android:paddingBottom="12dp"
                     android:switchPadding="20dp"
-                    android:text="@string/מצבכהה"
+                    android:text="@string/dark_mode"
                     android:textSize="20sp" />
 
                 <View
@@ -108,7 +107,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
                     android:fontFamily="@font/text_hebrew"
-                    android:text="@string/התנתקות"
+                    android:text="@string/log_out"
                     android:textSize="20sp" />
             </LinearLayout>
 

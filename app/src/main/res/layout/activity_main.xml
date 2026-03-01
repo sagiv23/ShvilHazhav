@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/headline_hebrew"
-                android:text="@string/שלוםמטופליקר"
+                android:text="@string/hello_dear_patient"
                 android:textColor="@color/headline"
                 android:textSize="30sp" />
 
@@ -77,7 +77,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginBottom="6dp"
-                            android:contentDescription="@string/אייקוןתרופה"
+                            android:contentDescription="@string/icon_medication"
                             android:src="@drawable/ic_medication" />
 
                         <Button
@@ -86,7 +86,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="6dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:text="@string/רשימתהתרופותשלי"
+                            android:text="@string/my_medications_list"
                             android:textSize="20sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -111,7 +111,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginBottom="6dp"
-                            android:contentDescription="@string/אייקוןפורום"
+                            android:contentDescription="@string/icon_forum"
                             android:src="@drawable/ic_forum" />
 
                         <Button
@@ -120,7 +120,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="6dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:text="@string/קשרקרוב"
+                            android:text="@string/forum"
                             android:textSize="20sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -152,7 +152,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginBottom="6dp"
-                            android:contentDescription="@string/אייקוןיועץבינהמלאכותית"
+                            android:contentDescription="@string/icon_ai_advisor"
                             android:src="@drawable/ic_ai_assistant" />
 
                         <Button
@@ -161,7 +161,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="6dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:text="@string/יועץבינהמלאכותית"
+                            android:text="@string/ai_advisor"
                             android:textSize="20sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -186,7 +186,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginBottom="6dp"
-                            android:contentDescription="@string/אייקוןמשחק"
+                            android:contentDescription="@string/icon_game"
                             android:src="@drawable/ic_memory_game" />
 
                         <Button
@@ -195,7 +195,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="6dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:text="@string/משחקזיכרון"
+                            android:text="@string/memory_game"
                             android:textSize="20sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -227,7 +227,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginBottom="6dp"
-                            android:contentDescription="@string/אייקוןמשחק"
+                            android:contentDescription="@string/icon_game"
                             android:src="@drawable/ic_math_game" />
 
                         <Button
@@ -236,7 +236,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="6dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:text="@string/תרגיליחשבון"
+                            android:text="@string/math_exercises"
                             android:textSize="20sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -261,7 +261,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginBottom="6dp"
-                            android:contentDescription="@string/טיפיומי"
+                            android:contentDescription="@string/daily_tip"
                             android:src="@drawable/ic_tip" />
 
                         <Button
@@ -270,7 +270,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="6dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:text="@string/טיפיומי"
+                            android:text="@string/daily_tip"
                             android:textSize="20sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

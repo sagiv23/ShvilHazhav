@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/headline_hebrew"
-                android:text="@string/משחקזיכרון"
+                android:text="@string/memory_game"
                 android:textColor="@color/headline"
                 android:textSize="40sp" />
 
@@ -68,7 +68,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/text_hebrew"
                 android:gravity="center"
-                android:text="@string/מחפשיריב"
+                android:text="@string/searching_enemy"
                 android:textSize="25sp"
                 android:visibility="gone" />
 
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/text_hebrew"
-                    android:text="@string/מצאיריב"
+                    android:text="@string/find_enemy"
                     android:textAllCaps="false"
                     android:textSize="25sp"
                     app:cornerRadius="30dp"
@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/text_hebrew"
-                    android:text="@string/בטלחיפוש"
+                    android:text="@string/cancel_search"
                     android:textAllCaps="false"
                     android:textSize="25sp"
                     android:visibility="gone"
@@ -131,7 +131,7 @@
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/headline_hebrew"
                         android:gravity="center"
-                        android:text="@string/הוראותהמשחק"
+                        android:text="@string/game_rules"
                         android:textSize="30sp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/השמעה"
+                        android:text="@string/playback"
                         android:textAllCaps="false"
                         android:textSize="20sp"
                         app:cornerRadius="30dp"
@@ -156,7 +156,7 @@
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="right"
-                        android:text="@string/טקסט1משחק"
+                        android:text="@string/game_rules_text1"
                         android:textSize="22sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -166,7 +166,7 @@
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/headline_hebrew"
                         android:gravity="right"
-                        android:text="@string/מטרתהמשחק"
+                        android:text="@string/game_target"
                         android:textSize="22sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -176,7 +176,7 @@
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="right"
-                        android:text="@string/טקסט2משחק"
+                        android:text="@string/game_rules_text2"
                         android:textSize="22sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -186,7 +186,7 @@
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/headline_hebrew"
                         android:gravity="right"
-                        android:text="@string/כלליהמשחק"
+                        android:text="@string/game_procedure"
                         android:textSize="22sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -195,7 +195,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="right"
-                        android:text="@string/טקסט3משחק"
+                        android:text="@string/game_rules_text3"
                         android:textSize="22sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -204,7 +204,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="right"
-                        android:text="@string/טקסט4משחק"
+                        android:text="@string/game_rules_text4"
                         android:textSize="22sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -214,7 +214,7 @@
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="right"
-                        android:text="@string/טקסט5משחק"
+                        android:text="@string/game_rules_text5"
                         android:textSize="22sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -224,7 +224,7 @@
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/headline_hebrew"
                         android:gravity="right"
-                        android:text="@string/שיטתהניקוד"
+                        android:text="@string/scoring_method"
                         android:textSize="22sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -233,7 +233,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="right"
-                        android:text="@string/טקסט6משחק"
+                        android:text="@string/game_rules_text6"
                         android:textSize="22sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -246,7 +246,7 @@
                 android:layout_marginTop="50dp"
                 android:fontFamily="@font/headline_hebrew"
                 android:gravity="center"
-                android:text="@string/טבלתמובילים"
+                android:text="@string/leaderboard"
                 android:textSize="30sp" />
 
             <LinearLayout
@@ -264,7 +264,7 @@
                     android:layout_weight="8"
                     android:fontFamily="@font/headline_hebrew"
                     android:gravity="center"
-                    android:text="@string/שםמלא"
+                    android:text="@string/full_name"
                     android:textSize="18sp"
                     tools:ignore="RtlHardcoded" />
 
@@ -273,7 +273,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:gravity="center"
-                    android:text="@string/אייקוןגביע"
+                    android:text="@string/icon_crown"
                     android:textSize="18sp" />
             </LinearLayout>
 

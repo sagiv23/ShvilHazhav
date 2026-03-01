@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:fontFamily="@font/headline_hebrew"
-                android:text="@string/צורקשר"
+                android:text="@string/contact"
                 android:textColor="@color/headline"
                 android:textSize="40sp" />
 
@@ -66,11 +66,12 @@
                     android:padding="24dp">
 
                     <ImageView
+                        android:id="@+id/imgContactIcon"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="16dp"
-                        android:contentDescription="@string/אייקוןצורקשר"
+                        android:contentDescription="@string/icon_contact"
                         android:src="@drawable/ic_contact_support" />
 
                     <TextView
@@ -78,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/כתובתמייללפניות"
+                        android:text="@string/mail_to_contact"
                         android:textSize="30sp"
                         tools:ignore="RtlHardcoded" />
 
@@ -89,7 +90,7 @@
                         android:layout_marginBottom="24dp"
                         android:autoLink="email"
                         android:fontFamily="@font/text_english"
-                        android:text="@string/אימייל"
+                        android:text="@string/mail"
                         android:textColorLink="@color/error"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -98,7 +99,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/טקסטצורקשר"
+                        android:text="@string/contact_text"
                         android:textSize="25sp"
                         tools:ignore="RtlHardcoded" />
                 </LinearLayout>

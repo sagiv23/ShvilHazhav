@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/headline_hebrew"
-        android:text="@string/טבלתמשתמשים"
+        android:text="@string/users_table"
         android:textColor="@color/headline"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +46,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="160dp"
         android:fontFamily="@font/text_hebrew"
-        android:text="@string/הוספתמשתמש"
+        android:text="@string/add_user"
         android:textSize="22sp"
         app:cornerRadius="20dp"
         app:icon="@drawable/ic_add"
@@ -79,15 +79,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:text="@string/חפשלפי"
+                android:text="@string/search_by"
                 android:textSize="25sp" />
 
             <Spinner
                 android:id="@+id/spinner_UsersTable_search_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:entries="@array/search_types" />
+                android:layout_marginTop="8dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -95,7 +94,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/text_hebrew"
-                android:hint="@string/הקלדכאן"
+                android:hint="@string/write_here"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"

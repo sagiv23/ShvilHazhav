@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/headline_hebrew"
-        android:text="@string/טבלתתיעודהמשחקים"
+        android:text="@string/memory_game_log_table"
         android:textColor="@color/headline"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"

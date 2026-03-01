@@ -30,7 +30,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/headline_hebrew"
-                android:text="@string/דףמנהלים"
+                android:text="@string/admin_page"
                 android:textColor="@color/headline"
                 android:textSize="40sp" />
 
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:fontFamily="@font/text_hebrew"
-                android:text="@string/שלוםמנהליקר"
+                android:text="@string/hello_admin"
                 android:textSize="37sp" />
 
             <com.google.android.material.card.MaterialCardView
@@ -66,7 +66,7 @@
                         android:layout_marginBottom="20dp"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="center"
-                        android:text="@string/אפשרויותניהול"
+                        android:text="@string/admin_options"
                         android:textSize="30sp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/טבלתמשתמשים"
+                        android:text="@string/users_table"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_users"
                         app:iconGravity="textEnd"
@@ -88,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/טבלתתיעודהמשחקים"
+                        android:text="@string/memory_game_log_table"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_memory_game"
                         app:iconGravity="textEnd"
@@ -101,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/טבלתתמונותהתרופות"
+                        android:text="@string/medications_imgs_table"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_medication"
                         app:iconGravity="textEnd"
@@ -114,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/ניהולקטגוריותקשרקרוב"
+                        android:text="@string/forum_categories_options"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_forum"
                         app:iconGravity="textEnd"
@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/משתמש"
+                        android:text="@string/user"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_user"
                         app:iconGravity="textEnd"
@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/הגדרות"
+                        android:text="@string/settings"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_settings"
                         app:iconGravity="textEnd"

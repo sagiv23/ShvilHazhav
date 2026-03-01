@@ -45,7 +45,7 @@
                 android:layout_width="280dp"
                 android:layout_height="185dp"
                 android:layout_marginBottom="24dp"
-                android:contentDescription="@string/תמונתהאפליקציה"
+                android:contentDescription="@string/app_picture"
                 android:scaleType="fitCenter"
                 android:src="@drawable/image" />
 
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="40dp"
                 android:fontFamily="@font/headline_hebrew"
-                android:text="@string/ברוכיםהבאים"
+                android:text="@string/welcome"
                 android:textColor="@color/headline"
                 android:textSize="50sp" />
 
@@ -79,7 +79,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/התחברות"
+                        android:text="@string/log_in"
                         android:textAllCaps="false"
                         android:textSize="25sp"
                         app:cornerRadius="30dp"
@@ -94,7 +94,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/הרשמה"
+                        android:text="@string/register"
                         android:textAllCaps="false"
                         android:textSize="25sp"
                         app:cornerRadius="30dp"
@@ -109,7 +109,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/צורקשר"
+                        android:text="@string/contact"
                         android:textAllCaps="false"
                         android:textSize="25sp"
                         app:cornerRadius="30dp"

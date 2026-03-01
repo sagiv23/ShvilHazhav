@@ -4,10 +4,10 @@
     <item
         android:id="@+id/action_edit"
         android:icon="@drawable/ic_edit"
-        android:title="@string/ערוך" />
+        android:title="@string/edit" />
 
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_delete"
-        android:title="@string/מחק" />
+        android:title="@string/delete" />
 </menu>

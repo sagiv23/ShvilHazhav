@@ -1,7 +1,13 @@
 package com.example.sagivproject.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -18,6 +24,9 @@ import com.example.sagivproject.bases.BaseActivity;
  * </p>
  */
 public class ContactActivity extends BaseActivity {
+    private static final int LONG_PRESS_DURATION = 4000;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable longPressedRunnable;
 
     /**
      * Initializes the activity, sets up the UI, and configures the top menu.
@@ -39,5 +48,31 @@ public class ContactActivity extends BaseActivity {
 
         ViewGroup topMenuContainer = findViewById(R.id.topMenuContainer);
         setupTopMenu(topMenuContainer);
+
+        ImageView imgContactIcon = findViewById(R.id.imgContactIcon);
+        setupSecretNavigation(imgContactIcon);
+    }
+
+    private void setupSecretNavigation(View view) {
+        longPressedRunnable = () -> {
+            Intent intent = new Intent(ContactActivity.this, SecretActivity.class);
+            startActivity(intent);
+        };
+
+        view.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    handler.postDelayed(longPressedRunnable, LONG_PRESS_DURATION);
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    v.performClick();
+                    handler.removeCallbacks(longPressedRunnable);
+                    return true;
+                case MotionEvent.ACTION_CANCEL:
+                    handler.removeCallbacks(longPressedRunnable);
+                    return true;
+            }
+            return false;
+        });
     }
 }

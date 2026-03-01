@@ -125,16 +125,16 @@ public class GameHomeScreenActivity extends BaseActivity {
             tts.stop();
             updateSpeakButton(false);
         } else {
-            String sb = getString(R.string.הוראותהמשחק) + ". " +
-                    getString(R.string.טקסט1משחק) + " " +
-                    getString(R.string.מטרתהמשחק) + ". " +
-                    getString(R.string.טקסט2משחק) + " " +
-                    getString(R.string.כלליהמשחק) + ". " +
-                    getString(R.string.טקסט3משחק) + " " +
-                    getString(R.string.טקסט4משחק) + " " +
-                    getString(R.string.טקסט5משחק) + " " +
-                    getString(R.string.שיטתהניקוד) + ". " +
-                    getString(R.string.טקסט6משחק);
+            String sb = getString(R.string.game_rules) + ". " +
+                    getString(R.string.game_rules_text1) + " " +
+                    getString(R.string.game_target) + ". " +
+                    getString(R.string.game_rules_text2) + " " +
+                    getString(R.string.game_procedure) + ". " +
+                    getString(R.string.game_rules_text3) + " " +
+                    getString(R.string.game_rules_text4) + " " +
+                    getString(R.string.game_rules_text5) + " " +
+                    getString(R.string.scoring_method) + ". " +
+                    getString(R.string.game_rules_text6);
 
             Bundle params = new Bundle();
             params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "instructions");
@@ -146,9 +146,9 @@ public class GameHomeScreenActivity extends BaseActivity {
     private void updateSpeakButton(boolean speaking) {
         isSpeaking = speaking;
         if (speaking) {
-            btnSpeak.setText(R.string.בטלהשמעה);
+            btnSpeak.setText(R.string.cancel_playback);
         } else {
-            btnSpeak.setText(R.string.השמעה);
+            btnSpeak.setText(R.string.playback);
         }
     }
 

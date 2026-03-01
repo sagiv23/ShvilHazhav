@@ -39,6 +39,9 @@
         </provider>
 
         <activity
+            android:name=".screens.SecretActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.TipOfTheDayActivity"
             android:exported="false" />
         <activity
@@ -50,7 +53,7 @@
         <activity
             android:name=".screens.SettingsActivity"
             android:exported="false"
-            android:label="@string/הגדרות" />
+            android:label="@string/settings" />
         <activity
             android:name=".screens.MemoryGameLogsTableActivity"
             android:exported="false" />

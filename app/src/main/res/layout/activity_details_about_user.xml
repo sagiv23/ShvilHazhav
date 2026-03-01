@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|right"
-                    android:contentDescription="@string/אייקוןמצלמה"
+                    android:contentDescription="@string/icon_camera"
                     app:backgroundTint="@color/background_color_buttons"
                     app:borderWidth="0dp"
                     app:elevation="4dp"
@@ -85,7 +85,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="30dp"
                 android:fontFamily="@font/headline_hebrew"
-                android:text="@string/שםמלא"
+                android:text="@string/full_name"
                 android:textColor="@color/headline"
                 android:textSize="38sp" />
 
@@ -157,7 +157,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/text_hebrew"
-                                android:text="@string/ניצחונות"
+                                android:text="@string/victories"
                                 android:textSize="22sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -173,7 +173,7 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_marginEnd="16dp"
-                            android:contentDescription="@string/אייקוןאימייל"
+                            android:contentDescription="@string/icon_mail"
                             android:src="@drawable/ic_email" />
 
                         <LinearLayout
@@ -185,7 +185,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/text_hebrew"
-                                android:text="@string/כתובתאימייל"
+                                android:text="@string/mail_address"
                                 android:textSize="20sp" />
 
                             <TextView
@@ -208,7 +208,7 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_marginEnd="16dp"
-                            android:contentDescription="@string/אייקוןסיסמה"
+                            android:contentDescription="@string/icon_password"
                             android:src="@drawable/ic_password" />
 
                         <LinearLayout
@@ -220,7 +220,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/text_hebrew"
-                                android:text="@string/סיסמה"
+                                android:text="@string/password"
                                 android:textSize="20sp" />
 
                             <TextView
@@ -242,7 +242,7 @@
                 android:layout_marginTop="35dp"
                 android:layout_marginBottom="40dp"
                 android:fontFamily="@font/text_hebrew"
-                android:text="@string/עריכתפרטים"
+                android:text="@string/edit_details"
                 android:textSize="24sp"
                 app:cornerRadius="25dp"
                 app:icon="@drawable/ic_edit"

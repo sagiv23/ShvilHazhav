@@ -48,7 +48,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/headline_hebrew"
-                android:text="@string/התחברות"
+                android:text="@string/log_in"
                 android:textColor="@color/headline"
                 android:textSize="40sp" />
 
@@ -81,7 +81,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:hint="@string/כתובתאימייל"
+                            android:hint="@string/mail_address"
                             android:inputType="textEmailAddress"
                             android:textDirection="ltr"
                             android:textSize="23sp" />
@@ -102,7 +102,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:hint="@string/סיסמה"
+                            android:hint="@string/password"
                             android:inputType="textPassword"
                             android:textDirection="ltr"
                             android:textSize="23sp" />
@@ -115,7 +115,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/התחברות"
+                        android:text="@string/log_in"
                         android:textSize="25sp"
                         app:cornerRadius="30dp" />
                 </LinearLayout>

@@ -85,9 +85,9 @@ public class SettingsActivity extends BaseActivity {
      */
     private void updateDarkModeText(SwitchMaterial switchDarkMode, boolean isDarkMode) {
         if (isDarkMode) {
-            switchDarkMode.setText(R.string.מצבבהיר);
+            switchDarkMode.setText(R.string.bright_mode);
         } else {
-            switchDarkMode.setText(R.string.מצבכהה);
+            switchDarkMode.setText(R.string.dark_mode);
         }
     }
 

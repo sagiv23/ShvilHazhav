@@ -46,7 +46,7 @@
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="80dp"
-                android:text="@string/אישור"
+                android:text="@string/confirm"
                 android:textSize="24sp" />
 
             <com.google.android.material.button.MaterialButton
@@ -56,7 +56,7 @@
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="80dp"
-                android:text="@string/ביטול"
+                android:text="@string/cancel"
                 android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>

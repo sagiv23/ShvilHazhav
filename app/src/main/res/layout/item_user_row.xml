@@ -22,7 +22,7 @@
             android:id="@+id/img_UserRow_userProfile"
             android:layout_width="68dp"
             android:layout_height="78dp"
-            android:contentDescription="@string/תמונתפרופיל"
+            android:contentDescription="@string/profile_img"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_user"
             app:strokeWidth="2dp" />
@@ -105,7 +105,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/מחק"
+                android:contentDescription="@string/delete"
                 android:src="@drawable/ic_delete" />
 
             <ImageButton
@@ -113,7 +113,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/הפוךלמנהל"
+                android:contentDescription="@string/make_admin"
                 android:src="@drawable/ic_add_admin" />
         </LinearLayout>
 

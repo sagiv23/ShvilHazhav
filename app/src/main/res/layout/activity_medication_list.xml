@@ -42,7 +42,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/headline_hebrew"
-            android:text="@string/רשימתהתרופותשלי"
+            android:text="@string/my_medications_list"
             android:textColor="@color/headline"
             android:textSize="35sp" />
 
@@ -53,7 +53,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/text_hebrew"
-            android:text="@string/הוספתתרופה"
+            android:text="@string/add_medication"
             android:textSize="22sp" />
 
         <com.google.android.material.card.MaterialCardView
@@ -91,7 +91,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/חפשתרופה"
+                    android:hint="@string/find_medication"
                     app:boxBackgroundMode="outline"
                     app:boxCornerRadiusBottomEnd="16dp"
                     app:boxCornerRadiusBottomStart="16dp"

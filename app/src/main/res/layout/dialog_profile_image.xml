@@ -17,7 +17,7 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/headline_hebrew"
             android:gravity="center"
-            android:text="@string/אפשרויות"
+            android:text="@string/options"
             android:textColor="@color/headline"
             android:textSize="35sp" />
 
@@ -35,7 +35,7 @@
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="150sp"
-                android:text="@string/צלםתמונה"
+                android:text="@string/take_a_photo"
                 android:textSize="22sp" />
 
             <Button
@@ -45,7 +45,7 @@
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="150sp"
-                android:text="@string/בחרמהגלריה"
+                android:text="@string/choose_from_gallery"
                 android:textSize="22sp" />
 
             <Button
@@ -55,7 +55,7 @@
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="150sp"
-                android:text="@string/מחיקתתמונה"
+                android:text="@string/delete_img"
                 android:textSize="22sp"
                 android:visibility="gone" />
 
@@ -66,7 +66,7 @@
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="150sp"
-                android:text="@string/ביטול"
+                android:text="@string/cancel"
                 android:textSize="22sp" />
         </LinearLayout>
     </LinearLayout>

@@ -18,7 +18,7 @@
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/headline_hebrew"
             android:gravity="center"
-            android:text="@string/עריכתשםקטגוריה"
+            android:text="@string/edit_category_name"
             android:textColor="@color/headline"
             android:textSize="35sp" />
 
@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:hint="@string/שםקטגוריה"
+                android:hint="@string/category_name"
                 android:inputType="textPersonName"
                 android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -53,7 +53,7 @@
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="80dp"
-                android:text="@string/שמור"
+                android:text="@string/save"
                 android:textSize="22sp" />
 
             <com.google.android.material.button.MaterialButton
@@ -63,7 +63,7 @@
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
                 android:minWidth="80dp"
-                android:text="@string/ביטול"
+                android:text="@string/cancel"
                 android:textSize="22sp" />
         </LinearLayout>
 

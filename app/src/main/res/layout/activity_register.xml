@@ -48,7 +48,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/headline_hebrew"
-                android:text="@string/הרשמה"
+                android:text="@string/register"
                 android:textColor="@color/headline"
                 android:textSize="40sp" />
 
@@ -81,7 +81,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:hint="@string/שםפרטי"
+                            android:hint="@string/first_name"
                             android:inputType="textPersonName"
                             android:textSize="23sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -100,7 +100,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:hint="@string/שםמשפחה"
+                            android:hint="@string/last_name"
                             android:inputType="textPersonName"
                             android:textSize="23sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -121,7 +121,7 @@
                             android:clickable="true"
                             android:focusable="false"
                             android:fontFamily="@font/text_hebrew"
-                            android:hint="@string/תאריךלידה"
+                            android:hint="@string/birth_date"
                             android:textSize="23sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -139,7 +139,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:hint="@string/כתובתאימייל"
+                            android:hint="@string/mail_address"
                             android:inputType="textEmailAddress"
                             android:textDirection="ltr"
                             android:textSize="23sp" />
@@ -160,7 +160,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:hint="@string/סיסמה"
+                            android:hint="@string/password"
                             android:inputType="textPassword"
                             android:textDirection="ltr"
                             android:textSize="23sp"
@@ -173,7 +173,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/הרשמה"
+                        android:text="@string/register"
                         android:textSize="25sp"
                         app:cornerRadius="30dp" />
                 </LinearLayout>

@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/headline_hebrew"
-                android:text="@string/טיפיומי"
+                android:text="@string/daily_tip"
                 android:textColor="@color/headline"
                 android:textSize="40sp" />
 
@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/השמעה"
+                        android:text="@string/playback"
                         android:textAllCaps="false"
                         android:textSize="20sp"
                         app:cornerRadius="30dp"
@@ -124,7 +124,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/headline_hebrew"
-                        android:text="@string/פינתהשראה"
+                        android:text="@string/inspiration_corner"
                         android:textColor="@color/headline"
                         android:textSize="30sp" />
 
@@ -135,7 +135,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/השמעה"
+                        android:text="@string/playback"
                         android:textAllCaps="false"
                         android:textSize="20sp"
                         app:cornerRadius="30dp"

@@ -149,10 +149,10 @@ public class TipOfTheDayActivity extends BaseActivity {
         Button btn = id.equals("tip") ? btnTipSpeak : btnInspirationSpeak;
         if (speaking) {
             currentlySpeakingId = id;
-            btn.setText(R.string.בטלהשמעה);
+            btn.setText(R.string.cancel_playback);
         } else {
             currentlySpeakingId = null;
-            btn.setText(R.string.השמעה);
+            btn.setText(R.string.playback);
         }
     }
 
