@@ -36,16 +36,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     public ForumAdapter() {
     }
 
-    private void initTTS(View v) {
-        if (tts == null) {
-            tts = new TextToSpeech(v.getContext(), status -> {
-                if (status == TextToSpeech.SUCCESS) {
-                    tts.setLanguage(new Locale("he", "IL"));
-                }
-            });
-        }
-    }
-
     /**
      * Sets the listener for message actions.
      *
@@ -93,13 +83,20 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         holder.txtUser.setText(userNameSpannable);
 
         holder.txtEmail.setText(msg.getEmail());
-        holder.txtIsAdmin.setText(msg.isSentByAdmin() ? "מנהל" : "משתמש רגיל");
+        holder.txtIsAdmin.setText(msg.isSentByAdmin() ? "מנהל" : "מטופל");
         holder.txtMessage.setText(msg.getMessage());
         holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 
         holder.btnSpeak.setOnClickListener(v -> {
-            initTTS(v);
-            if (tts != null) {
+            if (tts == null) {
+                tts = new TextToSpeech(v.getContext(), status -> {
+                    if (status == TextToSpeech.SUCCESS) {
+                        tts.setLanguage(new Locale("he", "IL"));
+                        // Initial initialization complete, speak the text
+                        tts.speak(msg.getMessage(), TextToSpeech.QUEUE_FLUSH, null, null);
+                    }
+                });
+            } else {
                 tts.speak(msg.getMessage(), TextToSpeech.QUEUE_FLUSH, null, null);
             }
         });

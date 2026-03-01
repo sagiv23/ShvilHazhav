@@ -19,9 +19,15 @@
             android:id="@+id/ItemForumMessageTxtUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:fontFamily="@font/text_hebrew"
+            android:singleLine="true"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/ItemForumMessageTxtIsAdmin"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="שם פרטי + משפחה" />
@@ -35,21 +41,12 @@
             android:fontFamily="@font/text_hebrew"
             android:paddingHorizontal="8dp"
             android:textSize="18sp"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="@id/ItemForumMessageTxtUser"
+            app:layout_constraintEnd_toStartOf="@id/ItemForumMessageBtnSpeak"
             app:layout_constraintStart_toEndOf="@id/ItemForumMessageTxtUser"
             app:layout_constraintTop_toTopOf="@id/ItemForumMessageTxtUser"
             tools:text="מנהל" />
-
-        <TextView
-            android:id="@+id/ItemForumMessageTxtEmail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/text_english"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/ItemForumMessageBtnSpeak"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ItemForumMessageTxtUser"
-            tools:text="user@email.com" />
 
         <ImageButton
             android:id="@+id/ItemForumMessageBtnMenu"
@@ -65,16 +62,28 @@
             android:id="@+id/ItemForumMessageBtnSpeak"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginEnd="4dp"
             android:contentDescription="@string/השמעה"
             android:padding="0dp"
             app:icon="@drawable/ic_sound"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
-            app:iconSize="20dp"
+            app:iconSize="22dp"
             app:layout_constraintBottom_toBottomOf="@id/ItemForumMessageBtnMenu"
             app:layout_constraintEnd_toStartOf="@id/ItemForumMessageBtnMenu"
             app:layout_constraintTop_toTopOf="@id/ItemForumMessageBtnMenu" />
+
+        <TextView
+            android:id="@+id/ItemForumMessageTxtEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/text_english"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@id/ItemForumMessageBtnSpeak"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ItemForumMessageTxtUser"
+            tools:text="user@email.com" />
 
         <TextView
             android:id="@+id/ItemForumMessageTxtMessage"
