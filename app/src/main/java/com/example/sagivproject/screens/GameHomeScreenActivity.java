@@ -3,6 +3,7 @@ package com.example.sagivproject.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,12 +41,14 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class GameHomeScreenActivity extends BaseActivity {
     private Button btnFindEnemy;
     private Button btnCancelFindEnemy;
+    private Button btnSpeak;
     private TextView TVictories, TVStatusOfFindingEnemy;
     private GameRoom currentRoom;
     private boolean gameStarted = false;
     private LeaderboardAdapter adapter;
     private User user;
     private TextToSpeech tts;
+    private boolean isSpeaking = false;
 
     /**
      * Initializes the activity, setting up the UI, and listeners.
@@ -73,7 +76,7 @@ public class GameHomeScreenActivity extends BaseActivity {
 
         btnFindEnemy = findViewById(R.id.btn_GameHomeScreen_find_enemy);
         btnCancelFindEnemy = findViewById(R.id.btn_GameHomeScreen_cancel_find_enemy);
-        Button btnSpeak = findViewById(R.id.btn_GameHomeScreen_speak);
+        btnSpeak = findViewById(R.id.btn_GameHomeScreen_speak);
         TVictories = findViewById(R.id.tv_GameHomeScreen_victories);
         TVStatusOfFindingEnemy = findViewById(R.id.tv_GameHomeScreen_status_of_finding_enemy);
         RecyclerView rvLeaderboard = findViewById(R.id.recyclerView_GameHomeScreen_leaderboard);
@@ -85,12 +88,29 @@ public class GameHomeScreenActivity extends BaseActivity {
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     Toast.makeText(this, "שפה לא נתמכת ב-TTS", Toast.LENGTH_SHORT).show();
                 }
+
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {
+                        runOnUiThread(() -> updateSpeakButton(true));
+                    }
+
+                    @Override
+                    public void onDone(String utteranceId) {
+                        runOnUiThread(() -> updateSpeakButton(false));
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                        runOnUiThread(() -> updateSpeakButton(false));
+                    }
+                });
             }
         });
 
         btnFindEnemy.setOnClickListener(view -> findEnemy());
         btnCancelFindEnemy.setOnClickListener(view -> cancelSearch());
-        btnSpeak.setOnClickListener(view -> speakInstructions());
+        btnSpeak.setOnClickListener(view -> toggleInstructionsSpeech());
 
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
         adapter = new LeaderboardAdapter();
@@ -100,19 +120,36 @@ public class GameHomeScreenActivity extends BaseActivity {
         updateUI(SearchState.IDLE);
     }
 
-    private void speakInstructions() {
-        String sb = getString(R.string.הוראותהמשחק) + ". " +
-                getString(R.string.טקסט1משחק) + " " +
-                getString(R.string.מטרתהמשחק) + ". " +
-                getString(R.string.טקסט2משחק) + " " +
-                getString(R.string.כלליהמשחק) + ". " +
-                getString(R.string.טקסט3משחק) + " " +
-                getString(R.string.טקסט4משחק) + " " +
-                getString(R.string.טקסט5משחק) + " " +
-                getString(R.string.שיטתהניקוד) + ". " +
-                getString(R.string.טקסט6משחק);
+    private void toggleInstructionsSpeech() {
+        if (isSpeaking) {
+            tts.stop();
+            updateSpeakButton(false);
+        } else {
+            String sb = getString(R.string.הוראותהמשחק) + ". " +
+                    getString(R.string.טקסט1משחק) + " " +
+                    getString(R.string.מטרתהמשחק) + ". " +
+                    getString(R.string.טקסט2משחק) + " " +
+                    getString(R.string.כלליהמשחק) + ". " +
+                    getString(R.string.טקסט3משחק) + " " +
+                    getString(R.string.טקסט4משחק) + " " +
+                    getString(R.string.טקסט5משחק) + " " +
+                    getString(R.string.שיטתהניקוד) + ". " +
+                    getString(R.string.טקסט6משחק);
 
-        tts.speak(sb, TextToSpeech.QUEUE_FLUSH, null, null);
+            Bundle params = new Bundle();
+            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "instructions");
+            tts.speak(sb, TextToSpeech.QUEUE_FLUSH, params, "instructions");
+            updateSpeakButton(true);
+        }
+    }
+
+    private void updateSpeakButton(boolean speaking) {
+        isSpeaking = speaking;
+        if (speaking) {
+            btnSpeak.setText(R.string.בטלהשמעה);
+        } else {
+            btnSpeak.setText(R.string.השמעה);
+        }
     }
 
     /**
@@ -131,6 +168,8 @@ public class GameHomeScreenActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        if (tts != null) tts.stop();
+        updateSpeakButton(false);
         // If user leaves the screen while searching, cancel the search to free up the room.
         if (currentRoom != null && !gameStarted) {
             cancelSearch();

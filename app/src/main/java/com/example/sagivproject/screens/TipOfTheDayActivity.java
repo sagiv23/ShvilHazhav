@@ -2,6 +2,7 @@ package com.example.sagivproject.screens;
 
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -53,16 +54,11 @@ public class TipOfTheDayActivity extends BaseActivity {
     private TextView tipContent;
     private TextView tvInspirationContent;
     private Button btnTipSpeak;
+    private Button btnInspirationSpeak;
     private GenerativeModelFutures model;
     private TextToSpeech tts;
+    private String currentlySpeakingId = null;
 
-    /**
-     * Initializes the activity, its views, and fetches the daily tip.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +81,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         tipContent = findViewById(R.id.tv_tipOfTheDay_content);
         tvInspirationContent = findViewById(R.id.tv_tipOfTheDay_inspiration_content);
         btnTipSpeak = findViewById(R.id.btn_tip_speak);
-        Button btnInspirationSpeak = findViewById(R.id.btn_inspiration_speak);
+        btnInspirationSpeak = findViewById(R.id.btn_inspiration_speak);
 
         // Initialize TextToSpeech
         tts = new TextToSpeech(this, status -> {
@@ -94,6 +90,23 @@ public class TipOfTheDayActivity extends BaseActivity {
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     Toast.makeText(this, "שפה לא נתמכת ב-TTS", Toast.LENGTH_SHORT).show();
                 }
+
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {
+                        runOnUiThread(() -> updateSpeakButton(utteranceId, true));
+                    }
+
+                    @Override
+                    public void onDone(String utteranceId) {
+                        runOnUiThread(() -> updateSpeakButton(utteranceId, false));
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                        runOnUiThread(() -> updateSpeakButton(utteranceId, false));
+                    }
+                });
             }
         });
 
@@ -104,8 +117,8 @@ public class TipOfTheDayActivity extends BaseActivity {
         int index = random.nextInt(inspirationalQuotes.length);
         tvInspirationContent.setText(inspirationalQuotes[index]);
 
-        btnTipSpeak.setOnClickListener(v -> speak(tipContent.getText().toString()));
-        btnInspirationSpeak.setOnClickListener(v -> speak(tvInspirationContent.getText().toString()));
+        btnTipSpeak.setOnClickListener(v -> toggleSpeech("tip", tipContent.getText().toString()));
+        btnInspirationSpeak.setOnClickListener(v -> toggleSpeech("inspiration", tvInspirationContent.getText().toString()));
 
         GenerativeModel generativeModel = FirebaseAI.getInstance(GenerativeBackend.googleAI())
                 .generativeModel("gemini-2.5-flash-lite");
@@ -114,16 +127,35 @@ public class TipOfTheDayActivity extends BaseActivity {
         checkDailyTip();
     }
 
-    private void speak(String text) {
-        if (text != null && !text.isEmpty()) {
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+    private void toggleSpeech(String id, String text) {
+        if (id.equals(currentlySpeakingId)) {
+            tts.stop();
+            updateSpeakButton(id, false);
+        } else {
+            if (currentlySpeakingId != null) {
+                tts.stop();
+                updateSpeakButton(currentlySpeakingId, false);
+            }
+            if (text != null && !text.isEmpty()) {
+                Bundle params = new Bundle();
+                params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, id);
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, id);
+                updateSpeakButton(id, true);
+            }
         }
     }
 
-    /**
-     * Checks if a daily tip has already been saved for the current day in the database.
-     * If so, it displays the saved tip. Otherwise, it fetches a new tip from the AI.
-     */
+    private void updateSpeakButton(String id, boolean speaking) {
+        Button btn = id.equals("tip") ? btnTipSpeak : btnInspirationSpeak;
+        if (speaking) {
+            currentlySpeakingId = id;
+            btn.setText(R.string.בטלהשמעה);
+        } else {
+            currentlySpeakingId = null;
+            btn.setText(R.string.השמעה);
+        }
+    }
+
     private void checkDailyTip() {
         databaseService.getTipOfTheDayService().getTipForToday(new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -143,10 +175,6 @@ public class TipOfTheDayActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Fetches a new daily tip from the generative AI model.
-     * Once fetched, the tip is saved in the database and displayed on the screen.
-     */
     private void fetchDailyTipFromAI() {
         tipContent.setText("טוען טיפ יומי...");
         btnTipSpeak.setVisibility(View.GONE);

@@ -127,6 +127,7 @@
     <string name="עריכה">עריכה</string>
     <string name="השמעתתשובה">השמעת תשובה</string>
     <string name="השמעה">השמעה</string>
+    <string name="בטלהשמעה">בטל השמעה</string>
 
     <string-array name="search_types">
         <item>שם פרטי</item>

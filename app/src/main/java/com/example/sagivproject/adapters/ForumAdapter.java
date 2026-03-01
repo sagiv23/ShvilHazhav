@@ -1,7 +1,11 @@
 package com.example.sagivproject.adapters;
 
 import android.graphics.Typeface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.format.DateFormat;
@@ -30,10 +34,55 @@ import java.util.Locale;
  * A RecyclerView adapter for displaying a list of {@link ForumMessage} objects.
  */
 public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private ForumMessageListener listener;
     private TextToSpeech tts;
+    private String currentlySpeakingMsgId = null;
 
     public ForumAdapter() {
+    }
+
+    private void initTTS(View v, ForumMessage msg) {
+        if (tts == null) {
+            tts = new TextToSpeech(v.getContext(), status -> {
+                if (status == TextToSpeech.SUCCESS) {
+                    tts.setLanguage(new Locale("he", "IL"));
+                    tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        @Override
+                        public void onStart(String utteranceId) {
+                            currentlySpeakingMsgId = utteranceId;
+                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
+                        }
+
+                        @Override
+                        public void onDone(String utteranceId) {
+                            if (utteranceId.equals(currentlySpeakingMsgId)) {
+                                currentlySpeakingMsgId = null;
+                            }
+                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
+                        }
+
+                        @Override
+                        public void onError(String utteranceId) {
+                            if (utteranceId.equals(currentlySpeakingMsgId)) {
+                                currentlySpeakingMsgId = null;
+                            }
+                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
+                        }
+                    });
+                    speak(msg);
+                }
+            });
+        }
+    }
+
+    private void notifyItemChangedById(String msgId) {
+        for (int i = 0; i < dataList.size(); i++) {
+            if (dataList.get(i).getId().equals(msgId)) {
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     /**
@@ -87,17 +136,28 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         holder.txtMessage.setText(msg.getMessage());
         holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 
+        boolean isThisSpeaking = msg.getId().equals(currentlySpeakingMsgId);
+        holder.btnSpeak.setIconResource(isThisSpeaking ? R.drawable.ic_x : R.drawable.ic_sound);
+        holder.btnSpeak.setContentDescription(isThisSpeaking ? "בטל השמעה" : "השמעה");
+
         holder.btnSpeak.setOnClickListener(v -> {
-            if (tts == null) {
-                tts = new TextToSpeech(v.getContext(), status -> {
-                    if (status == TextToSpeech.SUCCESS) {
-                        tts.setLanguage(new Locale("he", "IL"));
-                        // Initial initialization complete, speak the text
-                        tts.speak(msg.getMessage(), TextToSpeech.QUEUE_FLUSH, null, null);
-                    }
-                });
+            if (msg.getId().equals(currentlySpeakingMsgId)) {
+                tts.stop();
+                currentlySpeakingMsgId = null;
+                notifyItemChanged(position);
             } else {
-                tts.speak(msg.getMessage(), TextToSpeech.QUEUE_FLUSH, null, null);
+                String oldId = currentlySpeakingMsgId;
+                if (oldId != null) {
+                    tts.stop();
+                    currentlySpeakingMsgId = null;
+                    notifyItemChangedById(oldId);
+                }
+
+                if (tts == null) {
+                    initTTS(v, msg);
+                } else {
+                    speak(msg);
+                }
             }
         });
 
@@ -128,6 +188,14 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
             });
         } else {
             holder.btnMenu.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void speak(ForumMessage msg) {
+        if (tts != null) {
+            Bundle params = new Bundle();
+            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, msg.getId());
+            tts.speak(msg.getMessage(), TextToSpeech.QUEUE_FLUSH, params, msg.getId());
         }
     }
 

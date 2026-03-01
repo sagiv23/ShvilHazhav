@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -51,6 +52,7 @@ public class AiActivity extends BaseActivity {
     private Handler animationHandler;
     private int charIndex;
     private TextToSpeech tts;
+    private boolean isSpeaking = false;
 
     /**
      * Initializes the activity, its views, and the AI chat session.
@@ -86,6 +88,23 @@ public class AiActivity extends BaseActivity {
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     Toast.makeText(this, "שפה לא נתמכת ב-TTS", Toast.LENGTH_SHORT).show();
                 }
+
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {
+                        runOnUiThread(() -> updateSpeakButton(true));
+                    }
+
+                    @Override
+                    public void onDone(String utteranceId) {
+                        runOnUiThread(() -> updateSpeakButton(false));
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                        runOnUiThread(() -> updateSpeakButton(false));
+                    }
+                });
             }
         });
 
@@ -95,7 +114,31 @@ public class AiActivity extends BaseActivity {
         chatSession = modelFutures.startChat(Collections.emptyList());
 
         send.setOnClickListener(view -> sendQuestion());
-        speakBtn.setOnClickListener(view -> speakResponse());
+        speakBtn.setOnClickListener(view -> toggleSpeech());
+    }
+
+    private void toggleSpeech() {
+        if (isSpeaking) {
+            tts.stop();
+            updateSpeakButton(false);
+        } else {
+            String text = answerView.getText().toString();
+            if (!text.isEmpty()) {
+                Bundle params = new Bundle();
+                params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "ai_response");
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, "ai_response");
+                updateSpeakButton(true);
+            }
+        }
+    }
+
+    private void updateSpeakButton(boolean speaking) {
+        isSpeaking = speaking;
+        if (speaking) {
+            speakBtn.setText(R.string.בטלהשמעה);
+        } else {
+            speakBtn.setText(R.string.השמעתתשובה);
+        }
     }
 
     /**
@@ -108,7 +151,9 @@ public class AiActivity extends BaseActivity {
 
         progressBar.setVisibility(View.VISIBLE);
         send.setVisibility(View.GONE);
-        speakBtn.setVisibility(View.GONE); // Hide speak button for new question
+        speakBtn.setVisibility(View.GONE);
+        updateSpeakButton(false);
+        tts.stop();
         answerView.setText("");
 
         Content userMessage = new Content.Builder()
@@ -163,13 +208,6 @@ public class AiActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    private void speakResponse() {
-        String text = answerView.getText().toString();
-        if (!text.isEmpty()) {
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-        }
     }
 
     @Override

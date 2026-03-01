@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="@string/השמעתתשובה"
+                        android:text="@string/השמעה"
                         android:textAllCaps="false"
                         android:textSize="20sp"
                         app:cornerRadius="30dp"
