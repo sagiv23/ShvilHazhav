@@ -65,12 +65,15 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
         if (isAdmin) {
             holder.deleteButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setOnClickListener(v -> listener.onDelete(category));
+            holder.editButton.setVisibility(View.VISIBLE);
+            holder.editButton.setOnClickListener(v -> listener.onEdit(category));
             holder.itemView.setOnLongClickListener(v -> {
                 listener.onLongClick(category);
                 return true;
             });
         } else {
             holder.deleteButton.setVisibility(View.GONE);
+            holder.editButton.setVisibility(View.GONE);
         }
 
         holder.itemView.setOnClickListener(v -> listener.onClick(category));
@@ -86,6 +89,13 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
          * @param category The category to be deleted.
          */
         void onDelete(ForumCategory category);
+
+        /**
+         * Called when the edit button for a category is clicked.
+         *
+         * @param category The category to be edited.
+         */
+        void onEdit(ForumCategory category);
 
         /**
          * Called when a category item is long-clicked.
@@ -108,11 +118,13 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
     public static class CategoryViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView categoryName;
         final ImageButton deleteButton;
+        final ImageButton editButton;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryName = itemView.findViewById(R.id.txt_category_name);
             deleteButton = itemView.findViewById(R.id.btn_delete_category);
+            editButton = itemView.findViewById(R.id.btn_edit_category);
         }
     }
 }

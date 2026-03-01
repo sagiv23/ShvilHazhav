@@ -64,9 +64,13 @@ public class ForumCategoriesActivity extends BaseActivity {
             }
 
             @Override
+            public void onEdit(ForumCategory category) {
+                // Not used in this activity
+            }
+
+            @Override
             public void onLongClick(ForumCategory category) {
                 // Not used in this activity
-
             }
 
             @Override

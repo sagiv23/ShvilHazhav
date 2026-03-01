@@ -194,6 +194,14 @@ public abstract class BaseForumActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        if (adapter != null) {
+            adapter.onDestroy();
+        }
+        super.onDestroy();
+    }
+
     /**
      * An interface to delegate permission checks to the concrete Activity.
      */

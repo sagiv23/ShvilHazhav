@@ -100,7 +100,7 @@
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/שלחשאלה"
                         android:textAllCaps="false"
-                        android:textSize="25sp"
+                        android:textSize="20sp"
                         app:cornerRadius="30dp"
                         app:icon="@drawable/ic_send"
                         app:iconGravity="textStart"
@@ -115,10 +115,26 @@
                         android:layout_marginTop="16dp"
                         android:visibility="gone" />
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_Ai_speak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/text_hebrew"
+                        android:text="@string/השמעתתשובה"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"
+                        android:visibility="gone"
+                        app:cornerRadius="30dp"
+                        app:icon="@drawable/ic_sound"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconSize="28dp" />
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:fontFamily="@font/text_hebrew"
                         android:hint="@string/תשובתהיועץ"
                         app:boxBackgroundMode="outline"

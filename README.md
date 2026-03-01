@@ -42,10 +42,7 @@ The project is built using modern Android development best practices, ensuring s
 - **Architecture:** MVVM (Model-View-ViewModel) with Repository Pattern for clean separation of concerns.
 - **Dependency Injection:** **Hilt** for robust and testable component management.
 - **Backend Services:**
-    - **Firebase Authentication:** Secure user sign-in and profile management.
     - **Firebase Realtime Database:** Low-latency data synchronization for games and forums.
-    - **Firebase Storage:** Secure hosting for user profile images and medical documents.
-    - **Firebase Cloud Messaging:** Reliable delivery of medication reminders.
 - **AI Integration:** **Firebase Vertex AI (Gemini)** for the medical assistant module.
 - **UI/UX:** Material Design 3, custom adapters for high-contrast accessibility, and responsive layouts.
 

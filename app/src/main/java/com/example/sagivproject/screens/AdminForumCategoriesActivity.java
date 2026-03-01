@@ -67,20 +67,13 @@ public class AdminForumCategoriesActivity extends BaseActivity {
             }
 
             @Override
-            public void onLongClick(ForumCategory category) {
-                EditForumCategoryDialog dialog = new EditForumCategoryDialog(AdminForumCategoriesActivity.this, category, newName -> databaseService.getForumCategoriesService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
-                    @Override
-                    public void onCompleted(Void data) {
-                        Toast.makeText(AdminForumCategoriesActivity.this, "שם הקטגוריה עודכן", Toast.LENGTH_SHORT).show();
-                        loadCategories();
-                    }
+            public void onEdit(ForumCategory category) {
+                showEditDialog(category);
+            }
 
-                    @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(AdminForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show();
-                    }
-                }));
-                dialog.show();
+            @Override
+            public void onLongClick(ForumCategory category) {
+                showEditDialog(category);
             }
 
             @Override
@@ -116,6 +109,26 @@ public class AdminForumCategoriesActivity extends BaseActivity {
         });
 
         loadCategories();
+    }
+
+    /**
+     * Displays a dialog to edit the name of a forum category.
+     *
+     * @param category The category to be edited.
+     */
+    private void showEditDialog(ForumCategory category) {
+        new EditForumCategoryDialog(AdminForumCategoriesActivity.this, category, newName -> databaseService.getForumCategoriesService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Void data) {
+                Toast.makeText(AdminForumCategoriesActivity.this, "שם הקטגוריה עודכן", Toast.LENGTH_SHORT).show();
+                loadCategories();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(AdminForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show();
+            }
+        })).show();
     }
 
     /**

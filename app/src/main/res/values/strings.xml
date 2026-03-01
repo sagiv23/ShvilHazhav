@@ -124,6 +124,9 @@
     <string name="birthday_notif_title">מזל טוב!</string>
     <string name="birthday_notif_body">יום הולדת שמח, %1$s! מאחלים לך בריאות ואושר.</string>
     <string name="medication_summary_title">תזכורות לתרופות</string>
+    <string name="עריכה">עריכה</string>
+    <string name="השמעתתשובה">השמעת תשובה</string>
+    <string name="השמעה">השמעה</string>
 
     <string-array name="search_types">
         <item>שם פרטי</item>

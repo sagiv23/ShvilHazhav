@@ -1,8 +1,12 @@
 package com.example.sagivproject.screens;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -47,7 +51,10 @@ public class TipOfTheDayActivity extends BaseActivity {
             "ההתחלה היא החלק החשוב ביותר בעבודה."
     };
     private TextView tipContent;
+    private TextView tvInspirationContent;
+    private Button btnTipSpeak;
     private GenerativeModelFutures model;
+    private TextToSpeech tts;
 
     /**
      * Initializes the activity, its views, and fetches the daily tip.
@@ -76,20 +83,41 @@ public class TipOfTheDayActivity extends BaseActivity {
         tvDate.setText(currentDate);
 
         tipContent = findViewById(R.id.tv_tipOfTheDay_content);
-        TextView tvInspirationContent = findViewById(R.id.tv_tipOfTheDay_inspiration_content);
+        tvInspirationContent = findViewById(R.id.tv_tipOfTheDay_inspiration_content);
+        btnTipSpeak = findViewById(R.id.btn_tip_speak);
+        Button btnInspirationSpeak = findViewById(R.id.btn_inspiration_speak);
+
+        // Initialize TextToSpeech
+        tts = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                int result = tts.setLanguage(new Locale("he", "IL"));
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Toast.makeText(this, "שפה לא נתמכת ב-TTS", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         tipContent.setAlpha(0f);
-        tipContent.animate().alpha(1f).setDuration(800);
+        tipContent.animate().alpha(1f).setDuration(800).withEndAction(() -> btnTipSpeak.setVisibility(View.VISIBLE));
 
         Random random = new Random();
         int index = random.nextInt(inspirationalQuotes.length);
         tvInspirationContent.setText(inspirationalQuotes[index]);
+
+        btnTipSpeak.setOnClickListener(v -> speak(tipContent.getText().toString()));
+        btnInspirationSpeak.setOnClickListener(v -> speak(tvInspirationContent.getText().toString()));
 
         GenerativeModel generativeModel = FirebaseAI.getInstance(GenerativeBackend.googleAI())
                 .generativeModel("gemini-2.5-flash-lite");
         model = GenerativeModelFutures.from(generativeModel);
 
         checkDailyTip();
+    }
+
+    private void speak(String text) {
+        if (text != null && !text.isEmpty()) {
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+        }
     }
 
     /**
@@ -102,6 +130,7 @@ public class TipOfTheDayActivity extends BaseActivity {
             public void onCompleted(TipOfTheDay result) {
                 if (result != null) {
                     tipContent.setText(result.getTip());
+                    btnTipSpeak.setVisibility(View.VISIBLE);
                 } else {
                     fetchDailyTipFromAI();
                 }
@@ -120,6 +149,7 @@ public class TipOfTheDayActivity extends BaseActivity {
      */
     private void fetchDailyTipFromAI() {
         tipContent.setText("טוען טיפ יומי...");
+        btnTipSpeak.setVisibility(View.GONE);
 
         String prompt = "תן טיפ יומי קצר לחיים בעברית. עד 6 משפטים. בלי אימוג'ים. בבקשה תשלח רק את התשובה בלי הקדמה מיותרת";
         Content content = new Content.Builder().addText(prompt).build();
@@ -141,7 +171,7 @@ public class TipOfTheDayActivity extends BaseActivity {
                     public void onCompleted(Void result) {
                         tipContent.setAlpha(0f);
                         tipContent.setText(finalText);
-                        tipContent.animate().alpha(1f).setDuration(800);
+                        tipContent.animate().alpha(1f).setDuration(800).withEndAction(() -> btnTipSpeak.setVisibility(View.VISIBLE));
                     }
 
                     @Override
@@ -157,5 +187,14 @@ public class TipOfTheDayActivity extends BaseActivity {
                 tipContent.setText(String.format("שגיאה: %s", t.getMessage()));
             }
         }, mainExecutor);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 }

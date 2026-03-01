@@ -3,12 +3,14 @@ package com.example.sagivproject.screens;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -31,22 +33,24 @@ import com.google.firebase.ai.type.GenerateContentResponse;
 import com.google.firebase.ai.type.GenerativeBackend;
 
 import java.util.Collections;
+import java.util.Locale;
 import java.util.concurrent.Executor;
 
 /**
  * An activity that allows users to interact with a generative AI model.
  * Users can ask questions and receive answers from the AI.
+ * Includes Text-to-Speech capability to hear the AI's response.
  */
 public class AiActivity extends BaseActivity {
     private ChatFutures chatSession;
-
     private Button send;
+    private Button speakBtn;
     private ProgressBar progressBar;
     private EditText questionInput;
     private TextView answerView;
-
     private Handler animationHandler;
     private int charIndex;
+    private TextToSpeech tts;
 
     /**
      * Initializes the activity, its views, and the AI chat session.
@@ -70,9 +74,20 @@ public class AiActivity extends BaseActivity {
         setupTopMenu(topMenuContainer);
 
         send = findViewById(R.id.btn_Ai_send_to_Ai);
+        speakBtn = findViewById(R.id.btn_Ai_speak);
         questionInput = findViewById(R.id.edit_Ai_question);
         answerView = findViewById(R.id.TV_Ai_txt_response);
         progressBar = findViewById(R.id.progressBar_Ai);
+
+        // Initialize TextToSpeech
+        tts = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                int result = tts.setLanguage(new Locale("he", "IL"));
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Toast.makeText(this, "שפה לא נתמכת ב-TTS", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         GenerativeModel generativeModel = FirebaseAI.getInstance(GenerativeBackend.googleAI())
                 .generativeModel("gemini-2.5-flash-lite");
@@ -80,6 +95,7 @@ public class AiActivity extends BaseActivity {
         chatSession = modelFutures.startChat(Collections.emptyList());
 
         send.setOnClickListener(view -> sendQuestion());
+        speakBtn.setOnClickListener(view -> speakResponse());
     }
 
     /**
@@ -92,6 +108,7 @@ public class AiActivity extends BaseActivity {
 
         progressBar.setVisibility(View.VISIBLE);
         send.setVisibility(View.GONE);
+        speakBtn.setVisibility(View.GONE); // Hide speak button for new question
         answerView.setText("");
 
         Content userMessage = new Content.Builder()
@@ -140,8 +157,27 @@ public class AiActivity extends BaseActivity {
                 if (charIndex < fullText.length()) {
                     textView.append(String.valueOf(fullText.charAt(charIndex++)));
                     animationHandler.postDelayed(this, delay);
+                } else {
+                    // Animation complete, show the speak button
+                    speakBtn.setVisibility(View.VISIBLE);
                 }
             }
         });
+    }
+
+    private void speakResponse() {
+        String text = answerView.getText().toString();
+        if (!text.isEmpty()) {
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 }

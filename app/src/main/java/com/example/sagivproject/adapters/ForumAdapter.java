@@ -1,6 +1,7 @@
 package com.example.sagivproject.adapters;
 
 import android.graphics.Typeface;
+import android.speech.tts.TextToSpeech;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.format.DateFormat;
@@ -20,14 +21,30 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A RecyclerView adapter for displaying a list of {@link ForumMessage} objects.
  */
 public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
     private ForumMessageListener listener;
+    private TextToSpeech tts;
+
+    public ForumAdapter() {
+    }
+
+    private void initTTS(View v) {
+        if (tts == null) {
+            tts = new TextToSpeech(v.getContext(), status -> {
+                if (status == TextToSpeech.SUCCESS) {
+                    tts.setLanguage(new Locale("he", "IL"));
+                }
+            });
+        }
+    }
 
     /**
      * Sets the listener for message actions.
@@ -80,6 +97,13 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         holder.txtMessage.setText(msg.getMessage());
         holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 
+        holder.btnSpeak.setOnClickListener(v -> {
+            initTTS(v);
+            if (tts != null) {
+                tts.speak(msg.getMessage(), TextToSpeech.QUEUE_FLUSH, null, null);
+            }
+        });
+
         // Show or hide the menu button based on permissions
         if (listener != null && listener.isShowMenuOptions(msg)) {
             holder.btnMenu.setVisibility(View.VISIBLE);
@@ -110,6 +134,13 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         }
     }
 
+    public void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+    }
+
     /**
      * An interface for handling actions on a forum message item.
      */
@@ -128,6 +159,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     public static class ForumViewHolder extends BaseViewHolder {
         final TextView txtUser, txtEmail, txtIsAdmin, txtMessage, txtTime;
         final ImageButton btnMenu;
+        final MaterialButton btnSpeak;
 
         public ForumViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -137,6 +169,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
             txtMessage = itemView.findViewById(R.id.ItemForumMessageTxtMessage);
             txtTime = itemView.findViewById(R.id.ItemForumMessageTxtTime);
             btnMenu = itemView.findViewById(R.id.ItemForumMessageBtnMenu);
+            btnSpeak = itemView.findViewById(R.id.ItemForumMessageBtnSpeak);
         }
     }
 

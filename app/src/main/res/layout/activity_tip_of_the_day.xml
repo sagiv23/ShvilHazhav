@@ -76,10 +76,26 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_tip_speak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/text_hebrew"
+                        android:text="@string/השמעתתשובה"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"
+                        app:cornerRadius="30dp"
+                        app:icon="@drawable/ic_sound"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconSize="28dp" />
+
                     <TextView
                         android:id="@+id/tv_tipOfTheDay_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="center"
                         android:textSize="22sp"
@@ -112,10 +128,27 @@
                         android:textColor="@color/headline"
                         android:textSize="30sp" />
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_inspiration_speak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/text_hebrew"
+                        android:text="@string/השמעה"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"
+                        app:cornerRadius="30dp"
+                        app:icon="@drawable/ic_sound"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconSize="28dp" />
+
                     <TextView
                         android:id="@+id/tv_tipOfTheDay_inspiration_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="center"
                         android:textSize="20sp"

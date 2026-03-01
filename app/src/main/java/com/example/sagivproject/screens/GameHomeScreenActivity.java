@@ -2,6 +2,7 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.example.sagivproject.services.IGameService;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -43,6 +45,7 @@ public class GameHomeScreenActivity extends BaseActivity {
     private boolean gameStarted = false;
     private LeaderboardAdapter adapter;
     private User user;
+    private TextToSpeech tts;
 
     /**
      * Initializes the activity, setting up the UI, and listeners.
@@ -70,18 +73,46 @@ public class GameHomeScreenActivity extends BaseActivity {
 
         btnFindEnemy = findViewById(R.id.btn_GameHomeScreen_find_enemy);
         btnCancelFindEnemy = findViewById(R.id.btn_GameHomeScreen_cancel_find_enemy);
+        Button btnSpeak = findViewById(R.id.btn_GameHomeScreen_speak);
         TVictories = findViewById(R.id.tv_GameHomeScreen_victories);
         TVStatusOfFindingEnemy = findViewById(R.id.tv_GameHomeScreen_status_of_finding_enemy);
         RecyclerView rvLeaderboard = findViewById(R.id.recyclerView_GameHomeScreen_leaderboard);
 
+        // Initialize TextToSpeech
+        tts = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                int result = tts.setLanguage(new Locale("he", "IL"));
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Toast.makeText(this, "שפה לא נתמכת ב-TTS", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         btnFindEnemy.setOnClickListener(view -> findEnemy());
         btnCancelFindEnemy.setOnClickListener(view -> cancelSearch());
+        btnSpeak.setOnClickListener(view -> speakInstructions());
+
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
         adapter = new LeaderboardAdapter();
         rvLeaderboard.setAdapter(adapter);
         setupLeaderboard();
 
         updateUI(SearchState.IDLE);
+    }
+
+    private void speakInstructions() {
+        String sb = getString(R.string.הוראותהמשחק) + ". " +
+                getString(R.string.טקסט1משחק) + " " +
+                getString(R.string.מטרתהמשחק) + ". " +
+                getString(R.string.טקסט2משחק) + " " +
+                getString(R.string.כלליהמשחק) + ". " +
+                getString(R.string.טקסט3משחק) + " " +
+                getString(R.string.טקסט4משחק) + " " +
+                getString(R.string.טקסט5משחק) + " " +
+                getString(R.string.שיטתהניקוד) + ". " +
+                getString(R.string.טקסט6משחק);
+
+        tts.speak(sb, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
     /**
@@ -269,6 +300,15 @@ public class GameHomeScreenActivity extends BaseActivity {
                 btnFindEnemy.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 
     /**

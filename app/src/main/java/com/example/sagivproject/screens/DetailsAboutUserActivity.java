@@ -3,6 +3,7 @@ package com.example.sagivproject.screens;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,6 +67,9 @@ public class DetailsAboutUserActivity extends BaseActivity {
         });
 
         user = sharedPreferencesUtil.getUser();
+
+        ViewGroup topMenuContainer = findViewById(R.id.topMenuContainer);
+        setupTopMenu(topMenuContainer);
 
         Button btnEditUser = findViewById(R.id.btn_DetailsAboutUser_edit_user);
         btnEditUser.setOnClickListener(v -> openEditDialog());
