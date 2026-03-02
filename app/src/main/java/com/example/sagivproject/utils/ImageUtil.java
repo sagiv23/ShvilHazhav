@@ -13,15 +13,23 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * A utility class for handling image-related operations.
  * <p>
- * This class provides static methods for converting images to and from Base64 encoded strings,
- * and for loading images into ImageViews.
+ * This class provides methods for converting images to and from Base64 encoded strings,
+ * and for loading images into ImageViews. It is managed as a Singleton by Hilt.
  * </p>
  */
+@Singleton
 public class ImageUtil {
     private static final String BASE64_PREFIX = "data:image/jpeg;base64,";
+
+    @Inject
+    public ImageUtil() {
+    }
 
     /**
      * Converts the drawable from an ImageView into a Base64 encoded string.
@@ -29,7 +37,7 @@ public class ImageUtil {
      * @param imageView The ImageView containing the image to convert.
      * @return The Base64 encoded string with a data URI prefix, or null if the drawable is not present.
      */
-    public static @Nullable String convertTo64Base(@NotNull final ImageView imageView) {
+    public @Nullable String convertTo64Base(@NotNull final ImageView imageView) {
         if (imageView.getDrawable() == null || !(imageView.getDrawable() instanceof BitmapDrawable)) {
             return null;
         }
@@ -46,21 +54,25 @@ public class ImageUtil {
      * @param base64Code The Base64 encoded string of the image, potentially with a data URI prefix.
      * @param imageView  The ImageView to load the image into.
      */
-    public static void loadImage(@Nullable final String base64Code, @NotNull final ImageView imageView) {
+    public void loadImage(@Nullable final String base64Code, @NotNull final ImageView imageView) {
         if (base64Code == null || base64Code.isEmpty()) {
             // Set a default user icon if no image is available
             imageView.setImageResource(R.drawable.ic_user);
             return;
         }
 
-        // Remove the data URI prefix if it exists
-        String pureBase64 = base64Code.substring(base64Code.indexOf(",") + 1);
-        byte[] decodedString = Base64.decode(pureBase64, Base64.DEFAULT);
+        try {
+            // Remove the data URI prefix if it exists
+            String pureBase64 = base64Code.contains(",") ? base64Code.substring(base64Code.indexOf(",") + 1) : base64Code;
+            byte[] decodedString = Base64.decode(pureBase64, Base64.DEFAULT);
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        if (bitmap != null) {
-            imageView.setImageBitmap(bitmap);
-        } else {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+            } else {
+                imageView.setImageResource(R.drawable.ic_user);
+            }
+        } catch (Exception e) {
             imageView.setImageResource(R.drawable.ic_user);
         }
     }

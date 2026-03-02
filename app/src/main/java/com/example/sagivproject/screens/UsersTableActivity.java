@@ -30,9 +30,6 @@ import com.example.sagivproject.adapters.UsersTableAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.UserRole;
-import com.example.sagivproject.screens.dialogs.AddUserDialog;
-import com.example.sagivproject.screens.dialogs.EditUserDialog;
-import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
 
@@ -44,11 +41,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * An admin activity for managing the list of all users in the application.
- * <p>
- * This screen displays a table of users, allowing administrators to add, edit, delete,
- * and search for users. It also provides the functionality to promote or demote users
- * to/from admin status.
- * </p>
  */
 @AndroidEntryPoint
 public class UsersTableActivity extends BaseActivity {
@@ -58,14 +50,6 @@ public class UsersTableActivity extends BaseActivity {
     private Spinner spinnerSearchType;
     private User currentUser;
 
-    /**
-     * Initializes the activity, sets up the UI, RecyclerView, search/filter functionality,
-     * and action listeners for user management.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +67,11 @@ public class UsersTableActivity extends BaseActivity {
         setupTopMenu(topMenuContainer);
 
         Button btnAddUser = findViewById(R.id.btn_UsersTable_add_user);
-        btnAddUser.setOnClickListener(v -> new AddUserDialog(this, (fName, lName, birthDateMillis, email, password) -> databaseService.getAuthService().addUser(fName, lName, birthDateMillis, email, password, new IAuthService.AddUserCallback() {
+        btnAddUser.setOnClickListener(v -> dialogService.showAddUserDialog((fName, lName, birthDateMillis, email, password) -> databaseService.getAuthService().addUser(fName, lName, birthDateMillis, email, password, new IAuthService.AddUserCallback() {
             @Override
             public void onSuccess(User user) {
                 usersList.add(user);
-                filterUsers(editSearch.getText().toString().trim());
+                refreshList();
                 Toast.makeText(UsersTableActivity.this, "משתמש נוסף בהצלחה", Toast.LENGTH_SHORT).show();
             }
 
@@ -95,53 +79,60 @@ public class UsersTableActivity extends BaseActivity {
             public void onError(String message) {
                 Toast.makeText(UsersTableActivity.this, message, Toast.LENGTH_LONG).show();
             }
-        })).show());
+        })));
 
         adapter = adapterService.getUsersTableAdapter();
-        adapter.init(currentUser,
-                new UsersTableAdapter.OnUserActionListener() {
+        adapter.init(currentUser, new UsersTableAdapter.OnUserActionListener() {
+            @Override
+            public void onToggleAdmin(User user) {
+                handleToggleAdmin(user);
+            }
 
+            @Override
+            public void onDeleteUser(User user) {
+                handleDeleteUser(user);
+            }
+
+            @Override
+            public void onUserClicked(User clickedUser) {
+                // We pass a copy to avoid modifying the list item before the server confirms the update
+                User userCopy = new User(clickedUser);
+                dialogService.showEditUserDialog(userCopy, (fName, lName, birthDate, email, password) -> databaseService.getAuthService().updateUser(userCopy, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
                     @Override
-                    public void onToggleAdmin(User user) {
-                        handleToggleAdmin(user);
+                    public void onSuccess(User updatedUser) {
+                        Toast.makeText(UsersTableActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
+
+                        // Replace the user in our master list with the new instance
+                        for (int i = 0; i < usersList.size(); i++) {
+                            if (usersList.get(i).getId().equals(updatedUser.getId())) {
+                                usersList.set(i, updatedUser);
+                                break;
+                            }
+                        }
+
+                        if (updatedUser.getId().equals(currentUser.getId())) {
+                            sharedPreferencesUtil.saveUser(updatedUser);
+                            currentUser = updatedUser;
+                        }
+
+                        refreshList();
                     }
 
                     @Override
-                    public void onDeleteUser(User user) {
-                        handleDeleteUser(user);
+                    public void onError(String message) {
+                        Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון: " + message, Toast.LENGTH_LONG).show();
                     }
+                }));
+            }
 
-                    @Override
-                    public void onUserClicked(User clickedUser) {
-                        new EditUserDialog(
-                                UsersTableActivity.this,
-                                clickedUser,
-                                (fName, lName, birthDate, email, password) -> databaseService.getAuthService().updateUser(clickedUser, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
-                                    @Override
-                                    public void onSuccess(User updatedUser) {
-                                        Toast.makeText(UsersTableActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
-                                        loadUsers();
-                                    }
-
-                                    @Override
-                                    public void onError(String message) {
-                                        Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון: " + message, Toast.LENGTH_LONG).show();
-                                    }
-                                })
-                        ).show();
-                    }
-
-                    @Override
-                    public void onUserImageClicked(User user, ImageView imageView) {
-                        String base64Image = user.getProfileImage();
-                        if (base64Image == null || base64Image.isEmpty()) return;
-
-                        Drawable drawable = imageView.getDrawable();
-                        if (drawable == null) return;
-
-                        new FullImageDialog(UsersTableActivity.this, drawable).show();
-                    }
-                });
+            @Override
+            public void onUserImageClicked(User user, ImageView imageView) {
+                Drawable drawable = imageView.getDrawable();
+                if (drawable != null) {
+                    dialogService.showFullImageDialog(drawable);
+                }
+            }
+        });
 
         RecyclerView recyclerView = findViewById(R.id.recycler_UsersTable);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -149,9 +140,7 @@ public class UsersTableActivity extends BaseActivity {
 
         editSearch = findViewById(R.id.edit_UsersTable_search);
         spinnerSearchType = findViewById(R.id.spinner_UsersTable_search_type);
-
-        ArrayAdapter<String> spinnerAdapter = getStringArrayAdapter();
-        spinnerSearchType.setAdapter(spinnerAdapter);
+        spinnerSearchType.setAdapter(getStringArrayAdapter());
 
         editSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -180,60 +169,26 @@ public class UsersTableActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Creates and configures the ArrayAdapter for the search filter spinner.
-     *
-     * @return A customized ArrayAdapter for the spinner.
-     */
-    @NonNull
-    private ArrayAdapter<String> getStringArrayAdapter() {
-        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "משתמשים רגילים", "ניצחונות"};
-
-        return new ArrayAdapter<>(UsersTableActivity.this, android.R.layout.simple_spinner_item, searchOptions) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getView(position, convertView, parent);
-                tv.setTypeface(ResourcesCompat.getFont(UsersTableActivity.this, R.font.text_hebrew));
-                tv.setTextSize(22);
-                tv.setTextColor(getColor(R.color.text_color));
-                tv.setPadding(24, 24, 24, 24);
-                return tv;
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
-                tv.setTypeface(ResourcesCompat.getFont(UsersTableActivity.this, R.font.text_hebrew));
-                tv.setTextSize(22);
-                tv.setTextColor(getColor(R.color.text_color));
-                tv.setBackgroundColor(getColor(R.color.background_color_buttons));
-                tv.setPadding(24, 24, 24, 24);
-                return tv;
-            }
-        };
+    private void refreshList() {
+        usersList.sort((u1, u2) -> u1.getFullName().compareToIgnoreCase(u2.getFullName()));
+        filterUsers(editSearch.getText().toString().trim());
     }
 
-    /**
-     * Reloads the user list from the database when the activity resumes.
-     */
     @Override
     protected void onResume() {
         super.onResume();
         loadUsers();
     }
 
-    /**
-     * Fetches the complete list of users from the database and updates the UI.
-     */
     private void loadUsers() {
         databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> list) {
                 usersList.clear();
-                usersList.addAll(list.stream().filter(u -> u != null && u.getId() != null).collect(Collectors.toList()));
-                usersList.sort((u1, u2) -> u1.getFullName().compareToIgnoreCase(u2.getFullName()));
-                filterUsers(editSearch.getText().toString().trim());
+                if (list != null) {
+                    usersList.addAll(list.stream().filter(u -> u != null && u.getId() != null).collect(Collectors.toList()));
+                }
+                refreshList();
             }
 
             @Override
@@ -243,58 +198,49 @@ public class UsersTableActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Toggles the admin status of a user.
-     *
-     * @param user The user whose admin status is to be toggled.
-     */
     private void handleToggleAdmin(User user) {
         UserRole newRole = user.getRole() == UserRole.ADMIN ? UserRole.REGULAR : UserRole.ADMIN;
-
         databaseService.getUserService().updateUserRole(user.getId(), newRole, new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                Toast.makeText(
-                        UsersTableActivity.this,
-                        "הסטטוס עודכן בהצלחה",
-                        Toast.LENGTH_SHORT
-                ).show();
-                user.setRole(newRole);
-                filterUsers(editSearch.getText().toString().trim());
+                // Create a new instance to ensure DiffUtil detects the change
+                User updatedUser = new User(user);
+                updatedUser.setRole(newRole);
+
+                for (int i = 0; i < usersList.size(); i++) {
+                    if (usersList.get(i).getId().equals(updatedUser.getId())) {
+                        usersList.set(i, updatedUser);
+                        break;
+                    }
+                }
+
+                if (updatedUser.getId().equals(currentUser.getId())) {
+                    sharedPreferencesUtil.saveUser(updatedUser);
+                    currentUser = updatedUser;
+                }
+                refreshList();
+                Toast.makeText(UsersTableActivity.this, "הסטטוס עודכן", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(Exception e) {
-                Toast.makeText(
-                        UsersTableActivity.this,
-                        "שגיאה בעדכון סטטוס",
-                        Toast.LENGTH_SHORT
-                ).show();
+                Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    /**
-     * Handles the deletion of a user. If the admin deletes their own account, they are logged out.
-     *
-     * @param user The user to be deleted.
-     */
     private void handleDeleteUser(User user) {
-        boolean isSelf = user.equals(currentUser);
         databaseService.getUserService().deleteUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                if (isSelf) {
+                if (user.equals(currentUser)) {
                     sharedPreferencesUtil.signOutUser();
-                    Intent intent = new Intent(UsersTableActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    startActivity(new Intent(UsersTableActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                     return;
                 }
-
-                Toast.makeText(UsersTableActivity.this, "המשתמש נמחק", Toast.LENGTH_SHORT).show();
                 usersList.remove(user);
-                filterUsers(editSearch.getText().toString().trim());
+                refreshList();
+                Toast.makeText(UsersTableActivity.this, "המשתמש נמחק", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -304,56 +250,56 @@ public class UsersTableActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Filters the list of users based on the search query and the selected filter type.
-     *
-     * @param query The search text entered by the admin.
-     */
     private void filterUsers(String query) {
-        List<User> filteredUsers = new ArrayList<>();
-        String selectedType = spinnerSearchType.getSelectedItem() != null ? spinnerSearchType.getSelectedItem().toString() : "הכל";
         String lowerQuery = query.toLowerCase();
+        String selectedType = spinnerSearchType.getSelectedItem() != null ? spinnerSearchType.getSelectedItem().toString() : "הכל";
 
-        if (query.isEmpty() && selectedType.equals("הכל")) {
-            filteredUsers.addAll(usersList);
-        } else {
-            for (User user : usersList) {
-                boolean matches = false;
-                switch (selectedType) {
-                    case "הכל":
-                        matches = user.getFullName().toLowerCase().contains(lowerQuery) ||
-                                (user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery));
-                        break;
-                    case "שם פרטי":
-                        matches = user.getFirstName() != null && user.getFirstName().toLowerCase().contains(lowerQuery);
-                        break;
-                    case "שם משפחה":
-                        matches = user.getLastName() != null && user.getLastName().toLowerCase().contains(lowerQuery);
-                        break;
-                    case "אימייל":
-                        matches = user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery);
-                        break;
-                    case "מנהלים":
-                        matches = user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
-                        break;
-                    case "משתמשים רגילים":
-                        matches = !user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
-                        break;
-                    case "ניצחונות":
-                        matches = user.getFullName().toLowerCase().contains(lowerQuery);
-                        break;
-                }
-
-                if (matches) {
-                    filteredUsers.add(user);
-                }
+        List<User> filtered = usersList.stream().filter(user -> {
+            if (query.isEmpty() && selectedType.equals("הכל")) return true;
+            switch (selectedType) {
+                case "שם פרטי":
+                    return user.getFirstName() != null && user.getFirstName().toLowerCase().contains(lowerQuery);
+                case "שם משפחה":
+                    return user.getLastName() != null && user.getLastName().toLowerCase().contains(lowerQuery);
+                case "אימייל":
+                    return user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery);
+                case "מנהלים":
+                    return user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
+                case "משתמשים רגילים":
+                    return !user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
+                case "ניצחונות":
+                    return user.getFullName().toLowerCase().contains(lowerQuery);
+                default:
+                    return user.getFullName().toLowerCase().contains(lowerQuery) || (user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery));
             }
-        }
+        }).collect(Collectors.toList());
 
         if (selectedType.equals("ניצחונות")) {
-            filteredUsers.sort((u1, u2) -> Integer.compare(u2.getCountWins(), u1.getCountWins()));
+            filtered.sort((u1, u2) -> Integer.compare(u2.getCountWins(), u1.getCountWins()));
         }
 
-        adapter.setUserList(filteredUsers);
+        adapter.setUserList(filtered);
+    }
+
+    @NonNull
+    private ArrayAdapter<String> getStringArrayAdapter() {
+        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "משתמשים רגילים", "ניצחונות"};
+        return new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, searchOptions) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                TextView tv = (TextView) super.getView(position, convertView, parent);
+                tv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.text_hebrew));
+                tv.setTextSize(20);
+                return tv;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+                TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
+                tv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.text_hebrew));
+                return tv;
+            }
+        };
     }
 }

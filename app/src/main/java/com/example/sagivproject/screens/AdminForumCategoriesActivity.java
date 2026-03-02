@@ -18,7 +18,6 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.ForumCategoryAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ForumCategory;
-import com.example.sagivproject.screens.dialogs.EditForumCategoryDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 import java.util.List;
@@ -118,7 +117,7 @@ public class AdminForumCategoriesActivity extends BaseActivity {
      * @param category The category to be edited.
      */
     private void showEditDialog(ForumCategory category) {
-        new EditForumCategoryDialog(AdminForumCategoriesActivity.this, category, newName -> databaseService.getForumCategoriesService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
+        dialogService.showEditForumCategoryDialog(category, newName -> databaseService.getForumCategoriesService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void data) {
                 Toast.makeText(AdminForumCategoriesActivity.this, "שם הקטגוריה עודכן", Toast.LENGTH_SHORT).show();
@@ -129,7 +128,7 @@ public class AdminForumCategoriesActivity extends BaseActivity {
             public void onFailed(Exception e) {
                 Toast.makeText(AdminForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show();
             }
-        })).show();
+        }));
     }
 
     /**

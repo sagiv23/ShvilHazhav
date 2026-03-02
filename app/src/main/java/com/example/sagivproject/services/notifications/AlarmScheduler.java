@@ -30,12 +30,13 @@ public class AlarmScheduler {
     /**
      * Constructs a new AlarmScheduler.
      *
-     * @param context The application context.
+     * @param context      The application context.
+     * @param alarmManager The AlarmManager provided by Hilt.
      */
     @Inject
-    public AlarmScheduler(@ApplicationContext Context context) {
+    public AlarmScheduler(@ApplicationContext Context context, AlarmManager alarmManager) {
         this.context = context;
-        this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        this.alarmManager = alarmManager;
     }
 
     /**

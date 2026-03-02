@@ -22,10 +22,12 @@ import javax.inject.Inject;
  * A RecyclerView adapter for displaying a table of {@link ImageData} objects, intended for admin use.
  */
 public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, MedicationImagesTableAdapter.ViewHolder> {
+    private final ImageUtil imageUtil;
     private OnImageActionListener listener;
 
     @Inject
-    public MedicationImagesTableAdapter() {
+    public MedicationImagesTableAdapter(ImageUtil imageUtil) {
+        this.imageUtil = imageUtil;
     }
 
     public void setListener(OnImageActionListener listener) {
@@ -56,7 +58,7 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
         }
 
         holder.btnDelete.setVisibility(View.VISIBLE);
-        ImageUtil.loadImage(data.getBase64(), holder.imgView);
+        imageUtil.loadImage(data.getBase64(), holder.imgView);
 
         holder.imgView.setOnClickListener(v -> {
             if (listener != null) {

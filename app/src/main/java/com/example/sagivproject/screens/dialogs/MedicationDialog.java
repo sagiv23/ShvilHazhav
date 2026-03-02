@@ -28,6 +28,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ActivityContext;
+import dagger.hilt.android.scopes.ActivityScoped;
+
 /**
  * A dialog for adding or editing a user's medication.
  * <p>
@@ -36,30 +41,30 @@ import java.util.Objects;
  * and displays them as chips.
  * </p>
  */
+@ActivityScoped
 public class MedicationDialog {
     private final Context context;
-    private final Medication medToEdit;
-    private final OnMedicationSubmitListener listener;
     private final ArrayList<String> selectedHours = new ArrayList<>();
     private ChipGroup chipGroupSelectedHours;
 
     /**
      * Constructs a new MedicationDialog.
+     * Hilt uses this constructor to provide an instance.
      *
-     * @param context   The context in which the dialog should be shown.
-     * @param medToEdit The medication to edit, or null to add a new one.
-     * @param listener  The listener to be invoked when the form is submitted.
+     * @param context The context in which the dialog should be shown.
      */
-    public MedicationDialog(Context context, Medication medToEdit, OnMedicationSubmitListener listener) {
+    @Inject
+    public MedicationDialog(@ActivityContext Context context) {
         this.context = context;
-        this.medToEdit = medToEdit;
-        this.listener = listener;
     }
 
     /**
      * Creates and displays the dialog.
+     *
+     * @param medToEdit The medication to edit, or null to add a new one.
+     * @param listener  The listener to be invoked when the form is submitted.
      */
-    public void show() {
+    public void show(Medication medToEdit, OnMedicationSubmitListener listener) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_add_medication);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -71,6 +76,9 @@ public class MedicationDialog {
         chipGroupSelectedHours = dialog.findViewById(R.id.chip_group_selected_hours);
         Button btnConfirm = dialog.findViewById(R.id.btn_add_medication_confirm);
         Button btnCancel = dialog.findViewById(R.id.btn_add_medication_cancel);
+
+        // Reset selected hours for each new dialog show
+        selectedHours.clear();
 
         // Populate spinner with medication types
         List<String> typeNames = new ArrayList<>();
@@ -87,7 +95,6 @@ public class MedicationDialog {
                 spinnerType.setText(medToEdit.getType().getDisplayName(), false);
             }
             if (medToEdit.getReminderHours() != null && !medToEdit.getReminderHours().isEmpty()) {
-                selectedHours.clear();
                 selectedHours.addAll(medToEdit.getReminderHours());
                 updateSelectedHoursChips();
             }
@@ -110,7 +117,7 @@ public class MedicationDialog {
             medicationData.setName(name);
             medicationData.setDetails(details);
             medicationData.setType(selectedType);
-            medicationData.setReminderHours(selectedHours);
+            medicationData.setReminderHours(new ArrayList<>(selectedHours));
 
             if (medToEdit == null) {
                 listener.onAdd(medicationData);
@@ -127,15 +134,6 @@ public class MedicationDialog {
         dialog.show();
     }
 
-    /**
-     * Validates all the required input fields.
-     *
-     * @param name         The medication name.
-     * @param typeString   The selected medication type as a string.
-     * @param details      The medication details.
-     * @param selectedType The parsed MedicationType enum.
-     * @return True if all inputs are valid, false otherwise.
-     */
     private boolean validateInputs(String name, String typeString, String details, MedicationType selectedType) {
         if (name.isEmpty() || typeString.isEmpty() || details.isEmpty()) {
             showToast("אנא מלא את כל השדות");
@@ -152,12 +150,6 @@ public class MedicationDialog {
         return true;
     }
 
-    /**
-     * Converts a string representation of a medication type to the corresponding enum.
-     *
-     * @param typeString The string to convert.
-     * @return The MedicationType enum, or null if not found.
-     */
     private MedicationType getTypeFromString(String typeString) {
         for (MedicationType type : MedicationType.values()) {
             if (type.getDisplayName().equals(typeString)) {
@@ -167,9 +159,6 @@ public class MedicationDialog {
         return null;
     }
 
-    /**
-     * Shows a time picker dialog to allow the user to select a reminder time.
-     */
     private void showHourPicker() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -193,9 +182,6 @@ public class MedicationDialog {
         timePickerDialog.show();
     }
 
-    /**
-     * Updates the ChipGroup to display the currently selected reminder times.
-     */
     private void updateSelectedHoursChips() {
         chipGroupSelectedHours.removeAllViews();
         Collections.sort(selectedHours);
@@ -211,12 +197,6 @@ public class MedicationDialog {
         }
     }
 
-    /**
-     * Creates and customizes an ArrayAdapter for the medication type spinner.
-     *
-     * @param typeNames The list of medication type display names.
-     * @return A customized ArrayAdapter.
-     */
     private ArrayAdapter<String> createMedicationTypeAdapter(List<String> typeNames) {
         return new ArrayAdapter<>(
                 context,
@@ -240,12 +220,6 @@ public class MedicationDialog {
         };
     }
 
-    /**
-     * Applies a custom style to the TextViews used in the spinner.
-     *
-     * @param tv         The TextView to style.
-     * @param isDropdown True if the view is for the dropdown list, false for the selected item view.
-     */
     private void styleTextView(TextView tv, boolean isDropdown) {
         tv.setTypeface(ResourcesCompat.getFont(context, R.font.text_hebrew));
         tv.setTextSize(22);
@@ -259,11 +233,6 @@ public class MedicationDialog {
         }
     }
 
-    /**
-     * Shows a simple Toast message.
-     *
-     * @param message The message to display.
-     */
     private void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
@@ -272,18 +241,8 @@ public class MedicationDialog {
      * An interface for listeners that are invoked when the medication form is submitted.
      */
     public interface OnMedicationSubmitListener {
-        /**
-         * Called when a new medication is being added.
-         *
-         * @param medication The new medication data from the form.
-         */
         void onAdd(Medication medication);
 
-        /**
-         * Called when an existing medication is being edited.
-         *
-         * @param medication The updated medication data from the form.
-         */
         void onEdit(Medication medication);
     }
 }

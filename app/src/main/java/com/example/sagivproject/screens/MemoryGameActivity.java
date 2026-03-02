@@ -23,7 +23,6 @@ import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.dialogs.ConfirmDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 import java.text.MessageFormat;
@@ -111,7 +110,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             startActivity(intent);
         };
 
-        new ConfirmDialog(this, "יציאה מהמשחק", "האם ברצונך לצאת מהמשחק?", "צא", "בטל", onConfirm).show();
+        dialogService.showConfirmDialog("יציאה מהמשחק", "האם ברצונך לצאת מהמשחק?", "צא", "בטל", onConfirm);
     }
 
     /**
@@ -141,7 +140,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             finish();
         };
 
-        new ConfirmDialog(this, "המשחק הסתיים", message, onExit).show();
+        dialogService.showConfirmDialog("המשחק הסתיים", message, onExit);
     }
 
     /**

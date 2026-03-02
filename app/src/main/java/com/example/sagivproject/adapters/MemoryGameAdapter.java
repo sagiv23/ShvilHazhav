@@ -23,10 +23,12 @@ import javax.inject.Inject;
  */
 public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardViewHolder> {
     private static final int CAMERA_DISTANCE = 8000;
+    private final ImageUtil imageUtil;
     private MemoryGameListener listener;
 
     @Inject
-    public MemoryGameAdapter() {
+    public MemoryGameAdapter(ImageUtil imageUtil) {
+        this.imageUtil = imageUtil;
     }
 
     public void setListener(MemoryGameListener listener) {
@@ -58,7 +60,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         holder.cardImage.setRotationY(0f);
 
         if (card.getIsMatched() || card.getIsRevealed()) {
-            ImageUtil.loadImage(card.getBase64Content(), holder.cardImage);
+            imageUtil.loadImage(card.getBase64Content(), holder.cardImage);
 
             if (card.getIsMatched()) {
                 holder.itemView.setAlpha(0.6f);
@@ -101,7 +103,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
             };
 
             if (base64 != null) {
-                ImageUtil.loadImage(base64, imageView);
+                imageUtil.loadImage(base64, imageView);
                 flipIn.run();
             } else {
                 imageView.setImageResource(R.drawable.fold_card_img);

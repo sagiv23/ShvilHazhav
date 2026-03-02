@@ -19,12 +19,9 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.dialogs.EditUserDialog;
-import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
-import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
@@ -79,10 +76,8 @@ public class DetailsAboutUserActivity extends BaseActivity {
         btnChangePhoto.setOnClickListener(v -> openImagePicker());
         imgUserProfile.setOnClickListener(v -> {
             if (user.getProfileImage() != null) {
-                new FullImageDialog(
-                        this,
-                        imgUserProfile.getDrawable()
-                ).show();
+                // Use injected dialog from DialogService
+                dialogService.showFullImageDialog(imgUserProfile.getDrawable());
             }
         });
 
@@ -166,7 +161,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         txtEmail.setText(user.getEmail());
         txtPassword.setText(user.getPassword());
 
-        ImageUtil.loadImage(user.getProfileImage(), imgUserProfile);
+        imageUtil.loadImage(user.getProfileImage(), imgUserProfile);
 
         int age = user.getAge();
         txtAge.setText(String.valueOf(age));
@@ -191,7 +186,8 @@ public class DetailsAboutUserActivity extends BaseActivity {
      * Opens a dialog to allow the user to edit their profile information.
      */
     private void openEditDialog() {
-        new EditUserDialog(this, user, (fName, lName, birthDate, email, password) -> databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
+        // Use injected dialog from DialogService
+        dialogService.showEditUserDialog(user, (fName, lName, birthDate, email, password) -> databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
             @Override
             public void onSuccess(User updatedUser) {
                 Toast.makeText(DetailsAboutUserActivity.this, "הפרטים עודכנו!", Toast.LENGTH_SHORT).show();
@@ -203,7 +199,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
             public void onError(String message) {
                 Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show();
             }
-        })).show();
+        }));
     }
 
     /**
@@ -213,7 +209,8 @@ public class DetailsAboutUserActivity extends BaseActivity {
     private void openImagePicker() {
         boolean hasImage = user.getProfileImage() != null && !user.getProfileImage().isEmpty();
 
-        new ProfileImageDialog(this, hasImage, new ProfileImageDialog.ImagePickerListener() {
+        // Use injected dialog from DialogService
+        dialogService.showProfileImageDialog(hasImage, new ProfileImageDialog.ImagePickerListener() {
             @Override
             public void onCamera() {
                 cameraLauncher.launch(null);
@@ -232,7 +229,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
             public void onDelete() {
                 deleteProfileImage();
             }
-        }).show();
+        });
     }
 
     /**
@@ -267,7 +264,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         imgUserProfile.setImageBitmap(bitmap);
 
         // Convert to Base64 and save
-        String base64 = ImageUtil.convertTo64Base(imgUserProfile);
+        String base64 = imageUtil.convertTo64Base(imgUserProfile);
         user.setProfileImage(base64);
 
         saveProfileImage();

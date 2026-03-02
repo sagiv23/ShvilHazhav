@@ -10,6 +10,11 @@ import com.example.sagivproject.R;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ActivityContext;
+import dagger.hilt.android.scopes.ActivityScoped;
+
 /**
  * A generic confirmation dialog that can be reused for various scenarios.
  * <p>
@@ -17,45 +22,36 @@ import java.util.Objects;
  * It supports both a single action (confirm only) and a dual action (confirm/cancel).
  * </p>
  */
+@ActivityScoped
 public class ConfirmDialog {
     private final Context context;
-    private final String title;
-    private final String message;
-    private final String confirmText;
-    private final String cancelText;
-    private final Runnable onConfirm;
-    private final boolean isSingleAction;
 
     /**
-     * Constructor for a dual-action dialog (e.g., "OK" and "Cancel").
+     * Constructs a new ConfirmDialog.
+     * Hilt uses this constructor to provide an instance.
+     *
+     * @param context The context in which the dialog should be shown.
      */
-    public ConfirmDialog(Context context, String title, String message, String confirmText, String cancelText, Runnable onConfirm) {
+    @Inject
+    public ConfirmDialog(@ActivityContext Context context) {
         this.context = context;
-        this.title = title;
-        this.message = message;
-        this.confirmText = confirmText;
-        this.cancelText = cancelText;
-        this.onConfirm = onConfirm;
-        this.isSingleAction = false;
     }
 
     /**
-     * Constructor for a single-action dialog (e.g., an alert with just an "OK" button).
+     * Shows a dual-action dialog (e.g., "OK" and "Cancel").
      */
-    public ConfirmDialog(Context context, String title, String message, Runnable onConfirm) {
-        this.context = context;
-        this.title = title;
-        this.message = message;
-        this.confirmText = "אישור"; // Default confirm text
-        this.cancelText = null; // No cancel button
-        this.onConfirm = onConfirm;
-        this.isSingleAction = true;
+    public void show(String title, String message, String confirmText, String cancelText, Runnable onConfirm) {
+        createAndShow(title, message, confirmText, cancelText, onConfirm, false);
     }
 
     /**
-     * Creates and displays the configured dialog.
+     * Shows a single-action dialog (e.g., an alert with just an "OK" button).
      */
-    public void show() {
+    public void show(String title, String message, Runnable onConfirm) {
+        createAndShow(title, message, "אישור", null, onConfirm, true);
+    }
+
+    private void createAndShow(String title, String message, String confirmText, String cancelText, Runnable onConfirm, boolean isSingleAction) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_confirm);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -73,6 +69,7 @@ public class ConfirmDialog {
         if (isSingleAction) {
             btnCancel.setVisibility(View.GONE);
         } else {
+            btnCancel.setVisibility(View.VISIBLE);
             btnCancel.setText(cancelText);
             btnCancel.setOnClickListener(v -> dialog.dismiss());
         }

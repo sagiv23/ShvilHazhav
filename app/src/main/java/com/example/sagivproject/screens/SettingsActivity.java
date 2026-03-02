@@ -16,7 +16,6 @@ import androidx.preference.PreferenceManager;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
-import com.example.sagivproject.screens.dialogs.ConfirmDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -105,6 +104,7 @@ public class SettingsActivity extends BaseActivity {
             startActivity(intent);
         };
 
-        new ConfirmDialog(this, "התנתקות", "האם ברצונך להתנתק?", "התנתק", "בטל", onConfirm).show();
+        // Use injected dialog from DialogService
+        dialogService.showConfirmDialog("התנתקות", "האם ברצונך להתנתק?", "התנתק", "בטל", onConfirm);
     }
 }

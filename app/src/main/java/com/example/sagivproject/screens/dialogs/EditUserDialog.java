@@ -14,6 +14,11 @@ import com.example.sagivproject.utils.Validator;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ActivityContext;
+import dagger.hilt.android.scopes.ActivityScoped;
+
 /**
  * A dialog for editing an existing user's profile information.
  * <p>
@@ -21,29 +26,35 @@ import java.util.function.Predicate;
  * It includes input validation and notifies a listener of the update request.
  * </p>
  */
+@ActivityScoped
 public class EditUserDialog {
     private final Context context;
-    private final User user;
-    private final EditUserDialogListener listener;
+    private final Validator validator;
+    private final CalendarUtil calendarUtil;
     private long birthDateMillis = -1;
 
     /**
      * Constructs a new EditUserDialog.
+     * Hilt uses this constructor to provide an instance.
      *
-     * @param context  The context in which the dialog should be shown.
-     * @param user     The user object to be edited.
-     * @param listener A listener to be notified when the update button is clicked.
+     * @param context      The context in which the dialog should be shown.
+     * @param validator    The validator utility.
+     * @param calendarUtil The calendar utility.
      */
-    public EditUserDialog(Context context, User user, EditUserDialogListener listener) {
+    @Inject
+    public EditUserDialog(@ActivityContext Context context, Validator validator, CalendarUtil calendarUtil) {
         this.context = context;
-        this.user = user;
-        this.listener = listener;
+        this.validator = validator;
+        this.calendarUtil = calendarUtil;
     }
 
     /**
      * Creates and displays the dialog, handling user input and validation.
+     *
+     * @param user     The user object to be edited.
+     * @param listener A listener to be notified when the update button is clicked.
      */
-    public void show() {
+    public void show(User user, EditUserDialogListener listener) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_edit_user);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -64,7 +75,7 @@ public class EditUserDialog {
         inputEmail.setText(user.getEmail());
         inputPassword.setText(user.getPassword());
 
-        inputBirthDate.setOnClickListener(v -> CalendarUtil.openDatePicker(context, birthDateMillis, (millis, dateStr) -> {
+        inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(context, birthDateMillis, (millis, dateStr) -> {
             birthDateMillis = millis;
             inputBirthDate.setText(dateStr);
         }));
@@ -89,32 +100,19 @@ public class EditUserDialog {
         dialog.show();
     }
 
-    /**
-     * Sequentially validates all user input fields.
-     *
-     * @return True if all fields are valid, false otherwise.
-     */
     private boolean areAllFieldsValid(String fName, String lName, String email, String pass, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passEdt, EditText birthDateEdt) {
         if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || pass.isEmpty() || birthDateMillis <= 0) {
             Toast.makeText(context, "כל השדות חובה", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        return isFieldValid(firstNameEdt, Validator::isNameNotValid, "שם פרטי קצר מדי") &&
-                isFieldValid(lastNameEdt, Validator::isNameNotValid, "שם משפחה קצר מדי") &&
-                isFieldValid(birthDateEdt, val -> Validator.isAgeNotValid(birthDateMillis), "הגיל המינימלי הוא 12") &&
-                isFieldValid(emailEdt, Validator::isEmailNotValid, "כתובת האימייל לא תקינה") &&
-                isFieldValid(passEdt, Validator::isPasswordNotValid, "הסיסמה קצרה מדי");
+        return isFieldValid(firstNameEdt, validator::isNameNotValid, "שם פרטי קצר מדי") &&
+                isFieldValid(lastNameEdt, validator::isNameNotValid, "שם משפחה קצר מדי") &&
+                isFieldValid(birthDateEdt, val -> validator.isAgeNotValid(birthDateMillis), "הגיל המינימלי הוא 12") &&
+                isFieldValid(emailEdt, validator::isEmailNotValid, "כתובת האימייל לא תקינה") &&
+                isFieldValid(passEdt, validator::isPasswordNotValid, "הסיסמה קצרה מדי");
     }
 
-    /**
-     * Validates a single EditText field using a predicate.
-     *
-     * @param editText  The EditText to validate.
-     * @param predicate The validation logic to apply.
-     * @param errorMsg  The error message to show if validation fails.
-     * @return True if valid, false otherwise.
-     */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -124,15 +122,9 @@ public class EditUserDialog {
         return true;
     }
 
-    /**
-     * Helper method to set the text of the birthdate EditText.
-     *
-     * @param editText The EditText to update.
-     * @param millis   The date in milliseconds.
-     */
     private void updateBirthDateText(EditText editText, long millis) {
         if (millis > 0) {
-            editText.setText(CalendarUtil.formatDate(millis));
+            editText.setText(calendarUtil.formatDate(millis));
         }
     }
 
@@ -140,15 +132,6 @@ public class EditUserDialog {
      * An interface to listen for the update user action.
      */
     public interface EditUserDialogListener {
-        /**
-         * Called when the user clicks the update button and all fields are valid.
-         *
-         * @param fName           The user's updated first name.
-         * @param lName           The user's updated last name.
-         * @param birthDateMillis The user's updated birthdate in milliseconds.
-         * @param email           The user's updated email.
-         * @param password        The user's updated password.
-         */
         void onUpdateUser(String fName, String lName, long birthDateMillis, String email, String password);
     }
 }

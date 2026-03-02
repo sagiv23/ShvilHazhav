@@ -33,11 +33,12 @@ public class SharedPreferencesUtil {
      * Constructs a new SharedPreferencesUtil.
      *
      * @param context The application context.
+     * @param gson    The Gson instance for serialization.
      */
     @Inject
-    public SharedPreferencesUtil(@ApplicationContext Context context) {
+    public SharedPreferencesUtil(@ApplicationContext Context context, Gson gson) {
         this.sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        this.gson = new Gson();
+        this.gson = gson;
     }
 
     /**

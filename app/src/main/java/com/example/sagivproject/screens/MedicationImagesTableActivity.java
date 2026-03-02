@@ -25,9 +25,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationImagesTableAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ImageData;
-import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
-import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
@@ -79,7 +77,6 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
         adapter = adapterService.getMedicationImagesTableAdapter();
         adapter.setListener(new MedicationImagesTableAdapter.OnImageActionListener() {
-
                                 @Override
                                 public void onDeleteImage(ImageData image) {
                                     deleteImageAndReorder(image);
@@ -90,7 +87,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
                                     Drawable drawable = imageView.getDrawable();
                                     if (drawable == null) return;
 
-                                    new FullImageDialog(MedicationImagesTableActivity.this, drawable).show();
+                                    dialogService.showFullImageDialog(drawable);
                                 }
                             }
         );
@@ -181,7 +178,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(), uri));
             ImageView tempIv = new ImageView(this);
             tempIv.setImageBitmap(bitmap);
-            String base64 = ImageUtil.convertTo64Base(tempIv);
+            String base64 = imageUtil.convertTo64Base(tempIv);
 
             if (base64 != null) {
                 int nextNumber = allImages.size() + 1;

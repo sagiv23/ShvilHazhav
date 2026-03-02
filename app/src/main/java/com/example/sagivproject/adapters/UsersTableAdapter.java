@@ -25,11 +25,13 @@ import javax.inject.Inject;
  * A RecyclerView adapter for displaying a table of {@link User} objects for administrative purposes.
  */
 public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserViewHolder> {
+    private final ImageUtil imageUtil;
     private User currentUser;
     private OnUserActionListener listener;
 
     @Inject
-    public UsersTableAdapter() {
+    public UsersTableAdapter(ImageUtil imageUtil) {
+        this.imageUtil = imageUtil;
     }
 
     public void init(User currentUser, OnUserActionListener listener) {
@@ -65,7 +67,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
                 cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
         holder.txtUserBirthDate.setText(String.format("תאריך לידה: %s", birthDateStr));
 
-        ImageUtil.loadImage(user.getProfileImage(), holder.imgUserProfile);
+        imageUtil.loadImage(user.getProfileImage(), holder.imgUserProfile);
 
         boolean isSelf = user.equals(currentUser);
         holder.btnToggleAdmin.setVisibility(isSelf ? View.GONE : View.VISIBLE);

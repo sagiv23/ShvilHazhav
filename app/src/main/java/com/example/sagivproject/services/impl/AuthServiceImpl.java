@@ -104,8 +104,8 @@ public class AuthServiceImpl implements IAuthService {
      * @param firstName       The new user's first name.
      * @param lastName        The new user's last name.
      * @param birthDateMillis The new user's birthdate in milliseconds.
-     * @param email           The new user's email.
-     * @param password        The new user's password.
+     * @param email           The user's email.
+     * @param password        The user's password.
      * @param callback        The callback to be invoked with the result.
      */
     @Override
@@ -220,7 +220,6 @@ public class AuthServiceImpl implements IAuthService {
         userService.updateUser(user, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                sharedPreferencesUtil.saveUser(user);
                 callback.onSuccess(user);
             }
 

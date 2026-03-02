@@ -13,6 +13,11 @@ import com.example.sagivproject.utils.Validator;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ActivityContext;
+import dagger.hilt.android.scopes.ActivityScoped;
+
 /**
  * A dialog for administrators to add a new user to the application.
  * <p>
@@ -20,26 +25,34 @@ import java.util.function.Predicate;
  * last name, birthdate, email, and password. It includes input validation.
  * </p>
  */
+@ActivityScoped
 public class AddUserDialog {
     private final Context context;
-    private final AddUserDialogListener listener;
+    private final Validator validator;
+    private final CalendarUtil calendarUtil;
     private long birthDateMillis = -1;
 
     /**
      * Constructs a new AddUserDialog.
+     * Hilt uses this constructor to provide an instance.
      *
-     * @param context  The context in which the dialog should be shown.
-     * @param listener A listener to be notified when the add button is clicked.
+     * @param context      The context in which the dialog should be shown.
+     * @param validator    The validator utility.
+     * @param calendarUtil The calendar utility.
      */
-    public AddUserDialog(Context context, AddUserDialogListener listener) {
+    @Inject
+    public AddUserDialog(@ActivityContext Context context, Validator validator, CalendarUtil calendarUtil) {
         this.context = context;
-        this.listener = listener;
+        this.validator = validator;
+        this.calendarUtil = calendarUtil;
     }
 
     /**
      * Creates and displays the dialog, handling user input and validation.
+     *
+     * @param listener A listener to be notified when the add button is clicked.
      */
-    public void show() {
+    public void show(AddUserDialogListener listener) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_add_user);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -52,7 +65,9 @@ public class AddUserDialog {
         Button btnAdd = dialog.findViewById(R.id.btnAddUserSave);
         Button btnCancel = dialog.findViewById(R.id.btnAddUserCancel);
 
-        inputBirthDate.setOnClickListener(v -> CalendarUtil.openDatePicker(context, birthDateMillis, (millis, dateStr) -> {
+        birthDateMillis = -1; // Reset for new dialog
+
+        inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(context, birthDateMillis, (millis, dateStr) -> {
             birthDateMillis = millis;
             inputBirthDate.setText(dateStr);
         }));
@@ -77,34 +92,19 @@ public class AddUserDialog {
         dialog.show();
     }
 
-    /**
-     * Sequentially validates all user input fields.
-     *
-     * @return True if all fields are valid, false otherwise.
-     */
     private boolean areAllFieldsValid(String fName, String lName, String email, String password, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passwordEdt, EditText birthDateEdt) {
-        // Check for empty fields first
         if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || password.isEmpty() || birthDateMillis <= 0) {
             Toast.makeText(context, "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        // Chain validation checks
-        return isFieldValid(firstNameEdt, Validator::isNameNotValid, "שם פרטי קצר מדי") &&
-                isFieldValid(lastNameEdt, Validator::isNameNotValid, "שם משפחה קצר מדי") &&
-                isFieldValid(birthDateEdt, val -> Validator.isAgeNotValid(birthDateMillis), "הגיל המינימלי הוא 12") &&
-                isFieldValid(emailEdt, Validator::isEmailNotValid, "כתובת האימייל לא תקינה") &&
-                isFieldValid(passwordEdt, Validator::isPasswordNotValid, "הסיסמה קצרה מדי");
+        return isFieldValid(firstNameEdt, validator::isNameNotValid, "שם פרטי קצר מדי") &&
+                isFieldValid(lastNameEdt, validator::isNameNotValid, "שם משפחה קצר מדי") &&
+                isFieldValid(birthDateEdt, val -> validator.isAgeNotValid(birthDateMillis), "הגיל המינימלי הוא 12") &&
+                isFieldValid(emailEdt, validator::isEmailNotValid, "כתובת האימייל לא תקינה") &&
+                isFieldValid(passwordEdt, validator::isPasswordNotValid, "הסיסמה קצרה מדי");
     }
 
-    /**
-     * Validates a single EditText field using a predicate.
-     *
-     * @param editText  The EditText to validate.
-     * @param predicate The validation logic to apply.
-     * @param errorMsg  The error message to show if validation fails.
-     * @return True if valid, false otherwise.
-     */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -118,15 +118,6 @@ public class AddUserDialog {
      * An interface to listen for the add user action.
      */
     public interface AddUserDialogListener {
-        /**
-         * Called when the user clicks the add button and all fields are valid.
-         *
-         * @param fName           The user's first name.
-         * @param lName           The user's last name.
-         * @param birthDateMillis The user's birthdate in milliseconds.
-         * @param email           The user's email.
-         * @param password        The user's password.
-         */
         void onAddUser(String fName, String lName, long birthDateMillis, String email, String password);
     }
 }

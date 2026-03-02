@@ -9,6 +9,11 @@ import com.example.sagivproject.R;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ActivityContext;
+import dagger.hilt.android.scopes.ActivityScoped;
+
 /**
  * A dialog that presents options for changing a user's profile image.
  * <p>
@@ -16,28 +21,28 @@ import java.util.Objects;
  * It also provides an option to delete the current profile image, if one exists.
  * </p>
  */
+@ActivityScoped
 public class ProfileImageDialog {
     private final Context context;
-    private final boolean hasImage;
-    private final ImagePickerListener listener;
 
     /**
      * Constructs a new ProfileImageDialog.
+     * Hilt uses this constructor to provide an instance.
      *
-     * @param context  The context in which the dialog should be shown.
-     * @param hasImage True if the user currently has a profile image, which determines if the delete option is shown.
-     * @param listener The listener to be invoked when an option is selected.
+     * @param context The context in which the dialog should be shown.
      */
-    public ProfileImageDialog(Context context, boolean hasImage, ImagePickerListener listener) {
+    @Inject
+    public ProfileImageDialog(@ActivityContext Context context) {
         this.context = context;
-        this.hasImage = hasImage;
-        this.listener = listener;
     }
 
     /**
      * Creates and displays the dialog.
+     *
+     * @param hasImage True if the user currently has a profile image, which determines if the delete option is shown.
+     * @param listener The listener to be invoked when an option is selected.
      */
-    public void show() {
+    public void show(boolean hasImage, ImagePickerListener listener) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_profile_image);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -52,17 +57,17 @@ public class ProfileImageDialog {
         btnDelete.setVisibility(hasImage ? View.VISIBLE : View.GONE);
 
         btnCamera.setOnClickListener(v -> {
-            listener.onCamera();
+            if (listener != null) listener.onCamera();
             dialog.dismiss();
         });
 
         btnGallery.setOnClickListener(v -> {
-            listener.onGallery();
+            if (listener != null) listener.onGallery();
             dialog.dismiss();
         });
 
         btnDelete.setOnClickListener(v -> {
-            listener.onDelete();
+            if (listener != null) listener.onDelete();
             dialog.dismiss();
         });
 
@@ -75,19 +80,10 @@ public class ProfileImageDialog {
      * An interface for listeners that are invoked when an image source option is selected.
      */
     public interface ImagePickerListener {
-        /**
-         * Called when the "Camera" option is selected.
-         */
         void onCamera();
 
-        /**
-         * Called when the "Gallery" option is selected.
-         */
         void onGallery();
 
-        /**
-         * Called when the "Delete" option is selected.
-         */
         void onDelete();
     }
 }

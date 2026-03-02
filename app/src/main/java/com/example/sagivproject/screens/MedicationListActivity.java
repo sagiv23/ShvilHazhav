@@ -312,7 +312,7 @@ public class MedicationListActivity extends BaseActivity {
      * @param medToEdit The medication to edit, or null to add a new one.
      */
     private void openMedicationDialog(Medication medToEdit) {
-        new MedicationDialog(this, medToEdit, new MedicationDialog.OnMedicationSubmitListener() {
+        dialogService.showMedicationDialog(medToEdit, new MedicationDialog.OnMedicationSubmitListener() {
             @Override
             public void onAdd(Medication medication) {
                 saveMedication(medication);
@@ -322,7 +322,7 @@ public class MedicationListActivity extends BaseActivity {
             public void onEdit(Medication medication) {
                 updateMedication(medication);
             }
-        }).show();
+        });
     }
 
     /**

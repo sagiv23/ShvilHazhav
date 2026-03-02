@@ -64,6 +64,31 @@ public class User implements Serializable, Idable {
         this.mathProblemsStats = new MathProblemsStats();
     }
 
+    /**
+     * Copy constructor to create a new instance from an existing User.
+     * This is useful for editing without modifying the original instance.
+     */
+    public User(User other) {
+        if (other == null) return;
+        this.id = other.id;
+        this.email = other.email;
+        this.role = other.role;
+        this.firstName = other.firstName;
+        this.lastName = other.lastName;
+        this.birthDateMillis = other.birthDateMillis;
+        this.password = other.password;
+        this.profileImage = other.profileImage;
+        this.countWins = other.countWins;
+        if (other.medications != null) {
+            this.medications = new HashMap<>(other.medications);
+        }
+        if (other.mathProblemsStats != null) {
+            this.mathProblemsStats = new MathProblemsStats();
+            this.mathProblemsStats.setCorrectAnswers(other.mathProblemsStats.getCorrectAnswers());
+            this.mathProblemsStats.setWrongAnswers(other.mathProblemsStats.getWrongAnswers());
+        }
+    }
+
     @Override
     public String getId() {
         return this.id;
@@ -107,15 +132,11 @@ public class User implements Serializable, Idable {
     public int getAge() {
         Calendar birth = Calendar.getInstance();
         birth.setTimeInMillis(birthDateMillis);
-
         Calendar today = Calendar.getInstance();
-
         int age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
-
         if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
             age--;
         }
-
         return age;
     }
 
@@ -198,31 +219,28 @@ public class User implements Serializable, Idable {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id);
+        return birthDateMillis == user.birthDateMillis &&
+                countWins == user.countWins &&
+                Objects.equals(id, user.id) &&
+                Objects.equals(email, user.email) &&
+                role == user.role &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(profileImage, user.profileImage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id, email, role, firstName, lastName, birthDateMillis, password, profileImage, countWins);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", birthDateMillis=" + birthDateMillis +
-                ", password='" + password + '\'' +
-                ", profileImage='" + profileImage + '\'' +
-                ", medications=" + medications +
-                ", countWins=" + countWins +
-                ", mathProblemsStats=" + mathProblemsStats +
-                '}';
+        return "User{" + "id='" + id + '\'' + ", email='" + email + '\'' + ", role=" + role + ", fullName='" + getFullName() + '\'' + '}';
     }
 }

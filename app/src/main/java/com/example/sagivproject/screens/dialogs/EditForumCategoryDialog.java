@@ -11,18 +11,36 @@ import com.example.sagivproject.models.ForumCategory;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ActivityContext;
+import dagger.hilt.android.scopes.ActivityScoped;
+
+/**
+ * A dialog for editing the name of a forum category.
+ */
+@ActivityScoped
 public class EditForumCategoryDialog {
     private final Context context;
-    private final ForumCategory category;
-    private final EditForumCategoryDialogListener listener;
 
-    public EditForumCategoryDialog(Context context, ForumCategory category, EditForumCategoryDialogListener listener) {
+    /**
+     * Constructs a new EditForumCategoryDialog.
+     * Hilt uses this constructor to provide an instance.
+     *
+     * @param context The context in which the dialog should be shown.
+     */
+    @Inject
+    public EditForumCategoryDialog(@ActivityContext Context context) {
         this.context = context;
-        this.category = category;
-        this.listener = listener;
     }
 
-    public void show() {
+    /**
+     * Creates and displays the dialog.
+     *
+     * @param category The category to be edited.
+     * @param listener The listener for the update action.
+     */
+    public void show(ForumCategory category, EditForumCategoryDialogListener listener) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_edit_forum_category);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -50,6 +68,9 @@ public class EditForumCategoryDialog {
         dialog.show();
     }
 
+    /**
+     * An interface to listen for the update category action.
+     */
     public interface EditForumCategoryDialogListener {
         void onUpdateCategory(String newName);
     }

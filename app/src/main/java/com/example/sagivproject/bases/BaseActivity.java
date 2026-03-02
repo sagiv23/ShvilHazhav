@@ -19,8 +19,12 @@ import com.example.sagivproject.screens.MainActivity;
 import com.example.sagivproject.screens.RegisterActivity;
 import com.example.sagivproject.screens.SettingsActivity;
 import com.example.sagivproject.services.AdapterService;
+import com.example.sagivproject.services.DialogService;
 import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.utils.CalendarUtil;
+import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+import com.example.sagivproject.utils.Validator;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -46,6 +50,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected IDatabaseService databaseService;
     @Inject
     protected AdapterService adapterService;
+    @Inject
+    protected DialogService dialogService;
+    @Inject
+    protected Validator validator;
+    @Inject
+    protected CalendarUtil calendarUtil;
+    @Inject
+    protected ImageUtil imageUtil;
 
     /**
      * Initializes the activity and requests permissions if required.

@@ -1,5 +1,8 @@
 package com.example.sagivproject.di;
 
+import android.app.AlarmManager;
+import android.content.Context;
+
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
@@ -22,6 +25,7 @@ import com.example.sagivproject.services.impl.TipOfTheDayServiceImpl;
 import com.example.sagivproject.services.impl.UserServiceImpl;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 import javax.inject.Singleton;
 
@@ -29,6 +33,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
 @Module
@@ -45,6 +50,18 @@ public abstract class AppModule {
     @Singleton
     public static FirebaseDatabase provideFirebaseDatabase() {
         return FirebaseDatabase.getInstance();
+    }
+
+    @Provides
+    @Singleton
+    public static Gson provideGson() {
+        return new Gson();
+    }
+
+    @Provides
+    @Singleton
+    public static AlarmManager provideAlarmManager(@ApplicationContext Context context) {
+        return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
     @Binds

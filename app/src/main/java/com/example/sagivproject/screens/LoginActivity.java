@@ -16,7 +16,6 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
-import com.example.sagivproject.utils.Validator;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -119,13 +118,13 @@ public class LoginActivity extends BaseActivity {
             return false;
         }
 
-        if (Validator.isEmailNotValid(email)) {
+        if (validator.isEmailNotValid(email)) {
             editTextEmail.requestFocus();
             Toast.makeText(this, "כתובת האימייל אינה תקינה", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if (Validator.isPasswordNotValid(password)) {
+        if (validator.isPasswordNotValid(password)) {
             editTextPassword.requestFocus();
             Toast.makeText(this, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
             return false;
