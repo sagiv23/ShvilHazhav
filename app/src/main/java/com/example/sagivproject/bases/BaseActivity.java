@@ -18,6 +18,7 @@ import com.example.sagivproject.screens.LoginActivity;
 import com.example.sagivproject.screens.MainActivity;
 import com.example.sagivproject.screens.RegisterActivity;
 import com.example.sagivproject.screens.SettingsActivity;
+import com.example.sagivproject.services.AdapterService;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.android.material.button.MaterialButton;
@@ -43,6 +44,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected SharedPreferencesUtil sharedPreferencesUtil;
     @Inject
     protected IDatabaseService databaseService;
+    @Inject
+    protected AdapterService adapterService;
 
     /**
      * Initializes the activity and requests permissions if required.

@@ -25,26 +25,23 @@ import com.example.sagivproject.ui.CustomTypefaceSpan;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ActivityContext;
+
 /**
  * A RecyclerView adapter for displaying a list of a user's {@link Medication} objects.
- * <p>
- * This adapter binds medication data to the item view, displaying details like name, type,
- * dosage, and reminder times. It also provides an options menu for each item to allow
- * for editing and deleting the medication.
- * </p>
  */
 public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
-    private final OnMedicationActionListener listener;
+    private OnMedicationActionListener listener;
 
-    /**
-     * Constructs a new MedicationListAdapter.
-     *
-     * @param context  The context of the calling activity.
-     * @param listener The listener for medication item actions (edit, delete).
-     */
-    public MedicationListAdapter(Context context, OnMedicationActionListener listener) {
+    @Inject
+    public MedicationListAdapter(@ActivityContext Context context) {
         this.context = context;
+    }
+
+    public void setListener(OnMedicationActionListener listener) {
         this.listener = listener;
     }
 
@@ -65,7 +62,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
         Typeface typeface = ResourcesCompat.getFont(context, R.font.text_hebrew);
 
-        // Apply custom font to the medication name
         if (typeface != null) {
             SpannableString nameSpannable = new SpannableString(med.getName());
             nameSpannable.setSpan(new CustomTypefaceSpan("", typeface), 0, nameSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -90,12 +86,10 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
             holder.txtMedicationHours.setVisibility(View.GONE);
         }
 
-        // Set up the options menu (edit/delete)
         holder.btnMenu.setOnClickListener(v -> {
             PopupMenu menu = new PopupMenu(context, v);
             menu.inflate(R.menu.menu_medication_item);
 
-            // Apply custom font and size to menu items
             if (typeface != null) {
                 for (int i = 0; i < menu.getMenu().size(); i++) {
                     MenuItem item = menu.getMenu().getItem(i);
@@ -111,10 +105,10 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
                 if (currentPos == RecyclerView.NO_POSITION) return false;
 
                 Medication currentMed = getItem(currentPos);
-                if (item.getItemId() == R.id.action_edit) {
+                if (item.getItemId() == R.id.action_edit && listener != null) {
                     listener.onEdit(currentMed);
                     return true;
-                } else if (item.getItemId() == R.id.action_delete) {
+                } else if (item.getItemId() == R.id.action_delete && listener != null) {
                     listener.onDelete(currentMed);
                     return true;
                 }
@@ -125,22 +119,9 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         });
     }
 
-    /**
-     * An interface for handling actions on a medication item.
-     */
     public interface OnMedicationActionListener {
-        /**
-         * Called when the edit action is selected for a medication.
-         *
-         * @param medication The medication to edit.
-         */
         void onEdit(Medication medication);
 
-        /**
-         * Called when the delete action is selected for a medication.
-         *
-         * @param medication The medication to delete.
-         */
         void onDelete(Medication medication);
     }
 

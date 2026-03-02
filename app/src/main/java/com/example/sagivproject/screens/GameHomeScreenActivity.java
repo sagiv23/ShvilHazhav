@@ -113,7 +113,8 @@ public class GameHomeScreenActivity extends BaseActivity {
         btnSpeak.setOnClickListener(view -> toggleInstructionsSpeech());
 
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new LeaderboardAdapter();
+
+        adapter = adapterService.getLeaderboardAdapter();
         rvLeaderboard.setAdapter(adapter);
         setupLeaderboard();
 

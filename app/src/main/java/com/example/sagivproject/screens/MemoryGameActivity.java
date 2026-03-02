@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * The main activity for the online memory game.
  * <p>
@@ -39,6 +41,7 @@ import java.util.List;
  * managing player turns, checking for matches, updating scores, and determining the winner.
  * </p>
  */
+@AndroidEntryPoint
 public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapter.MemoryGameListener {
     private static final long TURN_TIME_LIMIT = 15000; // 15 seconds
     private RecyclerView recyclerCards;
@@ -79,7 +82,8 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         tvScore = findViewById(R.id.tv_OnlineMemoryGame_score);
         tvOpponentName = findViewById(R.id.tv_OnlineMemoryGame_opponent_name);
 
-        adapter = new MemoryGameAdapter(this);
+        adapter = adapterService.getMemoryGameAdapter();
+        adapter.setListener(this);
         recyclerCards.setAdapter(adapter);
 
         Button btnExit = findViewById(R.id.btn_OnlineMemoryGame_to_exit);

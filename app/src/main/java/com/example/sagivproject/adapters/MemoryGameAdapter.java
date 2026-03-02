@@ -16,20 +16,20 @@ import com.example.sagivproject.utils.ImageUtil;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * A RecyclerView adapter for displaying the cards in the memory game.
- * <p>
- * This adapter manages the visual representation of each {@link Card}, including its flipped state
- * and animations for revealing, hiding, matching, and error states. It communicates user
- * interactions, such as card clicks, back to the hosting activity or fragment through the
- * {@link MemoryGameListener}.
- * </p>
  */
 public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardViewHolder> {
     private static final int CAMERA_DISTANCE = 8000;
-    private final MemoryGameListener listener;
+    private MemoryGameListener listener;
 
-    public MemoryGameAdapter(MemoryGameListener listener) {
+    @Inject
+    public MemoryGameAdapter() {
+    }
+
+    public void setListener(MemoryGameListener listener) {
         this.listener = listener;
     }
 
@@ -48,7 +48,6 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         Card card = getItem(position);
 
-        // Reset animations and state to avoid issues with recycling
         holder.itemView.animate().cancel();
         holder.cardImage.animate().cancel();
 
@@ -68,7 +67,6 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
             holder.cardImage.setImageResource(R.drawable.fold_card_img);
         }
 
-        // Handle flip animations based on state changes
         if (card.getIsRevealed() && !card.wasRevealed()) {
             animateFlipOpen(holder.cardImage, card.getBase64Content());
             card.setWasRevealed(true);
@@ -82,7 +80,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
 
         holder.itemView.setOnClickListener(v -> {
             int currentPosition = holder.getBindingAdapterPosition();
-            if (currentPosition != RecyclerView.NO_POSITION) {
+            if (currentPosition != RecyclerView.NO_POSITION && listener != null) {
                 listener.onCardClicked(getItem(currentPosition), currentPosition);
             }
         });
@@ -91,14 +89,10 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
     @Override
     public void onViewRecycled(@NonNull CardViewHolder holder) {
         super.onViewRecycled(holder);
-        // Cancel all animations when the view is recycled to prevent the "Tmp detached view" exception
         holder.itemView.animate().cancel();
         holder.cardImage.animate().cancel();
     }
 
-    /**
-     * Animates a card flipping open to reveal its content.
-     */
     private void animateFlipOpen(ImageView imageView, String base64) {
         imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
             Runnable flipIn = () -> {
@@ -116,9 +110,6 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }).start();
     }
 
-    /**
-     * Animates a card flipping closed to hide its content.
-     */
     private void animateFlipClose(ImageView imageView) {
         imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
             imageView.setImageResource(R.drawable.fold_card_img);
@@ -127,9 +118,6 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }).start();
     }
 
-    /**
-     * Triggers a shake animation to indicate an incorrect match.
-     */
     public void animateError(int position, RecyclerView recyclerView) {
         CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
@@ -142,9 +130,6 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }
     }
 
-    /**
-     * Triggers a pulse animation to indicate a successful match.
-     */
     public void animateSuccess(int position, RecyclerView recyclerView) {
         CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
@@ -155,9 +140,6 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }
     }
 
-    /**
-     * An interface for listeners that handle card click events.
-     */
     public interface MemoryGameListener {
         void onCardClicked(Card card, int position);
     }

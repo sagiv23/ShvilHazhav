@@ -14,6 +14,8 @@ import com.example.sagivproject.models.ForumCategory;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * A RecyclerView adapter for displaying a list of {@link ForumCategory} objects.
  * <p>
@@ -23,16 +25,24 @@ import java.util.List;
  * </p>
  */
 public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCategoryAdapter.CategoryViewHolder> {
-    private final OnCategoryInteractionListener listener;
-    private final boolean isAdmin;
+    private OnCategoryInteractionListener listener;
+    private boolean isAdmin;
 
     /**
      * Constructs a new ForumCategoryAdapter.
+     * Hilt uses this constructor to provide an instance.
+     */
+    @Inject
+    public ForumCategoryAdapter() {
+    }
+
+    /**
+     * Initializes the adapter with a listener and admin status.
      *
      * @param listener The listener for category interaction events (click, delete).
      * @param isAdmin  True if the adapter should be in admin mode, false otherwise.
      */
-    public ForumCategoryAdapter(@NonNull OnCategoryInteractionListener listener, boolean isAdmin) {
+    public void init(OnCategoryInteractionListener listener, boolean isAdmin) {
         this.listener = listener;
         this.isAdmin = isAdmin;
     }
@@ -62,7 +72,7 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
         holder.categoryName.setText(category.getName());
 
         // Configure visibility and actions based on admin status
-        if (isAdmin) {
+        if (isAdmin && listener != null) {
             holder.deleteButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setOnClickListener(v -> listener.onDelete(category));
             holder.editButton.setVisibility(View.VISIBLE);
@@ -76,7 +86,9 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
             holder.editButton.setVisibility(View.GONE);
         }
 
-        holder.itemView.setOnClickListener(v -> listener.onClick(category));
+        if (listener != null) {
+            holder.itemView.setOnClickListener(v -> listener.onClick(category));
+        }
     }
 
     /**

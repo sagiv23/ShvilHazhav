@@ -76,22 +76,23 @@ public class MedicationImagesTableActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_MedicineImagesTablePage);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        adapter = new MedicationImagesTableAdapter(
-                new MedicationImagesTableAdapter.OnImageActionListener() {
 
-                    @Override
-                    public void onDeleteImage(ImageData image) {
-                        deleteImageAndReorder(image);
-                    }
+        adapter = adapterService.getMedicationImagesTableAdapter();
+        adapter.setListener(new MedicationImagesTableAdapter.OnImageActionListener() {
 
-                    @Override
-                    public void onImageClicked(ImageData image, ImageView imageView) {
-                        Drawable drawable = imageView.getDrawable();
-                        if (drawable == null) return;
+                                @Override
+                                public void onDeleteImage(ImageData image) {
+                                    deleteImageAndReorder(image);
+                                }
 
-                        new FullImageDialog(MedicationImagesTableActivity.this, drawable).show();
-                    }
-                }
+                                @Override
+                                public void onImageClicked(ImageData image, ImageView imageView) {
+                                    Drawable drawable = imageView.getDrawable();
+                                    if (drawable == null) return;
+
+                                    new FullImageDialog(MedicationImagesTableActivity.this, drawable).show();
+                                }
+                            }
         );
 
         recyclerView.setAdapter(adapter);

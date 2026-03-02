@@ -19,25 +19,20 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 /**
  * A RecyclerView adapter for displaying a table of {@link User} objects for administrative purposes.
- * <p>
- * This adapter binds detailed user information to a row layout. It provides controls for
- * administrators to perform actions such as deleting a user or toggling their admin status.
- * It also handles click events for editing a user or viewing their profile picture.
- * </p>
  */
 public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserViewHolder> {
-    private final User currentUser;
-    private final OnUserActionListener listener;
+    private User currentUser;
+    private OnUserActionListener listener;
 
-    /**
-     * Constructs a new UsersTableAdapter.
-     *
-     * @param currentUser The currently logged-in admin user, used to prevent self-modification.
-     * @param listener    The listener for user action events.
-     */
-    public UsersTableAdapter(User currentUser, OnUserActionListener listener) {
+    @Inject
+    public UsersTableAdapter() {
+    }
+
+    public void init(User currentUser, OnUserActionListener listener) {
         this.currentUser = currentUser;
         this.listener = listener;
     }
@@ -57,7 +52,6 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = getItem(position);
 
-        // Bind user data to views
         holder.txtUserFullName.setText(user.getFullName());
         holder.txtUserEmail.setText(user.getEmail());
         holder.txtUserPassword.setText(String.format("סיסמה: %s", user.getPassword()));
@@ -73,13 +67,11 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
 
         ImageUtil.loadImage(user.getProfileImage(), holder.imgUserProfile);
 
-        // Configure admin actions
         boolean isSelf = user.equals(currentUser);
         holder.btnToggleAdmin.setVisibility(isSelf ? View.GONE : View.VISIBLE);
         holder.btnDeleteUser.setVisibility(isSelf ? View.GONE : View.VISIBLE);
 
-        if (!isSelf) {
-            // Set icon based on current admin status
+        if (!isSelf && listener != null) {
             if (user.isAdmin()) {
                 holder.btnToggleAdmin.setImageResource(R.drawable.ic_remove_admin);
                 holder.btnToggleAdmin.setContentDescription("הסר מנהל");
@@ -92,46 +84,27 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
             holder.btnDeleteUser.setOnClickListener(v -> listener.onDeleteUser(user));
         }
 
-        // Set long-click listener to edit user details
         holder.itemView.setOnLongClickListener(v -> {
-            listener.onUserClicked(user);
+            if (listener != null) {
+                listener.onUserClicked(user);
+            }
             return true;
         });
 
-        holder.imgUserProfile.setOnClickListener(v -> listener.onUserImageClicked(user, holder.imgUserProfile));
+        holder.imgUserProfile.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onUserImageClicked(user, holder.imgUserProfile);
+            }
+        });
     }
 
-    /**
-     * An interface for handling administrative actions on a user item.
-     */
     public interface OnUserActionListener {
-        /**
-         * Called when the toggle admin button is clicked for a user.
-         *
-         * @param user The user whose admin status should be toggled.
-         */
         void onToggleAdmin(User user);
 
-        /**
-         * Called when the delete button is clicked for a user.
-         *
-         * @param user The user to be deleted.
-         */
         void onDeleteUser(User user);
 
-        /**
-         * Called when a user item is long-clicked, intended for editing.
-         *
-         * @param user The user that was clicked.
-         */
         void onUserClicked(User user);
 
-        /**
-         * Called when a user's profile image is clicked.
-         *
-         * @param user      The user whose image was clicked.
-         * @param imageView The ImageView that was clicked.
-         */
         void onUserImageClicked(User user, ImageView imageView);
     }
 

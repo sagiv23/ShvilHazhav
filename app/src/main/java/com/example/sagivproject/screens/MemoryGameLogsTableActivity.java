@@ -60,7 +60,8 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recycler_MemoryGameLogsTable);
         recyclerView.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
-        adapter = new MemoryGameLogAdapter(uidToNameMap);
+
+        adapter = adapterService.getMemoryGameLogAdapter();
         recyclerView.setAdapter(adapter);
 
         fetchUsersAndListenToGames();

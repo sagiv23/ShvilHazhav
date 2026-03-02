@@ -16,23 +16,19 @@ import com.example.sagivproject.utils.ImageUtil;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * A RecyclerView adapter for displaying a table of {@link ImageData} objects, intended for admin use.
- * <p>
- * This adapter is used to manage the images for the memory game. It displays each image
- * along with its ID and provides a delete button for each. It also handles click events
- * for viewing a full-size image.
- * </p>
  */
 public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, MedicationImagesTableAdapter.ViewHolder> {
-    private final OnImageActionListener listener;
+    private OnImageActionListener listener;
 
-    /**
-     * Constructs a new MedicationImagesTableAdapter.
-     *
-     * @param listener The listener for image actions (delete, click).
-     */
-    public MedicationImagesTableAdapter(OnImageActionListener listener) {
+    @Inject
+    public MedicationImagesTableAdapter() {
+    }
+
+    public void setListener(OnImageActionListener listener) {
         this.listener = listener;
     }
 
@@ -59,7 +55,6 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
             holder.txtId.setVisibility(View.GONE);
         }
 
-        // The delete button is always visible in this admin-focused adapter.
         holder.btnDelete.setVisibility(View.VISIBLE);
         ImageUtil.loadImage(data.getBase64(), holder.imgView);
 
@@ -76,23 +71,9 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
         });
     }
 
-    /**
-     * An interface for handling actions performed on an image item in the table.
-     */
     public interface OnImageActionListener {
-        /**
-         * Called when the delete button for an image is clicked.
-         *
-         * @param image The image data to be deleted.
-         */
         void onDeleteImage(ImageData image);
 
-        /**
-         * Called when an image is clicked, intended for showing a larger view.
-         *
-         * @param image     The image data that was clicked.
-         * @param imageView The ImageView that was clicked, to be used for transitions or dialogs.
-         */
         void onImageClicked(ImageData image, ImageView imageView);
     }
 

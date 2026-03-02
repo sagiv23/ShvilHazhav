@@ -57,7 +57,8 @@ public class ForumCategoriesActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_forumCategories);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ForumCategoryAdapter(new ForumCategoryAdapter.OnCategoryInteractionListener() {
+        adapter = adapterService.getForumCategoryAdapter();
+        adapter.init(new ForumCategoryAdapter.OnCategoryInteractionListener() {
             @Override
             public void onDelete(ForumCategory category) {
                 // Not used in this activity

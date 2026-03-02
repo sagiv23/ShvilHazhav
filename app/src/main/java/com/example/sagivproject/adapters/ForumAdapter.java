@@ -30,8 +30,15 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 /**
  * A RecyclerView adapter for displaying a list of {@link ForumMessage} objects.
+ * <p>
+ * This adapter handles the binding of forum message data to the corresponding views,
+ * includes functionality for Text-to-Speech (TTS) to read messages aloud, and
+ * provides a menu for message-specific actions based on user permissions.
+ * </p>
  */
 public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -39,6 +46,11 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     private TextToSpeech tts;
     private String currentlySpeakingMsgId = null;
 
+    /**
+     * Constructs a new ForumAdapter.
+     * Hilt uses this constructor to provide an instance.
+     */
+    @Inject
     public ForumAdapter() {
     }
 
@@ -199,6 +211,9 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         }
     }
 
+    /**
+     * Cleans up resources, such as the TextToSpeech engine, when the adapter is no longer needed.
+     */
     public void onDestroy() {
         if (tts != null) {
             tts.stop();
@@ -210,6 +225,11 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      * An interface for handling actions on a forum message item.
      */
     public interface ForumMessageListener {
+        /**
+         * Called when a message item is clicked (e.g., for deletion).
+         *
+         * @param message The message that was clicked.
+         */
         void onClick(ForumMessage message);
 
         /**
@@ -221,6 +241,9 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         boolean isShowMenuOptions(ForumMessage message);
     }
 
+    /**
+     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
+     */
     public static class ForumViewHolder extends BaseViewHolder {
         final TextView txtUser, txtEmail, txtIsAdmin, txtMessage, txtTime;
         final ImageButton btnMenu;

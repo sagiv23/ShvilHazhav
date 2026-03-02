@@ -97,7 +97,8 @@ public class UsersTableActivity extends BaseActivity {
             }
         })).show());
 
-        adapter = new UsersTableAdapter(currentUser,
+        adapter = adapterService.getUsersTableAdapter();
+        adapter.init(currentUser,
                 new UsersTableAdapter.OnUserActionListener() {
 
                     @Override

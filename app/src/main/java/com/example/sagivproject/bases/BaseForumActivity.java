@@ -79,7 +79,9 @@ public abstract class BaseForumActivity extends BaseActivity {
         }
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ForumAdapter();
+
+        // Use injected adapter from AdapterService
+        adapter = adapterService.getForumAdapter();
         recycler.setAdapter(adapter);
 
         recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {

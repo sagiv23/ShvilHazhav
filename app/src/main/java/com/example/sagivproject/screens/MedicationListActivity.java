@@ -89,7 +89,9 @@ public class MedicationListActivity extends BaseActivity {
         RecyclerView recyclerViewMedications = findViewById(R.id.recyclerView_medications);
         recyclerViewMedications.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new MedicationListAdapter(this, new MedicationListAdapter.OnMedicationActionListener() {
+        // Use injected adapter from AdapterService
+        adapter = adapterService.getMedicationListAdapter();
+        adapter.setListener(new MedicationListAdapter.OnMedicationActionListener() {
             @Override
             public void onEdit(Medication medication) {
                 openMedicationDialog(medication);

@@ -14,14 +14,16 @@ import com.example.sagivproject.models.User;
 import java.text.MessageFormat;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * A RecyclerView adapter for displaying a leaderboard of users based on their game wins.
- * <p>
- * This adapter takes a list of {@link User} objects, sorted by win count, and displays them.
- * It gives a special visual treatment (a trophy emoji) to the top-ranked player.
- * </p>
  */
 public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.ViewHolder> {
+
+    @Inject
+    public LeaderboardAdapter() {
+    }
 
     public void setUsers(List<User> users) {
         setData(users);
@@ -39,7 +41,6 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
         User user = getItem(position);
         holder.tvName.setText(user.getFullName());
 
-        // Add a trophy for the first place user
         if (position == 0 && user.getCountWins() > 0) {
             holder.tvWins.setText(MessageFormat.format("\uD83E\uDD47 {0}", user.getCountWins())); // 🥇
         } else {
