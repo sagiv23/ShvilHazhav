@@ -1,6 +1,7 @@
 # Services
 
-> Interfaces and specialized classes defining the business logic, data access, and orchestration layers.
+> Interfaces and specialized classes defining the business logic, data access, and orchestration
+> layers.
 
 ---
 
