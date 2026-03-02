@@ -79,9 +79,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/text_hebrew"
+                        android:gravity="start"
                         android:text="@string/mail_to_contact"
-                        android:textSize="30sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="30sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -99,9 +99,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/text_hebrew"
+                        android:gravity="start"
                         android:text="@string/contact_text"
-                        android:textSize="25sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="25sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

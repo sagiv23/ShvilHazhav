@@ -67,15 +67,14 @@
                     android:id="@+id/btn_DetailsAboutUser_change_photo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|right"
+                    android:layout_gravity="bottom|start"
                     android:contentDescription="@string/icon_camera"
                     app:backgroundTint="@color/background_color_buttons"
                     app:borderWidth="0dp"
                     app:elevation="4dp"
                     app:fabCustomSize="45dp"
                     app:srcCompat="@drawable/ic_camera"
-                    app:tint="@color/text_color"
-                    tools:ignore="RtlHardcoded" />
+                    app:tint="@color/text_color" />
             </FrameLayout>
 
             <TextView

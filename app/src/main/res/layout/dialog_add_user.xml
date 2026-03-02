@@ -117,9 +117,7 @@
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:textDirection="ltr"
-                android:textSize="23sp"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeWidth="1dp" />
+                android:textSize="23sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout

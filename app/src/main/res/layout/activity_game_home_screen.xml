@@ -56,9 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/text_hebrew"
-                android:gravity="right"
+                android:gravity="start"
                 android:textSize="25sp"
-                tools:ignore="RtlHardcoded"
                 tools:text="ניצחונות: " />
 
             <TextView
@@ -155,87 +154,78 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:gravity="right"
+                        android:gravity="start"
                         android:text="@string/game_rules_text1"
-                        android:textSize="22sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/headline_hebrew"
-                        android:gravity="right"
+                        android:gravity="start"
                         android:text="@string/game_target"
-                        android:textSize="22sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:gravity="right"
+                        android:gravity="start"
                         android:text="@string/game_rules_text2"
-                        android:textSize="22sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/headline_hebrew"
-                        android:gravity="right"
+                        android:gravity="start"
                         android:text="@string/game_procedure"
-                        android:textSize="22sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/text_hebrew"
-                        android:gravity="right"
+                        android:gravity="start"
                         android:text="@string/game_rules_text3"
-                        android:textSize="22sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/text_hebrew"
-                        android:gravity="right"
+                        android:gravity="start"
                         android:text="@string/game_rules_text4"
-                        android:textSize="22sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:gravity="right"
+                        android:gravity="start"
                         android:text="@string/game_rules_text5"
-                        android:textSize="22sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/headline_hebrew"
-                        android:gravity="right"
+                        android:gravity="start"
                         android:text="@string/scoring_method"
-                        android:textSize="22sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/text_hebrew"
-                        android:gravity="right"
+                        android:gravity="start"
                         android:text="@string/game_rules_text6"
-                        android:textSize="22sp"
-                        tools:ignore="RtlHardcoded" />
+                        android:textSize="22sp" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -265,8 +255,7 @@
                     android:fontFamily="@font/headline_hebrew"
                     android:gravity="center"
                     android:text="@string/full_name"
-                    android:textSize="18sp"
-                    tools:ignore="RtlHardcoded" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="0dp"

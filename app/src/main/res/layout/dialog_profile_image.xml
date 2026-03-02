@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
-                android:minWidth="150sp"
+                android:minWidth="150dp"
                 android:text="@string/take_a_photo"
                 android:textSize="22sp" />
 
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
-                android:minWidth="150sp"
+                android:minWidth="150dp"
                 android:text="@string/choose_from_gallery"
                 android:textSize="22sp" />
 
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:fontFamily="@font/text_hebrew"
-                android:minWidth="150sp"
+                android:minWidth="150dp"
                 android:text="@string/delete_img"
                 android:textSize="22sp"
                 android:visibility="gone" />
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/text_hebrew"
-                android:minWidth="150sp"
+                android:minWidth="150dp"
                 android:text="@string/cancel"
                 android:textSize="22sp" />
         </LinearLayout>

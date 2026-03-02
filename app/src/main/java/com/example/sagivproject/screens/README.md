@@ -18,3 +18,8 @@
 | `AiActivity`                                    | AI interaction features                                      |
 | `MathProblemsActivity`                          | Mental stimulation through math challenges                   |
 | `ContactActivity`                               | Support and contact information                              |
+| `AdminForumActivity`                            | Admin view for forum moderation                              |
+| `AdminForumCategoriesActivity`                  | Admin view for managing forum categories                     |
+| `MemoryGameLogsTableActivity`                   | Admin/User view for reviewing game history                   |
+| `MedicationImagesTableActivity`                 | View for managing medication-related image logs              |
+| `SecretActivity`                                | An easter-egg or hidden developer activity                   |

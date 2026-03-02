@@ -95,14 +95,12 @@ public class UsersTableActivity extends BaseActivity {
 
             @Override
             public void onUserClicked(User clickedUser) {
-                // We pass a copy to avoid modifying the list item before the server confirms the update
                 User userCopy = new User(clickedUser);
                 dialogService.showEditUserDialog(userCopy, (fName, lName, birthDate, email, password) -> databaseService.getAuthService().updateUser(userCopy, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
                     @Override
                     public void onSuccess(User updatedUser) {
                         Toast.makeText(UsersTableActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
 
-                        // Replace the user in our master list with the new instance
                         for (int i = 0; i < usersList.size(); i++) {
                             if (usersList.get(i).getId().equals(updatedUser.getId())) {
                                 usersList.set(i, updatedUser);
@@ -203,7 +201,6 @@ public class UsersTableActivity extends BaseActivity {
         databaseService.getUserService().updateUserRole(user.getId(), newRole, new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                // Create a new instance to ensure DiffUtil detects the change
                 User updatedUser = new User(user);
                 updatedUser.setRole(newRole);
 

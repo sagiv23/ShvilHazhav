@@ -29,7 +29,6 @@
             android:gravity="center"
             android:maxLines="1"
             android:textSize="20sp"
-            tools:ignore="RtlHardcoded"
             tools:text="שם פרטי + משפחה" />
 
         <TextView

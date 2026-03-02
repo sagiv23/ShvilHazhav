@@ -28,22 +28,20 @@
             android:id="@+id/txt_itemGameLog_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="start"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/text_hebrew"
             android:textSize="23sp"
-            tools:ignore="RtlHardcoded"
             tools:text="תוצאה: 0 - 0" />
 
         <TextView
             android:id="@+id/txt_itemGameLog_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="start"
             android:fontFamily="@font/text_hebrew"
             android:textColor="@color/headline"
             android:textSize="23sp"
-            tools:ignore="RtlHardcoded"
             tools:text="סטטוס: הסתיים" />
 
     </LinearLayout>
