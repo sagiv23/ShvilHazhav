@@ -99,7 +99,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         }
 
         holder.txtMedicationDetails.setText(med.getDetails());
-        
+
         // Format and display reminder hours
         List<String> reminderHours = med.getReminderHours();
         if (reminderHours != null && !reminderHours.isEmpty()) {

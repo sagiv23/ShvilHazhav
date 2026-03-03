@@ -133,6 +133,7 @@
                         tools:text="43 + 37 =" />
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_MathProblemsPage_answer_container"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginBottom="24dp"

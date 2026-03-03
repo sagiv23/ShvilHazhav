@@ -41,7 +41,7 @@ public class MainApplication extends Application implements Configuration.Provid
     @Override
     public void onCreate() {
         super.onCreate();
-        
+
         // Apply the saved theme preference (Dark Mode / Light Mode)
         boolean isDarkMode = sharedPreferencesUtil.isDarkMode();
         AppCompatDelegate.setDefaultNightMode(isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
@@ -76,12 +76,12 @@ public class MainApplication extends Application implements Configuration.Provid
         dueDate.set(Calendar.HOUR_OF_DAY, 9);
         dueDate.set(Calendar.MINUTE, 0);
         dueDate.set(Calendar.SECOND, 0);
-        
+
         // If 9 AM has already passed today, schedule for tomorrow
         if (dueDate.before(currentDate)) {
             dueDate.add(Calendar.HOUR_OF_DAY, 24);
         }
-        
+
         long timeDiff = dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
 
         PeriodicWorkRequest dailyRequest =

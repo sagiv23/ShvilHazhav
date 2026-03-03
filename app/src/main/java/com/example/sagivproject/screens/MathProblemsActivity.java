@@ -1,6 +1,9 @@
 package com.example.sagivproject.screens;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -9,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -17,6 +21,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.Operation;
+import com.google.android.material.card.MaterialCardView;
 
 import java.text.MessageFormat;
 
@@ -34,9 +39,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MathProblemsActivity extends BaseActivity {
     private final StringBuilder userInput = new StringBuilder();
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private TextView tvCorrect, tvWrong;
     private User user;
     private TextView tvQuestion, tvAnswer;
+    private MaterialCardView cvAnswerContainer;
     private int correctAnswer;
 
     /**
@@ -68,6 +75,7 @@ public class MathProblemsActivity extends BaseActivity {
         Button btnResetStats = findViewById(R.id.btn_MathProblemsPage_resetStats);
         tvQuestion = findViewById(R.id.tv_MathProblemsPage_question);
         tvAnswer = findViewById(R.id.tv_MathProblemsPage_user_answer);
+        cvAnswerContainer = findViewById(R.id.cv_MathProblemsPage_answer_container);
 
         btnResetStats.setOnClickListener(v -> dialogService.showConfirmDialog("איפוס נתונים", "האם לאפס את הנתונים?", "אפס", "בטל", this::resetStats));
 
@@ -222,7 +230,7 @@ public class MathProblemsActivity extends BaseActivity {
 
     /**
      * Checks the user's submitted answer against the correct answer. Updates statistics,
-     * provides feedback via a Toast message, and generates a new problem if correct.
+     * provides visual feedback, and generates a new problem if correct.
      */
     private void checkAnswer() {
         if (userInput.length() == 0) return;
@@ -231,19 +239,34 @@ public class MathProblemsActivity extends BaseActivity {
 
         if (userAnswer == correctAnswer) {
             user.getMathProblemsStats().setCorrectAnswers(user.getMathProblemsStats().getCorrectAnswers() + 1);
-
-            Toast.makeText(this, "נכון! ✅", Toast.LENGTH_SHORT).show();
+            showFeedback(true);
             generateProblem();
             databaseService.getStatsService().addCorrectAnswer(user.getId());
         } else {
             user.getMathProblemsStats().setWrongAnswers(user.getMathProblemsStats().getWrongAnswers() + 1);
-
-            Toast.makeText(this, "טעות, נסה שוב ❌", Toast.LENGTH_SHORT).show();
+            showFeedback(false);
             databaseService.getStatsService().addWrongAnswer(user.getId());
         }
 
         sharedPreferencesUtil.saveUser(user);
-
         updateStatsUI();
+    }
+
+    /**
+     * Provides quick visual feedback by changing the answer container's stroke color.
+     *
+     * @param isCorrect Whether the answer was correct.
+     */
+    private void showFeedback(boolean isCorrect) {
+        int colorRes = isCorrect ? R.color.headline : R.color.error;
+        int color = ContextCompat.getColor(this, colorRes);
+
+        cvAnswerContainer.setStrokeColor(ColorStateList.valueOf(color));
+        tvAnswer.setTextColor(color);
+
+        handler.postDelayed(() -> {
+            cvAnswerContainer.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_color)));
+            tvAnswer.setTextColor(ContextCompat.getColor(this, R.color.text_color));
+        }, 600);
     }
 }

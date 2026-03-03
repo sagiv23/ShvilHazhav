@@ -28,9 +28,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String medicationName = intent.getStringExtra("medication_name");
         int notificationId = intent.getIntExtra("notification_id", 0);
-        
+
         Log.d(TAG, "Alarm received for: " + medicationName);
-        
+
         // Show the notification
         notificationService.showMedicationNotification(medicationName, notificationId);
 

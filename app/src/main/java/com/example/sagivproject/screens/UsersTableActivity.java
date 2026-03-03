@@ -158,6 +158,12 @@ public class UsersTableActivity extends BaseActivity {
         spinnerSearchType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) { // "הכל"
+                    editSearch.setText("");
+                    editSearch.setEnabled(false);
+                } else {
+                    editSearch.setEnabled(true);
+                }
                 filterUsers(editSearch.getText().toString().trim());
             }
 

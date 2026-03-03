@@ -19,7 +19,7 @@ import java.util.List;
  * @param <VH> The type of the {@link RecyclerView.ViewHolder} used by the adapter.
  */
 public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
-    
+
     /**
      * The internal list containing the data items to be displayed.
      */
