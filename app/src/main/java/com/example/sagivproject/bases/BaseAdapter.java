@@ -9,18 +9,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A generic base adapter that handles list management and DiffUtil updates.
+ * A generic base adapter for {@link RecyclerView} that simplifies list management and data updates.
+ * <p>
+ * This class uses {@link DiffUtil} to calculate the minimum number of changes needed to update
+ * the list, providing smooth animations and better performance compared to {@code notifyDataSetChanged()}.
+ * </p>
  *
- * @param <T>  The type of data, must implement Idable.
- * @param <VH> The ViewHolder type.
+ * @param <T>  The type of the data items, which must implement the {@link Idable} interface.
+ * @param <VH> The type of the {@link RecyclerView.ViewHolder} used by the adapter.
  */
 public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+    
+    /**
+     * The internal list containing the data items to be displayed.
+     */
     protected final List<T> dataList = new ArrayList<>();
 
     /**
-     * Updates the data set and dispatches updates to the adapter using DiffUtil.
+     * Updates the current data set with a new list of items.
+     * <p>
+     * This method triggers a {@link DiffUtil} calculation to determine the differences between
+     * the old and new lists and automatically dispatches the necessary update events to the adapter.
+     * </p>
      *
-     * @param newData The new list of data.
+     * @param newData The new list of data items to display.
      */
     public void setData(List<T> newData) {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallback(this.dataList, newData));
@@ -29,25 +41,40 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
         diffResult.dispatchUpdatesTo(this);
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     *
+     * @return The size of the internal data list.
+     */
     @Override
     public int getItemCount() {
         return dataList.size();
     }
 
     /**
-     * Gets the item at the specified position.
+     * Retrieves the data item at the specified position in the list.
      *
-     * @param position The position of the item in the list.
-     * @return The item at the given position.
+     * @param position The index of the item to retrieve.
+     * @return The data item at the given position.
+     * @throws IndexOutOfBoundsException If the position is out of range.
      */
     protected T getItem(int position) {
         return dataList.get(position);
     }
 
+    /**
+     * Internal callback class for {@link DiffUtil} to compare items in the list.
+     */
     private class DiffCallback extends DiffUtil.Callback {
         private final List<T> oldList;
         private final List<T> newList;
 
+        /**
+         * Constructs a new DiffCallback.
+         *
+         * @param oldList The current list of items.
+         * @param newList The new list of items.
+         */
         public DiffCallback(List<T> oldList, List<T> newList) {
             this.oldList = oldList;
             this.newList = newList;
@@ -63,6 +90,9 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
             return newList.size();
         }
 
+        /**
+         * Checks if two items represent the same entity (usually by comparing IDs).
+         */
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
             T oldItem = oldList.get(oldItemPosition);
@@ -71,6 +101,10 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
             return oldItem.getId().equals(newItem.getId());
         }
 
+        /**
+         * Checks if the contents of two items are the same.
+         * This usually relies on the {@code equals} method of the data type {@code T}.
+         */
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
             return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));

@@ -18,13 +18,25 @@ import javax.inject.Inject;
 
 /**
  * A RecyclerView adapter for displaying a leaderboard of users based on their game wins.
+ * <p>
+ * This adapter manages the display of usernames and their respective win counts.
+ * It highlights the top-ranked user with a special icon.
+ * </p>
  */
 public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.ViewHolder> {
-
+    /**
+     * Constructs a new LeaderboardAdapter.
+     * Hilt uses this constructor to provide an instance.
+     */
     @Inject
     public LeaderboardAdapter() {
     }
 
+    /**
+     * Sets the list of users to be displayed in the leaderboard.
+     *
+     * @param users The list of {@link User} objects, typically sorted by wins.
+     */
     public void setUsers(List<User> users) {
         setData(users);
     }
@@ -41,6 +53,7 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
         User user = getItem(position);
         holder.tvName.setText(user.getFullName());
 
+        // Special handling for the first place (gold medal icon)
         if (position == 0 && user.getCountWins() > 0) {
             holder.tvWins.setText(MessageFormat.format("\uD83E\uDD47 {0}", user.getCountWins())); // 🥇
         } else {
@@ -48,9 +61,17 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
         }
     }
 
+    /**
+     * ViewHolder class for leaderboard items.
+     */
     public static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView tvName, tvWins;
 
+        /**
+         * Initializes the ViewHolder with the item view.
+         *
+         * @param itemView The view representing a single leaderboard row.
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_ItemUserRank_user_name);

@@ -38,6 +38,7 @@ import javax.inject.Inject;
  * This adapter handles the binding of forum message data to the corresponding views,
  * includes functionality for Text-to-Speech (TTS) to read messages aloud, and
  * provides a menu for message-specific actions based on user permissions.
+ * It uses a custom Hebrew font for a consistent UI experience.
  * </p>
  */
 public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
@@ -48,12 +49,18 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Constructs a new ForumAdapter.
-     * Hilt uses this constructor to provide an instance.
+     * Hilt uses this constructor to provide an instance via dependency injection.
      */
     @Inject
     public ForumAdapter() {
     }
 
+    /**
+     * Initializes the TextToSpeech engine.
+     *
+     * @param v   A view to get the context from.
+     * @param msg The message to speak once initialization is successful.
+     */
     private void initTTS(View v, ForumMessage msg) {
         if (tts == null) {
             tts = new TextToSpeech(v.getContext(), status -> {
@@ -88,6 +95,11 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         }
     }
 
+    /**
+     * Finds an item by its ID and notifies the adapter that its data has changed.
+     *
+     * @param msgId The ID of the message that changed.
+     */
     private void notifyItemChangedById(String msgId) {
         for (int i = 0; i < dataList.size(); i++) {
             if (dataList.get(i).getId().equals(msgId)) {
@@ -98,7 +110,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     }
 
     /**
-     * Sets the listener for message actions.
+     * Sets the listener for message actions like deletion.
      *
      * @param listener The listener to be notified of user actions.
      */
@@ -106,10 +118,20 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         this.listener = listener;
     }
 
+    /**
+     * Updates the adapter's data set with a new list of forum messages.
+     *
+     * @param newMessages The new list of messages.
+     */
     public void setMessages(List<ForumMessage> newMessages) {
         setData(newMessages);
     }
 
+    /**
+     * Removes a specific message from the list and notifies the adapter.
+     *
+     * @param message The message to remove.
+     */
     public void removeMessage(ForumMessage message) {
         int index = dataList.indexOf(message);
         if (index != -1) {
@@ -173,14 +195,14 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
             }
         });
 
-        // Show or hide the menu button based on permissions
+        // Show or hide the menu button based on permissions (provided by the listener)
         if (listener != null && listener.isShowMenuOptions(msg)) {
             holder.btnMenu.setVisibility(View.VISIBLE);
             holder.btnMenu.setOnClickListener(v -> {
                 PopupMenu popup = new PopupMenu(v.getContext(), holder.btnMenu);
                 popup.getMenuInflater().inflate(R.menu.menu_forum_message, popup.getMenu());
 
-                // Apply custom font and size to the menu item
+                // Apply custom font and size to the menu item for accessibility and styling
                 MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
                 if (deleteItem != null && customFont != null) {
                     SpannableString title = new SpannableString(deleteItem.getTitle());
@@ -203,6 +225,11 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         }
     }
 
+    /**
+     * Uses the TTS engine to speak the given forum message.
+     *
+     * @param msg The message to speak.
+     */
     private void speak(ForumMessage msg) {
         if (tts != null) {
             Bundle params = new Bundle();
@@ -213,6 +240,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Cleans up resources, such as the TextToSpeech engine, when the adapter is no longer needed.
+     * This should be called from the Activity's {@code onDestroy} method.
      */
     public void onDestroy() {
         if (tts != null) {
@@ -226,14 +254,14 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      */
     public interface ForumMessageListener {
         /**
-         * Called when a message item is clicked (e.g., for deletion).
+         * Called when a message item is clicked (e.g., to trigger a deletion flow).
          *
          * @param message The message that was clicked.
          */
         void onClick(ForumMessage message);
 
         /**
-         * Determines whether the action menu should be shown for a given message.
+         * Determines whether the action menu (e.g., delete) should be shown for a given message.
          *
          * @param message The message to check.
          * @return True to show the menu, false otherwise.
@@ -249,6 +277,11 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         final ImageButton btnMenu;
         final MaterialButton btnSpeak;
 
+        /**
+         * Initializes the ViewHolder with the item view.
+         *
+         * @param itemView The view representing a single forum message.
+         */
         public ForumViewHolder(@NonNull View itemView) {
             super(itemView);
             txtUser = itemView.findViewById(R.id.ItemForumMessageTxtUser);
@@ -261,6 +294,9 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         }
     }
 
+    /**
+     * Abstract base ViewHolder class for the forum, providing a common structure if needed.
+     */
     private abstract static class BaseViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         public BaseViewHolder(@NonNull View itemView) {
             super(itemView);

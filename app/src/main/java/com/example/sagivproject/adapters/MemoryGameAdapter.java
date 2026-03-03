@@ -20,21 +20,40 @@ import javax.inject.Inject;
 
 /**
  * A RecyclerView adapter for displaying the cards in the memory game.
+ * <p>
+ * This adapter manages the visual state of the game cards, including their revealed/hidden status,
+ * matching animations, and click handling. It uses {@link ImageUtil} to load card images from Base64 strings.
+ * </p>
  */
 public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardViewHolder> {
     private static final int CAMERA_DISTANCE = 8000;
     private final ImageUtil imageUtil;
     private MemoryGameListener listener;
 
+    /**
+     * Constructs a new MemoryGameAdapter.
+     *
+     * @param imageUtil A utility for loading and processing images.
+     */
     @Inject
     public MemoryGameAdapter(ImageUtil imageUtil) {
         this.imageUtil = imageUtil;
     }
 
+    /**
+     * Sets the listener for game interaction events.
+     *
+     * @param listener The listener to be notified when a card is clicked.
+     */
     public void setListener(MemoryGameListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Updates the list of cards in the game.
+     *
+     * @param cards The new list of {@link Card} objects.
+     */
     public void setCards(List<Card> cards) {
         setData(cards);
     }
@@ -50,6 +69,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         Card card = getItem(position);
 
+        // Reset animations and transformations to prevent visual artifacts during recycling
         holder.itemView.animate().cancel();
         holder.cardImage.animate().cancel();
 
@@ -59,6 +79,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         holder.itemView.setAlpha(1f);
         holder.cardImage.setRotationY(0f);
 
+        // Display card content or back based on state
         if (card.getIsMatched() || card.getIsRevealed()) {
             imageUtil.loadImage(card.getBase64Content(), holder.cardImage);
 
@@ -69,6 +90,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
             holder.cardImage.setImageResource(R.drawable.fold_card_img);
         }
 
+        // Handle flip animations based on state transitions
         if (card.getIsRevealed() && !card.wasRevealed()) {
             animateFlipOpen(holder.cardImage, card.getBase64Content());
             card.setWasRevealed(true);
@@ -77,6 +99,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
             card.setWasRevealed(false);
         }
 
+        // Determine clickability based on game turn and card state
         boolean isMyTurn = listener instanceof MemoryGameActivity && ((MemoryGameActivity) listener).isMyTurn();
         holder.itemView.setClickable(isMyTurn && !card.getIsMatched() && !card.getIsRevealed());
 
@@ -95,6 +118,12 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         holder.cardImage.animate().cancel();
     }
 
+    /**
+     * Animates the card flipping to reveal its content.
+     *
+     * @param imageView The ImageView to animate.
+     * @param base64    The Base64 string of the image to reveal.
+     */
     private void animateFlipOpen(ImageView imageView, String base64) {
         imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
             Runnable flipIn = () -> {
@@ -112,6 +141,11 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }).start();
     }
 
+    /**
+     * Animates the card flipping back to its hidden state.
+     *
+     * @param imageView The ImageView to animate.
+     */
     private void animateFlipClose(ImageView imageView) {
         imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
             imageView.setImageResource(R.drawable.fold_card_img);
@@ -120,6 +154,12 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }).start();
     }
 
+    /**
+     * Performs a shake animation to indicate an error (e.g., mismatched cards).
+     *
+     * @param position     The position of the card to animate.
+     * @param recyclerView The RecyclerView containing the card.
+     */
     public void animateError(int position, RecyclerView recyclerView) {
         CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
@@ -132,6 +172,12 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }
     }
 
+    /**
+     * Performs a scale animation to indicate success (e.g., matched cards).
+     *
+     * @param position     The position of the card to animate.
+     * @param recyclerView The RecyclerView containing the card.
+     */
     public void animateSuccess(int position, RecyclerView recyclerView) {
         CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
@@ -142,13 +188,30 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }
     }
 
+    /**
+     * An interface for handling card click events in the memory game.
+     */
     public interface MemoryGameListener {
+        /**
+         * Called when a card is clicked.
+         *
+         * @param card     The card that was clicked.
+         * @param position The position of the card in the list.
+         */
         void onCardClicked(Card card, int position);
     }
 
+    /**
+     * A ViewHolder that describes a card item view and metadata about its place within the RecyclerView.
+     */
     public static class CardViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final ImageView cardImage;
 
+        /**
+         * Initializes the ViewHolder with the item view and sets the camera distance for 3D flip effects.
+         *
+         * @param itemView The view representing a single card.
+         */
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
             cardImage = itemView.findViewById(R.id.img_ItemCard_card_image);

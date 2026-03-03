@@ -31,20 +31,39 @@ import dagger.hilt.android.qualifiers.ActivityContext;
 
 /**
  * A RecyclerView adapter for displaying a list of a user's {@link Medication} objects.
+ * <p>
+ * This adapter handles displaying medication details, including name, type, and reminder hours.
+ * It also provides an action menu for each item to allow editing or deleting medications.
+ * </p>
  */
 public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
     private OnMedicationActionListener listener;
 
+    /**
+     * Constructs a new MedicationListAdapter.
+     *
+     * @param context The activity context, provided by Hilt.
+     */
     @Inject
     public MedicationListAdapter(@ActivityContext Context context) {
         this.context = context;
     }
 
+    /**
+     * Sets the listener for medication actions (edit, delete).
+     *
+     * @param listener The listener to be notified of user actions.
+     */
     public void setListener(OnMedicationActionListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Updates the data set with a new list of medications.
+     *
+     * @param medications The new list of {@link Medication} objects.
+     */
     public void setMedications(List<Medication> medications) {
         setData(medications);
     }
@@ -62,6 +81,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
         Typeface typeface = ResourcesCompat.getFont(context, R.font.text_hebrew);
 
+        // Apply custom font to the medication name
         if (typeface != null) {
             SpannableString nameSpannable = new SpannableString(med.getName());
             nameSpannable.setSpan(new CustomTypefaceSpan("", typeface), 0, nameSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -70,6 +90,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
             holder.txtMedicationName.setText(med.getName());
         }
 
+        // Display medication type if available
         if (med.getType() != null) {
             holder.txtMedicationType.setText(med.getType().getDisplayName());
             holder.txtMedicationType.setVisibility(View.VISIBLE);
@@ -78,6 +99,8 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         }
 
         holder.txtMedicationDetails.setText(med.getDetails());
+        
+        // Format and display reminder hours
         List<String> reminderHours = med.getReminderHours();
         if (reminderHours != null && !reminderHours.isEmpty()) {
             holder.txtMedicationHours.setText(String.format("שעות: %s", TextUtils.join(", ", reminderHours)));
@@ -86,10 +109,12 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
             holder.txtMedicationHours.setVisibility(View.GONE);
         }
 
+        // Set up the popup menu for edit/delete actions
         holder.btnMenu.setOnClickListener(v -> {
             PopupMenu menu = new PopupMenu(context, v);
             menu.inflate(R.menu.menu_medication_item);
 
+            // Style menu items with custom font
             if (typeface != null) {
                 for (int i = 0; i < menu.getMenu().size(); i++) {
                     MenuItem item = menu.getMenu().getItem(i);
@@ -119,12 +144,24 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         });
     }
 
+    /**
+     * An interface for handling actions on a medication item.
+     */
     public interface OnMedicationActionListener {
+        /**
+         * Called when the edit action is selected for a medication.
+         */
         void onEdit(Medication medication);
 
+        /**
+         * Called when the delete action is selected for a medication.
+         */
         void onDelete(Medication medication);
     }
 
+    /**
+     * ViewHolder class for medication list items.
+     */
     public static class MedicationViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView txtMedicationName, txtMedicationType, txtMedicationDetails, txtMedicationHours;
         final ImageButton btnMenu;

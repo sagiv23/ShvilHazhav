@@ -19,9 +19,9 @@ import javax.inject.Inject;
 /**
  * A RecyclerView adapter for displaying a list of {@link ForumCategory} objects.
  * <p>
- * This adapter handles the binding of category data to the corresponding views.
- * It supports different appearances and actions based on whether the user is an admin,
- * such as showing a delete button for each category.
+ * This adapter manages the display of forum categories and provides different
+ * functional modes (admin vs. regular user). In admin mode, it enables editing
+ * and deletion of categories.
  * </p>
  */
 public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCategoryAdapter.CategoryViewHolder> {
@@ -37,20 +37,30 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
     }
 
     /**
-     * Initializes the adapter with a listener and admin status.
+     * Initializes the adapter with a listener and sets the admin status.
      *
-     * @param listener The listener for category interaction events (click, delete).
-     * @param isAdmin  True if the adapter should be in admin mode, false otherwise.
+     * @param listener The listener for handling category interaction events.
+     * @param isAdmin  True if the current user is an admin, enabling edit/delete actions.
      */
     public void init(OnCategoryInteractionListener listener, boolean isAdmin) {
         this.listener = listener;
         this.isAdmin = isAdmin;
     }
 
+    /**
+     * Updates the data set with a new list of categories.
+     *
+     * @param newCategories The new list of {@link ForumCategory} objects.
+     */
     public void setCategories(List<ForumCategory> newCategories) {
         setData(newCategories);
     }
 
+    /**
+     * Removes a specific category from the adapter's list.
+     *
+     * @param category The category to remove.
+     */
     public void removeCategory(ForumCategory category) {
         int index = dataList.indexOf(category);
         if (index != -1) {
@@ -97,35 +107,27 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
     public interface OnCategoryInteractionListener {
         /**
          * Called when the delete button for a category is clicked.
-         *
-         * @param category The category to be deleted.
          */
         void onDelete(ForumCategory category);
 
         /**
          * Called when the edit button for a category is clicked.
-         *
-         * @param category The category to be edited.
          */
         void onEdit(ForumCategory category);
 
         /**
          * Called when a category item is long-clicked.
-         *
-         * @param category The category that was long-clicked.
          */
         void onLongClick(ForumCategory category);
 
         /**
          * Called when a category item is clicked.
-         *
-         * @param category The category that was clicked.
          */
         void onClick(ForumCategory category);
     }
 
     /**
-     * A ViewHolder that describes an item view and metadata about its place within the RecyclerView.
+     * ViewHolder class for forum category items.
      */
     public static class CategoryViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView categoryName;
