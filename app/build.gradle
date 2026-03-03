@@ -44,7 +44,6 @@ dependencies {
     implementation libs.annotation
     implementation libs.lifecycle.livedata.ktx
     implementation libs.lifecycle.viewmodel.ktx
-    implementation libs.localagents.fc
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -58,5 +57,4 @@ dependencies {
     annotationProcessor libs.hilt.work
     implementation libs.firebase.ai
     implementation libs.guava
-    implementation libs.reactive.streams
 }
