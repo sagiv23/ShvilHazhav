@@ -9,7 +9,7 @@ import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
-import com.example.sagivproject.services.IGameService;
+import com.example.sagivproject.services.IMemoryGameService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -28,14 +28,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 
 /**
- * An implementation of the {@link IGameService} interface for managing the memory game.
+ * An implementation of the {@link IMemoryGameService} interface for managing the memory game.
  * <p>
  * This service handles all aspects of the game lifecycle, including matchmaking (finding or creating rooms),
  * managing game state in real-time, handling player moves, updating scores, and determining the winner.
  * It also manages listeners for game state changes and handles player disconnections.
  * </p>
  */
-public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IGameService {
+public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> implements IMemoryGameService {
     private static final String ROOMS_PATH = "rooms";
     private static final String USERS_PATH = "users";
     private static final String TAG = "GameServiceImpl"; // Added TAG for logging
@@ -68,7 +68,7 @@ public class GameServiceImpl extends BaseDatabaseService<GameRoom> implements IG
      * @param firebaseDatabase The FirebaseDatabase instance.
      */
     @Inject
-    public GameServiceImpl(FirebaseDatabase firebaseDatabase) {
+    public MemoryGameServiceImpl(FirebaseDatabase firebaseDatabase) {
         super(ROOMS_PATH, GameRoom.class);
         this.roomsReference = firebaseDatabase.getReference(ROOMS_PATH);
         this.usersReference = firebaseDatabase.getReference(USERS_PATH);

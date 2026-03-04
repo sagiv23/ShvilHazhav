@@ -18,7 +18,7 @@ public class DatabaseService implements IDatabaseService {
     private final IAuthService authService;
     private final IUserService userService;
     private final IMedicationService medicationService;
-    private final IGameService gameService;
+    private final IMemoryGameService gameService;
     private final IStatsService statsService;
     private final IForumService forumService;
     private final IImageService imageService;
@@ -43,7 +43,7 @@ public class DatabaseService implements IDatabaseService {
             IAuthService authService,
             IUserService userService,
             IMedicationService medicationService,
-            IGameService gameService,
+            IMemoryGameService gameService,
             IStatsService statsService,
             IForumService forumService,
             IImageService imageService,
@@ -77,7 +77,7 @@ public class DatabaseService implements IDatabaseService {
     }
 
     @Override
-    public IGameService getGameService() {
+    public IMemoryGameService getGameService() {
         return gameService;
     }
 

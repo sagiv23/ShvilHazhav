@@ -121,7 +121,6 @@
     <string name="medication_notif_body">הגיע הזמן לקחת את התרופה: %1$s</string>
     <string name="birthday_notif_title">מזל טוב!</string>
     <string name="birthday_notif_body">יום הולדת שמח, %1$s! מאחלים לך בריאות ואושר.</string>
-    <string name="medication_summary_title">תזכורות לתרופות</string>
     <string name="edit">עריכה</string>
     <string name="playback_answer">השמעת תשובה</string>
     <string name="playback">השמעה</string>

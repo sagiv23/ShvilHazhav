@@ -8,7 +8,7 @@ import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IForumCategoriesService;
 import com.example.sagivproject.services.IForumService;
-import com.example.sagivproject.services.IGameService;
+import com.example.sagivproject.services.IMemoryGameService;
 import com.example.sagivproject.services.IImageService;
 import com.example.sagivproject.services.IMedicationService;
 import com.example.sagivproject.services.IStatsService;
@@ -17,7 +17,7 @@ import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.services.impl.AuthServiceImpl;
 import com.example.sagivproject.services.impl.ForumCategoriesServiceImpl;
 import com.example.sagivproject.services.impl.ForumServiceImpl;
-import com.example.sagivproject.services.impl.GameServiceImpl;
+import com.example.sagivproject.services.impl.MemoryGameServiceImpl;
 import com.example.sagivproject.services.impl.ImageServiceImpl;
 import com.example.sagivproject.services.impl.MedicationServiceImpl;
 import com.example.sagivproject.services.impl.StatsServiceImpl;
@@ -94,7 +94,7 @@ public abstract class AppModule {
 
     @Binds
     @Singleton
-    public abstract IGameService bindGameService(GameServiceImpl gameService);
+    public abstract IMemoryGameService bindGameService(MemoryGameServiceImpl gameService);
 
     @Binds
     @Singleton

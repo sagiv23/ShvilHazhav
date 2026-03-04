@@ -32,9 +32,9 @@ public interface IDatabaseService {
     /**
      * Gets the game management service.
      *
-     * @return The {@link IGameService} instance.
+     * @return The {@link IMemoryGameService} instance.
      */
-    IGameService getGameService();
+    IMemoryGameService getGameService();
 
     /**
      * Gets the statistics management service.

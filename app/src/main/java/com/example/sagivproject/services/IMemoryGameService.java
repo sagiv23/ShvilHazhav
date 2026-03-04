@@ -18,7 +18,7 @@ import java.util.List;
  * and setting up real-time listeners.
  * </p>
  */
-public interface IGameService {
+public interface IMemoryGameService {
     /**
      * Finds an existing waiting room or creates a new one if none is available.
      *

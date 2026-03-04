@@ -23,7 +23,7 @@ import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
-import com.example.sagivproject.services.IGameService;
+import com.example.sagivproject.services.IMemoryGameService;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -271,7 +271,7 @@ public class GameHomeScreenActivity extends BaseActivity {
             cancelSearch();
             return;
         }
-        databaseService.getGameService().listenToRoomStatus(roomId, new IGameService.IRoomStatusCallback() {
+        databaseService.getGameService().listenToRoomStatus(roomId, new IMemoryGameService.IRoomStatusCallback() {
             @Override
             public void onRoomStarted(GameRoom startedRoom) {
                 if (gameStarted) return;

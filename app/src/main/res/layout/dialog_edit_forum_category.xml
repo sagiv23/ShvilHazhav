@@ -23,7 +23,6 @@
             android:textSize="35sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputLayoutEditCategoryName"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
