@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.models.User;
+import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import javax.inject.Inject;
 
@@ -24,10 +26,21 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Inject
     AlarmScheduler alarmScheduler;
 
+    @Inject
+    SharedPreferencesUtil sharedPreferencesUtil;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        String medicationId = intent.getStringExtra("medication_id");
         String medicationName = intent.getStringExtra("medication_name");
         int notificationId = intent.getIntExtra("notification_id", 0);
+
+        // Check if the medication still exists in the user's cache
+        User user = sharedPreferencesUtil.getUser();
+        if (user == null || user.getMedications() == null || !user.getMedications().containsKey(medicationId)) {
+            Log.d(TAG, "Medication " + medicationName + " (ID: " + medicationId + ") no longer exists. Skipping notification and reschedule.");
+            return;
+        }
 
         Log.d(TAG, "Alarm received for: " + medicationName);
 

@@ -94,6 +94,9 @@ public class AlarmScheduler {
         }
     }
 
+    /**
+     * Cancels all scheduled alarms for a given medication.
+     */
     public void cancel(Medication medication) {
         if (medication.getReminderHours() == null) {
             return;
@@ -102,13 +105,19 @@ public class AlarmScheduler {
         for (String hourStr : medication.getReminderHours()) {
             Intent intent = new Intent(context, AlarmReceiver.class);
             int requestCode = (medication.getId() + hourStr).hashCode();
+            
+            // Try to find the existing PendingIntent to cancel it
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
                     context,
                     requestCode,
                     intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                    PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
             );
-            alarmManager.cancel(pendingIntent);
+            
+            if (pendingIntent != null) {
+                alarmManager.cancel(pendingIntent);
+                pendingIntent.cancel();
+            }
         }
     }
 }

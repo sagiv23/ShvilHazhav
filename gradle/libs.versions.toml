@@ -1,5 +1,5 @@
 [versions]
-agp = "9.0.1"
+agp = "9.1.0"
 gson = "2.13.2"
 guava = "33.5.0-android"
 hiltAndroid = "2.59.2"
