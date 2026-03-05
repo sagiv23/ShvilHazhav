@@ -122,7 +122,10 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param callback The callback to be invoked with the updated entity.
      */
     protected void update(@NotNull final String id, final @NotNull UnaryOperator<T> function, @Nullable final IDatabaseService.DatabaseCallback<T> callback) {
-        runTransaction(path + "/" + id, function, callback);
+        runTransaction(path + "/" + id, currentValue -> {
+            if (currentValue == null) return null;
+            return function.apply(currentValue);
+        }, callback);
     }
 
     // region low-level helpers
@@ -248,10 +251,8 @@ public abstract class BaseDatabaseService<T extends Idable> {
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                 T currentValue = currentData.getValue(clazz);
-                if (currentValue != null) {
-                    currentValue = function.apply(currentValue);
-                }
-                currentData.setValue(currentValue);
+                T newValue = function.apply(currentValue);
+                currentData.setValue(newValue);
                 return Transaction.success(currentData);
             }
 

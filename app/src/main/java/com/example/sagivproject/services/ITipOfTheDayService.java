@@ -14,10 +14,10 @@ public interface ITipOfTheDayService {
     void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay> callback);
 
     /**
-     * Saves the tip for the current day.
+     * Saves the tip for the current day only if it doesn't already exist, using a transaction.
      *
-     * @param tip      The tip to save.
-     * @param callback The callback to be invoked upon completion.
+     * @param tip      The tip object to save.
+     * @param callback The callback to be invoked with the final tip (either the new one or the existing one).
      */
-    void saveTipForToday(String tip, IDatabaseService.DatabaseCallback<Void> callback);
+    void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback);
 }

@@ -8,6 +8,7 @@ import com.example.sagivproject.services.ITipOfTheDayService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -43,16 +44,17 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
     }
 
     /**
-     * Saves the tip for the current day to the database.
+     * Saves the tip for the current day only if it doesn't already exist, using a transaction.
      *
-     * @param tip      The tip to save.
-     * @param callback The callback to be invoked upon completion.
+     * @param tip      The tip object to save.
+     * @param callback The callback to be invoked with the final tip (either the new one or the existing one).
      */
     @Override
-    public void saveTipForToday(String tip, IDatabaseService.DatabaseCallback<Void> callback) {
-        String today = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date());
-        TipOfTheDay tipOfTheDay = new TipOfTheDay(tip, today);
-        tipOfTheDay.setId(today);
-        create(tipOfTheDay, callback);
+    public void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
+        runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> {
+            // If there's already a tip for today, we don't overwrite it.
+            return Objects.requireNonNullElse(currentTip, tip);
+            // Otherwise, we set the new tip.
+        }, callback);
     }
 }

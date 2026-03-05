@@ -193,12 +193,17 @@ public class TipOfTheDayActivity extends BaseActivity {
                     text = "לא התקבלה תשובה.";
                 }
 
+                String today = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+                TipOfTheDay newTip = new TipOfTheDay(text, today);
+                newTip.setId(today);
+
                 String finalText = text;
-                databaseService.getTipOfTheDayService().saveTipForToday(finalText, new IDatabaseService.DatabaseCallback<>() {
+                databaseService.getTipOfTheDayService().saveTipIfNotExists(newTip, new IDatabaseService.DatabaseCallback<>() {
                     @Override
-                    public void onCompleted(Void result) {
+                    public void onCompleted(TipOfTheDay finalResult) {
+                        String tipToDisplay = (finalResult != null) ? finalResult.getTip() : finalText;
                         tipContent.setAlpha(0f);
-                        tipContent.setText(finalText);
+                        tipContent.setText(tipToDisplay);
                         tipContent.animate().alpha(1f).setDuration(800).withEndAction(() -> btnTipSpeak.setVisibility(View.VISIBLE));
                     }
 
