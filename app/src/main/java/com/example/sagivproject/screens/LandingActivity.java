@@ -13,12 +13,15 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * The initial landing screen for users who are not logged in.
  * <p>
  * This activity provides options to navigate to the Login, Register, or Contact screens.
  * </p>
  */
+@AndroidEntryPoint
 public class LandingActivity extends BaseActivity implements BaseActivity.RequiresPermissions {
 
     /**

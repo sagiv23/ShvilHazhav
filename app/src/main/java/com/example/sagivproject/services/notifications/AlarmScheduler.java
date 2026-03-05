@@ -105,7 +105,7 @@ public class AlarmScheduler {
         for (String hourStr : medication.getReminderHours()) {
             Intent intent = new Intent(context, AlarmReceiver.class);
             int requestCode = (medication.getId() + hourStr).hashCode();
-            
+
             // Try to find the existing PendingIntent to cancel it
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
                     context,
@@ -113,7 +113,7 @@ public class AlarmScheduler {
                     intent,
                     PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
             );
-            
+
             if (pendingIntent != null) {
                 alarmManager.cancel(pendingIntent);
                 pendingIntent.cancel();

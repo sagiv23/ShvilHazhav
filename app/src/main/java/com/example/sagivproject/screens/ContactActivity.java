@@ -17,12 +17,15 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * A simple activity to display contact information.
  * <p>
  * This screen shows static contact details and includes the standard top menu.
  * </p>
  */
+@AndroidEntryPoint
 public class ContactActivity extends BaseActivity {
     private static final int LONG_PRESS_DURATION = 4000;
     private final Handler handler = new Handler(Looper.getMainLooper());

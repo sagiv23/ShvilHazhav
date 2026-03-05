@@ -1,5 +1,6 @@
 package com.example.sagivproject.services.impl;
 
+import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.ITipOfTheDayService;

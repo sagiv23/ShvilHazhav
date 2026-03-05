@@ -37,15 +37,17 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * An activity that allows users to interact with a generative AI model.
  * Users can ask questions and receive answers from the AI.
  * Includes Text-to-Speech capability to hear the AI's response.
  */
+@AndroidEntryPoint
 public class AiActivity extends BaseActivity {
     private ChatFutures chatSession;
-    private Button send;
-    private Button speakBtn;
+    private Button send, speakBtn;
     private ProgressBar progressBar;
     private EditText questionInput;
     private TextView answerView;

@@ -14,6 +14,8 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * An activity for the administrator's main page.
  * <p>
@@ -21,6 +23,7 @@ import com.example.sagivproject.models.User;
  * viewing medication images, accessing game logs, and managing forum categories.
  * </p>
  */
+@AndroidEntryPoint
 public class AdminPageActivity extends BaseActivity {
 
     /**

@@ -14,7 +14,6 @@ import java.io.Serializable;
 public class ForumCategory implements Serializable, Idable {
     private String id;
     private String name;
-    private long orderTimestamp;
 
     /**
      * Default constructor required for calls to DataSnapshot.getValue(ForumCategory.class).
@@ -31,7 +30,6 @@ public class ForumCategory implements Serializable, Idable {
     public ForumCategory(String id, String name) {
         this.id = id;
         this.name = name;
-        this.orderTimestamp = -System.currentTimeMillis(); // Use negative value for descending order by default
     }
 
     @Override
@@ -52,21 +50,12 @@ public class ForumCategory implements Serializable, Idable {
         this.name = name;
     }
 
-    public long getOrderTimestamp() {
-        return orderTimestamp;
-    }
-
-    public void setOrderTimestamp(long orderTimestamp) {
-        this.orderTimestamp = orderTimestamp;
-    }
-
     @NonNull
     @Override
     public String toString() {
         return "ForumCategory{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", orderTimestamp=" + orderTimestamp +
                 '}';
     }
 }

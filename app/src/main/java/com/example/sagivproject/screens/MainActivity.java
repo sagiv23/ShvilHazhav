@@ -15,6 +15,8 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * The main screen for logged-in users.
  * <p>
@@ -23,6 +25,7 @@ import com.example.sagivproject.models.User;
  * a welcome message.
  * </p>
  */
+@AndroidEntryPoint
 public class MainActivity extends BaseActivity implements BaseActivity.RequiresPermissions {
 
     /**
@@ -69,6 +72,3 @@ public class MainActivity extends BaseActivity implements BaseActivity.RequiresP
         }
     }
 }
-/*
-https://1drv.ms/w/c/b29d00b16b90197e/IQB5GYxFy5jcSqn2ijhKrBt5AZ-i9bVXCN5uMkeosIqI23I?e=O2m3N9
- */

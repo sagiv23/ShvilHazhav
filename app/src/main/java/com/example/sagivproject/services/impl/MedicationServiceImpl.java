@@ -3,6 +3,7 @@ package com.example.sagivproject.services.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IMedicationService;

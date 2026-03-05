@@ -2,6 +2,7 @@ package com.example.sagivproject.services.impl;
 
 import androidx.annotation.NonNull;
 
+import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IForumCategoriesService;
