@@ -5,6 +5,7 @@ import com.example.sagivproject.adapters.ForumCategoryAdapter;
 import com.example.sagivproject.adapters.LeaderboardAdapter;
 import com.example.sagivproject.adapters.MedicationImagesTableAdapter;
 import com.example.sagivproject.adapters.MedicationListAdapter;
+import com.example.sagivproject.adapters.MedicationUsageAdapter;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.adapters.MemoryGameLogAdapter;
 import com.example.sagivproject.adapters.UsersTableAdapter;
@@ -15,11 +16,6 @@ import dagger.hilt.android.scopes.ActivityScoped;
 
 /**
  * A service that provides access to all RecyclerView adapters used in the application.
- * <p>
- * This class uses Hilt to inject and manage the lifecycle of various adapters.
- * By centralizing adapter access, it simplifies dependency management in Activities
- * and ensures that adapters requiring Activity context are correctly instantiated.
- * </p>
  */
 @ActivityScoped
 public class AdapterService {
@@ -31,6 +27,7 @@ public class AdapterService {
     private final UsersTableAdapter usersTableAdapter;
     private final MedicationImagesTableAdapter medicationImagesTableAdapter;
     private final LeaderboardAdapter leaderboardAdapter;
+    private final MedicationUsageAdapter medicationUsageAdapter;
 
     @Inject
     public AdapterService(
@@ -41,7 +38,8 @@ public class AdapterService {
             MemoryGameLogAdapter memoryGameLogAdapter,
             UsersTableAdapter usersTableAdapter,
             MedicationImagesTableAdapter medicationImagesTableAdapter,
-            LeaderboardAdapter leaderboardAdapter
+            LeaderboardAdapter leaderboardAdapter,
+            MedicationUsageAdapter medicationUsageAdapter
     ) {
         this.forumAdapter = forumAdapter;
         this.forumCategoryAdapter = forumCategoryAdapter;
@@ -51,6 +49,7 @@ public class AdapterService {
         this.usersTableAdapter = usersTableAdapter;
         this.medicationImagesTableAdapter = medicationImagesTableAdapter;
         this.leaderboardAdapter = leaderboardAdapter;
+        this.medicationUsageAdapter = medicationUsageAdapter;
     }
 
     public ForumAdapter getForumAdapter() {
@@ -83,5 +82,9 @@ public class AdapterService {
 
     public LeaderboardAdapter getLeaderboardAdapter() {
         return leaderboardAdapter;
+    }
+
+    public MedicationUsageAdapter getMedicationUsageAdapter() {
+        return medicationUsageAdapter;
     }
 }

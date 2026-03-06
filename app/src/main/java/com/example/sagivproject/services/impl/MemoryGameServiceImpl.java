@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
+import com.example.sagivproject.models.MemoryGameDayStats;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IMemoryGameService;
@@ -20,28 +21,25 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
 /**
- * An implementation of the {@link IMemoryGameService} interface for managing the memory game.
- * <p>
- * This service handles all aspects of the game lifecycle, including matchmaking (finding or creating rooms),
- * managing game state in real-time, handling player moves, updating scores, and determining the winner.
- * It also manages listeners for game state changes and handles player disconnections.
- * </p>
+ * An implementation of the {@link IMemoryGameService} interface.
  */
 public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> implements IMemoryGameService {
     private static final String ROOMS_PATH = "rooms";
     private static final String USERS_PATH = "users";
-    private static final String TAG = "GameServiceImpl"; // Added TAG for logging
+    private static final String TAG = "GameServiceImpl";
 
-    // Field names in database
     private static final String FIELD_STATUS = "status";
     private static final String FIELD_CARDS = "cards";
     private static final String FIELD_CURRENT_TURN_UID = "currentTurnUid";
@@ -50,8 +48,8 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     private static final String FIELD_PROCESSING_MATCH = "processingMatch";
     private static final String FIELD_WINNER_UID = "winnerUid";
     private static final String FIELD_COUNT_WINS = "countWins";
+    private static final String FIELD_MEMORY_GAME_DAY_STATS = "memoryGameDayStats";
 
-    // Status values
     private static final String STATUS_WAITING = "waiting";
     private static final String STATUS_PLAYING = "playing";
     private static final String STATUS_FINISHED = "finished";
@@ -62,12 +60,6 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     private final Map<String, ValueEventListener> roomStatusListeners = new ConcurrentHashMap<>();
     private ValueEventListener activeGameListener;
 
-
-    /**
-     * Constructs a new GameServiceImpl.
-     *
-     * @param firebaseDatabase The FirebaseDatabase instance.
-     */
     @Inject
     public MemoryGameServiceImpl(FirebaseDatabase firebaseDatabase) {
         super(ROOMS_PATH, GameRoom.class);
@@ -75,26 +67,18 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
         this.usersReference = firebaseDatabase.getReference(USERS_PATH);
     }
 
-    /**
-     * Finds an available waiting game room or creates a new one for the user.
-     *
-     * @param user     The user looking for a game.
-     * @param callback The callback to be invoked with the resulting game room.
-     */
     @Override
     public void findOrCreateRoom(User user, DatabaseCallback<GameRoom> callback) {
         if (user == null) {
             callback.onFailed(new IllegalArgumentException("User cannot be null"));
             return;
         }
-
         roomsReference.runTransaction(new Transaction.Handler() {
             private String roomIdForUser = null;
 
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                // Try to find a waiting room to join
                 for (MutableData roomData : currentData.getChildren()) {
                     try {
                         GameRoom room = roomData.getValue(GameRoom.class);
@@ -106,15 +90,11 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
                             return Transaction.success(currentData);
                         }
                     } catch (DatabaseException e) {
-                        Log.e(TAG, "Error deserializing room during transaction: " + roomData.getKey(), e);
+                        Log.e(TAG, "Error deserializing room", e);
                     }
                 }
-
-                // No waiting room found, create a new one
                 String newRoomId = roomsReference.push().getKey();
-                if (newRoomId == null) {
-                    return Transaction.abort(); // Could not generate a key
-                }
+                if (newRoomId == null) return Transaction.abort();
                 GameRoom newRoom = new GameRoom(newRoomId, user);
                 currentData.child(newRoomId).setValue(newRoom);
                 roomIdForUser = newRoomId;
@@ -124,37 +104,18 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             @Override
             public void onComplete(DatabaseError error, boolean committed, DataSnapshot snapshot) {
                 if (error != null) {
-                    Log.e(TAG, "Transaction to find/create room failed", error.toException());
                     callback.onFailed(error.toException());
-                    return;
-                }
-                if (!committed) {
-                    Log.w(TAG, "Transaction to find/create room was not committed. It might have been aborted or contended.");
-                    callback.onFailed(new Exception("שגיאה במציאת חדר. נסה שוב."));
-                    return;
-                }
-
-                if (roomIdForUser != null && snapshot.hasChild(roomIdForUser)) {
-                    GameRoom finalRoom = snapshot.child(roomIdForUser).getValue(GameRoom.class);
-                    if (finalRoom != null) {
-                        callback.onCompleted(finalRoom);
-                    } else {
-                        Log.e(TAG, "Room data is null after transaction for room ID: " + roomIdForUser);
-                        callback.onFailed(new Exception("שגיאה בקריאת נתוני החדר."));
-                    }
+                } else if (!committed) {
+                    callback.onFailed(new Exception("שגיאה במציאת חדר."));
                 } else {
-                    Log.e(TAG, "Could not find the user's room in the final snapshot. Room ID was: " + roomIdForUser);
-                    callback.onFailed(new Exception("שגיאה באימות החדר לאחר יצירה."));
+                    GameRoom finalRoom = snapshot.child(roomIdForUser).getValue(GameRoom.class);
+                    if (finalRoom != null) callback.onCompleted(finalRoom);
+                    else callback.onFailed(new Exception("שגיאה בנתוני החדר."));
                 }
             }
         });
     }
 
-    /**
-     * Retrieves a list of all game rooms with real-time updates.
-     *
-     * @param callback The callback to be invoked with the list of game rooms.
-     */
     @Override
     public void getAllRoomsRealtime(@NonNull DatabaseCallback<List<GameRoom>> callback) {
         roomsReference.addValueEventListener(new ValueEventListener() {
@@ -163,9 +124,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
                 List<GameRoom> roomList = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
                     GameRoom room = child.getValue(GameRoom.class);
-                    if (room != null) {
-                        roomList.add(room);
-                    }
+                    if (room != null) roomList.add(room);
                 }
                 callback.onCompleted(roomList);
             }
@@ -177,12 +136,6 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
         });
     }
 
-    /**
-     * Listens for status changes in a specific game room.
-     *
-     * @param roomId   The ID of the room to listen to.
-     * @param callback The callback to handle room status changes.
-     */
     @Override
     public void listenToRoomStatus(@NonNull String roomId, @NonNull IRoomStatusCallback callback) {
         ValueEventListener listener = new ValueEventListener() {
@@ -192,15 +145,10 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
                     callback.onRoomDeleted();
                     return;
                 }
-
                 GameRoom room = snapshot.getValue(GameRoom.class);
                 if (room == null) return;
-
-                if (STATUS_PLAYING.equals(room.getStatus())) {
-                    callback.onRoomStarted(room);
-                } else if (STATUS_FINISHED.equals(room.getStatus())) {
-                    callback.onRoomFinished(room);
-                }
+                if (STATUS_PLAYING.equals(room.getStatus())) callback.onRoomStarted(room);
+                else if (STATUS_FINISHED.equals(room.getStatus())) callback.onRoomFinished(room);
             }
 
             @Override
@@ -208,31 +156,16 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
                 callback.onFailed(error.toException());
             }
         };
-
         roomsReference.child(roomId).addValueEventListener(listener);
         roomStatusListeners.put(roomId, listener);
     }
 
-
-    /**
-     * Removes a previously attached room status listener.
-     *
-     * @param roomId The ID of the room.
-     */
     @Override
     public void removeRoomListener(@NonNull String roomId) {
         ValueEventListener listener = roomStatusListeners.remove(roomId);
-        if (listener != null) {
-            roomsReference.child(roomId).removeEventListener(listener);
-        }
+        if (listener != null) roomsReference.child(roomId).removeEventListener(listener);
     }
 
-    /**
-     * Cancels and deletes a waiting game room.
-     *
-     * @param roomId   The ID of the room to cancel.
-     * @param callback The callback to be invoked on completion.
-     */
     @Override
     public void cancelRoom(@NonNull String roomId, @Nullable DatabaseCallback<Void> callback) {
         roomsReference.child(roomId).runTransaction(new Transaction.Handler() {
@@ -241,7 +174,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                 GameRoom room = currentData.getValue(GameRoom.class);
                 if (room != null && STATUS_WAITING.equals(room.getStatus()) && room.getPlayer2Uid() == null) {
-                    currentData.setValue(null); // Delete the room
+                    currentData.setValue(null);
                 }
                 return Transaction.success(currentData);
             }
@@ -249,54 +182,30 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
                 if (callback != null) {
-                    if (error != null) {
-                        callback.onFailed(error.toException());
-                    } else {
-                        callback.onCompleted(null);
-                    }
+                    if (error != null) callback.onFailed(error.toException());
+                    else callback.onCompleted(null);
                 }
             }
         });
     }
 
-    /**
-     * Initializes the game board with cards and sets the first turn.
-     *
-     * @param roomId       The ID of the room.
-     * @param cards        The list of cards for the game board.
-     * @param firstTurnUid The UID of the player who takes the first turn.
-     * @param callback     The callback to be invoked on completion.
-     */
     @Override
     public void initGameBoard(String roomId, List<Card> cards, String firstTurnUid, DatabaseCallback<Void> callback) {
         Map<String, Object> roomUpdates = new HashMap<>();
         roomUpdates.put(FIELD_CURRENT_TURN_UID, firstTurnUid);
         roomUpdates.put(FIELD_STATUS, STATUS_PLAYING);
-
         roomsReference.child(roomId).child(FIELD_CARDS).setValue(cards)
                 .addOnSuccessListener(aVoid -> roomsReference.child(roomId).updateChildren(roomUpdates, (error, ref) -> {
                     if (callback != null) {
-                        if (error != null) {
-                            callback.onFailed(error.toException());
-                        } else {
-                            callback.onCompleted(null);
-                        }
+                        if (error != null) callback.onFailed(error.toException());
+                        else callback.onCompleted(null);
                     }
                 }))
                 .addOnFailureListener(e -> {
-                    if (callback != null) {
-                        callback.onFailed(e);
-                    }
+                    if (callback != null) callback.onFailed(e);
                 });
     }
 
-
-    /**
-     * Listens for real-time updates to the entire game room state.
-     *
-     * @param roomId   The ID of the room to listen to.
-     * @param callback The callback to be invoked with the updated game room.
-     */
     @Override
     public void listenToGame(String roomId, DatabaseCallback<GameRoom> callback) {
         stopListeningToGame(roomId);
@@ -304,14 +213,13 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
-                    callback.onCompleted(null); // Room was deleted
+                    callback.onCompleted(null);
                     return;
                 }
                 try {
                     GameRoom room = snapshot.getValue(GameRoom.class);
                     callback.onCompleted(room);
                 } catch (DatabaseException e) {
-                    Log.e(TAG, "Error deserializing game room", e);
                     callback.onFailed(e);
                 }
             }
@@ -324,11 +232,6 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
         roomsReference.child(roomId).addValueEventListener(activeGameListener);
     }
 
-    /**
-     * Stops listening for game state updates for a specific room.
-     *
-     * @param roomId The ID of the room to stop listening to.
-     */
     @Override
     public void stopListeningToGame(String roomId) {
         if (activeGameListener != null) {
@@ -337,13 +240,6 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
         }
     }
 
-    /**
-     * Updates a specific field within a game room.
-     *
-     * @param roomId The ID of the room.
-     * @param field  The name of the field to update.
-     * @param value  The new value for the field.
-     */
     @Override
     public void updateRoomField(String roomId, String field, Object value) {
         roomsReference.child(roomId).child(field).setValue(value);
@@ -356,72 +252,44 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
                 GameRoom room = mutableData.getValue(GameRoom.class);
-                if (room == null) {
-                    return Transaction.success(mutableData);
-                }
-
-                if (playerUid.equals(room.getPlayer1Uid())) {
+                if (room == null) return Transaction.success(mutableData);
+                if (playerUid.equals(room.getPlayer1Uid()))
                     room.setPlayer1Score(room.getPlayer1Score() + 1);
-                } else if (playerUid.equals(room.getPlayer2Uid())) {
+                else if (playerUid.equals(room.getPlayer2Uid()))
                     room.setPlayer2Score(room.getPlayer2Score() + 1);
-                }
-
                 mutableData.setValue(room);
                 return Transaction.success(mutableData);
             }
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (committed && error == null) {
+                    updateDailyStats(playerUid, true, false);
+                }
                 if (callback != null) {
-                    if (error != null) {
-                        callback.onFailed(error.toException());
-                    } else {
-                        callback.onCompleted(null);
-                    }
+                    if (error != null) callback.onFailed(error.toException());
+                    else callback.onCompleted(null);
                 }
             }
         });
     }
 
-    /**
-     * Updates the status (revealed and matched) of a specific card on the board.
-     *
-     * @param roomId   The ID of the room.
-     * @param index    The index of the card in the list.
-     * @param revealed The new revealed status.
-     * @param matched  The new matched status.
-     */
     @Override
     public void updateCardStatus(String roomId, int index, boolean revealed, boolean matched) {
-        if (index < 0) {
-            Log.e(TAG, "Attempted to update card with invalid index: " + index);
-            return;
-        }
+        if (index < 0) return;
         DatabaseReference cardRef = roomsReference.child(roomId).child(FIELD_CARDS).child(String.valueOf(index));
         cardRef.child(FIELD_IS_REVEALED).setValue(revealed);
         cardRef.child(FIELD_IS_MATCHED).setValue(matched);
     }
 
-    /**
-     * Sets a flag to indicate that a match check is in progress, preventing other moves.
-     *
-     * @param roomId       The ID of the room.
-     * @param isProcessing The processing status.
-     */
     @Override
     public void setProcessing(String roomId, boolean isProcessing) {
         updateRoomField(roomId, FIELD_PROCESSING_MATCH, isProcessing);
     }
 
-    /**
-     * Increments the win count for a user.
-     *
-     * @param uid The UID of the user who won.
-     */
     @Override
     public void addUserWin(String uid) {
         if (uid == null || uid.isEmpty() || VALUE_DRAW.equals(uid)) return;
-
         usersReference.child(uid).child(FIELD_COUNT_WINS).runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
@@ -433,17 +301,39 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                // Transaction complete. No action needed.
+                if (committed && error == null) {
+                    updateDailyStats(uid, false, true);
+                }
             }
         });
     }
 
-    /**
-     * Sets up an onDisconnect handler to automatically end the game if the current player disconnects.
-     *
-     * @param roomId      The ID of the room.
-     * @param opponentUid The UID of the opponent, who will be declared the winner.
-     */
+    @Override
+    public void logWrongMove(String uid) {
+        updateDailyStats(uid, false, false);
+    }
+
+    private void updateDailyStats(String uid, boolean correct, boolean win) {
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        usersReference.child(uid).child(FIELD_MEMORY_GAME_DAY_STATS).child(today).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                MemoryGameDayStats stats = currentData.getValue(MemoryGameDayStats.class);
+                if (stats == null) stats = new MemoryGameDayStats();
+                if (win) stats.addWin();
+                else if (correct) stats.addCorrect();
+                else stats.addWrong();
+                currentData.setValue(stats);
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+            }
+        });
+    }
+
     @Override
     public void setupForfeitOnDisconnect(String roomId, String opponentUid) {
         DatabaseReference roomRef = roomsReference.child(roomId);
@@ -451,11 +341,6 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
         roomRef.child(FIELD_WINNER_UID).onDisconnect().setValue(opponentUid);
     }
 
-    /**
-     * Removes the onDisconnect handler for the game room.
-     *
-     * @param roomId The ID of the room.
-     */
     @Override
     public void removeForfeitOnDisconnect(String roomId) {
         DatabaseReference roomRef = roomsReference.child(roomId);

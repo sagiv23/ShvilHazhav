@@ -49,6 +49,9 @@
         </provider>
 
         <activity
+            android:name=".screens.UserStatsActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.SecretActivity"
             android:exported="false" />
         <activity

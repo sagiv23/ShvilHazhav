@@ -129,4 +129,7 @@
     <string name="instagram">Instagram</string>
     <string name="github">GitHub</string>
     <string name="statistics">סטטיסטיקות</string>
+    <string name="took">נטל</string>
+    <string name="didnt_take">לא נטל</string>
+    <string name="will_take">ינטול בעתיד</string>
 </resources>

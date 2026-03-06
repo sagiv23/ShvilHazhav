@@ -12,12 +12,10 @@ import java.util.Objects;
 
 /**
  * Represents a user of the application.
- * <p>
- * This class holds all the data associated with a user, including their personal details,
- * credentials, role, game statistics, and medication list. It is a central model in the application.
- * </p>
  */
 public class User implements Serializable, Idable {
+    private static final int YEAR = Calendar.YEAR;
+    private static final int DAY_OF_YEAR = Calendar.DAY_OF_YEAR;
     private String id;
     private String email;
     private UserRole role;
@@ -29,27 +27,15 @@ public class User implements Serializable, Idable {
     private HashMap<String, Medication> medications;
     private int countWins;
     private MathProblemsStats mathProblemsStats;
+    private HashMap<String, MemoryGameDayStats> memoryGameDayStats; // Date string -> Stats
+    private HashMap<String, MemoryGameDayStats> mathProblemsDayStats; // Date string -> Stats
 
-    /**
-     * Default constructor required for calls to DataSnapshot.getValue(User.class).
-     */
     public User() {
         this.role = UserRole.REGULAR;
+        this.memoryGameDayStats = new HashMap<>();
+        this.mathProblemsDayStats = new HashMap<>();
     }
 
-    /**
-     * Constructs a new User object.
-     *
-     * @param id              The unique ID of the user.
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
-     * @param birthDateMillis The user's birthdate in milliseconds.
-     * @param email           The user's email address.
-     * @param password        The user's password.
-     * @param role            The user's role (REGULAR or ADMIN).
-     * @param profileImage    The user's profile image as a Base64 string.
-     * @param medications     A map of the user's medications.
-     */
     public User(String id, String firstName, String lastName, long birthDateMillis, String email, String password, UserRole role, String profileImage, HashMap<String, Medication> medications) {
         this.id = id;
         this.firstName = firstName;
@@ -62,12 +48,10 @@ public class User implements Serializable, Idable {
         this.medications = medications;
         this.countWins = 0;
         this.mathProblemsStats = new MathProblemsStats();
+        this.memoryGameDayStats = new HashMap<>();
+        this.mathProblemsDayStats = new HashMap<>();
     }
 
-    /**
-     * Copy constructor to create a new instance from an existing User.
-     * This is useful for editing without modifying the original instance.
-     */
     public User(User other) {
         if (other == null) return;
         this.id = other.id;
@@ -83,9 +67,17 @@ public class User implements Serializable, Idable {
             this.medications = new HashMap<>(other.medications);
         }
         if (other.mathProblemsStats != null) {
-            this.mathProblemsStats = new MathProblemsStats();
-            this.mathProblemsStats.setCorrectAnswers(other.mathProblemsStats.getCorrectAnswers());
-            this.mathProblemsStats.setWrongAnswers(other.mathProblemsStats.getWrongAnswers());
+            this.mathProblemsStats = new MathProblemsStats(other.mathProblemsStats.getCorrectAnswers(), other.mathProblemsStats.getWrongAnswers(), other.mathProblemsStats.getLastUpdateDate());
+        }
+        if (other.memoryGameDayStats != null) {
+            this.memoryGameDayStats = new HashMap<>(other.memoryGameDayStats);
+        } else {
+            this.memoryGameDayStats = new HashMap<>();
+        }
+        if (other.mathProblemsDayStats != null) {
+            this.mathProblemsDayStats = new HashMap<>(other.mathProblemsDayStats);
+        } else {
+            this.mathProblemsDayStats = new HashMap<>();
         }
     }
 
@@ -123,18 +115,13 @@ public class User implements Serializable, Idable {
         this.birthDateMillis = birthDateMillis;
     }
 
-    /**
-     * Calculates the user's age based on their birthdate.
-     *
-     * @return The user's current age in years.
-     */
     @Exclude
     public int getAge() {
         Calendar birth = Calendar.getInstance();
         birth.setTimeInMillis(birthDateMillis);
         Calendar today = Calendar.getInstance();
-        int age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
-        if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
+        int age = today.get(YEAR) - birth.get(YEAR);
+        if (today.get(DAY_OF_YEAR) < birth.get(DAY_OF_YEAR)) {
             age--;
         }
         return age;
@@ -164,11 +151,6 @@ public class User implements Serializable, Idable {
         this.role = role;
     }
 
-    /**
-     * A convenience method to check if the user has an ADMIN role.
-     *
-     * @return True if the user is an admin, false otherwise.
-     */
     @Exclude
     public boolean isAdmin() {
         return this.role == UserRole.ADMIN;
@@ -207,11 +189,24 @@ public class User implements Serializable, Idable {
         this.mathProblemsStats = mathProblemsStats;
     }
 
-    /**
-     * A convenience method to get the user's full name.
-     *
-     * @return The user's first name and last name concatenated.
-     */
+    public HashMap<String, MemoryGameDayStats> getMemoryGameDayStats() {
+        if (memoryGameDayStats == null) memoryGameDayStats = new HashMap<>();
+        return memoryGameDayStats;
+    }
+
+    public void setMemoryGameDayStats(HashMap<String, MemoryGameDayStats> memoryGameDayStats) {
+        this.memoryGameDayStats = memoryGameDayStats;
+    }
+
+    public HashMap<String, MemoryGameDayStats> getMathProblemsDayStats() {
+        if (mathProblemsDayStats == null) mathProblemsDayStats = new HashMap<>();
+        return mathProblemsDayStats;
+    }
+
+    public void setMathProblemsDayStats(HashMap<String, MemoryGameDayStats> mathProblemsDayStats) {
+        this.mathProblemsDayStats = mathProblemsDayStats;
+    }
+
     @Exclude
     public String getFullName() {
         return this.firstName + " " + this.lastName;
@@ -228,14 +223,12 @@ public class User implements Serializable, Idable {
                 Objects.equals(email, user.email) &&
                 role == user.role &&
                 Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(profileImage, user.profileImage);
+                Objects.equals(lastName, user.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, role, firstName, lastName, birthDateMillis, password, profileImage, countWins);
+        return Objects.hash(id, email, role, firstName, lastName, birthDateMillis, countWins);
     }
 
     @NonNull

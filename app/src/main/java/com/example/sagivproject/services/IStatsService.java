@@ -4,29 +4,19 @@ import androidx.annotation.NonNull;
 
 /**
  * An interface that defines the contract for operations related to user statistics.
- * <p>
- * This service currently focuses on statistics for the math problems feature.
- * </p>
  */
 public interface IStatsService {
-    /**
-     * Increments the count of correct answers for a user's math problems statistics.
-     *
-     * @param uid The UID of the user.
-     */
     void addCorrectAnswer(String uid);
 
-    /**
-     * Increments the count of wrong answers for a user's math problems statistics.
-     *
-     * @param uid The UID of the user.
-     */
     void addWrongAnswer(String uid);
 
+    void resetMathStats(@NonNull String uid, @NonNull String date);
+
     /**
-     * Resets the math problems statistics (correct and wrong answers) for a user to zero.
+     * Increments daily math statistics for a user.
      *
-     * @param uid The UID of the user whose stats are to be reset.
+     * @param uid     The user's ID.
+     * @param correct True if the answer was correct, false otherwise.
      */
-    void resetMathStats(@NonNull String uid);
+    void updateDailyMathStats(@NonNull String uid, boolean correct);
 }

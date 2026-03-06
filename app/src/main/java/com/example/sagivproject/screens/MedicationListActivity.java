@@ -25,15 +25,20 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationListAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.screens.dialogs.MedicationDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.notifications.AlarmScheduler;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -42,11 +47,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * An activity for managing a user's list of medications.
- * <p>
- * This screen displays a list of the user's medications, allowing them to add, edit,
- * delete, and search for medications. It also handles scheduling and canceling
- * medication reminders (alarms).
- * </p>
  */
 @AndroidEntryPoint
 public class MedicationListActivity extends BaseActivity {
@@ -59,14 +59,6 @@ public class MedicationListActivity extends BaseActivity {
     private EditText editSearch;
     private Spinner spinnerSearchType;
 
-    /**
-     * Initializes the activity, sets up the UI, RecyclerView, search/filter functionality,
-     * and loads medication data.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +81,6 @@ public class MedicationListActivity extends BaseActivity {
         RecyclerView recyclerViewMedications = findViewById(R.id.recyclerView_medications);
         recyclerViewMedications.setLayoutManager(new LinearLayoutManager(this));
 
-        // Use injected adapter from AdapterService
         adapter = adapterService.getMedicationListAdapter();
         adapter.setListener(new MedicationListAdapter.OnMedicationActionListener() {
             @Override
@@ -100,6 +91,11 @@ public class MedicationListActivity extends BaseActivity {
             @Override
             public void onDelete(Medication medication) {
                 deleteMedicationById(medication);
+            }
+
+            @Override
+            public void onStatusChanged(Medication medication, MedicationStatus status) {
+                logMedicationStatus(medication, status);
             }
         });
         recyclerViewMedications.setAdapter(adapter);
@@ -128,12 +124,8 @@ public class MedicationListActivity extends BaseActivity {
         spinnerSearchType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) { // "הכל"
-                    editSearch.setText("");
-                    editSearch.setEnabled(false);
-                } else {
-                    editSearch.setEnabled(true);
-                }
+                editSearch.setEnabled(position != 0);
+                if (position == 0) editSearch.setText("");
                 filterMedications(editSearch.getText().toString());
             }
 
@@ -146,18 +138,30 @@ public class MedicationListActivity extends BaseActivity {
         fetchMedicationsFromServer();
     }
 
-    /**
-     * Loads the initial list of medications from the local user cache (SharedPreferences).
-     */
+    private void logMedicationStatus(Medication medication, MedicationStatus status) {
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        MedicationUsage usage = new MedicationUsage(medication.getId(), medication.getName(), time, date, status);
+
+        databaseService.getMedicationService().logMedicationUsage(uid, usage, new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Void object) {
+                Toast.makeText(MedicationListActivity.this, "סטטוס עודכן: " + status.getDisplayName(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationListActivity.this, "שגיאה בעדכון סטטוס", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void loadMedicationsFromCache() {
         if (user.getMedications() != null) {
             updateMedicationList(new ArrayList<>(user.getMedications().values()));
         }
     }
 
-    /**
-     * Fetches the most up-to-date medication list from the server (Firebase) and updates the UI.
-     */
     private void fetchMedicationsFromServer() {
         databaseService.getMedicationService().getUserMedicationList(uid, new DatabaseCallback<>() {
             @Override
@@ -172,11 +176,6 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Updates the local user cache in SharedPreferences with the latest medication list.
-     *
-     * @param medicationList The list of medications to cache.
-     */
     private void updateUserCache(List<Medication> medicationList) {
         HashMap<String, Medication> updatedMedicationsMap = new HashMap<>();
         for (Medication med : medicationList) {
@@ -186,11 +185,6 @@ public class MedicationListActivity extends BaseActivity {
         sharedPreferencesUtil.saveUser(user);
     }
 
-    /**
-     * Updates the main medication list, sorts it, and applies the current filter.
-     *
-     * @param medicationList The new list of medications.
-     */
     private void updateMedicationList(List<Medication> medicationList) {
         fullMedicationList.clear();
         fullMedicationList.addAll(medicationList);
@@ -199,15 +193,9 @@ public class MedicationListActivity extends BaseActivity {
         filterMedications(editSearch.getText().toString());
     }
 
-    /**
-     * Creates and configures the ArrayAdapter for the search filter spinner.
-     *
-     * @return A customized ArrayAdapter for the spinner.
-     */
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         String[] searchOptions = {"הכל", "שם תרופה", "סוג תרופה"};
-
         return new ArrayAdapter<>(MedicationListActivity.this, android.R.layout.simple_spinner_item, searchOptions) {
             @NonNull
             @Override
@@ -233,11 +221,6 @@ public class MedicationListActivity extends BaseActivity {
         };
     }
 
-    /**
-     * Saves a new medication to the database and schedules its alarms.
-     *
-     * @param medication The new medication to save.
-     */
     private void saveMedication(Medication medication) {
         String medicationId = databaseService.getMedicationService().generateMedicationId();
         medication.setId(medicationId);
@@ -259,11 +242,6 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Updates an existing medication in the database and reschedules its alarms.
-     *
-     * @param med The medication to update.
-     */
     private void updateMedication(Medication med) {
         med.setUserId(uid);
         databaseService.getMedicationService().updateMedication(uid, med, new DatabaseCallback<>() {
@@ -289,11 +267,6 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Deletes a medication from the database and cancels its alarms.
-     *
-     * @param medication The medication to delete.
-     */
     private void deleteMedicationById(Medication medication) {
         databaseService.getMedicationService().deleteMedication(uid, medication.getId(), new DatabaseCallback<>() {
             @Override
@@ -312,11 +285,6 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Opens a dialog to add a new medication or edit an existing one.
-     *
-     * @param medToEdit The medication to edit, or null to add a new one.
-     */
     private void openMedicationDialog(Medication medToEdit) {
         dialogService.showMedicationDialog(medToEdit, new MedicationDialog.OnMedicationSubmitListener() {
             @Override
@@ -331,16 +299,9 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Filters the medication list based on the search query and selected filter type.
-     * Updates the RecyclerView using DiffUtil for efficient updates.
-     *
-     * @param query The search text entered by the user.
-     */
     private void filterMedications(String query) {
         List<Medication> filteredMedications = new ArrayList<>();
         String selectedType = spinnerSearchType.getSelectedItem() != null ? spinnerSearchType.getSelectedItem().toString() : "הכל";
-
         if (query.isEmpty() && selectedType.equals("הכל")) {
             filteredMedications.addAll(fullMedicationList);
         } else {
@@ -358,13 +319,9 @@ public class MedicationListActivity extends BaseActivity {
                         matches = med.getType() != null && med.getType().getDisplayName().toLowerCase().contains(query.toLowerCase());
                         break;
                 }
-
-                if (matches) {
-                    filteredMedications.add(med);
-                }
+                if (matches) filteredMedications.add(med);
             }
         }
-
         adapter.setMedications(filteredMedications);
     }
 }

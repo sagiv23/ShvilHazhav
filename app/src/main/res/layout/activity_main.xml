@@ -295,8 +295,8 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginBottom="6dp"
-                        android:src="@drawable/ic_settings"
-                        app:tint="@color/headline" />
+                        android:contentDescription="@string/statistics"
+                        android:src="@drawable/ic_settings" />
 
                     <Button
                         android:id="@+id/btn_main_to_Stats"
@@ -304,7 +304,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="6dp"
                         android:fontFamily="@font/text_hebrew"
-                        android:text="הסטטיסטיקות והיומן שלי"
+                        android:text="@string/statistics"
                         android:textSize="20sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

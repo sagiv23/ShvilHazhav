@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 
 import java.util.List;
@@ -31,39 +33,20 @@ import dagger.hilt.android.qualifiers.ActivityContext;
 
 /**
  * A RecyclerView adapter for displaying a list of a user's {@link Medication} objects.
- * <p>
- * This adapter handles displaying medication details, including name, type, and reminder hours.
- * It also provides an action menu for each item to allow editing or deleting medications.
- * </p>
  */
 public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
     private OnMedicationActionListener listener;
 
-    /**
-     * Constructs a new MedicationListAdapter.
-     *
-     * @param context The activity context, provided by Hilt.
-     */
     @Inject
     public MedicationListAdapter(@ActivityContext Context context) {
         this.context = context;
     }
 
-    /**
-     * Sets the listener for medication actions (edit, delete).
-     *
-     * @param listener The listener to be notified of user actions.
-     */
     public void setListener(OnMedicationActionListener listener) {
         this.listener = listener;
     }
 
-    /**
-     * Updates the data set with a new list of medications.
-     *
-     * @param medications The new list of {@link Medication} objects.
-     */
     public void setMedications(List<Medication> medications) {
         setData(medications);
     }
@@ -78,10 +61,8 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
     @Override
     public void onBindViewHolder(@NonNull MedicationViewHolder holder, int position) {
         Medication med = getItem(position);
-
         Typeface typeface = ResourcesCompat.getFont(context, R.font.text_hebrew);
 
-        // Apply custom font to the medication name
         if (typeface != null) {
             SpannableString nameSpannable = new SpannableString(med.getName());
             nameSpannable.setSpan(new CustomTypefaceSpan("", typeface), 0, nameSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -90,7 +71,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
             holder.txtMedicationName.setText(med.getName());
         }
 
-        // Display medication type if available
         if (med.getType() != null) {
             holder.txtMedicationType.setText(med.getType().getDisplayName());
             holder.txtMedicationType.setVisibility(View.VISIBLE);
@@ -100,7 +80,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
         holder.txtMedicationDetails.setText(med.getDetails());
 
-        // Format and display reminder hours
         List<String> reminderHours = med.getReminderHours();
         if (reminderHours != null && !reminderHours.isEmpty()) {
             holder.txtMedicationHours.setText(String.format("שעות: %s", TextUtils.join(", ", reminderHours)));
@@ -109,12 +88,9 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
             holder.txtMedicationHours.setVisibility(View.GONE);
         }
 
-        // Set up the popup menu for edit/delete actions
         holder.btnMenu.setOnClickListener(v -> {
             PopupMenu menu = new PopupMenu(context, v);
             menu.inflate(R.menu.menu_medication_item);
-
-            // Style menu items with custom font
             if (typeface != null) {
                 for (int i = 0; i < menu.getMenu().size(); i++) {
                     MenuItem item = menu.getMenu().getItem(i);
@@ -124,11 +100,9 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
                     item.setTitle(s);
                 }
             }
-
             menu.setOnMenuItemClickListener(item -> {
                 int currentPos = holder.getBindingAdapterPosition();
                 if (currentPos == RecyclerView.NO_POSITION) return false;
-
                 Medication currentMed = getItem(currentPos);
                 if (item.getItemId() == R.id.action_edit && listener != null) {
                     listener.onEdit(currentMed);
@@ -139,32 +113,32 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
                 }
                 return false;
             });
-
             menu.show();
+        });
+
+        holder.btnTaken.setOnClickListener(v -> {
+            if (listener != null) listener.onStatusChanged(med, MedicationStatus.TAKEN);
+        });
+        holder.btnNotTaken.setOnClickListener(v -> {
+            if (listener != null) listener.onStatusChanged(med, MedicationStatus.NOT_TAKEN);
+        });
+        holder.btnSnoozed.setOnClickListener(v -> {
+            if (listener != null) listener.onStatusChanged(med, MedicationStatus.SNOOZED);
         });
     }
 
-    /**
-     * An interface for handling actions on a medication item.
-     */
     public interface OnMedicationActionListener {
-        /**
-         * Called when the edit action is selected for a medication.
-         */
         void onEdit(Medication medication);
 
-        /**
-         * Called when the delete action is selected for a medication.
-         */
         void onDelete(Medication medication);
+
+        void onStatusChanged(Medication medication, MedicationStatus status);
     }
 
-    /**
-     * ViewHolder class for medication list items.
-     */
-    public static class MedicationViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    public static class MedicationViewHolder extends RecyclerView.ViewHolder {
         final TextView txtMedicationName, txtMedicationType, txtMedicationDetails, txtMedicationHours;
         final ImageButton btnMenu;
+        final Button btnTaken, btnNotTaken, btnSnoozed;
 
         public MedicationViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -173,6 +147,9 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
             txtMedicationDetails = itemView.findViewById(R.id.txt_MedicationRow_Details);
             txtMedicationHours = itemView.findViewById(R.id.txt_MedicationRow_Hours);
             btnMenu = itemView.findViewById(R.id.btn_MedicationRow_Menu);
+            btnTaken = itemView.findViewById(R.id.btn_MedicationRow_Taken);
+            btnNotTaken = itemView.findViewById(R.id.btn_MedicationRow_NotTaken);
+            btnSnoozed = itemView.findViewById(R.id.btn_MedicationRow_Snoozed);
         }
     }
 }

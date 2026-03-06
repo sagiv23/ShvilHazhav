@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.content.ContextCompat;
@@ -19,22 +18,21 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.models.MathProblemsStats;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.Operation;
+import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * An activity for practicing various math problems.
- * <p>
- * This screen generates random math problems (addition, subtraction, multiplication, division,
- * powers, and square roots) and allows the user to solve them using a numeric keypad.
- * It tracks and displays the number of correct and incorrect answers and allows the user
- * to reset their statistics.
- * </p>
  */
 @AndroidEntryPoint
 public class MathProblemsActivity extends BaseActivity {
@@ -46,14 +44,6 @@ public class MathProblemsActivity extends BaseActivity {
     private MaterialCardView cvAnswerContainer;
     private int correctAnswer;
 
-    /**
-     * Initializes the activity, sets up the UI, generates the first problem,
-     * and configures the keypad.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,56 +62,55 @@ public class MathProblemsActivity extends BaseActivity {
 
         tvCorrect = findViewById(R.id.tv_MathProblemsPage_correct);
         tvWrong = findViewById(R.id.tv_MathProblemsPage_wrong);
-        Button btnResetStats = findViewById(R.id.btn_MathProblemsPage_resetStats);
         tvQuestion = findViewById(R.id.tv_MathProblemsPage_question);
         tvAnswer = findViewById(R.id.tv_MathProblemsPage_user_answer);
         cvAnswerContainer = findViewById(R.id.cv_MathProblemsPage_answer_container);
 
-        btnResetStats.setOnClickListener(v -> dialogService.showConfirmDialog("איפוס נתונים", "האם לאפס את הנתונים?", "אפס", "בטל", this::resetStats));
-
+        fetchLatestStatsAndCheckReset();
         generateProblem();
         setupKeypad();
     }
 
-    /**
-     * Updates the statistics UI when the activity resumes.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void fetchLatestStatsAndCheckReset() {
+        databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(User updatedUser) {
+                if (updatedUser != null) {
+                    user = updatedUser;
+                    sharedPreferencesUtil.saveUser(user);
+                }
+                checkDailyReset();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                checkDailyReset();
+            }
+        });
+    }
+
+    private void checkDailyReset() {
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        MathProblemsStats stats = user.getMathProblemsStats();
+
+        if (!today.equals(stats.getLastUpdateDate())) {
+            stats.setCorrectAnswers(0);
+            stats.setWrongAnswers(0);
+            stats.setLastUpdateDate(today);
+
+            databaseService.getStatsService().resetMathStats(user.getId(), today);
+            sharedPreferencesUtil.saveUser(user);
+        }
         updateStatsUI();
     }
 
-    /**
-     * Updates the text views for correct and wrong answers with the current user stats.
-     */
     private void updateStatsUI() {
         tvCorrect.setText(MessageFormat.format("נכונות: {0}", user.getMathProblemsStats().getCorrectAnswers()));
         tvWrong.setText(MessageFormat.format("טעויות: {0}", user.getMathProblemsStats().getWrongAnswers()));
     }
 
-    /**
-     * Resets the user's math problem statistics (correct and wrong answers) to zero,
-     * both locally and in the database.
-     */
-    private void resetStats() {
-        user.getMathProblemsStats().setCorrectAnswers(0);
-        user.getMathProblemsStats().setWrongAnswers(0);
-
-        databaseService.getStatsService().resetMathStats(user.getId());
-        sharedPreferencesUtil.saveUser(user);
-
-        updateStatsUI();
-        Toast.makeText(this, "הנתונים אופסו בהצלחה", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Generates a new random math problem, including the operation and operands,
-     * calculates the correct answer, and displays the question in the UI.
-     */
     private void generateProblem() {
         Operation operation = Operation.values()[(int) (Math.random() * Operation.values().length)];
-
         int a, b;
 
         switch (operation) {
@@ -131,71 +120,51 @@ public class MathProblemsActivity extends BaseActivity {
                 correctAnswer = a + b;
                 tvQuestion.setText(MessageFormat.format("{0} + {1} =", a, b));
                 break;
-
             case SUBTRACT:
                 a = rand(10, 99);
                 b = rand(10, a);
                 correctAnswer = a - b;
                 tvQuestion.setText(MessageFormat.format("{0} - {1} =", a, b));
                 break;
-
             case MULTIPLY:
                 a = rand(2, 12);
                 b = rand(2, 12);
                 correctAnswer = a * b;
                 tvQuestion.setText(MessageFormat.format("{0} × {1} =", a, b));
                 break;
-
             case DIVIDE:
                 b = rand(2, 12);
                 correctAnswer = rand(2, 12);
                 a = b * correctAnswer;
                 tvQuestion.setText(MessageFormat.format("{0} ÷ {1} =", a, b));
                 break;
-
             case POWER:
                 a = rand(2, 5);
                 b = rand(2, 3);
                 correctAnswer = (int) Math.pow(a, b);
                 tvQuestion.setText(MessageFormat.format("{0}^{1} =", a, b));
                 break;
-
             case SQRT:
                 correctAnswer = rand(2, 12);
                 a = correctAnswer * correctAnswer;
                 tvQuestion.setText(MessageFormat.format("√{0} =", a));
                 break;
         }
-
         userInput.setLength(0);
         tvAnswer.setText("");
     }
 
-    /**
-     * Generates a random integer within a specified range (inclusive).
-     *
-     * @param min The minimum value.
-     * @param max The maximum value.
-     * @return A random integer between min and max.
-     */
     private int rand(int min, int max) {
         return min + (int) (Math.random() * (max - min + 1));
     }
 
-    /**
-     * Sets up the on-click listeners for the numeric keypad buttons and control buttons
-     * (delete, clear, submit).
-     */
     private void setupKeypad() {
         GridLayout keypad = findViewById(R.id.keypad_MathProblemsPage);
-
         for (int i = 0; i < keypad.getChildCount(); i++) {
             View v = keypad.getChildAt(i);
-
             if (v instanceof Button) {
                 Button btn = (Button) v;
                 String text = btn.getText().toString();
-
                 if (text.matches("\\d+")) {
                     btn.setOnClickListener(view -> {
                         userInput.append(text);
@@ -204,15 +173,11 @@ public class MathProblemsActivity extends BaseActivity {
                 }
             }
         }
-
         findViewById(R.id.btn_MathProblemsPage_delete).setOnClickListener(v -> deleteLast());
         findViewById(R.id.btn_MathProblemsPage_clear).setOnClickListener(v -> clearInput());
         findViewById(R.id.btn_MathProblemsPage_submit).setOnClickListener(v -> checkAnswer());
     }
 
-    /**
-     * Deletes the last character from the user's input.
-     */
     private void deleteLast() {
         if (userInput.length() > 0) {
             userInput.deleteCharAt(userInput.length() - 1);
@@ -220,21 +185,13 @@ public class MathProblemsActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Clears the user's entire input.
-     */
     private void clearInput() {
         userInput.setLength(0);
         tvAnswer.setText("");
     }
 
-    /**
-     * Checks the user's submitted answer against the correct answer. Updates statistics,
-     * provides visual feedback, and generates a new problem if correct.
-     */
     private void checkAnswer() {
         if (userInput.length() == 0) return;
-
         int userAnswer = Integer.parseInt(userInput.toString());
 
         if (userAnswer == correctAnswer) {
@@ -242,28 +199,23 @@ public class MathProblemsActivity extends BaseActivity {
             showFeedback(true);
             generateProblem();
             databaseService.getStatsService().addCorrectAnswer(user.getId());
+            databaseService.getStatsService().updateDailyMathStats(user.getId(), true);
         } else {
             user.getMathProblemsStats().setWrongAnswers(user.getMathProblemsStats().getWrongAnswers() + 1);
             showFeedback(false);
             databaseService.getStatsService().addWrongAnswer(user.getId());
+            databaseService.getStatsService().updateDailyMathStats(user.getId(), false);
         }
 
         sharedPreferencesUtil.saveUser(user);
         updateStatsUI();
     }
 
-    /**
-     * Provides quick visual feedback by changing the answer container's stroke color.
-     *
-     * @param isCorrect Whether the answer was correct.
-     */
     private void showFeedback(boolean isCorrect) {
         int colorRes = isCorrect ? R.color.headline : R.color.error;
         int color = ContextCompat.getColor(this, colorRes);
-
         cvAnswerContainer.setStrokeColor(ColorStateList.valueOf(color));
         tvAnswer.setTextColor(color);
-
         handler.postDelayed(() -> {
             cvAnswerContainer.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_color)));
             tvAnswer.setTextColor(ContextCompat.getColor(this, R.color.text_color));
