@@ -3,7 +3,7 @@ package com.example.sagivproject.models.enums;
 public enum MedicationStatus {
     TAKEN("נטל"),
     NOT_TAKEN("לא נטל"),
-    SNOOZED("ינטול בעתיד");
+    SNOOZED("בהמשך היום");
 
     private final String displayName;
 

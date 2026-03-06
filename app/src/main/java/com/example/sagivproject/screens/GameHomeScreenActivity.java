@@ -20,12 +20,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.LeaderboardAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IMemoryGameService;
 
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,13 +53,6 @@ public class GameHomeScreenActivity extends BaseActivity {
     private TextToSpeech tts;
     private boolean isSpeaking = false;
 
-    /**
-     * Initializes the activity, setting up the UI, and listeners.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,9 +149,6 @@ public class GameHomeScreenActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Refreshes user's win count when the activity is resumed.
-     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -163,23 +156,16 @@ public class GameHomeScreenActivity extends BaseActivity {
         gameStarted = false; // Reset game started flag when returning to screen
     }
 
-    /**
-     * Cancels the search for an opponent if the user navigates away from the screen.
-     */
     @Override
     protected void onStop() {
         super.onStop();
         if (tts != null) tts.stop();
         updateSpeakButton(false);
-        // If user leaves the screen while searching, cancel the search to free up the room.
         if (currentRoom != null && !gameStarted) {
             cancelSearch();
         }
     }
 
-    /**
-     * Loads the current user's win count from the database and updates the UI.
-     */
     private void loadWins() {
         databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -187,30 +173,34 @@ public class GameHomeScreenActivity extends BaseActivity {
                 if (updatedUser != null) {
                     sharedPreferencesUtil.saveUser(updatedUser);
                     GameHomeScreenActivity.this.user = updatedUser;
-                    TVictories.setText(MessageFormat.format("ניצחונות: {0}", updatedUser.getCountWins()));
+                    displayTodayWins();
                 }
             }
 
             @Override
             public void onFailed(Exception e) {
                 Toast.makeText(GameHomeScreenActivity.this, "שגיאה בעדכון נתוני משתמש", Toast.LENGTH_SHORT).show();
-                // Even if update fails, show existing data from shared preferences
-                TVictories.setText(MessageFormat.format("ניצחונות: {0}", GameHomeScreenActivity.this.user.getCountWins()));
+                displayTodayWins();
             }
         });
     }
 
-    /**
-     * Fetches the list of users, sorts them by win count, and displays them in a leaderboard.
-     */
+    private void displayTodayWins() {
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        DailyStats stats = user.getDailyStats().get(today);
+        int wins = (stats != null) ? stats.getMemoryWins() : 0;
+        TVictories.setText(MessageFormat.format("ניצחונות היום: {0}", wins));
+    }
+
     private void setupLeaderboard() {
         databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> users) {
                 if (users != null) {
                     users.removeIf(User::isAdmin);
-                    users.removeIf(user -> user.getCountWins() < 1);
-                    users.sort((u1, u2) -> Integer.compare(u2.getCountWins(), u1.getCountWins()));
+                    // Filter and sort by total wins (calculating from all daily stats)
+                    users.sort((u1, u2) -> Integer.compare(getTotalWins(u2), getTotalWins(u1)));
+                    users.removeIf(u -> getTotalWins(u) < 1);
                     adapter.setUsers(users);
                 }
             }
@@ -222,9 +212,16 @@ public class GameHomeScreenActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Initiates a search for an opponent by creating or joining a game room.
-     */
+    private int getTotalWins(User u) {
+        int total = 0;
+        if (u.getDailyStats() != null) {
+            for (DailyStats ds : u.getDailyStats().values()) {
+                total += ds.getMemoryWins();
+            }
+        }
+        return total;
+    }
+
     private void findEnemy() {
         updateUI(SearchState.SEARCHING);
         databaseService.getGameService().findOrCreateRoom(user, new IDatabaseService.DatabaseCallback<>() {
@@ -246,26 +243,18 @@ public class GameHomeScreenActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Cancels the ongoing search for an opponent and resets the UI.
-     */
     private void cancelSearch() {
         if (currentRoom != null) {
             databaseService.getGameService().removeRoomListener(currentRoom.getId());
         }
 
         if (currentRoom != null && "waiting".equals(currentRoom.getStatus()) && user.getId().equals(currentRoom.getPlayer1Uid())) {
-            databaseService.getGameService().cancelRoom(currentRoom.getId(), null); // Callback is optional
+            databaseService.getGameService().cancelRoom(currentRoom.getId(), null);
         }
         currentRoom = null;
         updateUI(SearchState.IDLE);
     }
 
-    /**
-     * Listens for status changes in the game room (e.g., when an opponent joins).
-     *
-     * @param roomId The ID of the room to listen to.
-     */
     private void listenToRoom(String roomId) {
         if (roomId == null) {
             cancelSearch();
@@ -288,7 +277,6 @@ public class GameHomeScreenActivity extends BaseActivity {
 
             @Override
             public void onRoomFinished(GameRoom room) {
-                // This case should not happen while waiting for a game, but as a safeguard:
                 cancelSearch();
             }
 
@@ -300,11 +288,6 @@ public class GameHomeScreenActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Starts the memory game activity.
-     *
-     * @param room The game room containing opponent details.
-     */
     private void startGame(GameRoom room) {
         if (currentRoom != null) {
             databaseService.getGameService().removeRoomListener(room.getId());
@@ -316,11 +299,6 @@ public class GameHomeScreenActivity extends BaseActivity {
         finish();
     }
 
-    /**
-     * Updates the UI to reflect the current state of opponent search.
-     *
-     * @param state The current search state.
-     */
     private void updateUI(SearchState state) {
         switch (state) {
             case IDLE:
@@ -351,21 +329,9 @@ public class GameHomeScreenActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    /**
-     * Represents the possible states when searching for a memory game opponent.
-     */
     private enum SearchState {
-        /**
-         * The initial state, not currently searching for a game.
-         */
         IDLE,
-        /**
-         * Actively searching for an opponent.
-         */
         SEARCHING,
-        /**
-         * An opponent has been found and the game is about to start.
-         */
         GAME_FOUND
     }
 }

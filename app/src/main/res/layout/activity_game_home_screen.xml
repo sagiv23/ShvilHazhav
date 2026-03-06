@@ -58,7 +58,7 @@
                 android:fontFamily="@font/text_hebrew"
                 android:gravity="start"
                 android:textSize="25sp"
-                tools:text="ניצחונות: " />
+                tools:text="ניצחונות היום: " />
 
             <TextView
                 android:id="@+id/tv_GameHomeScreen_status_of_finding_enemy"

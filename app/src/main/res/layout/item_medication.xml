@@ -79,6 +79,7 @@
             tools:text="שעות: 08:00, 20:00" />
 
         <LinearLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -90,19 +91,21 @@
 
             <Button
                 android:id="@+id/btn_MedicationRow_Taken"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/took"
-                android:textColor="@color/error"
+                android:textColor="@color/headline"
                 android:textSize="18sp" />
 
             <Button
                 android:id="@+id/btn_MedicationRow_NotTaken"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/didnt_take"
                 android:textColor="@color/error"
@@ -110,12 +113,13 @@
 
             <Button
                 android:id="@+id/btn_MedicationRow_Snoozed"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/will_take"
-                android:textColor="@color/error"
+                android:textColor="@color/text_color"
                 android:textSize="18sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

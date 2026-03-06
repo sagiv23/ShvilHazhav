@@ -59,7 +59,6 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         holder.txtUserPassword.setText(String.format("סיסמה: %s", user.getPassword()));
         holder.txtUserAge.setText(MessageFormat.format("גיל: {0}", user.getAge()));
         holder.txtUserIsAdmin.setText(String.format("מנהל: %s", user.isAdmin() ? "כן" : "לא"));
-        holder.txtUserWins.setText(MessageFormat.format("ניצחונות: {0}", user.getCountWins()));
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(user.getBirthDateMillis());
@@ -111,7 +110,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
     }
 
     public static class UserViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        final TextView txtUserFullName, txtUserEmail, txtUserPassword, txtUserIsAdmin, txtUserWins, txtUserAge, txtUserBirthDate;
+        final TextView txtUserFullName, txtUserEmail, txtUserPassword, txtUserIsAdmin, txtUserAge, txtUserBirthDate;
         final ImageButton btnDeleteUser, btnToggleAdmin;
         final ImageView imgUserProfile;
 
@@ -124,7 +123,6 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
             txtUserPassword = itemView.findViewById(R.id.txt_UserRow_password);
             txtUserIsAdmin = itemView.findViewById(R.id.txt_UserRow_IsAdmin);
             imgUserProfile = itemView.findViewById(R.id.img_UserRow_userProfile);
-            txtUserWins = itemView.findViewById(R.id.txt_UserRow_wins);
             btnDeleteUser = itemView.findViewById(R.id.btn_UserRow_DeleteUser);
             btnToggleAdmin = itemView.findViewById(R.id.btn_UserRow_MakeAdmin);
         }

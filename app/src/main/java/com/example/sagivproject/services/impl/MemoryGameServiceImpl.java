@@ -7,8 +7,8 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.Card;
+import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.GameRoom;
-import com.example.sagivproject.models.MemoryGameDayStats;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IMemoryGameService;
@@ -47,8 +47,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     private static final String FIELD_IS_MATCHED = "isMatched";
     private static final String FIELD_PROCESSING_MATCH = "processingMatch";
     private static final String FIELD_WINNER_UID = "winnerUid";
-    private static final String FIELD_COUNT_WINS = "countWins";
-    private static final String FIELD_MEMORY_GAME_DAY_STATS = "memoryGameDayStats";
+    private static final String FIELD_DAILY_STATS = "dailyStats";
 
     private static final String STATUS_WAITING = "waiting";
     private static final String STATUS_PLAYING = "playing";
@@ -263,9 +262,6 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                if (committed && error == null) {
-                    updateDailyStats(playerUid, true, false);
-                }
                 if (callback != null) {
                     if (error != null) callback.onFailed(error.toException());
                     else callback.onCompleted(null);
@@ -290,40 +286,18 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     @Override
     public void addUserWin(String uid) {
         if (uid == null || uid.isEmpty() || VALUE_DRAW.equals(uid)) return;
-        usersReference.child(uid).child(FIELD_COUNT_WINS).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                Integer currentWins = currentData.getValue(Integer.class);
-                currentData.setValue(currentWins == null ? 1 : currentWins + 1);
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                if (committed && error == null) {
-                    updateDailyStats(uid, false, true);
-                }
-            }
-        });
+        updateDailyStats(uid);
     }
 
-    @Override
-    public void logWrongMove(String uid) {
-        updateDailyStats(uid, false, false);
-    }
-
-    private void updateDailyStats(String uid, boolean correct, boolean win) {
+    private void updateDailyStats(String uid) {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        usersReference.child(uid).child(FIELD_MEMORY_GAME_DAY_STATS).child(today).runTransaction(new Transaction.Handler() {
+        usersReference.child(uid).child(FIELD_DAILY_STATS).child(today).runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                MemoryGameDayStats stats = currentData.getValue(MemoryGameDayStats.class);
-                if (stats == null) stats = new MemoryGameDayStats();
-                if (win) stats.addWin();
-                else if (correct) stats.addCorrect();
-                else stats.addWrong();
+                DailyStats stats = currentData.getValue(DailyStats.class);
+                if (stats == null) stats = new DailyStats();
+                stats.addMemoryWin();
                 currentData.setValue(stats);
                 return Transaction.success(currentData);
             }

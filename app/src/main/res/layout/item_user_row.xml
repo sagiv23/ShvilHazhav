@@ -77,14 +77,6 @@
                 tools:text="גיל: 0" />
 
             <TextView
-                android:id="@+id/txt_UserRow_wins"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/text_hebrew"
-                android:textSize="20sp"
-                tools:text="ניצחונות: 0" />
-
-            <TextView
                 android:id="@+id/txt_UserRow_IsAdmin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

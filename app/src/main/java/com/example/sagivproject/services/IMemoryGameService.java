@@ -44,11 +44,6 @@ public interface IMemoryGameService {
 
     void removeForfeitOnDisconnect(String roomId);
 
-    /**
-     * Logs a wrong move for a user in the memory game.
-     */
-    void logWrongMove(String uid);
-
     interface IRoomStatusCallback {
         void onRoomStarted(GameRoom room);
 

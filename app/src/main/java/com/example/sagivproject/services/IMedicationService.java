@@ -32,4 +32,9 @@ public interface IMedicationService {
      * Retrieves the medication usage logs for a specific user.
      */
     void getMedicationUsageLogs(@NonNull String uid, @NonNull DatabaseCallback<List<MedicationUsage>> callback);
+
+    /**
+     * Clears all medication usage logs for a specific user.
+     */
+    void clearMedicationUsageLogs(@NonNull String uid, @Nullable DatabaseCallback<Void> callback);
 }

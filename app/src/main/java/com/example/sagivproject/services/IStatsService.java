@@ -6,12 +6,6 @@ import androidx.annotation.NonNull;
  * An interface that defines the contract for operations related to user statistics.
  */
 public interface IStatsService {
-    void addCorrectAnswer(String uid);
-
-    void addWrongAnswer(String uid);
-
-    void resetMathStats(@NonNull String uid, @NonNull String date);
-
     /**
      * Increments daily math statistics for a user.
      *

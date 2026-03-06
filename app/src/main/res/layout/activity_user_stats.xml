@@ -51,6 +51,38 @@
                 android:textSize="40sp" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_user_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/text_hebrew"
+                        android:text="@string/choose_user"
+                        android:textSize="20sp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_user_selector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
                 android:layout_marginBottom="16dp"
@@ -92,14 +124,30 @@
                     android:padding="16dp" />
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/headline_hebrew"
-                android:text="יומן תרופות"
-                android:textSize="24sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/headline_hebrew"
+                    android:text="@string/medication_log"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/btn_user_stats_clear_med_logs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/reset_history"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_medication_logs"

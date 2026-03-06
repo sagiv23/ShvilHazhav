@@ -39,7 +39,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class DetailsAboutUserActivity extends BaseActivity {
-    private TextView txtTitle, txtEmail, txtPassword, txtAge, txtBirthDate, txtWins;
+    private TextView txtTitle, txtEmail, txtPassword, txtAge, txtBirthDate;
     private ImageView imgUserProfile;
     private User user;
     private ActivityResultLauncher<androidx.activity.result.PickVisualMediaRequest> photoPickerLauncher;
@@ -76,7 +76,6 @@ public class DetailsAboutUserActivity extends BaseActivity {
         btnChangePhoto.setOnClickListener(v -> openImagePicker());
         imgUserProfile.setOnClickListener(v -> {
             if (user.getProfileImage() != null) {
-                // Use injected dialog from DialogService
                 dialogService.showFullImageDialog(imgUserProfile.getDrawable());
             }
         });
@@ -84,7 +83,6 @@ public class DetailsAboutUserActivity extends BaseActivity {
         txtTitle = findViewById(R.id.txt_DetailsAboutUser_title);
         txtAge = findViewById(R.id.txt_DetailsAboutUser_age);
         txtBirthDate = findViewById(R.id.txt_DetailsAboutUser_birth_date);
-        txtWins = findViewById(R.id.txt_DetailsAboutUser_wins);
         txtEmail = findViewById(R.id.txt_DetailsAboutUser_email);
         txtPassword = findViewById(R.id.txt_DetailsAboutUser_password);
 
@@ -178,8 +176,6 @@ public class DetailsAboutUserActivity extends BaseActivity {
         );
 
         txtBirthDate.setText(birthDate);
-
-        txtWins.setText(String.valueOf(user.getCountWins()));
     }
 
     /**

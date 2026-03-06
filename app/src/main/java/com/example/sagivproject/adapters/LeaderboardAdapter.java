@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
+import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.User;
 
 import java.text.MessageFormat;
@@ -53,12 +54,24 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
         User user = getItem(position);
         holder.tvName.setText(user.getFullName());
 
+        int totalWins = getTotalWins(user);
+
         // Special handling for the first place (gold medal icon)
-        if (position == 0 && user.getCountWins() > 0) {
-            holder.tvWins.setText(MessageFormat.format("\uD83E\uDD47 {0}", user.getCountWins())); // 🥇
+        if (position == 0 && totalWins > 0) {
+            holder.tvWins.setText(MessageFormat.format("\uD83E\uDD47 {0}", totalWins)); // 🥇
         } else {
-            holder.tvWins.setText(String.valueOf(user.getCountWins()));
+            holder.tvWins.setText(String.valueOf(totalWins));
         }
+    }
+
+    private int getTotalWins(User u) {
+        int total = 0;
+        if (u.getDailyStats() != null) {
+            for (DailyStats ds : u.getDailyStats().values()) {
+                total += ds.getMemoryWins();
+            }
+        }
+        return total;
     }
 
     /**

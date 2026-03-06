@@ -194,9 +194,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             adapter.animateError(idx1, recyclerCards);
             adapter.animateError(idx2, recyclerCards);
 
-            // Log wrong move for stats
-            databaseService.getGameService().logWrongMove(user.getId());
-
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 databaseService.getGameService().updateCardStatus(roomId, idx1, false, false);
                 databaseService.getGameService().updateCardStatus(roomId, idx2, false, false);

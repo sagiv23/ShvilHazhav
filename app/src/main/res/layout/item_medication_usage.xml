@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
                 android:textSize="16sp"
-                tools:text="2023-10-27 08:30" />
+                tools:text="2008-11-23 08:30" />
         </LinearLayout>
 
         <TextView

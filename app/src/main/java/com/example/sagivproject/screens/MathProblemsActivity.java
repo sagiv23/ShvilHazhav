@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
-import com.example.sagivproject.models.MathProblemsStats;
+import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.Operation;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
@@ -66,47 +66,37 @@ public class MathProblemsActivity extends BaseActivity {
         tvAnswer = findViewById(R.id.tv_MathProblemsPage_user_answer);
         cvAnswerContainer = findViewById(R.id.cv_MathProblemsPage_answer_container);
 
-        fetchLatestStatsAndCheckReset();
+        fetchLatestStats();
         generateProblem();
         setupKeypad();
     }
 
-    private void fetchLatestStatsAndCheckReset() {
+    private void fetchLatestStats() {
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
                 if (updatedUser != null) {
                     user = updatedUser;
                     sharedPreferencesUtil.saveUser(user);
+                    updateStatsUI();
                 }
-                checkDailyReset();
             }
 
             @Override
             public void onFailed(Exception e) {
-                checkDailyReset();
+                updateStatsUI();
             }
         });
     }
 
-    private void checkDailyReset() {
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        MathProblemsStats stats = user.getMathProblemsStats();
-
-        if (!today.equals(stats.getLastUpdateDate())) {
-            stats.setCorrectAnswers(0);
-            stats.setWrongAnswers(0);
-            stats.setLastUpdateDate(today);
-
-            databaseService.getStatsService().resetMathStats(user.getId(), today);
-            sharedPreferencesUtil.saveUser(user);
-        }
-        updateStatsUI();
-    }
-
     private void updateStatsUI() {
-        tvCorrect.setText(MessageFormat.format("נכונות: {0}", user.getMathProblemsStats().getCorrectAnswers()));
-        tvWrong.setText(MessageFormat.format("טעויות: {0}", user.getMathProblemsStats().getWrongAnswers()));
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        DailyStats stats = user.getDailyStats().get(today);
+        int correct = (stats != null) ? stats.getMathCorrect() : 0;
+        int wrong = (stats != null) ? stats.getMathWrong() : 0;
+
+        tvCorrect.setText(MessageFormat.format("נכונות: {0}", correct));
+        tvWrong.setText(MessageFormat.format("טעויות: {0}", wrong));
     }
 
     private void generateProblem() {
@@ -193,22 +183,29 @@ public class MathProblemsActivity extends BaseActivity {
     private void checkAnswer() {
         if (userInput.length() == 0) return;
         int userAnswer = Integer.parseInt(userInput.toString());
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         if (userAnswer == correctAnswer) {
-            user.getMathProblemsStats().setCorrectAnswers(user.getMathProblemsStats().getCorrectAnswers() + 1);
+            getTodayStats(today).addMathCorrect();
             showFeedback(true);
             generateProblem();
-            databaseService.getStatsService().addCorrectAnswer(user.getId());
             databaseService.getStatsService().updateDailyMathStats(user.getId(), true);
         } else {
-            user.getMathProblemsStats().setWrongAnswers(user.getMathProblemsStats().getWrongAnswers() + 1);
+            getTodayStats(today).addMathWrong();
             showFeedback(false);
-            databaseService.getStatsService().addWrongAnswer(user.getId());
             databaseService.getStatsService().updateDailyMathStats(user.getId(), false);
         }
 
         sharedPreferencesUtil.saveUser(user);
         updateStatsUI();
+    }
+
+    private DailyStats getTodayStats(String date) {
+        if (user.getDailyStats() == null) user.setDailyStats(new java.util.HashMap<>());
+        if (!user.getDailyStats().containsKey(date)) {
+            user.getDailyStats().put(date, new DailyStats());
+        }
+        return user.getDailyStats().get(date);
     }
 
     private void showFeedback(boolean isCorrect) {

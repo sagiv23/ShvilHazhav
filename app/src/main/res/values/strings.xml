@@ -72,7 +72,6 @@
     <string name="icon_game">אייקון משחק</string>
     <string name="app_picture">תמונת האפליקציה</string>
     <string name="send_message">שלח הודעה</string>
-    <string name="victories">ניצחונות</string>
     <string name="icon_mail">אייקון אימייל</string>
     <string name="icon_password">אייקון סיסמה</string>
     <string name="cancel_search">בטל חיפוש</string>
@@ -131,5 +130,8 @@
     <string name="statistics">סטטיסטיקות</string>
     <string name="took">נטל</string>
     <string name="didnt_take">לא נטל</string>
-    <string name="will_take">ינטול בעתיד</string>
+    <string name="will_take">בהמשך היום</string>
+    <string name="medication_log">יומן תרופות</string>
+    <string name="reset_history">איפוס היסטוריה</string>
+    <string name="choose_user">בחר משתמש:</string>
 </resources>

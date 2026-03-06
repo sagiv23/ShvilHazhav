@@ -25,7 +25,9 @@ import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -36,6 +38,8 @@ import dagger.hilt.android.qualifiers.ActivityContext;
  */
 public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
+    private final Set<String> processingMedications = new HashSet<>();
+    private final Set<String> loggedTodayMedications = new HashSet<>();
     private OnMedicationActionListener listener;
 
     @Inject
@@ -51,6 +55,19 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         setData(medications);
     }
 
+    public void setLoggedTodayMedications(Set<String> medicationIds) {
+        this.loggedTodayMedications.clear();
+        if (medicationIds != null) {
+            this.loggedTodayMedications.addAll(medicationIds);
+        }
+        setData(new java.util.ArrayList<>(dataList));
+    }
+
+    public void addLoggedTodayMedication(String medicationId) {
+        this.loggedTodayMedications.add(medicationId);
+        setProcessingFinished(medicationId);
+    }
+
     @NonNull
     @Override
     public MedicationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -62,6 +79,15 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
     public void onBindViewHolder(@NonNull MedicationViewHolder holder, int position) {
         Medication med = getItem(position);
         Typeface typeface = ResourcesCompat.getFont(context, R.font.text_hebrew);
+
+        boolean isProcessing = processingMedications.contains(med.getId());
+        boolean isLoggedToday = loggedTodayMedications.contains(med.getId());
+
+        boolean shouldDisable = isProcessing || isLoggedToday;
+
+        holder.btnTaken.setEnabled(!shouldDisable);
+        holder.btnNotTaken.setEnabled(!shouldDisable);
+        holder.btnSnoozed.setEnabled(!shouldDisable);
 
         if (typeface != null) {
             SpannableString nameSpannable = new SpannableString(med.getName());
@@ -116,15 +142,27 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
             menu.show();
         });
 
-        holder.btnTaken.setOnClickListener(v -> {
-            if (listener != null) listener.onStatusChanged(med, MedicationStatus.TAKEN);
-        });
-        holder.btnNotTaken.setOnClickListener(v -> {
-            if (listener != null) listener.onStatusChanged(med, MedicationStatus.NOT_TAKEN);
-        });
-        holder.btnSnoozed.setOnClickListener(v -> {
-            if (listener != null) listener.onStatusChanged(med, MedicationStatus.SNOOZED);
-        });
+        holder.btnTaken.setOnClickListener(v -> handleStatusClick(med, MedicationStatus.TAKEN));
+        holder.btnNotTaken.setOnClickListener(v -> handleStatusClick(med, MedicationStatus.NOT_TAKEN));
+        holder.btnSnoozed.setOnClickListener(v -> handleStatusClick(med, MedicationStatus.SNOOZED));
+    }
+
+    private void handleStatusClick(Medication med, MedicationStatus status) {
+        if (listener != null) {
+            processingMedications.add(med.getId());
+            notifyItemChanged(getItemList().indexOf(med));
+            listener.onStatusChanged(med, status);
+        }
+    }
+
+    public void setProcessingFinished(String medicationId) {
+        processingMedications.remove(medicationId);
+        for (int i = 0; i < getItemCount(); i++) {
+            if (getItem(i).getId().equals(medicationId)) {
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     public interface OnMedicationActionListener {

@@ -7,7 +7,6 @@ import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
-import java.util.HashMap;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
@@ -184,7 +183,7 @@ public class AuthServiceImpl implements IAuthService {
      */
     private void createUser(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> callback) {
         String uid = userService.generateUserId();
-        User user = new User(uid, firstName, lastName, birthDateMillis, email, password, UserRole.REGULAR, null, new HashMap<>());
+        User user = new User(uid, firstName, lastName, birthDateMillis, email, password, UserRole.REGULAR);
 
         userService.createNewUser(user, new DatabaseCallback<>() {
             @Override

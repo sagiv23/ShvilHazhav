@@ -270,23 +270,17 @@ public class UsersTableActivity extends BaseActivity {
                     return user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
                 case "משתמשים רגילים":
                     return !user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
-                case "ניצחונות":
-                    return user.getFullName().toLowerCase().contains(lowerQuery);
                 default:
                     return user.getFullName().toLowerCase().contains(lowerQuery) || (user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery));
             }
         }).collect(Collectors.toList());
-
-        if (selectedType.equals("ניצחונות")) {
-            filtered.sort((u1, u2) -> Integer.compare(u2.getCountWins(), u1.getCountWins()));
-        }
 
         adapter.setUserList(filtered);
     }
 
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
-        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "משתמשים רגילים", "ניצחונות"};
+        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "משתמשים רגילים"};
         return new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, searchOptions) {
             @NonNull
             @Override

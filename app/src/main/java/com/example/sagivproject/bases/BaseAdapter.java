@@ -63,6 +63,15 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
     }
 
     /**
+     * Returns the internal data list.
+     *
+     * @return The list of items.
+     */
+    public List<T> getItemList() {
+        return dataList;
+    }
+
+    /**
      * Internal callback class for {@link DiffUtil} to compare items in the list.
      */
     private class DiffCallback extends DiffUtil.Callback {

@@ -43,13 +43,10 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
         int color;
         switch (usage.getStatus()) {
             case TAKEN:
-                color = android.R.color.holo_green_dark;
+                color = R.color.headline;
                 break;
             case NOT_TAKEN:
-                color = android.R.color.holo_red_dark;
-                break;
-            case SNOOZED:
-                color = android.R.color.holo_orange_dark;
+                color = R.color.error;
                 break;
             default:
                 color = R.color.text_color;

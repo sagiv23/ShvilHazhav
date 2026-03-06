@@ -1,9 +1,18 @@
 package com.example.sagivproject.screens;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -13,9 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationUsageAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.MedicationUsage;
-import com.example.sagivproject.models.MemoryGameDayStats;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.ui.SimpleXYGraphView;
 
@@ -29,10 +39,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class UserStatsActivity extends BaseActivity {
-    private SimpleXYGraphView graphMemoryCW, graphMemoryWins, graphMathCW;
+    private final List<User> selectableUsers = new ArrayList<>();
+    private SimpleXYGraphView graphMemoryWins, graphMathStats, graphMedicationStats;
     private RecyclerView recyclerMedicationLogs;
     private MedicationUsageAdapter usageAdapter;
-    private User user;
+    private User currentUser;
+    private User loggedInUser;
+    private Spinner spinnerUserSelector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,26 +58,126 @@ public class UserStatsActivity extends BaseActivity {
             return insets;
         });
 
-        user = sharedPreferencesUtil.getUser();
+        loggedInUser = sharedPreferencesUtil.getUser();
+        currentUser = loggedInUser;
+
         ViewGroup topMenuContainer = findViewById(R.id.topMenuContainer);
         setupTopMenu(topMenuContainer);
 
-        graphMemoryCW = findViewById(R.id.graph_memory_cw);
         graphMemoryWins = findViewById(R.id.graph_wins);
-        graphMathCW = findViewById(R.id.graph_math_stats);
+        graphMathStats = findViewById(R.id.graph_math_stats);
+        graphMedicationStats = findViewById(R.id.graph_memory_cw);
         recyclerMedicationLogs = findViewById(R.id.recycler_medication_logs);
+        spinnerUserSelector = findViewById(R.id.spinner_user_selector);
 
-        fetchLatestUserData();
+        Button btnClearLogs = findViewById(R.id.btn_user_stats_clear_med_logs);
+        if (btnClearLogs != null) {
+            btnClearLogs.setOnClickListener(v -> clearMedicationLogs());
+        }
+
+        setupAdminUI();
+        refreshData();
         setupMedicationLogs();
     }
 
+    private void setupAdminUI() {
+        if (loggedInUser.getRole() == UserRole.ADMIN) {
+            findViewById(R.id.card_user_selector).setVisibility(View.VISIBLE);
+            databaseService.getUserService().getUserList(new DatabaseCallback<>() {
+                @Override
+                public void onCompleted(List<User> list) {
+                    selectableUsers.clear();
+                    List<String> userNames = new ArrayList<>();
+
+                    // Filter out the logged-in admin from the list
+                    for (User u : list) {
+                        if (!u.getId().equals(loggedInUser.getId())) {
+                            selectableUsers.add(u);
+                            userNames.add(u.getFullName());
+                        }
+                    }
+
+                    if (selectableUsers.isEmpty()) {
+                        findViewById(R.id.card_user_selector).setVisibility(View.GONE);
+                        return;
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(UserStatsActivity.this, android.R.layout.simple_spinner_item, userNames) {
+                        @NonNull
+                        @Override
+                        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                            TextView tv = (TextView) super.getView(position, convertView, parent);
+                            tv.setTypeface(ResourcesCompat.getFont(UserStatsActivity.this, R.font.text_hebrew));
+                            tv.setTextSize(22);
+                            tv.setTextColor(getColor(R.color.text_color));
+                            tv.setPadding(24, 24, 24, 24);
+                            return tv;
+                        }
+
+                        @Override
+                        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+                            TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
+                            tv.setTypeface(ResourcesCompat.getFont(UserStatsActivity.this, R.font.text_hebrew));
+                            tv.setTextSize(22);
+                            tv.setTextColor(getColor(R.color.text_color));
+                            tv.setBackgroundColor(getColor(R.color.background_color_buttons));
+                            tv.setPadding(24, 24, 24, 24);
+                            return tv;
+                        }
+                    };
+
+                    spinnerUserSelector.setAdapter(adapter);
+                    spinnerUserSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            currentUser = selectableUsers.get(position);
+                            refreshData();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailed(Exception e) {
+                    Toast.makeText(UserStatsActivity.this, "שגיאה בטעינת משתמשים", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void refreshData() {
+        fetchLatestUserData();
+        loadMedicationLogs();
+    }
+
+    private void clearMedicationLogs() {
+        dialogService.showConfirmDialog("איפוס היסטוריה", "האם אתה בטוח שברצונך למחוק את כל יומן נטילת התרופות?", "אפס", "בטל", () -> databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Void object) {
+                usageAdapter.setData(new ArrayList<>());
+                Toast.makeText(UserStatsActivity.this, "ההיסטוריה אופסה בהצלחה", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(UserStatsActivity.this, "שגיאה באיפוס ההיסטוריה", Toast.LENGTH_SHORT).show();
+            }
+        }));
+    }
+
     private void fetchLatestUserData() {
-        databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
+        databaseService.getUserService().getUser(currentUser.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
                 if (updatedUser != null) {
-                    user = updatedUser;
-                    sharedPreferencesUtil.saveUser(user);
+                    currentUser = updatedUser;
+                    // Only save to cache if it's the logged-in user
+                    if (currentUser.getId().equals(loggedInUser.getId())) {
+                        sharedPreferencesUtil.saveUser(currentUser);
+                    }
                     setupGraphs();
                 }
             }
@@ -77,76 +190,65 @@ public class UserStatsActivity extends BaseActivity {
     }
 
     private void setupGraphs() {
-        setupMemoryGraphs();
-        setupMathGraphs();
-    }
-
-    private void setupMemoryGraphs() {
-        if (user.getMemoryGameDayStats() == null || user.getMemoryGameDayStats().isEmpty()) return;
-
-        Map<String, MemoryGameDayStats> statsMap = new TreeMap<>(user.getMemoryGameDayStats());
-        List<SimpleXYGraphView.Point> ratioPoints = new ArrayList<>();
-        List<SimpleXYGraphView.Point> winPoints = new ArrayList<>();
-        List<String> dates = new ArrayList<>();
-
-        int index = 0;
-        for (String date : statsMap.keySet()) {
-            MemoryGameDayStats stats = statsMap.get(date);
-            if (stats != null) {
-                float total = stats.getCorrectAnswers() + stats.getWrongAnswers();
-                float ratio = total > 0 ? (stats.getCorrectAnswers() / total) * 100 : 0;
-
-                ratioPoints.add(new SimpleXYGraphView.Point(index, ratio));
-                winPoints.add(new SimpleXYGraphView.Point(index, stats.getWins()));
-                dates.add(date);
-                index++;
-            }
-        }
-
-        graphMemoryCW.setData(ratioPoints, dates, "זיכרון: אחוז הצלחה", "תאריך", "% הצלחה");
-        graphMemoryWins.setData(winPoints, dates, "זיכרון: ניצחונות", "תאריך", "ניצחונות");
-    }
-
-    private void setupMathGraphs() {
-        if (user.getMathProblemsDayStats() == null || user.getMathProblemsDayStats().isEmpty())
+        if (currentUser.getDailyStats() == null || currentUser.getDailyStats().isEmpty()) {
+            graphMemoryWins.setData(new ArrayList<>(), new ArrayList<>(), "זיכרון: ניצחונות", "תאריך", "ניצחונות");
+            graphMathStats.setData(new ArrayList<>(), new ArrayList<>(), "מתמטיקה: אחוז הצלחה", "תאריך", "% הצלחה");
+            graphMedicationStats.setData(new ArrayList<>(), new ArrayList<>(), "תרופות: עמידה ביעדים", "תאריך", "% הצלחה");
             return;
+        }
 
-        Map<String, MemoryGameDayStats> statsMap = new TreeMap<>(user.getMathProblemsDayStats());
-        List<SimpleXYGraphView.Point> ratioPoints = new ArrayList<>();
+        Map<String, DailyStats> statsMap = new TreeMap<>(currentUser.getDailyStats());
+        List<SimpleXYGraphView.Point> memoryWinPoints = new ArrayList<>();
+        List<SimpleXYGraphView.Point> mathRatioPoints = new ArrayList<>();
+        List<SimpleXYGraphView.Point> medRatioPoints = new ArrayList<>();
         List<String> dates = new ArrayList<>();
 
         int index = 0;
         for (String date : statsMap.keySet()) {
-            MemoryGameDayStats stats = statsMap.get(date);
+            DailyStats stats = statsMap.get(date);
             if (stats != null) {
-                float total = stats.getCorrectAnswers() + stats.getWrongAnswers();
-                float ratio = total > 0 ? (stats.getCorrectAnswers() / total) * 100 : 0;
+                memoryWinPoints.add(new SimpleXYGraphView.Point(index, stats.getMemoryWins()));
 
-                ratioPoints.add(new SimpleXYGraphView.Point(index, ratio));
+                float totalMath = stats.getMathCorrect() + stats.getMathWrong();
+                float mathRatio = totalMath > 0 ? (stats.getMathCorrect() / totalMath) * 100 : 0;
+                mathRatioPoints.add(new SimpleXYGraphView.Point(index, mathRatio));
+
+                float totalMeds = stats.getMedicationsTaken() + stats.getMedicationsMissed();
+                float medRatio = totalMeds > 0 ? (stats.getMedicationsTaken() / totalMeds) * 100 : 0;
+                medRatioPoints.add(new SimpleXYGraphView.Point(index, medRatio));
+
                 dates.add(date);
                 index++;
             }
         }
 
-        graphMathCW.setData(ratioPoints, dates, "מתמטיקה: אחוז הצלחה", "תאריך", "% הצלחה");
+        graphMemoryWins.setData(memoryWinPoints, dates, "זיכרון: ניצחונות", "תאריך", "ניצחונות");
+        graphMathStats.setData(mathRatioPoints, dates, "מתמטיקה: אחוז הצלחה", "תאריך", "% הצלחה");
+        graphMedicationStats.setData(medRatioPoints, dates, "תרופות: עמידה ביעדים", "תאריך", "% הצלחה");
     }
 
     private void setupMedicationLogs() {
         recyclerMedicationLogs.setLayoutManager(new LinearLayoutManager(this));
         usageAdapter = adapterService.getMedicationUsageAdapter();
         recyclerMedicationLogs.setAdapter(usageAdapter);
+    }
 
-        databaseService.getMedicationService().getMedicationUsageLogs(user.getId(), new DatabaseCallback<>() {
+    private void loadMedicationLogs() {
+        databaseService.getMedicationService().getMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<MedicationUsage> list) {
                 if (list != null) {
-                    Collections.reverse(list);
-                    usageAdapter.setData(list);
+                    List<MedicationUsage> mutableList = new ArrayList<>(list);
+                    Collections.reverse(mutableList);
+                    usageAdapter.setData(mutableList);
+                } else {
+                    usageAdapter.setData(new ArrayList<>());
                 }
             }
 
             @Override
             public void onFailed(Exception e) {
+                usageAdapter.setData(new ArrayList<>());
             }
         });
     }

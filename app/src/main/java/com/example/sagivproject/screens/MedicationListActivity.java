@@ -37,9 +37,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -136,6 +138,28 @@ public class MedicationListActivity extends BaseActivity {
 
         loadMedicationsFromCache();
         fetchMedicationsFromServer();
+        fetchTodayUsageLogs();
+    }
+
+    private void fetchTodayUsageLogs() {
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        databaseService.getMedicationService().getMedicationUsageLogs(uid, new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(List<MedicationUsage> logs) {
+                Set<String> todayLoggedIds = new HashSet<>();
+                for (MedicationUsage usage : logs) {
+                    if (today.equals(usage.getDate())) {
+                        todayLoggedIds.add(usage.getId());
+                    }
+                }
+                adapter.setLoggedTodayMedications(todayLoggedIds);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                // Ignore failure for logs fetching
+            }
+        });
     }
 
     private void logMedicationStatus(Medication medication, MedicationStatus status) {
@@ -146,11 +170,13 @@ public class MedicationListActivity extends BaseActivity {
         databaseService.getMedicationService().logMedicationUsage(uid, usage, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                adapter.addLoggedTodayMedication(medication.getId());
                 Toast.makeText(MedicationListActivity.this, "סטטוס עודכן: " + status.getDisplayName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(Exception e) {
+                adapter.setProcessingFinished(medication.getId());
                 Toast.makeText(MedicationListActivity.this, "שגיאה בעדכון סטטוס", Toast.LENGTH_SHORT).show();
             }
         });

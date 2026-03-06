@@ -109,56 +109,24 @@
                         android:layout_marginBottom="30dp"
                         android:baselineAligned="false"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/txt_DetailsAboutUser_age"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:fontFamily="@font/text_hebrew"
+                            android:textColor="@color/headline"
+                            android:textSize="45sp"
+                            tools:text="0" />
 
-                            <TextView
-                                android:id="@+id/txt_DetailsAboutUser_age"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/text_hebrew"
-                                android:textColor="@color/headline"
-                                android:textSize="45sp"
-                                tools:text="0" />
-
-                            <TextView
-                                android:id="@+id/txt_DetailsAboutUser_birth_date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/text_hebrew"
-                                android:textSize="22sp"
-                                tools:text="00/00/0000" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/txt_DetailsAboutUser_birth_date"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/txt_DetailsAboutUser_wins"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/text_hebrew"
-                                android:textColor="@color/headline"
-                                android:textSize="45sp"
-                                tools:text="0" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/text_hebrew"
-                                android:text="@string/victories"
-                                android:textSize="22sp" />
-                        </LinearLayout>
+                            android:fontFamily="@font/text_hebrew"
+                            android:textSize="22sp"
+                            tools:text="00/00/0000" />
                     </LinearLayout>
 
                     <LinearLayout

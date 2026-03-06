@@ -25,18 +25,14 @@ public class User implements Serializable, Idable {
     private String password;
     private String profileImage;
     private HashMap<String, Medication> medications;
-    private int countWins;
-    private MathProblemsStats mathProblemsStats;
-    private HashMap<String, MemoryGameDayStats> memoryGameDayStats; // Date string -> Stats
-    private HashMap<String, MemoryGameDayStats> mathProblemsDayStats; // Date string -> Stats
+    private HashMap<String, DailyStats> dailyStats;
 
     public User() {
         this.role = UserRole.REGULAR;
-        this.memoryGameDayStats = new HashMap<>();
-        this.mathProblemsDayStats = new HashMap<>();
+        this.dailyStats = new HashMap<>();
     }
 
-    public User(String id, String firstName, String lastName, long birthDateMillis, String email, String password, UserRole role, String profileImage, HashMap<String, Medication> medications) {
+    public User(String id, String firstName, String lastName, long birthDateMillis, String email, String password, UserRole role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,12 +40,9 @@ public class User implements Serializable, Idable {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.profileImage = profileImage;
-        this.medications = medications;
-        this.countWins = 0;
-        this.mathProblemsStats = new MathProblemsStats();
-        this.memoryGameDayStats = new HashMap<>();
-        this.mathProblemsDayStats = new HashMap<>();
+        this.profileImage = null;
+        this.medications = new HashMap<>();
+        this.dailyStats = new HashMap<>();
     }
 
     public User(User other) {
@@ -62,22 +55,13 @@ public class User implements Serializable, Idable {
         this.birthDateMillis = other.birthDateMillis;
         this.password = other.password;
         this.profileImage = other.profileImage;
-        this.countWins = other.countWins;
         if (other.medications != null) {
             this.medications = new HashMap<>(other.medications);
         }
-        if (other.mathProblemsStats != null) {
-            this.mathProblemsStats = new MathProblemsStats(other.mathProblemsStats.getCorrectAnswers(), other.mathProblemsStats.getWrongAnswers(), other.mathProblemsStats.getLastUpdateDate());
-        }
-        if (other.memoryGameDayStats != null) {
-            this.memoryGameDayStats = new HashMap<>(other.memoryGameDayStats);
+        if (other.dailyStats != null) {
+            this.dailyStats = new HashMap<>(other.dailyStats);
         } else {
-            this.memoryGameDayStats = new HashMap<>();
-        }
-        if (other.mathProblemsDayStats != null) {
-            this.mathProblemsDayStats = new HashMap<>(other.mathProblemsDayStats);
-        } else {
-            this.mathProblemsDayStats = new HashMap<>();
+            this.dailyStats = new HashMap<>();
         }
     }
 
@@ -172,39 +156,13 @@ public class User implements Serializable, Idable {
         this.medications = medications;
     }
 
-    public int getCountWins() {
-        return this.countWins;
+    public HashMap<String, DailyStats> getDailyStats() {
+        if (dailyStats == null) dailyStats = new HashMap<>();
+        return dailyStats;
     }
 
-    public void setCountWins(int countWins) {
-        this.countWins = countWins;
-    }
-
-    public MathProblemsStats getMathProblemsStats() {
-        if (mathProblemsStats == null) mathProblemsStats = new MathProblemsStats();
-        return mathProblemsStats;
-    }
-
-    public void setMathProblemsStats(MathProblemsStats mathProblemsStats) {
-        this.mathProblemsStats = mathProblemsStats;
-    }
-
-    public HashMap<String, MemoryGameDayStats> getMemoryGameDayStats() {
-        if (memoryGameDayStats == null) memoryGameDayStats = new HashMap<>();
-        return memoryGameDayStats;
-    }
-
-    public void setMemoryGameDayStats(HashMap<String, MemoryGameDayStats> memoryGameDayStats) {
-        this.memoryGameDayStats = memoryGameDayStats;
-    }
-
-    public HashMap<String, MemoryGameDayStats> getMathProblemsDayStats() {
-        if (mathProblemsDayStats == null) mathProblemsDayStats = new HashMap<>();
-        return mathProblemsDayStats;
-    }
-
-    public void setMathProblemsDayStats(HashMap<String, MemoryGameDayStats> mathProblemsDayStats) {
-        this.mathProblemsDayStats = mathProblemsDayStats;
+    public void setDailyStats(HashMap<String, DailyStats> dailyStats) {
+        this.dailyStats = dailyStats;
     }
 
     @Exclude
@@ -218,7 +176,6 @@ public class User implements Serializable, Idable {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return birthDateMillis == user.birthDateMillis &&
-                countWins == user.countWins &&
                 Objects.equals(id, user.id) &&
                 Objects.equals(email, user.email) &&
                 role == user.role &&
@@ -228,7 +185,7 @@ public class User implements Serializable, Idable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, role, firstName, lastName, birthDateMillis, countWins);
+        return Objects.hash(id, email, role, firstName, lastName, birthDateMillis);
     }
 
     @NonNull
