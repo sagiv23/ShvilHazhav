@@ -8,24 +8,20 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
-import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.ContactActivity;
-import com.example.sagivproject.screens.DetailsAboutUserActivity;
-import com.example.sagivproject.screens.LandingActivity;
-import com.example.sagivproject.screens.LoginActivity;
-import com.example.sagivproject.screens.MainActivity;
-import com.example.sagivproject.screens.RegisterActivity;
-import com.example.sagivproject.screens.SettingsActivity;
 import com.example.sagivproject.services.AdapterService;
 import com.example.sagivproject.services.DialogService;
 import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.ui.AdminMenuFragment;
+import com.example.sagivproject.ui.LoggedInMenuFragment;
+import com.example.sagivproject.ui.LoggedOutMenuFragment;
+import com.example.sagivproject.ui.MenuNavigationListener;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.example.sagivproject.utils.Validator;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +32,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * An abstract base class for all activities in the application.
- * <p>
- * This class provides common functionality that is shared across multiple activities,
- * such as dependency injection for services, and a standardized way to set up a top navigation menu.
- * It also includes a mechanism for requesting necessary permissions.
- * </p>
  */
 @AndroidEntryPoint
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements MenuNavigationListener {
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
     @Inject
@@ -59,13 +50,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Inject
     protected ImageUtil imageUtil;
 
-    /**
-     * Initializes the activity and requests permissions if required.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,73 +60,43 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Determines which top menu to show based on user state and inflates it.
+     * Determines which top menu Fragment to show based on user state and replaces it in the container.
      *
      * @param menuContainer The ViewGroup into which the menu will be inflated.
      */
     protected void setupTopMenu(ViewGroup menuContainer) {
+        if (menuContainer == null) return;
+
+        // Check if a fragment is already attached to this container to avoid duplicates on rotation
+        if (getSupportFragmentManager().findFragmentById(menuContainer.getId()) != null) {
+            return;
+        }
+
         User currentUser = sharedPreferencesUtil.getUser();
+        Fragment menuFragment;
 
         if (currentUser != null) {
             if (currentUser.isAdmin()) {
-                setupAdminMenu(menuContainer);
+                menuFragment = new AdminMenuFragment();
             } else {
-                setupLoggedInMenu(menuContainer);
+                menuFragment = new LoggedInMenuFragment();
             }
         } else {
-            setupLoggedOutMenu(menuContainer);
+            menuFragment = new LoggedOutMenuFragment();
         }
+
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(menuContainer.getId(), menuFragment)
+                .commit();
     }
 
     /**
-     * Inflates and configures the top menu for an admin user.
+     * Implements MenuNavigationListener.
      */
-    private void setupAdminMenu(ViewGroup menuContainer) {
-        getLayoutInflater().inflate(R.layout.top_menu_admin, menuContainer, true);
-        MaterialButton btnAdmin = findViewById(R.id.btn_menu_admin_back);
-        btnAdmin.setOnClickListener(v -> finish());
-    }
-
-    /**
-     * Inflates and configures the top menu for a regular (non-admin) logged-in user.
-     */
-    private void setupLoggedInMenu(ViewGroup menuContainer) {
-        getLayoutInflater().inflate(R.layout.top_menu_logged_in, menuContainer, true);
-        setupNavigationButton(R.id.btn_menu_main, MainActivity.class);
-        setupNavigationButton(R.id.btn_menu_contact, ContactActivity.class);
-        setupNavigationButton(R.id.btn_menu_details, DetailsAboutUserActivity.class);
-        setupSettingsButton(R.id.btn_menu_settings, true);
-    }
-
-    /**
-     * Inflates and configures the top menu for a logged-out user.
-     */
-    private void setupLoggedOutMenu(ViewGroup menuContainer) {
-        getLayoutInflater().inflate(R.layout.top_menu_logged_out, menuContainer, true);
-        setupNavigationButton(R.id.btn_menu_main, LandingActivity.class);
-        setupNavigationButton(R.id.btn_menu_contact, ContactActivity.class);
-        setupNavigationButton(R.id.btn_menu_login, LoginActivity.class);
-        setupNavigationButton(R.id.btn_menu_register, RegisterActivity.class);
-        setupSettingsButton(R.id.btn_menu_settings, false);
-    }
-
-    /**
-     * Helper method to set up a navigation button's click listener.
-     */
-    private void setupNavigationButton(int buttonId, Class<?> targetActivity) {
-        findViewById(buttonId).setOnClickListener(v -> navigateIfNotCurrent(targetActivity));
-    }
-
-    /**
-     * Helper method to set up the settings button's click listener with the correct intent extra.
-     */
-    private void setupSettingsButton(int buttonId, boolean isFromLoggedIn) {
-        MaterialButton btnSettings = findViewById(buttonId);
-        btnSettings.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            intent.putExtra("isFromLoggedIn", isFromLoggedIn);
-            startActivity(intent);
-        });
+    @Override
+    public void onNavigate(Class<?> targetActivity) {
+        navigateIfNotCurrent(targetActivity);
     }
 
     /**
@@ -150,7 +104,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param targetActivity The class of the activity to navigate to.
      */
-    protected void navigateIfNotCurrent(Class<?> targetActivity) {
+    public void navigateIfNotCurrent(Class<?> targetActivity) {
         if (!this.getClass().equals(targetActivity)) {
             startActivity(new Intent(this, targetActivity));
         }
@@ -158,7 +112,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * Requests a standard set of required permissions for the application.
-     * NOTE: This does not handle the result of the permission request (e.g., if the user denies them).
      */
     protected void requestPermissions() {
         List<String> permissions = new ArrayList<>();
@@ -169,10 +122,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), 1001);
     }
 
-    /**
-     * A marker interface to indicate that an activity requires special permissions.
-     * Activities implementing this interface will have {@link #requestPermissions()} called automatically.
-     */
     public interface RequiresPermissions {
     }
 }

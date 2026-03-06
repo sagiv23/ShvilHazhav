@@ -8,14 +8,14 @@
     android:paddingBottom="16dp"
     tools:context=".screens.MedicationImagesTableActivity">
 
-    <LinearLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/topMenuContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/top_menu_admin" />
 
     <View
         android:id="@+id/separatorLine"

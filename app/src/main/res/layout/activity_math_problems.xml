@@ -7,14 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".screens.MathProblemsActivity">
 
-    <LinearLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/topMenuContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/top_menu_logged_in" />
 
     <View
         android:id="@+id/separatorLine"
@@ -66,11 +66,9 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- נתונים -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -93,14 +91,6 @@
                             android:textSize="23sp"
                             tools:text="טעויות: 0" />
                     </LinearLayout>
-
-                    <Button
-                        android:id="@+id/btn_MathProblemsPage_resetStats"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/text_hebrew"
-                        android:text="@string/data_reset"
-                        android:textSize="20sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

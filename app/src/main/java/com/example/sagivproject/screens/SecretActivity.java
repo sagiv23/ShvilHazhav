@@ -5,15 +5,15 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseActivity;
 import com.google.android.material.button.MaterialButton;
 
-public class SecretActivity extends AppCompatActivity {
+public class SecretActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +25,7 @@ public class SecretActivity extends AppCompatActivity {
             return insets;
         });
 
-        findViewById(R.id.btn_secret_back).setOnClickListener(v -> finish());
+        setupTopMenu(findViewById(R.id.topMenuContainer));
 
         setupSocialButton(R.id.btnYoutube, "https://www.youtube.com/@Sagiv23");
         setupSocialButton(R.id.btnInstagram, "https://www.instagram.com/Sagiv23");

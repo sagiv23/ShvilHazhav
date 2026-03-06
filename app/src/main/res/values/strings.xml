@@ -104,7 +104,6 @@
     <string name="clean">C</string>
     <string name="_0">0</string>
     <string name="find_medication">חפש תרופה…</string>
-    <string name="data_reset">איפוס נתונים</string>
     <string name="searching_enemy">מחפש יריב…</string>
     <string name="new_category_name">שם קטגוריה חדשה</string>
     <string name="forum_categories">קטגוריות קשר קרוב</string>
@@ -129,4 +128,5 @@
     <string name="youtube">YouTube</string>
     <string name="instagram">Instagram</string>
     <string name="github">GitHub</string>
+    <string name="statistics">סטטיסטיקות</string>
 </resources>

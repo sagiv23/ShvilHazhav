@@ -19,23 +19,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * The main screen for logged-in users.
- * <p>
- * This activity serves as the central hub, providing navigation to the app's main features:
- * Medication List, Forum, AI Assistant, Memory Game, Math Problems and Tip Of The Day. It also displays
- * a welcome message.
- * </p>
  */
 @AndroidEntryPoint
 public class MainActivity extends BaseActivity implements BaseActivity.RequiresPermissions {
 
-    /**
-     * Initializes the activity, sets up the UI, configures button click listeners,
-     * and displays a welcome message.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +45,7 @@ public class MainActivity extends BaseActivity implements BaseActivity.RequiresP
         Button btnToGameHomeScreen = findViewById(R.id.btn_main_to_GameHomeScreen);
         Button btnToMathProblems = findViewById(R.id.btn_main_to_MathProblems);
         Button btnToTipOfTheDay = findViewById(R.id.btn_main_to_TipOfTheDay);
+        Button btnToStats = findViewById(R.id.btn_main_to_Stats);
         TextView txtHomePageTitle = findViewById(R.id.txt_main_Title);
 
         btnToMedicationList.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, MedicationListActivity.class)));
@@ -66,6 +54,7 @@ public class MainActivity extends BaseActivity implements BaseActivity.RequiresP
         btnToGameHomeScreen.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, GameHomeScreenActivity.class)));
         btnToMathProblems.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, MathProblemsActivity.class)));
         btnToTipOfTheDay.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, TipOfTheDayActivity.class)));
+        btnToStats.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, UserStatsActivity.class)));
 
         if (user != null) {
             txtHomePageTitle.setText(String.format("שלום %s", user.getFullName()));

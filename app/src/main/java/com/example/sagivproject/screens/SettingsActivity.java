@@ -48,7 +48,8 @@ public class SettingsActivity extends BaseActivity {
             return insets;
         });
 
-        findViewById(R.id.btn_settings_back).setOnClickListener(v -> finish());
+        setupTopMenu(findViewById(R.id.topMenuContainer));
+
         Button btnLogout = findViewById(R.id.btn_logout);
 
         boolean isFromLoggedIn = getIntent().getBooleanExtra("isFromLoggedIn", false);
@@ -104,7 +105,6 @@ public class SettingsActivity extends BaseActivity {
             startActivity(intent);
         };
 
-        // Use injected dialog from DialogService
         dialogService.showConfirmDialog("התנתקות", "האם ברצונך להתנתק?", "התנתק", "בטל", onConfirm);
     }
 }
