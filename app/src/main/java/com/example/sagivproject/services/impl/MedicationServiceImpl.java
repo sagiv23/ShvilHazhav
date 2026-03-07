@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -26,7 +27,6 @@ import javax.inject.Inject;
 public class MedicationServiceImpl extends BaseDatabaseService<Medication> implements IMedicationService {
     private static final String USERS_PATH = "users";
     private static final String MEDICATIONS_PATH = "medications";
-    private static final String USAGE_LOGS_PATH = "medicationUsageLogs";
     private static final String FIELD_DAILY_STATS = "dailyStats";
 
     @Inject
@@ -72,54 +72,46 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
 
     @Override
     public void logMedicationUsage(@NonNull String uid, @NonNull MedicationUsage usage, @Nullable DatabaseCallback<Void> callback) {
-        String logPath = USERS_PATH + "/" + uid + "/" + USAGE_LOGS_PATH;
-        String logId = databaseReference.child(logPath).push().getKey();
-        if (logId != null) {
-            databaseReference.child(logPath).child(logId).setValue(usage)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            updateDailyStats(uid, usage.getDate(), usage.getStatus());
-                            if (callback != null) callback.onCompleted(null);
-                        } else {
-                            if (callback != null) callback.onFailed(task.getException());
-                        }
-                    });
-        }
-    }
-
-    private void updateDailyStats(String uid, String date, MedicationStatus status) {
-        databaseReference.child(USERS_PATH).child(uid).child(FIELD_DAILY_STATS).child(date).runTransaction(new Transaction.Handler() {
+        databaseReference.child(USERS_PATH).child(uid).child(FIELD_DAILY_STATS).child(usage.getDate()).runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                 DailyStats stats = currentData.getValue(DailyStats.class);
                 if (stats == null) stats = new DailyStats();
-                if (status == MedicationStatus.TAKEN) {
+
+                if (usage.getStatus() == MedicationStatus.TAKEN) {
                     stats.addMedicationTaken();
-                } else if (status == MedicationStatus.NOT_TAKEN) {
+                } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) {
                     stats.addMedicationMissed();
                 }
+
+                stats.addMedicationUsageLog(usage);
                 currentData.setValue(stats);
                 return Transaction.success(currentData);
             }
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (callback != null) {
+                    if (error != null) callback.onFailed(error.toException());
+                    else callback.onCompleted(null);
+                }
             }
         });
     }
 
     @Override
     public void getMedicationUsageLogs(@NonNull String uid, @NonNull DatabaseCallback<List<MedicationUsage>> callback) {
-        String logPath = USERS_PATH + "/" + uid + "/" + USAGE_LOGS_PATH;
-        databaseReference.child(logPath).get().addOnCompleteListener(task -> {
+        databaseReference.child(USERS_PATH).child(uid).child(FIELD_DAILY_STATS).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                java.util.ArrayList<MedicationUsage> logs = new java.util.ArrayList<>();
-                for (com.google.firebase.database.DataSnapshot ds : task.getResult().getChildren()) {
-                    MedicationUsage usage = ds.getValue(MedicationUsage.class);
-                    if (usage != null) logs.add(usage);
+                List<MedicationUsage> allLogs = new ArrayList<>();
+                for (DataSnapshot daySnapshot : task.getResult().getChildren()) {
+                    DailyStats stats = daySnapshot.getValue(DailyStats.class);
+                    if (stats != null && stats.getMedicationUsageLogs() != null) {
+                        allLogs.addAll(stats.getMedicationUsageLogs());
+                    }
                 }
-                callback.onCompleted(logs);
+                callback.onCompleted(allLogs);
             } else {
                 callback.onFailed(task.getException());
             }
@@ -128,8 +120,30 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
 
     @Override
     public void clearMedicationUsageLogs(@NonNull String uid, @Nullable DatabaseCallback<Void> callback) {
-        String logPath = USERS_PATH + "/" + uid + "/" + USAGE_LOGS_PATH;
-        deleteData(logPath, callback);
+        databaseReference.child(USERS_PATH).child(uid).child(FIELD_DAILY_STATS).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                for (MutableData dayData : currentData.getChildren()) {
+                    DailyStats stats = dayData.getValue(DailyStats.class);
+                    if (stats != null) {
+                        stats.getMedicationUsageLogs().clear();
+                        stats.setMedicationsTaken(0);
+                        stats.setMedicationsMissed(0);
+                        dayData.setValue(stats);
+                    }
+                }
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (callback != null) {
+                    if (error != null) callback.onFailed(error.toException());
+                    else callback.onCompleted(null);
+                }
+            }
+        });
     }
 
     private String getMedicationPath(String uid) {

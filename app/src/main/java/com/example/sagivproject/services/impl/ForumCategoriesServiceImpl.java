@@ -15,31 +15,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-/**
- * An implementation of the {@link IForumCategoriesService} interface.
- * <p>
- * This service handles operations related to forum categories, such as fetching, adding,
- * and deleting categories. It extends {@link BaseDatabaseService} to leverage common
- * Firebase database interactions.
- * </p>
- */
 public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategory> implements IForumCategoriesService {
     private static final String CATEGORIES_PATH = "forum_categories";
-    private static final String MESSAGES_PATH = "forum_messages"; // For cleaning up messages on category deletion
+    private static final String MESSAGES_PATH = "forum_messages";
 
-    /**
-     * Constructs a new ForumCategoriesServiceImpl.
-     */
     @Inject
     public ForumCategoriesServiceImpl() {
         super(CATEGORIES_PATH, ForumCategory.class);
     }
 
-    /**
-     * Retrieves all forum categories, ordered by their creation timestamp, with real-time updates.
-     *
-     * @param callback The callback to be invoked with the list of categories or an error.
-     */
     @Override
     public void getCategories(IDatabaseService.DatabaseCallback<List<ForumCategory>> callback) {
         databaseReference.child(CATEGORIES_PATH).orderByChild("orderTimestamp").addValueEventListener(new ValueEventListener() {
@@ -60,12 +44,6 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
         });
     }
 
-    /**
-     * Adds a new forum category.
-     *
-     * @param name     The name of the new category.
-     * @param callback The callback to be invoked upon completion.
-     */
     @Override
     public void addCategory(String name, IDatabaseService.DatabaseCallback<Void> callback) {
         String categoryId = super.generateId();
@@ -73,12 +51,6 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
         super.create(category, callback);
     }
 
-    /**
-     * Deletes a forum category and all the messages within it.
-     *
-     * @param categoryId The ID of the category to delete.
-     * @param callback   The callback to be invoked upon completion.
-     */
     @Override
     public void deleteCategory(String categoryId, IDatabaseService.DatabaseCallback<Void> callback) {
         // First, delete all messages associated with this category to prevent orphaned data.
@@ -99,13 +71,6 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
         });
     }
 
-    /**
-     * Updates the name of a forum category.
-     *
-     * @param categoryId The ID of the category to update.
-     * @param newName    The new name for the category.
-     * @param callback   A callback to be invoked upon completion.
-     */
     @Override
     public void updateCategoryName(String categoryId, String newName, IDatabaseService.DatabaseCallback<Void> callback) {
         update(categoryId, category -> {

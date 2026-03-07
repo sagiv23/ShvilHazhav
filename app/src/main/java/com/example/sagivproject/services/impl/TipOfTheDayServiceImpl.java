@@ -12,43 +12,21 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-/**
- * An implementation of the {@link ITipOfTheDayService} interface.
- * <p>
- * This service handles operations related to the "Tip of the Day", such as fetching and saving the tip
- * for the current day. It extends {@link BaseDatabaseService} to leverage common
- * Firebase database interactions.
- * </p>
- */
 public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> implements ITipOfTheDayService {
     private static final String TIP_OF_THE_DAY_PATH = "tip_of_the_day";
     private static final String DATE_FORMAT = "yyyyMMdd";
 
-    /**
-     * Constructs a new TipOfTheDayServiceImpl.
-     */
     @Inject
     public TipOfTheDayServiceImpl() {
         super(TIP_OF_THE_DAY_PATH, TipOfTheDay.class);
     }
 
-    /**
-     * Retrieves the tip for the current day from the database.
-     *
-     * @param callback The callback to be invoked with the tip or an error.
-     */
     @Override
     public void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
         String today = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date());
         get(today, callback);
     }
 
-    /**
-     * Saves the tip for the current day only if it doesn't already exist, using a transaction.
-     *
-     * @param tip      The tip object to save.
-     * @param callback The callback to be invoked with the final tip (either the new one or the existing one).
-     */
     @Override
     public void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
         runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> {

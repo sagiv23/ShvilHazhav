@@ -32,9 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
-/**
- * An implementation of the {@link IMemoryGameService} interface.
- */
 public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> implements IMemoryGameService {
     private static final String ROOMS_PATH = "rooms";
     private static final String USERS_PATH = "users";

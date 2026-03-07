@@ -17,9 +17,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-/**
- * An implementation of the {@link IStatsService} interface.
- */
 public class StatsServiceImpl implements IStatsService {
     private static final String USERS_PATH = "users";
     private static final String FIELD_DAILY_STATS = "dailyStats";

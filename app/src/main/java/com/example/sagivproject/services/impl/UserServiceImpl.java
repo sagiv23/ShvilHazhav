@@ -15,85 +15,38 @@ import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
-/**
- * An implementation of the {@link IUserService} interface.
- * <p>
- * This service manages all database operations related to the {@link User} model.
- * It handles creating, retrieving, updating, and deleting users. It also provides
- * methods for specific queries like finding a user by email and password or checking
- * if an email exists.
- * </p>
- */
 public class UserServiceImpl extends BaseDatabaseService<User> implements IUserService {
 
-    /**
-     * Constructs a new UserServiceImpl.
-     */
     @Inject
     public UserServiceImpl() {
         super("users", User.class);
     }
 
-    /**
-     * Generates a new unique ID for a user.
-     *
-     * @return A new unique ID string.
-     */
     @Override
     public String generateUserId() {
         return super.generateId();
     }
 
-    /**
-     * Creates a new user in the database.
-     *
-     * @param user     The user to create.
-     * @param callback The callback to be invoked upon completion.
-     */
     @Override
     public void createNewUser(@NonNull User user, @Nullable DatabaseCallback<Void> callback) {
         super.create(user, callback);
     }
 
-    /**
-     * Retrieves a single user by their ID.
-     *
-     * @param uid      The ID of the user to retrieve.
-     * @param callback The callback to be invoked with the user data.
-     */
     @Override
     public void getUser(@NonNull String uid, @NonNull DatabaseCallback<User> callback) {
         super.get(uid, callback);
     }
 
-    /**
-     * Retrieves a list of all users.
-     *
-     * @param callback The callback to be invoked with the list of users.
-     */
     @Override
     public void getUserList(@NonNull DatabaseCallback<List<User>> callback) {
         super.getAll(callback);
     }
 
-    /**
-     * Deletes a user from the database by their ID.
-     *
-     * @param uid      The ID of the user to delete.
-     * @param callback The callback to be invoked upon completion.
-     */
     @Override
     public void deleteUser(@NonNull String uid, @Nullable DatabaseCallback<Void> callback) {
         super.delete(uid, callback);
     }
 
-    /**
-     * Finds a user by matching their email and password.
-     *
-     * @param email    The email to search for.
-     * @param password The password to match.
-     * @param callback The callback to be invoked with the found user, or null if not found.
-     */
     @Override
     public void getUserByEmailAndPassword(@NonNull String email, @NonNull String password, @NonNull DatabaseCallback<User> callback) {
         getAll(new DatabaseCallback<>() {
@@ -115,12 +68,6 @@ public class UserServiceImpl extends BaseDatabaseService<User> implements IUserS
         });
     }
 
-    /**
-     * Checks if a given email address already exists in the database.
-     *
-     * @param email    The email to check.
-     * @param callback The callback to be invoked with true if the email exists, false otherwise.
-     */
     @Override
     public void checkIfEmailExists(@NonNull String email, @NonNull DatabaseCallback<Boolean> callback) {
         getAll(new DatabaseCallback<>() {
@@ -142,12 +89,6 @@ public class UserServiceImpl extends BaseDatabaseService<User> implements IUserS
         });
     }
 
-    /**
-     * Updates an entire user object in the database.
-     *
-     * @param user     The user object with updated information.
-     * @param callback The callback to be invoked upon completion.
-     */
     @Override
     public void updateUser(@NonNull User user, @Nullable DatabaseCallback<Void> callback) {
         UnaryOperator<User> updateFunction = oldUser -> user;
@@ -164,13 +105,6 @@ public class UserServiceImpl extends BaseDatabaseService<User> implements IUserS
         });
     }
 
-    /**
-     * Updates a user's role (e.g., from REGULAR to ADMIN).
-     *
-     * @param uid      The ID of the user to update.
-     * @param role     The new role for the user.
-     * @param callback The callback to be invoked upon completion.
-     */
     @Override
     public void updateUserRole(@NonNull String uid, @NonNull UserRole role, @Nullable DatabaseCallback<Void> callback) {
         UnaryOperator<User> updateFunction = user -> {

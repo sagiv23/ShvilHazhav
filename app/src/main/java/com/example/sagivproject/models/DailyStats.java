@@ -1,6 +1,8 @@
 package com.example.sagivproject.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents combined daily statistics for memory game, math problems, and medication compliance.
@@ -12,6 +14,7 @@ public class DailyStats implements Serializable {
     private int mathWrong;
     private int medicationsTaken;
     private int medicationsMissed;
+    private List<MedicationUsage> medicationUsageLogs;
 
     public DailyStats() {
         this.memoryWins = 0;
@@ -20,6 +23,7 @@ public class DailyStats implements Serializable {
         this.mathWrong = 0;
         this.medicationsTaken = 0;
         this.medicationsMissed = 0;
+        this.medicationUsageLogs = new ArrayList<>();
     }
 
     public int getMemoryWins() {
@@ -70,6 +74,17 @@ public class DailyStats implements Serializable {
         this.medicationsMissed = medicationsMissed;
     }
 
+    public List<MedicationUsage> getMedicationUsageLogs() {
+        if (medicationUsageLogs == null) {
+            medicationUsageLogs = new ArrayList<>();
+        }
+        return medicationUsageLogs;
+    }
+
+    public void setMedicationUsageLogs(List<MedicationUsage> medicationUsageLogs) {
+        this.medicationUsageLogs = medicationUsageLogs;
+    }
+
     public void addMemoryWin() {
         this.memoryWins++;
     }
@@ -92,5 +107,9 @@ public class DailyStats implements Serializable {
 
     public void addMedicationMissed() {
         this.medicationsMissed++;
+    }
+
+    public void addMedicationUsageLog(MedicationUsage log) {
+        getMedicationUsageLogs().add(log);
     }
 }
