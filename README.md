@@ -3,7 +3,8 @@
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
 [![Language](https://img.shields.io/badge/Language-Java-orange.svg)](https://www.java.com)
 [![Firebase](https://img.shields.io/badge/Backend-Firebase-ffca28.svg)](https://firebase.google.com)
-[![Hilt](https://img.shields.io/badge/DI-Hilt-blue.svg)](https://developer.android.com/training/dependency-injection/hilt-android)
+[![Hilt](https://img.shields.io/badge/DI-Hilt-blue.svg)](https://developer.android.com)
+[![Material 3](https://img.shields.io/badge/UI-Material--3-7b4397.svg)](https://m3.material.io)
 
 **Shvil Hazhav** is a comprehensive, accessibility-focused Android application designed to empower elderly individuals (60+) and people with disabilities. It combines essential health management tools with cognitive stimulation and social connectivity to improve daily quality of life and safety.
 
@@ -13,16 +14,17 @@
 
 ### 💊 Medication Management & Safety
 - **Smart Scheduling:** Easily add and manage medication regimens with specific dosages and timings.
-- **Automated Alerts:** High-priority notifications and alarms to ensure no dose is missed.
+- **Automated Alerts:** High-priority notifications and alarms using **AlarmManager** to ensure no dose is missed.
+- **Compliance Tracking:** Log medication intake and monitor adherence over time.
 - **Inventory Tracking:** Real-time monitoring of medication supplies with expiration alerts.
 
 ### 🧠 Cognitive Training Hub
 - **Online Memory Game:** Engage in 1-on-1 matches or solo practice to strengthen short-term memory and focus.
 - **Math Problems Activity:** Daily arithmetic challenges designed to maintain mental agility and logical thinking.
-- **Progress Tracking:** Monitor game scores and cognitive activity over time.
+- **Data Visualization:** Track daily progress across all activities with visual graphs (Custom Views) and history logs.
 
 ### 🤖 AI Health Companion
-- **Intelligent Q&A:** An AI assistant powered by Google Gemini (Firebase AI) to answer general health and wellness questions in simple, accessible language.
+- **Intelligent Q&A:** An AI assistant powered by **Google Gemini (Firebase Vertex AI)** to answer general health and wellness questions in simple, accessible language.
 - **Accessibility First:** Designed to provide clear, jargon-free information.
 - *Note: Not a substitute for professional medical advice.*
 
@@ -37,45 +39,48 @@
 
 ## 🛠 Tech Stack & Architecture
 
-The project is built using modern Android development best practices, ensuring scalability and maintainability.
+The project is built using modern Android development best practices.
 
-- **Architecture:** MVVM (Model-View-ViewModel) with Repository Pattern for clean separation of concerns.
+- **Architecture:** **MVVM (Model-View-ViewModel)** with Repository Pattern.
 - **Dependency Injection:** **Hilt** for robust and testable component management.
-- **Backend Services:**
+- **Background Tasks:** **WorkManager** for reliable periodic checks (e.g., birthday reminders).
+- **Local Persistence:** **SharedPreferences** for user settings and preferences.
+- **Backend Services (Firebase):**
     - **Firebase Realtime Database:** Low-latency data synchronization for games and forums.
-- **AI Integration:** **Firebase Vertex AI (Gemini)** for the medical assistant module.
-- **UI/UX:** Material Design 3, custom adapters for high-contrast accessibility, and responsive layouts.
+- **AI Integration:** **Firebase Vertex AI (Gemini SDK)** for the medical assistant module.
+- **UI Framework:** **Material Design 3**, **ViewBinding**, and Custom Views for specialized data rendering.
+- **Serialization:** **GSON** for efficient data handling.
 
 ---
 
 ## 📁 Project Structure
 
-This project follows a modular package structure for organized development.
-
-| Package                                                           | Purpose                                        |
-|:------------------------------------------------------------------|:-----------------------------------------------|
-| [`screens`](app/src/main/java/com/example/sagivproject/screens)   | Activities, Fragments, and UI logic.           |
-| [`services`](app/src/main/java/com/example/sagivproject/services) | Business logic interfaces and implementations. |
-| [`models`](app/src/main/java/com/example/sagivproject/models)     | Data entities and Enums.                       |
-| [`adapters`](app/src/main/java/com/example/sagivproject/adapters) | RecyclerView adapters for lists and grids.     |
-| [`di`](app/src/main/java/com/example/sagivproject/di)             | Dependency Injection modules (Hilt).           |
-| [`utils`](app/src/main/java/com/example/sagivproject/utils)       | Static helpers for validation, UI, and dates.  |
+| Package                                                                | Purpose                                                       |
+|:-----------------------------------------------------------------------|:--------------------------------------------------------------|
+| [`screens`](app/src/main/java/com/example/sagivproject/screens)        | Activities and UI logic.                                      |
+| [`services`](app/src/main/java/com/example/sagivproject/services)      | Business logic interfaces and implementations.                |
+| [`models`](app/src/main/java/com/example/sagivproject/models)          | Data entities and Enums.                                      |
+| [`adapters`](app/src/main/java/com/example/sagivproject/adapters)      | RecyclerView adapters for lists and grids.                    |
+| [`ui`](app/src/main/java/com/example/sagivproject/ui)                  | Custom views, fragments, and shared UI components.            |
+| [`bases`](app/src/main/java/com/example/sagivproject/bases)            | Abstract base classes for standardized component behavior.    |
+| [`di`](app/src/main/java/com/example/sagivproject/di)                  | Dependency Injection modules (Hilt).                          |
+| [`utils`](app/src/main/java/com/example/sagivproject/utils)            | Static helpers for validation, UI, dates, and storage.        |
 
 ---
 
 ## ♿ Accessibility Standards
 - **High Contrast:** UI elements optimized for visual clarity.
 - **Large Typography:** Default font sizes optimized for elderly users.
-- **Intuitive Navigation:** Minimalist screen layouts to reduce cognitive load.
+- **Intuitive Navigation:** Minimalist screen layouts and consistent UI patterns to reduce cognitive load.
 
 ---
 
 ## ⚙️ Getting Started
 
 ### Prerequisites
-- Android Studio Hedgehog (or newer)
-- JDK 17
-- Android SDK 34 (API Level 34)
+- Android Studio Ladybug (or newer)
+- JDK 17+
+- Android SDK 35+ (API Level 35)
 
 ### Installation
 1. Clone the repository:
