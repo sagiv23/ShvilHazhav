@@ -14,8 +14,9 @@
 | `MedicationListActivity`                        | Medication tracking and management UI                        |
 | `AdminPageActivity` / `UsersTableActivity`      | Administrative dashboards for managing content and users     |
 | `SettingsActivity` / `DetailsAboutUserActivity` | User preferences and profile management                      |
+| `UserStatsActivity`                             | Detailed statistics and progress tracking for a user         |
 | `TipOfTheDayActivity`                           | Displays daily motivational tips                             |
-| `AiActivity`                                    | AI interaction features                                      |
+| `AiActivity`                                    | AI interaction features (Gemini)                             |
 | `MathProblemsActivity`                          | Mental stimulation through math challenges                   |
 | `ContactActivity`                               | Support and contact information                              |
 | `AdminForumActivity`                            | Admin view for forum moderation                              |

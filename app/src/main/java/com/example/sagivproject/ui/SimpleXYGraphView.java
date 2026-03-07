@@ -1,6 +1,5 @@
 package com.example.sagivproject.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -89,7 +88,6 @@ public class SimpleXYGraphView extends View {
         return super.performClick();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (points.size() < 2) return super.onTouchEvent(event);
@@ -262,7 +260,7 @@ public class SimpleXYGraphView extends View {
     }
 
     private void drawNoData(Canvas canvas) {
-        String msg = "אין מספיק נתונים להצגת גרף";
+        String msg = "אין מספיק נתונים להצגת הגרף";
         textPaint.setTextSize(45f);
         canvas.drawText(msg, (float) getWidth() / 2 - textPaint.measureText(msg) / 2, (float) getHeight() / 2, textPaint);
     }

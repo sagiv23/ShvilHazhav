@@ -7,7 +7,7 @@
 | Implementation               | Interface                 | Responsibility                     |
 |------------------------------|---------------------------|------------------------------------|
 | `AuthServiceImpl`            | `IAuthService`            | Firebase Authentication logic      |
-| `GameServiceImpl`            | `IGameService`            | Memory game state and logic        |
+| `MemoryGameServiceImpl`      | `IMemoryGameService`      | Memory game state and logic        |
 | `UserServiceImpl`            | `IUserService`            | User profile updates in Firebase   |
 | `ForumServiceImpl`           | `IForumService`           | Forum message CRUD operations      |
 | `ImageServiceImpl`           | `IImageService`           | Firebase Storage image uploads     |
