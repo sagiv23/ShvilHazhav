@@ -70,7 +70,7 @@ public class AddUserDialog {
         inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(context, birthDateMillis, (millis, dateStr) -> {
             birthDateMillis = millis;
             inputBirthDate.setText(dateStr);
-        }));
+        }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT));
 
         btnAdd.setOnClickListener(v -> {
             String fName = inputFirstName.getText().toString().trim();

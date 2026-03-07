@@ -47,14 +47,18 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Show the notification
         notificationService.showMedicationNotification(medicationName, notificationId);
 
-        // Reschedule the next alarm for this medication to make it repeating
-        // Since setExactAndAllowWhileIdle is one-shot, we schedule it again for tomorrow.
-        // Using the non-deprecated version of getSerializableExtra for API 33+
-        Medication medication = intent.getSerializableExtra("medication_object", Medication.class);
+        // Reschedule the next alarm for this medication to make it repeating.
+        // We fetch the latest medication data from the user object to ensure it's up to date.
+        Medication medication = user.getMedications().get(medicationId);
 
         if (medication != null) {
-            Log.d(TAG, "Rescheduling next alarm for: " + medicationName);
+            Log.d(TAG, "Rescheduling next alarms for: " + medicationName);
+            // Calling schedule again will recalculate the next occurrence for each reminder hour.
+            // Since the current time is now exactly (or slightly after) the alarm time,
+            // the schedule logic will push the alarm for this specific hour to tomorrow.
             alarmScheduler.schedule(medication);
+        } else {
+            Log.e(TAG, "Failed to reschedule: Medication object is null in user cache.");
         }
     }
 }

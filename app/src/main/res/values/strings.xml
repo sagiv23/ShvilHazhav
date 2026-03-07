@@ -134,4 +134,6 @@
     <string name="medication_log">יומן תרופות</string>
     <string name="reset_history">איפוס היסטוריה</string>
     <string name="choose_user">בחר משתמש:</string>
+    <string name="choose_date">בחר תאריך</string>
+    <string name="show_all_history">מציג את כל ההיסטוריה</string>
 </resources>

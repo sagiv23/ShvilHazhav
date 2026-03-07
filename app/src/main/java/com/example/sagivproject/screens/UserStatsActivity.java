@@ -28,24 +28,36 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.ui.SimpleXYGraphView;
+import com.example.sagivproject.utils.CalendarUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class UserStatsActivity extends BaseActivity {
     private final List<User> selectableUsers = new ArrayList<>();
+    @Inject
+    CalendarUtil calendarUtil;
     private SimpleXYGraphView graphMemoryWins, graphMathStats, graphMedicationStats;
     private RecyclerView recyclerMedicationLogs;
     private MedicationUsageAdapter usageAdapter;
     private User currentUser;
     private User loggedInUser;
     private Spinner spinnerUserSelector;
+    private TextView txtSelectedDate;
+    private String filteredDate = null;
+    private List<MedicationUsage> allLogs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +73,9 @@ public class UserStatsActivity extends BaseActivity {
         loggedInUser = sharedPreferencesUtil.getUser();
         currentUser = loggedInUser;
 
+        // Set default filter to today
+        filteredDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
         ViewGroup topMenuContainer = findViewById(R.id.topMenuContainer);
         setupTopMenu(topMenuContainer);
 
@@ -69,15 +84,46 @@ public class UserStatsActivity extends BaseActivity {
         graphMedicationStats = findViewById(R.id.graph_memory_cw);
         recyclerMedicationLogs = findViewById(R.id.recycler_medication_logs);
         spinnerUserSelector = findViewById(R.id.spinner_user_selector);
+        txtSelectedDate = findViewById(R.id.txt_user_stats_selected_date);
 
         Button btnClearLogs = findViewById(R.id.btn_user_stats_clear_med_logs);
         if (btnClearLogs != null) {
             btnClearLogs.setOnClickListener(v -> clearMedicationLogs());
         }
 
+        findViewById(R.id.btn_user_stats_open_calendar).setOnClickListener(v -> openCalendar());
+
         setupAdminUI();
         refreshData();
         setupMedicationLogs();
+
+        // Show today's date in the label
+        String todayDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+        txtSelectedDate.setText(String.format("מציג תוצאות לתאריך: %s (היום)", todayDisplay));
+        txtSelectedDate.setVisibility(View.VISIBLE);
+    }
+
+    private void openCalendar() {
+        calendarUtil.openDatePicker(this, System.currentTimeMillis(), (dateMillis, formattedDate) -> {
+            filteredDate = calendarUtil.formatDate(dateMillis, "yyyy-MM-dd");
+            txtSelectedDate.setText(String.format("מציג תוצאות לתאריך: %s", formattedDate));
+            txtSelectedDate.setVisibility(View.VISIBLE);
+            applyFilter();
+        }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
+    }
+
+    private void applyFilter() {
+        if (filteredDate == null) {
+            usageAdapter.setData(allLogs);
+        } else {
+            List<MedicationUsage> filtered = allLogs.stream()
+                    .filter(log -> filteredDate.equals(log.getDate()))
+                    .collect(Collectors.toList());
+            usageAdapter.setData(filtered);
+            if (filtered.isEmpty() && !allLogs.isEmpty()) {
+                Toast.makeText(this, "אין תיעוד לתאריך זה", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void setupAdminUI() {
@@ -131,6 +177,7 @@ public class UserStatsActivity extends BaseActivity {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             currentUser = selectableUsers.get(position);
+                            // Keep the date filter when switching users
                             refreshData();
                         }
 
@@ -157,6 +204,7 @@ public class UserStatsActivity extends BaseActivity {
         dialogService.showConfirmDialog("איפוס היסטוריה", "האם אתה בטוח שברצונך למחוק את כל יומן נטילת התרופות?", "אפס", "בטל", () -> databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                allLogs.clear();
                 usageAdapter.setData(new ArrayList<>());
                 Toast.makeText(UserStatsActivity.this, "ההיסטוריה אופסה בהצלחה", Toast.LENGTH_SHORT).show();
             }
@@ -174,7 +222,6 @@ public class UserStatsActivity extends BaseActivity {
             public void onCompleted(User updatedUser) {
                 if (updatedUser != null) {
                     currentUser = updatedUser;
-                    // Only save to cache if it's the logged-in user
                     if (currentUser.getId().equals(loggedInUser.getId())) {
                         sharedPreferencesUtil.saveUser(currentUser);
                     }
@@ -238,16 +285,18 @@ public class UserStatsActivity extends BaseActivity {
             @Override
             public void onCompleted(List<MedicationUsage> list) {
                 if (list != null) {
-                    List<MedicationUsage> mutableList = new ArrayList<>(list);
-                    Collections.reverse(mutableList);
-                    usageAdapter.setData(mutableList);
+                    allLogs = new ArrayList<>(list);
+                    Collections.reverse(allLogs);
+                    applyFilter();
                 } else {
+                    allLogs.clear();
                     usageAdapter.setData(new ArrayList<>());
                 }
             }
 
             @Override
             public void onFailed(Exception e) {
+                allLogs.clear();
                 usageAdapter.setData(new ArrayList<>());
             }
         });

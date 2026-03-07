@@ -56,8 +56,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="18dp"
                 app:cardElevation="4dp"
+                app:strokeColor="?attr/colorOutline"
                 tools:visibility="visible">
 
                 <LinearLayout
@@ -69,16 +70,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/choose_user"
-                        android:textSize="20sp" />
+                        android:textSize="25sp" />
 
                     <Spinner
                         android:id="@+id/spinner_user_selector"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="48dp" />
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -138,16 +138,38 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/medication_log"
-                    android:textSize="24sp" />
+                    android:textSize="22sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_user_stats_open_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/choose_date"
+                    android:textSize="14sp"
+                    app:icon="@drawable/ic_calendar" />
 
                 <Button
                     android:id="@+id/btn_user_stats_clear_med_logs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
                     android:fontFamily="@font/text_hebrew"
                     android:text="@string/reset_history"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_user_stats_selected_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/text_hebrew"
+                android:gravity="center"
+                android:text="@string/show_all_history"
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_medication_logs"

@@ -36,7 +36,7 @@ public class CalendarUtil {
      * @param listener      The listener to be invoked when a date is selected.
      */
     public void openDatePicker(Context context, long initialMillis, OnDateSelectedListener listener) {
-        openDatePicker(context, initialMillis, listener, false, DEFAULT_DATE_FORMAT);
+        openDatePicker(context, initialMillis, listener, false, false, DEFAULT_DATE_FORMAT);
     }
 
     /**
@@ -46,9 +46,10 @@ public class CalendarUtil {
      * @param initialMillis The initial date to show in the picker, in milliseconds.
      * @param listener      The listener to be invoked when a date is selected.
      * @param futureOnly    If true, restricts date selection to today and future dates.
+     * @param pastOnly      If true, restricts date selection to today and past dates.
      * @param format        The date format to use for the returned string.
      */
-    public void openDatePicker(Context context, long initialMillis, OnDateSelectedListener listener, boolean futureOnly, String format) {
+    public void openDatePicker(Context context, long initialMillis, OnDateSelectedListener listener, boolean futureOnly, boolean pastOnly, String format) {
         final Calendar calendar = Calendar.getInstance();
         if (initialMillis > 0) {
             calendar.setTimeInMillis(initialMillis);
@@ -75,6 +76,9 @@ public class CalendarUtil {
 
         if (futureOnly) {
             dialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        }
+        if (pastOnly) {
+            dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         }
 
         dialog.show();
