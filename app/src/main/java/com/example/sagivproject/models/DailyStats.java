@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class DailyStats implements Serializable {
     private int memoryWins;
+    private int memoryGamesPlayed;
     private int mathCorrect;
     private int mathWrong;
     private int medicationsTaken;
@@ -14,6 +15,7 @@ public class DailyStats implements Serializable {
 
     public DailyStats() {
         this.memoryWins = 0;
+        this.memoryGamesPlayed = 0;
         this.mathCorrect = 0;
         this.mathWrong = 0;
         this.medicationsTaken = 0;
@@ -26,6 +28,14 @@ public class DailyStats implements Serializable {
 
     public void setMemoryWins(int memoryWins) {
         this.memoryWins = memoryWins;
+    }
+
+    public int getMemoryGamesPlayed() {
+        return memoryGamesPlayed;
+    }
+
+    public void setMemoryGamesPlayed(int memoryGamesPlayed) {
+        this.memoryGamesPlayed = memoryGamesPlayed;
     }
 
     public int getMathCorrect() {
@@ -62,6 +72,10 @@ public class DailyStats implements Serializable {
 
     public void addMemoryWin() {
         this.memoryWins++;
+    }
+
+    public void addMemoryGamePlayed() {
+        this.memoryGamesPlayed++;
     }
 
     public void addMathCorrect() {

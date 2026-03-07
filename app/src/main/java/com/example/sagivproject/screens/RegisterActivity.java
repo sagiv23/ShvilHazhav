@@ -16,6 +16,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
+import com.example.sagivproject.utils.CalendarUtil;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -163,6 +164,6 @@ public class RegisterActivity extends BaseActivity {
         calendarUtil.openDatePicker(this, birthDateMillis, (dateMillis, formattedDate) -> {
             this.birthDateMillis = dateMillis;
             editTextBirthDate.setText(formattedDate);
-        });
+        }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
     }
 }

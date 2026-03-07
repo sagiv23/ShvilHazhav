@@ -284,12 +284,8 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     }
 
     @Override
-    public void addUserWin(String uid) {
+    public void updateDailyMemoryStats(String uid, boolean isWin) {
         if (uid == null || uid.isEmpty() || VALUE_DRAW.equals(uid)) return;
-        updateDailyStats(uid);
-    }
-
-    private void updateDailyStats(String uid) {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         usersReference.child(uid).child(FIELD_DAILY_STATS).child(today).runTransaction(new Transaction.Handler() {
             @NonNull
@@ -297,7 +293,10 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                 DailyStats stats = currentData.getValue(DailyStats.class);
                 if (stats == null) stats = new DailyStats();
-                stats.addMemoryWin();
+                stats.addMemoryGamePlayed();
+                if (isWin) {
+                    stats.addMemoryWin();
+                }
                 currentData.setValue(stats);
                 return Transaction.success(currentData);
             }

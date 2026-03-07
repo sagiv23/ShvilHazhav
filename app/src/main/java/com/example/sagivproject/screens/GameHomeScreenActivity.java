@@ -45,7 +45,7 @@ public class GameHomeScreenActivity extends BaseActivity {
     private Button btnFindEnemy;
     private Button btnCancelFindEnemy;
     private Button btnSpeak;
-    private TextView TVictories, TVStatusOfFindingEnemy;
+    private TextView TVictories, tvGamesToday, tvGamesTotal, TVStatusOfFindingEnemy;
     private GameRoom currentRoom;
     private boolean gameStarted = false;
     private LeaderboardAdapter adapter;
@@ -74,6 +74,8 @@ public class GameHomeScreenActivity extends BaseActivity {
         btnCancelFindEnemy = findViewById(R.id.btn_GameHomeScreen_cancel_find_enemy);
         btnSpeak = findViewById(R.id.btn_GameHomeScreen_speak);
         TVictories = findViewById(R.id.tv_GameHomeScreen_victories);
+        tvGamesToday = findViewById(R.id.tv_GameHomeScreen_games_today);
+        tvGamesTotal = findViewById(R.id.tv_GameHomeScreen_games_total);
         TVStatusOfFindingEnemy = findViewById(R.id.tv_GameHomeScreen_status_of_finding_enemy);
         RecyclerView rvLeaderboard = findViewById(R.id.recyclerView_GameHomeScreen_leaderboard);
 
@@ -188,8 +190,20 @@ public class GameHomeScreenActivity extends BaseActivity {
     private void displayTodayWins() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DailyStats stats = user.getDailyStats().get(today);
-        int wins = (stats != null) ? stats.getMemoryWins() : 0;
-        TVictories.setText(MessageFormat.format("ניצחונות היום: {0}", wins));
+
+        int winsToday = (stats != null) ? stats.getMemoryWins() : 0;
+        int gamesToday = (stats != null) ? stats.getMemoryGamesPlayed() : 0;
+
+        TVictories.setText(MessageFormat.format("ניצחונות היום: {0}", winsToday));
+        tvGamesToday.setText(MessageFormat.format("משחקים היום: {0}", gamesToday));
+
+        int totalGames = 0;
+        if (user.getDailyStats() != null) {
+            for (DailyStats ds : user.getDailyStats().values()) {
+                totalGames += ds.getMemoryGamesPlayed();
+            }
+        }
+        tvGamesTotal.setText(MessageFormat.format("משחקים סך הכל: {0}", totalGames));
     }
 
     private void setupLeaderboard() {

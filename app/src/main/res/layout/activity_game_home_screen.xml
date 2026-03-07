@@ -61,6 +61,26 @@
                 tools:text="ניצחונות היום: " />
 
             <TextView
+                android:id="@+id/tv_GameHomeScreen_games_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/text_hebrew"
+                android:gravity="start"
+                android:textSize="25sp"
+                tools:text="משחקים היום: " />
+
+            <TextView
+                android:id="@+id/tv_GameHomeScreen_games_total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/text_hebrew"
+                android:gravity="start"
+                android:textSize="25sp"
+                tools:text="משחקים סך הכל: " />
+
+            <TextView
                 android:id="@+id/tv_GameHomeScreen_status_of_finding_enemy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

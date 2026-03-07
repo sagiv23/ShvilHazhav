@@ -38,7 +38,13 @@ public interface IMemoryGameService {
 
     void setProcessing(String roomId, boolean isProcessing);
 
-    void addUserWin(String uid);
+    /**
+     * Updates the daily statistics for a user after a memory game session.
+     *
+     * @param uid   The user's ID.
+     * @param isWin True if the user won the game, false otherwise.
+     */
+    void updateDailyMemoryStats(String uid, boolean isWin);
 
     void setupForfeitOnDisconnect(String roomId, String opponentUid);
 

@@ -100,9 +100,14 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         endDialogShown = true;
         String winnerUid = room.getWinnerUid();
         String message;
+        boolean isWin = user.getId().equals(winnerUid);
+
+        // Update stats once per game locally
+        databaseService.getGameService().updateDailyMemoryStats(user.getId(), isWin);
+
         if ("draw".equals(winnerUid)) {
             message = "זה נגמר בתיקו!";
-        } else if (user.getId().equals(winnerUid)) {
+        } else if (isWin) {
             message = "כל הכבוד! ניצחת והתווסף לך ניצחון!";
         } else {
             message = "הפעם הפסדת... לא נורא!";
@@ -262,11 +267,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                 if ("finished".equals(room.getStatus())) {
                     if (turnTimer != null) turnTimer.cancel();
                     databaseService.getGameService().removeForfeitOnDisconnect(roomId);
-                    if (!endDialogShown) {
-                        if (myUid.equals(room.getWinnerUid()))
-                            databaseService.getGameService().addUserWin(myUid);
-                        showGameEndDialog(room);
-                    }
+                    showGameEndDialog(room);
                     return;
                 }
                 checkIfGameFinished();

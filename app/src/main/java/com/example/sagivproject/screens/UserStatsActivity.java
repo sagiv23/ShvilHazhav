@@ -238,40 +238,57 @@ public class UserStatsActivity extends BaseActivity {
 
     private void setupGraphs() {
         if (currentUser.getDailyStats() == null || currentUser.getDailyStats().isEmpty()) {
-            graphMemoryWins.setData(new ArrayList<>(), new ArrayList<>(), "זיכרון: ניצחונות", "תאריך", "ניצחונות");
+            graphMemoryWins.setData(new ArrayList<>(), new ArrayList<>(), "זיכרון: אחוז ניצחונות", "תאריך", "% ניצחונות");
             graphMathStats.setData(new ArrayList<>(), new ArrayList<>(), "מתמטיקה: אחוז הצלחה", "תאריך", "% הצלחה");
             graphMedicationStats.setData(new ArrayList<>(), new ArrayList<>(), "תרופות: עמידה ביעדים", "תאריך", "% הצלחה");
             return;
         }
 
         Map<String, DailyStats> statsMap = new TreeMap<>(currentUser.getDailyStats());
+
         List<SimpleXYGraphView.Point> memoryWinPoints = new ArrayList<>();
+        List<String> memoryDates = new ArrayList<>();
+
         List<SimpleXYGraphView.Point> mathRatioPoints = new ArrayList<>();
+        List<String> mathDates = new ArrayList<>();
+
         List<SimpleXYGraphView.Point> medRatioPoints = new ArrayList<>();
-        List<String> dates = new ArrayList<>();
+        List<String> medDates = new ArrayList<>();
 
-        int index = 0;
-        for (String date : statsMap.keySet()) {
-            DailyStats stats = statsMap.get(date);
-            if (stats != null) {
-                memoryWinPoints.add(new SimpleXYGraphView.Point(index, stats.getMemoryWins()));
+        int memIdx = 0, mathIdx = 0, medIdx = 0;
 
-                float totalMath = stats.getMathCorrect() + stats.getMathWrong();
-                float mathRatio = totalMath > 0 ? (stats.getMathCorrect() / totalMath) * 100 : 0;
-                mathRatioPoints.add(new SimpleXYGraphView.Point(index, mathRatio));
+        for (Map.Entry<String, DailyStats> entry : statsMap.entrySet()) {
+            String date = entry.getKey();
+            DailyStats stats = entry.getValue();
+            if (stats == null) continue;
 
-                float totalMeds = stats.getMedicationsTaken() + stats.getMedicationsMissed();
-                float medRatio = totalMeds > 0 ? (stats.getMedicationsTaken() / totalMeds) * 100 : 0;
-                medRatioPoints.add(new SimpleXYGraphView.Point(index, medRatio));
+            // Filter Memory: Only if games were actually played on that day
+            if (stats.getMemoryGamesPlayed() > 0) {
+                float winRatio = (stats.getMemoryWins() / (float) stats.getMemoryGamesPlayed()) * 100;
+                memoryWinPoints.add(new SimpleXYGraphView.Point(memIdx++, winRatio));
+                memoryDates.add(date);
+            }
 
-                dates.add(date);
-                index++;
+            // Filter Math: Only if problems were attempted
+            int totalMath = stats.getMathCorrect() + stats.getMathWrong();
+            if (totalMath > 0) {
+                float mathRatio = (stats.getMathCorrect() / (float) totalMath) * 100;
+                mathRatioPoints.add(new SimpleXYGraphView.Point(mathIdx++, mathRatio));
+                mathDates.add(date);
+            }
+
+            // Filter Medications: Only if taken/missed was recorded
+            int totalMeds = stats.getMedicationsTaken() + stats.getMedicationsMissed();
+            if (totalMeds > 0) {
+                float medRatio = (stats.getMedicationsTaken() / (float) totalMeds) * 100;
+                medRatioPoints.add(new SimpleXYGraphView.Point(medIdx++, medRatio));
+                medDates.add(date);
             }
         }
 
-        graphMemoryWins.setData(memoryWinPoints, dates, "זיכרון: ניצחונות", "תאריך", "ניצחונות");
-        graphMathStats.setData(mathRatioPoints, dates, "מתמטיקה: אחוז הצלחה", "תאריך", "% הצלחה");
-        graphMedicationStats.setData(medRatioPoints, dates, "תרופות: עמידה ביעדים", "תאריך", "% הצלחה");
+        graphMemoryWins.setData(memoryWinPoints, memoryDates, "זיכרון: אחוז ניצחונות", "תאריך", "% ניצחונות");
+        graphMathStats.setData(mathRatioPoints, mathDates, "מתמטיקה: אחוז הצלחה", "תאריך", "% הצלחה");
+        graphMedicationStats.setData(medRatioPoints, medDates, "תרופות: עמידה ביעדים", "תאריך", "% הצלחה");
     }
 
     private void setupMedicationLogs() {
