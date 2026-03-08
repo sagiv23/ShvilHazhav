@@ -36,7 +36,6 @@ public abstract class BaseForumActivity extends BaseActivity {
     protected ForumAdapter adapter;
     protected ForumPermissions permissions;
     protected String categoryId;
-    protected String categoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +70,6 @@ public abstract class BaseForumActivity extends BaseActivity {
      */
     protected void setupForum(String categoryId, String categoryName) {
         this.categoryId = categoryId;
-        this.categoryName = categoryName;
 
         TextView title = findViewById(R.id.txtForumTitle);
         if (title != null) {
