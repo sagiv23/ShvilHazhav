@@ -37,60 +37,69 @@ public class AlarmScheduler {
         }
 
         for (String hourStr : medication.getReminderHours()) {
-            String[] time = hourStr.split(":");
-            int hour = Integer.parseInt(time[0]);
-            int minute = Integer.parseInt(time[1]);
+            scheduleSpecificTime(medication, hourStr, false);
+        }
+    }
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, hour);
-            calendar.set(Calendar.MINUTE, minute);
-            calendar.set(Calendar.SECOND, 0);
+    /**
+     * Schedules an alarm for a specific time.
+     *
+     * @param medication    The medication.
+     * @param hourStr       The time in "HH:mm" format.
+     * @param forceTomorrow If true, the alarm will be scheduled for tomorrow even if the time hasn't passed yet.
+     */
+    public void scheduleSpecificTime(Medication medication, String hourStr, boolean forceTomorrow) {
+        String[] time = hourStr.split(":");
+        int hour = Integer.parseInt(time[0]);
+        int minute = Integer.parseInt(time[1]);
 
-            // If the time is in the past, schedule it for the next day.
-            if (calendar.before(Calendar.getInstance())) {
-                calendar.add(Calendar.DATE, 1);
-            }
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
-            Intent intent = new Intent(context, AlarmReceiver.class);
-            intent.putExtra("medication_name", medication.getName());
-            intent.putExtra("medication_id", medication.getId());
-            intent.putExtra("hour_str", hourStr);
-            intent.putExtra("medication_object", medication);
+        // If the time is in the past, or we force tomorrow, schedule it for the next day.
+        if (forceTomorrow || calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DATE, 1);
+        }
 
-            int requestCode = (medication.getId() + hourStr).hashCode();
-            intent.putExtra("notification_id", requestCode);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra("medication_name", medication.getName());
+        intent.putExtra("medication_id", medication.getId());
+        intent.putExtra("hour_str", hourStr);
+        intent.putExtra("medication_object", medication);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    requestCode,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-            );
+        int requestCode = (medication.getId() + hourStr).hashCode();
+        intent.putExtra("notification_id", requestCode);
 
-            // Checking for exact alarm permission and handling SecurityException
-            if (alarmManager.canScheduleExactAlarms()) {
-                try {
-                    alarmManager.setExactAndAllowWhileIdle(
-                            AlarmManager.RTC_WAKEUP,
-                            calendar.getTimeInMillis(),
-                            pendingIntent
-                    );
-                } catch (SecurityException e) {
-                    // Fallback if permission is missing or revoked
-                    alarmManager.setAndAllowWhileIdle(
-                            AlarmManager.RTC_WAKEUP,
-                            calendar.getTimeInMillis(),
-                            pendingIntent
-                    );
-                }
-            } else {
-                // Use non-exact alarm if permission is not granted
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        if (alarmManager.canScheduleExactAlarms()) {
+            try {
+                alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        pendingIntent
+                );
+            } catch (SecurityException e) {
                 alarmManager.setAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
                         calendar.getTimeInMillis(),
                         pendingIntent
                 );
             }
+        } else {
+            alarmManager.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    pendingIntent
+            );
         }
     }
 
@@ -103,21 +112,55 @@ public class AlarmScheduler {
         }
 
         for (String hourStr : medication.getReminderHours()) {
-            Intent intent = new Intent(context, AlarmReceiver.class);
-            int requestCode = (medication.getId() + hourStr).hashCode();
-
-            // Try to find the existing PendingIntent to cancel it
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    requestCode,
-                    intent,
-                    PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
-            );
-
-            if (pendingIntent != null) {
-                alarmManager.cancel(pendingIntent);
-                pendingIntent.cancel();
-            }
+            cancelSpecificTime(medication.getId(), hourStr);
         }
+    }
+
+    public void cancelSpecificTime(String medicationId, String hourStr) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        int requestCode = (medicationId + hourStr).hashCode();
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        if (pendingIntent != null) {
+            alarmManager.cancel(pendingIntent);
+            pendingIntent.cancel();
+        }
+    }
+
+    /**
+     * Schedules the daily birthday check alarm at 9:00 AM.
+     */
+    public void scheduleBirthdayAlarm() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.setAction("ACTION_BIRTHDAY_CHECK");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                1001, // Unique ID for birthday alarm
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        alarmManager.setAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                pendingIntent
+        );
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -22,11 +22,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -39,7 +44,8 @@ import dagger.hilt.android.qualifiers.ActivityContext;
 public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
     private final Set<String> processingMedications = new HashSet<>();
-    private final Set<String> loggedTodayMedications = new HashSet<>();
+    // Key: medicationId, Value: Map of scheduledTime -> MedicationStatus
+    private final Map<String, Map<String, MedicationStatus>> loggedTodayMedications = new HashMap<>();
     private OnMedicationActionListener listener;
 
     @Inject
@@ -55,17 +61,33 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         setData(medications);
     }
 
-    public void setLoggedTodayMedications(Set<String> medicationIds) {
+    public void setLoggedTodayMedications(List<MedicationUsage> logs) {
         this.loggedTodayMedications.clear();
-        if (medicationIds != null) {
-            this.loggedTodayMedications.addAll(medicationIds);
+        if (logs != null) {
+            for (MedicationUsage usage : logs) {
+                String medId = usage.getId();
+                String scheduledTime = usage.getScheduledTime();
+                if (scheduledTime == null) continue;
+
+                if (!loggedTodayMedications.containsKey(medId)) {
+                    loggedTodayMedications.put(medId, new HashMap<>());
+                }
+                Objects.requireNonNull(loggedTodayMedications.get(medId)).put(scheduledTime, usage.getStatus());
+            }
         }
-        setData(new java.util.ArrayList<>(dataList));
+        setData(new ArrayList<>(dataList));
     }
 
-    public void addLoggedTodayMedication(String medicationId) {
-        this.loggedTodayMedications.add(medicationId);
-        setProcessingFinished(medicationId);
+    public void addLoggedTodayMedication(MedicationUsage usage) {
+        String medId = usage.getId();
+        String scheduledTime = usage.getScheduledTime();
+        if (scheduledTime != null) {
+            if (!loggedTodayMedications.containsKey(medId)) {
+                loggedTodayMedications.put(medId, new HashMap<>());
+            }
+            Objects.requireNonNull(loggedTodayMedications.get(medId)).put(scheduledTime, usage.getStatus());
+        }
+        setProcessingFinished(medId);
     }
 
     @NonNull
@@ -79,15 +101,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
     public void onBindViewHolder(@NonNull MedicationViewHolder holder, int position) {
         Medication med = getItem(position);
         Typeface typeface = ResourcesCompat.getFont(context, R.font.text_hebrew);
-
-        boolean isProcessing = processingMedications.contains(med.getId());
-        boolean isLoggedToday = loggedTodayMedications.contains(med.getId());
-
-        boolean shouldDisable = isProcessing || isLoggedToday;
-
-        holder.btnTaken.setEnabled(!shouldDisable);
-        holder.btnNotTaken.setEnabled(!shouldDisable);
-        holder.btnSnoozed.setEnabled(!shouldDisable);
 
         if (typeface != null) {
             SpannableString nameSpannable = new SpannableString(med.getName());
@@ -105,13 +118,15 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         }
 
         holder.txtMedicationDetails.setText(med.getDetails());
+        holder.txtMedicationHours.setVisibility(View.GONE); // Replaced by dynamic rows
 
+        holder.statusContainer.removeAllViews();
         List<String> reminderHours = med.getReminderHours();
-        if (reminderHours != null && !reminderHours.isEmpty()) {
-            holder.txtMedicationHours.setText(String.format("שעות: %s", TextUtils.join(", ", reminderHours)));
-            holder.txtMedicationHours.setVisibility(View.VISIBLE);
-        } else {
-            holder.txtMedicationHours.setVisibility(View.GONE);
+        if (reminderHours != null) {
+            Map<String, MedicationStatus> medLogs = loggedTodayMedications.get(med.getId());
+            for (String hour : reminderHours) {
+                addStatusRow(holder.statusContainer, med, hour, medLogs != null ? medLogs.get(hour) : null);
+            }
         }
 
         holder.btnMenu.setOnClickListener(v -> {
@@ -141,17 +156,56 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
             });
             menu.show();
         });
-
-        holder.btnTaken.setOnClickListener(v -> handleStatusClick(med, MedicationStatus.TAKEN));
-        holder.btnNotTaken.setOnClickListener(v -> handleStatusClick(med, MedicationStatus.NOT_TAKEN));
-        holder.btnSnoozed.setOnClickListener(v -> handleStatusClick(med, MedicationStatus.SNOOZED));
     }
 
-    private void handleStatusClick(Medication med, MedicationStatus status) {
+    private void addStatusRow(LinearLayout container, Medication med, String scheduledTime, MedicationStatus status) {
+        View rowView = LayoutInflater.from(context).inflate(R.layout.item_medication_status_row, container, false);
+        TextView txtTime = rowView.findViewById(R.id.txt_MedicationRow_ScheduledTime);
+        Button btnTaken = rowView.findViewById(R.id.btn_MedicationRow_Taken);
+        Button btnNotTaken = rowView.findViewById(R.id.btn_MedicationRow_NotTaken);
+        Button btnSnoozed = rowView.findViewById(R.id.btn_MedicationRow_Snoozed);
+
+        txtTime.setText(scheduledTime);
+
+        boolean isLogged = status != null;
+        boolean isProcessing = processingMedications.contains(med.getId());
+
+        btnTaken.setEnabled(!isLogged && !isProcessing);
+        btnNotTaken.setEnabled(!isLogged && !isProcessing);
+        btnSnoozed.setEnabled(!isLogged && !isProcessing);
+
+        if (isLogged) {
+            switch (status) {
+                case TAKEN:
+                    btnTaken.setAlpha(1.0f);
+                    btnNotTaken.setAlpha(0.3f);
+                    btnSnoozed.setAlpha(0.3f);
+                    break;
+                case NOT_TAKEN:
+                    btnTaken.setAlpha(0.3f);
+                    btnNotTaken.setAlpha(1.0f);
+                    btnSnoozed.setAlpha(0.3f);
+                    break;
+                case SNOOZED:
+                    btnTaken.setAlpha(0.3f);
+                    btnNotTaken.setAlpha(0.3f);
+                    btnSnoozed.setAlpha(1.0f);
+                    break;
+            }
+        }
+
+        btnTaken.setOnClickListener(v -> handleStatusClick(med, scheduledTime, MedicationStatus.TAKEN));
+        btnNotTaken.setOnClickListener(v -> handleStatusClick(med, scheduledTime, MedicationStatus.NOT_TAKEN));
+        btnSnoozed.setOnClickListener(v -> handleStatusClick(med, scheduledTime, MedicationStatus.SNOOZED));
+
+        container.addView(rowView);
+    }
+
+    private void handleStatusClick(Medication med, String scheduledTime, MedicationStatus status) {
         if (listener != null) {
             processingMedications.add(med.getId());
             notifyItemChanged(getItemList().indexOf(med));
-            listener.onStatusChanged(med, status);
+            listener.onStatusChanged(med, scheduledTime, status);
         }
     }
 
@@ -170,13 +224,13 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
         void onDelete(Medication medication);
 
-        void onStatusChanged(Medication medication, MedicationStatus status);
+        void onStatusChanged(Medication medication, String scheduledTime, MedicationStatus status);
     }
 
     public static class MedicationViewHolder extends RecyclerView.ViewHolder {
         final TextView txtMedicationName, txtMedicationType, txtMedicationDetails, txtMedicationHours;
         final ImageButton btnMenu;
-        final Button btnTaken, btnNotTaken, btnSnoozed;
+        final LinearLayout statusContainer;
 
         public MedicationViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -185,9 +239,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
             txtMedicationDetails = itemView.findViewById(R.id.txt_MedicationRow_Details);
             txtMedicationHours = itemView.findViewById(R.id.txt_MedicationRow_Hours);
             btnMenu = itemView.findViewById(R.id.btn_MedicationRow_Menu);
-            btnTaken = itemView.findViewById(R.id.btn_MedicationRow_Taken);
-            btnNotTaken = itemView.findViewById(R.id.btn_MedicationRow_NotTaken);
-            btnSnoozed = itemView.findViewById(R.id.btn_MedicationRow_Snoozed);
+            statusContainer = itemView.findViewById(R.id.layout_MedicationRow_StatusContainer);
         }
     }
 }

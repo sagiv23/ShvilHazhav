@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationListAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.User;
@@ -37,11 +38,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -96,8 +95,8 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void onStatusChanged(Medication medication, MedicationStatus status) {
-                logMedicationStatus(medication, status);
+            public void onStatusChanged(Medication medication, String scheduledTime, MedicationStatus status) {
+                logMedicationStatus(medication, scheduledTime, status);
             }
         });
         recyclerViewMedications.setAdapter(adapter);
@@ -146,31 +145,51 @@ public class MedicationListActivity extends BaseActivity {
         databaseService.getMedicationService().getMedicationUsageLogs(uid, new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<MedicationUsage> logs) {
-                Set<String> todayLoggedIds = new HashSet<>();
+                List<MedicationUsage> todayLogs = new ArrayList<>();
                 for (MedicationUsage usage : logs) {
                     if (today.equals(usage.getDate())) {
-                        todayLoggedIds.add(usage.getId());
+                        todayLogs.add(usage);
                     }
                 }
-                adapter.setLoggedTodayMedications(todayLoggedIds);
+
+                // Update local user stats cache for the AlarmReceiver
+                DailyStats stats = user.getDailyStats().get(today);
+                if (stats == null) {
+                    stats = new DailyStats();
+                    user.getDailyStats().put(today, stats);
+                }
+                stats.setMedicationUsageLogs(todayLogs);
+                sharedPreferencesUtil.saveUser(user);
+
+                adapter.setLoggedTodayMedications(todayLogs);
             }
 
             @Override
             public void onFailed(Exception e) {
-                // Ignore failure for logs fetching
             }
         });
     }
 
-    private void logMedicationStatus(Medication medication, MedicationStatus status) {
+    private void logMedicationStatus(Medication medication, String scheduledTime, MedicationStatus status) {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-        MedicationUsage usage = new MedicationUsage(medication.getId(), medication.getName(), time, date, status);
+        MedicationUsage usage = new MedicationUsage(medication.getId(), medication.getName(), time, date, scheduledTime, status);
 
         databaseService.getMedicationService().logMedicationUsage(uid, usage, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                adapter.addLoggedTodayMedication(medication.getId());
+                // Update local User cache
+                DailyStats stats = user.getDailyStats().get(date);
+                if (stats == null) {
+                    stats = new DailyStats();
+                    user.getDailyStats().put(date, stats);
+                }
+                stats.addMedicationUsageLog(usage);
+                if (status == MedicationStatus.TAKEN) stats.addMedicationTaken();
+                else if (status == MedicationStatus.NOT_TAKEN) stats.addMedicationMissed();
+                sharedPreferencesUtil.saveUser(user);
+
+                adapter.addLoggedTodayMedication(usage);
                 Toast.makeText(MedicationListActivity.this, "סטטוס עודכן: " + status.getDisplayName(), Toast.LENGTH_SHORT).show();
             }
 
