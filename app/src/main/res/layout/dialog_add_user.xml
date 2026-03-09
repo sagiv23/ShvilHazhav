@@ -38,7 +38,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:gravity="right"
                 android:hint="@string/first_name"
                 android:inputType="textPersonName"
                 android:textSize="23sp" />
@@ -59,7 +58,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:gravity="right"
                 android:hint="@string/last_name"
                 android:inputType="textPersonName"
                 android:textSize="23sp" />
@@ -81,7 +79,6 @@
                 android:clickable="true"
                 android:focusable="false"
                 android:fontFamily="@font/text_hebrew"
-                android:gravity="right"
                 android:hint="@string/birth_date"
                 android:textSize="23sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -101,7 +98,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:gravity="right"
                 android:hint="@string/mail_address"
                 android:inputType="textEmailAddress"
                 android:textDirection="ltr"
@@ -123,7 +119,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:gravity="right"
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:textDirection="ltr"
