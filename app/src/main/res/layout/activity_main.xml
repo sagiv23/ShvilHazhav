@@ -5,25 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     tools:context=".screens.MainActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/topMenuContainer"
+    <include
+        layout="@layout/include_top_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/top_menu_logged_in" />
-
-    <View
-        android:id="@+id/separatorLine"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?attr/colorOnSurface"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topMenuContainer" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -261,7 +252,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginBottom="6dp"
-                            android:contentDescription="@string/daily_tip"
+                            android:contentDescription="@string/icon_daily_tip"
                             android:src="@drawable/ic_tip" />
 
                         <Button

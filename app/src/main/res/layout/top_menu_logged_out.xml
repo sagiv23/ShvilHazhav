@@ -6,6 +6,7 @@
     android:background="@color/background_color_nav"
     android:elevation="4dp"
     android:gravity="center_vertical"
+    android:layoutDirection="rtl"
     android:orientation="horizontal"
     android:paddingHorizontal="4dp"
     android:paddingTop="8dp">

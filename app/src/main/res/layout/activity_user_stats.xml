@@ -5,25 +5,16 @@
     android:id="@+id/userStatsPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     tools:context=".screens.UserStatsActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/topMenuContainer"
+    <include
+        layout="@layout/include_top_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/top_menu_logged_in" />
-
-    <View
-        android:id="@+id/separatorLine"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?attr/colorOnSurface"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topMenuContainer" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -70,6 +61,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/choose_user"
                         android:textSize="25sp" />

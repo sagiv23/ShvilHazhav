@@ -5,25 +5,16 @@
     android:id="@+id/registerPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     tools:context=".screens.RegisterActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/topMenuContainer"
+    <include
+        layout="@layout/include_top_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/top_menu_logged_out" />
-
-    <View
-        android:id="@+id/separatorLine"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?attr/colorOnSurface"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topMenuContainer" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -74,7 +65,8 @@
                         android:fontFamily="@font/text_hebrew"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        app:startIconDrawable="@drawable/ic_edit">
+                        app:endIconDrawable="@drawable/ic_edit"
+                        app:endIconMode="custom">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_first_name"
@@ -93,7 +85,8 @@
                         android:fontFamily="@font/text_hebrew"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        app:startIconDrawable="@drawable/ic_edit">
+                        app:endIconDrawable="@drawable/ic_edit"
+                        app:endIconMode="custom">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_last_name"
@@ -112,7 +105,8 @@
                         android:fontFamily="@font/text_hebrew"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        app:startIconDrawable="@drawable/ic_calendar">
+                        app:endIconDrawable="@drawable/ic_calendar"
+                        app:endIconMode="custom">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_birth_date"
@@ -132,7 +126,8 @@
                         android:fontFamily="@font/text_english"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        app:startIconDrawable="@drawable/ic_email">
+                        app:endIconDrawable="@drawable/ic_email"
+                        app:endIconMode="custom">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_email"
@@ -152,8 +147,7 @@
                         android:fontFamily="@font/text_english"
                         app:boxBackgroundMode="outline"
                         app:boxStrokeWidth="1dp"
-                        app:endIconMode="password_toggle"
-                        app:startIconDrawable="@drawable/ic_password">
+                        app:endIconMode="password_toggle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_register_password"
@@ -163,9 +157,7 @@
                             android:hint="@string/password"
                             android:inputType="textPassword"
                             android:textDirection="ltr"
-                            android:textSize="23sp"
-                            app:boxBackgroundMode="outline"
-                            app:boxStrokeWidth="1dp" />
+                            android:textSize="23sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton

@@ -2,8 +2,6 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -46,7 +44,14 @@ public class SplashActivity extends BaseActivity {
             return insets;
         });
 
-        new Handler(Looper.getMainLooper()).postDelayed(this::navigateNext, SPLASH_DELAY);
+        new Thread(() -> {
+            try {
+                Thread.sleep(SPLASH_DELAY);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            runOnUiThread(this::navigateNext);
+        }).start();
     }
 
     /**

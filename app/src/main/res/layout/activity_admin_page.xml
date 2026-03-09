@@ -5,6 +5,7 @@
     android:id="@+id/adminPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     android:padding="16dp"
     tools:context=".screens.AdminPageActivity">
 
@@ -78,7 +79,7 @@
                         android:text="@string/users_table"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_users"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
 
@@ -91,7 +92,7 @@
                         android:text="@string/statistics"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_statistics"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
 
@@ -104,7 +105,7 @@
                         android:text="@string/memory_game_log_table"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_memory_game"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
 
@@ -117,7 +118,7 @@
                         android:text="@string/medications_imgs_table"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_medication"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
 
@@ -130,7 +131,7 @@
                         android:text="@string/forum_categories_options"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_forum"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
 
@@ -143,7 +144,7 @@
                         android:text="@string/user"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_user"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
 
@@ -156,7 +157,7 @@
                         android:text="@string/settings"
                         android:textSize="25sp"
                         app:icon="@drawable/ic_settings"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
                 </LinearLayout>

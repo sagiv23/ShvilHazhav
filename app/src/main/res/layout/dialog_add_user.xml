@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/colorSurface"
+    android:layoutDirection="rtl"
     android:padding="20dp">
 
     <LinearLayout
@@ -29,13 +30,15 @@
             android:fontFamily="@font/text_hebrew"
             app:boxBackgroundMode="outline"
             app:boxStrokeWidth="1dp"
-            app:startIconDrawable="@drawable/ic_edit">
+            app:endIconDrawable="@drawable/ic_edit"
+            app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputAddUserFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
+                android:gravity="right"
                 android:hint="@string/first_name"
                 android:inputType="textPersonName"
                 android:textSize="23sp" />
@@ -48,13 +51,15 @@
             android:fontFamily="@font/text_hebrew"
             app:boxBackgroundMode="outline"
             app:boxStrokeWidth="1dp"
-            app:startIconDrawable="@drawable/ic_edit">
+            app:endIconDrawable="@drawable/ic_edit"
+            app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputAddUserLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
+                android:gravity="right"
                 android:hint="@string/last_name"
                 android:inputType="textPersonName"
                 android:textSize="23sp" />
@@ -66,7 +71,8 @@
             android:layout_marginBottom="12dp"
             app:boxBackgroundMode="outline"
             app:boxStrokeWidth="1dp"
-            app:startIconDrawable="@drawable/ic_calendar">
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputAddUserBirthDate"
@@ -75,6 +81,7 @@
                 android:clickable="true"
                 android:focusable="false"
                 android:fontFamily="@font/text_hebrew"
+                android:gravity="right"
                 android:hint="@string/birth_date"
                 android:textSize="23sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -86,13 +93,15 @@
             android:fontFamily="@font/text_english"
             app:boxBackgroundMode="outline"
             app:boxStrokeWidth="1dp"
-            app:startIconDrawable="@drawable/ic_email">
+            app:endIconDrawable="@drawable/ic_email"
+            app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputAddUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
+                android:gravity="right"
                 android:hint="@string/mail_address"
                 android:inputType="textEmailAddress"
                 android:textDirection="ltr"
@@ -114,6 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
+                android:gravity="right"
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:textDirection="ltr"

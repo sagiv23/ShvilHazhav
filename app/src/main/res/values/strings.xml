@@ -136,4 +136,5 @@
     <string name="choose_user">בחר משתמש:</string>
     <string name="choose_date">בחר תאריך</string>
     <string name="show_all_history">מציג את כל ההיסטוריה</string>
+    <string name="icon_daily_tip">אייקון טיפ יומי</string>
 </resources>

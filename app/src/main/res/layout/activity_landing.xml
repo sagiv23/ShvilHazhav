@@ -5,25 +5,16 @@
     android:id="@+id/landing_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     tools:context=".screens.LandingActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/topMenuContainer"
+    <include
+        layout="@layout/include_top_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/top_menu_logged_out" />
-
-    <View
-        android:id="@+id/separatorLine"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?attr/colorOnSurface"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topMenuContainer" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -84,7 +75,7 @@
                         android:textSize="25sp"
                         app:cornerRadius="30dp"
                         app:icon="@drawable/ic_login"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
 
@@ -99,7 +90,7 @@
                         android:textSize="25sp"
                         app:cornerRadius="30dp"
                         app:icon="@drawable/ic_register"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
 
@@ -114,7 +105,7 @@
                         android:textSize="25sp"
                         app:cornerRadius="30dp"
                         app:icon="@drawable/ic_contact_support"
-                        app:iconGravity="textEnd"
+                        app:iconGravity="textStart"
                         app:iconPadding="12dp"
                         app:iconSize="28dp" />
                 </LinearLayout>

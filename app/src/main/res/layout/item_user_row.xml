@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="12dp"
     android:layout_marginVertical="6dp"
+    android:layoutDirection="rtl"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
     app:strokeColor="?attr/colorOutline">
@@ -14,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layoutDirection="rtl"
         android:orientation="horizontal"
         android:padding="12dp">
 

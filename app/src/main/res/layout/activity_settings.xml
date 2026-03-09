@@ -5,25 +5,16 @@
     android:id="@+id/settingsPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     tools:context=".screens.SettingsActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/topMenuContainer"
+    <include
+        layout="@layout/include_top_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/top_menu_logged_in" />
-
-    <View
-        android:id="@+id/separatorLine"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?attr/colorOnSurface"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topMenuContainer" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtSettingsTitle"
@@ -68,6 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/text_hebrew"
+                    android:layoutDirection="rtl"
                     android:padding="20dp"
                     android:paddingStart="20dp"
                     android:paddingTop="12dp"
@@ -75,6 +67,7 @@
                     android:paddingBottom="12dp"
                     android:switchPadding="20dp"
                     android:text="@string/dark_mode"
+                    android:textAlignment="viewStart"
                     android:textSize="20sp" />
 
                 <View
@@ -98,5 +91,4 @@
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
