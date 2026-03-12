@@ -1,10 +1,14 @@
 package com.example.sagivproject.screens.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.utils.CalendarUtil;
@@ -15,45 +19,33 @@ import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.qualifiers.ActivityContext;
-import dagger.hilt.android.scopes.ActivityScoped;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * A dialog for administrators to add a new user to the application.
- * <p>
- * This dialog provides a form for entering the new user's details, including first name,
- * last name, birthdate, email, and password. It includes input validation.
- * </p>
  */
-@ActivityScoped
-public class AddUserDialog {
-    private final Context context;
-    private final Validator validator;
-    private final CalendarUtil calendarUtil;
-    private long birthDateMillis = -1;
-
-    /**
-     * Constructs a new AddUserDialog.
-     * Hilt uses this constructor to provide an instance.
-     *
-     * @param context      The context in which the dialog should be shown.
-     * @param validator    The validator utility.
-     * @param calendarUtil The calendar utility.
-     */
+@AndroidEntryPoint
+public class AddUserDialog extends DialogFragment {
     @Inject
-    public AddUserDialog(@ActivityContext Context context, Validator validator, CalendarUtil calendarUtil) {
-        this.context = context;
-        this.validator = validator;
-        this.calendarUtil = calendarUtil;
+    Validator validator;
+    @Inject
+    CalendarUtil calendarUtil;
+
+    private long birthDateMillis = -1;
+    private AddUserDialogListener listener;
+
+    @Inject
+    public AddUserDialog() {
     }
 
-    /**
-     * Creates and displays the dialog, handling user input and validation.
-     *
-     * @param listener A listener to be notified when the add button is clicked.
-     */
-    public void show(AddUserDialogListener listener) {
-        Dialog dialog = new Dialog(context);
+    public void setListener(AddUserDialogListener listener) {
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_add_user);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -65,9 +57,7 @@ public class AddUserDialog {
         Button btnAdd = dialog.findViewById(R.id.btnAddUserSave);
         Button btnCancel = dialog.findViewById(R.id.btnAddUserCancel);
 
-        birthDateMillis = -1; // Reset for new dialog
-
-        inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(context, birthDateMillis, (millis, dateStr) -> {
+        inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(requireContext(), birthDateMillis, (millis, dateStr) -> {
             birthDateMillis = millis;
             inputBirthDate.setText(dateStr);
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT));
@@ -85,16 +75,16 @@ public class AddUserDialog {
             if (listener != null) {
                 listener.onAddUser(fName, lName, birthDateMillis, email, password);
             }
-            dialog.dismiss();
+            dismiss();
         });
 
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-        dialog.show();
+        btnCancel.setOnClickListener(v -> dismiss());
+        return dialog;
     }
 
     private boolean areAllFieldsValid(String fName, String lName, String email, String password, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passwordEdt, EditText birthDateEdt) {
         if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || password.isEmpty() || birthDateMillis <= 0) {
-            Toast.makeText(context, "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -108,15 +98,12 @@ public class AddUserDialog {
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
-            Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
     }
 
-    /**
-     * An interface to listen for the add user action.
-     */
     public interface AddUserDialogListener {
         void onAddUser(String fName, String lName, long birthDateMillis, String email, String password);
     }

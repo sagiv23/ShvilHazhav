@@ -2,7 +2,7 @@ package com.example.sagivproject.screens.dialogs;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -13,7 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.Medication;
@@ -30,42 +32,31 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.qualifiers.ActivityContext;
-import dagger.hilt.android.scopes.ActivityScoped;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A dialog for adding or editing a user's medication.
- * <p>
- * This dialog provides a form to input medication details such as name, type, and dosage.
- * It also allows the user to select multiple reminder times using a {@link TimePickerDialog}
- * and displays them as chips.
- * </p>
+ * A dialog for adding or editing a user's medication, implemented as a DialogFragment.
  */
-@ActivityScoped
-public class MedicationDialog {
-    private final Context context;
+@AndroidEntryPoint
+public class MedicationDialog extends DialogFragment {
     private final ArrayList<String> selectedHours = new ArrayList<>();
     private ChipGroup chipGroupSelectedHours;
+    private Medication medToEdit;
+    private OnMedicationSubmitListener listener;
 
-    /**
-     * Constructs a new MedicationDialog.
-     * Hilt uses this constructor to provide an instance.
-     *
-     * @param context The context in which the dialog should be shown.
-     */
     @Inject
-    public MedicationDialog(@ActivityContext Context context) {
-        this.context = context;
+    public MedicationDialog() {
     }
 
-    /**
-     * Creates and displays the dialog.
-     *
-     * @param medToEdit The medication to edit, or null to add a new one.
-     * @param listener  The listener to be invoked when the form is submitted.
-     */
-    public void show(Medication medToEdit, OnMedicationSubmitListener listener) {
-        Dialog dialog = new Dialog(context);
+    public void setData(Medication medToEdit, OnMedicationSubmitListener listener) {
+        this.medToEdit = medToEdit;
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_add_medication);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -77,17 +68,14 @@ public class MedicationDialog {
         Button btnConfirm = dialog.findViewById(R.id.btn_add_medication_confirm);
         Button btnCancel = dialog.findViewById(R.id.btn_add_medication_cancel);
 
-        // Reset selected hours for each new dialog show
         selectedHours.clear();
 
-        // Populate spinner with medication types
         List<String> typeNames = new ArrayList<>();
         for (MedicationType type : MedicationType.values()) {
             typeNames.add(type.getDisplayName());
         }
         spinnerType.setAdapter(createMedicationTypeAdapter(typeNames));
 
-        // If editing, pre-fill the form with existing data
         if (medToEdit != null) {
             edtName.setText(medToEdit.getName());
             edtDetails.setText(medToEdit.getDetails());
@@ -120,18 +108,18 @@ public class MedicationDialog {
             medicationData.setReminderHours(new ArrayList<>(selectedHours));
 
             if (medToEdit == null) {
-                listener.onAdd(medicationData);
+                if (listener != null) listener.onAdd(medicationData);
             } else {
                 medicationData.setId(medToEdit.getId());
-                listener.onEdit(medicationData);
+                if (listener != null) listener.onEdit(medicationData);
             }
 
-            dialog.dismiss();
+            dismiss();
         });
 
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        btnCancel.setOnClickListener(v -> dismiss());
 
-        dialog.show();
+        return dialog;
     }
 
     private boolean validateInputs(String name, String typeString, String details, MedicationType selectedType) {
@@ -165,7 +153,7 @@ public class MedicationDialog {
         int minute = calendar.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(
-                context,
+                requireContext(),
                 R.style.TimePickerCustomTheme,
                 (view, hourOfDay, minuteOfHour) -> {
                     String time = String.format(Locale.US, "%02d:%02d", hourOfDay, minuteOfHour);
@@ -186,7 +174,7 @@ public class MedicationDialog {
         chipGroupSelectedHours.removeAllViews();
         Collections.sort(selectedHours);
         for (String hour : selectedHours) {
-            Chip chip = new Chip(context);
+            Chip chip = new Chip(requireContext());
             chip.setText(hour);
             chip.setCloseIconVisible(true);
             chip.setOnCloseIconClickListener(v -> {
@@ -199,7 +187,7 @@ public class MedicationDialog {
 
     private ArrayAdapter<String> createMedicationTypeAdapter(List<String> typeNames) {
         return new ArrayAdapter<>(
-                context,
+                requireContext(),
                 android.R.layout.simple_spinner_item,
                 typeNames
         ) {
@@ -221,25 +209,22 @@ public class MedicationDialog {
     }
 
     private void styleTextView(TextView tv, boolean isDropdown) {
-        tv.setTypeface(ResourcesCompat.getFont(context, R.font.text_hebrew));
+        tv.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.text_hebrew));
         tv.setTextSize(22);
-        tv.setTextColor(context.getColor(R.color.text_color));
+        tv.setTextColor(requireContext().getColor(R.color.text_color));
         tv.setPadding(24, 24, 24, 24);
 
         if (isDropdown) {
             tv.setBackgroundColor(
-                    context.getColor(R.color.background_color_buttons)
+                    requireContext().getColor(R.color.background_color_buttons)
             );
         }
     }
 
     private void showToast(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * An interface for listeners that are invoked when the medication form is submitted.
-     */
     public interface OnMedicationSubmitListener {
         void onAdd(Medication medication);
 

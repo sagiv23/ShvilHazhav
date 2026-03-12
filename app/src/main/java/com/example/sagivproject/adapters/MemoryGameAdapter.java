@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Card;
-import com.example.sagivproject.screens.MemoryGameActivity;
 import com.example.sagivproject.utils.ImageUtil;
 
 import java.util.List;
@@ -100,7 +99,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }
 
         // Determine clickability based on game turn and card state
-        boolean isMyTurn = listener instanceof MemoryGameActivity && ((MemoryGameActivity) listener).isMyTurn();
+        boolean isMyTurn = listener != null && listener.isMyTurn();
         holder.itemView.setClickable(isMyTurn && !card.getIsMatched() && !card.getIsRevealed());
 
         holder.itemView.setOnClickListener(v -> {
@@ -199,6 +198,13 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
          * @param position The position of the card in the list.
          */
         void onCardClicked(Card card, int position);
+
+        /**
+         * Checks if it is currently the user's turn.
+         *
+         * @return True if it is the user's turn, false otherwise.
+         */
+        boolean isMyTurn();
     }
 
     /**

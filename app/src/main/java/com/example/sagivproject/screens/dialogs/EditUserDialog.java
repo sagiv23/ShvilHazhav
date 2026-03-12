@@ -1,10 +1,14 @@
 package com.example.sagivproject.screens.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
@@ -16,48 +20,39 @@ import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.qualifiers.ActivityContext;
-import dagger.hilt.android.scopes.ActivityScoped;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * A dialog for editing an existing user's profile information.
- * <p>
- * This dialog pre-fills a form with the user's current details and allows for modification.
- * It includes input validation and notifies a listener of the update request.
- * </p>
  */
-@ActivityScoped
-public class EditUserDialog {
-    private final Context context;
-    private final Validator validator;
-    private final CalendarUtil calendarUtil;
-    private long birthDateMillis = -1;
-
-    /**
-     * Constructs a new EditUserDialog.
-     * Hilt uses this constructor to provide an instance.
-     *
-     * @param context      The context in which the dialog should be shown.
-     * @param validator    The validator utility.
-     * @param calendarUtil The calendar utility.
-     */
+@AndroidEntryPoint
+public class EditUserDialog extends DialogFragment {
     @Inject
-    public EditUserDialog(@ActivityContext Context context, Validator validator, CalendarUtil calendarUtil) {
-        this.context = context;
-        this.validator = validator;
-        this.calendarUtil = calendarUtil;
+    Validator validator;
+    @Inject
+    CalendarUtil calendarUtil;
+
+    private User user;
+    private long birthDateMillis = -1;
+    private EditUserDialogListener listener;
+
+    @Inject
+    public EditUserDialog() {
     }
 
-    /**
-     * Creates and displays the dialog, handling user input and validation.
-     *
-     * @param user     The user object to be edited.
-     * @param listener A listener to be notified when the update button is clicked.
-     */
-    public void show(User user, EditUserDialogListener listener) {
-        Dialog dialog = new Dialog(context);
+    public void setData(User user, EditUserDialogListener listener) {
+        this.user = user;
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_edit_user);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+
+        if (user == null) return dialog;
 
         EditText inputFirstName = dialog.findViewById(R.id.inputEditUserFirstName);
         EditText inputLastName = dialog.findViewById(R.id.inputEditUserLastName);
@@ -67,15 +62,16 @@ public class EditUserDialog {
         Button btnSave = dialog.findViewById(R.id.btnEditUserSave);
         Button btnCancel = dialog.findViewById(R.id.btnEditUserCancel);
 
-        // Initialize with existing user data
         birthDateMillis = user.getBirthDateMillis();
-        updateBirthDateText(inputBirthDate, birthDateMillis);
+        if (birthDateMillis > 0) {
+            inputBirthDate.setText(calendarUtil.formatDate(birthDateMillis));
+        }
         inputFirstName.setText(user.getFirstName());
         inputLastName.setText(user.getLastName());
         inputEmail.setText(user.getEmail());
         inputPassword.setText(user.getPassword());
 
-        inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(context, birthDateMillis, (millis, dateStr) -> {
+        inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(requireContext(), birthDateMillis, (millis, dateStr) -> {
             birthDateMillis = millis;
             inputBirthDate.setText(dateStr);
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT));
@@ -93,16 +89,16 @@ public class EditUserDialog {
             if (listener != null) {
                 listener.onUpdateUser(fName, lName, birthDateMillis, email, pass);
             }
-            dialog.dismiss();
+            dismiss();
         });
 
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-        dialog.show();
+        btnCancel.setOnClickListener(v -> dismiss());
+        return dialog;
     }
 
     private boolean areAllFieldsValid(String fName, String lName, String email, String pass, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passEdt, EditText birthDateEdt) {
         if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || pass.isEmpty() || birthDateMillis <= 0) {
-            Toast.makeText(context, "כל השדות חובה", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "כל השדות חובה", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -116,21 +112,12 @@ public class EditUserDialog {
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
-            Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
     }
 
-    private void updateBirthDateText(EditText editText, long millis) {
-        if (millis > 0) {
-            editText.setText(calendarUtil.formatDate(millis));
-        }
-    }
-
-    /**
-     * An interface to listen for the update user action.
-     */
     public interface EditUserDialogListener {
         void onUpdateUser(String fName, String lName, long birthDateMillis, String email, String password);
     }

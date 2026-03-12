@@ -46,7 +46,7 @@ public class DailyCheckWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        if (!sharedPreferencesUtil.isUserLoggedIn()) return Result.success();
+        if (sharedPreferencesUtil.isUserNotLoggedIn()) return Result.success();
 
         String userId = sharedPreferencesUtil.getUserId();
         if (userId == null) return Result.success();

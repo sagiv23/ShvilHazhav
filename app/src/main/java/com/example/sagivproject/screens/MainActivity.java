@@ -1,63 +1,57 @@
 package com.example.sagivproject.screens;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseActivity;
-import com.example.sagivproject.models.User;
+import com.example.sagivproject.ui.MenuNavigationListener;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * The main screen for logged-in users.
+ * The main activity that hosts all fragments in the application.
  */
 @AndroidEntryPoint
-public class MainActivity extends BaseActivity implements BaseActivity.RequiresPermissions {
+public class MainActivity extends AppCompatActivity implements MenuNavigationListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    }
 
-        ViewGroup topMenuContainer = findViewById(R.id.topMenuContainer);
-        setupTopMenu(topMenuContainer);
+    /**
+     * Navigates to a specific destination in the navigation graph with custom animations.
+     *
+     * @param resId The resource ID of the destination or action.
+     */
+    @Override
+    public void onNavigate(int resId) {
+        onNavigate(resId, null);
+    }
 
-        User user = sharedPreferencesUtil.getUser();
-
-        Button btnToMedicationList = findViewById(R.id.btn_main_to_MedicationList);
-        Button btnToForum = findViewById(R.id.btn_main_to_forum);
-        Button btnToAi = findViewById(R.id.btn_main_to_Ai);
-        Button btnToGameHomeScreen = findViewById(R.id.btn_main_to_GameHomeScreen);
-        Button btnToMathProblems = findViewById(R.id.btn_main_to_MathProblems);
-        Button btnToTipOfTheDay = findViewById(R.id.btn_main_to_TipOfTheDay);
-        Button btnToStats = findViewById(R.id.btn_main_to_Stats);
-        TextView txtHomePageTitle = findViewById(R.id.txt_main_Title);
-
-        btnToMedicationList.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, MedicationListActivity.class)));
-        btnToForum.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, ForumCategoriesActivity.class)));
-        btnToAi.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AiActivity.class)));
-        btnToGameHomeScreen.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, GameHomeScreenActivity.class)));
-        btnToMathProblems.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, MathProblemsActivity.class)));
-        btnToTipOfTheDay.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, TipOfTheDayActivity.class)));
-        btnToStats.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, UserStatsActivity.class)));
-
-        if (user != null) {
-            txtHomePageTitle.setText(String.format("שלום %s", user.getFullName()));
+    /**
+     * Navigates to a specific destination in the navigation graph with arguments and custom animations.
+     *
+     * @param resId The resource ID of the destination or action.
+     * @param args  The arguments to pass.
+     */
+    @Override
+    public void onNavigate(int resId, Bundle args) {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        if (navController.getCurrentDestination() != null && navController.getCurrentDestination().getId() != resId) {
+            NavOptions navOptions = new NavOptions.Builder()
+                    .setEnterAnim(R.anim.slide_up)
+                    .setExitAnim(R.anim.slide_out_left)
+                    .setPopEnterAnim(R.anim.slide_in_left)
+                    .setPopExitAnim(R.anim.slide_down)
+                    .build();
+            navController.navigate(resId, args, navOptions);
         }
     }
 }

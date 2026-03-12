@@ -41,7 +41,8 @@
 
 The project is built using modern Android development best practices.
 
-- **Architecture:** **MVVM (Model-View-ViewModel)** with Repository Pattern.
+- **Architecture:** **Single-Activity Architecture** with **MVVM (Model-View-ViewModel)** and Repository Pattern.
+- **Navigation:** **Jetpack Navigation Component** for managing fragment transitions.
 - **Dependency Injection:** **Hilt** for robust and testable component management.
 - **Background Tasks:** **WorkManager** for reliable periodic checks (e.g., birthday reminders).
 - **Local Persistence:** **SharedPreferences** for user settings and preferences.
@@ -57,11 +58,11 @@ The project is built using modern Android development best practices.
 
 | Package                                                                | Purpose                                                       |
 |:-----------------------------------------------------------------------|:--------------------------------------------------------------|
-| [`screens`](app/src/main/java/com/example/sagivproject/screens)        | Activities and UI logic.                                      |
+| [`screens`](app/src/main/java/com/example/sagivproject/screens)        | Fragments and UI logic for various screens.                   |
 | [`services`](app/src/main/java/com/example/sagivproject/services)      | Business logic interfaces and implementations.                |
 | [`models`](app/src/main/java/com/example/sagivproject/models)          | Data entities and Enums.                                      |
 | [`adapters`](app/src/main/java/com/example/sagivproject/adapters)      | RecyclerView adapters for lists and grids.                    |
-| [`ui`](app/src/main/java/com/example/sagivproject/ui)                  | Custom views, fragments, and shared UI components.            |
+| [`ui`](app/src/main/java/com/example/sagivproject/ui)                  | Custom views, menu fragments, and shared UI components.       |
 | [`bases`](app/src/main/java/com/example/sagivproject/bases)            | Abstract base classes for standardized component behavior.    |
 | [`di`](app/src/main/java/com/example/sagivproject/di)                  | Dependency Injection modules (Hilt).                          |
 | [`utils`](app/src/main/java/com/example/sagivproject/utils)            | Static helpers for validation, UI, dates, and storage.        |

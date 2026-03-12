@@ -11,10 +11,10 @@ import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.navigation.NavDeepLinkBuilder;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.screens.MedicationListActivity;
-import com.example.sagivproject.screens.SplashActivity;
+import com.example.sagivproject.screens.MainActivity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -66,15 +66,14 @@ public class NotificationService {
         String title = context.getString(R.string.medication_notif_title);
         String message = context.getString(R.string.medication_notif_body, medicationName);
 
-        Intent intent = new Intent(context, MedicationListActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                context,
-                notificationId,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
-        );
+        // Using NavDeepLinkBuilder to navigate directly to medicationListFragment
+        PendingIntent pendingIntent = new NavDeepLinkBuilder(context)
+                .setGraph(R.navigation.nav_graph)
+                .setDestination(R.id.medicationListFragment)
+                .setComponentName(MainActivity.class)
+                .createPendingIntent();
 
-        show(MEDICATIONS_CHANNEL_ID, title, message, pendingIntent, notificationId, MEDICATIONS_GROUP);
+        show(title, message, pendingIntent, notificationId);
         showSummaryNotification(MEDICATIONS_CHANNEL_ID, MEDICATIONS_GROUP);
     }
 
@@ -82,7 +81,8 @@ public class NotificationService {
         String title = context.getString(R.string.birthday_notif_title);
         String message = context.getString(R.string.birthday_notif_body, firstName);
 
-        Intent intent = new Intent(context, SplashActivity.class);
+        // For birthday, just open the app (Splash -> Main)
+        Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context,
                 notificationId,
@@ -90,7 +90,7 @@ public class NotificationService {
                 PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
 
-        show(BIRTHDAYS_CHANNEL_ID, title, message, pendingIntent, notificationId, BIRTHDAYS_GROUP);
+        show(BIRTHDAYS_CHANNEL_ID, title, message, notificationId, pendingIntent, BIRTHDAYS_GROUP);
         showSummaryNotification(BIRTHDAYS_CHANNEL_ID, BIRTHDAYS_GROUP);
     }
 
@@ -107,7 +107,7 @@ public class NotificationService {
         }
     }
 
-    private void show(String channelId, String title, String message, PendingIntent pendingIntent, int notificationId, String group) {
+    private void show(String channelId, String title, String message, int notificationId, PendingIntent pendingIntent, String group) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_medication)
                 .setContentTitle(title)
@@ -120,5 +120,10 @@ public class NotificationService {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             manager.notify(notificationId, builder.build());
         }
+    }
+
+    // Helper to avoid signature mismatch if I swapped arguments in my head
+    private void show(String title, String message, PendingIntent pendingIntent, int notificationId) {
+        show(NotificationService.MEDICATIONS_CHANNEL_ID, title, message, notificationId, pendingIntent, NotificationService.MEDICATIONS_GROUP);
     }
 }

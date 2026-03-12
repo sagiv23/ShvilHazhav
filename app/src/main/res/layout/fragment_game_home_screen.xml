@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameHomeScreenPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:layoutDirection="rtl"
+    tools:context=".screens.GameHomeScreenFragment">
+
+    <include
+        layout="@layout/include_top_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separatorLine">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/headline_hebrew"
+                android:text="@string/memory_game"
+                android:textColor="@color/headline"
+                android:textSize="40sp" />
+
+            <TextView
+                android:id="@+id/tv_GameHomeScreen_victories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/text_hebrew"
+                android:gravity="start"
+                android:textSize="22sp"
+                tools:text="ניצחונות היום: " />
+
+            <TextView
+                android:id="@+id/tv_GameHomeScreen_games_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/text_hebrew"
+                android:gravity="start"
+                android:textSize="22sp"
+                tools:text="משחקים היום: " />
+
+            <TextView
+                android:id="@+id/tv_GameHomeScreen_games_total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/text_hebrew"
+                android:gravity="start"
+                android:textSize="22sp"
+                tools:text="משחקים סך הכל: " />
+
+            <TextView
+                android:id="@+id/tv_GameHomeScreen_status_of_finding_enemy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/text_hebrew"
+                android:gravity="center"
+                android:text="@string/searching_enemy"
+                android:textSize="25sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_GameHomeScreen_find_enemy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/find_enemy"
+                    android:textAllCaps="false"
+                    android:textSize="25sp"
+                    app:cornerRadius="30dp"
+                    app:icon="@drawable/ic_search"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_GameHomeScreen_cancel_find_enemy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/cancel_search"
+                    android:textAllCaps="false"
+                    android:textSize="25sp"
+                    android:visibility="gone"
+                    app:cornerRadius="30dp"
+                    app:icon="@drawable/ic_cancel"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp" />
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                app:strokeColor="?attr/colorOutline"
+                app:strokeWidth="1.5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/headline_hebrew"
+                        android:gravity="center"
+                        android:text="@string/game_rules"
+                        android:textSize="30sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_GameHomeScreen_speak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/text_hebrew"
+                        android:text="@string/playback"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"
+                        app:cornerRadius="30dp"
+                        app:icon="@drawable/ic_sound"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconSize="28dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/text_hebrew"
+                        android:gravity="start"
+                        android:text="@string/game_rules_text1"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/headline_hebrew"
+                        android:gravity="start"
+                        android:text="@string/game_target"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/text_hebrew"
+                        android:gravity="start"
+                        android:text="@string/game_rules_text2"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/headline_hebrew"
+                        android:gravity="start"
+                        android:text="@string/game_procedure"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/text_hebrew"
+                        android:gravity="start"
+                        android:text="@string/game_rules_text3"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/text_hebrew"
+                        android:gravity="start"
+                        android:text="@string/game_rules_text4"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/text_hebrew"
+                        android:gravity="start"
+                        android:text="@string/game_rules_text5"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/headline_hebrew"
+                        android:gravity="start"
+                        android:text="@string/scoring_method"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/text_hebrew"
+                        android:gravity="start"
+                        android:text="@string/game_rules_text6"
+                        android:textSize="22sp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/headline_hebrew"
+                android:gravity="center"
+                android:text="@string/leaderboard"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="1dp"
+                android:paddingVertical="10dp"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:fontFamily="@font/headline_hebrew"
+                    android:gravity="center"
+                    android:text="@string/full_name"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/icon_crown"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_GameHomeScreen_leaderboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

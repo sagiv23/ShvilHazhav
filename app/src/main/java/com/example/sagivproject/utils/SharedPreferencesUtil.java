@@ -188,7 +188,7 @@ public class SharedPreferencesUtil {
      *
      * @return True if user data exists in SharedPreferences, false otherwise.
      */
-    public boolean isUserLoggedIn() {
+    public boolean isUserNotLoggedIn() {
         return !contains(KEY_USER);
     }
 

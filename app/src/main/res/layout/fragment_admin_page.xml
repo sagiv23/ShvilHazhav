@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/adminPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:layoutDirection="rtl"
+    tools:context=".screens.AdminPageFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/headline_hebrew"
+            android:text="@string/admin_page"
+            android:textColor="@color/headline"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/txt_admin_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="@font/text_hebrew"
+            android:text="@string/hello_admin"
+            android:textSize="37sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="6dp"
+            app:strokeColor="?attr/colorOutline">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="25dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:gravity="center"
+                    android:text="@string/admin_options"
+                    android:textSize="30sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_admin_to_UsersTablePage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/users_table"
+                    android:textSize="25sp"
+                    app:icon="@drawable/ic_users"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_admin_to_UserStats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/statistics"
+                    android:textSize="25sp"
+                    app:icon="@drawable/ic_statistics"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_admin_to_MemoryGameLogsTablePage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/memory_game_log_table"
+                    android:textSize="25sp"
+                    app:icon="@drawable/ic_memory_game"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_admin_to_MedicineImagesTablePage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/medications_imgs_table"
+                    android:textSize="25sp"
+                    app:icon="@drawable/ic_medication"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_admin_to_ForumCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/forum_categories_options"
+                    android:textSize="25sp"
+                    app:icon="@drawable/ic_forum"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_admin_to_DetailsAboutUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/user"
+                    android:textSize="25sp"
+                    app:icon="@drawable/ic_user"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_admin_to_Settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/settings"
+                    android:textSize="25sp"
+                    app:icon="@drawable/ic_settings"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

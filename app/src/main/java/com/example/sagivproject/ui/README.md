@@ -1,6 +1,6 @@
 # UI Components
 
-> Reusable UI components, fragments, and specialized display helpers.
+> Reusable UI components, menu fragments, and specialized display helpers.
 
 ---
 

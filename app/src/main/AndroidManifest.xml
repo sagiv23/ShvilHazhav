@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.CAMERA" /> <!-- For Android 13+ -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -38,7 +38,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- Disable the default WorkManagerInitializer -->
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
@@ -51,83 +50,11 @@
         </provider>
 
         <activity
-            android:name=".screens.UserStatsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.SecretActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.TipOfTheDayActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.ForumCategoriesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.MathProblemsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.SettingsActivity"
-            android:exported="false"
-            android:label="@string/settings" />
-        <activity
-            android:name=".screens.MemoryGameLogsTableActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.MedicationImagesTableActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.AdminForumActivity"
-            android:exported="false"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-        <activity
-            android:name=".screens.AdminForumCategoriesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.UsersTableActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.AdminPageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.DetailsAboutUserActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.MemoryGameActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.GameHomeScreenActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.ForumActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
-            android:name=".screens.MedicationListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.AiActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.ContactActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.LoginActivity"
-            android:exported="false" />
-        <activity
             android:name=".screens.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.LandingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

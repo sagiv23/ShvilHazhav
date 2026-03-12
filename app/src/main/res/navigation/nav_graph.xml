@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <!-- Auth Flow -->
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.sagivproject.screens.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_landingFragment"
+            app:destination="@id/landingFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_adminPageFragment"
+            app:destination="@id/adminPageFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.example.sagivproject.screens.LandingFragment"
+        android:label="LandingFragment"
+        tools:layout="@layout/fragment_landing">
+        <action
+            android:id="@+id/action_landingFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_landingFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_landingFragment_to_contactFragment"
+            app:destination="@id/contactFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_landingFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.sagivproject.screens.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_adminPageFragment"
+            app:destination="@id/adminPageFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.sagivproject.screens.RegisterFragment"
+        android:label="RegisterFragment"
+        tools:layout="@layout/fragment_register">
+
+        <action
+            android:id="@+id/action_registerFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Main User Flow -->
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.sagivproject.screens.HomeFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_medicationListFragment"
+            app:destination="@id/medicationListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_forumCategoriesFragment"
+            app:destination="@id/forumCategoriesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_aiFragment"
+            app:destination="@id/aiFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_gameHomeScreenFragment"
+            app:destination="@id/gameHomeScreenFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_mathProblemsFragment"
+            app:destination="@id/mathProblemsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_tipOfTheDayFragment"
+            app:destination="@id/tipOfTheDayFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_userStatsFragment"
+            app:destination="@id/userStatsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_contactFragment"
+            app:destination="@id/contactFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_detailsAboutUserFragment"
+            app:destination="@id/detailsAboutUserFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/medicationListFragment"
+        android:name="com.example.sagivproject.screens.MedicationListFragment"
+        android:label="MedicationListFragment"
+        tools:layout="@layout/fragment_medication_list" />
+
+    <fragment
+        android:id="@+id/forumCategoriesFragment"
+        android:name="com.example.sagivproject.screens.ForumCategoriesFragment"
+        android:label="ForumCategoriesFragment"
+        tools:layout="@layout/fragment_forum_categories">
+        <action
+            android:id="@+id/action_forumCategoriesFragment_to_forumFragment"
+            app:destination="@id/forumFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forumFragment"
+        android:name="com.example.sagivproject.screens.ForumFragment"
+        android:label="ForumFragment"
+        tools:layout="@layout/fragment_forum">
+        <action
+            android:id="@+id/action_forumFragment_to_forumCategoriesFragment"
+            app:destination="@id/forumCategoriesFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/aiFragment"
+        android:name="com.example.sagivproject.screens.AiFragment"
+        android:label="AiFragment"
+        tools:layout="@layout/fragment_ai" />
+
+    <fragment
+        android:id="@+id/gameHomeScreenFragment"
+        android:name="com.example.sagivproject.screens.GameHomeScreenFragment"
+        android:label="GameHomeScreenFragment"
+        tools:layout="@layout/fragment_game_home_screen">
+        <action
+            android:id="@+id/action_gameHomeScreenFragment_to_memoryGameFragment"
+            app:destination="@id/memoryGameFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/memoryGameFragment"
+        android:name="com.example.sagivproject.screens.MemoryGameFragment"
+        android:label="MemoryGameFragment"
+        tools:layout="@layout/fragment_memory_game">
+        <action
+            android:id="@+id/action_memoryGameFragment_to_gameHomeScreenFragment"
+            app:destination="@id/gameHomeScreenFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/mathProblemsFragment"
+        android:name="com.example.sagivproject.screens.MathProblemsFragment"
+        android:label="MathProblemsFragment"
+        tools:layout="@layout/fragment_math_problems" />
+
+    <fragment
+        android:id="@+id/tipOfTheDayFragment"
+        android:name="com.example.sagivproject.screens.TipOfTheDayFragment"
+        android:label="TipOfTheDayFragment"
+        tools:layout="@layout/fragment_tip_of_the_day" />
+
+    <fragment
+        android:id="@+id/userStatsFragment"
+        android:name="com.example.sagivproject.screens.UserStatsFragment"
+        android:label="UserStatsFragment"
+        tools:layout="@layout/fragment_user_stats" />
+
+    <!-- Admin Flow -->
+    <fragment
+        android:id="@+id/adminPageFragment"
+        android:name="com.example.sagivproject.screens.AdminPageFragment"
+        android:label="AdminPageFragment"
+        tools:layout="@layout/fragment_admin_page">
+        <action
+            android:id="@+id/action_adminPageFragment_to_usersTableFragment"
+            app:destination="@id/usersTableFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_adminPageFragment_to_medicationImagesTableFragment"
+            app:destination="@id/medicationImagesTableFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_adminPageFragment_to_adminForumCategoriesFragment"
+            app:destination="@id/adminForumCategoriesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_adminPageFragment_to_memoryGameLogsTableFragment"
+            app:destination="@id/memoryGameLogsTableFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_adminPageFragment_to_detailsAboutUserFragment"
+            app:destination="@id/detailsAboutUserFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_adminPageFragment_to_userStatsFragment"
+            app:destination="@id/userStatsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_adminPageFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/usersTableFragment"
+        android:name="com.example.sagivproject.screens.UsersTableFragment"
+        android:label="UsersTableFragment"
+        tools:layout="@layout/fragment_users_table" />
+
+    <fragment
+        android:id="@+id/medicationImagesTableFragment"
+        android:name="com.example.sagivproject.screens.MedicationImagesTableFragment"
+        android:label="MedicationImagesTableFragment"
+        tools:layout="@layout/fragment_medication_images_table" />
+
+    <fragment
+        android:id="@+id/adminForumCategoriesFragment"
+        android:name="com.example.sagivproject.screens.AdminForumCategoriesFragment"
+        android:label="AdminForumCategoriesFragment"
+        tools:layout="@layout/fragment_admin_forum_categories">
+        <action
+            android:id="@+id/action_adminForumCategoriesFragment_to_adminForumFragment"
+            app:destination="@id/adminForumFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminForumFragment"
+        android:name="com.example.sagivproject.screens.AdminForumFragment"
+        android:label="AdminForumFragment"
+        tools:layout="@layout/fragment_admin_forum">
+        <action
+            android:id="@+id/action_adminForumFragment_to_adminForumCategoriesFragment"
+            app:destination="@id/adminForumCategoriesFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/memoryGameLogsTableFragment"
+        android:name="com.example.sagivproject.screens.MemoryGameLogsTableFragment"
+        android:label="MemoryGameLogsTableFragment"
+        tools:layout="@layout/fragment_memory_game_logs_table" />
+
+    <fragment
+        android:id="@+id/detailsAboutUserFragment"
+        android:name="com.example.sagivproject.screens.DetailsAboutUserFragment"
+        android:label="DetailsAboutUserFragment"
+        tools:layout="@layout/fragment_details_about_user" />
+
+    <!-- Shared -->
+    <fragment
+        android:id="@+id/contactFragment"
+        android:name="com.example.sagivproject.screens.ContactFragment"
+        android:label="ContactFragment"
+        tools:layout="@layout/fragment_contact">
+        <action
+            android:id="@+id/action_contactFragment_to_secretFragment"
+            app:destination="@id/secretFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.sagivproject.screens.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/secretFragment"
+        android:name="com.example.sagivproject.screens.SecretFragment"
+        android:label="SecretFragment"
+        tools:layout="@layout/fragment_secret" />
+
+</navigation>

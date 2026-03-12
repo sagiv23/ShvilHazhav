@@ -1,26 +1,35 @@
 # Screens
 
-> Activities and Fragments that handle user interaction and screen navigation.
+> Fragments that handle user interaction and screen navigation within the Single-Activity
+> architecture.
 
 ---
 
-| Activity                                        | Description                                                  |
+| Fragment                                        | Description                                                  |
 |-------------------------------------------------|--------------------------------------------------------------|
-| `SplashActivity`                                | Initial launch screen with branding and authentication check |
-| `LoginActivity` / `RegisterActivity`            | User authentication and account creation screens             |
-| `MainActivity` / `LandingActivity`              | Main navigation hubs for the application                     |
-| `ForumActivity` / `ForumCategoriesActivity`     | Discussion forums and category browsing                      |
-| `MemoryGameActivity` / `GameHomeScreenActivity` | Core game logic and memory game selection                    |
-| `MedicationListActivity`                        | Medication tracking and management UI                        |
-| `AdminPageActivity` / `UsersTableActivity`      | Administrative dashboards for managing content and users     |
-| `SettingsActivity` / `DetailsAboutUserActivity` | User preferences and profile management                      |
-| `UserStatsActivity`                             | Detailed statistics and progress tracking for a user         |
-| `TipOfTheDayActivity`                           | Displays daily motivational tips                             |
-| `AiActivity`                                    | AI interaction features (Gemini)                             |
-| `MathProblemsActivity`                          | Mental stimulation through math challenges                   |
-| `ContactActivity`                               | Support and contact information                              |
-| `AdminForumActivity`                            | Admin view for forum moderation                              |
-| `AdminForumCategoriesActivity`                  | Admin view for managing forum categories                     |
-| `MemoryGameLogsTableActivity`                   | Admin/User view for reviewing game history                   |
-| `MedicationImagesTableActivity`                 | View for managing medication-related image logs              |
-| `SecretActivity`                                | An easter-egg or hidden developer activity                   |
+| `SplashFragment`                                | Initial launch screen with branding and authentication check |
+| `LoginFragment` / `RegisterFragment`            | User authentication and account creation screens             |
+| `HomeFragment` / `LandingFragment`              | Main navigation hubs for the application                     |
+| `ForumFragment` / `ForumCategoriesFragment`     | Discussion forums and category browsing                      |
+| `MemoryGameFragment` / `GameHomeScreenFragment` | Core game logic and memory game selection                    |
+| `MedicationListFragment`                        | Medication tracking and management UI                        |
+| `AdminPageFragment` / `UsersTableFragment`      | Administrative dashboards for managing content and users     |
+| `SettingsFragment` / `DetailsAboutUserFragment` | User preferences and profile management                      |
+| `UserStatsFragment`                             | Detailed statistics and progress tracking for a user         |
+| `TipOfTheDayFragment`                           | Displays daily motivational tips                             |
+| `AiFragment`                                    | AI interaction features (Gemini)                             |
+| `MathProblemsFragment`                          | Mental stimulation through math challenges                   |
+| `ContactFragment`                               | Support and contact information                              |
+| `AdminForumFragment`                            | Admin view for forum moderation                              |
+| `AdminForumCategoriesFragment`                  | Admin view for managing forum categories                     |
+| `MemoryGameLogsTableFragment`                   | Admin/User view for reviewing game history                   |
+| `MedicationImagesTableFragment`                 | View for managing medication-related image logs              |
+| `SecretFragment`                                | An easter-egg or hidden developer activity                   |
+
+---
+
+### UI Components
+
+- **Main Components**: Fragments and Navigation Components.
+- **Dialogs**: See the [dialogs](./dialogs/README.md) directory for popup interactions (implemented
+  as `DialogFragment`).

@@ -37,7 +37,7 @@ public class BootReceiver extends BroadcastReceiver {
     }
 
     private void rescheduleAlarms() {
-        if (!sharedPreferencesUtil.isUserLoggedIn()) {
+        if (sharedPreferencesUtil.isUserNotLoggedIn()) {
             Log.d(TAG, "User not logged in, skipping reschedule");
             return;
         }
