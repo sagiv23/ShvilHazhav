@@ -77,8 +77,21 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         listenToGame();
     }
 
+    /**
+     * Safe navigation override to prevent crashes when multiple events trigger navigation.
+     */
+    @Override
+    protected void navigateTo(int resId) {
+        if (navController != null && navController.getCurrentDestination() != null &&
+                navController.getCurrentDestination().getId() == R.id.memoryGameFragment) {
+            super.navigateTo(resId);
+        }
+    }
+
     private void showExitGameDialog() {
         Runnable onConfirm = () -> {
+            // Prevent other end-game dialogs from appearing since we are already navigating away
+            endDialogShown = true;
             if (currentRoom != null && !"finished".equals(currentRoom.getStatus())) {
                 String opponentUid = user.getId().equals(currentRoom.getPlayer1Uid()) ? currentRoom.getPlayer2Uid() : currentRoom.getPlayer1Uid();
                 databaseService.getGameService().updateRoomField(roomId, "winnerUid", opponentUid);

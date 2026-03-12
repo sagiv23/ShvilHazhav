@@ -22,6 +22,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ProfileImageDialog extends DialogFragment {
+    private static final String ARG_HAS_IMAGE = "arg_has_image";
+
     private boolean hasImage;
     private ImagePickerListener listener;
 
@@ -30,8 +32,18 @@ public class ProfileImageDialog extends DialogFragment {
     }
 
     public void setData(boolean hasImage, ImagePickerListener listener) {
-        this.hasImage = hasImage;
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_HAS_IMAGE, hasImage);
+        setArguments(args);
         this.listener = listener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            hasImage = getArguments().getBoolean(ARG_HAS_IMAGE);
+        }
     }
 
     @NonNull

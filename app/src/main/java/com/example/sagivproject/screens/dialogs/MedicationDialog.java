@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.os.BundleCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
@@ -39,6 +40,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MedicationDialog extends DialogFragment {
+    private static final String ARG_MEDICATION = "arg_medication";
+
     private final ArrayList<String> selectedHours = new ArrayList<>();
     private ChipGroup chipGroupSelectedHours;
     private Medication medToEdit;
@@ -49,8 +52,20 @@ public class MedicationDialog extends DialogFragment {
     }
 
     public void setData(Medication medToEdit, OnMedicationSubmitListener listener) {
-        this.medToEdit = medToEdit;
+        Bundle args = new Bundle();
+        if (medToEdit != null) {
+            args.putSerializable(ARG_MEDICATION, medToEdit);
+        }
+        setArguments(args);
         this.listener = listener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            medToEdit = BundleCompat.getSerializable(getArguments(), ARG_MEDICATION, Medication.class);
+        }
     }
 
     @NonNull

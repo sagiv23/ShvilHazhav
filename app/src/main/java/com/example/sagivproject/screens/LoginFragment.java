@@ -15,6 +15,9 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseFragment;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
+import com.example.sagivproject.utils.Validator;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -23,6 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class LoginFragment extends BaseFragment {
+    @Inject
+    protected Validator validator;
     private EditText editTextEmail, editTextPassword;
 
     @Nullable

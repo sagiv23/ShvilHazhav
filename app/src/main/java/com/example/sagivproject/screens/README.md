@@ -26,10 +26,3 @@
 | `MedicationImagesTableFragment`                 | View for managing medication-related image logs              |
 | `SecretFragment`                                | An easter-egg or hidden developer activity                   |
 
----
-
-### UI Components
-
-- **Main Components**: Fragments and Navigation Components.
-- **Dialogs**: See the [dialogs](./dialogs/README.md) directory for popup interactions (implemented
-  as `DialogFragment`).

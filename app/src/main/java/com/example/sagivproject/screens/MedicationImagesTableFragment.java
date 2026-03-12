@@ -27,12 +27,15 @@ import com.example.sagivproject.adapters.MedicationImagesTableAdapter;
 import com.example.sagivproject.bases.BaseFragment;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -42,6 +45,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MedicationImagesTableFragment extends BaseFragment {
     private final List<ImageData> allImages = new ArrayList<>();
+    @Inject
+    protected ImageUtil imageUtil;
     private MedicationImagesTableAdapter adapter;
     private TextInputEditText etSearch;
     private ActivityResultLauncher<PickVisualMediaRequest> photoPickerLauncher;

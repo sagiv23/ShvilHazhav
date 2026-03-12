@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.os.BundleCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
@@ -24,6 +25,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class EditForumCategoryDialog extends DialogFragment {
+    private static final String ARG_CATEGORY = "arg_category";
+
     private ForumCategory category;
     private EditForumCategoryDialogListener listener;
 
@@ -32,8 +35,20 @@ public class EditForumCategoryDialog extends DialogFragment {
     }
 
     public void setData(ForumCategory category, EditForumCategoryDialogListener listener) {
-        this.category = category;
+        Bundle args = new Bundle();
+        if (category != null) {
+            args.putSerializable(ARG_CATEGORY, category);
+        }
+        setArguments(args);
         this.listener = listener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            category = BundleCompat.getSerializable(getArguments(), ARG_CATEGORY, ForumCategory.class);
+        }
     }
 
     @NonNull

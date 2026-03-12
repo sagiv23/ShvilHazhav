@@ -23,10 +23,13 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -35,6 +38,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class DetailsAboutUserFragment extends BaseFragment {
+    @Inject
+    protected ImageUtil imageUtil;
     private TextView txtTitle, txtEmail, txtPassword, txtAge, txtBirthDate;
     private ImageView imgUserProfile;
     private User user;

@@ -27,10 +27,7 @@ import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.ui.AdminMenuFragment;
 import com.example.sagivproject.ui.LoggedInMenuFragment;
 import com.example.sagivproject.ui.LoggedOutMenuFragment;
-import com.example.sagivproject.utils.CalendarUtil;
-import com.example.sagivproject.utils.ImageUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-import com.example.sagivproject.utils.Validator;
 
 import javax.inject.Inject;
 
@@ -41,10 +38,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public abstract class BaseFragment extends Fragment {
-    // Register the permissions callback, which handles the user's response to the system permissions dialog.
     private final ActivityResultLauncher<String[]> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), isGranted -> {
-                // You can add logic here to handle the result (e.g., showing a message if a permission is denied)
             });
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
@@ -54,12 +49,7 @@ public abstract class BaseFragment extends Fragment {
     protected AdapterService adapterService;
     @Inject
     protected DialogService dialogService;
-    @Inject
-    protected Validator validator;
-    @Inject
-    protected CalendarUtil calendarUtil;
-    @Inject
-    protected ImageUtil imageUtil;
+
     protected NavController navController;
 
     @Override

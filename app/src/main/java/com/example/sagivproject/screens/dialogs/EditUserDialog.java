@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.os.BundleCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
@@ -27,6 +28,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class EditUserDialog extends DialogFragment {
+    private static final String ARG_USER = "arg_user";
+
     @Inject
     Validator validator;
     @Inject
@@ -41,8 +44,20 @@ public class EditUserDialog extends DialogFragment {
     }
 
     public void setData(User user, EditUserDialogListener listener) {
-        this.user = user;
+        Bundle args = new Bundle();
+        if (user != null) {
+            args.putSerializable(ARG_USER, user);
+        }
+        setArguments(args);
         this.listener = listener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = BundleCompat.getSerializable(getArguments(), ARG_USER, User.class);
+        }
     }
 
     @NonNull

@@ -36,6 +36,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -44,6 +46,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class UserStatsFragment extends BaseFragment {
     private final List<User> selectableUsers = new ArrayList<>();
+    @Inject
+    protected CalendarUtil calendarUtil;
     private SimpleXYGraphView graphMemoryWins, graphMathStats, graphMedicationStats;
     private RecyclerView recyclerMedicationLogs;
     private MedicationUsageAdapter usageAdapter;

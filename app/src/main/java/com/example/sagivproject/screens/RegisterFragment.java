@@ -16,6 +16,9 @@ import com.example.sagivproject.bases.BaseFragment;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.utils.CalendarUtil;
+import com.example.sagivproject.utils.Validator;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -24,6 +27,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class RegisterFragment extends BaseFragment {
+    @Inject
+    protected CalendarUtil calendarUtil;
+    @Inject
+    protected Validator validator;
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword, editTextBirthDate;
     private long birthDateMillis = -1;
 
