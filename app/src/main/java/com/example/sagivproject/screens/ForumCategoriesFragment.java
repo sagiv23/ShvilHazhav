@@ -60,10 +60,10 @@ public class ForumCategoriesFragment extends BaseFragment {
 
             @Override
             public void onClick(ForumCategory category) {
-                Bundle args = new Bundle();
-                args.putString("categoryId", category.getId());
-                args.putString("categoryName", category.getName());
-                navigateTo(R.id.action_forumCategoriesFragment_to_forumFragment, args);
+                // Using Safe Args Directions
+                ForumCategoriesFragmentDirections.ActionForumCategoriesFragmentToForumFragment action =
+                        ForumCategoriesFragmentDirections.actionForumCategoriesFragmentToForumFragment(category.getId(), category.getName());
+                navigateTo(action);
             }
         }, false); // isAdmin = false
         recyclerView.setAdapter(adapter);

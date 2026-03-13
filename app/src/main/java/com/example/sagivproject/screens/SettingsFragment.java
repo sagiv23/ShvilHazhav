@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.navigation.NavDirections;
 import androidx.preference.PreferenceManager;
 
 import com.example.sagivproject.R;
@@ -38,9 +39,11 @@ public class SettingsFragment extends BaseFragment {
         Button btnLogout = view.findViewById(R.id.btn_logout);
         SwitchMaterial switchDarkMode = view.findViewById(R.id.switch_dark_mode);
 
+        // Using Safe Args to retrieve arguments with null check
         boolean isFromLoggedIn = false;
         if (getArguments() != null) {
-            isFromLoggedIn = getArguments().getBoolean("isFromLoggedIn", false);
+            SettingsFragmentArgs args = SettingsFragmentArgs.fromBundle(getArguments());
+            isFromLoggedIn = args.getIsFromLoggedIn();
         }
 
         if (!isFromLoggedIn) {
@@ -75,9 +78,8 @@ public class SettingsFragment extends BaseFragment {
             if (getContext() != null)
                 Toast.makeText(getContext(), "התנתקת בהצלחה", Toast.LENGTH_SHORT).show();
 
-            Bundle args = new Bundle();
-            args.putString("userEmail", email);
-            navigateTo(R.id.loginFragment, args);
+            NavDirections action = SettingsFragmentDirections.actionSettingsFragmentToLoginFragment().setUserEmail(email);
+            navigateTo(action);
         };
 
         dialogService.showConfirmDialog(getParentFragmentManager(), "התנתקות", "האם ברצונך להתנתק?", "התנתק", "בטל", onConfirm);

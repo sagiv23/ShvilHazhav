@@ -46,8 +46,10 @@ public class LoginFragment extends BaseFragment {
 
         btnLogin.setOnClickListener(v -> tryLogin());
 
+        // Using Safe Args to retrieve arguments with null check
         if (getArguments() != null) {
-            String lastEmail = getArguments().getString("userEmail");
+            LoginFragmentArgs args = LoginFragmentArgs.fromBundle(getArguments());
+            String lastEmail = args.getUserEmail();
             if (lastEmail != null && !lastEmail.isEmpty()) {
                 editTextEmail.setText(lastEmail);
             }

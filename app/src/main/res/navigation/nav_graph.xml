@@ -80,6 +80,11 @@
         android:name="com.example.sagivproject.screens.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
+        <argument
+            android:name="userEmail"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_loginFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -220,6 +225,12 @@
         android:name="com.example.sagivproject.screens.ForumFragment"
         android:label="ForumFragment"
         tools:layout="@layout/fragment_forum">
+        <argument
+            android:name="categoryId"
+            app:argType="string" />
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
         <action
             android:id="@+id/action_forumFragment_to_forumCategoriesFragment"
             app:destination="@id/forumCategoriesFragment"
@@ -254,6 +265,9 @@
         android:name="com.example.sagivproject.screens.MemoryGameFragment"
         android:label="MemoryGameFragment"
         tools:layout="@layout/fragment_memory_game">
+        <argument
+            android:name="roomId"
+            app:argType="string" />
         <action
             android:id="@+id/action_memoryGameFragment_to_gameHomeScreenFragment"
             app:destination="@id/gameHomeScreenFragment"
@@ -372,6 +386,12 @@
         android:name="com.example.sagivproject.screens.AdminForumFragment"
         android:label="AdminForumFragment"
         tools:layout="@layout/fragment_admin_forum">
+        <argument
+            android:name="categoryId"
+            app:argType="string" />
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
         <action
             android:id="@+id/action_adminForumFragment_to_adminForumCategoriesFragment"
             app:destination="@id/adminForumCategoriesFragment"
@@ -412,7 +432,21 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.sagivproject.screens.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+        <argument
+            android:name="isFromLoggedIn"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_settingsFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/secretFragment"

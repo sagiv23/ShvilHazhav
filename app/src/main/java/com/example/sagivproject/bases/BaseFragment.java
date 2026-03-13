@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.sagivproject.R;
@@ -96,6 +97,17 @@ public abstract class BaseFragment extends Fragment {
     protected void navigateTo(int resId, Bundle args) {
         if (navController != null) {
             navController.navigate(resId, args);
+        }
+    }
+
+    /**
+     * Navigates using Safe Args Directions.
+     *
+     * @param directions The generated Directions class.
+     */
+    protected void navigateTo(NavDirections directions) {
+        if (navController != null) {
+            navController.navigate(directions);
         }
     }
 

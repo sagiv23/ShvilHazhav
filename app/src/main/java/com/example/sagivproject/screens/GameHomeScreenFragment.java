@@ -246,9 +246,10 @@ public class GameHomeScreenFragment extends BaseFragment {
                 gameStarted = true;
                 updateUI(SearchState.GAME_FOUND);
 
-                Bundle args = new Bundle();
-                args.putString("roomId", startedRoom.getId());
-                navigateTo(R.id.action_gameHomeScreenFragment_to_memoryGameFragment, args);
+                // Using Safe Args Directions
+                GameHomeScreenFragmentDirections.ActionGameHomeScreenFragmentToMemoryGameFragment action =
+                        GameHomeScreenFragmentDirections.actionGameHomeScreenFragmentToMemoryGameFragment(startedRoom.getId());
+                navigateTo(action);
             }
 
             @Override
