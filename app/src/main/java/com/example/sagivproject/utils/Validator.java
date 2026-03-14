@@ -45,6 +45,16 @@ public class Validator {
     }
 
     /**
+     * Validates a phone number.
+     *
+     * @param phone The phone number to validate.
+     * @return True if the phone number is null or does not match the standard phone pattern, false otherwise.
+     */
+    public boolean isPhoneNotValid(@Nullable String phone) {
+        return phone == null || !Patterns.PHONE.matcher(phone).matches();
+    }
+
+    /**
      * Validates a password.
      *
      * @param password The password to validate.

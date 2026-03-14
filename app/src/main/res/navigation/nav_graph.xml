@@ -198,7 +198,20 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_emergencyContactsFragment"
+            app:destination="@id/emergencyContactsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
+    <fragment
+        android:id="@+id/emergencyContactsFragment"
+        android:name="com.example.sagivproject.screens.EmergencyContactsFragment"
+        android:label="EmergencyContactsFragment"
+        tools:layout="@layout/fragment_emergency_contacts" />
 
     <fragment
         android:id="@+id/medicationListFragment"

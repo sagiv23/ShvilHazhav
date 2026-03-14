@@ -1,5 +1,6 @@
 package com.example.sagivproject.services;
 
+import com.example.sagivproject.adapters.EmergencyContactsAdapter;
 import com.example.sagivproject.adapters.ForumAdapter;
 import com.example.sagivproject.adapters.ForumCategoryAdapter;
 import com.example.sagivproject.adapters.LeaderboardAdapter;
@@ -28,6 +29,7 @@ public class AdapterService {
     private final MedicationImagesTableAdapter medicationImagesTableAdapter;
     private final LeaderboardAdapter leaderboardAdapter;
     private final MedicationUsageAdapter medicationUsageAdapter;
+    private final EmergencyContactsAdapter emergencyContactsAdapter;
 
     @Inject
     public AdapterService(
@@ -39,7 +41,8 @@ public class AdapterService {
             UsersTableAdapter usersTableAdapter,
             MedicationImagesTableAdapter medicationImagesTableAdapter,
             LeaderboardAdapter leaderboardAdapter,
-            MedicationUsageAdapter medicationUsageAdapter
+            MedicationUsageAdapter medicationUsageAdapter,
+            EmergencyContactsAdapter emergencyContactsAdapter
     ) {
         this.forumAdapter = forumAdapter;
         this.forumCategoryAdapter = forumCategoryAdapter;
@@ -50,6 +53,7 @@ public class AdapterService {
         this.medicationImagesTableAdapter = medicationImagesTableAdapter;
         this.leaderboardAdapter = leaderboardAdapter;
         this.medicationUsageAdapter = medicationUsageAdapter;
+        this.emergencyContactsAdapter = emergencyContactsAdapter;
     }
 
     public ForumAdapter getForumAdapter() {
@@ -86,5 +90,9 @@ public class AdapterService {
 
     public MedicationUsageAdapter getMedicationUsageAdapter() {
         return medicationUsageAdapter;
+    }
+
+    public EmergencyContactsAdapter getEmergencyContactsAdapter() {
+        return emergencyContactsAdapter;
     }
 }

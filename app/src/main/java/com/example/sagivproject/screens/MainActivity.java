@@ -125,14 +125,14 @@ public class MainActivity extends AppCompatActivity implements MenuNavigationLis
     }
 
     public void openDrawer() {
-        if (drawerLayout != null && drawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED) {
-            drawerLayout.openDrawer(GravityCompat.START);
+        if (drawerLayout != null && drawerLayout.getDrawerLockMode(GravityCompat.END) == DrawerLayout.LOCK_MODE_UNLOCKED) {
+            drawerLayout.openDrawer(GravityCompat.END);
         }
     }
 
     public void closeDrawer() {
         if (drawerLayout != null) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+            drawerLayout.closeDrawer(GravityCompat.END);
         }
     }
 

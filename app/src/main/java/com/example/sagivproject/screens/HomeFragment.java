@@ -41,6 +41,7 @@ public class HomeFragment extends BaseFragment {
         Button btnToMathProblems = view.findViewById(R.id.btn_home_to_MathProblems);
         Button btnToTipOfTheDay = view.findViewById(R.id.btn_home_to_TipOfTheDay);
         Button btnToStats = view.findViewById(R.id.btn_home_to_Stats);
+        Button btnToEmergency = view.findViewById(R.id.btn_home_to_emergency);
         TextView txtHomePageTitle = view.findViewById(R.id.txt_home_Title);
 
         // Navigation logic using Navigation Component actions (to be defined in nav_graph)
@@ -51,6 +52,7 @@ public class HomeFragment extends BaseFragment {
         btnToMathProblems.setOnClickListener(v -> navigateTo(R.id.action_homeFragment_to_mathProblemsFragment));
         btnToTipOfTheDay.setOnClickListener(v -> navigateTo(R.id.action_homeFragment_to_tipOfTheDayFragment));
         btnToStats.setOnClickListener(v -> navigateTo(R.id.action_homeFragment_to_userStatsFragment));
+        btnToEmergency.setOnClickListener(v -> navigateTo(R.id.action_mainFragment_to_emergencyContactsFragment));
 
         if (user != null) {
             txtHomePageTitle.setText(String.format("שלום %s", user.getFullName()));

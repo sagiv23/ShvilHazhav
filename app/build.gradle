@@ -60,4 +60,5 @@ dependencies {
     annotationProcessor libs.hilt.work
     implementation libs.firebase.ai
     implementation libs.guava
+    implementation libs.play.services.location
 }

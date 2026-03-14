@@ -137,4 +137,13 @@
     <string name="choose_date">בחר תאריך</string>
     <string name="show_all_history">מציג את כל ההיסטוריה</string>
     <string name="icon_daily_tip">אייקון טיפ יומי</string>
+    <string name="emergency_contacts">אנשי קשר לחירום</string>
+    <string name="add_emergency_contact">הוספת איש קשר לחירום</string>
+    <string name="phone_number">מספר טלפון</string>
+    <string name="send_emergency_sms">שלח הודעת חירום (SMS)</string>
+    <string name="call_emergency_109">התקשר למוקד 109</string>
+    <string name="emergency_sms_content">אני זקוק לעזרה בדחיפות! המיקום שלי: </string>
+    <string name="no_emergency_contacts">לא הוגדרו אנשי קשר לחירום.</string>
+    <string name="icon_emergency_contacts">אייקון אנשי קשר לחירום</string>
+    <string name="choose_from_contacts">בחירה מאנשי קשר</string>
 </resources>

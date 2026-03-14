@@ -4,9 +4,11 @@ import android.graphics.drawable.Drawable;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.dialogs.AddEmergencyContactDialog;
 import com.example.sagivproject.screens.dialogs.AddUserDialog;
 import com.example.sagivproject.screens.dialogs.ConfirmDialog;
 import com.example.sagivproject.screens.dialogs.EditForumCategoryDialog;
@@ -26,7 +28,6 @@ import dagger.hilt.android.scopes.ActivityScoped;
  */
 @ActivityScoped
 public class DialogService {
-
     private final Provider<MedicationDialog> medicationDialogProvider;
     private final Provider<AddUserDialog> addUserDialogProvider;
     private final Provider<EditUserDialog> editUserDialogProvider;
@@ -34,6 +35,7 @@ public class DialogService {
     private final Provider<FullImageDialog> fullImageDialogProvider;
     private final Provider<ProfileImageDialog> profileImageDialogProvider;
     private final Provider<ConfirmDialog> confirmDialogProvider;
+    private final Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider;
 
     @Inject
     public DialogService(
@@ -43,7 +45,8 @@ public class DialogService {
             Provider<EditForumCategoryDialog> editForumCategoryDialogProvider,
             Provider<FullImageDialog> fullImageDialogProvider,
             Provider<ProfileImageDialog> profileImageDialogProvider,
-            Provider<ConfirmDialog> confirmDialogProvider
+            Provider<ConfirmDialog> confirmDialogProvider,
+            Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider
     ) {
         this.medicationDialogProvider = medicationDialogProvider;
         this.addUserDialogProvider = addUserDialogProvider;
@@ -52,6 +55,7 @@ public class DialogService {
         this.fullImageDialogProvider = fullImageDialogProvider;
         this.profileImageDialogProvider = profileImageDialogProvider;
         this.confirmDialogProvider = confirmDialogProvider;
+        this.addEmergencyContactDialogProvider = addEmergencyContactDialogProvider;
     }
 
     public void showMedicationDialog(FragmentManager fm, Medication medToEdit, MedicationDialog.OnMedicationSubmitListener listener) {
@@ -88,6 +92,17 @@ public class DialogService {
         ProfileImageDialog dialog = profileImageDialogProvider.get();
         dialog.setData(hasImage, listener);
         dialog.show(fm, "ProfileImageDialog");
+    }
+
+    /**
+     * Shows a dialog to add or edit an emergency contact.
+     *
+     * @param contact The contact to edit, or null to add a new one.
+     */
+    public void showEmergencyContactDialog(FragmentManager fm, EmergencyContact contact, AddEmergencyContactDialog.AddEmergencyContactListener listener) {
+        AddEmergencyContactDialog dialog = addEmergencyContactDialogProvider.get();
+        dialog.setData(contact, listener);
+        dialog.show(fm, "AddEmergencyContactDialog");
     }
 
     /**
