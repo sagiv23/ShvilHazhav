@@ -26,10 +26,12 @@ public class User implements Serializable, Idable {
     private String profileImage;
     private HashMap<String, Medication> medications;
     private HashMap<String, DailyStats> dailyStats;
+    private HashMap<String, EmergencyContact> emergencyContacts;
 
     public User() {
         this.role = UserRole.REGULAR;
         this.dailyStats = new HashMap<>();
+        this.emergencyContacts = new HashMap<>();
     }
 
     public User(String id, String firstName, String lastName, long birthDateMillis, String email, String password, UserRole role) {
@@ -43,6 +45,7 @@ public class User implements Serializable, Idable {
         this.profileImage = null;
         this.medications = new HashMap<>();
         this.dailyStats = new HashMap<>();
+        this.emergencyContacts = new HashMap<>();
     }
 
     public User(User other) {
@@ -62,6 +65,11 @@ public class User implements Serializable, Idable {
             this.dailyStats = new HashMap<>(other.dailyStats);
         } else {
             this.dailyStats = new HashMap<>();
+        }
+        if (other.emergencyContacts != null) {
+            this.emergencyContacts = new HashMap<>(other.emergencyContacts);
+        } else {
+            this.emergencyContacts = new HashMap<>();
         }
     }
 
@@ -163,6 +171,15 @@ public class User implements Serializable, Idable {
 
     public void setDailyStats(HashMap<String, DailyStats> dailyStats) {
         this.dailyStats = dailyStats;
+    }
+
+    public HashMap<String, EmergencyContact> getEmergencyContacts() {
+        if (emergencyContacts == null) emergencyContacts = new HashMap<>();
+        return emergencyContacts;
+    }
+
+    public void setEmergencyContacts(HashMap<String, EmergencyContact> emergencyContacts) {
+        this.emergencyContacts = emergencyContacts;
     }
 
     @Exclude

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.NavDirections;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseFragment;
@@ -43,16 +44,16 @@ public class AdminPageFragment extends BaseFragment {
         Button btnToSettings = view.findViewById(R.id.btn_admin_to_Settings);
         TextView txtAdminTitle = view.findViewById(R.id.txt_admin_title);
 
-        btnToUserTable.setOnClickListener(v -> navigateTo(R.id.action_adminPageFragment_to_usersTableFragment));
-        btnToUserStats.setOnClickListener(v -> navigateTo(R.id.action_adminPageFragment_to_userStatsFragment));
-        btnToMedicationsTable.setOnClickListener(v -> navigateTo(R.id.action_adminPageFragment_to_medicationImagesTableFragment));
-        btnToMemoryGameLogsTable.setOnClickListener(v -> navigateTo(R.id.action_adminPageFragment_to_memoryGameLogsTableFragment));
-        btnToForumCategories.setOnClickListener(v -> navigateTo(R.id.action_adminPageFragment_to_adminForumCategoriesFragment));
-        btnToDetailsAboutUser.setOnClickListener(v -> navigateTo(R.id.action_adminPageFragment_to_detailsAboutUserFragment));
+        btnToUserTable.setOnClickListener(v -> navigateTo(AdminPageFragmentDirections.actionAdminPageFragmentToUsersTableFragment()));
+        btnToUserStats.setOnClickListener(v -> navigateTo(AdminPageFragmentDirections.actionAdminPageFragmentToUserStatsFragment()));
+        btnToMedicationsTable.setOnClickListener(v -> navigateTo(AdminPageFragmentDirections.actionAdminPageFragmentToMedicationImagesTableFragment()));
+        btnToMemoryGameLogsTable.setOnClickListener(v -> navigateTo(AdminPageFragmentDirections.actionAdminPageFragmentToMemoryGameLogsTableFragment()));
+        btnToForumCategories.setOnClickListener(v -> navigateTo(AdminPageFragmentDirections.actionAdminPageFragmentToAdminForumCategoriesFragment()));
+        btnToDetailsAboutUser.setOnClickListener(v -> navigateTo(AdminPageFragmentDirections.actionAdminPageFragmentToDetailsAboutUserFragment()));
         btnToSettings.setOnClickListener(v -> {
-            Bundle args = new Bundle();
-            args.putBoolean("isFromLoggedIn", true);
-            navigateTo(R.id.action_adminPageFragment_to_settingsFragment, args);
+            NavDirections action = AdminPageFragmentDirections.actionAdminPageFragmentToSettingsFragment()
+                    .setIsFromLoggedIn(true);
+            navigateTo(action);
         });
 
         if (user != null) {

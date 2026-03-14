@@ -284,15 +284,21 @@ public class UsersTableFragment extends BaseFragment {
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 TextView tv = (TextView) super.getView(position, convertView, parent);
-                tv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.text_hebrew));
-                tv.setTextSize(20);
+                tv.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.text_hebrew));
+                tv.setTextSize(22);
+                tv.setTextColor(getColor(R.color.text_color));
+                tv.setPadding(24, 24, 24, 24);
                 return tv;
             }
 
             @Override
             public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
                 TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
-                tv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.text_hebrew));
+                tv.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.text_hebrew));
+                tv.setTextSize(22);
+                tv.setTextColor(getColor(R.color.text_color));
+                tv.setBackgroundColor(getColor(R.color.background_color_buttons));
+                tv.setPadding(24, 24, 24, 24);
                 return tv;
             }
         };

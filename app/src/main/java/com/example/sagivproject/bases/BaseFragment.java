@@ -3,7 +3,6 @@ package com.example.sagivproject.bases;
 import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,14 +19,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.example.sagivproject.R;
-import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.MainActivity;
 import com.example.sagivproject.services.AdapterService;
 import com.example.sagivproject.services.DialogService;
 import com.example.sagivproject.services.IDatabaseService;
-import com.example.sagivproject.ui.AdminMenuFragment;
-import com.example.sagivproject.ui.LoggedInMenuFragment;
-import com.example.sagivproject.ui.LoggedOutMenuFragment;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import javax.inject.Inject;
@@ -73,8 +68,9 @@ public abstract class BaseFragment extends Fragment {
             return insets;
         });
 
-        ViewGroup topMenuContainer = view.findViewById(R.id.topMenuContainer);
-        setupTopMenu(topMenuContainer);
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setupMenu(this);
+        }
     }
 
     /**
@@ -85,18 +81,6 @@ public abstract class BaseFragment extends Fragment {
     protected void navigateTo(int resId) {
         if (navController != null) {
             navController.navigate(resId);
-        }
-    }
-
-    /**
-     * Navigates to a destination with arguments.
-     *
-     * @param resId The action id or destination id.
-     * @param args  The arguments to pass.
-     */
-    protected void navigateTo(int resId, Bundle args) {
-        if (navController != null) {
-            navController.navigate(resId, args);
         }
     }
 
@@ -120,38 +104,6 @@ public abstract class BaseFragment extends Fragment {
     @ColorInt
     protected int getColor(@ColorRes int resId) {
         return ContextCompat.getColor(requireContext(), resId);
-    }
-
-    /**
-     * Determines which top menu Fragment to show based on user state and replaces it in the container.
-     *
-     * @param menuContainer The ViewGroup into which the menu will be inflated.
-     */
-    protected void setupTopMenu(ViewGroup menuContainer) {
-        if (menuContainer == null) return;
-
-        // Check if a fragment is already attached to this container to avoid duplicates
-        if (getChildFragmentManager().findFragmentById(menuContainer.getId()) != null) {
-            return;
-        }
-
-        User currentUser = sharedPreferencesUtil.getUser();
-        Fragment menuFragment;
-
-        if (currentUser != null) {
-            if (currentUser.isAdmin()) {
-                menuFragment = new AdminMenuFragment();
-            } else {
-                menuFragment = new LoggedInMenuFragment();
-            }
-        } else {
-            menuFragment = new LoggedOutMenuFragment();
-        }
-
-        getChildFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(menuContainer.getId(), menuFragment)
-                .commit();
     }
 
     /**

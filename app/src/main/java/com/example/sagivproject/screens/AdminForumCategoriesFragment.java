@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.NavDirections;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,10 +62,9 @@ public class AdminForumCategoriesFragment extends BaseFragment {
 
             @Override
             public void onClick(ForumCategory category) {
-                Bundle args = new Bundle();
-                args.putString("categoryId", category.getId());
-                args.putString("categoryName", category.getName());
-                navigateTo(R.id.action_adminForumCategoriesFragment_to_adminForumFragment, args);
+                NavDirections action = AdminForumCategoriesFragmentDirections
+                        .actionAdminForumCategoriesFragmentToAdminForumFragment(category.getId(), category.getName());
+                navigateTo(action);
             }
         }, true);
         recyclerView.setAdapter(adapter);
