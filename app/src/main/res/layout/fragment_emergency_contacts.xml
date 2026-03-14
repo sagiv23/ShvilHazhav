@@ -9,7 +9,6 @@
     tools:context=".screens.EmergencyContactsFragment">
 
     <include
-        android:id="@+id/topBar"
         layout="@layout/include_top_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 package com.example.sagivproject.screens;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,6 @@ public class HomeFragment extends BaseFragment {
         Button btnToEmergency = view.findViewById(R.id.btn_home_to_emergency);
         TextView txtHomePageTitle = view.findViewById(R.id.txt_home_Title);
 
-        // Navigation logic using Navigation Component actions (to be defined in nav_graph)
         btnToMedicationList.setOnClickListener(v -> navigateTo(R.id.action_homeFragment_to_medicationListFragment));
         btnToForum.setOnClickListener(v -> navigateTo(R.id.action_homeFragment_to_forumCategoriesFragment));
         btnToAi.setOnClickListener(v -> navigateTo(R.id.action_homeFragment_to_aiFragment));
@@ -57,5 +57,11 @@ public class HomeFragment extends BaseFragment {
         if (user != null) {
             txtHomePageTitle.setText(String.format("שלום %s", user.getFullName()));
         }
+
+        requestNotificationPermission();
+    }
+
+    private void requestNotificationPermission() {
+        requestPermissions(Manifest.permission.POST_NOTIFICATIONS);
     }
 }

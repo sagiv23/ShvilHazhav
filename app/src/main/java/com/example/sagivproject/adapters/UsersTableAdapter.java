@@ -93,7 +93,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         });
 
         holder.imgUserProfile.setOnClickListener(v -> {
-            if (listener != null) {
+            if (listener != null && user.getProfileImage() != null && !user.getProfileImage().isEmpty()) {
                 listener.onUserImageClicked(user, holder.imgUserProfile);
             }
         });

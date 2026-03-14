@@ -1,6 +1,5 @@
 package com.example.sagivproject.bases;
 
-import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
 
@@ -25,6 +24,8 @@ import com.example.sagivproject.services.DialogService;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -34,9 +35,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public abstract class BaseFragment extends Fragment {
-    private final ActivityResultLauncher<String[]> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), isGranted -> {
-            });
+    protected final ActivityResultLauncher<String[]> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), this::onPermissionsResult);
+
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
     @Inject
@@ -47,15 +48,6 @@ public abstract class BaseFragment extends Fragment {
     protected DialogService dialogService;
 
     protected NavController navController;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (this instanceof RequiresPermissions) {
-            requestPermissions();
-        }
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -74,10 +66,18 @@ public abstract class BaseFragment extends Fragment {
     }
 
     /**
-     * Navigates to a destination.
-     *
-     * @param resId The action id or destination id.
+     * Helper to request permissions.
      */
+    protected void requestPermissions(String... permissions) {
+        requestPermissionLauncher.launch(permissions);
+    }
+
+    /**
+     * Callback for permission results. Can be overridden by subclasses.
+     */
+    protected void onPermissionsResult(Map<String, Boolean> isGranted) {
+    }
+
     protected void navigateTo(int resId) {
         if (navController != null) {
             navController.navigate(resId);
@@ -104,21 +104,5 @@ public abstract class BaseFragment extends Fragment {
     @ColorInt
     protected int getColor(@ColorRes int resId) {
         return ContextCompat.getColor(requireContext(), resId);
-    }
-
-    /**
-     * Requests a standard set of required permissions for the application.
-     * Uses the modern ActivityResultLauncher API to avoid deprecation.
-     */
-    protected void requestPermissions() {
-        String[] permissions = {
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.POST_NOTIFICATIONS
-        };
-        requestPermissionLauncher.launch(permissions);
-    }
-
-    public interface RequiresPermissions {
     }
 }

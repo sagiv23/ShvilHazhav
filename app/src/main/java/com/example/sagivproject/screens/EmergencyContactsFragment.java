@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -148,9 +147,8 @@ public class EmergencyContactsFragment extends BaseFragment {
     }
 
     private void addEmergencyContact(String firstName, String lastName, String phoneNumber) {
-        String contactId = UUID.randomUUID().toString();
-        EmergencyContact contact = new EmergencyContact(contactId, firstName, lastName, phoneNumber);
-        user.getEmergencyContacts().put(contactId, contact);
+        EmergencyContact contact = new EmergencyContact(phoneNumber, firstName, lastName, phoneNumber);
+        user.getEmergencyContacts().put(phoneNumber, contact);
         updateUserInDb("איש קשר חדש נוסף");
     }
 

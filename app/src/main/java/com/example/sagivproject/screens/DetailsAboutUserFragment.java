@@ -1,5 +1,7 @@
 package com.example.sagivproject.screens;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseFragment;
@@ -28,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -107,6 +111,15 @@ public class DetailsAboutUserFragment extends BaseFragment {
                     }
                 }
         );
+    }
+
+    @Override
+    protected void onPermissionsResult(Map<String, Boolean> isGranted) {
+        if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.CAMERA))) {
+            cameraLauncher.launch(null);
+        } else {
+            Toast.makeText(requireContext(), "נדרשת הרשאת מצלמה כדי לצלם תמונה", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -192,7 +205,11 @@ public class DetailsAboutUserFragment extends BaseFragment {
         dialogService.showProfileImageDialog(getParentFragmentManager(), hasImage, new ProfileImageDialog.ImagePickerListener() {
             @Override
             public void onCamera() {
-                cameraLauncher.launch(null);
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    cameraLauncher.launch(null);
+                } else {
+                    requestPermissions(Manifest.permission.CAMERA);
+                }
             }
 
             @Override
