@@ -6,6 +6,7 @@ import android.content.Context;
 import com.example.sagivproject.services.DatabaseService;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.IEmergencyService;
 import com.example.sagivproject.services.IForumCategoriesService;
 import com.example.sagivproject.services.IForumService;
 import com.example.sagivproject.services.IImageService;
@@ -15,6 +16,7 @@ import com.example.sagivproject.services.IStatsService;
 import com.example.sagivproject.services.ITipOfTheDayService;
 import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.services.impl.AuthServiceImpl;
+import com.example.sagivproject.services.impl.EmergencyServiceImpl;
 import com.example.sagivproject.services.impl.ForumCategoriesServiceImpl;
 import com.example.sagivproject.services.impl.ForumServiceImpl;
 import com.example.sagivproject.services.impl.ImageServiceImpl;
@@ -163,4 +165,11 @@ public abstract class AppModule {
     @Binds
     @Singleton
     public abstract ITipOfTheDayService bindTipOfTheDayService(TipOfTheDayServiceImpl tipOfTheDayService);
+
+    /**
+     * Binds the {@link IEmergencyService} interface to its implementation.
+     */
+    @Binds
+    @Singleton
+    public abstract IEmergencyService bindEmergencyService(EmergencyServiceImpl emergencyService);
 }

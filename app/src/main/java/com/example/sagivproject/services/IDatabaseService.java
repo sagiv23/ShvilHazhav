@@ -72,6 +72,13 @@ public interface IDatabaseService {
     ITipOfTheDayService getTipOfTheDayService();
 
     /**
+     * Gets the emergency service.
+     *
+     * @return The {@link IEmergencyService} instance.
+     */
+    IEmergencyService getEmergencyService();
+
+    /**
      * A generic callback interface for asynchronous database operations.
      *
      * @param <T> The type of the expected result.

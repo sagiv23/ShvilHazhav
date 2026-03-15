@@ -24,6 +24,7 @@ public class DatabaseService implements IDatabaseService {
     private final IImageService imageService;
     private final IForumCategoriesService forumCategoriesService;
     private final ITipOfTheDayService tipOfTheDayService;
+    private final IEmergencyService emergencyService;
 
     /**
      * Constructs a new DatabaseService.
@@ -37,6 +38,7 @@ public class DatabaseService implements IDatabaseService {
      * @param imageService           The game image management service.
      * @param forumCategoriesService The forum category management service.
      * @param tipOfTheDayService     The tip of the day management service.
+     * @param emergencyService       The emergency contact management service.
      */
     @Inject
     public DatabaseService(
@@ -48,7 +50,8 @@ public class DatabaseService implements IDatabaseService {
             IForumService forumService,
             IImageService imageService,
             IForumCategoriesService forumCategoriesService,
-            ITipOfTheDayService tipOfTheDayService
+            ITipOfTheDayService tipOfTheDayService,
+            IEmergencyService emergencyService
     ) {
         this.authService = authService;
         this.userService = userService;
@@ -59,6 +62,7 @@ public class DatabaseService implements IDatabaseService {
         this.imageService = imageService;
         this.forumCategoriesService = forumCategoriesService;
         this.tipOfTheDayService = tipOfTheDayService;
+        this.emergencyService = emergencyService;
     }
 
     @Override
@@ -104,5 +108,10 @@ public class DatabaseService implements IDatabaseService {
     @Override
     public ITipOfTheDayService getTipOfTheDayService() {
         return tipOfTheDayService;
+    }
+
+    @Override
+    public IEmergencyService getEmergencyService() {
+        return emergencyService;
     }
 }

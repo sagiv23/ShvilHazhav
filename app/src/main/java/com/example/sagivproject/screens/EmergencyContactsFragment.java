@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +29,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -105,19 +101,46 @@ public class EmergencyContactsFragment extends BaseFragment {
             @Override
             public void onEdit(EmergencyContact contact) {
                 dialogService.showEmergencyContactDialog(getChildFragmentManager(), contact, (firstName, lastName, phoneNumber) -> {
-                    EmergencyContact original = user.getEmergencyContacts().get(contact.getId());
-                    if (original != null) {
-                        original.setFirstName(firstName);
-                        original.setLastName(lastName);
-                        original.setPhoneNumber(phoneNumber);
-                        updateUserInDb("איש הקשר עודכן בהצלחה");
-                    }
+                    contact.setFirstName(firstName);
+                    contact.setLastName(lastName);
+                    contact.setPhoneNumber(phoneNumber);
+                    databaseService.getEmergencyService().updateContact(user.getId(), contact, new IDatabaseService.DatabaseCallback<>() {
+                        @Override
+                        public void onCompleted(Void object) {
+                            if (isAdded()) {
+                                Toast.makeText(requireContext(), "איש הקשר עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                loadContacts();
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(Exception e) {
+                            if (isAdded()) {
+                                Toast.makeText(requireContext(), "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 });
             }
 
             @Override
             public void onDelete(EmergencyContact contact) {
-                deleteContact(contact);
+                databaseService.getEmergencyService().deleteContact(user.getId(), contact.getId(), new IDatabaseService.DatabaseCallback<>() {
+                    @Override
+                    public void onCompleted(Void object) {
+                        if (isAdded()) {
+                            Toast.makeText(requireContext(), "איש הקשר נמחק", Toast.LENGTH_SHORT).show();
+                            loadContacts();
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(Exception e) {
+                        if (isAdded()) {
+                            Toast.makeText(requireContext(), "שגיאה במחיקת איש הקשר", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -127,20 +150,41 @@ public class EmergencyContactsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadUserFromDatabase();
+        loadContacts();
     }
 
     /**
-     * Fetches the latest user data from the database.
+     * Loads the emergency contacts from the database into the adapter.
      */
-    private void loadUserFromDatabase() {
+    private void loadContacts() {
         if (user == null) return;
-        databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
+        databaseService.getEmergencyService().getContacts(user.getId(), new IDatabaseService.DatabaseCallback<>() {
             @Override
-            public void onCompleted(User dbUser) {
-                if (dbUser != null) {
-                    user = dbUser;
-                    sharedPreferencesUtil.saveUser(user);
+            public void onCompleted(List<EmergencyContact> contactsList) {
+                if (isAdded()) {
+                    adapter.setData(contactsList);
+                    txtNoContacts.setVisibility(contactsList.isEmpty() ? View.VISIBLE : View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), "שגיאה בטעינת אנשי קשר", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * Adds a new emergency contact to the user's profile and updates the database.
+     */
+    private void addEmergencyContact(String firstName, String lastName, String phoneNumber) {
+        databaseService.getEmergencyService().addContact(user.getId(), firstName, lastName, phoneNumber, new IDatabaseService.DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Void object) {
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), "איש קשר חדש נוסף", Toast.LENGTH_SHORT).show();
                     loadContacts();
                 }
             }
@@ -148,43 +192,10 @@ public class EmergencyContactsFragment extends BaseFragment {
             @Override
             public void onFailed(Exception e) {
                 if (isAdded()) {
-                    Toast.makeText(requireContext(), "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-    }
-
-    /**
-     * Loads the emergency contacts from the user model into the adapter.
-     */
-    private void loadContacts() {
-        HashMap<String, EmergencyContact> contactsMap = user.getEmergencyContacts();
-        List<EmergencyContact> contactsList = new ArrayList<>();
-
-        for (EmergencyContact c : contactsMap.values()) {
-            contactsList.add(new EmergencyContact(c.getId(), c.getFirstName(), c.getLastName(), c.getPhoneNumber()));
-        }
-
-        adapter.setData(contactsList);
-        txtNoContacts.setVisibility(contactsList.isEmpty() ? View.VISIBLE : View.GONE);
-    }
-
-    /**
-     * Adds a new emergency contact to the user's profile and updates the database.
-     */
-    private void addEmergencyContact(String firstName, String lastName, String phoneNumber) {
-        EmergencyContact contact = new EmergencyContact(phoneNumber, firstName, lastName, phoneNumber);
-        user.getEmergencyContacts().put(phoneNumber, contact);
-        updateUserInDb("איש קשר חדש נוסף");
-    }
-
-    /**
-     * Deletes an emergency contact from the user's profile and updates the database.
-     */
-    private void deleteContact(EmergencyContact contact) {
-        if (user.getEmergencyContacts().remove(contact.getId()) != null) {
-            updateUserInDb("איש הקשר נמחק");
-        }
     }
 
     /**
@@ -234,33 +245,6 @@ public class EmergencyContactsFragment extends BaseFragment {
     }
 
     /**
-     * Saves the updated user profile (with modified contacts) to the database.
-     *
-     * @param successMessage The message to display on success.
-     */
-    private void updateUserInDb(String successMessage) {
-        databaseService.getUserService().updateUser(user, new IDatabaseService.DatabaseCallback<>() {
-            @Override
-            public void onCompleted(Void object) {
-                sharedPreferencesUtil.saveUser(user);
-                if (isAdded()) {
-                    if (successMessage != null) {
-                        Toast.makeText(requireContext(), successMessage, Toast.LENGTH_SHORT).show();
-                    }
-                    loadContacts();
-                }
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                if (isAdded()) {
-                    Toast.makeText(requireContext(), "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    /**
      * Requests necessary permissions for sending SMS and accessing location.
      */
     private void checkSmsAndLocationPermissions() {
@@ -296,23 +280,33 @@ public class EmergencyContactsFragment extends BaseFragment {
      * @param locationUrl The Google Maps URL of the current location, or null if unavailable.
      */
     private void sendSmsToAll(@Nullable String locationUrl) {
-        List<EmergencyContact> contacts = new ArrayList<>(user.getEmergencyContacts().values());
-        if (contacts.isEmpty()) {
-            Toast.makeText(getContext(), R.string.no_emergency_contacts, Toast.LENGTH_SHORT).show();
-            return;
-        }
+        databaseService.getEmergencyService().getContacts(user.getId(), new IDatabaseService.DatabaseCallback<>() {
+            @Override
+            public void onCompleted(List<EmergencyContact> contacts) {
+                databaseService.getEmergencyService().sendEmergencyAlert(requireContext(), contacts, locationUrl, new IDatabaseService.DatabaseCallback<>() {
+                    @Override
+                    public void onCompleted(Void object) {
+                        if (isAdded()) {
+                            Toast.makeText(getContext(), "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-        SmsManager smsManager = requireContext().getSystemService(SmsManager.class);
-        if (smsManager == null) return;
+                    @Override
+                    public void onFailed(Exception e) {
+                        if (isAdded()) {
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
 
-        for (EmergencyContact contact : contacts) {
-            String message = "שלום " + contact.getFirstName() + ", " + getString(R.string.emergency_sms_content);
-            message += Objects.requireNonNullElse(locationUrl, "לא ניתן היה להשיג מיקום מדויק.");
-
-            ArrayList<String> parts = smsManager.divideMessage(message);
-            smsManager.sendMultipartTextMessage(contact.getPhoneNumber(), null, parts, null, null);
-        }
-        Toast.makeText(getContext(), "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailed(Exception e) {
+                if (isAdded()) {
+                    Toast.makeText(getContext(), "שגיאה בטעינת אנשי קשר לשליחת SMS", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     /**
