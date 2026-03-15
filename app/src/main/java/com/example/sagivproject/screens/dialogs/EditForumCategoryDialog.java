@@ -21,7 +21,11 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A dialog for editing the name of a forum category, implemented as a DialogFragment.
+ * A dialog fragment for editing the name of an existing forum category.
+ * <p>
+ * This dialog is used by administrators to rename categories. It ensures the name is not empty
+ * and communicates the change back via the {@link EditForumCategoryDialogListener}.
+ * </p>
  */
 @AndroidEntryPoint
 public class EditForumCategoryDialog extends DialogFragment {
@@ -30,10 +34,19 @@ public class EditForumCategoryDialog extends DialogFragment {
     private ForumCategory category;
     private EditForumCategoryDialogListener listener;
 
+    /**
+     * Constructs a new EditForumCategoryDialog.
+     */
     @Inject
     public EditForumCategoryDialog() {
     }
 
+    /**
+     * Sets the data for the dialog and the update listener.
+     *
+     * @param category The forum category to edit.
+     * @param listener The listener to handle the name update.
+     */
     public void setData(ForumCategory category, EditForumCategoryDialogListener listener) {
         Bundle args = new Bundle();
         if (category != null) {
@@ -83,7 +96,15 @@ public class EditForumCategoryDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Listener interface for forum category name updates.
+     */
     public interface EditForumCategoryDialogListener {
+        /**
+         * Called when the administrator submits a new name for the category.
+         *
+         * @param newName The updated category name.
+         */
         void onUpdateCategory(String newName);
     }
 }

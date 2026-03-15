@@ -10,7 +10,7 @@ import javax.inject.Singleton;
  * specific service interfaces (e.g., {@link IUserService}, {@link IAuthService}). It uses
  * dependency injection to get instances of these services and exposes them through getter methods.
  * This simplifies dependency management in other parts of the application, such as activities and ViewModels,
- * which now only need to inject this single `DatabaseService`.
+ * which now only need to inject this single {@code DatabaseService}.
  * </p>
  */
 @Singleton

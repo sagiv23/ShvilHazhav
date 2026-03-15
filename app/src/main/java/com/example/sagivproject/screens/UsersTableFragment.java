@@ -37,7 +37,12 @@ import java.util.stream.Collectors;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * An admin fragment for managing the list of all users.
+ * An admin-specific fragment for managing the entire user base of the application.
+ * <p>
+ * This fragment provides a comprehensive table view of all users. Administrators can
+ * search and filter users by name, email, or role. Key administrative actions include
+ * adding new users, editing user profiles, toggling admin privileges, and deleting accounts.
+ * </p>
  */
 @AndroidEntryPoint
 public class UsersTableFragment extends BaseFragment {
@@ -134,6 +139,9 @@ public class UsersTableFragment extends BaseFragment {
         setupSearch();
     }
 
+    /**
+     * Sets up the search bar and filter spinner logic for the user table.
+     */
     private void setupSearch() {
         if (getContext() == null) return;
         spinnerSearchType.setAdapter(getStringArrayAdapter());
@@ -171,6 +179,9 @@ public class UsersTableFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Sorts the user list and triggers a filter refresh.
+     */
     private void refreshList() {
         usersList.sort((u1, u2) -> u1.getFullName().compareToIgnoreCase(u2.getFullName()));
         filterUsers(editSearch.getText().toString().trim());
@@ -182,6 +193,9 @@ public class UsersTableFragment extends BaseFragment {
         loadUsers();
     }
 
+    /**
+     * Fetches the complete user list from the database.
+     */
     private void loadUsers() {
         databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -200,6 +214,11 @@ public class UsersTableFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Toggles the administrative role for a user and updates the database.
+     *
+     * @param user The user whose role is being toggled.
+     */
     private void handleToggleAdmin(User user) {
         UserRole newRole = user.getRole() == UserRole.ADMIN ? UserRole.REGULAR : UserRole.ADMIN;
         databaseService.getUserService().updateUserRole(user.getId(), newRole, new IDatabaseService.DatabaseCallback<>() {
@@ -230,6 +249,12 @@ public class UsersTableFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Deletes a user account from the database. If the deleted user is the current user,
+     * they are automatically logged out.
+     *
+     * @param user The user account to delete.
+     */
     private void handleDeleteUser(User user) {
         databaseService.getUserService().deleteUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -251,6 +276,11 @@ public class UsersTableFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Filters the user list based on the search query and selected criteria.
+     *
+     * @param query The search query string.
+     */
     private void filterUsers(String query) {
         String lowerQuery = query.toLowerCase();
         String selectedType = spinnerSearchType.getSelectedItem() != null ? spinnerSearchType.getSelectedItem().toString() : "הכל";
@@ -276,6 +306,9 @@ public class UsersTableFragment extends BaseFragment {
         adapter.setUserList(filtered);
     }
 
+    /**
+     * Helper to create a styled ArrayAdapter for the search filter spinner.
+     */
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "משתמשים רגילים"};

@@ -22,13 +22,22 @@ import java.util.function.UnaryOperator;
 import javax.inject.Inject;
 
 /**
- * An implementation of the {@link IMedicationService} interface.
+ * Implementation of the {@link IMedicationService} interface.
+ * <p>
+ * This class handles all database interactions related to medication management,
+ * including CRUD operations for medications and logging of medication intake events.
+ * It uses Firebase transactions to ensure that daily statistics (taken vs missed counts)
+ * are updated atomically alongside the usage logs.
+ * </p>
  */
 public class MedicationServiceImpl extends BaseDatabaseService<Medication> implements IMedicationService {
     private static final String USERS_PATH = "users";
     private static final String MEDICATIONS_PATH = "medications";
     private static final String FIELD_DAILY_STATS = "dailyStats";
 
+    /**
+     * Constructs a new MedicationServiceImpl.
+     */
     @Inject
     public MedicationServiceImpl() {
         super("", Medication.class);
@@ -79,6 +88,7 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
                 DailyStats stats = currentData.getValue(DailyStats.class);
                 if (stats == null) stats = new DailyStats();
 
+                // Increment appropriate counter based on status
                 if (usage.getStatus() == MedicationStatus.TAKEN) {
                     stats.addMedicationTaken();
                 } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) {
@@ -146,10 +156,16 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
         });
     }
 
+    /**
+     * Helper to construct the path to a user's medication collection.
+     */
     private String getMedicationPath(String uid) {
         return USERS_PATH + "/" + uid + "/" + MEDICATIONS_PATH;
     }
 
+    /**
+     * Helper to construct the path to a specific medication item.
+     */
     private String getMedicationItemPath(String uid, String medicationId) {
         return getMedicationPath(uid) + "/" + medicationId;
     }

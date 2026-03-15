@@ -107,7 +107,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
     /**
      * Deletes an entity from the database by its ID.
      *
-     * @param id       The ID of the entity to delete.<br>
+     * @param id       The ID of the entity to delete.
      * @param callback The callback to be invoked upon completion.
      */
     protected void delete(@NotNull final String id, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) {

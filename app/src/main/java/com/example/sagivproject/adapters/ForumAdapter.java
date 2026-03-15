@@ -49,7 +49,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Constructs a new ForumAdapter.
-     * Hilt uses this constructor to provide an instance via dependency injection.
      */
     @Inject
     public ForumAdapter() {
@@ -254,14 +253,14 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      */
     public interface ForumMessageListener {
         /**
-         * Called when a message item is clicked (e.g., to trigger a deletion flow).
+         * Called when a message action (e.g., delete) is triggered.
          *
-         * @param message The message that was clicked.
+         * @param message The message that was acted upon.
          */
         void onClick(ForumMessage message);
 
         /**
-         * Determines whether the action menu (e.g., delete) should be shown for a given message.
+         * Determines whether the action menu should be shown for a given message.
          *
          * @param message The message to check.
          * @return True to show the menu, false otherwise.
@@ -295,7 +294,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     }
 
     /**
-     * Abstract base ViewHolder class for the forum, providing a common structure if needed.
+     * Abstract base ViewHolder class for the forum, providing a common structure.
      */
     private abstract static class BaseViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         public BaseViewHolder(@NonNull View itemView) {

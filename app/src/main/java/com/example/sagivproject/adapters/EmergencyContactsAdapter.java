@@ -15,13 +15,25 @@ import com.example.sagivproject.models.EmergencyContact;
 
 import javax.inject.Inject;
 
+/**
+ * Adapter for displaying emergency contacts in a RecyclerView.
+ * This adapter supports editing and deleting contacts through a listener.
+ */
 public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, EmergencyContactsAdapter.EmergencyContactViewHolder> {
     private OnContactActionListener listener;
 
+    /**
+     * Constructs a new EmergencyContactsAdapter.
+     */
     @Inject
     public EmergencyContactsAdapter() {
     }
 
+    /**
+     * Sets the listener for contact actions (edit/delete).
+     *
+     * @param listener The listener to set.
+     */
     public void setListener(OnContactActionListener listener) {
         this.listener = listener;
     }
@@ -48,18 +60,39 @@ public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, Emer
         });
     }
 
+    /**
+     * Interface for listening to actions on emergency contacts.
+     */
     public interface OnContactActionListener {
+        /**
+         * Called when the edit button is clicked for a contact.
+         *
+         * @param contact The contact to edit.
+         */
         void onEdit(EmergencyContact contact);
 
+        /**
+         * Called when the delete button is clicked for a contact.
+         *
+         * @param contact The contact to delete.
+         */
         void onDelete(EmergencyContact contact);
     }
 
+    /**
+     * ViewHolder for emergency contact items.
+     */
     public static class EmergencyContactViewHolder extends RecyclerView.ViewHolder {
         final TextView txtName;
         final TextView txtPhone;
         final ImageButton btnEdit;
         final ImageButton btnDelete;
 
+        /**
+         * Constructs a new EmergencyContactViewHolder.
+         *
+         * @param itemView The view of the item.
+         */
         public EmergencyContactViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.txt_contact_name);

@@ -38,12 +38,20 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment to display and manage user profile details.
+ * A fragment that displays and allows management of user profile details.
+ * <p>
+ * This fragment provides features for viewing personal information (name, email, age, birthdate),
+ * editing these details via a dialog, and updating the profile image using the camera or gallery.
+ * </p>
  */
 @AndroidEntryPoint
 public class DetailsAboutUserFragment extends BaseFragment {
+    /**
+     * Utility for handling image conversions and loading.
+     */
     @Inject
     protected ImageUtil imageUtil;
+
     private TextView txtTitle, txtEmail, txtPassword, txtAge, txtBirthDate;
     private ImageView imgUserProfile;
     private User user;
@@ -84,6 +92,9 @@ public class DetailsAboutUserFragment extends BaseFragment {
         loadUserDetailsToUI();
     }
 
+    /**
+     * Initializes the ActivityResultLaunchers for camera and photo picking.
+     */
     private void setupLaunchers() {
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.TakePicturePreview(),
@@ -128,6 +139,9 @@ public class DetailsAboutUserFragment extends BaseFragment {
         loadUserFromDatabase();
     }
 
+    /**
+     * Fetches the latest user data from the database.
+     */
     private void loadUserFromDatabase() {
         if (user == null) return;
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
@@ -149,6 +163,9 @@ public class DetailsAboutUserFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Populates the UI components with the current user's details.
+     */
     private void loadUserDetailsToUI() {
         if (user == null || !isAdded()) {
             return;
@@ -177,6 +194,9 @@ public class DetailsAboutUserFragment extends BaseFragment {
         txtBirthDate.setText(birthDate);
     }
 
+    /**
+     * Opens a dialog to edit user personal details.
+     */
     private void openEditDialog() {
         dialogService.showEditUserDialog(getParentFragmentManager(), user, (fName, lName, birthDate, email, password) ->
                 databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
@@ -199,6 +219,9 @@ public class DetailsAboutUserFragment extends BaseFragment {
                 }));
     }
 
+    /**
+     * Opens a dialog to choose between camera and gallery for updating the profile image.
+     */
     private void openImagePicker() {
         boolean hasImage = user.getProfileImage() != null && !user.getProfileImage().isEmpty();
 
@@ -228,6 +251,9 @@ public class DetailsAboutUserFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Deletes the user's profile image and updates the database.
+     */
     private void deleteProfileImage() {
         user.setProfileImage(null);
         imgUserProfile.setImageResource(R.drawable.ic_user);
@@ -250,6 +276,11 @@ public class DetailsAboutUserFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Handles a new image bitmap, converts it to Base64, and triggers a save operation.
+     *
+     * @param bitmap The new profile image bitmap.
+     */
     private void handleImageBitmap(Bitmap bitmap) {
         imgUserProfile.setImageBitmap(bitmap);
         String base64 = imageUtil.convertTo64Base(imgUserProfile);
@@ -257,6 +288,9 @@ public class DetailsAboutUserFragment extends BaseFragment {
         saveProfileImage();
     }
 
+    /**
+     * Saves the updated user profile image to the database.
+     */
     private void saveProfileImage() {
         databaseService.getUserService().updateUser(user, new DatabaseCallback<>() {
             @Override

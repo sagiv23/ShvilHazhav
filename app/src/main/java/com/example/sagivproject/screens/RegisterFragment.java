@@ -23,14 +23,28 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment for new user registration.
+ * A fragment that handles the user registration process.
+ * <p>
+ * This fragment provides a form for new users to enter their personal details,
+ * including name, birthdate, email, and password. It validates the input
+ * using the {@link Validator} and {@link CalendarUtil} utilities and
+ * uses the {@link IAuthService} to create a new user account.
+ * </p>
  */
 @AndroidEntryPoint
 public class RegisterFragment extends BaseFragment {
+    /**
+     * Utility for date picking and formatting.
+     */
     @Inject
     protected CalendarUtil calendarUtil;
+
+    /**
+     * Utility for validating user input.
+     */
     @Inject
     protected Validator validator;
+
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword, editTextBirthDate;
     private long birthDateMillis = -1;
 
@@ -57,6 +71,9 @@ public class RegisterFragment extends BaseFragment {
         btnRegister.setOnClickListener(v -> tryRegister());
     }
 
+    /**
+     * Attempts to register a new user with the provided details.
+     */
     private void tryRegister() {
         String firstName = editTextFirstName.getText().toString().trim();
         String lastName = editTextLastName.getText().toString().trim();
@@ -85,6 +102,16 @@ public class RegisterFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Validates the registration input fields.
+     *
+     * @param firstName The first name entered.
+     * @param lastName  The last name entered.
+     * @param birthDate The birthdate string.
+     * @param email     The email address.
+     * @param password  The password.
+     * @return true if all inputs are valid, false otherwise.
+     */
     private boolean validateInput(String firstName, String lastName, String birthDate, String email, String password) {
         if (firstName.isEmpty() || lastName.isEmpty() || birthDate.isEmpty() || email.isEmpty() || password.isEmpty()) {
             if (getContext() != null)
@@ -137,6 +164,9 @@ public class RegisterFragment extends BaseFragment {
         return true;
     }
 
+    /**
+     * Opens a date picker dialog to select the user's birthdate.
+     */
     private void openDatePicker() {
         if (getActivity() == null) return;
         calendarUtil.openDatePicker(getActivity(), birthDateMillis, (dateMillis, formattedDate) -> {

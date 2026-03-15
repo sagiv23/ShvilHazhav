@@ -41,13 +41,24 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment to display user statistics and graphs.
+ * A fragment that displays performance statistics and historical logs for a user.
+ * <p>
+ * This fragment includes interactive graphs (custom views) for memory game wins, math problem
+ * accuracy, and medication compliance over time. For administrators, it provides a user
+ * selector to view statistics for any specific regular user. It also features a
+ * filterable list of medication usage logs.
+ * </p>
  */
 @AndroidEntryPoint
 public class UserStatsFragment extends BaseFragment {
     private final List<User> selectableUsers = new ArrayList<>();
+
+    /**
+     * Utility for date picking and formatting.
+     */
     @Inject
     protected CalendarUtil calendarUtil;
+
     private SimpleXYGraphView graphMemoryWins, graphMathStats, graphMedicationStats;
     private RecyclerView recyclerMedicationLogs;
     private MedicationUsageAdapter usageAdapter;
@@ -90,6 +101,9 @@ public class UserStatsFragment extends BaseFragment {
         txtSelectedDate.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Opens a date picker to filter medication usage logs by a specific date.
+     */
     private void openCalendar() {
         if (getActivity() == null) return;
         calendarUtil.openDatePicker(getActivity(), System.currentTimeMillis(), (dateMillis, formattedDate) -> {
@@ -100,6 +114,9 @@ public class UserStatsFragment extends BaseFragment {
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
     }
 
+    /**
+     * Filters the medication logs based on the selected date.
+     */
     private void applyFilter() {
         if (filteredDate == null) {
             usageAdapter.setData(allLogs);
@@ -114,6 +131,9 @@ public class UserStatsFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Sets up the administrator-only user selection UI.
+     */
     private void setupAdminUI() {
         if (loggedInUser.isAdmin()) {
             if (getView() != null) {
@@ -125,7 +145,7 @@ public class UserStatsFragment extends BaseFragment {
                     selectableUsers.clear();
                     List<String> userNames = new ArrayList<>();
 
-                    // Filter out the logged-in admin from the list
+                    // Filter out other administrators from the selection list
                     for (User u : list) {
                         if (!u.isAdmin()) {
                             selectableUsers.add(u);
@@ -188,11 +208,17 @@ public class UserStatsFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Refreshes user statistics and medication logs from the database.
+     */
     private void refreshData() {
         fetchLatestUserData();
         loadMedicationLogs();
     }
 
+    /**
+     * Fetches the latest data for the currently selected user to update graphs.
+     */
     private void fetchLatestUserData() {
         databaseService.getUserService().getUser(currentUser.getId(), new DatabaseCallback<>() {
             @Override
@@ -213,6 +239,9 @@ public class UserStatsFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Processes historical statistics and populates the graph views.
+     */
     private void setupGraphs() {
         if (currentUser.getDailyStats() == null || currentUser.getDailyStats().isEmpty()) {
             graphMemoryWins.setData(new ArrayList<>(), new ArrayList<>(), "זיכרון: אחוז ניצחונות", "תאריך", "% ניצחונות");
@@ -268,12 +297,18 @@ public class UserStatsFragment extends BaseFragment {
         graphMedicationStats.setData(medRatioPoints, medDates, "תרופות: עמידה ביעדים", "תאריך", "% הצלחה");
     }
 
+    /**
+     * Initializes the RecyclerView for medication usage logs.
+     */
     private void setupMedicationLogs() {
         recyclerMedicationLogs.setLayoutManager(new LinearLayoutManager(getContext()));
         usageAdapter = adapterService.getMedicationUsageAdapter();
         recyclerMedicationLogs.setAdapter(usageAdapter);
     }
 
+    /**
+     * Loads medication usage logs from the database for the current user.
+     */
     private void loadMedicationLogs() {
         databaseService.getMedicationService().getMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
             @Override
@@ -296,6 +331,9 @@ public class UserStatsFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Displays a confirmation dialog and then clears all medication usage logs for the current user.
+     */
     private void clearMedicationLogs() {
         dialogService.showConfirmDialog(getParentFragmentManager(), "איפוס היסטוריה", "האם לאפס?", "אפס", "בטל", () -> databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
             @Override

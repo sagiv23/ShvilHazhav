@@ -22,18 +22,37 @@ import javax.inject.Singleton;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**
- * A singleton service responsible for creating and displaying notifications.
+ * A singleton service responsible for creating and displaying notifications in the application.
+ * <p>
+ * This service manages notification channels for medication reminders and birthdays.
+ * It uses {@link NavDeepLinkBuilder} to allow users to navigate directly from a
+ * notification to the relevant screen (e.g., Medication List). It also supports
+ * notification grouping to avoid cluttering the user's notification drawer.
+ * </p>
  */
 @Singleton
 public class NotificationService {
+    /**
+     * Channel ID for medication-related notifications.
+     */
     public static final String MEDICATIONS_CHANNEL_ID = "medication_notifications";
+
+    /**
+     * Channel ID for birthday-related notifications.
+     */
     public static final String BIRTHDAYS_CHANNEL_ID = "birthday_notifications";
+
     private static final String MEDICATIONS_GROUP = "com.example.sagivproject.MEDICATIONS_GROUP";
     private static final String BIRTHDAYS_GROUP = "com.example.sagivproject.BIRTHDAYS_GROUP";
 
     private final Context context;
     private final NotificationManagerCompat manager;
 
+    /**
+     * Constructs a new NotificationService.
+     *
+     * @param context The application context.
+     */
     @Inject
     public NotificationService(@ApplicationContext Context context) {
         this.context = context;
@@ -42,6 +61,9 @@ public class NotificationService {
         createChannels();
     }
 
+    /**
+     * Creates the required notification channels for the application (required for Android 8.0+).
+     */
     private void createChannels() {
         NotificationChannel medChannel = new NotificationChannel(
                 MEDICATIONS_CHANNEL_ID,
@@ -62,11 +84,17 @@ public class NotificationService {
         }
     }
 
+    /**
+     * Displays a notification reminding the user to take a specific medication.
+     *
+     * @param medicationName The name of the medication.
+     * @param notificationId A unique ID for the notification.
+     */
     public void showMedicationNotification(String medicationName, int notificationId) {
         String title = context.getString(R.string.medication_notif_title);
         String message = context.getString(R.string.medication_notif_body, medicationName);
 
-        // Using NavDeepLinkBuilder to navigate directly to medicationListFragment
+        // Create a PendingIntent that triggers deep linking into the MedicationListFragment
         PendingIntent pendingIntent = new NavDeepLinkBuilder(context)
                 .setGraph(R.navigation.nav_graph)
                 .setDestination(R.id.medicationListFragment)
@@ -77,11 +105,16 @@ public class NotificationService {
         showSummaryNotification(MEDICATIONS_CHANNEL_ID, MEDICATIONS_GROUP);
     }
 
+    /**
+     * Displays a birthday greeting notification for the user.
+     *
+     * @param firstName      The user's first name.
+     * @param notificationId A unique ID for the notification.
+     */
     public void showBirthdayNotification(String firstName, int notificationId) {
         String title = context.getString(R.string.birthday_notif_title);
         String message = context.getString(R.string.birthday_notif_body, firstName);
 
-        // For birthday, just open the app (Splash -> Main)
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context,
@@ -94,6 +127,12 @@ public class NotificationService {
         showSummaryNotification(BIRTHDAYS_CHANNEL_ID, BIRTHDAYS_GROUP);
     }
 
+    /**
+     * Shows a summary notification for a specific group to keep the notification drawer organized.
+     *
+     * @param channelId The channel ID.
+     * @param groupKey  The group key.
+     */
     private void showSummaryNotification(String channelId, String groupKey) {
         NotificationCompat.Builder summaryBuilder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_medication)
@@ -107,6 +146,9 @@ public class NotificationService {
         }
     }
 
+    /**
+     * Internal helper to build and display a notification.
+     */
     private void show(String channelId, String title, String message, int notificationId, PendingIntent pendingIntent, String group) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_medication)
@@ -122,7 +164,9 @@ public class NotificationService {
         }
     }
 
-    // Helper to avoid signature mismatch if I swapped arguments in my head
+    /**
+     * Overloaded show method for medication notifications.
+     */
     private void show(String title, String message, PendingIntent pendingIntent, int notificationId) {
         show(NotificationService.MEDICATIONS_CHANNEL_ID, title, message, notificationId, pendingIntent, NotificationService.MEDICATIONS_GROUP);
     }

@@ -14,6 +14,14 @@ import com.example.sagivproject.R;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * A fragment that represents the navigation drawer menu for unauthenticated users.
+ * <p>
+ * This fragment provides links to the landing screen, login, registration,
+ * contact information, and general settings. It uses the {@link MenuNavigationListener}
+ * to trigger navigation events in the host activity.
+ * </p>
+ */
 @AndroidEntryPoint
 public class LoggedOutMenuFragment extends Fragment {
     private MenuNavigationListener navigationListener;
@@ -21,6 +29,7 @@ public class LoggedOutMenuFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        // Ensure the host activity implements the navigation listener
         if (context instanceof MenuNavigationListener) {
             navigationListener = (MenuNavigationListener) context;
         } else {
@@ -49,6 +58,13 @@ public class LoggedOutMenuFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Helper to set up a navigation button with a click listener.
+     *
+     * @param root          The root view containing the button.
+     * @param buttonId      The resource ID of the button.
+     * @param destinationId The navigation destination fragment ID.
+     */
     private void setupNavigationButton(View root, int buttonId, int destinationId) {
         View button = root.findViewById(buttonId);
         if (button != null) {

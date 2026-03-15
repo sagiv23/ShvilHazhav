@@ -19,7 +19,11 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A generic confirmation dialog implemented as a DialogFragment.
+ * A generic confirmation dialog fragment.
+ * <p>
+ * This dialog can be used to show messages to the user with either a single "Confirm" button
+ * (acting as an alert) or both "Confirm" and "Cancel" buttons.
+ * </p>
  */
 @AndroidEntryPoint
 public class ConfirmDialog extends DialogFragment {
@@ -30,11 +34,22 @@ public class ConfirmDialog extends DialogFragment {
 
     private Runnable onConfirm;
 
+    /**
+     * Constructs a new ConfirmDialog.
+     */
     @Inject
     public ConfirmDialog() {
-        // Required empty public constructor
     }
 
+    /**
+     * Sets the data for the dialog and the confirmation action.
+     *
+     * @param title       The dialog title.
+     * @param message     The message content.
+     * @param confirmText The text for the positive button.
+     * @param cancelText  The text for the negative button, or null to hide it.
+     * @param onConfirm   The action to execute when the user confirms.
+     */
     public void setData(String title, String message, String confirmText, String cancelText, Runnable onConfirm) {
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);

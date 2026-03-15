@@ -18,9 +18,22 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.qualifiers.ActivityContext;
 
+/**
+ * A RecyclerView adapter for displaying a user's medication usage logs.
+ * <p>
+ * This adapter shows the medication name, the date and time it was recorded,
+ * and the status of the intake (e.g., TAKEN, NOT_TAKEN).
+ * It uses different colors to visually indicate the status.
+ * </p>
+ */
 public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, MedicationUsageAdapter.UsageViewHolder> {
     private final Context context;
 
+    /**
+     * Constructs a new MedicationUsageAdapter.
+     *
+     * @param context The activity context.
+     */
     @Inject
     public MedicationUsageAdapter(@ActivityContext Context context) {
         this.context = context;
@@ -54,9 +67,17 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
         holder.txtStatus.setTextColor(ContextCompat.getColor(context, color));
     }
 
+    /**
+     * ViewHolder for medication usage items.
+     */
     public static class UsageViewHolder extends RecyclerView.ViewHolder {
         final TextView txtName, txtDateTime, txtStatus;
 
+        /**
+         * Initializes the ViewHolder with the item view.
+         *
+         * @param itemView The view representing a single usage log entry.
+         */
         public UsageViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.txt_UsageRow_Name);

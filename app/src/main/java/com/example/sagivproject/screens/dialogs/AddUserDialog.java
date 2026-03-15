@@ -22,22 +22,41 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A dialog for administrators to add a new user to the application.
+ * A dialog fragment that allows an administrator to add a new user to the system.
+ * <p>
+ * This dialog provides fields for the new user's name, birthdate, email, and password.
+ * It uses the {@link CalendarUtil} for date selection and {@link Validator} for data validation.
+ * </p>
  */
 @AndroidEntryPoint
 public class AddUserDialog extends DialogFragment {
+    /**
+     * Utility for validating user input data.
+     */
     @Inject
     Validator validator;
+
+    /**
+     * Utility for displaying a date picker.
+     */
     @Inject
     CalendarUtil calendarUtil;
 
     private long birthDateMillis = -1;
     private AddUserDialogListener listener;
 
+    /**
+     * Constructs a new AddUserDialog.
+     */
     @Inject
     public AddUserDialog() {
     }
 
+    /**
+     * Sets the listener for the user addition event.
+     *
+     * @param listener The listener to set.
+     */
     public void setListener(AddUserDialogListener listener) {
         this.listener = listener;
     }
@@ -57,6 +76,7 @@ public class AddUserDialog extends DialogFragment {
         Button btnAdd = dialog.findViewById(R.id.btnAddUserSave);
         Button btnCancel = dialog.findViewById(R.id.btnAddUserCancel);
 
+        // Open date picker when the birthdate field is clicked
         inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(requireContext(), birthDateMillis, (millis, dateStr) -> {
             birthDateMillis = millis;
             inputBirthDate.setText(dateStr);
@@ -82,6 +102,9 @@ public class AddUserDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Validates all input fields in the dialog.
+     */
     private boolean areAllFieldsValid(String fName, String lName, String email, String password, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passwordEdt, EditText birthDateEdt) {
         if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || password.isEmpty() || birthDateMillis <= 0) {
             Toast.makeText(requireContext(), "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
@@ -95,6 +118,9 @@ public class AddUserDialog extends DialogFragment {
                 isFieldValid(passwordEdt, validator::isPasswordNotValid, "הסיסמה קצרה מדי");
     }
 
+    /**
+     * Helper to validate a single field and show an error if invalid.
+     */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -104,7 +130,19 @@ public class AddUserDialog extends DialogFragment {
         return true;
     }
 
+    /**
+     * Listener interface for new user addition events.
+     */
     public interface AddUserDialogListener {
+        /**
+         * Called when the administrator submits a valid new user profile.
+         *
+         * @param fName           User's first name.
+         * @param lName           User's last name.
+         * @param birthDateMillis User's birthdate.
+         * @param email           User's email address.
+         * @param password        User's password.
+         */
         void onAddUser(String fName, String lName, long birthDateMillis, String email, String password);
     }
 }

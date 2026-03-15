@@ -15,13 +15,24 @@ import javax.inject.Singleton;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**
- * A singleton class responsible for scheduling and canceling medication reminder alarms.
+ * A singleton class responsible for scheduling and canceling alarms using {@link AlarmManager}.
+ * <p>
+ * This class provides methods to schedule recurring medication reminders and a daily birthday check.
+ * It handles the creation of {@link PendingIntent}s and ensures that alarms are set correctly
+ * according to the Android version (using exact alarms where possible).
+ * </p>
  */
 @Singleton
 public class AlarmScheduler {
     private final Context context;
     private final AlarmManager alarmManager;
 
+    /**
+     * Constructs a new AlarmScheduler.
+     *
+     * @param context      The application context.
+     * @param alarmManager The system AlarmManager service.
+     */
     @Inject
     public AlarmScheduler(@ApplicationContext Context context, AlarmManager alarmManager) {
         this.context = context;
@@ -29,7 +40,9 @@ public class AlarmScheduler {
     }
 
     /**
-     * Schedules daily repeating alarms for a given medication.
+     * Schedules daily repeating alarms for all reminder hours of a given medication.
+     *
+     * @param medication The medication object containing the list of hours.
      */
     public void schedule(Medication medication) {
         if (medication.getReminderHours() == null) {
@@ -42,9 +55,9 @@ public class AlarmScheduler {
     }
 
     /**
-     * Schedules an alarm for a specific time.
+     * Schedules an alarm for a specific medication at a specific time.
      *
-     * @param medication    The medication.
+     * @param medication    The medication object.
      * @param hourStr       The time in "HH:mm" format.
      * @param forceTomorrow If true, the alarm will be scheduled for tomorrow even if the time hasn't passed yet.
      */
@@ -105,6 +118,8 @@ public class AlarmScheduler {
 
     /**
      * Cancels all scheduled alarms for a given medication.
+     *
+     * @param medication The medication for which to cancel alarms.
      */
     public void cancel(Medication medication) {
         if (medication.getReminderHours() == null) {
@@ -116,6 +131,12 @@ public class AlarmScheduler {
         }
     }
 
+    /**
+     * Cancels an alarm for a specific medication ID and time.
+     *
+     * @param medicationId The unique ID of the medication.
+     * @param hourStr      The scheduled hour string.
+     */
     public void cancelSpecificTime(String medicationId, String hourStr) {
         Intent intent = new Intent(context, AlarmReceiver.class);
         int requestCode = (medicationId + hourStr).hashCode();
@@ -135,6 +156,7 @@ public class AlarmScheduler {
 
     /**
      * Schedules the daily birthday check alarm at 9:00 AM.
+     * This alarm is set to allow the app to perform a check and show a birthday greeting.
      */
     public void scheduleBirthdayAlarm() {
         Calendar calendar = Calendar.getInstance();

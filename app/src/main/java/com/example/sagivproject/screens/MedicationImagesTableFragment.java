@@ -40,13 +40,23 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * An admin fragment for managing medication images.
+ * An admin-only fragment for managing the set of images used for medication cards in the memory game.
+ * <p>
+ * This fragment provides a grid view of all currently uploaded images. Administrators can
+ * search for specific images by ID, upload new images from the device gallery, and delete existing ones.
+ * When an image is deleted, the remaining images are automatically reordered/renamed to maintain consistency.
+ * </p>
  */
 @AndroidEntryPoint
 public class MedicationImagesTableFragment extends BaseFragment {
     private final List<ImageData> allImages = new ArrayList<>();
+
+    /**
+     * Utility for image processing and Base64 conversion.
+     */
     @Inject
     protected ImageUtil imageUtil;
+
     private MedicationImagesTableAdapter adapter;
     private TextInputEditText etSearch;
     private ActivityResultLauncher<PickVisualMediaRequest> photoPickerLauncher;
@@ -83,6 +93,7 @@ public class MedicationImagesTableFragment extends BaseFragment {
         etSearch = view.findViewById(R.id.edit_MedicineImagesTablePage_search);
         Button btnAdd = view.findViewById(R.id.btn_MedicineImagesTablePage_add);
 
+        // Launcher for picking a new image to upload
         photoPickerLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
             if (uri != null) uploadImage(uri);
         });
@@ -108,6 +119,9 @@ public class MedicationImagesTableFragment extends BaseFragment {
         loadImages();
     }
 
+    /**
+     * Fetches all images from the database and updates the UI.
+     */
     private void loadImages() {
         databaseService.getImageService().getAllImages(new DatabaseCallback<>() {
             @Override
@@ -124,6 +138,11 @@ public class MedicationImagesTableFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Filters the displayed images based on their ID.
+     *
+     * @param query The search query string.
+     */
     private void filterImages(String query) {
         List<ImageData> newList = new ArrayList<>();
         String lowerQuery = query.toLowerCase().trim();
@@ -134,6 +153,11 @@ public class MedicationImagesTableFragment extends BaseFragment {
         adapter.setImages(newList);
     }
 
+    /**
+     * Handles the image upload process: decodes the URI, converts to Base64, and saves to database.
+     *
+     * @param uri The URI of the image to upload.
+     */
     private void uploadImage(Uri uri) {
         try {
             if (getContext() == null) return;
@@ -164,6 +188,11 @@ public class MedicationImagesTableFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Deletes an image from the database and triggers a reordering of the remaining images.
+     *
+     * @param imageToDelete The {@link ImageData} object to delete.
+     */
     private void deleteImageAndReorder(ImageData imageToDelete) {
         databaseService.getImageService().deleteImage(imageToDelete.getId(), new DatabaseCallback<>() {
             @Override
@@ -180,6 +209,10 @@ public class MedicationImagesTableFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Reorders all images in the list, reassigning IDs sequentially (card1, card2, etc.),
+     * and updates the database to reflect these changes.
+     */
     private void reorderImages() {
         for (int i = 0; i < allImages.size(); i++)
             allImages.get(i).setId("card" + (i + 1));

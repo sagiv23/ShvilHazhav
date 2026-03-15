@@ -19,6 +19,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * The main fragment for logged-in users.
+ * <p>
+ * This fragment serves as the primary navigation hub, providing buttons to access
+ * medication management, forums, AI assistant, games, statistics, and emergency contacts.
+ * It also greets the user by name and requests notification permissions.
+ * </p>
  */
 @AndroidEntryPoint
 public class HomeFragment extends BaseFragment {
@@ -61,6 +66,9 @@ public class HomeFragment extends BaseFragment {
         requestNotificationPermission();
     }
 
+    /**
+     * Requests the POST_NOTIFICATIONS permission required for Android 13+.
+     */
     private void requestNotificationPermission() {
         requestPermissions(Manifest.permission.POST_NOTIFICATIONS);
     }

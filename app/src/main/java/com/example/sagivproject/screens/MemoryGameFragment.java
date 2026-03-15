@@ -32,11 +32,21 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * The main fragment for the online memory game.
+ * A fragment that manages the 1-on-1 online memory game session.
+ * <p>
+ * This fragment handles the real-time game logic, including card flipping, matching,
+ * turn management, scoring, and a turn timer. It synchronizes the game state
+ * with the Firebase database via the {@link com.example.sagivproject.services.IMemoryGameService}.
+ * It also handles player disconnection and game-over states.
+ * </p>
  */
 @AndroidEntryPoint
 public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapter.MemoryGameListener {
+    /**
+     * The time limit for each player's turn in milliseconds.
+     */
     private static final long TURN_TIME_LIMIT = 15000;
+
     private RecyclerView recyclerCards;
     private boolean endDialogShown = false, localLock = false;
     private String roomId;
@@ -88,6 +98,10 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         }
     }
 
+    /**
+     * Shows a confirmation dialog before exiting the game.
+     * Exiting mid-game results in a forfeit.
+     */
     private void showExitGameDialog() {
         Runnable onConfirm = () -> {
             // Prevent other end-game dialogs from appearing since we are already navigating away
@@ -102,6 +116,11 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         dialogService.showConfirmDialog(getParentFragmentManager(), "יציאה מהמשחק", "האם ברצונך לצאת מהמשחק?", "צא", "בטל", onConfirm);
     }
 
+    /**
+     * Displays the game over dialog with the result (Win/Loss/Draw).
+     *
+     * @param room The final state of the game room.
+     */
     private void showGameEndDialog(GameRoom room) {
         if (endDialogShown) return;
         endDialogShown = true;
@@ -109,7 +128,7 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         String message;
         boolean isWin = user.getId().equals(winnerUid);
 
-        // Update stats once per game locally
+        // Update local daily statistics
         databaseService.getGameService().updateDailyMemoryStats(user.getId(), isWin);
 
         if ("draw".equals(winnerUid)) {
@@ -123,6 +142,11 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         dialogService.showConfirmDialog(getParentFragmentManager(), "המשחק הסתיים", message, "אישור", null, () -> navigateTo(R.id.action_memoryGameFragment_to_gameHomeScreenFragment));
     }
 
+    /**
+     * Updates the scoreboard UI based on the room's current scores.
+     *
+     * @param room The current game room state.
+     */
     private void updateScoreUI(GameRoom room) {
         boolean amIPlayer1 = user.getId().equals(room.getPlayer1Uid());
         int myScore = amIPlayer1 ? room.getPlayer1Score() : room.getPlayer2Score();
@@ -130,6 +154,12 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         tvScore.setText(MessageFormat.format("אני: {0} | יריב: {1}", myScore, opponentScore));
     }
 
+    /**
+     * Initializes the game board by selecting random images and shuffling them into card pairs.
+     * This is typically performed by Player 1 (the host).
+     *
+     * @param room The room to initialize the board for.
+     */
     private void setupGameBoard(GameRoom room) {
         if ((room.getCards() == null || room.getCards().isEmpty()) && user.getId().equals(room.getPlayer1Uid())) {
             databaseService.getImageService().getAllImages(new DatabaseCallback<>() {
@@ -173,6 +203,11 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         return currentRoom != null && user.getId().equals(currentRoom.getCurrentTurnUid()) && !currentRoom.isProcessingMatch();
     }
 
+    /**
+     * Logic for selecting a card. If it's the second card, it triggers a match check.
+     *
+     * @param clickedIndex The index of the clicked card.
+     */
     private void handleCardSelection(int clickedIndex) {
         Integer firstIndex = currentRoom.getFirstSelectedCardIndex();
         if (firstIndex == null) {
@@ -187,6 +222,12 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         }
     }
 
+    /**
+     * Checks if two revealed cards match. Updates scores and animations accordingly.
+     *
+     * @param idx1 Index of the first card.
+     * @param idx2 Index of the second card.
+     */
     private void checkMatch(int idx1, int idx2) {
         List<Card> cards = currentRoom.getCards();
         Card c1 = cards.get(idx1);
@@ -218,6 +259,9 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         }, 700);
     }
 
+    /**
+     * Checks if all cards have been matched to end the game.
+     */
     private void checkIfGameFinished() {
         boolean allCardsMatched = true;
         for (Card card : currentRoom.getCards()) {
@@ -229,6 +273,11 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         if (allCardsMatched) finishGame(currentRoom);
     }
 
+    /**
+     * Sets the game status to finished and identifies the winner.
+     *
+     * @param room The room state.
+     */
     private void finishGame(GameRoom room) {
         if ("finished".equals(room.getStatus())) return;
         String winnerUid = calculateWinner(room);
@@ -236,6 +285,9 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         databaseService.getGameService().updateRoomField(roomId, "status", "finished");
     }
 
+    /**
+     * Sets up a real-time listener for game room updates.
+     */
     private void listenToGame() {
         databaseService.getGameService().listenToGame(roomId, new DatabaseCallback<>() {
             @Override
@@ -266,9 +318,12 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
                     return;
                 }
                 if (room.getCards() != null) adapter.setCards(room.getCards());
+
+                // Forfeit logic: if opponent disconnects, I win.
                 String myUid = user.getId();
                 String opponentUid = myUid.equals(room.getPlayer1Uid()) ? room.getPlayer2Uid() : room.getPlayer1Uid();
                 databaseService.getGameService().setupForfeitOnDisconnect(roomId, opponentUid);
+
                 if ("finished".equals(room.getStatus())) {
                     if (turnTimer != null) turnTimer.cancel();
                     databaseService.getGameService().removeForfeitOnDisconnect(roomId);
@@ -296,6 +351,12 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         });
     }
 
+    /**
+     * Calculates the UID of the winner based on the current scores.
+     *
+     * @param room The room state.
+     * @return Winner UID or "draw".
+     */
     private String calculateWinner(GameRoom room) {
         int p1 = room.getPlayer1Score();
         int p2 = room.getPlayer2Score();
@@ -304,6 +365,10 @@ public class MemoryGameFragment extends BaseFragment implements MemoryGameAdapte
         return "draw";
     }
 
+    /**
+     * Starts a countdown timer for the current player's turn.
+     * If the timer finishes, the turn is automatically passed to the opponent.
+     */
     private void startTurnTimer() {
         if (turnTimer != null) turnTimer.cancel();
         turnTimer = new CountDownTimer(TURN_TIME_LIMIT, 1000) {

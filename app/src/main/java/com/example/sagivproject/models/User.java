@@ -12,6 +12,7 @@ import java.util.Objects;
 
 /**
  * Represents a user of the application.
+ * Holds personal information, role, medications, stats, and emergency contacts.
  */
 public class User implements Serializable, Idable {
     private static final int YEAR = Calendar.YEAR;
@@ -28,12 +29,27 @@ public class User implements Serializable, Idable {
     private HashMap<String, DailyStats> dailyStats;
     private HashMap<String, EmergencyContact> emergencyContacts;
 
+    /**
+     * Default constructor for Firebase.
+     * Initializes role to REGULAR and maps to empty HashMaps.
+     */
     public User() {
         this.role = UserRole.REGULAR;
         this.dailyStats = new HashMap<>();
         this.emergencyContacts = new HashMap<>();
     }
 
+    /**
+     * Constructs a new User with full details.
+     *
+     * @param id              The unique identifier for the user.
+     * @param firstName       The user's first name.
+     * @param lastName        The user's last name.
+     * @param birthDateMillis The user's birthdate in milliseconds.
+     * @param email           The user's email address.
+     * @param password        The user's password.
+     * @param role            The user's role (ADMIN or REGULAR).
+     */
     public User(String id, String firstName, String lastName, long birthDateMillis, String email, String password, UserRole role) {
         this.id = id;
         this.firstName = firstName;
@@ -48,6 +64,11 @@ public class User implements Serializable, Idable {
         this.emergencyContacts = new HashMap<>();
     }
 
+    /**
+     * Copy constructor.
+     *
+     * @param other The user object to copy from.
+     */
     public User(User other) {
         if (other == null) return;
         this.id = other.id;
@@ -107,6 +128,11 @@ public class User implements Serializable, Idable {
         this.birthDateMillis = birthDateMillis;
     }
 
+    /**
+     * Calculates the user's age based on their birthdate.
+     *
+     * @return The user's age in years.
+     */
     @Exclude
     public int getAge() {
         Calendar birth = Calendar.getInstance();
@@ -143,6 +169,11 @@ public class User implements Serializable, Idable {
         this.role = role;
     }
 
+    /**
+     * Checks if the user has an administrative role.
+     *
+     * @return true if the user is an admin, false otherwise.
+     */
     @Exclude
     public boolean isAdmin() {
         return this.role == UserRole.ADMIN;
@@ -182,6 +213,11 @@ public class User implements Serializable, Idable {
         this.emergencyContacts = emergencyContacts;
     }
 
+    /**
+     * Gets the full name of the user.
+     *
+     * @return A string combining first name and last name.
+     */
     @Exclude
     public String getFullName() {
         return this.firstName + " " + this.lastName;

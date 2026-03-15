@@ -22,8 +22,18 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * A custom view that draws a simple XY graph with axes, points, titles, and an optional trend line.
- * Supports string labels for the X-axis (e.g., dates) and horizontal scrolling.
+ * A custom view that renders a scrollable XY graph.
+ * <p>
+ * This view is designed to visualize user performance trends (e.g., game scores or medication adherence).
+ * Key features include:
+ * <ul>
+ *     <li>Custom axes and grid lines with dash effects.</li>
+ *     <li>Automatic scaling based on data points.</li>
+ *     <li>Horizontal scrolling for long data sets.</li>
+ *     <li>Linear regression trend line calculation and display.</li>
+ *     <li>Support for custom X-axis labels (e.g., dates).</li>
+ * </ul>
+ * </p>
  */
 public class SimpleXYGraphView extends View {
     private final Paint axisPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -31,10 +41,12 @@ public class SimpleXYGraphView extends View {
     private final Paint pointPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint trendLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
     private final float paddingLeft = 180f;
     private final float paddingBottom = 220f;
     private final float paddingTop = 120f;
     private final float pointSpacing = 200f;
+
     private List<Point> points = new ArrayList<>();
     private List<String> xLabels = new ArrayList<>();
     private String title = "";
@@ -44,11 +56,17 @@ public class SimpleXYGraphView extends View {
     private float scrollXOffset = 0f;
     private float lastTouchX = 0f;
 
+    /**
+     * Constructs a new SimpleXYGraphView.
+     */
     public SimpleXYGraphView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
+    /**
+     * Initializes the paint objects and styles for drawing the graph.
+     */
     private void init(Context context) {
         Typeface textFont = ResourcesCompat.getFont(context, R.font.text_hebrew);
         int textColor = ContextCompat.getColor(context, R.color.text_color);
@@ -73,6 +91,15 @@ public class SimpleXYGraphView extends View {
         textPaint.setTypeface(textFont);
     }
 
+    /**
+     * Sets the data to be displayed on the graph.
+     *
+     * @param points  A list of {@link Point} objects.
+     * @param xLabels Labels for the X-axis corresponding to each point.
+     * @param title   The graph title.
+     * @param labelX  Label for the X-axis.
+     * @param labelY  Label for the Y-axis.
+     */
     public void setData(List<Point> points, List<String> xLabels, String title, String labelX, String labelY) {
         this.points = points != null ? points : new ArrayList<>();
         this.xLabels = xLabels != null ? xLabels : new ArrayList<>();
@@ -80,7 +107,7 @@ public class SimpleXYGraphView extends View {
         this.labelX = labelX;
         this.labelY = labelY;
         this.scrollXOffset = 0;
-        invalidate();
+        invalidate(); // Request a redraw
     }
 
     @Override
@@ -88,6 +115,9 @@ public class SimpleXYGraphView extends View {
         return super.performClick();
     }
 
+    /**
+     * Handles touch events to implement horizontal scrolling when data exceeds view width.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (points.size() < 2) return super.onTouchEvent(event);
@@ -105,7 +135,7 @@ public class SimpleXYGraphView extends View {
             case MotionEvent.ACTION_MOVE:
                 float dx = event.getX() - lastTouchX;
                 scrollXOffset += dx;
-                // Clamp scroll
+                // Clamp scroll to boundaries
                 if (scrollXOffset > 0) scrollXOffset = 0;
                 if (scrollXOffset < viewWidth - totalWidth) scrollXOffset = viewWidth - totalWidth;
                 lastTouchX = event.getX();
@@ -131,57 +161,57 @@ public class SimpleXYGraphView extends View {
         float paddingRight = 100f;
         float graphHeight = viewHeight - paddingTop - paddingBottom;
 
+        // Calculate vertical scale
         float maxY = 0;
         for (Point p : points) {
             maxY = Math.max(maxY, p.y);
         }
         float displayMaxY = maxY == 0 ? 100 : maxY * 1.2f;
 
+        // Draw title
         textPaint.setTextSize(56f);
         textPaint.setTypeface(ResourcesCompat.getFont(getContext(), R.font.headline_hebrew));
         canvas.drawText(title, viewWidth / 2 - textPaint.measureText(title) / 2, paddingTop / 1.5f, textPaint);
 
+        // Draw labels
         textPaint.setTextSize(50f);
         textPaint.setTypeface(ResourcesCompat.getFont(getContext(), R.font.text_hebrew));
-        // Y Label
         canvas.save();
         canvas.rotate(-90, 60, viewHeight / 2);
         canvas.drawText(labelY, 60 - textPaint.measureText(labelY) / 2, viewHeight / 2, textPaint);
         canvas.restore();
-        // X Label
         canvas.drawText(labelX, viewWidth / 2 - textPaint.measureText(labelX) / 2, viewHeight - 30, textPaint);
 
         // --- Start Scrolling Area ---
         canvas.save();
-        // Clip to graph area to avoid drawing over Y axis labels
+        // Clip content to ensure scrolling doesn't bleed into fixed axis labels
         canvas.clipRect(paddingLeft, 0, viewWidth, viewHeight - paddingBottom + 150);
         canvas.translate(scrollXOffset, 0);
 
-        // Draw Grid Y lines (full width)
         float totalGraphWidth = Math.max(viewWidth - paddingLeft - paddingRight, (points.size() - 1) * pointSpacing);
         drawGridY(canvas, displayMaxY, totalGraphWidth, graphHeight, viewHeight);
 
-        // Draw X Axis Line
+        // Draw X-axis line
         canvas.drawLine(paddingLeft, viewHeight - paddingBottom, paddingLeft + totalGraphWidth, viewHeight - paddingBottom, axisPaint);
 
-        // Draw Trend Line
+        // Draw trend line
         drawTrendLine(canvas, displayMaxY, graphHeight, viewHeight);
 
-        // Draw Data Points and X labels
+        // Draw data points and corresponding X-axis labels
         for (int i = 0; i < points.size(); i++) {
             Point p = points.get(i);
             float px = paddingLeft + i * pointSpacing;
             float py = (viewHeight - paddingBottom) - (p.y / displayMaxY) * graphHeight;
 
-            // Grid X
+            // Draw vertical grid line
             canvas.drawLine(px, paddingTop, px, viewHeight - paddingBottom, gridPaint);
 
-            // Point
+            // Draw data point
             canvas.drawCircle(px, py, 16f, pointPaint);
 
-            // X Label
+            // Draw rotated X label for better fit
             if (i < xLabels.size()) {
-                textPaint.setTextSize(40f); // Slightly larger
+                textPaint.setTextSize(40f);
                 String label = xLabels.get(i);
                 canvas.save();
                 canvas.rotate(-45, px, viewHeight - paddingBottom + 60);
@@ -193,11 +223,15 @@ public class SimpleXYGraphView extends View {
         canvas.restore();
         // --- End Scrolling Area ---
 
+        // Draw fixed Y-axis line
         canvas.drawLine(paddingLeft, paddingTop, paddingLeft, viewHeight - paddingBottom, axisPaint);
 
         drawYLabels(canvas, displayMaxY, graphHeight, viewHeight);
     }
 
+    /**
+     * Draws horizontal grid lines.
+     */
     private void drawGridY(Canvas canvas, float maxY, float totalWidth, float graphHeight, float viewHeight) {
         int ySteps = 5;
         for (int i = 0; i <= ySteps; i++) {
@@ -207,6 +241,9 @@ public class SimpleXYGraphView extends View {
         }
     }
 
+    /**
+     * Draws value labels for the Y-axis.
+     */
     private void drawYLabels(Canvas canvas, float maxY, float graphHeight, float viewHeight) {
         textPaint.setTextSize(38f);
         int ySteps = 5;
@@ -218,12 +255,14 @@ public class SimpleXYGraphView extends View {
         }
     }
 
+    /**
+     * Calculates and draws a linear regression trend line for the provided points.
+     */
     private void drawTrendLine(Canvas canvas, float maxY, float graphHeight, float viewHeight) {
         if (points.size() < 2) return;
 
         float sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
         for (int i = 0; i < points.size(); i++) {
-            // Use index as X for trend
             float y = points.get(i).y;
             sumX += (float) i;
             sumY += y;
@@ -247,24 +286,31 @@ public class SimpleXYGraphView extends View {
 
         canvas.drawLine(paddingLeft, py1, px2, py2, trendLinePaint);
 
-        // Equation text
-        textPaint.setTextSize(44f); // Increased equation font size
+        // Render trend equation string
+        textPaint.setTextSize(44f);
         textPaint.setFakeBoldText(true);
         String equation = String.format(Locale.US, "y = %.2fx + %.2f", slope, yStart);
 
         canvas.save();
-        canvas.translate(-scrollXOffset, 0); // Keep equation fixed relative to screen
+        // Keep equation visible at top left regardless of scroll
+        canvas.translate(-scrollXOffset, 0);
         canvas.drawText(equation, paddingLeft + 40, paddingTop + 60, textPaint);
         textPaint.setFakeBoldText(false);
         canvas.restore();
     }
 
+    /**
+     * Draws a placeholder message when no data is available.
+     */
     private void drawNoData(Canvas canvas) {
         String msg = "אין מספיק נתונים להצגת הגרף";
         textPaint.setTextSize(45f);
         canvas.drawText(msg, (float) getWidth() / 2 - textPaint.measureText(msg) / 2, (float) getHeight() / 2, textPaint);
     }
 
+    /**
+     * Data model for a single point on the graph.
+     */
     public static class Point {
         public final float x;
         public final float y;

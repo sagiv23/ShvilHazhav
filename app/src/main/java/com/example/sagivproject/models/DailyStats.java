@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents combined daily statistics for memory game, math problems, and medication compliance.
+ * Represents combined daily statistics for a user.
+ * <p>
+ * This class tracks performance metrics for cognitive games (memory game, math problems)
+ * and medication compliance (taken vs missed) for a single day.
+ * </p>
  */
 public class DailyStats implements Serializable {
     private int memoryWins;
@@ -16,6 +20,9 @@ public class DailyStats implements Serializable {
     private int medicationsMissed;
     private List<MedicationUsage> medicationUsageLogs;
 
+    /**
+     * Constructs a new DailyStats object with all counters initialized to zero.
+     */
     public DailyStats() {
         this.memoryWins = 0;
         this.memoryGamesPlayed = 0;
@@ -74,6 +81,11 @@ public class DailyStats implements Serializable {
         this.medicationsMissed = medicationsMissed;
     }
 
+    /**
+     * Gets the list of medication usage logs for the day.
+     *
+     * @return A list of {@link MedicationUsage} objects.
+     */
     public List<MedicationUsage> getMedicationUsageLogs() {
         if (medicationUsageLogs == null) {
             medicationUsageLogs = new ArrayList<>();
@@ -85,30 +97,53 @@ public class DailyStats implements Serializable {
         this.medicationUsageLogs = medicationUsageLogs;
     }
 
+    /**
+     * Increments the count of memory game wins.
+     */
     public void addMemoryWin() {
         this.memoryWins++;
     }
 
+    /**
+     * Increments the count of memory games played.
+     */
     public void addMemoryGamePlayed() {
         this.memoryGamesPlayed++;
     }
 
+    /**
+     * Increments the count of correct math answers.
+     */
     public void addMathCorrect() {
         this.mathCorrect++;
     }
 
+    /**
+     * Increments the count of incorrect math answers.
+     */
     public void addMathWrong() {
         this.mathWrong++;
     }
 
+    /**
+     * Increments the count of medications taken.
+     */
     public void addMedicationTaken() {
         this.medicationsTaken++;
     }
 
+    /**
+     * Increments the count of medications missed.
+     */
     public void addMedicationMissed() {
         this.medicationsMissed++;
     }
 
+    /**
+     * Adds a medication usage log entry to the daily statistics.
+     *
+     * @param log The {@link MedicationUsage} log to add.
+     */
     public void addMedicationUsageLog(MedicationUsage log) {
         getMedicationUsageLogs().add(log);
     }

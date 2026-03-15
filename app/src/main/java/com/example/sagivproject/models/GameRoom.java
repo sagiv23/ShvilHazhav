@@ -89,7 +89,12 @@ public class GameRoom implements Serializable, Idable {
         this.player2Uid = player2Uid;
     }
 
-    public List<Card> getCards() { // Updated return type to List<Card>
+    /**
+     * Gets the list of cards representing the game board.
+     *
+     * @return A list of {@link Card} objects.
+     */
+    public List<Card> getCards() {
         return cards;
     }
 
@@ -129,6 +134,11 @@ public class GameRoom implements Serializable, Idable {
         this.firstSelectedCardIndex = index;
     }
 
+    /**
+     * Checks if the room is currently processing a card match (to prevent concurrent actions).
+     *
+     * @return true if processing, false otherwise.
+     */
     public boolean isProcessingMatch() {
         return processingMatch;
     }

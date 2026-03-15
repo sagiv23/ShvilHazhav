@@ -33,7 +33,12 @@ import java.util.Locale;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * The main fragment for the memory game home screen.
+ * The home screen for the memory game, providing matchmaking and statistics.
+ * <p>
+ * This fragment allows users to view their game statistics (wins/plays), see a global leaderboard,
+ * and find an opponent for an online 1-on-1 match. It also includes an accessibility feature
+ * to read the game rules aloud using Text-to-Speech.
+ * </p>
  */
 @AndroidEntryPoint
 public class GameHomeScreenFragment extends BaseFragment {
@@ -67,6 +72,7 @@ public class GameHomeScreenFragment extends BaseFragment {
         TVStatusOfFindingEnemy = view.findViewById(R.id.tv_GameHomeScreen_status_of_finding_enemy);
         RecyclerView rvLeaderboard = view.findViewById(R.id.recyclerView_GameHomeScreen_leaderboard);
 
+        // Initialize TTS for game instructions
         tts = new TextToSpeech(getContext(), status -> {
             if (status == TextToSpeech.SUCCESS) {
                 tts.setLanguage(new Locale("he", "IL"));
@@ -104,6 +110,9 @@ public class GameHomeScreenFragment extends BaseFragment {
         updateUI(SearchState.IDLE);
     }
 
+    /**
+     * Toggles the playback of game instructions using Text-to-Speech.
+     */
     private void toggleInstructionsSpeech() {
         if (isSpeaking) {
             tts.stop();
@@ -124,6 +133,11 @@ public class GameHomeScreenFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Updates the UI state of the speech button.
+     *
+     * @param speaking true if instructions are being read, false otherwise.
+     */
     private void updateSpeakButton(boolean speaking) {
         isSpeaking = speaking;
         btnSpeak.setText(speaking ? R.string.cancel_playback : R.string.playback);
@@ -144,6 +158,9 @@ public class GameHomeScreenFragment extends BaseFragment {
         updateSpeakButton(false);
     }
 
+    /**
+     * Fetches the latest win statistics for the current user.
+     */
     private void loadWins() {
         databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -163,6 +180,9 @@ public class GameHomeScreenFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Displays the calculated win statistics in the UI.
+     */
     private void displayTodayWins() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DailyStats stats = user.getDailyStats().get(today);
@@ -175,6 +195,9 @@ public class GameHomeScreenFragment extends BaseFragment {
         tvGamesTotal.setText(MessageFormat.format("משחקים סך הכל: {0}", totalGames));
     }
 
+    /**
+     * Fetches and displays the top players in the global leaderboard.
+     */
     private void setupLeaderboard() {
         databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -194,6 +217,9 @@ public class GameHomeScreenFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Helper to calculate the total wins for a user across all days.
+     */
     private int getTotalWins(User u) {
         int total = 0;
         if (u.getDailyStats() != null) {
@@ -204,6 +230,9 @@ public class GameHomeScreenFragment extends BaseFragment {
         return total;
     }
 
+    /**
+     * Initiates the matchmaking process to find an opponent.
+     */
     private void findEnemy() {
         updateUI(SearchState.SEARCHING);
         databaseService.getGameService().findOrCreateRoom(user, new IDatabaseService.DatabaseCallback<>() {
@@ -223,6 +252,9 @@ public class GameHomeScreenFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Cancels the current search for an opponent and cleans up the room if necessary.
+     */
     private void cancelSearch() {
         if (currentRoom != null) {
             databaseService.getGameService().removeRoomListener(currentRoom.getId());
@@ -233,6 +265,11 @@ public class GameHomeScreenFragment extends BaseFragment {
         updateUI(SearchState.IDLE);
     }
 
+    /**
+     * Listens for status changes in the current game room.
+     *
+     * @param roomId The ID of the room to monitor.
+     */
     private void listenToRoom(String roomId) {
         if (roomId == null) {
             cancelSearch();
@@ -246,7 +283,7 @@ public class GameHomeScreenFragment extends BaseFragment {
                 gameStarted = true;
                 updateUI(SearchState.GAME_FOUND);
 
-                // Using Safe Args Directions
+                // Using Safe Args Directions to navigate to the game screen
                 GameHomeScreenFragmentDirections.ActionGameHomeScreenFragmentToMemoryGameFragment action =
                         GameHomeScreenFragmentDirections.actionGameHomeScreenFragmentToMemoryGameFragment(startedRoom.getId());
                 navigateTo(action);
@@ -271,6 +308,11 @@ public class GameHomeScreenFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Updates the UI components based on the current matchmaking search state.
+     *
+     * @param state The current search state.
+     */
     private void updateUI(SearchState state) {
         switch (state) {
             case IDLE:
@@ -301,6 +343,9 @@ public class GameHomeScreenFragment extends BaseFragment {
         super.onDestroy();
     }
 
+    /**
+     * Enum defining the possible states of the matchmaking process.
+     */
     private enum SearchState {
         IDLE,
         SEARCHING,

@@ -37,18 +37,35 @@ import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * A fragment for managing emergency contacts and sending emergency alerts.
+ * <p>
+ * This fragment allows users to add emergency contacts manually or by picking from the device's
+ * contacts list. It also provides functionality to send emergency SMS messages to all
+ * contacts, including the user's current location, and a quick dial for emergency services.
+ * </p>
+ */
 @AndroidEntryPoint
 public class EmergencyContactsFragment extends BaseFragment {
     private EmergencyContactsAdapter adapter;
     private TextView txtNoContacts;
     private User user;
+
+    /**
+     * Launcher for picking a contact from the device's contact list.
+     */
     private final ActivityResultLauncher<Void> contactPickerLauncher =
             registerForActivityResult(new ActivityResultContracts.PickContact(), uri -> {
                 if (uri != null) {
                     retrieveContactDetails(uri);
                 }
             });
+
     private FusedLocationProviderClient fusedLocationClient;
+
+    /**
+     * Launcher for requesting multiple permissions (SMS and Location).
+     */
     private final ActivityResultLauncher<String[]> permissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
                 if (Boolean.TRUE.equals(result.get(Manifest.permission.SEND_SMS))) {
@@ -113,6 +130,9 @@ public class EmergencyContactsFragment extends BaseFragment {
         loadUserFromDatabase();
     }
 
+    /**
+     * Fetches the latest user data from the database.
+     */
     private void loadUserFromDatabase() {
         if (user == null) return;
         databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
@@ -134,6 +154,9 @@ public class EmergencyContactsFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Loads the emergency contacts from the user model into the adapter.
+     */
     private void loadContacts() {
         HashMap<String, EmergencyContact> contactsMap = user.getEmergencyContacts();
         List<EmergencyContact> contactsList = new ArrayList<>();
@@ -146,18 +169,29 @@ public class EmergencyContactsFragment extends BaseFragment {
         txtNoContacts.setVisibility(contactsList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * Adds a new emergency contact to the user's profile and updates the database.
+     */
     private void addEmergencyContact(String firstName, String lastName, String phoneNumber) {
         EmergencyContact contact = new EmergencyContact(phoneNumber, firstName, lastName, phoneNumber);
         user.getEmergencyContacts().put(phoneNumber, contact);
         updateUserInDb("איש קשר חדש נוסף");
     }
 
+    /**
+     * Deletes an emergency contact from the user's profile and updates the database.
+     */
     private void deleteContact(EmergencyContact contact) {
         if (user.getEmergencyContacts().remove(contact.getId()) != null) {
             updateUserInDb("איש הקשר נמחק");
         }
     }
 
+    /**
+     * Retrieves name and phone number from a picked contact URI.
+     *
+     * @param contactUri The URI of the picked contact.
+     */
     private void retrieveContactDetails(Uri contactUri) {
         String[] projection = {ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME};
         try (Cursor cursor = requireContext().getContentResolver().query(contactUri, projection, null, null, null)) {
@@ -178,6 +212,12 @@ public class EmergencyContactsFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Fetches the primary phone number for a given contact ID.
+     *
+     * @param contactId The ID of the contact.
+     * @return The phone number string, or null if not found.
+     */
     private String fetchPhoneNumber(String contactId) {
         String phone = null;
         try (Cursor cursor = requireContext().getContentResolver().query(
@@ -193,6 +233,11 @@ public class EmergencyContactsFragment extends BaseFragment {
         return phone;
     }
 
+    /**
+     * Saves the updated user profile (with modified contacts) to the database.
+     *
+     * @param successMessage The message to display on success.
+     */
     private void updateUserInDb(String successMessage) {
         databaseService.getUserService().updateUser(user, new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -215,6 +260,9 @@ public class EmergencyContactsFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Requests necessary permissions for sending SMS and accessing location.
+     */
     private void checkSmsAndLocationPermissions() {
         permissionLauncher.launch(new String[]{
                 Manifest.permission.SEND_SMS,
@@ -223,6 +271,9 @@ public class EmergencyContactsFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Attempts to fetch the current location and then send an emergency SMS to all contacts.
+     */
     private void fetchLocationAndSendSms() {
         try {
             fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
@@ -239,6 +290,11 @@ public class EmergencyContactsFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Sends an emergency SMS message to all emergency contacts.
+     *
+     * @param locationUrl The Google Maps URL of the current location, or null if unavailable.
+     */
     private void sendSmsToAll(@Nullable String locationUrl) {
         List<EmergencyContact> contacts = new ArrayList<>(user.getEmergencyContacts().values());
         if (contacts.isEmpty()) {
@@ -259,6 +315,9 @@ public class EmergencyContactsFragment extends BaseFragment {
         Toast.makeText(getContext(), "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Initiates a dialer intent with the emergency services number.
+     */
     private void callEmergency() {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:109"));

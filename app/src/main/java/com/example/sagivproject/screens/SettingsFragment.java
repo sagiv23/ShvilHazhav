@@ -21,7 +21,11 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment for managing application settings.
+ * A fragment that allows users to manage application settings and preferences.
+ * <p>
+ * This fragment provides controls for toggling Dark Mode and handles the user logout process.
+ * Settings are persisted using {@link SharedPreferences}.
+ * </p>
  */
 @AndroidEntryPoint
 public class SettingsFragment extends BaseFragment {
@@ -39,7 +43,7 @@ public class SettingsFragment extends BaseFragment {
         Button btnLogout = view.findViewById(R.id.btn_logout);
         SwitchMaterial switchDarkMode = view.findViewById(R.id.switch_dark_mode);
 
-        // Using Safe Args to retrieve arguments with null check
+        // Retrieve arguments to check if we should show the logout button
         boolean isFromLoggedIn = false;
         if (getArguments() != null) {
             SettingsFragmentArgs args = SettingsFragmentArgs.fromBundle(getArguments());
@@ -52,6 +56,7 @@ public class SettingsFragment extends BaseFragment {
 
         btnLogout.setOnClickListener(v -> logout());
 
+        // Initialize Dark Mode switch state
         if (getContext() != null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
@@ -66,10 +71,19 @@ public class SettingsFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Updates the text label of the Dark Mode switch.
+     *
+     * @param switchDarkMode The switch component.
+     * @param isDarkMode     true if dark mode is enabled, false otherwise.
+     */
     private void updateDarkModeText(SwitchMaterial switchDarkMode, boolean isDarkMode) {
         switchDarkMode.setText(isDarkMode ? R.string.bright_mode : R.string.dark_mode);
     }
 
+    /**
+     * Initiates the logout process, clearing user data and navigating to the login screen.
+     */
     private void logout() {
         if (getActivity() == null) return;
         Runnable onConfirm = () -> {

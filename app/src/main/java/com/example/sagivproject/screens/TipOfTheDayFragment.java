@@ -36,10 +36,19 @@ import java.util.concurrent.Executor;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment that displays a "Tip of the Day".
+ * A fragment that displays a daily motivational tip or health advice.
+ * <p>
+ * This fragment attempts to fetch a specific tip for today from the database.
+ * If no tip exists, it uses the Gemini AI model to generate a new, unique tip for the user,
+ * which is then saved for others to see. It also displays a random inspirational quote
+ * and provides Text-to-Speech support for accessibility.
+ * </p>
  */
 @AndroidEntryPoint
 public class TipOfTheDayFragment extends BaseFragment {
+    /**
+     * A list of static inspirational quotes used as a fallback or secondary content.
+     */
     private final String[] inspirationalQuotes = {
             "ההצלחה היא סך הכל של מאמצים קטנים, שחוזרים עליהם יום יום.",
             "הדרך הטובה ביותר לחזות את העתיד היא ליצור אותו.",
@@ -47,6 +56,7 @@ public class TipOfTheDayFragment extends BaseFragment {
             "האמינו בעצמכם וכל מה שאתם. דעו שיש בכם משהו גדול יותר מכל מכשול.",
             "ההתחלה היא החלק החשוב ביותר בעבודה."
     };
+
     private TextView tipContent, tvInspirationContent;
     private Button btnTipSpeak, btnInspirationSpeak;
     private GenerativeModelFutures model;
@@ -71,6 +81,7 @@ public class TipOfTheDayFragment extends BaseFragment {
         btnTipSpeak = view.findViewById(R.id.btn_tip_speak);
         btnInspirationSpeak = view.findViewById(R.id.btn_inspiration_speak);
 
+        // Initialize Text-to-Speech for accessibility
         tts = new TextToSpeech(getContext(), status -> {
             if (status == TextToSpeech.SUCCESS) {
                 tts.setLanguage(new Locale("he", "IL"));
@@ -100,6 +111,7 @@ public class TipOfTheDayFragment extends BaseFragment {
         btnTipSpeak.setOnClickListener(v -> toggleSpeech("tip", tipContent.getText().toString()));
         btnInspirationSpeak.setOnClickListener(v -> toggleSpeech("inspiration", tvInspirationContent.getText().toString()));
 
+        // Initialize Gemini AI model
         GenerativeModel generativeModel = FirebaseAI.getInstance(GenerativeBackend.googleAI())
                 .generativeModel("gemini-2.5-flash-lite");
         model = GenerativeModelFutures.from(generativeModel);
@@ -107,6 +119,12 @@ public class TipOfTheDayFragment extends BaseFragment {
         checkDailyTip();
     }
 
+    /**
+     * Toggles the playback of a specific text content using TTS.
+     *
+     * @param id   The identifier for the content (e.g., "tip" or "inspiration").
+     * @param text The text to speak.
+     */
     private void toggleSpeech(String id, String text) {
         if (id.equals(currentlySpeakingId)) {
             tts.stop();
@@ -118,12 +136,22 @@ public class TipOfTheDayFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Updates the UI state of the playback button for a specific content.
+     *
+     * @param id       The content ID.
+     * @param speaking true if speech is playing, false otherwise.
+     */
     private void updateSpeakButton(String id, boolean speaking) {
         Button btn = id.equals("tip") ? btnTipSpeak : btnInspirationSpeak;
         currentlySpeakingId = speaking ? id : null;
         btn.setText(speaking ? R.string.cancel_playback : R.string.playback);
     }
 
+    /**
+     * Checks if a tip for today exists in the database.
+     * If not, it triggers the AI to generate one.
+     */
     private void checkDailyTip() {
         databaseService.getTipOfTheDayService().getTipForToday(new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -141,6 +169,9 @@ public class TipOfTheDayFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Uses the Gemini AI model to generate a short, daily tip in Hebrew.
+     */
     private void fetchDailyTipFromAI() {
         tipContent.setText("טוען טיפ יומי...");
         btnTipSpeak.setVisibility(View.GONE);
@@ -164,6 +195,7 @@ public class TipOfTheDayFragment extends BaseFragment {
                 newTip.setId(today);
 
                 String finalText = text;
+                // Save the generated tip to the database so other users see the same tip today.
                 databaseService.getTipOfTheDayService().saveTipIfNotExists(newTip, new IDatabaseService.DatabaseCallback<>() {
                     @Override
                     public void onCompleted(TipOfTheDay finalResult) {

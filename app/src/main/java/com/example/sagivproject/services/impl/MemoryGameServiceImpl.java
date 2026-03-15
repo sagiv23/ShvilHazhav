@@ -32,6 +32,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
+/**
+ * Implementation of the {@link IMemoryGameService} interface.
+ * <p>
+ * This class manages the complex state synchronization for the 1-on-1 online memory game.
+ * It handles room creation/matchmaking, game board initialization, real-time game state updates
+ * (card flips, matches, scores), turn management, and automatic forfeits on disconnection
+ * using Firebase's {@code onDisconnect} feature.
+ * </p>
+ */
 public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> implements IMemoryGameService {
     private static final String ROOMS_PATH = "rooms";
     private static final String USERS_PATH = "users";
@@ -56,6 +65,11 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     private final Map<String, ValueEventListener> roomStatusListeners = new ConcurrentHashMap<>();
     private ValueEventListener activeGameListener;
 
+    /**
+     * Constructs a new MemoryGameServiceImpl.
+     *
+     * @param firebaseDatabase The FirebaseDatabase instance injected by Hilt.
+     */
     @Inject
     public MemoryGameServiceImpl(FirebaseDatabase firebaseDatabase) {
         super(ROOMS_PATH, GameRoom.class);
@@ -75,6 +89,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                // Search for an existing room waiting for a second player
                 for (MutableData roomData : currentData.getChildren()) {
                     try {
                         GameRoom room = roomData.getValue(GameRoom.class);
@@ -89,6 +104,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
                         Log.e(TAG, "Error deserializing room", e);
                     }
                 }
+                // No waiting room found, create a new one
                 String newRoomId = roomsReference.push().getKey();
                 if (newRoomId == null) return Transaction.abort();
                 GameRoom newRoom = new GameRoom(newRoomId, user);

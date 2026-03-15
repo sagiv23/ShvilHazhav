@@ -22,7 +22,12 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment that displays a list of forum categories.
+ * A fragment that displays a list of available forum categories for the user to browse.
+ * <p>
+ * This fragment populates a RecyclerView with categories fetched from the database.
+ * When a category is clicked, the user is navigated to the {@link ForumFragment}
+ * to view the messages within that category.
+ * </p>
  */
 @AndroidEntryPoint
 public class ForumCategoriesFragment extends BaseFragment {
@@ -45,22 +50,22 @@ public class ForumCategoriesFragment extends BaseFragment {
         adapter.init(new ForumCategoryAdapter.OnCategoryInteractionListener() {
             @Override
             public void onDelete(ForumCategory category) {
-                // Not used in this activity
+                // Not used in this fragment
             }
 
             @Override
             public void onEdit(ForumCategory category) {
-                // Not used in this activity
+                // Not used in this fragment
             }
 
             @Override
             public void onLongClick(ForumCategory category) {
-                // Not used in this activity
+                // Not used in this fragment
             }
 
             @Override
             public void onClick(ForumCategory category) {
-                // Using Safe Args Directions
+                // Using Safe Args Directions to pass category data to the messages fragment
                 ForumCategoriesFragmentDirections.ActionForumCategoriesFragmentToForumFragment action =
                         ForumCategoriesFragmentDirections.actionForumCategoriesFragmentToForumFragment(category.getId(), category.getName());
                 navigateTo(action);
@@ -71,6 +76,9 @@ public class ForumCategoriesFragment extends BaseFragment {
         loadCategories();
     }
 
+    /**
+     * Fetches the list of forum categories from the database and updates the adapter.
+     */
     private void loadCategories() {
         databaseService.getForumCategoriesService().getCategories(new DatabaseCallback<>() {
             @Override

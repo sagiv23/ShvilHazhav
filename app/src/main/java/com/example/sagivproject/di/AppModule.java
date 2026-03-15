@@ -36,70 +36,130 @@ import dagger.hilt.InstallIn;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
+/**
+ * Hilt module that provides and binds dependencies for the application.
+ * <p>
+ * This module is installed in the {@link SingletonComponent}, ensuring that the provided
+ * instances have a singleton scope throughout the application's lifecycle.
+ * It provides core Firebase components, utility classes, and binds service interfaces
+ * to their respective implementations.
+ * </p>
+ */
 @Module
 @InstallIn(SingletonComponent.class)
 public abstract class AppModule {
 
+    /**
+     * Provides a singleton instance of {@link DatabaseReference}.
+     *
+     * @return The root reference to the Firebase Realtime Database.
+     */
     @Provides
     @Singleton
     public static DatabaseReference provideDatabaseReference() {
         return FirebaseDatabase.getInstance().getReference();
     }
 
+    /**
+     * Provides a singleton instance of {@link FirebaseDatabase}.
+     *
+     * @return The {@link FirebaseDatabase} instance.
+     */
     @Provides
     @Singleton
     public static FirebaseDatabase provideFirebaseDatabase() {
         return FirebaseDatabase.getInstance();
     }
 
+    /**
+     * Provides a singleton instance of {@link Gson} for JSON serialization/deserialization.
+     *
+     * @return A {@link Gson} instance.
+     */
     @Provides
     @Singleton
     public static Gson provideGson() {
         return new Gson();
     }
 
+    /**
+     * Provides the system's {@link AlarmManager} service.
+     *
+     * @param context The application context.
+     * @return The {@link AlarmManager} system service.
+     */
     @Provides
     @Singleton
     public static AlarmManager provideAlarmManager(@ApplicationContext Context context) {
         return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
+    /**
+     * Binds the {@link IDatabaseService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract IDatabaseService bindDatabaseService(DatabaseService databaseService);
 
+    /**
+     * Binds the {@link IAuthService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract IAuthService bindAuthService(AuthServiceImpl authService);
 
+    /**
+     * Binds the {@link IUserService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract IUserService bindUserService(UserServiceImpl userService);
 
+    /**
+     * Binds the {@link IMedicationService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract IMedicationService bindMedicationService(MedicationServiceImpl medicationService);
 
+    /**
+     * Binds the {@link IStatsService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract IStatsService bindStatsService(StatsServiceImpl statsService);
 
+    /**
+     * Binds the {@link IForumService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract IForumService bindForumService(ForumServiceImpl forumService);
 
+    /**
+     * Binds the {@link IForumCategoriesService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract IForumCategoriesService bindForumCategoryService(ForumCategoriesServiceImpl forumCategoryService);
 
+    /**
+     * Binds the {@link IMemoryGameService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract IMemoryGameService bindGameService(MemoryGameServiceImpl gameService);
 
+    /**
+     * Binds the {@link IImageService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract IImageService bindImageService(ImageServiceImpl imageService);
 
+    /**
+     * Binds the {@link ITipOfTheDayService} interface to its implementation.
+     */
     @Binds
     @Singleton
     public abstract ITipOfTheDayService bindTipOfTheDayService(TipOfTheDayServiceImpl tipOfTheDayService);

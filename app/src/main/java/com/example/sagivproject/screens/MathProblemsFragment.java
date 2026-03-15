@@ -32,7 +32,13 @@ import java.util.Locale;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment for practicing various math problems.
+ * A fragment for practicing various math problems to maintain cognitive health.
+ * <p>
+ * This fragment generates random arithmetic problems (addition, subtraction, multiplication,
+ * division, powers, and square roots) and provides a custom numeric keypad for user input.
+ * It tracks daily performance statistics (correct/wrong answers) and provides immediate
+ * visual feedback to the user.
+ * </p>
  */
 @AndroidEntryPoint
 public class MathProblemsFragment extends BaseFragment {
@@ -67,6 +73,9 @@ public class MathProblemsFragment extends BaseFragment {
         setupKeypad(view);
     }
 
+    /**
+     * Fetches the latest user data from the database to ensure statistics are up-to-date.
+     */
     private void fetchLatestStats() {
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
             @Override
@@ -85,6 +94,9 @@ public class MathProblemsFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Updates the UI text views with the user's correct and wrong answer counts for today.
+     */
     private void updateStatsUI() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DailyStats stats = user.getDailyStats().get(today);
@@ -95,6 +107,9 @@ public class MathProblemsFragment extends BaseFragment {
         tvWrong.setText(MessageFormat.format("טעויות: {0}", wrong));
     }
 
+    /**
+     * Generates a new random math problem and updates the question display.
+     */
     private void generateProblem() {
         Operation operation = Operation.values()[(int) (Math.random() * Operation.values().length)];
         int a, b;
@@ -140,10 +155,22 @@ public class MathProblemsFragment extends BaseFragment {
         tvAnswer.setText("");
     }
 
+    /**
+     * Helper to generate a random integer within a range.
+     *
+     * @param min Minimum value (inclusive).
+     * @param max Maximum value (inclusive).
+     * @return A random integer.
+     */
     private int rand(int min, int max) {
         return min + (int) (Math.random() * (max - min + 1));
     }
 
+    /**
+     * Sets up click listeners for the custom numeric keypad.
+     *
+     * @param view The root view of the fragment.
+     */
     private void setupKeypad(View view) {
         GridLayout keypad = view.findViewById(R.id.keypad_MathProblemsPage);
         for (int i = 0; i < keypad.getChildCount(); i++) {
@@ -164,6 +191,9 @@ public class MathProblemsFragment extends BaseFragment {
         view.findViewById(R.id.btn_MathProblemsPage_submit).setOnClickListener(v -> checkAnswer());
     }
 
+    /**
+     * Deletes the last character from the user's input.
+     */
     private void deleteLast() {
         if (userInput.length() > 0) {
             userInput.deleteCharAt(userInput.length() - 1);
@@ -171,11 +201,17 @@ public class MathProblemsFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Clears all user input.
+     */
     private void clearInput() {
         userInput.setLength(0);
         tvAnswer.setText("");
     }
 
+    /**
+     * Checks if the user's answer is correct, updates statistics, and provides feedback.
+     */
     private void checkAnswer() {
         if (userInput.length() == 0) return;
         int userAnswer = Integer.parseInt(userInput.toString());
@@ -196,6 +232,12 @@ public class MathProblemsFragment extends BaseFragment {
         updateStatsUI();
     }
 
+    /**
+     * Retrieves the daily statistics for today, creating a new entry if it doesn't exist.
+     *
+     * @param date Today's date string.
+     * @return The {@link DailyStats} object for today.
+     */
     private DailyStats getTodayStats(String date) {
         if (user.getDailyStats() == null) user.setDailyStats(new HashMap<>());
         if (!user.getDailyStats().containsKey(date)) {
@@ -204,6 +246,11 @@ public class MathProblemsFragment extends BaseFragment {
         return user.getDailyStats().get(date);
     }
 
+    /**
+     * Shows visual feedback (color change) for correct or incorrect answers.
+     *
+     * @param isCorrect true if the answer was correct, false otherwise.
+     */
     private void showFeedback(boolean isCorrect) {
         if (getContext() == null) return;
         int colorRes = isCorrect ? R.color.headline : R.color.error;

@@ -24,7 +24,11 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * An admin fragment for managing forum categories.
+ * An admin-specific fragment for managing forum categories.
+ * <p>
+ * This fragment allows administrators to view a list of all forum categories,
+ * add new ones, edit existing names, and delete categories.
+ * </p>
  */
 @AndroidEntryPoint
 public class AdminForumCategoriesFragment extends BaseFragment {
@@ -92,6 +96,9 @@ public class AdminForumCategoriesFragment extends BaseFragment {
         loadCategories();
     }
 
+    /**
+     * Loads the list of forum categories from the database.
+     */
     private void loadCategories() {
         databaseService.getForumCategoriesService().getCategories(new DatabaseCallback<>() {
             @Override
@@ -106,6 +113,11 @@ public class AdminForumCategoriesFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Displays a dialog to edit the name of an existing forum category.
+     *
+     * @param category The category to edit.
+     */
     private void showEditDialog(ForumCategory category) {
         if (getActivity() == null) return;
         dialogService.showEditForumCategoryDialog(getParentFragmentManager(), category, newName ->
@@ -123,6 +135,11 @@ public class AdminForumCategoriesFragment extends BaseFragment {
                 }));
     }
 
+    /**
+     * Deletes a forum category from the database.
+     *
+     * @param category The category to delete.
+     */
     private void deleteCategory(ForumCategory category) {
         databaseService.getForumCategoriesService().deleteCategory(category.getId(), new DatabaseCallback<>() {
             @Override

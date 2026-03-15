@@ -18,7 +18,12 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A dialog that presents options for changing a user's profile image, implemented as a DialogFragment.
+ * A dialog fragment that presents options for changing or deleting a user's profile image.
+ * <p>
+ * This dialog provides buttons to trigger the camera, open the gallery, or delete the
+ * current profile image (if one exists). Interaction events are communicated back
+ * via the {@link ImagePickerListener}.
+ * </p>
  */
 @AndroidEntryPoint
 public class ProfileImageDialog extends DialogFragment {
@@ -27,10 +32,19 @@ public class ProfileImageDialog extends DialogFragment {
     private boolean hasImage;
     private ImagePickerListener listener;
 
+    /**
+     * Constructs a new ProfileImageDialog.
+     */
     @Inject
     public ProfileImageDialog() {
     }
 
+    /**
+     * Sets the data for the dialog and the picker listener.
+     *
+     * @param hasImage Whether the user currently has a profile image set.
+     * @param listener The listener to handle image source selection or deletion.
+     */
     public void setData(boolean hasImage, ImagePickerListener listener) {
         Bundle args = new Bundle();
         args.putBoolean(ARG_HAS_IMAGE, hasImage);
@@ -59,6 +73,7 @@ public class ProfileImageDialog extends DialogFragment {
         Button btnDelete = dialog.findViewById(R.id.btn_profileImageDialog_delete);
         Button btnCancel = dialog.findViewById(R.id.btn_profileImageDialog_cancel);
 
+        // Only show the delete option if an image is already present
         btnDelete.setVisibility(hasImage ? View.VISIBLE : View.GONE);
 
         btnCamera.setOnClickListener(v -> {
@@ -81,11 +96,23 @@ public class ProfileImageDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Listener interface for handling profile image selection actions.
+     */
     public interface ImagePickerListener {
+        /**
+         * Called when the camera option is selected.
+         */
         void onCamera();
 
+        /**
+         * Called when the gallery option is selected.
+         */
         void onGallery();
 
+        /**
+         * Called when the delete option is selected.
+         */
         void onDelete();
     }
 }

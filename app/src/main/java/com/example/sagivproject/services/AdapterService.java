@@ -17,6 +17,11 @@ import dagger.hilt.android.scopes.ActivityScoped;
 
 /**
  * A service that provides access to all RecyclerView adapters used in the application.
+ * <p>
+ * This service is activity-scoped and uses dependency injection to provide singleton-like
+ * access to adapters within the lifecycle of an activity. It helps in decoupling
+ * fragments from direct adapter instantiation.
+ * </p>
  */
 @ActivityScoped
 public class AdapterService {
@@ -31,6 +36,9 @@ public class AdapterService {
     private final MedicationUsageAdapter medicationUsageAdapter;
     private final EmergencyContactsAdapter emergencyContactsAdapter;
 
+    /**
+     * Constructs a new AdapterService with all required adapters injected.
+     */
     @Inject
     public AdapterService(
             ForumAdapter forumAdapter,

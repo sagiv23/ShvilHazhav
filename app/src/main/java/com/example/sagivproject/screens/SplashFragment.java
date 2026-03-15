@@ -17,9 +17,18 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * The initial splash fragment of the application.
+ * <p>
+ * This fragment is responsible for showing a branding screen for a short duration
+ * and then navigating the user to the appropriate screen based on their
+ * authentication state and role (e.g., Home for regular users, Admin dashboard for admins,
+ * or Landing for unauthenticated users).
+ * </p>
  */
 @AndroidEntryPoint
 public class SplashFragment extends BaseFragment {
+    /**
+     * The delay in milliseconds before navigating away from the splash screen.
+     */
     private static final long SPLASH_DELAY = 3000;
 
     @Nullable
@@ -32,6 +41,7 @@ public class SplashFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Start a delayed navigation on a background thread
         new Thread(() -> {
             try {
                 Thread.sleep(SPLASH_DELAY);
@@ -44,6 +54,13 @@ public class SplashFragment extends BaseFragment {
         }).start();
     }
 
+    /**
+     * Determines the next screen to navigate to based on user authentication state.
+     * <p>
+     * If a user is cached, it attempts to fetch the latest user data from the database
+     * to ensure the profile and role are up-to-date.
+     * </p>
+     */
     private void navigateNext() {
         User cachedUser = sharedPreferencesUtil.getUser();
         if (cachedUser == null || sharedPreferencesUtil.isUserNotLoggedIn()) {
@@ -62,6 +79,7 @@ public class SplashFragment extends BaseFragment {
                         navigateTo(R.id.action_splashFragment_to_mainFragment);
                     }
                 } else {
+                    // User exists in cache but not in DB, sign out
                     sharedPreferencesUtil.signOutUser();
                     navigateTo(R.id.action_splashFragment_to_landingFragment);
                 }
@@ -69,6 +87,7 @@ public class SplashFragment extends BaseFragment {
 
             @Override
             public void onFailed(Exception e) {
+                // On error, revert to sign-in
                 sharedPreferencesUtil.signOutUser();
                 navigateTo(R.id.action_splashFragment_to_landingFragment);
             }

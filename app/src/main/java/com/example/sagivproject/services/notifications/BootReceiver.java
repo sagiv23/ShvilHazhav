@@ -15,6 +15,14 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * A {@link BroadcastReceiver} that listens for the device boot completion event.
+ * <p>
+ * Since scheduled alarms are cleared when the device is powered off, this receiver
+ * is responsible for rescheduling all necessary medication reminders once the
+ * device has finished booting.
+ * </p>
+ */
 @AndroidEntryPoint
 public class BootReceiver extends BroadcastReceiver {
     private static final String TAG = "BootReceiver";
@@ -36,6 +44,9 @@ public class BootReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     * Fetches the user's medication list from the database and reschedules all reminders.
+     */
     private void rescheduleAlarms() {
         if (sharedPreferencesUtil.isUserNotLoggedIn()) {
             Log.d(TAG, "User not logged in, skipping reschedule");

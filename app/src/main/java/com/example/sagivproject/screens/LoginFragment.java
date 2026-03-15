@@ -22,7 +22,13 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment for user login.
+ * A fragment that handles the user login process.
+ * <p>
+ * This fragment provides input fields for email and password, validates the input
+ * using the {@link Validator} utility, and attempts to authenticate the user via
+ * the {@link IAuthService}. Upon successful login, it navigates to the appropriate
+ * home screen based on the user's role.
+ * </p>
  */
 @AndroidEntryPoint
 public class LoginFragment extends BaseFragment {
@@ -56,6 +62,9 @@ public class LoginFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Attempts to log in the user with the provided credentials.
+     */
     private void tryLogin() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -88,6 +97,13 @@ public class LoginFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Validates the login input fields.
+     *
+     * @param email    The email entered by the user.
+     * @param password The password entered by the user.
+     * @return true if both fields are valid, false otherwise.
+     */
     private boolean validateInput(String email, String password) {
         if (email.isEmpty() || password.isEmpty()) {
             if (getContext() != null)

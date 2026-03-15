@@ -18,6 +18,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * A fragment that displays the messages within a specific forum category.
+ * <p>
+ * This fragment extends {@link BaseForumFragment} to inherit common forum logic
+ * and implements {@link BaseForumFragment.ForumPermissions} to define message
+ * deletion rules (users can delete their own messages).
+ * </p>
  */
 @AndroidEntryPoint
 public class ForumFragment extends BaseForumFragment implements BaseForumFragment.ForumPermissions {
@@ -51,6 +56,12 @@ public class ForumFragment extends BaseForumFragment implements BaseForumFragmen
         setupForum(view, categoryId, categoryName);
     }
 
+    /**
+     * Determines if the current user has permission to delete a specific forum message.
+     *
+     * @param message The message to check for deletion permission.
+     * @return true if the current user is the author of the message, false otherwise.
+     */
     @Override
     public boolean canDelete(ForumMessage message) {
         return user != null && message.getUserId() != null && message.getUserId().equals(user.getId());

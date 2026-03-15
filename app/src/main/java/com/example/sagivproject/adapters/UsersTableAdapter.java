@@ -23,22 +23,43 @@ import javax.inject.Inject;
 
 /**
  * A RecyclerView adapter for displaying a table of {@link User} objects for administrative purposes.
+ * <p>
+ * This adapter shows detailed user information including full name, email, password, age,
+ * birthdate, and role. It provides administrative actions such as toggling admin status
+ * and deleting users.
+ * </p>
  */
 public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserViewHolder> {
     private final ImageUtil imageUtil;
     private User currentUser;
     private OnUserActionListener listener;
 
+    /**
+     * Constructs a new UsersTableAdapter.
+     *
+     * @param imageUtil A utility for loading and processing profile images.
+     */
     @Inject
     public UsersTableAdapter(ImageUtil imageUtil) {
         this.imageUtil = imageUtil;
     }
 
+    /**
+     * Initializes the adapter with the current user and a listener for actions.
+     *
+     * @param currentUser The currently logged-in user (to prevent self-deletion/role change).
+     * @param listener    The listener for user-related actions.
+     */
     public void init(User currentUser, OnUserActionListener listener) {
         this.currentUser = currentUser;
         this.listener = listener;
     }
 
+    /**
+     * Sets the list of users to be displayed in the table.
+     *
+     * @param users The list of {@link User} objects.
+     */
     public void setUserList(List<User> users) {
         setData(users);
     }
@@ -99,21 +120,53 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         });
     }
 
+    /**
+     * Interface for listening to administrative actions on users.
+     */
     public interface OnUserActionListener {
+        /**
+         * Called when the toggle admin status button is clicked.
+         *
+         * @param user The user whose role is being toggled.
+         */
         void onToggleAdmin(User user);
 
+        /**
+         * Called when the delete user button is clicked.
+         *
+         * @param user The user to be deleted.
+         */
         void onDeleteUser(User user);
 
+        /**
+         * Called when a user row is long-clicked.
+         *
+         * @param user The user that was clicked.
+         */
         void onUserClicked(User user);
 
+        /**
+         * Called when a user's profile image is clicked.
+         *
+         * @param user      The user whose image was clicked.
+         * @param imageView The ImageView containing the profile image.
+         */
         void onUserImageClicked(User user, ImageView imageView);
     }
 
+    /**
+     * ViewHolder for user table rows.
+     */
     public static class UserViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView txtUserFullName, txtUserEmail, txtUserPassword, txtUserIsAdmin, txtUserAge, txtUserBirthDate;
         final ImageButton btnDeleteUser, btnToggleAdmin;
         final ImageView imgUserProfile;
 
+        /**
+         * Initializes the ViewHolder with the item view.
+         *
+         * @param itemView The view representing a single user row.
+         */
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             txtUserFullName = itemView.findViewById(R.id.txt_UserRow_fullName);

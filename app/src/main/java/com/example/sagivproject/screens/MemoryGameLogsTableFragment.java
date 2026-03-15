@@ -25,10 +25,18 @@ import java.util.Map;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * An admin fragment to display a real-time log of all memory game rooms.
+ * An admin-facing fragment that displays a real-time log of all memory game rooms.
+ * <p>
+ * This fragment fetches all users to create a UID-to-Name mapping and then
+ * listens for real-time updates to all game rooms in the database. It uses
+ * the {@link MemoryGameLogAdapter} to display the history and status of these games.
+ * </p>
  */
 @AndroidEntryPoint
 public class MemoryGameLogsTableFragment extends BaseFragment {
+    /**
+     * Map used to resolve user UIDs to full names for display in the log.
+     */
     private final Map<String, String> uidToNameMap = new HashMap<>();
     private MemoryGameLogAdapter adapter;
 
@@ -51,6 +59,10 @@ public class MemoryGameLogsTableFragment extends BaseFragment {
         fetchUsersAndListenToGames();
     }
 
+    /**
+     * Fetches the user list from the database to populate the name map,
+     * and then starts listening to the game rooms.
+     */
     private void fetchUsersAndListenToGames() {
         databaseService.getUserService().getUserList(new DatabaseCallback<>() {
             @Override
@@ -70,6 +82,9 @@ public class MemoryGameLogsTableFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Sets up a real-time listener for all game rooms in the database.
+     */
     private void listenToGamesRealtime() {
         databaseService.getGameService().getAllRoomsRealtime(new DatabaseCallback<>() {
             @Override

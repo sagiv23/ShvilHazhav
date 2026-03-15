@@ -15,8 +15,20 @@ import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
+/**
+ * Implementation of the {@link IUserService} interface.
+ * <p>
+ * This class provides methods for performing CRUD operations on user data in the
+ * Firebase Realtime Database. It extends {@link BaseDatabaseService} to reuse
+ * common database logic.
+ * </p>
+ */
 public class UserServiceImpl extends BaseDatabaseService<User> implements IUserService {
 
+    /**
+     * Constructs a new UserServiceImpl.
+     * Initializes the base service with the "users" path.
+     */
     @Inject
     public UserServiceImpl() {
         super("users", User.class);

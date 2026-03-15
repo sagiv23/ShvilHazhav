@@ -28,12 +28,19 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * The main activity that hosts all fragments in the application.
+ * <p>
+ * This activity follows the Single-Activity Architecture and is responsible for managing
+ * the navigation drawer, the top bar's dynamic content (depending on whether the user is an admin),
+ * and handling navigation events between fragments.
+ * </p>
  */
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements MenuNavigationListener {
     private static final String TAG = "MainActivity";
+
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
+
     private DrawerLayout drawerLayout;
 
     @Override
@@ -45,14 +52,20 @@ public class MainActivity extends AppCompatActivity implements MenuNavigationLis
     }
 
     /**
-     * Updates the UI state (Drawer and Top Bar) based on user state.
+     * Updates the UI state (Drawer and Top Bar) based on the current user state.
+     * This version is typically called when no specific fragment context is required.
      */
     public void setupMenu() {
         setupMenu(null);
     }
 
     /**
-     * Updates the UI state (Drawer and Top Bar) based on user state.
+     * Updates the UI state (Drawer and Top Bar) based on user state and the current fragment.
+     * <p>
+     * It manages the locking/unlocking of the navigation drawer and swaps the menu fragments
+     * (Admin vs LoggedIn vs LoggedOut) as needed. It also handles the visibility of standard
+     * top bar elements versus admin-specific ones.
+     * </p>
      *
      * @param fragment The current fragment to configure its top bar if it has one.
      */
@@ -124,12 +137,18 @@ public class MainActivity extends AppCompatActivity implements MenuNavigationLis
         }
     }
 
+    /**
+     * Opens the navigation drawer if it is unlocked.
+     */
     public void openDrawer() {
         if (drawerLayout != null && drawerLayout.getDrawerLockMode(GravityCompat.END) == DrawerLayout.LOCK_MODE_UNLOCKED) {
             drawerLayout.openDrawer(GravityCompat.END);
         }
     }
 
+    /**
+     * Closes the navigation drawer.
+     */
     public void closeDrawer() {
         if (drawerLayout != null) {
             drawerLayout.closeDrawer(GravityCompat.END);

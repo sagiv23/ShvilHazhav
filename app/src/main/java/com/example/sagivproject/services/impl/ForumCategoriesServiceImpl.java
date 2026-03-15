@@ -15,10 +15,21 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+/**
+ * Implementation of the {@link IForumCategoriesService} interface.
+ * <p>
+ * This class provides methods for managing forum categories in the Firebase Realtime Database.
+ * It handles the retrieval of categories with real-time updates and ensures that when a category
+ * is deleted, its associated messages are also removed to maintain data integrity.
+ * </p>
+ */
 public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategory> implements IForumCategoriesService {
     private static final String CATEGORIES_PATH = "forum_categories";
     private static final String MESSAGES_PATH = "forum_messages";
 
+    /**
+     * Constructs a new ForumCategoriesServiceImpl.
+     */
     @Inject
     public ForumCategoriesServiceImpl() {
         super(CATEGORIES_PATH, ForumCategory.class);

@@ -22,25 +22,47 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A dialog for adding or editing an emergency contact.
+ * A dialog fragment for adding a new emergency contact or editing an existing one.
+ * <p>
+ * This dialog provides input fields for the contact's first name, last name, and phone number.
+ * It validates the input using the {@link Validator} utility before submitting the data
+ * through the {@link AddEmergencyContactListener}.
+ * </p>
  */
 @AndroidEntryPoint
 public class AddEmergencyContactDialog extends DialogFragment {
 
+    /**
+     * Utility for validating contact information.
+     */
     @Inject
     Validator validator;
 
     private AddEmergencyContactListener listener;
     private EmergencyContact contactToEdit;
 
+    /**
+     * Constructs a new AddEmergencyContactDialog.
+     */
     @Inject
     public AddEmergencyContactDialog() {
     }
 
+    /**
+     * Sets the listener for contact submission events.
+     *
+     * @param listener The listener to set.
+     */
     public void setListener(AddEmergencyContactListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Sets the initial data for the dialog.
+     *
+     * @param contact  The contact to edit, or null to add a new one.
+     * @param listener The listener for submission.
+     */
     public void setData(EmergencyContact contact, AddEmergencyContactListener listener) {
         this.contactToEdit = contact;
         this.listener = listener;
@@ -59,6 +81,7 @@ public class AddEmergencyContactDialog extends DialogFragment {
         Button btnSave = dialog.findViewById(R.id.btn_dialog_save_contact);
         Button btnCancel = dialog.findViewById(R.id.btn_dialog_cancel_contact);
 
+        // Populate fields if editing
         if (contactToEdit != null) {
             etFirstName.setText(contactToEdit.getFirstName());
             etLastName.setText(contactToEdit.getLastName());
@@ -91,6 +114,9 @@ public class AddEmergencyContactDialog extends DialogFragment {
         contactToEdit = null; // Clear data on close
     }
 
+    /**
+     * Validates all input fields in the dialog.
+     */
     private boolean areAllFieldsValid(String fName, String lName, String phone, EditText firstNameEdt, EditText lastNameEdt, EditText phoneEdt) {
         if (fName.isEmpty() || lName.isEmpty() || phone.isEmpty()) {
             Toast.makeText(requireContext(), "כל השדות חובה", Toast.LENGTH_SHORT).show();
@@ -102,6 +128,9 @@ public class AddEmergencyContactDialog extends DialogFragment {
                 isFieldValid(phoneEdt, validator::isPhoneNotValid, "מספר טלפון לא תקין");
     }
 
+    /**
+     * Helper to validate a single field and show an error if invalid.
+     */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -111,7 +140,17 @@ public class AddEmergencyContactDialog extends DialogFragment {
         return true;
     }
 
+    /**
+     * Interface for listening to contact submission events.
+     */
     public interface AddEmergencyContactListener {
+        /**
+         * Called when the contact details are submitted and valid.
+         *
+         * @param firstName   The entered first name.
+         * @param lastName    The entered last name.
+         * @param phoneNumber The entered phone number.
+         */
         void onContactSubmit(String firstName, String lastName, String phoneNumber);
     }
 }

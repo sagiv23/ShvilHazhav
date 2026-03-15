@@ -11,6 +11,14 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
+/**
+ * Implementation of the {@link IAuthService} interface.
+ * <p>
+ * This class provides the logic for user authentication, including login, registration,
+ * and profile updates. It interacts with the {@link IUserService} for database operations
+ * and the {@link SharedPreferencesUtil} for local session management.
+ * </p>
+ */
 public class AuthServiceImpl implements IAuthService {
     private static final String ERROR_INVALID_CREDENTIALS = "אימייל או סיסמה שגויים";
     private static final String ERROR_LOGIN = "שגיאה בהתחברות המשתמש";
@@ -20,6 +28,12 @@ public class AuthServiceImpl implements IAuthService {
     private final IUserService userService;
     private final SharedPreferencesUtil sharedPreferencesUtil;
 
+    /**
+     * Constructs a new AuthServiceImpl.
+     *
+     * @param userService           The user management service.
+     * @param sharedPreferencesUtil The utility for managing local user preferences.
+     */
     @Inject
     public AuthServiceImpl(IUserService userService, SharedPreferencesUtil sharedPreferencesUtil) {
         this.userService = userService;
@@ -113,6 +127,9 @@ public class AuthServiceImpl implements IAuthService {
         return email;
     }
 
+    /**
+     * Internal helper to create a new user object and save it to the database.
+     */
     private void createUser(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> callback) {
         String uid = userService.generateUserId();
         User user = new User(uid, firstName, lastName, birthDateMillis, email, password, UserRole.REGULAR);
@@ -130,6 +147,9 @@ public class AuthServiceImpl implements IAuthService {
         });
     }
 
+    /**
+     * Internal helper to apply profile updates to an existing user.
+     */
     private void applyUserUpdate(User user, String firstName, String lastName, long birthDate, String email, String password, UpdateUserCallback callback) {
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -150,6 +170,9 @@ public class AuthServiceImpl implements IAuthService {
         });
     }
 
+    /**
+     * Internal helper to handle user creation logic, including email uniqueness check.
+     */
     private void handleUserCreation(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> successCallback, Consumer<String> errorCallback) {
         userService.checkIfEmailExists(email, new DatabaseCallback<>() {
             @Override

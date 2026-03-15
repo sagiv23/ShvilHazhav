@@ -24,14 +24,26 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A dialog for editing an existing user's profile information.
+ * A dialog fragment for editing an existing user's profile information.
+ * <p>
+ * This dialog allows administrators or users themselves to update personal details
+ * such as name, email, password, and birthdate. It performs validation using
+ * the {@link Validator} and {@link CalendarUtil} before applying changes.
+ * </p>
  */
 @AndroidEntryPoint
 public class EditUserDialog extends DialogFragment {
     private static final String ARG_USER = "arg_user";
 
+    /**
+     * Utility for validating user input.
+     */
     @Inject
     Validator validator;
+
+    /**
+     * Utility for date formatting and picking.
+     */
     @Inject
     CalendarUtil calendarUtil;
 
@@ -39,10 +51,19 @@ public class EditUserDialog extends DialogFragment {
     private long birthDateMillis = -1;
     private EditUserDialogListener listener;
 
+    /**
+     * Constructs a new EditUserDialog.
+     */
     @Inject
     public EditUserDialog() {
     }
 
+    /**
+     * Sets the user data to be edited and the submission listener.
+     *
+     * @param user     The user profile to edit.
+     * @param listener The listener to handle the update action.
+     */
     public void setData(User user, EditUserDialogListener listener) {
         Bundle args = new Bundle();
         if (user != null) {
@@ -77,6 +98,7 @@ public class EditUserDialog extends DialogFragment {
         Button btnSave = dialog.findViewById(R.id.btnEditUserSave);
         Button btnCancel = dialog.findViewById(R.id.btnEditUserCancel);
 
+        // Pre-fill fields with current user data
         birthDateMillis = user.getBirthDateMillis();
         if (birthDateMillis > 0) {
             inputBirthDate.setText(calendarUtil.formatDate(birthDateMillis));
@@ -111,6 +133,9 @@ public class EditUserDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Validates all input fields in the edit dialog.
+     */
     private boolean areAllFieldsValid(String fName, String lName, String email, String pass, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passEdt, EditText birthDateEdt) {
         if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || pass.isEmpty() || birthDateMillis <= 0) {
             Toast.makeText(requireContext(), "כל השדות חובה", Toast.LENGTH_SHORT).show();
@@ -124,6 +149,9 @@ public class EditUserDialog extends DialogFragment {
                 isFieldValid(passEdt, validator::isPasswordNotValid, "הסיסמה קצרה מדי");
     }
 
+    /**
+     * Helper to validate a single field and show feedback on error.
+     */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -133,7 +161,19 @@ public class EditUserDialog extends DialogFragment {
         return true;
     }
 
+    /**
+     * Listener interface for profile update events.
+     */
     public interface EditUserDialogListener {
+        /**
+         * Called when the user submits valid updated profile information.
+         *
+         * @param fName           Updated first name.
+         * @param lName           Updated last name.
+         * @param birthDateMillis Updated birthdate.
+         * @param email           Updated email address.
+         * @param password        Updated password.
+         */
         void onUpdateUser(String fName, String lName, long birthDateMillis, String email, String password);
     }
 }

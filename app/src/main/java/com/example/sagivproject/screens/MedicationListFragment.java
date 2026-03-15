@@ -45,13 +45,23 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment for managing a user's list of medications.
+ * A fragment for managing and displaying a user's list of medications.
+ * <p>
+ * This fragment allows users to view their medication schedule, add new medications,
+ * edit or delete existing ones, and search through their list by name or type.
+ * It also facilitates logging the daily intake status for each medication dose.
+ * </p>
  */
 @AndroidEntryPoint
 public class MedicationListFragment extends BaseFragment {
     private final List<Medication> fullMedicationList = new ArrayList<>();
+
+    /**
+     * Helper service to schedule alarms for medication reminders.
+     */
     @Inject
     AlarmScheduler alarmScheduler;
+
     private MedicationListAdapter adapter;
     private User user;
     private String uid;
@@ -104,6 +114,9 @@ public class MedicationListFragment extends BaseFragment {
         fetchTodayUsageLogs();
     }
 
+    /**
+     * Sets up the search bar and filter spinner logic.
+     */
     private void setupSearch() {
         if (getContext() == null) return;
         ArrayAdapter<String> spinnerAdapter = getStringArrayAdapter();
@@ -138,6 +151,9 @@ public class MedicationListFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Fetches medication usage logs for the current day from the database.
+     */
     private void fetchTodayUsageLogs() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         databaseService.getMedicationService().getMedicationUsageLogs(uid, new DatabaseCallback<>() {
@@ -150,7 +166,7 @@ public class MedicationListFragment extends BaseFragment {
                     }
                 }
 
-                // Update local user stats cache for the AlarmReceiver
+                // Update local user stats cache for consistency
                 DailyStats stats = user.getDailyStats().get(today);
                 if (stats == null) {
                     stats = new DailyStats();
@@ -168,6 +184,13 @@ public class MedicationListFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Logs the intake status of a medication dose and updates the database and local cache.
+     *
+     * @param medication    The medication whose dose is being logged.
+     * @param scheduledTime The scheduled time of the dose.
+     * @param status        The intake status (TAKEN, NOT_TAKEN, SNOOZED).
+     */
     private void logMedicationStatus(Medication medication, String scheduledTime, MedicationStatus status) {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
@@ -176,7 +199,7 @@ public class MedicationListFragment extends BaseFragment {
         databaseService.getMedicationService().logMedicationUsage(uid, usage, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                // Update local User cache
+                // Update local User cache for immediate UI feedback
                 DailyStats stats = user.getDailyStats().get(date);
                 if (stats == null) {
                     stats = new DailyStats();
@@ -199,12 +222,18 @@ public class MedicationListFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Loads the medication list from the local cache for quick initial display.
+     */
     private void loadMedicationsFromCache() {
         if (user.getMedications() != null) {
             updateMedicationList(new ArrayList<>(user.getMedications().values()));
         }
     }
 
+    /**
+     * Fetches the full medication list from the server.
+     */
     private void fetchMedicationsFromServer() {
         databaseService.getMedicationService().getUserMedicationList(uid, new DatabaseCallback<>() {
             @Override
@@ -219,6 +248,9 @@ public class MedicationListFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Updates the user's medication cache in SharedPreferences.
+     */
     private void updateUserCache(List<Medication> medicationList) {
         HashMap<String, Medication> updatedMedicationsMap = new HashMap<>();
         for (Medication med : medicationList) {
@@ -228,6 +260,9 @@ public class MedicationListFragment extends BaseFragment {
         sharedPreferencesUtil.saveUser(user);
     }
 
+    /**
+     * Updates the internal list of medications, sorts it, and refreshes the UI.
+     */
     private void updateMedicationList(List<Medication> medicationList) {
         fullMedicationList.clear();
         fullMedicationList.addAll(medicationList);
@@ -236,6 +271,9 @@ public class MedicationListFragment extends BaseFragment {
         filterMedications(editSearch.getText().toString());
     }
 
+    /**
+     * Helper to create a styled ArrayAdapter for the search filter spinner.
+     */
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         String[] searchOptions = {"הכל", "שם תרופה", "סוג תרופה"};
@@ -264,6 +302,9 @@ public class MedicationListFragment extends BaseFragment {
         };
     }
 
+    /**
+     * Saves a new medication to the database and schedules its reminders.
+     */
     private void saveMedication(Medication medication) {
         String medicationId = databaseService.getMedicationService().generateMedicationId();
         medication.setId(medicationId);
@@ -285,6 +326,9 @@ public class MedicationListFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Updates an existing medication's details in the database and refreshes its reminders.
+     */
     private void updateMedication(Medication med) {
         med.setUserId(uid);
         databaseService.getMedicationService().updateMedication(uid, med, new DatabaseCallback<>() {
@@ -310,6 +354,9 @@ public class MedicationListFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Deletes a medication by its ID and cancels its reminders.
+     */
     private void deleteMedicationById(Medication medication) {
         databaseService.getMedicationService().deleteMedication(uid, medication.getId(), new DatabaseCallback<>() {
             @Override
@@ -328,6 +375,9 @@ public class MedicationListFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Opens a dialog to add a new medication or edit an existing one.
+     */
     private void openMedicationDialog(Medication medToEdit) {
         dialogService.showMedicationDialog(getParentFragmentManager(), medToEdit, new MedicationDialog.OnMedicationSubmitListener() {
             @Override
@@ -342,6 +392,9 @@ public class MedicationListFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Filters the medication list based on the search query and selected filter type.
+     */
     private void filterMedications(String query) {
         List<Medication> filteredMedications = new ArrayList<>();
         String selectedType = spinnerSearchType.getSelectedItem() != null ? spinnerSearchType.getSelectedItem().toString() : "הכל";

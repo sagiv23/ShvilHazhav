@@ -15,7 +15,11 @@ import com.example.sagivproject.models.ForumMessage;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * An admin fragment for managing forum messages.
+ * An admin-specific fragment for managing forum messages within a category.
+ * <p>
+ * This fragment extends {@link BaseForumFragment} and provides administrative
+ * privileges, such as the ability to delete any message in the forum.
+ * </p>
  */
 @AndroidEntryPoint
 public class AdminForumFragment extends BaseForumFragment implements BaseForumFragment.ForumPermissions {
@@ -45,6 +49,12 @@ public class AdminForumFragment extends BaseForumFragment implements BaseForumFr
         setupForum(view, categoryId, categoryName);
     }
 
+    /**
+     * Overrides the permission check to allow administrators to delete any message.
+     *
+     * @param message The message to check for deletion permission.
+     * @return always true for administrators.
+     */
     @Override
     public boolean canDelete(ForumMessage message) {
         return true; // Admin can delete everything

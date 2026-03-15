@@ -37,7 +37,12 @@ import java.util.concurrent.Executor;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment that allows users to interact with a generative AI model.
+ * A fragment that allows users to interact with a generative AI health assistant.
+ * <p>
+ * This fragment provides an interface to chat with a Gemini-powered AI model (Firebase Vertex AI).
+ * It includes features like animated text response and Text-to-Speech (TTS) to read
+ * the AI's responses aloud, improving accessibility for elderly users.
+ * </p>
  */
 @AndroidEntryPoint
 public class AiFragment extends BaseFragment {
@@ -67,6 +72,7 @@ public class AiFragment extends BaseFragment {
         answerView = view.findViewById(R.id.TV_Ai_txt_response);
         progressBar = view.findViewById(R.id.progressBar_Ai);
 
+        // Initialize Text-to-Speech for accessibility
         tts = new TextToSpeech(getContext(), status -> {
             if (status == TextToSpeech.SUCCESS) {
                 tts.setLanguage(new Locale("he", "IL"));
@@ -92,6 +98,7 @@ public class AiFragment extends BaseFragment {
             }
         });
 
+        // Initialize Firebase Vertex AI chat session
         GenerativeModel generativeModel = FirebaseAI.getInstance(GenerativeBackend.googleAI())
                 .generativeModel("gemini-2.5-flash-lite");
         GenerativeModelFutures modelFutures = GenerativeModelFutures.from(generativeModel);
@@ -101,6 +108,9 @@ public class AiFragment extends BaseFragment {
         speakBtn.setOnClickListener(v -> toggleSpeech());
     }
 
+    /**
+     * Toggles the playback of the current response using Text-to-Speech.
+     */
     private void toggleSpeech() {
         if (isSpeaking) {
             tts.stop();
@@ -114,11 +124,19 @@ public class AiFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Updates the UI state of the speech toggle button.
+     *
+     * @param speaking true if speech is currently playing, false otherwise.
+     */
     private void updateSpeakButton(boolean speaking) {
         isSpeaking = speaking;
         speakBtn.setText(speaking ? R.string.cancel_playback : R.string.playback_answer);
     }
 
+    /**
+     * Sends the user's question to the AI model and handles the response.
+     */
     private void sendQuestion() {
         String q = questionInput.getText().toString().trim();
         if (q.isEmpty()) return;
@@ -141,7 +159,7 @@ public class AiFragment extends BaseFragment {
             @Override
             public void onSuccess(GenerateContentResponse result) {
                 progressBar.setVisibility(View.GONE);
-                send.setVisibility(View.VISIBLE);
+                send.setEnabled(true);
                 String text = result.getText();
                 if (text == null) {
                     text = "לא התקבלה תשובה.";
@@ -152,12 +170,17 @@ public class AiFragment extends BaseFragment {
             @Override
             public void onFailure(@NonNull Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                send.setVisibility(View.VISIBLE);
+                send.setEnabled(true);
                 answerView.setText(String.format("שגיאה: %s", t.getMessage()));
             }
         }, mainExecutor);
     }
 
+    /**
+     * Displays the AI response text character by character with an animation.
+     *
+     * @param fullText The full response text to display.
+     */
     private void displayTextWithAnimation(String fullText) {
         if (fullText == null) return;
         charIndex = 0;

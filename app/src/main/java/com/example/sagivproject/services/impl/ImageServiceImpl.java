@@ -14,9 +14,20 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+/**
+ * Implementation of the {@link IImageService} interface.
+ * <p>
+ * This class provides methods for managing the memory game's image assets in the database.
+ * It supports retrieving all images, adding new ones, deleting, and batch updating the
+ * entire collection (useful for reordering).
+ * </p>
+ */
 public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements IImageService {
     private static final String IMAGES_PATH = "images";
 
+    /**
+     * Constructs a new ImageServiceImpl.
+     */
     @Inject
     public ImageServiceImpl() {
         super(IMAGES_PATH, ImageData.class);

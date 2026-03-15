@@ -18,7 +18,12 @@ import com.example.sagivproject.models.User;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment for the administrator's main page.
+ * The main dashboard fragment for administrators.
+ * <p>
+ * This fragment provides navigation links to various administrative tools, including
+ * user management, forum moderation, game logs, and medication image logs.
+ * It also displays a personalized greeting to the administrator.
+ * </p>
  */
 @AndroidEntryPoint
 public class AdminPageFragment extends BaseFragment {

@@ -14,6 +14,13 @@ import com.example.sagivproject.R;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * A fragment that represents the top navigation menu for administrators.
+ * <p>
+ * This fragment is dynamically loaded into the top bar of the {@link com.example.sagivproject.screens.MainActivity}
+ * when an admin user is logged in. It provides a simple way to navigate back to the main admin dashboard.
+ * </p>
+ */
 @AndroidEntryPoint
 public class AdminMenuFragment extends Fragment {
     private MenuNavigationListener navigationListener;
@@ -21,6 +28,7 @@ public class AdminMenuFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        // Ensure the host activity implements the navigation listener
         if (context instanceof MenuNavigationListener) {
             navigationListener = (MenuNavigationListener) context;
         } else {

@@ -21,6 +21,16 @@ import java.util.Objects;
 
 /**
  * An abstract base class for fragments that display a forum message board.
+ * <p>
+ * This class provides common logic for handling forum messages, including:
+ * <ul>
+ *     <li>Initializing RecyclerView and adapters.</li>
+ *     <li>Listening for real-time message updates.</li>
+ *     <li>Sending new messages.</li>
+ *     <li>Deleting messages based on permissions.</li>
+ *     <li>Auto-scrolling to the bottom when new messages arrive.</li>
+ * </ul>
+ * </p>
  */
 public abstract class BaseForumFragment extends BaseFragment {
     protected RecyclerView recycler;
@@ -32,6 +42,11 @@ public abstract class BaseForumFragment extends BaseFragment {
 
     /**
      * Initializes the core UI views required for the forum functionality.
+     *
+     * @param view           The root view of the fragment.
+     * @param recyclerId     The resource ID of the RecyclerView.
+     * @param edtId          The resource ID of the message input EditText.
+     * @param btnIndicatorId The resource ID of the "new messages" scroll indicator button.
      */
     protected void initForumViews(View view, int recyclerId, int edtId, int btnIndicatorId) {
         this.recycler = view.findViewById(recyclerId);
@@ -47,7 +62,11 @@ public abstract class BaseForumFragment extends BaseFragment {
     }
 
     /**
-     * Sets up the forum with the specified category details.
+     * Sets up the forum with the specified category details and initializes the adapter.
+     *
+     * @param view         The root view.
+     * @param categoryId   The ID of the forum category to display.
+     * @param categoryName The display name of the category.
      */
     protected void setupForum(View view, String categoryId, String categoryName) {
         this.categoryId = categoryId;
@@ -98,6 +117,9 @@ public abstract class BaseForumFragment extends BaseFragment {
         loadMessages();
     }
 
+    /**
+     * Starts listening for messages in the current category and updates the adapter.
+     */
     protected void loadMessages() {
         databaseService.getForumService().listenToMessages(categoryId, new DatabaseCallback<>() {
             @Override
@@ -122,6 +144,9 @@ public abstract class BaseForumFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Sends the text currently in the EditText as a new message.
+     */
     protected void sendMessage() {
         String text = edtMessage.getText().toString().trim();
         if (text.isEmpty()) return;
@@ -143,6 +168,9 @@ public abstract class BaseForumFragment extends BaseFragment {
         });
     }
 
+    /**
+     * Checks if the last item in the list is currently visible to the user.
+     */
     private boolean isLastItemVisible() {
         LinearLayoutManager lm = (LinearLayoutManager) recycler.getLayoutManager();
         if (lm == null || adapter == null || adapter.getItemCount() == 0) return true;
@@ -151,6 +179,11 @@ public abstract class BaseForumFragment extends BaseFragment {
         return lastVisible >= adapter.getItemCount() - 1;
     }
 
+    /**
+     * Scrolls the RecyclerView to the bottom.
+     *
+     * @param smooth If true, performs a smooth scroll; otherwise, snaps to bottom.
+     */
     private void scrollToBottom(boolean smooth) {
         if (adapter != null && adapter.getItemCount() > 0) {
             if (smooth) {

@@ -2,11 +2,20 @@ package com.example.sagivproject.models;
 
 import java.io.Serializable;
 
+/**
+ * Represents daily statistics specifically for the memory game.
+ * <p>
+ * This class tracks correct/wrong moves and total wins for a single day.
+ * </p>
+ */
 public class MemoryGameDayStats implements Serializable {
     private int correctAnswers;
     private int wrongAnswers;
     private int wins;
 
+    /**
+     * Constructs a new MemoryGameDayStats object with all counters initialized to zero.
+     */
     public MemoryGameDayStats() {
         this.correctAnswers = 0;
         this.wrongAnswers = 0;
@@ -37,14 +46,23 @@ public class MemoryGameDayStats implements Serializable {
         this.wins = wins;
     }
 
+    /**
+     * Increments the correct answers counter.
+     */
     public void addCorrect() {
         this.correctAnswers++;
     }
 
+    /**
+     * Increments the wrong answers counter.
+     */
     public void addWrong() {
         this.wrongAnswers++;
     }
 
+    /**
+     * Increments the wins counter.
+     */
     public void addWin() {
         this.wins++;
     }

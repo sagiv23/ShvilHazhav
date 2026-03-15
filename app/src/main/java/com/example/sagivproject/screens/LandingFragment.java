@@ -16,6 +16,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * The initial landing screen for users who are not logged in.
+ * <p>
+ * This fragment provides the entry points for new and returning users,
+ * with buttons to navigate to the Login, Registration, and Contact/Support screens.
+ * </p>
  */
 @AndroidEntryPoint
 public class LandingFragment extends BaseFragment {

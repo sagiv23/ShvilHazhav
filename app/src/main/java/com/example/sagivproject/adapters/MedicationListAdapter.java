@@ -40,6 +40,11 @@ import dagger.hilt.android.qualifiers.ActivityContext;
 
 /**
  * A RecyclerView adapter for displaying a list of a user's {@link Medication} objects.
+ * <p>
+ * This adapter manages the display of medication details and provides interactive
+ * controls for logging medication intake (Taken, Not Taken, Snoozed) for specific
+ * scheduled times today.
+ * </p>
  */
 public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
@@ -48,19 +53,39 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
     private final Map<String, Map<String, MedicationStatus>> loggedTodayMedications = new HashMap<>();
     private OnMedicationActionListener listener;
 
+    /**
+     * Constructs a new MedicationListAdapter.
+     *
+     * @param context The activity context used for layout inflation and resources.
+     */
     @Inject
     public MedicationListAdapter(@ActivityContext Context context) {
         this.context = context;
     }
 
+    /**
+     * Sets the listener for medication-related actions (edit, delete, status change).
+     *
+     * @param listener The listener to set.
+     */
     public void setListener(OnMedicationActionListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Updates the list of medications to be displayed.
+     *
+     * @param medications The new list of {@link Medication} objects.
+     */
     public void setMedications(List<Medication> medications) {
         setData(medications);
     }
 
+    /**
+     * Sets the medication usage logs for today to reflect the current intake status.
+     *
+     * @param logs The list of {@link MedicationUsage} logs for today.
+     */
     public void setLoggedTodayMedications(List<MedicationUsage> logs) {
         this.loggedTodayMedications.clear();
         if (logs != null) {
@@ -78,6 +103,11 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         setData(new ArrayList<>(dataList));
     }
 
+    /**
+     * Adds a single medication usage log to the current view.
+     *
+     * @param usage The {@link MedicationUsage} log to add.
+     */
     public void addLoggedTodayMedication(MedicationUsage usage) {
         String medId = usage.getId();
         String scheduledTime = usage.getScheduledTime();
@@ -118,7 +148,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         }
 
         holder.txtMedicationDetails.setText(med.getDetails());
-        holder.txtMedicationHours.setVisibility(View.GONE); // Replaced by dynamic rows
+        holder.txtMedicationHours.setVisibility(View.GONE);
 
         holder.statusContainer.removeAllViews();
         List<String> reminderHours = med.getReminderHours();
@@ -158,6 +188,14 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         });
     }
 
+    /**
+     * Adds a dynamic row for a specific reminder hour to the medication item.
+     *
+     * @param container     The container to add the row to.
+     * @param med           The medication object.
+     * @param scheduledTime The scheduled time for this row.
+     * @param status        The current status of the medication for this time.
+     */
     private void addStatusRow(LinearLayout container, Medication med, String scheduledTime, MedicationStatus status) {
         View rowView = LayoutInflater.from(context).inflate(R.layout.item_medication_status_row, container, false);
         TextView txtTime = rowView.findViewById(R.id.txt_MedicationRow_ScheduledTime);
@@ -201,6 +239,13 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         container.addView(rowView);
     }
 
+    /**
+     * Handles a click on a status button (Taken, Not Taken, Snoozed).
+     *
+     * @param med           The medication being acted upon.
+     * @param scheduledTime The scheduled time for the dose.
+     * @param status        The new status to set.
+     */
     private void handleStatusClick(Medication med, String scheduledTime, MedicationStatus status) {
         if (listener != null) {
             processingMedications.add(med.getId());
@@ -209,6 +254,12 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         }
     }
 
+    /**
+     * Notifies the adapter that processing for a specific medication has finished,
+     * allowing the UI to re-enable interaction.
+     *
+     * @param medicationId The ID of the medication that finished processing.
+     */
     public void setProcessingFinished(String medicationId) {
         processingMedications.remove(medicationId);
         for (int i = 0; i < getItemCount(); i++) {
@@ -219,19 +270,47 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         }
     }
 
+    /**
+     * Interface for listening to actions on medication items.
+     */
     public interface OnMedicationActionListener {
+        /**
+         * Called when the edit option is selected for a medication.
+         *
+         * @param medication The medication to edit.
+         */
         void onEdit(Medication medication);
 
+        /**
+         * Called when the delete option is selected for a medication.
+         *
+         * @param medication The medication to delete.
+         */
         void onDelete(Medication medication);
 
+        /**
+         * Called when the status of a medication dose is changed.
+         *
+         * @param medication    The medication whose dose status changed.
+         * @param scheduledTime The scheduled time of the dose.
+         * @param status        The new status (TAKEN, NOT_TAKEN, SNOOZED).
+         */
         void onStatusChanged(Medication medication, String scheduledTime, MedicationStatus status);
     }
 
+    /**
+     * ViewHolder for medication items.
+     */
     public static class MedicationViewHolder extends RecyclerView.ViewHolder {
         final TextView txtMedicationName, txtMedicationType, txtMedicationDetails, txtMedicationHours;
         final ImageButton btnMenu;
         final LinearLayout statusContainer;
 
+        /**
+         * Initializes the ViewHolder with the item view.
+         *
+         * @param itemView The view representing a single medication card.
+         */
         public MedicationViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMedicationName = itemView.findViewById(R.id.txt_MedicationRow_Name);

@@ -18,7 +18,11 @@ import com.example.sagivproject.bases.BaseFragment;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A fragment to display contact information.
+ * A fragment that displays developer and contact information.
+ * <p>
+ * This fragment also contains a hidden navigation trigger (long press) to access
+ * a secret area of the application.
+ * </p>
  */
 @AndroidEntryPoint
 public class ContactFragment extends BaseFragment {
@@ -40,6 +44,11 @@ public class ContactFragment extends BaseFragment {
         setupSecretNavigation(imgContactIcon);
     }
 
+    /**
+     * Sets up a long press listener on a view to navigate to a secret screen.
+     *
+     * @param view The view to attach the secret navigation logic to.
+     */
     private void setupSecretNavigation(View view) {
         longPressedRunnable = () -> navigateTo(R.id.action_contactFragment_to_secretFragment);
 

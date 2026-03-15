@@ -24,6 +24,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * A {@link BroadcastReceiver} that listens for scheduled medication alarms and daily birthday checks.
+ * <p>
+ * This receiver is triggered by the {@link android.app.AlarmManager}. It handles two main actions:
+ * 1. Showing medication reminders if the medication hasn't been taken yet today.
+ * 2. Performing a daily check for the user's birthday to show a celebratory notification.
+ * </p>
  */
 @AndroidEntryPoint
 public class AlarmReceiver extends BroadcastReceiver {
@@ -42,7 +47,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if ("ACTION_BIRTHDAY_CHECK".equals(intent.getAction())) {
             handleBirthdayCheck();
-            alarmScheduler.scheduleBirthdayAlarm(); // Reschedule for tomorrow
+            // Reschedule for the same time tomorrow
+            alarmScheduler.scheduleBirthdayAlarm();
             return;
         }
 
@@ -57,7 +63,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             return;
         }
 
-        // Check if already taken today for this scheduled time
+        // Check if the medication was already logged as TAKEN today for this specific scheduled time.
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DailyStats stats = user.getDailyStats().get(today);
         if (stats != null && stats.getMedicationUsageLogs() != null) {
@@ -66,7 +72,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                         hourStr.equals(usage.getScheduledTime()) &&
                         usage.getStatus() == MedicationStatus.TAKEN) {
                     Log.d(TAG, "Medication " + medicationName + " already taken for " + hourStr + ". Skipping notification.");
-                    // Still need to schedule for tomorrow
+
+                    // Still need to schedule the alarm for the next day.
                     Medication medication = user.getMedications().get(medicationId);
                     if (medication != null) {
                         alarmScheduler.scheduleSpecificTime(medication, hourStr, true);
@@ -79,14 +86,16 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, "Showing notification for: " + medicationName + " at " + hourStr);
         notificationService.showMedicationNotification(medicationName, notificationId);
 
+        // Reschedule the alarm for tomorrow.
         Medication medication = user.getMedications().get(medicationId);
-        if (medication != null) {
-            if (hourStr != null) {
-                alarmScheduler.scheduleSpecificTime(medication, hourStr, true);
-            }
+        if (medication != null && hourStr != null) {
+            alarmScheduler.scheduleSpecificTime(medication, hourStr, true);
         }
     }
 
+    /**
+     * Checks if today is the user's birthday and shows a notification if it is.
+     */
     private void handleBirthdayCheck() {
         User user = sharedPreferencesUtil.getUser();
         if (user == null || user.getBirthDateMillis() <= 0) return;

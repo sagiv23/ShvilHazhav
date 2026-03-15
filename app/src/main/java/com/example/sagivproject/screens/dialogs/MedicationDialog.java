@@ -36,7 +36,12 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A dialog for adding or editing a user's medication, implemented as a DialogFragment.
+ * A dialog fragment for adding or editing a medication in the user's schedule.
+ * <p>
+ * This dialog provides fields for the medication name, type (via a dropdown),
+ * dosage details, and multiple reminder hours. It uses {@link Chip} components
+ * to visually manage the selected reminder times.
+ * </p>
  */
 @AndroidEntryPoint
 public class MedicationDialog extends DialogFragment {
@@ -47,10 +52,19 @@ public class MedicationDialog extends DialogFragment {
     private Medication medToEdit;
     private OnMedicationSubmitListener listener;
 
+    /**
+     * Constructs a new MedicationDialog.
+     */
     @Inject
     public MedicationDialog() {
     }
 
+    /**
+     * Sets the initial data for the dialog and the submission listener.
+     *
+     * @param medToEdit The medication to edit, or null for a new medication.
+     * @param listener  The listener to handle add/edit actions.
+     */
     public void setData(Medication medToEdit, OnMedicationSubmitListener listener) {
         Bundle args = new Bundle();
         if (medToEdit != null) {
@@ -91,6 +105,7 @@ public class MedicationDialog extends DialogFragment {
         }
         spinnerType.setAdapter(createMedicationTypeAdapter(typeNames));
 
+        // Populate fields if editing an existing medication
         if (medToEdit != null) {
             edtName.setText(medToEdit.getName());
             edtDetails.setText(medToEdit.getDetails());
@@ -137,6 +152,9 @@ public class MedicationDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Validates that all required fields are filled and valid.
+     */
     private boolean validateInputs(String name, String typeString, String details, MedicationType selectedType) {
         if (name.isEmpty() || typeString.isEmpty() || details.isEmpty()) {
             showToast("אנא מלא את כל השדות");
@@ -153,6 +171,9 @@ public class MedicationDialog extends DialogFragment {
         return true;
     }
 
+    /**
+     * Maps a Hebrew display name string to its corresponding {@link MedicationType} enum.
+     */
     private MedicationType getTypeFromString(String typeString) {
         for (MedicationType type : MedicationType.values()) {
             if (type.getDisplayName().equals(typeString)) {
@@ -162,6 +183,9 @@ public class MedicationDialog extends DialogFragment {
         return null;
     }
 
+    /**
+     * Opens a {@link TimePickerDialog} to allow the user to add a new reminder hour.
+     */
     private void showHourPicker() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -185,6 +209,9 @@ public class MedicationDialog extends DialogFragment {
         timePickerDialog.show();
     }
 
+    /**
+     * Refreshes the display of selected reminder hours using Material Chips.
+     */
     private void updateSelectedHoursChips() {
         chipGroupSelectedHours.removeAllViews();
         Collections.sort(selectedHours);
@@ -200,6 +227,9 @@ public class MedicationDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Creates a styled adapter for the medication type dropdown.
+     */
     private ArrayAdapter<String> createMedicationTypeAdapter(List<String> typeNames) {
         return new ArrayAdapter<>(
                 requireContext(),
@@ -223,6 +253,9 @@ public class MedicationDialog extends DialogFragment {
         };
     }
 
+    /**
+     * Applies custom styling (font, size, colors) to TextViews used in the dropdown.
+     */
     private void styleTextView(TextView tv, boolean isDropdown) {
         tv.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.text_hebrew));
         tv.setTextSize(22);
@@ -240,9 +273,18 @@ public class MedicationDialog extends DialogFragment {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Listener interface for medication submission events.
+     */
     public interface OnMedicationSubmitListener {
+        /**
+         * Called when a new medication is added.
+         */
         void onAdd(Medication medication);
 
+        /**
+         * Called when an existing medication is edited.
+         */
         void onEdit(Medication medication);
     }
 }

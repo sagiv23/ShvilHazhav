@@ -17,12 +17,25 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+/**
+ * Implementation of the {@link IStatsService} interface.
+ * <p>
+ * This class handles updating daily statistics for the math game in the Firebase database.
+ * It uses atomic transactions to ensure that the correct and wrong answer counters
+ * for the current day are incremented correctly.
+ * </p>
+ */
 public class StatsServiceImpl implements IStatsService {
     private static final String USERS_PATH = "users";
     private static final String FIELD_DAILY_STATS = "dailyStats";
 
     private final DatabaseReference databaseReference;
 
+    /**
+     * Constructs a new StatsServiceImpl.
+     *
+     * @param databaseReference The root DatabaseReference.
+     */
     @Inject
     public StatsServiceImpl(DatabaseReference databaseReference) {
         this.databaseReference = databaseReference.child(USERS_PATH);

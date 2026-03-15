@@ -17,11 +17,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * A RecyclerView adapter for displaying a list of {@link ForumCategory} objects.
+ * A RecyclerView adapter for displaying a list of forum categories.
  * <p>
- * This adapter manages the display of forum categories and provides different
- * functional modes (admin vs. regular user). In admin mode, it enables editing
- * and deletion of categories.
+ * This adapter handles the display of {@link ForumCategory} items and manages
+ * different behaviors based on whether the current user is an administrator.
+ * Admins are provided with edit and delete options for each category.
  * </p>
  */
 public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCategoryAdapter.CategoryViewHolder> {
@@ -30,17 +30,16 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
 
     /**
      * Constructs a new ForumCategoryAdapter.
-     * Hilt uses this constructor to provide an instance.
      */
     @Inject
     public ForumCategoryAdapter() {
     }
 
     /**
-     * Initializes the adapter with a listener and sets the admin status.
+     * Initializes the adapter with a listener and the admin status.
      *
-     * @param listener The listener for handling category interaction events.
-     * @param isAdmin  True if the current user is an admin, enabling edit/delete actions.
+     * @param listener The listener for handling category interactions.
+     * @param isAdmin  true if the current user has administrative privileges.
      */
     public void init(OnCategoryInteractionListener listener, boolean isAdmin) {
         this.listener = listener;
@@ -50,14 +49,14 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
     /**
      * Updates the data set with a new list of categories.
      *
-     * @param newCategories The new list of {@link ForumCategory} objects.
+     * @param newCategories The list of {@link ForumCategory} objects to display.
      */
     public void setCategories(List<ForumCategory> newCategories) {
         setData(newCategories);
     }
 
     /**
-     * Removes a specific category from the adapter's list.
+     * Removes a specific category from the adapter's data set.
      *
      * @param category The category to remove.
      */
@@ -81,7 +80,7 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
         ForumCategory category = getItem(position);
         holder.categoryName.setText(category.getName());
 
-        // Configure visibility and actions based on admin status
+        // Configure admin-specific controls
         if (isAdmin && listener != null) {
             holder.deleteButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setOnClickListener(v -> listener.onDelete(category));
@@ -102,16 +101,16 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
     }
 
     /**
-     * An interface for handling user interactions with a category item.
+     * Interface for listening to user interactions with forum categories.
      */
     public interface OnCategoryInteractionListener {
         /**
-         * Called when the delete button for a category is clicked.
+         * Called when the delete button is clicked.
          */
         void onDelete(ForumCategory category);
 
         /**
-         * Called when the edit button for a category is clicked.
+         * Called when the edit button is clicked.
          */
         void onEdit(ForumCategory category);
 
@@ -127,13 +126,18 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
     }
 
     /**
-     * ViewHolder class for forum category items.
+     * ViewHolder for forum category items.
      */
     public static class CategoryViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
         final TextView categoryName;
         final ImageButton deleteButton;
         final ImageButton editButton;
 
+        /**
+         * Constructs a new CategoryViewHolder.
+         *
+         * @param itemView The item view.
+         */
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryName = itemView.findViewById(R.id.txt_category_name);

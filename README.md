@@ -51,6 +51,7 @@ The project is built using modern Android development best practices.
 - **AI Integration:** **Firebase Vertex AI (Gemini SDK)** for the medical assistant module.
 - **UI Framework:** **Material Design 3**, **ViewBinding**, and Custom Views for specialized data rendering.
 - **Serialization:** **GSON** for efficient data handling.
+- **Documentation:** Extensively documented using **Javadoc** for improved maintainability and developer onboarding.
 
 ---
 
