@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="mainActivity" type="id" />
+    <item name="contactActivity" type="id" />
+    <item name="detailsAboutUserActivity" type="id" />
+    <item name="settingsActivity" type="id" />
+    <item name="landingActivity" type="id" />
+    <item name="loginActivity" type="id" />
+    <item name="registerActivity" type="id" />
+    <item name="adminPageActivity" type="id" />
+
+    <item name="nav_logout" type="id" />
+</resources>

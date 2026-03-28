@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:layoutDirection="rtl"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/txt_MedicationRow_ScheduledTime"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/text_hebrew"
+        android:textColor="@color/text_color"
+        android:textSize="20sp"
+        tools:text="00:00" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_MedicationRow_Taken"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/text_hebrew"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:paddingHorizontal="4dp"
+        android:text="@string/took"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:cornerRadius="20dp"
+        app:strokeColor="@color/headline"
+        app:strokeWidth="1dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_MedicationRow_NotTaken"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/text_hebrew"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:paddingHorizontal="4dp"
+        android:text="@string/didnt_take"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:cornerRadius="20dp"
+        app:strokeColor="@color/error"
+        app:strokeWidth="1dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_MedicationRow_Snoozed"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="@font/text_hebrew"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:paddingHorizontal="4dp"
+        android:text="@string/will_take"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:cornerRadius="20dp"
+        app:strokeColor="?attr/colorOutline"
+        app:strokeWidth="1dp" />
+</LinearLayout>

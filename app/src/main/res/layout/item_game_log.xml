@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    android:layoutDirection="rtl"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    app:strokeColor="?attr/colorOutline"
+    app:strokeWidth="1.5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/txt_itemGameLog_players"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/headline_hebrew"
+            android:textColor="@color/headline"
+            android:textSize="22sp"
+            tools:text="שחקן 1 נגד שחקן 2" />
+
+        <TextView
+            android:id="@+id/txt_itemGameLog_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/text_hebrew"
+            android:textSize="20sp"
+            tools:text="תוצאה: 0 - 0" />
+
+        <TextView
+            android:id="@+id/txt_itemGameLog_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/text_hebrew"
+            android:textColor="@color/headline"
+            android:textSize="18sp"
+            tools:text="סטטוס: הסתיים" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

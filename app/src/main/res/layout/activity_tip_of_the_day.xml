@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    tools:context=".screens.TipOfTheDayActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tipOfTheDayPage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutDirection="rtl">
+
+        <include
+            layout="@layout/include_top_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separatorLine">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/headline_hebrew"
+                    android:text="@string/daily_tip"
+                    android:textColor="@color/headline"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/tv_tip_of_the_day_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:textSize="25sp"
+                    tools:text="23/11/2008" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    app:strokeColor="?attr/colorOutline"
+                    app:strokeWidth="1.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_tip_speak"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:fontFamily="@font/text_hebrew"
+                            android:text="@string/playback"
+                            android:textAllCaps="false"
+                            android:textSize="20sp"
+                            app:cornerRadius="30dp"
+                            app:icon="@drawable/ic_sound"
+                            app:iconGravity="textStart"
+                            app:iconPadding="12dp"
+                            app:iconSize="28dp"
+                            app:strokeWidth="1dp" />
+
+                        <TextView
+                            android:id="@+id/tv_tipOfTheDay_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:gravity="center"
+                            android:textSize="22sp"
+                            tools:text="כאן יוצג הטיפ היומי" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    app:strokeColor="?attr/colorOutline"
+                    app:strokeWidth="1.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="8dp"
+                            android:fontFamily="@font/headline_hebrew"
+                            android:text="@string/inspiration_corner"
+                            android:textColor="@color/headline"
+                            android:textSize="30sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_inspiration_speak"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:text="@string/playback"
+                            android:textAllCaps="false"
+                            android:textSize="20sp"
+                            app:cornerRadius="30dp"
+                            app:icon="@drawable/ic_sound"
+                            app:iconGravity="textStart"
+                            app:iconPadding="12dp"
+                            app:iconSize="28dp"
+                            app:strokeWidth="1dp" />
+
+                        <TextView
+                            android:id="@+id/tv_tipOfTheDay_inspiration_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:gravity="center"
+                            android:textSize="20sp"
+                            tools:text="כאן יופיע משפט השראה, סיפור קצר או בדיחה" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/drawer_menu_container"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layoutDirection="rtl" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

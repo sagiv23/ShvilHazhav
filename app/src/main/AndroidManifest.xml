@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <!-- הרשאות בסיסיות ואינטרנט -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- הרשאות מיקום (עבור זיהוי נפילות ושליחת מיקום בחירום) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <!-- הרשאות תקשורת ואנשי קשר -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- הרשאות חומרה ומדיה -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- עבור אנדרואיד 13 ומעלה (במקום READ_EXTERNAL_STORAGE) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- עבור גרסאות ישנות יותר של אנדרואיד (תאימות לאחור) -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <!-- הרשאות זיהוי פעילות (עבור זיהוי נפילות) -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <!-- הרשאות התראות ושירותי רקע -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+    <application
+        android:name=".MainApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SagivProject">
+
+        <service
+            android:name=".services.impl.FallDetectionServiceImpl"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="health|location" />
+
+        <receiver
+            android:name=".services.notifications.AlarmReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".services.notifications.MedicationActionReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".services.notifications.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
+        <activity
+            android:name=".screens.SplashActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".screens.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.LandingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.ContactActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.ForumCategoriesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.ForumActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MedicationListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.GameHomeScreenActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MathProblemsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MemoryGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.TipOfTheDayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.UserStatsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.EmergencyContactsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.DetailsAboutUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AdminPageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.UsersTableActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MemoryGameLogsTableActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MedicationImagesTableActivity"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

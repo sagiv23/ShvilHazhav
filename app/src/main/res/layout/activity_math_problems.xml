@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    tools:context=".screens.MathProblemsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mathProblemsPage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutDirection="rtl">
+
+        <include
+            layout="@layout/include_top_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separatorLine">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/headline_hebrew"
+                    android:text="@string/math_exercises"
+                    android:textColor="@color/headline"
+                    android:textSize="40sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    app:strokeColor="?attr/colorOutline"
+                    app:strokeWidth="1.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/tv_MathProblemsPage_correct"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="32dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:textColor="@color/headline"
+                            android:textSize="20sp"
+                            tools:text="נכונות: 0" />
+
+                        <TextView
+                            android:id="@+id/tv_MathProblemsPage_wrong"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/text_hebrew"
+                            android:textColor="@color/headline"
+                            android:textSize="20sp"
+                            tools:text="טעויות: 0" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    app:strokeColor="?attr/colorOutline"
+                    app:strokeWidth="1.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:id="@+id/tv_MathProblemsPage_question"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:fontFamily="@font/headline_hebrew"
+                            android:layoutDirection="ltr"
+                            android:textColor="@color/headline"
+                            android:textDirection="ltr"
+                            android:textSize="38sp"
+                            tools:text="43 + 37 =" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cv_MathProblemsPage_answer_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_marginBottom="24dp"
+                            app:cardCornerRadius="22dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="?attr/colorOutline"
+                            app:strokeWidth="2dp">
+
+                            <TextView
+                                android:id="@+id/tv_MathProblemsPage_user_answer"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/text_hebrew"
+                                android:gravity="center"
+                                android:textSize="36sp"
+                                tools:text="80" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <GridLayout
+                            android:id="@+id/keypad_MathProblemsPage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:columnCount="4"
+                            android:layoutDirection="ltr">
+
+                            <!-- Row 1 -->
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_7"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_8"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_9"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_MathProblemsPage_delete"
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/calc_back"
+                                android:textAllCaps="false"
+                                android:textSize="16sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="2dp" />
+
+                            <!-- Row 2 -->
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_4"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_5"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_6"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_MathProblemsPage_clear"
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/clean"
+                                android:textAllCaps="false"
+                                android:textSize="16sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="2dp" />
+
+                            <!-- Row 3 -->
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_1"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_2"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_3"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_MathProblemsPage_submit"
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/vi"
+                                android:textAllCaps="false"
+                                android:textSize="20sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="2dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="0dp"
+                                android:layout_height="70dp"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/_0"
+                                android:textSize="24sp"
+                                app:cornerRadius="18dp"
+                                app:strokeWidth="1dp" />
+                        </GridLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/drawer_menu_container"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layoutDirection="rtl" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
