@@ -29,6 +29,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -52,6 +53,10 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * The time limit for each turn in milliseconds (15 seconds).
      */
     private static final long TURN_TIME_LIMIT = 15000;
+    /**
+     * The total time limit for the entire game in milliseconds (1.5 minutes).
+     */
+    private static final long TOTAL_GAME_TIME_LIMIT = 90000;
 
     private RecyclerView recyclerCards;
     private boolean endDialogShown = false, localLock = false;
@@ -59,8 +64,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     private User user;
     private GameRoom currentRoom;
     private MemoryGameAdapter adapter;
-    private TextView tvTimer, tvTurnStatus, tvScore, tvOpponentName;
+    private TextView tvTimer, tvTurnStatus, tvScore, tvOpponentName, tvTotalTimer;
     private CountDownTimer turnTimer;
+    private CountDownTimer totalGameTimer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +92,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         tvTurnStatus = findViewById(R.id.tv_OnlineMemoryGame_turn_status);
         tvScore = findViewById(R.id.tv_OnlineMemoryGame_score);
         tvOpponentName = findViewById(R.id.tv_OnlineMemoryGame_opponent_name);
+        tvTotalTimer = findViewById(R.id.tv_OnlineMemoryGame_total_timer);
 
         adapter = adapterService.getMemoryGameAdapter();
         adapter.setListener(this);
@@ -321,10 +328,17 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
                 if ("finished".equals(room.getStatus())) {
                     if (turnTimer != null) turnTimer.cancel();
+                    if (totalGameTimer != null) totalGameTimer.cancel();
                     databaseService.getGameService().removeForfeitOnDisconnect(roomId);
                     showGameEndDialog(room);
                     return;
                 }
+
+                // Start total game timer if not already running
+                if (totalGameTimer == null) {
+                    startTotalGameTimer();
+                }
+
                 checkIfGameFinished();
 
                 boolean isMyTurn = user.getId().equals(room.getCurrentTurnUid());
@@ -382,6 +396,27 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     }
 
     /**
+     * Manages the countdown for the total game time.
+     */
+    private void startTotalGameTimer() {
+        if (totalGameTimer != null) totalGameTimer.cancel();
+        totalGameTimer = new CountDownTimer(TOTAL_GAME_TIME_LIMIT, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long minutes = (millisUntilFinished / 1000) / 60;
+                long seconds = (millisUntilFinished / 1000) % 60;
+                tvTotalTimer.setText(String.format(Locale.getDefault(), "זמן משחק כולל: %02d:%02d", minutes, seconds));
+            }
+
+            @Override
+            public void onFinish() {
+                tvTotalTimer.setText("זמן נגמר!");
+                finishGame(currentRoom);
+            }
+        }.start();
+    }
+
+    /**
      * Returns the user to the game matchmaking screen.
      */
     private void goBack() {
@@ -394,6 +429,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     protected void onDestroy() {
         if (roomId != null) databaseService.getGameService().stopListeningToGame(roomId);
         if (turnTimer != null) turnTimer.cancel();
+        if (totalGameTimer != null) totalGameTimer.cancel();
         super.onDestroy();
     }
 }

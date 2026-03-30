@@ -80,6 +80,16 @@
             tools:text="תורך לשחק" />
 
         <TextView
+            android:id="@+id/tv_OnlineMemoryGame_total_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/text_hebrew"
+            android:textColor="@color/headline"
+            android:textSize="18sp"
+            tools:text="זמן משחק כולל: 01:30" />
+
+        <TextView
             android:id="@+id/tv_OnlineMemoryGame_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
