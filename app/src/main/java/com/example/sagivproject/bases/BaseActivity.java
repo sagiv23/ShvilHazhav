@@ -25,9 +25,9 @@ import com.example.sagivproject.screens.LoginActivity;
 import com.example.sagivproject.screens.MainActivity;
 import com.example.sagivproject.screens.RegisterActivity;
 import com.example.sagivproject.screens.SettingsActivity;
-import com.example.sagivproject.services.AdapterService;
-import com.example.sagivproject.services.DialogService;
+import com.example.sagivproject.services.IAdapterService;
 import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.IDialogService;
 import com.example.sagivproject.ui.AdminMenuFragment;
 import com.example.sagivproject.ui.LoggedInMenuFragment;
 import com.example.sagivproject.ui.LoggedOutMenuFragment;
@@ -79,13 +79,13 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
      * Activity-scoped service for providing RecyclerView adapters.
      */
     @Inject
-    protected AdapterService adapterService;
+    protected IAdapterService adapterService;
 
     /**
      * Activity-scoped service for showing UI dialogs.
      */
     @Inject
-    protected DialogService dialogService;
+    protected IDialogService dialogService;
 
     /**
      * The root layout for the navigation drawer.

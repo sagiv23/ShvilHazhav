@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.GameRoom;
+import com.example.sagivproject.services.impl.AdapterService;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -33,7 +34,7 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
 
     /**
      * Constructs a new MemoryGameLogAdapter.
-     * Hilt provides instances via {@link com.example.sagivproject.services.AdapterService}.
+     * Hilt provides instances via {@link AdapterService}.
      */
     @Inject
     public MemoryGameLogAdapter() {

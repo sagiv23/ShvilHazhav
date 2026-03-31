@@ -3,9 +3,10 @@ package com.example.sagivproject.di;
 import android.app.AlarmManager;
 import android.content.Context;
 
-import com.example.sagivproject.services.DatabaseService;
+import com.example.sagivproject.services.IAdapterService;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.IDialogService;
 import com.example.sagivproject.services.IEmergencyService;
 import com.example.sagivproject.services.IFallDetectionService;
 import com.example.sagivproject.services.IForumCategoriesService;
@@ -16,7 +17,10 @@ import com.example.sagivproject.services.IMemoryGameService;
 import com.example.sagivproject.services.IStatsService;
 import com.example.sagivproject.services.ITipOfTheDayService;
 import com.example.sagivproject.services.IUserService;
+import com.example.sagivproject.services.impl.AdapterService;
 import com.example.sagivproject.services.impl.AuthServiceImpl;
+import com.example.sagivproject.services.impl.DatabaseService;
+import com.example.sagivproject.services.impl.DialogService;
 import com.example.sagivproject.services.impl.EmergencyServiceImpl;
 import com.example.sagivproject.services.impl.FallDetectionManager;
 import com.example.sagivproject.services.impl.ForumCategoriesServiceImpl;
@@ -37,14 +41,15 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
+import dagger.hilt.android.components.ActivityComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
+import dagger.hilt.android.scopes.ActivityScoped;
 import dagger.hilt.components.SingletonComponent;
 
 /**
  * Hilt module that provides and binds dependencies for the application.
  * <p>
- * This module is installed in the {@link SingletonComponent}, ensuring that the provided
- * instances have a singleton scope throughout the application's lifecycle.
+ * This class contains both singleton-scoped and activity-scoped dependency definitions.
  * It provides core Firebase components, utility classes, and binds service interfaces
  * to their respective implementation classes.
  * </p>
@@ -217,4 +222,35 @@ public abstract class AppModule {
     @Binds
     @Singleton
     public abstract IFallDetectionService bindFallDetectionService(FallDetectionManager fallDetectionManager);
+
+    /**
+     * Nested Hilt module for activity-scoped bindings.
+     * <p>
+     * This module must be installed in {@link ActivityComponent} because the services it binds
+     * are scoped to the activity lifecycle.
+     * </p>
+     */
+    @Module
+    @InstallIn(ActivityComponent.class)
+    public interface ActivityBindingsModule {
+        /**
+         * Binds the {@link IDialogService} interface to its implementation.
+         *
+         * @param dialogService The {@link DialogService} implementation.
+         * @return The bound interface.
+         */
+        @Binds
+        @ActivityScoped
+        IDialogService bindDialogService(DialogService dialogService);
+
+        /**
+         * Binds the {@link IAdapterService} interface to its implementation.
+         *
+         * @param adapterService The {@link AdapterService} implementation.
+         * @return The bound interface.
+         */
+        @Binds
+        @ActivityScoped
+        IAdapterService bindAdapterService(AdapterService adapterService);
+    }
 }

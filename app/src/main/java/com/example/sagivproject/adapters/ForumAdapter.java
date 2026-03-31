@@ -24,6 +24,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumMessage;
+import com.example.sagivproject.services.impl.AdapterService;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.google.android.material.button.MaterialButton;
 
@@ -54,7 +55,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Constructs a new ForumAdapter.
-     * Hilt provides instances of this adapter via {@link com.example.sagivproject.services.AdapterService}.
+     * Hilt provides instances of this adapter via {@link AdapterService}.
      */
     @Inject
     public ForumAdapter() {

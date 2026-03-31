@@ -1,4 +1,4 @@
-package com.example.sagivproject.services;
+package com.example.sagivproject.services.impl;
 
 import android.graphics.drawable.Drawable;
 
@@ -16,6 +16,7 @@ import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.screens.dialogs.MedicationDialog;
 import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
+import com.example.sagivproject.services.IDialogService;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -31,7 +32,7 @@ import dagger.hilt.android.scopes.ActivityScoped;
  * </p>
  */
 @ActivityScoped
-public class DialogService {
+public class DialogService implements IDialogService {
     private final Provider<MedicationDialog> medicationDialogProvider;
     private final Provider<AddUserDialog> addUserDialogProvider;
     private final Provider<EditUserDialog> editUserDialogProvider;
@@ -72,6 +73,7 @@ public class DialogService {
      * @param medToEdit The {@link Medication} object to edit, or null to add a new one.
      * @param listener  The listener to handle submission events.
      */
+    @Override
     public void showMedicationDialog(FragmentManager fm, Medication medToEdit, MedicationDialog.OnMedicationSubmitListener listener) {
         MedicationDialog dialog = medicationDialogProvider.get();
         dialog.setData(medToEdit, listener);
@@ -84,6 +86,7 @@ public class DialogService {
      * @param fm       The {@link FragmentManager}.
      * @param listener The listener to handle the user creation logic.
      */
+    @Override
     public void showAddUserDialog(FragmentManager fm, AddUserDialog.AddUserDialogListener listener) {
         AddUserDialog dialog = addUserDialogProvider.get();
         dialog.setListener(listener);
@@ -97,6 +100,7 @@ public class DialogService {
      * @param user     The {@link User} object containing current data.
      * @param listener The listener to handle the update results.
      */
+    @Override
     public void showEditUserDialog(FragmentManager fm, User user, EditUserDialog.EditUserDialogListener listener) {
         EditUserDialog dialog = editUserDialogProvider.get();
         dialog.setData(user, listener);
@@ -110,6 +114,7 @@ public class DialogService {
      * @param category The {@link ForumCategory} to rename.
      * @param listener The listener to handle the name update.
      */
+    @Override
     public void showEditForumCategoryDialog(FragmentManager fm, ForumCategory category, EditForumCategoryDialog.EditForumCategoryDialogListener listener) {
         EditForumCategoryDialog dialog = editForumCategoryDialogProvider.get();
         dialog.setData(category, listener);
@@ -122,6 +127,7 @@ public class DialogService {
      * @param fm            The {@link FragmentManager}.
      * @param imageDrawable The {@link Drawable} to display in full screen.
      */
+    @Override
     public void showFullImageDialog(FragmentManager fm, Drawable imageDrawable) {
         FullImageDialog dialog = fullImageDialogProvider.get();
         dialog.setImage(imageDrawable);
@@ -135,6 +141,7 @@ public class DialogService {
      * @param hasImage Whether the user currently has an active profile image.
      * @param listener The listener to handle selection actions.
      */
+    @Override
     public void showProfileImageDialog(FragmentManager fm, boolean hasImage, ProfileImageDialog.ImagePickerListener listener) {
         ProfileImageDialog dialog = profileImageDialogProvider.get();
         dialog.setData(hasImage, listener);
@@ -148,6 +155,7 @@ public class DialogService {
      * @param contact  The {@link EmergencyContact} to edit, or null for a new one.
      * @param listener The listener to handle the contact submission.
      */
+    @Override
     public void showEmergencyContactDialog(FragmentManager fm, EmergencyContact contact, AddEmergencyContactDialog.AddEmergencyContactListener listener) {
         AddEmergencyContactDialog dialog = addEmergencyContactDialogProvider.get();
         dialog.setData(contact, listener);
@@ -164,6 +172,7 @@ public class DialogService {
      * @param cancelText  Optional text for the negative button (if null, the button is hidden).
      * @param onConfirm   The Runnable to execute upon user confirmation.
      */
+    @Override
     public void showConfirmDialog(FragmentManager fm, String title, String message, String confirmText, String cancelText, Runnable onConfirm) {
         ConfirmDialog dialog = confirmDialogProvider.get();
         dialog.setData(title, message, confirmText, cancelText, onConfirm);

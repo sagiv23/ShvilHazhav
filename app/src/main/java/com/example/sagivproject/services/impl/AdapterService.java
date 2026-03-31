@@ -1,4 +1,4 @@
-package com.example.sagivproject.services;
+package com.example.sagivproject.services.impl;
 
 import com.example.sagivproject.adapters.EmergencyContactsAdapter;
 import com.example.sagivproject.adapters.ForumAdapter;
@@ -11,6 +11,7 @@ import com.example.sagivproject.adapters.MedicationUsageAdapter;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.adapters.MemoryGameLogAdapter;
 import com.example.sagivproject.adapters.UsersTableAdapter;
+import com.example.sagivproject.services.IAdapterService;
 
 import javax.inject.Inject;
 
@@ -26,7 +27,7 @@ import dagger.hilt.android.scopes.ActivityScoped;
  * </p>
  */
 @ActivityScoped
-public class AdapterService {
+public class AdapterService implements IAdapterService {
     private final ForumAdapter forumAdapter;
     private final ForumCategoryAdapter forumCategoryAdapter;
     private final MedicationListAdapter medicationListAdapter;
@@ -72,6 +73,7 @@ public class AdapterService {
     /**
      * @return The adapter for forum message lists.
      */
+    @Override
     public ForumAdapter getForumAdapter() {
         return forumAdapter;
     }
@@ -79,6 +81,7 @@ public class AdapterService {
     /**
      * @return The adapter for forum category lists.
      */
+    @Override
     public ForumCategoryAdapter getForumCategoryAdapter() {
         return forumCategoryAdapter;
     }
@@ -86,6 +89,7 @@ public class AdapterService {
     /**
      * @return The adapter for the user's medication schedule.
      */
+    @Override
     public MedicationListAdapter getMedicationListAdapter() {
         return medicationListAdapter;
     }
@@ -93,6 +97,7 @@ public class AdapterService {
     /**
      * @return The adapter for memory game card grids.
      */
+    @Override
     public MemoryGameAdapter getMemoryGameAdapter() {
         return memoryGameAdapter;
     }
@@ -100,6 +105,7 @@ public class AdapterService {
     /**
      * @return The adapter for memory game history logs.
      */
+    @Override
     public MemoryGameLogAdapter getMemoryGameLogAdapter() {
         return memoryGameLogAdapter;
     }
@@ -107,6 +113,7 @@ public class AdapterService {
     /**
      * @return The adapter for the administrative user table.
      */
+    @Override
     public UsersTableAdapter getUsersTableAdapter() {
         return usersTableAdapter;
     }
@@ -114,6 +121,7 @@ public class AdapterService {
     /**
      * @return The adapter for managing medication card images.
      */
+    @Override
     public MedicationImagesTableAdapter getMedicationImagesTableAdapter() {
         return medicationImagesTableAdapter;
     }
@@ -121,6 +129,7 @@ public class AdapterService {
     /**
      * @return The adapter for the ranked user leaderboard.
      */
+    @Override
     public LeaderboardAdapter getLeaderboardAdapter() {
         return leaderboardAdapter;
     }
@@ -128,6 +137,7 @@ public class AdapterService {
     /**
      * @return The adapter for viewing historical medication logs.
      */
+    @Override
     public MedicationUsageAdapter getMedicationUsageAdapter() {
         return medicationUsageAdapter;
     }
@@ -135,6 +145,7 @@ public class AdapterService {
     /**
      * @return The adapter for emergency contact cards.
      */
+    @Override
     public EmergencyContactsAdapter getEmergencyContactsAdapter() {
         return emergencyContactsAdapter;
     }
@@ -142,6 +153,7 @@ public class AdapterService {
     /**
      * @return The adapter for statistical XY graphs.
      */
+    @Override
     public GraphAdapter getGraphAdapter() {
         return graphAdapter;
     }
