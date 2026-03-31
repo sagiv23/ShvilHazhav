@@ -297,7 +297,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             @Override
             public void onCompleted(GameRoom room) {
                 if (room == null) {
-                    if (!isFinishing()) goBack();
+                    goBack();
                     return;
                 }
                 currentRoom = room;
@@ -306,13 +306,13 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                     databaseService.getUserService().getUser(opponentUid, new DatabaseCallback<>() {
                         @Override
                         public void onCompleted(User opponent) {
-                            if (opponent != null && !isFinishing())
+                            if (opponent != null)
                                 tvOpponentName.setText(String.format("משחק נגד: %s", opponent.getFullName()));
                         }
 
                         @Override
                         public void onFailed(Exception e) {
-                            if (!isFinishing()) tvOpponentName.setText("משחק נגד: יריב");
+                            tvOpponentName.setText("משחק נגד: יריב");
                         }
                     });
                 }
@@ -356,7 +356,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
             @Override
             public void onFailed(Exception e) {
-                if (!isFinishing()) goBack();
+                goBack();
             }
         });
     }

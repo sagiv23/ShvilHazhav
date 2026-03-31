@@ -171,7 +171,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User dbUser) {
-                if (dbUser != null && !isFinishing()) {
+                if (dbUser != null) {
                     user = dbUser;
                     sharedPreferencesUtil.saveUser(user);
                     loadUserDetailsToUI();
@@ -180,9 +180,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
-                if (!isFinishing()) {
-                    Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -191,7 +189,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
      * Populates UI components with the current user's data.
      */
     private void loadUserDetailsToUI() {
-        if (user == null || isFinishing()) {
+        if (user == null) {
             return;
         }
 
@@ -226,19 +224,15 @@ public class DetailsAboutUserActivity extends BaseActivity {
                 databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
                     @Override
                     public void onSuccess(User updatedUser) {
-                        if (!isFinishing()) {
-                            Toast.makeText(DetailsAboutUserActivity.this, "הפרטים עודכנו!", Toast.LENGTH_SHORT).show();
-                            sharedPreferencesUtil.saveUser(updatedUser);
-                            user = updatedUser;
-                            loadUserDetailsToUI();
-                        }
+                        Toast.makeText(DetailsAboutUserActivity.this, "הפרטים עודכנו!", Toast.LENGTH_SHORT).show();
+                        sharedPreferencesUtil.saveUser(updatedUser);
+                        user = updatedUser;
+                        loadUserDetailsToUI();
                     }
 
                     @Override
                     public void onError(String message) {
-                        if (!isFinishing()) {
-                            Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show();
                     }
                 }));
     }
@@ -286,16 +280,12 @@ public class DetailsAboutUserActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 sharedPreferencesUtil.saveUser(user);
-                if (!isFinishing()) {
-                    Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל נמחקה", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל נמחקה", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(Exception e) {
-                if (!isFinishing()) {
-                    Toast.makeText(DetailsAboutUserActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -320,16 +310,12 @@ public class DetailsAboutUserActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 sharedPreferencesUtil.saveUser(user);
-                if (!isFinishing()) {
-                    Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל עודכנה!", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל עודכנה!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(Exception e) {
-                if (!isFinishing()) {
-                    Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
