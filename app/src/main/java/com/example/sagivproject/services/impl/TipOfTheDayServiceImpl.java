@@ -60,9 +60,6 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      */
     @Override
     public void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
-        runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> {
-
-            return Objects.requireNonNullElse(currentTip, tip);
-        }, callback);
+        runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> Objects.requireNonNullElse(currentTip, tip), callback);
     }
 }
