@@ -102,7 +102,6 @@ public class DailyStats implements Serializable {
 
     /**
      * Gets the list of detailed medication usage logs for the day.
-     *
      * @return A list of {@link MedicationUsage} objects.
      */
     public List<MedicationUsage> getMedicationUsageLogs() {
@@ -160,7 +159,6 @@ public class DailyStats implements Serializable {
 
     /**
      * Adds a detailed medication usage log entry to this day's statistics.
-     *
      * @param log The {@link MedicationUsage} record to append.
      */
     public void addMedicationUsageLog(MedicationUsage log) {

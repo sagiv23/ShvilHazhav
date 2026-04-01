@@ -38,10 +38,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * This screen generates random arithmetic challenges (addition, subtraction, multiplication,
  * division, powers, and square roots). It features:
  * <ul>
- *     <li>Dynamic problem generation with randomized operations and numbers.</li>
- *     <li>A custom on-screen numeric keypad for input.</li>
- *     <li>Immediate visual feedback for correct or incorrect answers.</li>
- *     <li>Daily performance tracking (correct/wrong counts) synchronized with Firebase.</li>
+ * <li>Dynamic problem generation with randomized operations and numbers.</li>
+ * <li>A custom on-screen numeric keypad for input.</li>
+ * <li>Immediate visual feedback for correct or incorrect answers.</li>
+ * <li>Daily performance tracking (correct/wrong counts) synchronized with Firebase.</li>
  * </ul>
  * </p>
  */
@@ -174,7 +174,6 @@ public class MathProblemsActivity extends BaseActivity {
 
     /**
      * Generates a random integer within a specified range.
-     *
      * @param min Minimum value (inclusive).
      * @param max Maximum value (inclusive).
      * @return A random integer.
@@ -250,7 +249,6 @@ public class MathProblemsActivity extends BaseActivity {
 
     /**
      * Retrieves the daily statistics for today, creating a new entry if necessary.
-     *
      * @param date Today's date string.
      * @return The {@link DailyStats} object for the current date.
      */
@@ -264,7 +262,6 @@ public class MathProblemsActivity extends BaseActivity {
 
     /**
      * Animates the answer container to provide feedback on the answer correctness.
-     *
      * @param isCorrect true if the user's answer was right.
      */
     private void showFeedback(boolean isCorrect) {

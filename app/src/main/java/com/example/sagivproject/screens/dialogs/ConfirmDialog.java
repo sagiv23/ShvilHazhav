@@ -47,12 +47,11 @@ public class ConfirmDialog extends DialogFragment {
 
     /**
      * Configures the dialog with specific content and behavior.
-     *
-     * @param title       The text to display in the dialog title.
-     * @param message     The descriptive body text.
+     * @param title The text to display in the dialog title.
+     * @param message The descriptive body text.
      * @param confirmText The label for the positive button (defaults to "אישור").
-     * @param cancelText  The label for the negative button (if null, the button is hidden).
-     * @param onConfirm   The Runnable to run upon confirmation.
+     * @param cancelText The label for the negative button (if null, the button is hidden).
+     * @param onConfirm The Runnable to run upon confirmation.
      */
     public void setData(String title, String message, String confirmText, String cancelText, Runnable onConfirm) {
         Bundle args = new Bundle();

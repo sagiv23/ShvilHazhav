@@ -26,9 +26,9 @@ import javax.inject.Inject;
  * This adapter displays detailed user information including full name, email, birthdate,
  * and administrative status. It provides interactive buttons for:
  * <ul>
- *     <li>Toggling administrative privileges (promoting/demoting users).</li>
- *     <li>Deleting user accounts.</li>
- *     <li>Viewing profile images in detail.</li>
+ * <li>Toggling administrative privileges (promoting/demoting users).</li>
+ * <li>Deleting user accounts.</li>
+ * <li>Viewing profile images in detail.</li>
  * </ul>
  * It prevents the current administrator from performing self-destructive actions (deletion/role change).
  * </p>
@@ -40,7 +40,6 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
 
     /**
      * Constructs a new UsersTableAdapter.
-     *
      * @param imageUtil A utility class for loading and processing profile images.
      */
     @Inject
@@ -50,9 +49,8 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
 
     /**
      * Initializes the adapter with state-specific data and a listener.
-     *
      * @param currentUser The currently logged-in administrator (used for self-protection logic).
-     * @param listener    The {@link OnUserActionListener} to handle administrative events.
+     * @param listener The {@link OnUserActionListener} to handle administrative events.
      */
     public void init(User currentUser, OnUserActionListener listener) {
         this.currentUser = currentUser;
@@ -61,7 +59,6 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
 
     /**
      * Updates the user list to be displayed in the table.
-     *
      * @param users The list of {@link User} objects.
      */
     public void setUserList(List<User> users) {
@@ -128,29 +125,25 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
     public interface OnUserActionListener {
         /**
          * Called when the administrative role toggle button is clicked.
-         *
          * @param user The {@link User} whose role is being modified.
          */
         void onToggleAdmin(User user);
 
         /**
          * Called when the user deletion button is clicked.
-         *
          * @param user The {@link User} account to be deleted.
          */
         void onDeleteUser(User user);
 
         /**
          * Called when a user row is long-clicked, typically for editing details.
-         *
          * @param user The {@link User} that was clicked.
          */
         void onUserClicked(User user);
 
         /**
          * Called when a user's profile image is clicked.
-         *
-         * @param user      The {@link User} whose image was clicked.
+         * @param user The {@link User} whose image was clicked.
          * @param imageView The {@link ImageView} containing the profile image.
          */
         void onUserImageClicked(User user, ImageView imageView);
@@ -177,7 +170,6 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
 
         /**
          * Constructs a new UserViewHolder.
-         *
          * @param itemView The view representing a single user row.
          */
         public UserViewHolder(@NonNull View itemView) {

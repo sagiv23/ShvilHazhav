@@ -42,7 +42,6 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
 
     /**
      * Updates the game room data list.
-     *
      * @param newRooms The new list of {@link GameRoom} objects.
      */
     public void setRooms(List<GameRoom> newRooms) {
@@ -51,9 +50,8 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
 
     /**
      * Updates both the data list and the name resolution map simultaneously.
-     *
      * @param newRooms The new list of {@link GameRoom} objects.
-     * @param newMap   The updated UID-to-Name resolution map.
+     * @param newMap The updated UID-to-Name resolution map.
      */
     public void submitData(List<GameRoom> newRooms, Map<String, String> newMap) {
         this.uidToNameMap = newMap;
@@ -90,7 +88,6 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
 
         /**
          * Constructs a new ViewHolder.
-         *
          * @param itemView The view representing a single game log row.
          */
         public ViewHolder(@NonNull View itemView) {

@@ -48,11 +48,10 @@ public class DailyCheckWorker extends Worker {
 
     /**
      * Constructs a new DailyCheckWorker.
-     *
-     * @param context               The application context.
-     * @param workerParams          Parameters for the worker.
-     * @param databaseService       The database service provider.
-     * @param notificationService   The notification manager.
+     * @param context The application context.
+     * @param workerParams Parameters for the worker.
+     * @param databaseService The database service provider.
+     * @param notificationService The notification manager.
      * @param sharedPreferencesUtil The preference utility.
      */
     @AssistedInject
@@ -75,7 +74,6 @@ public class DailyCheckWorker extends Worker {
      * Verifies user session, fetches the latest profile from Firebase, and triggers
      * specific daily logic like birthday notifications.
      * </p>
-     *
      * @return {@link androidx.work.ListenableWorker.Result#success()} if finished,
      * or {@link androidx.work.ListenableWorker.Result#retry()} on transient failures.
      */
@@ -119,7 +117,6 @@ public class DailyCheckWorker extends Worker {
     /**
      * Checks if today matches the user's birth month and day.
      * Triggers a celebratory notification if true.
-     *
      * @param user The {@link User} object to validate.
      */
     private void checkAndNotifyBirthday(User user) {

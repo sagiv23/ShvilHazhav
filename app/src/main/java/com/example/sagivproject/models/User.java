@@ -48,14 +48,13 @@ public class User implements Serializable, Idable {
 
     /**
      * Constructs a new User with full details.
-     *
-     * @param id              The unique identifier for the user.
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
+     * @param id The unique identifier for the user.
+     * @param firstName The user's first name.
+     * @param lastName The user's last name.
      * @param birthDateMillis The user's birthdate in milliseconds.
-     * @param email           The user's email address.
-     * @param password        The user's password.
-     * @param role            The user's role (ADMIN or REGULAR).
+     * @param email The user's email address.
+     * @param password The user's password.
+     * @param role The user's role (ADMIN or REGULAR).
      */
     public User(String id, String firstName, String lastName, long birthDateMillis, String email, String password, UserRole role) {
         this.id = id;
@@ -73,7 +72,6 @@ public class User implements Serializable, Idable {
 
     /**
      * Copy constructor.
-     *
      * @param other The user object to copy from.
      */
     public User(User other) {
@@ -147,7 +145,6 @@ public class User implements Serializable, Idable {
     /**
      * Calculates the user's age based on their birthdate.
      * Annotated with {@code @Exclude} to prevent storage in Firebase.
-     *
      * @return The user's current age in years.
      */
     @Exclude
@@ -198,7 +195,6 @@ public class User implements Serializable, Idable {
     /**
      * Checks if the user has an administrative role.
      * Annotated with {@code @Exclude} to prevent storage in Firebase.
-     *
      * @return true if the user is an admin.
      */
     @Exclude
@@ -243,7 +239,6 @@ public class User implements Serializable, Idable {
     /**
      * Helper to get today's {@link DailyStats}. If it doesn't exist, a new entry is created.
      * Annotated with {@code @Exclude} to prevent storage in Firebase.
-     *
      * @return The DailyStats for today.
      */
     @Exclude
@@ -272,7 +267,6 @@ public class User implements Serializable, Idable {
     /**
      * Gets the full name of the user.
      * Annotated with {@code @Exclude} to prevent redundant storage in Firebase.
-     *
      * @return A string combining first name and last name.
      */
     @Exclude

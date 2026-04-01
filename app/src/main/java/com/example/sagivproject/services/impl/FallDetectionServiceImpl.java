@@ -34,9 +34,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  * is in the background. It calculates total acceleration magnitude and compares it against
  * a pre-defined G-force threshold. When a potential fall is detected, it:
  * <ul>
- *     <li>Triggers a local notification.</li>
- *     <li>Attempts to fetch the user's high-accuracy location.</li>
- *     <li>Sends an automated SMS alert to all registered emergency contacts.</li>
+ * <li>Triggers a local notification.</li>
+ * <li>Attempts to fetch the user's high-accuracy location.</li>
+ * <li>Sends an automated SMS alert to all registered emergency contacts.</li>
  * </ul>
  * </p>
  */
@@ -124,7 +124,6 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
 
     /**
      * Processes raw sensor data to detect sudden impacts.
-     *
      * @param event The sensor event containing X, Y, Z acceleration values.
      */
     @Override
@@ -169,8 +168,7 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
 
     /**
      * Fetches user contacts from the database and triggers the SMS alerting mechanism.
-     *
-     * @param uid         The ID of the user who fell.
+     * @param uid The ID of the user who fell.
      * @param locationUrl The location URL to include in the message.
      */
     private void sendEmergencyAlert(String uid, String locationUrl) {

@@ -31,7 +31,6 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
 
     /**
      * Constructs a new MedicationUsageAdapter.
-     *
      * @param context The {@link ActivityContext} used for resource access.
      */
     @Inject
@@ -78,7 +77,6 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
 
         /**
          * Constructs a new UsageViewHolder.
-         *
          * @param itemView The view representing a single log entry.
          */
         public UsageViewHolder(@NonNull View itemView) {

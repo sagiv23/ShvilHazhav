@@ -44,10 +44,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * This activity allows users to ask health-related questions and receive responses generated
  * by Google's Gemini model via Firebase Vertex AI. Key features include:
  * <ul>
- *     <li>Real-time chat interaction with generative AI.</li>
- *     <li>Animated text display for AI responses (typewriter effect).</li>
- *     <li>Text-to-Speech (TTS) integration to read AI responses aloud for accessibility.</li>
- *     <li>Progress tracking during AI generation.</li>
+ * <li>Real-time chat interaction with generative AI.</li>
+ * <li>Animated text display for AI responses (typewriter effect).</li>
+ * <li>Text-to-Speech (TTS) integration to read AI responses aloud for accessibility.</li>
+ * <li>Progress tracking during AI generation.</li>
  * </ul>
  * </p>
  */
@@ -131,7 +131,6 @@ public class AiActivity extends BaseActivity {
 
     /**
      * Updates the playback button UI state.
-     *
      * @param speaking true if text is currently being read.
      */
     private void updateSpeakButton(boolean speaking) {
@@ -183,7 +182,6 @@ public class AiActivity extends BaseActivity {
 
     /**
      * Animates the display of AI response text character by character.
-     *
      * @param fullText The full response string to display.
      */
     private void displayTextWithAnimation(String fullText) {

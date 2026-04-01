@@ -23,8 +23,7 @@ public class ForumCategory implements Serializable, Idable {
 
     /**
      * Constructs a new ForumCategory.
-     *
-     * @param id   The unique ID of the category.
+     * @param id The unique ID of the category.
      * @param name The display name of the category.
      */
     public ForumCategory(String id, String name) {

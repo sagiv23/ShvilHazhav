@@ -66,10 +66,9 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
 
     /**
      * Updates an existing medication record using a database transaction.
-     *
-     * @param uid        User identifier.
+     * @param uid User identifier.
      * @param medication Updated medication object.
-     * @param callback   Result callback.
+     * @param callback Result callback.
      */
     @Override
     public void updateMedication(String uid, Medication medication, @Nullable DatabaseCallback<Void> callback) {
@@ -93,9 +92,8 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
      * Increments the appropriate counter in {@link DailyStats} (taken/missed) based on the
      * provided {@code usage} status.
      * </p>
-     *
-     * @param uid      User identifier.
-     * @param usage    Usage record details.
+     * @param uid User identifier.
+     * @param usage Usage record details.
      * @param callback Result callback.
      */
     @Override
@@ -130,8 +128,7 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
 
     /**
      * Fetches all usage logs across all dates for a specific user.
-     *
-     * @param uid      User identifier.
+     * @param uid User identifier.
      * @param callback Callback invoked with the full list of logs.
      */
     @Override
@@ -154,8 +151,7 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
 
     /**
      * Resets the usage logs and compliance counters for all dates in a user's history.
-     *
-     * @param uid      User identifier.
+     * @param uid User identifier.
      * @param callback Result callback.
      */
     @Override

@@ -31,13 +31,12 @@ public class Medication implements Serializable, Idable {
 
     /**
      * Constructs a new Medication object.
-     *
-     * @param id            The unique ID of the medication record.
-     * @param name          The user-friendly name of the medication.
-     * @param details       Additional details (e.g., dosage, instructions).
-     * @param type          The physical form of the medication (e.g., Pill, Syrup).
+     * @param id The unique ID of the medication record.
+     * @param name The user-friendly name of the medication.
+     * @param details Additional details (e.g., dosage, instructions).
+     * @param type The physical form of the medication (e.g., Pill, Syrup).
      * @param reminderHours A list of strings representing daily reminder times in "HH:mm".
-     * @param userId        The ID of the user who owns this medication record.
+     * @param userId The ID of the user who owns this medication record.
      */
     public Medication(String id, String name, String details, MedicationType type, List<String> reminderHours, String userId) {
         this.id = id;

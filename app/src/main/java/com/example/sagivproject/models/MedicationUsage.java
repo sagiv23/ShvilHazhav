@@ -40,12 +40,11 @@ public class MedicationUsage implements Serializable, Idable {
 
     /**
      * Constructs a new MedicationUsage without a specific scheduled time (legacy/manual log).
-     *
-     * @param medicationId   The unique ID of the medication.
+     * @param medicationId The unique ID of the medication.
      * @param medicationName The display name of the medication.
-     * @param time           The actual record time.
-     * @param date           The record date.
-     * @param status         The resulting status.
+     * @param time The actual record time.
+     * @param date The record date.
+     * @param status The resulting status.
      */
     public MedicationUsage(String medicationId, String medicationName, String time, String date, MedicationStatus status) {
         this(medicationId, medicationName, time, date, null, status);
@@ -53,13 +52,12 @@ public class MedicationUsage implements Serializable, Idable {
 
     /**
      * Constructs a full MedicationUsage record.
-     *
-     * @param medicationId   The unique ID of the medication.
+     * @param medicationId The unique ID of the medication.
      * @param medicationName The display name of the medication.
-     * @param time           The actual record time.
-     * @param date           The record date.
-     * @param scheduledTime  The time this dose was scheduled for.
-     * @param status         The resulting status.
+     * @param time The actual record time.
+     * @param date The record date.
+     * @param scheduledTime The time this dose was scheduled for.
+     * @param status The resulting status.
      */
     public MedicationUsage(String medicationId, String medicationName, String time, String date, String scheduledTime, MedicationStatus status) {
         this.medicationId = medicationId;

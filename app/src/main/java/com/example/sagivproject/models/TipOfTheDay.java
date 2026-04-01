@@ -22,8 +22,7 @@ public class TipOfTheDay implements Idable {
 
     /**
      * Constructs a new TipOfTheDay.
-     *
-     * @param tip  The content of the tip.
+     * @param tip The content of the tip.
      * @param date The date string (e.g., "yyyymmdd") for this tip.
      */
     public TipOfTheDay(String tip, String date) {

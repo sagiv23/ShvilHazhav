@@ -24,7 +24,6 @@ public class FallDetectionManager implements IFallDetectionService {
 
     /**
      * Constructs a new FallDetectionManager.
-     *
      * @param context The application context used to start/stop the background service.
      */
     @Inject

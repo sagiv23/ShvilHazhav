@@ -41,7 +41,6 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
 
     /**
      * Retrieves the tip assigned to the current calendar day.
-     *
      * @param callback The callback invoked with the found {@link TipOfTheDay} or null.
      */
     @Override
@@ -56,8 +55,7 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      * Uses a transaction to ensure that if multiple users generate a tip simultaneously,
      * only the first one is committed, and others receive the already-stored tip.
      * </p>
-     *
-     * @param tip      The {@link TipOfTheDay} object to potentially save.
+     * @param tip The {@link TipOfTheDay} object to potentially save.
      * @param callback The callback invoked with the final tip stored in the database.
      */
     @Override

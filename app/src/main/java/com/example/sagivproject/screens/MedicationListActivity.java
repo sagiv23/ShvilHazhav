@@ -62,11 +62,11 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This activity provides a unified interface for:
  * <ul>
- *     <li>Viewing current medications in a tabbed {@link ViewPager2} layout.</li>
- *     <li>Searching and filtering medications by name or type.</li>
- *     <li>Logging real-time intake status (Taken, Not Taken, Snoozed).</li>
- *     <li>Adding, editing, and deleting medication prescriptions.</li>
- *     <li>Scheduling and managing local notification reminders via {@link AlarmScheduler}.</li>
+ * <li>Viewing current medications in a tabbed {@link ViewPager2} layout.</li>
+ * <li>Searching and filtering medications by name or type.</li>
+ * <li>Logging real-time intake status (Taken, Not Taken, Snoozed).</li>
+ * <li>Adding, editing, and deleting medication prescriptions.</li>
+ * <li>Scheduling and managing local notification reminders via {@link AlarmScheduler}.</li>
  * </ul>
  * It ensures the local UI state is synchronized with both Firebase and the local device cache.
  * </p>
@@ -221,10 +221,9 @@ public class MedicationListActivity extends BaseActivity {
 
     /**
      * Commits a medication status change to the database and updates daily stats.
-     *
-     * @param medication    Target medication.
+     * @param medication Target medication.
      * @param scheduledTime The time of the dose (HH:mm).
-     * @param status        The result (TAKEN, etc.).
+     * @param status The result (TAKEN, etc.).
      */
     private void logMedicationStatus(Medication medication, String scheduledTime, MedicationStatus status) {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -443,7 +442,6 @@ public class MedicationListActivity extends BaseActivity {
 
     /**
      * Filters the medication list based on name or type criteria.
-     *
      * @param query The search query string.
      */
     private void filterMedications(String query) {

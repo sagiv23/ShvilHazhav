@@ -62,7 +62,6 @@ public class AddUserDialog extends DialogFragment {
 
     /**
      * Sets the submission listener.
-     *
      * @param listener The {@link AddUserDialogListener} implementation.
      */
     public void setListener(AddUserDialogListener listener) {
@@ -111,7 +110,6 @@ public class AddUserDialog extends DialogFragment {
 
     /**
      * Validates all required fields in the addition form.
-     *
      * @return true if all data is formally valid.
      */
     private boolean areAllFieldsValid(String fName, String lName, String email, String password, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passwordEdt, EditText birthDateEdt) {
@@ -145,12 +143,11 @@ public class AddUserDialog extends DialogFragment {
     public interface AddUserDialogListener {
         /**
          * Called when the administrator submits a valid user profile.
-         *
-         * @param fName           First name.
-         * @param lName           Last name.
+         * @param fName First name.
+         * @param lName Last name.
          * @param birthDateMillis Birthdate in ms.
-         * @param email           Email address.
-         * @param password        Account password.
+         * @param email Email address.
+         * @param password Account password.
          */
         void onAddUser(String fName, String lName, long birthDateMillis, String email, String password);
     }

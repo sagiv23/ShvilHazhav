@@ -42,10 +42,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This screen performs a daily content check:
  * <ul>
- *     <li>It attempts to fetch today's tip from the shared database.</li>
- *     <li>If no tip exists for today, it uses the Google Gemini AI model to generate a unique, relevant tip.</li>
- *     <li>Generated tips are saved back to the database for all other users to see.</li>
- *     <li>It provides Text-to-Speech (TTS) support for both the daily tip and the quote.</li>
+ * <li>It attempts to fetch today's tip from the shared database.</li>
+ * <li>If no tip exists for today, it uses the Google Gemini AI model to generate a unique, relevant tip.</li>
+ * <li>Generated tips are saved back to the database for all other users to see.</li>
+ * <li>It provides Text-to-Speech (TTS) support for both the daily tip and the quote.</li>
  * </ul>
  * </p>
  */
@@ -127,8 +127,7 @@ public class TipOfTheDayActivity extends BaseActivity {
 
     /**
      * Toggles the audio playback for a specific text block.
-     *
-     * @param id   Unique ID for the content piece.
+     * @param id Unique ID for the content piece.
      * @param text The actual text to speak.
      */
     private void toggleSpeech(String id, String text) {
@@ -144,8 +143,7 @@ public class TipOfTheDayActivity extends BaseActivity {
 
     /**
      * Updates the UI state of the relevant playback button.
-     *
-     * @param id       The content ID.
+     * @param id The content ID.
      * @param speaking true if currently playing.
      */
     private void updateSpeakButton(String id, boolean speaking) {

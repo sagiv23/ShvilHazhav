@@ -40,7 +40,6 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
     /**
      * Retrieves all forum categories from the database, ordered by an internal timestamp.
      * Uses a {@link ValueEventListener} to provide real-time updates to the caller.
-     *
      * @param callback A callback invoked with the full list of {@link ForumCategory} objects.
      */
     @Override
@@ -67,8 +66,7 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
 
     /**
      * Creates a new forum category with a unique generated ID.
-     *
-     * @param name     The name for the new category.
+     * @param name The name for the new category.
      * @param callback A callback to be invoked upon completion.
      */
     @Override
@@ -84,9 +82,8 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
      * This operation first cleans up the message node for the category to ensure
      * no orphaned messages remain in the database before removing the category definition itself.
      * </p>
-     *
      * @param categoryId The ID of the category to delete.
-     * @param callback   A callback to be invoked when the entire operation is complete.
+     * @param callback A callback to be invoked when the entire operation is complete.
      */
     @Override
     public void deleteCategory(String categoryId, IDatabaseService.DatabaseCallback<Void> callback) {
@@ -109,10 +106,9 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
 
     /**
      * Updates the name of an existing forum category using an atomic transaction.
-     *
      * @param categoryId The ID of the category to update.
-     * @param newName    The new display name for the category.
-     * @param callback   A callback to be invoked upon completion.
+     * @param newName The new display name for the category.
+     * @param callback A callback to be invoked upon completion.
      */
     @Override
     public void updateCategoryName(String categoryId, String newName, IDatabaseService.DatabaseCallback<Void> callback) {

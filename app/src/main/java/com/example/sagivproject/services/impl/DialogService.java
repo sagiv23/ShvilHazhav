@@ -68,10 +68,9 @@ public class DialogService implements IDialogService {
 
     /**
      * Displays a dialog to add a new medication or edit an existing one.
-     *
-     * @param fm        The {@link FragmentManager} used to show the dialog.
+     * @param fm The {@link FragmentManager} used to show the dialog.
      * @param medToEdit The {@link Medication} object to edit, or null to add a new one.
-     * @param listener  The listener to handle submission events.
+     * @param listener The listener to handle submission events.
      */
     @Override
     public void showMedicationDialog(FragmentManager fm, Medication medToEdit, MedicationDialog.OnMedicationSubmitListener listener) {
@@ -82,8 +81,7 @@ public class DialogService implements IDialogService {
 
     /**
      * Displays a dialog for administrators to create a new user profile.
-     *
-     * @param fm       The {@link FragmentManager}.
+     * @param fm The {@link FragmentManager}.
      * @param listener The listener to handle the user creation logic.
      */
     @Override
@@ -95,9 +93,8 @@ public class DialogService implements IDialogService {
 
     /**
      * Displays a dialog to edit an existing user's personal details.
-     *
-     * @param fm       The {@link FragmentManager}.
-     * @param user     The {@link User} object containing current data.
+     * @param fm The {@link FragmentManager}.
+     * @param user The {@link User} object containing current data.
      * @param listener The listener to handle the update results.
      */
     @Override
@@ -109,8 +106,7 @@ public class DialogService implements IDialogService {
 
     /**
      * Displays a dialog to rename an existing forum category.
-     *
-     * @param fm       The {@link FragmentManager}.
+     * @param fm The {@link FragmentManager}.
      * @param category The {@link ForumCategory} to rename.
      * @param listener The listener to handle the name update.
      */
@@ -123,8 +119,7 @@ public class DialogService implements IDialogService {
 
     /**
      * Displays a full-screen image viewer.
-     *
-     * @param fm            The {@link FragmentManager}.
+     * @param fm The {@link FragmentManager}.
      * @param imageDrawable The {@link Drawable} to display in full screen.
      */
     @Override
@@ -136,8 +131,7 @@ public class DialogService implements IDialogService {
 
     /**
      * Displays a dialog to choose a profile image source (Camera/Gallery) or delete it.
-     *
-     * @param fm       The {@link FragmentManager}.
+     * @param fm The {@link FragmentManager}.
      * @param hasImage Whether the user currently has an active profile image.
      * @param listener The listener to handle selection actions.
      */
@@ -150,9 +144,8 @@ public class DialogService implements IDialogService {
 
     /**
      * Displays a dialog to add or edit an emergency contact.
-     *
-     * @param fm       The {@link FragmentManager}.
-     * @param contact  The {@link EmergencyContact} to edit, or null for a new one.
+     * @param fm The {@link FragmentManager}.
+     * @param contact The {@link EmergencyContact} to edit, or null for a new one.
      * @param listener The listener to handle the contact submission.
      */
     @Override
@@ -164,13 +157,12 @@ public class DialogService implements IDialogService {
 
     /**
      * Displays a standardized confirmation dialog with "Confirm" and optional "Cancel" buttons.
-     *
-     * @param fm          The {@link FragmentManager}.
-     * @param title       The dialog title string.
-     * @param message     The descriptive message body.
+     * @param fm The {@link FragmentManager}.
+     * @param title The dialog title string.
+     * @param message The descriptive message body.
      * @param confirmText Text for the positive action button.
-     * @param cancelText  Optional text for the negative button (if null, the button is hidden).
-     * @param onConfirm   The Runnable to execute upon user confirmation.
+     * @param cancelText Optional text for the negative button (if null, the button is hidden).
+     * @param onConfirm The Runnable to execute upon user confirmation.
      */
     @Override
     public void showConfirmDialog(FragmentManager fm, String title, String message, String confirmText, String cancelText, Runnable onConfirm) {

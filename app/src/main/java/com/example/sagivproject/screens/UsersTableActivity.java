@@ -45,11 +45,11 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This screen displays a comprehensive table of registered users and provides tools for:
  * <ul>
- *     <li>Filtering users by name, email, or role (Admin/Regular).</li>
- *     <li>Adding new user accounts manually.</li>
- *     <li>Updating existing user profile information.</li>
- *     <li>Toggling administrative privileges for accounts.</li>
- *     <li>Deleting user accounts (including automatic logout if self-deleting).</li>
+ * <li>Filtering users by name, email, or role (Admin/Regular).</li>
+ * <li>Adding new user accounts manually.</li>
+ * <li>Updating existing user profile information.</li>
+ * <li>Toggling administrative privileges for accounts.</li>
+ * <li>Deleting user accounts (including automatic logout if self-deleting).</li>
  * </ul>
  * It uses {@link UsersTableAdapter} to render user rows and manages data sorting and filtering.
  * </p>
@@ -235,7 +235,6 @@ public class UsersTableActivity extends BaseActivity {
 
     /**
      * Toggles the user role between ADMIN and REGULAR and commits the change to the database.
-     *
      * @param user The user whose role is being modified.
      */
     private void handleToggleAdmin(User user) {
@@ -274,7 +273,6 @@ public class UsersTableActivity extends BaseActivity {
      * If the target user is the currently logged-in account, it triggers a full logout
      * and redirects to the landing screen.
      * </p>
-     *
      * @param user The user account to remove.
      */
     private void handleDeleteUser(User user) {
@@ -302,7 +300,6 @@ public class UsersTableActivity extends BaseActivity {
 
     /**
      * Filters the user list based on the search query and selected attribute.
-     *
      * @param query The search string.
      */
     private void filterUsers(String query) {

@@ -30,7 +30,6 @@ public class GraphAdapter extends BaseAdapter<GraphData, GraphAdapter.GraphViewH
 
     /**
      * Constructs a new GraphAdapter.
-     *
      * @param context The {@link ActivityContext} used for layout inflation and resources.
      */
     @Inject
@@ -62,7 +61,6 @@ public class GraphAdapter extends BaseAdapter<GraphData, GraphAdapter.GraphViewH
 
         /**
          * Constructs a new GraphViewHolder.
-         *
          * @param itemView The view representing a single graph container.
          */
         public GraphViewHolder(@NonNull View itemView) {

@@ -34,7 +34,6 @@ public class StatsServiceImpl implements IStatsService {
 
     /**
      * Constructs a new StatsServiceImpl.
-     *
      * @param databaseReference The root DatabaseReference injected by Hilt.
      */
     @Inject
@@ -49,8 +48,7 @@ public class StatsServiceImpl implements IStatsService {
      * if false. The transaction handles the case where the {@link DailyStats} object
      * for the current date doesn't exist yet by creating a new instance.
      * </p>
-     *
-     * @param uid     The unique identifier of the user.
+     * @param uid The unique identifier of the user.
      * @param correct true if the answer was correct, false if it was wrong.
      */
     @Override

@@ -14,8 +14,7 @@ import java.util.List;
  * This class uses {@link DiffUtil} to calculate the minimum number of changes needed to update
  * the list, providing smooth animations and better performance compared to {@code notifyDataSetChanged()}.
  * </p>
- *
- * @param <T>  The type of the data items, which must implement the {@link Idable} interface.
+ * @param <T> The type of the data items, which must implement the {@link Idable} interface.
  * @param <VH> The type of the {@link RecyclerView.ViewHolder} used by the adapter.
  */
 public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
@@ -31,7 +30,6 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
      * This method triggers a {@link DiffUtil} calculation to determine the differences between
      * the old and new lists and automatically dispatches the necessary update events to the adapter.
      * </p>
-     *
      * @param newData The new list of data items to display.
      */
     public void setData(List<T> newData) {
@@ -43,7 +41,6 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
 
     /**
      * Returns the total number of items in the data set held by the adapter.
-     *
      * @return The size of the internal data list.
      */
     @Override
@@ -53,7 +50,6 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
 
     /**
      * Retrieves the data item at the specified position in the list.
-     *
      * @param position The index of the item to retrieve.
      * @return The data item at the given position.
      * @throws IndexOutOfBoundsException If the position is out of range.
@@ -64,7 +60,6 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
 
     /**
      * Returns the internal data list.
-     *
      * @return The list of items.
      */
     public List<T> getItemList() {
@@ -80,7 +75,6 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
 
         /**
          * Constructs a new DiffCallback.
-         *
          * @param oldList The current list of items.
          * @param newList The new list of items.
          */
@@ -101,7 +95,6 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
 
         /**
          * Checks if two items represent the same entity (usually by comparing IDs).
-         *
          * @param oldItemPosition Position in the old list.
          * @param newItemPosition Position in the new list.
          * @return true if items represent the same entity.
@@ -116,7 +109,6 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
 
         /**
          * Checks if the contents of two items are the same.
-         *
          * @param oldItemPosition Position in the old list.
          * @param newItemPosition Position in the new list.
          * @return true if contents are identical.

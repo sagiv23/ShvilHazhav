@@ -34,7 +34,6 @@ public class AdminMenuFragment extends Fragment {
      * Verifies that the host context (Activity) implements {@link MenuNavigationListener}
      * to facilitate decoupled navigation.
      * </p>
-     *
      * @param context The host context.
      * @throws RuntimeException If the context does not implement {@link MenuNavigationListener}.
      */
@@ -50,9 +49,8 @@ public class AdminMenuFragment extends Fragment {
 
     /**
      * Initializes the fragment's UI view.
-     *
-     * @param inflater           The LayoutInflater object to inflate views.
-     * @param container          The parent view that the fragment's UI should be attached to.
+     * @param inflater The LayoutInflater object to inflate views.
+     * @param container The parent view that the fragment's UI should be attached to.
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous state.
      * @return The View for the fragment's UI.
      */

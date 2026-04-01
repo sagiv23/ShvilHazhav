@@ -33,9 +33,8 @@ public class SharedPreferencesUtil {
 
     /**
      * Constructs a new SharedPreferencesUtil.
-     *
      * @param context The application context used to access shared preferences.
-     * @param gson    The Gson instance used for object serialization.
+     * @param gson The Gson instance used for object serialization.
      */
     @Inject
     public SharedPreferencesUtil(@ApplicationContext Context context, Gson gson) {
@@ -45,8 +44,7 @@ public class SharedPreferencesUtil {
 
     /**
      * Saves a string value to preferences.
-     *
-     * @param key   The unique key for the preference.
+     * @param key The unique key for the preference.
      * @param value The string value to store.
      */
     public void saveString(String key, String value) {
@@ -55,8 +53,7 @@ public class SharedPreferencesUtil {
 
     /**
      * Retrieves a string value from preferences.
-     *
-     * @param key          The unique key for the preference.
+     * @param key The unique key for the preference.
      * @param defaultValue The value to return if the key does not exist.
      * @return The stored string or the default value.
      */
@@ -66,8 +63,7 @@ public class SharedPreferencesUtil {
 
     /**
      * Saves an integer value to preferences.
-     *
-     * @param key   The unique key for the preference.
+     * @param key The unique key for the preference.
      * @param value The integer value to store.
      */
     public void saveInt(String key, int value) {
@@ -76,8 +72,7 @@ public class SharedPreferencesUtil {
 
     /**
      * Retrieves an integer value from preferences.
-     *
-     * @param key          The unique key for the preference.
+     * @param key The unique key for the preference.
      * @param defaultValue The value to return if the key does not exist.
      * @return The stored integer or the default value.
      */
@@ -87,8 +82,7 @@ public class SharedPreferencesUtil {
 
     /**
      * Saves a boolean value to preferences.
-     *
-     * @param key   The unique key for the preference.
+     * @param key The unique key for the preference.
      * @param value The boolean value to store.
      */
     public void saveBoolean(String key, boolean value) {
@@ -97,8 +91,7 @@ public class SharedPreferencesUtil {
 
     /**
      * Retrieves a boolean value from preferences.
-     *
-     * @param key          The unique key for the preference.
+     * @param key The unique key for the preference.
      * @param defaultValue The value to return if the key does not exist.
      * @return The stored boolean or the default value.
      */
@@ -115,7 +108,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Removes a specific preference entry.
-     *
      * @param key The key of the entry to remove.
      */
     public void remove(String key) {
@@ -124,7 +116,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Checks if a specific key exists in the preferences.
-     *
      * @param key The key to check.
      * @return true if the key is present.
      */
@@ -134,10 +125,9 @@ public class SharedPreferencesUtil {
 
     /**
      * Serializes an object to JSON and saves it to preferences.
-     *
-     * @param key    The unique key for the preference.
+     * @param key The unique key for the preference.
      * @param object The object instance to store.
-     * @param <T>    The type of the object.
+     * @param <T> The type of the object.
      */
     public <T> void saveObject(String key, T object) {
         String json = gson.toJson(object);
@@ -146,10 +136,9 @@ public class SharedPreferencesUtil {
 
     /**
      * Retrieves a JSON string from preferences and deserializes it into an object.
-     *
-     * @param key  The unique key for the preference.
+     * @param key The unique key for the preference.
      * @param type The class type of the object to return.
-     * @param <T>  The type of the object.
+     * @param <T> The type of the object.
      * @return The deserialized object, or null if the key is missing.
      */
     public <T> T getObject(String key, Class<T> type) {
@@ -162,7 +151,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Saves the current {@link User} object to persistent storage.
-     *
      * @param user The user profile to save.
      */
     public void saveUser(User user) {
@@ -171,7 +159,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Retrieves the stored {@link User} profile.
-     *
      * @return The User object, or null if no user is authenticated.
      */
     public User getUser() {
@@ -187,7 +174,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Checks if there is no authenticated user session.
-     *
      * @return true if no user data is stored.
      */
     public boolean isUserNotLoggedIn() {
@@ -196,7 +182,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Checks the user's preferred theme setting.
-     *
      * @return true if Dark Mode is enabled.
      */
     public boolean isDarkMode() {
@@ -205,7 +190,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Sets the user's preferred theme setting.
-     *
      * @param isDarkMode true to enable Dark Mode.
      */
     public void setDarkMode(boolean isDarkMode) {
@@ -214,7 +198,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Safely retrieves the unique identifier of the logged-in user.
-     *
      * @return The user ID string, or null if not logged in.
      */
     @Nullable
@@ -228,7 +211,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Checks if the fall detection background service is enabled.
-     *
      * @return true if fall detection is active.
      */
     public boolean isFallDetectionEnabled() {
@@ -237,7 +219,6 @@ public class SharedPreferencesUtil {
 
     /**
      * Updates the fall detection service state in preferences.
-     *
      * @param isEnabled true to enable monitoring.
      */
     public void setFallDetectionEnabled(boolean isEnabled) {

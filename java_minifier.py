@@ -1,7 +1,8 @@
 """
 This module provides utility functions to clean up Java source code by removing
 non-Javadoc comments and excessive empty lines, while preserving Javadoc comments
-and the general formatting. It also minifies Javadoc comments by removing extra spaces.
+and the general formatting. It also minifies Javadoc comments by removing extra spaces
+and empty Javadoc lines.
 """
 
 import os
@@ -9,43 +10,54 @@ import re
 
 def minify_javadoc_block(text):
     """
-    Collapses multiple spaces within a Javadoc block, while preserving
-    leading indentation and the '*' character.
+    Collapses multiple spaces within a Javadoc block and removes lines
+    that only contain the '*' character (empty Javadoc lines).
     """
     lines = text.splitlines()
     processed_lines = []
     for line in lines:
-        # Match: (indent)(optional *)(optional spaces)(rest)
-        match = re.match(r'^(\s*)(\*?)(\s*)(.*)', line)
-        if match:
-            indent, asterisk, spaces, rest = match.groups()
-            # Collapse multiple spaces in 'rest' to one
-            collapsed_rest = re.sub(r' +', ' ', rest).strip()
+        stripped = line.strip()
 
-            # Reconstruct the line
-            new_line = indent + asterisk
-            if asterisk and spaces:
-                new_line += ' '
-            if collapsed_rest:
-                new_line += collapsed_rest
-            else:
-                new_line = new_line.rstrip()
-            processed_lines.append(new_line)
+        # Keep the opening and closing markers as is
+        if stripped == "/**" or stripped == "*/" or stripped == "**/":
+            processed_lines.append(line.rstrip())
+            continue
+
+        # Match standard Javadoc line: (indent) * (content)
+        match = re.match(r'^(\s*)\*(\s*)(.*)', line)
+        if match:
+            indent, spaces, content = match.groups()
+            # Collapse multiple spaces in content
+            content = re.sub(r' +', ' ', content).strip()
+
+            if not content:
+                # This is an "empty" Javadoc line like " * ", skip it
+                continue
+
+            # Reconstruct the line with a single space after the asterisk
+            processed_lines.append(f"{indent}* {content}")
         else:
-            processed_lines.append(line)
+            # Handle lines like the start line if it has content: /** Content
+            if stripped.startswith("/**"):
+                content = stripped[3:].strip()
+                if content:
+                    content = re.sub(r' +', ' ', content)
+                    # Find indent of /**
+                    match_indent = re.match(r'^(\s*)', line)
+                    indent = match_indent.group(1) if match_indent else ""
+                    processed_lines.append(f"{indent}/** {content}")
+                else:
+                    processed_lines.append(line.rstrip())
+            else:
+                processed_lines.append(line.rstrip())
+
     return "\n".join(processed_lines)
 
 def remove_comments_keep_javadoc(code):
     """
     Removes single-line (//) and multi-line (/* */) comments from Java code,
     but preserves Javadoc (/** */) comments and string/character literals.
-    Also minifies Javadoc comments by removing extra spaces.
-
-    Args:
-        code (str): The Java source code to process.
-
-    Returns:
-        str: The processed Java source code with only Javadoc comments remaining.
+    Also minifies Javadoc comments by removing extra spaces and empty Javadoc lines.
     """
     result = []
     i = 0
@@ -153,12 +165,6 @@ def remove_comments_keep_javadoc(code):
 def remove_extra_empty_lines(code):
     """
     Reduces multiple consecutive empty lines in the code to a single empty line.
-
-    Args:
-        code (str): The code to process.
-
-    Returns:
-        str: The code with excessive empty lines removed.
     """
     lines = code.splitlines()
     new_lines = []
@@ -178,11 +184,7 @@ def remove_extra_empty_lines(code):
 
 def clean_java_keep_format(project_path):
     """
-    Recursively scans the project path for .java files and applies cleaning:
-    removes non-Javadoc comments and extra empty lines.
-
-    Args:
-        project_path (str): The root directory of the project to clean.
+    Recursively scans the project path for .java files and applies cleaning.
     """
     for root, dirs, files in os.walk(project_path):
         # Skip common non-source directories
@@ -194,7 +196,7 @@ def clean_java_keep_format(project_path):
                 path = os.path.join(root, file)
                 rel = os.path.relpath(path, project_path)
 
-                print(f"Cleaning (keep format): {rel}")
+                print(f"Cleaning: {rel}")
 
                 try:
                     with open(path, 'r', encoding='utf-8') as f:
@@ -209,10 +211,9 @@ def clean_java_keep_format(project_path):
                 except Exception as e:
                     print(f"Error: {rel} -> {e}")
 
-    print("\nDone! Clean + readable + Javadoc kept.")
+    print("\nDone! Minified Javadocs and cleaned code.")
 
 
 if __name__ == "__main__":
-    # Get the directory where the script is located and start cleaning from there.
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
     clean_java_keep_format(PROJECT_ROOT)

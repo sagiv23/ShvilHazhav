@@ -38,11 +38,11 @@ import javax.inject.Inject;
  * This class manages the complex real-time state synchronization for the 1-on-1 online memory game.
  * It handles:
  * <ul>
- *     <li>Atomic matchmaking (finding or creating rooms).</li>
- *     <li>Board initialization and card shuffling synchronization.</li>
- *     <li>Turn-based logic and score tracking.</li>
- *     <li>Automatic forfeit handling using Firebase's {@code onDisconnect}.</li>
- *     <li>Daily cognitive performance statistics updates.</li>
+ * <li>Atomic matchmaking (finding or creating rooms).</li>
+ * <li>Board initialization and card shuffling synchronization.</li>
+ * <li>Turn-based logic and score tracking.</li>
+ * <li>Automatic forfeit handling using Firebase's {@code onDisconnect}.</li>
+ * <li>Daily cognitive performance statistics updates.</li>
  * </ul>
  * </p>
  */
@@ -72,7 +72,6 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Constructs a new MemoryGameServiceImpl.
-     *
      * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      */
     @Inject
@@ -84,8 +83,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Uses a Firebase transaction to atomically find a waiting room or create a new one.
-     *
-     * @param user     The user seeking a match.
+     * @param user The user seeking a match.
      * @param callback Result callback.
      */
     @Override
@@ -159,8 +157,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Attaches a listener to track room status transitions (e.g. from waiting to playing).
-     *
-     * @param roomId   Room ID.
+     * @param roomId Room ID.
      * @param callback Status events handler.
      */
     @Override
@@ -235,8 +232,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Sets up a real-time listener for the active game room state.
-     *
-     * @param roomId   Room ID.
+     * @param roomId Room ID.
      * @param callback Handler for state updates.
      */
     @Override
@@ -280,10 +276,9 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Atomic transaction to increment a player's score.
-     *
-     * @param roomId    Room identifier.
+     * @param roomId Room identifier.
      * @param playerUid Player to reward.
-     * @param callback  Optional result callback.
+     * @param callback Optional result callback.
      */
     @Override
     public void incrementScore(String roomId, String playerUid, @Nullable DatabaseCallback<Void> callback) {
@@ -326,8 +321,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Updates daily memory game stats for a user using an atomic transaction.
-     *
-     * @param uid   User ID.
+     * @param uid User ID.
      * @param isWin true if session was won.
      */
     @Override

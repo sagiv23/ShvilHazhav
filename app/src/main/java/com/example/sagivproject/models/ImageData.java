@@ -23,8 +23,7 @@ public class ImageData implements Serializable, Idable {
 
     /**
      * Constructs a new ImageData object with specific ID and content.
-     *
-     * @param id     The unique identifier for the image (e.g., "card1").
+     * @param id The unique identifier for the image (e.g., "card1").
      * @param base64 The Base64 encoded string representing the image bitmap.
      */
     public ImageData(String id, String base64) {

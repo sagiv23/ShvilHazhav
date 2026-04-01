@@ -43,10 +43,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * This screen provides a read-only view of primary user data (name, email, age, birthdate)
  * and features for:
  * <ul>
- *     <li>Editing personal details via a centralized dialog.</li>
- *     <li>Updating the profile image using the camera or device gallery.</li>
- *     <li>Viewing the profile image in full screen.</li>
- *     <li>Deleting the current profile image.</li>
+ * <li>Editing personal details via a centralized dialog.</li>
+ * <li>Updating the profile image using the camera or device gallery.</li>
+ * <li>Viewing the profile image in full screen.</li>
+ * <li>Deleting the current profile image.</li>
  * </ul>
  * It ensures that any changes are synchronized with both the Firebase database and the local cache.
  * </p>
@@ -142,7 +142,6 @@ public class DetailsAboutUserActivity extends BaseActivity {
 
     /**
      * Handles the results of permission requests, specifically for the camera.
-     *
      * @param isGranted Map of requested permissions and their granted status.
      */
     @Override
@@ -292,7 +291,6 @@ public class DetailsAboutUserActivity extends BaseActivity {
 
     /**
      * Processes a new image bitmap, converts it to Base64, and updates the profile.
-     *
      * @param bitmap The new image bitmap.
      */
     private void handleImageBitmap(Bitmap bitmap) {

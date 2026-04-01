@@ -9,9 +9,9 @@ import java.io.Serializable;
  * <p>
  * This model follows a "Thin Database" strategy:
  * <ul>
- *     <li><b>Persistent fields:</b> Only the message ID, content, timestamp, and sender's user ID are stored in the forum node.</li>
- *     <li><b>Transient fields:</b> Sender details (name, email, admin status) are populated dynamically by the service layer
- *         from the user database during retrieval.</li>
+ * <li><b>Persistent fields:</b> Only the message ID, content, timestamp, and sender's user ID are stored in the forum node.</li>
+ * <li><b>Transient fields:</b> Sender details (name, email, admin status) are populated dynamically by the service layer
+ * from the user database during retrieval.</li>
  * </ul>
  * This ensures that if a user changes their name or role, all their past messages reflect the update automatically.
  * </p>
@@ -45,11 +45,10 @@ public class ForumMessage implements Serializable, Idable {
 
     /**
      * Constructs a new ForumMessage with persistent data.
-     *
-     * @param id        The unique ID of the message.
-     * @param message   The content of the message.
+     * @param id The unique ID of the message.
+     * @param message The content of the message.
      * @param timestamp The time the message was sent, in milliseconds.
-     * @param userId    The unique ID of the sender.
+     * @param userId The unique ID of the sender.
      */
     public ForumMessage(String id, String message, long timestamp, String userId) {
         this.id = id;

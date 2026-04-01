@@ -45,10 +45,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This class provides common infrastructure for activities, including:
  * <ul>
- *     <li>Hilt dependency injection for common services (Database, Dialogs, Adapters).</li>
- *     <li>Standardized navigation drawer and top bar management.</li>
- *     <li>A unified transition animation system between activities.</li>
- *     <li>Centralized handling of runtime permissions.</li>
+ * <li>Hilt dependency injection for common services (Database, Dialogs, Adapters).</li>
+ * <li>Standardized navigation drawer and top bar management.</li>
+ * <li>A unified transition animation system between activities.</li>
+ * <li>Centralized handling of runtime permissions.</li>
  * </ul>
  * </p>
  */
@@ -178,7 +178,6 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
 
     /**
      * Navigates to a destination identified by a resource ID.
-     *
      * @param resId The resource ID of the target destination (e.g., {@code R.id.mainActivity}).
      */
     @Override
@@ -188,9 +187,8 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
 
     /**
      * Navigates to a destination with optional arguments and a standard slide animation.
-     *
      * @param resId The resource ID of the target destination.
-     * @param args  Optional Bundle of arguments to pass to the target activity.
+     * @param args Optional Bundle of arguments to pass to the target activity.
      */
     @Override
     public void onNavigate(int resId, Bundle args) {
@@ -234,7 +232,6 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
 
     /**
      * Requests a set of runtime permissions from the user.
-     *
      * @param permissions A variable list of permission strings (e.g., {@code Manifest.permission.CAMERA}).
      */
     protected void requestPermissions(String... permissions) {
@@ -244,7 +241,6 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     /**
      * Callback method invoked when the results of a permission request are available.
      * Subclasses should override this to handle specific permission outcomes.
-     *
      * @param isGranted A map where the keys are permissions and values are their granted status.
      */
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {

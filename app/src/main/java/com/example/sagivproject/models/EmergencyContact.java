@@ -27,10 +27,9 @@ public class EmergencyContact implements Serializable, Idable {
 
     /**
      * Constructs a new EmergencyContact with the specified details.
-     *
-     * @param id          The unique identifier for this contact record.
-     * @param firstName   The contact's first name.
-     * @param lastName    The contact's last name.
+     * @param id The unique identifier for this contact record.
+     * @param firstName The contact's first name.
+     * @param lastName The contact's last name.
      * @param phoneNumber The contact's primary phone number.
      */
     public EmergencyContact(String id, String firstName, String lastName, String phoneNumber) {
@@ -86,7 +85,6 @@ public class EmergencyContact implements Serializable, Idable {
     /**
      * Gets the full name of the contact.
      * Annotated with {@code @Exclude} to prevent redundant storage in Firebase.
-     *
      * @return A string combining first name and last name.
      */
     @Exclude

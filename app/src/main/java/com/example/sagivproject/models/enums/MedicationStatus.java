@@ -25,7 +25,6 @@ public enum MedicationStatus {
 
     /**
      * Constructs a new MedicationStatus.
-     *
      * @param displayName The Hebrew display name for the status.
      */
     MedicationStatus(String displayName) {
@@ -34,7 +33,6 @@ public enum MedicationStatus {
 
     /**
      * Gets the user-friendly display name of the status.
-     *
      * @return The Hebrew display name.
      */
     public String getDisplayName() {

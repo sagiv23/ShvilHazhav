@@ -32,8 +32,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  * This activity handles the retrieval and display of {@link ForumCategory} items.
  * It provides different functionality based on the user's role:
  * <ul>
- *     <li>Standard users can browse and select categories to view messages.</li>
- *     <li>Administrators can additionally add, rename, and delete categories.</li>
+ * <li>Standard users can browse and select categories to view messages.</li>
+ * <li>Administrators can additionally add, rename, and delete categories.</li>
  * </ul>
  * It uses {@link ForumCategoryAdapter} to manage the list display.
  * </p>
@@ -137,8 +137,7 @@ public class ForumCategoriesActivity extends BaseActivity {
 
     /**
      * Adds a new category to the database and refreshes the list.
-     *
-     * @param name     Name of the new category.
+     * @param name Name of the new category.
      * @param editText Reference to the input field to clear on success.
      */
     private void addCategory(String name, EditText editText) {
@@ -159,7 +158,6 @@ public class ForumCategoriesActivity extends BaseActivity {
 
     /**
      * Displays a dialog to rename an existing category.
-     *
      * @param category The category to edit.
      */
     private void showEditDialog(ForumCategory category) {
@@ -180,7 +178,6 @@ public class ForumCategoriesActivity extends BaseActivity {
 
     /**
      * Deletes a category and all its messages from the database.
-     *
      * @param category The category to remove.
      */
     private void deleteCategory(ForumCategory category) {

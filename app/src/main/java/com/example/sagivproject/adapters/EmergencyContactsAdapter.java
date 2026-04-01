@@ -35,7 +35,6 @@ public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, Emer
 
     /**
      * Sets the listener for contact-specific actions (edit and delete).
-     *
      * @param listener The {@link OnContactActionListener} to handle user interactions.
      */
     public void setListener(OnContactActionListener listener) {
@@ -70,14 +69,12 @@ public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, Emer
     public interface OnContactActionListener {
         /**
          * Called when the edit button is clicked for a specific contact.
-         *
          * @param contact The {@link EmergencyContact} to edit.
          */
         void onEdit(EmergencyContact contact);
 
         /**
          * Called when the delete button is clicked for a specific contact.
-         *
          * @param contact The {@link EmergencyContact} to delete.
          */
         void onDelete(EmergencyContact contact);
@@ -109,7 +106,6 @@ public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, Emer
 
         /**
          * Constructs a new EmergencyContactViewHolder.
-         *
          * @param itemView The view representing a single contact row.
          */
         public EmergencyContactViewHolder(@NonNull View itemView) {

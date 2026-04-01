@@ -48,12 +48,11 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
     /**
      * Adds a new emergency contact to the database.
      * First validates that the phone number is not already present in the user's list.
-     *
-     * @param uid         User ID.
-     * @param firstName   Contact's first name.
-     * @param lastName    Contact's last name.
+     * @param uid User ID.
+     * @param firstName Contact's first name.
+     * @param lastName Contact's last name.
      * @param phoneNumber Contact's phone number.
-     * @param callback    Result callback.
+     * @param callback Result callback.
      */
     @Override
     public void addContact(@NonNull String uid, @NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber, @Nullable DatabaseCallback<Void> callback) {
@@ -91,9 +90,8 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
 
     /**
      * Updates an existing contact record using a database transaction.
-     *
-     * @param uid      User ID.
-     * @param contact  Updated contact object.
+     * @param uid User ID.
+     * @param contact Updated contact object.
      * @param callback Result callback.
      */
     @Override
@@ -115,11 +113,10 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
     /**
      * Sends emergency SMS messages to all provided contacts.
      * Includes location URL if available.
-     *
-     * @param context     App context.
-     * @param contacts    List of contacts to notify.
+     * @param context App context.
+     * @param contacts List of contacts to notify.
      * @param locationUrl Google Maps link or null.
-     * @param callback    Result callback.
+     * @param callback Result callback.
      */
     @Override
     public void sendEmergencyAlert(@NonNull Context context, @NonNull List<EmergencyContact> contacts, @Nullable String locationUrl, @Nullable DatabaseCallback<Void> callback) {

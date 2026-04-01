@@ -38,12 +38,12 @@ import javax.inject.Inject;
  * <p>
  * This adapter handles the binding of forum message data to views and includes:
  * <ul>
- *     <li>Dynamic user data display: Sender details (name, email, role) are pre-populated
- *         by the service layer into the {@link ForumMessage} object.</li>
- *     <li>Text-to-Speech (TTS) integration for reading messages aloud.</li>
- *     <li>Admin moderation tools (conditional menu for deletion).</li>
- *     <li>Custom Hebrew typography using {@link CustomTypefaceSpan}.</li>
- *     <li>Real-time visual feedback for the currently speaking message.</li>
+ * <li>Dynamic user data display: Sender details (name, email, role) are pre-populated
+ * by the service layer into the {@link ForumMessage} object.</li>
+ * <li>Text-to-Speech (TTS) integration for reading messages aloud.</li>
+ * <li>Admin moderation tools (conditional menu for deletion).</li>
+ * <li>Custom Hebrew typography using {@link CustomTypefaceSpan}.</li>
+ * <li>Real-time visual feedback for the currently speaking message.</li>
  * </ul>
  * </p>
  */
@@ -63,8 +63,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Initializes the Text-to-Speech engine and begins speaking the provided message.
-     *
-     * @param v   A view used to retrieve context for TTS initialization.
+     * @param v A view used to retrieve context for TTS initialization.
      * @param msg The {@link ForumMessage} to read aloud after initialization.
      */
     private void initTTS(View v, ForumMessage msg) {
@@ -103,7 +102,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Finds a message by its ID and triggers a partial UI refresh for that item.
-     *
      * @param msgId The unique ID of the message.
      */
     private void notifyItemChangedById(String msgId) {
@@ -117,7 +115,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Sets the listener for message-specific actions (e.g., deletion).
-     *
      * @param listener The {@link ForumMessageListener} implementation.
      */
     public void setForumMessageListener(ForumMessageListener listener) {
@@ -126,7 +123,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Updates the entire message list.
-     *
      * @param newMessages The new list of {@link ForumMessage} objects.
      */
     public void setMessages(List<ForumMessage> newMessages) {
@@ -135,7 +131,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Removes a specific message from the list and notifies the adapter.
-     *
      * @param message The message object to remove.
      */
     public void removeMessage(ForumMessage message) {
@@ -232,7 +227,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Triggers the TTS engine to speak the text of the given message.
-     *
      * @param msg The message to speak.
      */
     private void speak(ForumMessage msg) {
@@ -260,14 +254,12 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     public interface ForumMessageListener {
         /**
          * Called when a message is clicked (e.g., for deletion).
-         *
          * @param message The clicked {@link ForumMessage}.
          */
         void onClick(ForumMessage message);
 
         /**
          * Determines whether the action menu should be displayed for a specific message.
-         *
          * @param message The message to check.
          * @return true to show the menu, false otherwise.
          */
@@ -295,7 +287,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
         /**
          * Constructs a new ForumViewHolder.
-         *
          * @param itemView The view representing a single forum message.
          */
         public ForumViewHolder(@NonNull View itemView) {

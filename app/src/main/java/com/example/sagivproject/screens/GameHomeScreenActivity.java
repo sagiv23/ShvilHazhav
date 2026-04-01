@@ -39,10 +39,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This activity serves as the lobby for the online memory game. It allows users to:
  * <ul>
- *     <li>View personal game statistics (wins today, games played).</li>
- *     <li>See a global leaderboard of top-performing players.</li>
- *     <li>Find or create a game room to play against a live opponent.</li>
- *     <li>Listen to the game rules via Text-to-Speech (TTS).</li>
+ * <li>View personal game statistics (wins today, games played).</li>
+ * <li>See a global leaderboard of top-performing players.</li>
+ * <li>Find or create a game room to play against a live opponent.</li>
+ * <li>Listen to the game rules via Text-to-Speech (TTS).</li>
  * </ul>
  * It manages the matchmaking lifecycle and transitions the user to the active game screen.
  * </p>
@@ -141,7 +141,6 @@ public class GameHomeScreenActivity extends BaseActivity {
 
     /**
      * Updates the speak button text based on the TTS status.
-     *
      * @param speaking true if TTS is active.
      */
     private void updateSpeakButton(boolean speaking) {
@@ -272,7 +271,6 @@ public class GameHomeScreenActivity extends BaseActivity {
 
     /**
      * Monitors the status of the assigned game room for state changes.
-     *
      * @param roomId The unique ID of the room to listen to.
      */
     private void listenToRoom(String roomId) {
@@ -313,7 +311,6 @@ public class GameHomeScreenActivity extends BaseActivity {
 
     /**
      * Updates UI component visibility and text based on the matchmaking state.
-     *
      * @param state The current search state.
      */
     private void updateUI(SearchState state) {

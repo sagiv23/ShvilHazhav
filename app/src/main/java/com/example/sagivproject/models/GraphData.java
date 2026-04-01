@@ -23,13 +23,12 @@ public class GraphData implements Idable {
 
     /**
      * Constructs a new GraphData object.
-     *
-     * @param id      The unique identifier for the graph.
-     * @param title   The title displayed at the top of the graph.
-     * @param points  The list of data points (X, Y) to be plotted.
+     * @param id The unique identifier for the graph.
+     * @param title The title displayed at the top of the graph.
+     * @param points The list of data points (X, Y) to be plotted.
      * @param xLabels Labels for the X-axis (e.g., dates).
-     * @param labelX  The name or unit of the X-axis.
-     * @param labelY  The name or unit of the Y-axis.
+     * @param labelX The name or unit of the X-axis.
+     * @param labelY The name or unit of the Y-axis.
      */
     public GraphData(String id, String title, List<SimpleXYGraphView.Point> points, List<String> xLabels, String labelX, String labelY) {
         this.id = id;

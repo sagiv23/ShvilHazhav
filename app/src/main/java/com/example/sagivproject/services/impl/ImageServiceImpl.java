@@ -40,7 +40,6 @@ public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements 
 
     /**
      * Retrieves all image records from the database.
-     *
      * @param callback The callback invoked with the list of all images.
      */
     @Override
@@ -50,8 +49,7 @@ public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements 
 
     /**
      * Creates a new image entry in the database.
-     *
-     * @param image    The {@link ImageData} object to create.
+     * @param image The {@link ImageData} object to create.
      * @param callback An optional callback to be invoked upon completion.
      */
     @Override
@@ -65,8 +63,7 @@ public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements 
      * This method converts the list into a map for an atomic overwrite operation,
      * ensuring that reordered IDs are correctly applied across the entire set.
      * </p>
-     *
-     * @param list     The new, complete list of images to be saved.
+     * @param list The new, complete list of images to be saved.
      * @param callback A callback invoked when the batch update is finished.
      */
     @Override
@@ -81,8 +78,7 @@ public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements 
 
     /**
      * Deletes a specific image from the database by its ID.
-     *
-     * @param imageId  The unique identifier of the image to remove.
+     * @param imageId The unique identifier of the image to remove.
      * @param callback An optional callback invoked upon completion.
      */
     @Override

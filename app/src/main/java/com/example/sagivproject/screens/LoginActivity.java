@@ -102,8 +102,7 @@ public class LoginActivity extends BaseActivity {
 
     /**
      * Validates that the login credentials meet application standards.
-     *
-     * @param email    The email string to check.
+     * @param email The email string to check.
      * @param password The password string to check.
      * @return true if both inputs are formally valid.
      */

@@ -27,10 +27,10 @@ import dagger.hilt.android.HiltAndroidApp;
  * <p>
  * This class is the entry point of the application and is responsible for:
  * <ul>
- *     <li>Initializing Hilt for dependency injection (via {@code @HiltAndroidApp}).</li>
- *     <li>Configuring {@link WorkManager} to support Hilt worker injection.</li>
- *     <li>Applying the user's preferred theme (Dark/Light mode) on startup.</li>
- *     <li>Scheduling periodic background tasks for daily health and system checks.</li>
+ * <li>Initializing Hilt for dependency injection (via {@code @HiltAndroidApp}).</li>
+ * <li>Configuring {@link WorkManager} to support Hilt worker injection.</li>
+ * <li>Applying the user's preferred theme (Dark/Light mode) on startup.</li>
+ * <li>Scheduling periodic background tasks for daily health and system checks.</li>
  * </ul>
  * </p>
  */
@@ -62,7 +62,6 @@ public class MainApplication extends Application implements Configuration.Provid
     /**
      * Provides the WorkManager configuration to the system.
      * This implementation enables Hilt injection for {@link androidx.work.ListenableWorker} subclasses.
-     *
      * @return A custom {@link Configuration} instance containing the Hilt worker factory.
      */
     @NonNull

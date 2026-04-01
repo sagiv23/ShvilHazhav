@@ -53,9 +53,8 @@ public class MedicationActionReceiver extends BroadcastReceiver {
      * logs the event to Firebase, and updates the today's statistics in the local cache.
      * Finally, dismisses the notification.
      * </p>
-     *
      * @param context The application context.
-     * @param intent  The intent containing medication details and selected status.
+     * @param intent The intent containing medication details and selected status.
      */
     @Override
     public void onReceive(Context context, Intent intent) {

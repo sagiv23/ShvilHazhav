@@ -24,11 +24,10 @@ public interface IForumService {
      * To optimize storage, this method ensures only the message text, timestamp, and sender ID
      * are persisted. Full user details are not duplicated in the forum branch.
      * </p>
-     *
-     * @param user       The {@link User} sending the message (used to extract the user ID).
-     * @param text       The message content string.
+     * @param user The {@link User} sending the message (used to extract the user ID).
+     * @param text The message content string.
      * @param categoryId The unique identifier of the forum category.
-     * @param callback   An optional callback invoked when the message is successfully saved.
+     * @param callback An optional callback invoked when the message is successfully saved.
      */
     void sendMessage(User user, String text, String categoryId, @Nullable DatabaseCallback<Void> callback);
 
@@ -38,18 +37,16 @@ public interface IForumService {
      * The returned {@link ForumMessage} objects will have their sender details (name, email, role)
      * automatically populated by the service by cross-referencing the user database.
      * </p>
-     *
      * @param categoryId The unique identifier of the forum category to monitor.
-     * @param callback   The callback that will be invoked with the updated list of {@link ForumMessage} objects.
+     * @param callback The callback that will be invoked with the updated list of {@link ForumMessage} objects.
      */
     void listenToMessages(String categoryId, DatabaseCallback<List<ForumMessage>> callback);
 
     /**
      * Deletes a specific message from a forum category.
-     *
-     * @param messageId  The unique identifier of the message to delete.
+     * @param messageId The unique identifier of the message to delete.
      * @param categoryId The ID of the category containing the message.
-     * @param callback   An optional callback invoked upon completion.
+     * @param callback An optional callback invoked upon completion.
      */
     void deleteMessage(@NonNull String messageId, String categoryId, @Nullable DatabaseCallback<Void> callback);
 }

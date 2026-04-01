@@ -62,7 +62,6 @@ public class ContactActivity extends BaseActivity {
 
     /**
      * Configures a view to respond to a long press by revealing a secret UI component.
-     *
      * @param view The view to attach the secret navigation logic to.
      */
     private void setupSecretNavigation(View view) {
@@ -98,9 +97,8 @@ public class ContactActivity extends BaseActivity {
 
     /**
      * Helper to configure a button to open an external URL when clicked.
-     *
      * @param buttonId The resource ID of the MaterialButton.
-     * @param url      The web address to navigate to.
+     * @param url The web address to navigate to.
      */
     private void setupSocialButton(int buttonId, String url) {
         MaterialButton button = findViewById(buttonId);

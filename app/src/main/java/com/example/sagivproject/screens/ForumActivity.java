@@ -97,9 +97,8 @@ public class ForumActivity extends BaseActivity {
 
     /**
      * Initializes the core UI views required for the forum functionality.
-     *
-     * @param recyclerId     Resource ID for the RecyclerView.
-     * @param edtId          Resource ID for the message EditText.
+     * @param recyclerId Resource ID for the RecyclerView.
+     * @param edtId Resource ID for the message EditText.
      * @param btnIndicatorId Resource ID for the new message indicator button.
      */
     private void initForumViews(int recyclerId, int edtId, int btnIndicatorId) {
@@ -117,8 +116,7 @@ public class ForumActivity extends BaseActivity {
 
     /**
      * Sets up the forum with the specified category details and initializes the adapter.
-     *
-     * @param categoryId   The unique ID of the forum category.
+     * @param categoryId The unique ID of the forum category.
      * @param categoryName The display name of the forum category.
      */
     private void setupForum(String categoryId, String categoryName) {
@@ -220,7 +218,6 @@ public class ForumActivity extends BaseActivity {
 
     /**
      * Determines if the current user has the authority to delete a specific message.
-     *
      * @param message The {@link ForumMessage} to check permissions for.
      * @return true if the current user is an admin or the author of the message.
      */
@@ -232,7 +229,6 @@ public class ForumActivity extends BaseActivity {
 
     /**
      * Checks if the last item in the RecyclerView is currently visible to the user.
-     *
      * @return true if the last item is visible, false otherwise.
      */
     private boolean isLastItemVisible() {
@@ -245,7 +241,6 @@ public class ForumActivity extends BaseActivity {
 
     /**
      * Scrolls the RecyclerView to the bottom.
-     *
      * @param smooth true to use a smooth animation, false for an immediate jump.
      */
     private void scrollToBottom(boolean smooth) {

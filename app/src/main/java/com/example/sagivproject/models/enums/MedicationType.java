@@ -49,7 +49,6 @@ public enum MedicationType {
 
     /**
      * Constructs a new MedicationType.
-     *
      * @param displayName The Hebrew display name for the medication type.
      */
     MedicationType(String displayName) {
@@ -58,7 +57,6 @@ public enum MedicationType {
 
     /**
      * Gets the user-friendly display name of the medication type.
-     *
      * @return The Hebrew display name.
      */
     public String getDisplayName() {

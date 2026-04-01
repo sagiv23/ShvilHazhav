@@ -40,10 +40,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * score tracking, and turn management. It implements the {@link MemoryGameAdapter.MemoryGameListener}
  * to handle card clicks. Key features:
  * <ul>
- *     <li>Real-time synchronization with Firebase database.</li>
- *     <li>Turn-based countdown timer.</li>
- *     <li>Automatic win detection and forfeit handling.</li>
- *     <li>Dynamic board initialization with random card pairs.</li>
+ * <li>Real-time synchronization with Firebase database.</li>
+ * <li>Turn-based countdown timer.</li>
+ * <li>Automatic win detection and forfeit handling.</li>
+ * <li>Dynamic board initialization with random card pairs.</li>
  * </ul>
  * </p>
  */
@@ -123,7 +123,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     /**
      * Displays the game conclusion dialog with the final result.
      * Triggers statistical updates in the database.
-     *
      * @param room The final state of the game session.
      */
     private void showGameEndDialog(GameRoom room) {
@@ -148,7 +147,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
     /**
      * Updates the scoreboard UI based on the current room state.
-     *
      * @param room Current game room data.
      */
     private void updateScoreUI(GameRoom room) {
@@ -161,7 +159,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     /**
      * Initializes the board by shuffling 6 pairs of random images.
      * Typically executed by the room host (Player 1).
-     *
      * @param room The room to configure.
      */
     private void setupGameBoard(GameRoom room) {

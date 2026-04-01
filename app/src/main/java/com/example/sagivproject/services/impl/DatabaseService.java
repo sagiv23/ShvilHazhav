@@ -39,17 +39,16 @@ public class DatabaseService implements IDatabaseService {
 
     /**
      * Constructs a new DatabaseService with all specific sub-services injected.
-     *
-     * @param authService            Service handling authentication and user creation logic.
-     * @param userService            Service for direct user-related database CRUD operations.
-     * @param medicationService      Service managing medication records and usage logs.
-     * @param gameService            Service coordinating memory game sessions and logic.
-     * @param statsService           Service for updating and retrieving activity statistics.
-     * @param forumService           Service for forum message persistence and retrieval.
-     * @param imageService           Service managing image assets for game cards.
+     * @param authService Service handling authentication and user creation logic.
+     * @param userService Service for direct user-related database CRUD operations.
+     * @param medicationService Service managing medication records and usage logs.
+     * @param gameService Service coordinating memory game sessions and logic.
+     * @param statsService Service for updating and retrieving activity statistics.
+     * @param forumService Service for forum message persistence and retrieval.
+     * @param imageService Service managing image assets for game cards.
      * @param forumCategoriesService Service for managing forum discussion topics.
-     * @param tipOfTheDayService     Service providing daily health and motivational tips.
-     * @param emergencyService       Service managing emergency contacts and SMS alerts.
+     * @param tipOfTheDayService Service providing daily health and motivational tips.
+     * @param emergencyService Service managing emergency contacts and SMS alerts.
      */
     @Inject
     public DatabaseService(

@@ -57,7 +57,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
     /**
      * Constructs a new MedicationListAdapter.
-     *
      * @param context The activity context used for layout inflation and resources.
      */
     @Inject
@@ -67,7 +66,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
     /**
      * Sets the listener for medication-related actions (edit, delete, status change).
-     *
      * @param listener The {@link OnMedicationActionListener} implementation.
      */
     public void setListener(OnMedicationActionListener listener) {
@@ -76,7 +74,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
     /**
      * Updates the list of medications to be displayed.
-     *
      * @param medications The new list of {@link Medication} objects.
      */
     public void setMedications(List<Medication> medications) {
@@ -85,7 +82,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
     /**
      * Sets the medication usage logs for today to reflect the current intake status in the UI.
-     *
      * @param logs The list of {@link MedicationUsage} logs for today.
      */
     public void setLoggedTodayMedications(List<MedicationUsage> logs) {
@@ -108,7 +104,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
     /**
      * Adds a single medication usage log to the current view tracking.
-     *
      * @param usage The {@link MedicationUsage} log to add.
      */
     public void addLoggedTodayMedication(MedicationUsage usage) {
@@ -192,11 +187,10 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
     /**
      * Adds a dynamic row for a specific reminder hour to the medication item.
-     *
-     * @param container     The container layout to add the row to.
-     * @param med           The {@link Medication} object.
+     * @param container The container layout to add the row to.
+     * @param med The {@link Medication} object.
      * @param scheduledTime The scheduled time for this row (HH:mm).
-     * @param status        The current {@link MedicationStatus} for this dose, or null if not yet logged.
+     * @param status The current {@link MedicationStatus} for this dose, or null if not yet logged.
      */
     private void addStatusRow(LinearLayout container, Medication med, String scheduledTime, MedicationStatus status) {
         View rowView = LayoutInflater.from(context).inflate(R.layout.item_medication_status_row, container, false);
@@ -243,10 +237,9 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
     /**
      * Handles a click on a status button (Taken, Not Taken, Snoozed).
-     *
-     * @param med           The medication being acted upon.
+     * @param med The medication being acted upon.
      * @param scheduledTime The scheduled time for the dose.
-     * @param status        The new status to set.
+     * @param status The new status to set.
      */
     private void handleStatusClick(Medication med, String scheduledTime, MedicationStatus status) {
         if (listener != null) {
@@ -259,7 +252,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
     /**
      * Notifies the adapter that processing for a specific medication has finished,
      * allowing the UI to re-enable interaction for that item.
-     *
      * @param medicationId The ID of the medication that finished processing.
      */
     public void setProcessingFinished(String medicationId) {
@@ -278,24 +270,21 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
     public interface OnMedicationActionListener {
         /**
          * Called when the edit option is selected for a medication.
-         *
          * @param medication The {@link Medication} to edit.
          */
         void onEdit(Medication medication);
 
         /**
          * Called when the delete option is selected for a medication.
-         *
          * @param medication The {@link Medication} to delete.
          */
         void onDelete(Medication medication);
 
         /**
          * Called when the status of a medication dose is changed by the user.
-         *
-         * @param medication    The medication whose dose status changed.
+         * @param medication The medication whose dose status changed.
          * @param scheduledTime The scheduled time of the dose (HH:mm).
-         * @param status        The new status (TAKEN, NOT_TAKEN, SNOOZED).
+         * @param status The new status (TAKEN, NOT_TAKEN, SNOOZED).
          */
         void onStatusChanged(Medication medication, String scheduledTime, MedicationStatus status);
     }
@@ -321,7 +310,6 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
         /**
          * Constructs a new MedicationViewHolder.
-         *
          * @param itemView The view representing a single medication card.
          */
         public MedicationViewHolder(@NonNull View itemView) {

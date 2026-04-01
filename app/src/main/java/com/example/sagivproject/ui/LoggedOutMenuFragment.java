@@ -34,7 +34,6 @@ public class LoggedOutMenuFragment extends Fragment {
      * <p>
      * Verifies that the hosting context implements the navigation listener.
      * </p>
-     *
      * @param context The host Activity.
      * @throws RuntimeException If the activity does not implement {@link MenuNavigationListener}.
      */
@@ -50,9 +49,8 @@ public class LoggedOutMenuFragment extends Fragment {
 
     /**
      * Initializes the fragment's UI and configures the navigation buttons.
-     *
-     * @param inflater           The LayoutInflater.
-     * @param container          The parent container view.
+     * @param inflater The LayoutInflater.
+     * @param container The parent container view.
      * @param savedInstanceState Fragment's saved state.
      * @return The inflated view.
      */
@@ -72,9 +70,8 @@ public class LoggedOutMenuFragment extends Fragment {
 
     /**
      * Helper to set up a navigation button with a standardized click listener.
-     *
-     * @param root          The root view of the fragment.
-     * @param buttonId      The resource ID of the button.
+     * @param root The root view of the fragment.
+     * @param buttonId The resource ID of the button.
      * @param destinationId The destination identifier.
      */
     private void setupNavigationButton(View root, int buttonId, int destinationId) {

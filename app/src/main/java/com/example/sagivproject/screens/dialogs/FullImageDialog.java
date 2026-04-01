@@ -39,7 +39,6 @@ public class FullImageDialog extends DialogFragment {
 
     /**
      * Sets the image drawable to be displayed.
-     *
      * @param imageDrawable The {@link Drawable} source.
      */
     public void setImage(Drawable imageDrawable) {

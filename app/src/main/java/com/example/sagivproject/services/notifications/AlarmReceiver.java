@@ -27,10 +27,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This receiver is triggered by the Android {@link android.app.AlarmManager}. It performs the following:
  * <ul>
- *     <li>Validates if a medication reminder is still relevant (i.e., medication hasn't been taken already today).</li>
- *     <li>Triggers local notifications for relevant reminders via {@link NotificationService}.</li>
- *     <li>Automatically reschedules recurring alarms for the following day.</li>
- *     <li>Handles special system actions like the daily birthday check.</li>
+ * <li>Validates if a medication reminder is still relevant (i.e., medication hasn't been taken already today).</li>
+ * <li>Triggers local notifications for relevant reminders via {@link NotificationService}.</li>
+ * <li>Automatically reschedules recurring alarms for the following day.</li>
+ * <li>Handles special system actions like the daily birthday check.</li>
  * </ul>
  * </p>
  */
@@ -49,9 +49,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     /**
      * Entry point for the broadcast event.
-     *
      * @param context The application context.
-     * @param intent  The intent containing alarm metadata (medication info or action types).
+     * @param intent The intent containing alarm metadata (medication info or action types).
      */
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -111,12 +111,11 @@ public class RegisterActivity extends BaseActivity {
 
     /**
      * Validates that all registration fields meet the required constraints.
-     *
      * @param firstName User's first name.
-     * @param lastName  User's last name.
+     * @param lastName User's last name.
      * @param birthDate Formatted birthdate string.
-     * @param email     User's email.
-     * @param password  User's password.
+     * @param email User's email.
+     * @param password User's password.
      * @return true if all inputs are valid.
      */
     private boolean validateInput(String firstName, String lastName, String birthDate, String email, String password) {

@@ -38,9 +38,8 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
 
     /**
      * Initializes the adapter with a listener and role-based permissions.
-     *
      * @param listener The listener for handling category interactions (clicks, edits, deletes).
-     * @param isAdmin  true if the current user has administrative privileges.
+     * @param isAdmin true if the current user has administrative privileges.
      */
     public void init(OnCategoryInteractionListener listener, boolean isAdmin) {
         this.listener = listener;
@@ -49,7 +48,6 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
 
     /**
      * Updates the data set with a new list of categories.
-     *
      * @param newCategories The list of {@link ForumCategory} objects to display.
      */
     public void setCategories(List<ForumCategory> newCategories) {
@@ -58,7 +56,6 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
 
     /**
      * Removes a specific category from the adapter's data set and notifies changes.
-     *
      * @param category The category object to remove.
      */
     public void removeCategory(ForumCategory category) {
@@ -106,28 +103,24 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
     public interface OnCategoryInteractionListener {
         /**
          * Called when the delete button is clicked for a category.
-         *
          * @param category The category to be deleted.
          */
         void onDelete(ForumCategory category);
 
         /**
          * Called when the edit button is clicked for a category.
-         *
          * @param category The category to be edited.
          */
         void onEdit(ForumCategory category);
 
         /**
          * Called when a category item is long-clicked.
-         *
          * @param category The category that was long-clicked.
          */
         void onLongClick(ForumCategory category);
 
         /**
          * Called when a category item is clicked normally.
-         *
          * @param category The category that was clicked.
          */
         void onClick(ForumCategory category);
@@ -154,7 +147,6 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
 
         /**
          * Constructs a new CategoryViewHolder.
-         *
          * @param itemView The item view for a category row.
          */
         public CategoryViewHolder(@NonNull View itemView) {

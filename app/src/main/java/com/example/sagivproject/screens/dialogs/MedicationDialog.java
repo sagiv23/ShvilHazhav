@@ -40,10 +40,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This dialog provides a comprehensive form including:
  * <ul>
- *     <li>Medication name and physical form (via a themed dropdown).</li>
- *     <li>Dosage or specific intake instructions.</li>
- *     <li>Multiple reminder hours, managed visually using {@link ChipGroup}.</li>
- *     <li>Integration with {@link TimePickerDialog} for precise time selection.</li>
+ * <li>Medication name and physical form (via a themed dropdown).</li>
+ * <li>Dosage or specific intake instructions.</li>
+ * <li>Multiple reminder hours, managed visually using {@link ChipGroup}.</li>
+ * <li>Integration with {@link TimePickerDialog} for precise time selection.</li>
  * </ul>
  * It validates all inputs before submitting the data through the {@link OnMedicationSubmitListener}.
  * </p>
@@ -70,9 +70,8 @@ public class MedicationDialog extends DialogFragment {
 
     /**
      * Sets the initial state of the dialog and the submission callback.
-     *
      * @param medToEdit The medication record to modify, or null to create a new one.
-     * @param listener  The listener to handle add or edit operations.
+     * @param listener The listener to handle add or edit operations.
      */
     public void setData(Medication medToEdit, OnMedicationSubmitListener listener) {
         Bundle args = new Bundle();
@@ -162,7 +161,6 @@ public class MedicationDialog extends DialogFragment {
 
     /**
      * Validates that all required fields are populated correctly.
-     *
      * @return true if input is valid.
      */
     private boolean validateInputs(String name, String typeString, String details, MedicationType selectedType) {

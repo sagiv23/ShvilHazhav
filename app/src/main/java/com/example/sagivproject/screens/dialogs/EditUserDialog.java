@@ -60,8 +60,7 @@ public class EditUserDialog extends DialogFragment {
 
     /**
      * Sets the user data to be edited and the submission listener.
-     *
-     * @param user     The {@link User} profile to edit.
+     * @param user The {@link User} profile to edit.
      * @param listener The listener to handle the update action.
      */
     public void setData(User user, EditUserDialogListener listener) {
@@ -134,7 +133,6 @@ public class EditUserDialog extends DialogFragment {
 
     /**
      * Validates all input fields in the edit dialog.
-     *
      * @return true if all fields are valid.
      */
     private boolean areAllFieldsValid(String fName, String lName, String email, String pass, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passEdt, EditText birthDateEdt) {
@@ -168,12 +166,11 @@ public class EditUserDialog extends DialogFragment {
     public interface EditUserDialogListener {
         /**
          * Called when the user submits valid updated profile information.
-         *
-         * @param fName           Updated first name.
-         * @param lName           Updated last name.
+         * @param fName Updated first name.
+         * @param lName Updated last name.
          * @param birthDateMillis Updated birthdate.
-         * @param email           Updated email address.
-         * @param password        Updated password.
+         * @param email Updated email address.
+         * @param password Updated password.
          */
         void onUpdateUser(String fName, String lName, long birthDateMillis, String email, String password);
     }

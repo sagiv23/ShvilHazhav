@@ -30,8 +30,7 @@ public class Card implements Serializable, Idable {
 
     /**
      * Constructs a new Card with a specific ID and image content.
-     *
-     * @param id            The identifier for the card, shared with its match.
+     * @param id The identifier for the card, shared with its match.
      * @param base64Content The Base64 encoded string of the card's image.
      */
     public Card(String id, String base64Content) {
@@ -51,7 +50,6 @@ public class Card implements Serializable, Idable {
 
     /**
      * Gets the Base64 image content of the card.
-     *
      * @return Base64 string.
      */
     public String getBase64Content() {
@@ -60,7 +58,6 @@ public class Card implements Serializable, Idable {
 
     /**
      * Sets the Base64 image content of the card.
-     *
      * @param base64Content New image content.
      */
     public void setBase64Content(String base64Content) {
@@ -69,7 +66,6 @@ public class Card implements Serializable, Idable {
 
     /**
      * Checks if the card is currently revealed (flipped up).
-     *
      * @return true if revealed.
      */
     public boolean getIsRevealed() {
@@ -78,7 +74,6 @@ public class Card implements Serializable, Idable {
 
     /**
      * Sets the revealed state of the card.
-     *
      * @param revealed true to flip up, false to flip down.
      */
     public void setRevealed(boolean revealed) {
@@ -87,7 +82,6 @@ public class Card implements Serializable, Idable {
 
     /**
      * Checks if the card has been successfully matched.
-     *
      * @return true if matched.
      */
     public boolean getIsMatched() {
@@ -96,7 +90,6 @@ public class Card implements Serializable, Idable {
 
     /**
      * Sets the matched state of the card.
-     *
      * @param matched true if the card pair was found.
      */
     public void setMatched(boolean matched) {
@@ -106,7 +99,6 @@ public class Card implements Serializable, Idable {
     /**
      * Internal flag to track if the card was previously revealed, used for animation triggers.
      * Annotated with {@code @Exclude} to prevent saving to Firebase.
-     *
      * @return true if the card was revealed in the previous frame.
      */
     @Exclude
@@ -116,7 +108,6 @@ public class Card implements Serializable, Idable {
 
     /**
      * Sets the previous revealed state for animation tracking.
-     *
      * @param wasRevealed previous state.
      */
     @Exclude

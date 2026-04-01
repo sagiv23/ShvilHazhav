@@ -29,9 +29,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This screen performs a real-time sync with the 'rooms' node in the database. It:
  * <ul>
- *     <li>Fetches all registered users to build a UID-to-Name resolution map.</li>
- *     <li>Displays a chronological log of game sessions using {@link MemoryGameLogAdapter}.</li>
- *     <li>Updates the log dynamically as game statuses (waiting, playing, finished) or scores change.</li>
+ * <li>Fetches all registered users to build a UID-to-Name resolution map.</li>
+ * <li>Displays a chronological log of game sessions using {@link MemoryGameLogAdapter}.</li>
+ * <li>Updates the log dynamically as game statuses (waiting, playing, finished) or scores change.</li>
  * </ul>
  * </p>
  */

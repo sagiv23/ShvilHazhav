@@ -48,11 +48,11 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This screen allows administrators to:
  * <ul>
- *     <li>View a grid of all currently uploaded images for the memory game.</li>
- *     <li>Search for specific images by their unique ID.</li>
- *     <li>Upload new images from the device's storage.</li>
- *     <li>Delete existing images, with automatic sequential ID reordering.</li>
- *     <li>View full-screen previews of card images.</li>
+ * <li>View a grid of all currently uploaded images for the memory game.</li>
+ * <li>Search for specific images by their unique ID.</li>
+ * <li>Upload new images from the device's storage.</li>
+ * <li>Delete existing images, with automatic sequential ID reordering.</li>
+ * <li>View full-screen previews of card images.</li>
  * </ul>
  * It ensures the game board has a consistent set of sequentially named IDs (card1, card2, etc.).
  * </p>
@@ -182,7 +182,6 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
     /**
      * Filters the grid display based on the user's ID search query.
-     *
      * @param query The search text.
      */
     private void filterImages(String query) {
@@ -197,7 +196,6 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
     /**
      * Decodes a selected image URI, converts it to Base64, and saves it as a new card record.
-     *
      * @param uri The URI of the selected image.
      */
     private void uploadImage(Uri uri) {
@@ -231,7 +229,6 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
     /**
      * Deletes an image from the database and triggers a batch update to re-index IDs.
-     *
      * @param imageToDelete The image object to remove.
      */
     private void deleteImageAndReorder(ImageData imageToDelete) {

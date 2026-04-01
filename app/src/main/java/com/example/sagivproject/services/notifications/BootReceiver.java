@@ -39,9 +39,8 @@ public class BootReceiver extends BroadcastReceiver {
 
     /**
      * Receives the broadcast intent.
-     *
      * @param context The application context.
-     * @param intent  The intent being received (expected to be {@link Intent#ACTION_BOOT_COMPLETED}).
+     * @param intent The intent being received (expected to be {@link Intent#ACTION_BOOT_COMPLETED}).
      */
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -33,7 +33,6 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
 
     /**
      * Constructs a new MedicationImagesTableAdapter.
-     *
      * @param imageUtil A utility class for loading and processing images from Base64 strings.
      */
     @Inject
@@ -43,7 +42,6 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
 
     /**
      * Sets the listener for image-related interactions (clicks and deletes).
-     *
      * @param listener The {@link OnImageActionListener} to handle events.
      */
     public void setListener(OnImageActionListener listener) {
@@ -52,7 +50,6 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
 
     /**
      * Updates the data set with a new list of images.
-     *
      * @param images The new list of {@link ImageData} objects to display.
      */
     public void setImages(List<ImageData> images) {
@@ -97,15 +94,13 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
     public interface OnImageActionListener {
         /**
          * Called when the delete button for an image is clicked.
-         *
          * @param image The {@link ImageData} object to be deleted.
          */
         void onDeleteImage(ImageData image);
 
         /**
          * Called when an image is clicked, typically to trigger a full-screen view.
-         *
-         * @param image     The {@link ImageData} object that was clicked.
+         * @param image The {@link ImageData} object that was clicked.
          * @param imageView The {@link ImageView} containing the clicked image.
          */
         void onImageClicked(ImageData image, ImageView imageView);
@@ -132,7 +127,6 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
 
         /**
          * Constructs a new ViewHolder.
-         *
          * @param itemView The view representing a single image card item.
          */
         public ViewHolder(@NonNull View itemView) {

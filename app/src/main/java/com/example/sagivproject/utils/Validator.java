@@ -33,7 +33,6 @@ public class Validator {
 
     /**
      * Validates a person's name (first or last).
-     *
      * @param name The name string to validate.
      * @return true if the name is null, empty, or too short (less than 2 characters).
      */
@@ -43,7 +42,6 @@ public class Validator {
 
     /**
      * Validates an email address format.
-     *
      * @param email The email address to validate.
      * @return true if the email is null or does not match the standard {@link Patterns#EMAIL_ADDRESS} pattern.
      */
@@ -53,7 +51,6 @@ public class Validator {
 
     /**
      * Validates a phone number format.
-     *
      * @param phone The phone number to validate.
      * @return true if the phone number is null or does not match the standard {@link Patterns#PHONE} pattern.
      */
@@ -63,7 +60,6 @@ public class Validator {
 
     /**
      * Validates a password's strength.
-     *
      * @param password The password to validate.
      * @return true if the password is null or too short (less than 6 characters).
      */
@@ -73,7 +69,6 @@ public class Validator {
 
     /**
      * Checks if a user's age meets the minimum requirement based on their birthdate.
-     *
      * @param birthDateMillis The user's birthdate in milliseconds.
      * @return true if the calculated age is less than the required minimum age (12).
      */

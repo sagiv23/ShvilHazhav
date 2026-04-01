@@ -22,9 +22,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This dialog provides buttons to:
  * <ul>
- *     <li>Launch the camera to take a new photo.</li>
- *     <li>Open the system gallery to select an existing image.</li>
- *     <li>Delete the current profile image (only visible if an image exists).</li>
+ * <li>Launch the camera to take a new photo.</li>
+ * <li>Open the system gallery to select an existing image.</li>
+ * <li>Delete the current profile image (only visible if an image exists).</li>
  * </ul>
  * Interaction results are passed back to the caller via the {@link ImagePickerListener}.
  * </p>
@@ -45,7 +45,6 @@ public class ProfileImageDialog extends DialogFragment {
 
     /**
      * Configures the dialog state.
-     *
      * @param hasImage true if the user currently has a profile picture set.
      * @param listener Callback for image selection actions.
      */

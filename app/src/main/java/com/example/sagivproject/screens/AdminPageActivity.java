@@ -22,11 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This activity provides a central hub for administrative tools, including:
  * <ul>
- *     <li>User account management and role assignment.</li>
- *     <li>Forum moderation and category management.</li>
- *     <li>Monitoring real-time memory game logs.</li>
- *     <li>Managing medication card image assets.</li>
- *     <li>Accessing detailed user profile information and statistics.</li>
+ * <li>User account management and role assignment.</li>
+ * <li>Forum moderation and category management.</li>
+ * <li>Monitoring real-time memory game logs.</li>
+ * <li>Managing medication card image assets.</li>
+ * <li>Accessing detailed user profile information and statistics.</li>
  * </ul>
  * It also displays a personalized greeting to the administrator.
  * </p>

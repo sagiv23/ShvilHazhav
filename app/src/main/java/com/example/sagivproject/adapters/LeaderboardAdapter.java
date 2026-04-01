@@ -35,7 +35,6 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
 
     /**
      * Sets the list of users to be displayed in the leaderboard.
-     *
      * @param users The list of {@link User} objects, typically pre-sorted by total wins.
      */
     public void setUsers(List<User> users) {
@@ -66,7 +65,6 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
 
     /**
      * Calculates the sum of all memory game wins across the user's daily statistics.
-     *
      * @param u The user to calculate wins for.
      * @return The total number of wins.
      */
@@ -96,7 +94,6 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
 
         /**
          * Constructs a new ViewHolder.
-         *
          * @param itemView The view representing a single leaderboard row.
          */
         public ViewHolder(@NonNull View itemView) {

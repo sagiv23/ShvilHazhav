@@ -50,7 +50,6 @@ public class AddEmergencyContactDialog extends DialogFragment {
 
     /**
      * Sets the listener for contact submission events.
-     *
      * @param listener The listener to set.
      */
     public void setListener(AddEmergencyContactListener listener) {
@@ -59,8 +58,7 @@ public class AddEmergencyContactDialog extends DialogFragment {
 
     /**
      * Sets the initial data for the dialog.
-     *
-     * @param contact  The {@link EmergencyContact} to edit, or null to add a new one.
+     * @param contact The {@link EmergencyContact} to edit, or null to add a new one.
      * @param listener The listener for handling the result.
      */
     public void setData(EmergencyContact contact, AddEmergencyContactListener listener) {
@@ -115,7 +113,6 @@ public class AddEmergencyContactDialog extends DialogFragment {
 
     /**
      * Validates all input fields in the dialog.
-     *
      * @return true if all fields are valid.
      */
     private boolean areAllFieldsValid(String fName, String lName, String phone, EditText firstNameEdt, EditText lastNameEdt, EditText phoneEdt) {
@@ -147,9 +144,8 @@ public class AddEmergencyContactDialog extends DialogFragment {
     public interface AddEmergencyContactListener {
         /**
          * Called when the contact details are submitted and valid.
-         *
-         * @param firstName   The entered first name.
-         * @param lastName    The entered last name.
+         * @param firstName The entered first name.
+         * @param lastName The entered last name.
          * @param phoneNumber The entered phone number.
          */
         void onContactSubmit(String firstName, String lastName, String phoneNumber);

@@ -58,10 +58,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This screen features:
  * <ul>
- *     <li>Interactive XY graphs for tracking memory game performance, math accuracy, and medication compliance over time.</li>
- *     <li>A filterable historical log of medication usage events.</li>
- *     <li>Administrative mode: allowing admins to select and view stats for any regular user in the system.</li>
- *     <li>Date-based filtering using a calendar picker for usage logs.</li>
+ * <li>Interactive XY graphs for tracking memory game performance, math accuracy, and medication compliance over time.</li>
+ * <li>A filterable historical log of medication usage events.</li>
+ * <li>Administrative mode: allowing admins to select and view stats for any regular user in the system.</li>
+ * <li>Date-based filtering using a calendar picker for usage logs.</li>
  * </ul>
  * It utilizes {@link ViewPager2} with {@link TabLayout} to organize multiple graphs.
  * </p>

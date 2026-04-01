@@ -54,7 +54,6 @@ public class EditForumCategoryDialog extends DialogFragment {
 
     /**
      * Configures the dialog with the category to edit and the submission listener.
-     *
      * @param category The {@link ForumCategory} to edit.
      * @param listener The listener to handle the update action.
      */
@@ -116,7 +115,6 @@ public class EditForumCategoryDialog extends DialogFragment {
     public interface EditForumCategoryDialogListener {
         /**
          * Called when the administrator submits a valid new name for the category.
-         *
          * @param newName The updated display name.
          */
         void onUpdateCategory(String newName);

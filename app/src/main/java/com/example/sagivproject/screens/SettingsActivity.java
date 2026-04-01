@@ -154,7 +154,6 @@ public class SettingsActivity extends BaseActivity {
 
     /**
      * Processes the results of the permission request specifically for fall detection.
-     *
      * @param isGranted Map of permissions and their grant status.
      */
     @Override
@@ -216,9 +215,8 @@ public class SettingsActivity extends BaseActivity {
 
     /**
      * Updates the text label of the Dark Mode switch.
-     *
      * @param switchDarkMode The switch component.
-     * @param isDarkMode     Current dark mode state.
+     * @param isDarkMode Current dark mode state.
      */
     private void updateDarkModeText(SwitchMaterial switchDarkMode, boolean isDarkMode) {
         switchDarkMode.setText(isDarkMode ? R.string.bright_mode : R.string.dark_mode);

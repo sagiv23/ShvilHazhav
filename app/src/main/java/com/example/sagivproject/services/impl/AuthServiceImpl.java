@@ -32,8 +32,7 @@ public class AuthServiceImpl implements IAuthService {
 
     /**
      * Constructs a new AuthServiceImpl.
-     *
-     * @param userService           The user management service for database access.
+     * @param userService The user management service for database access.
      * @param sharedPreferencesUtil The utility for managing local session and preferences.
      */
     @Inject
@@ -45,8 +44,7 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * Authenticates a user using email and password.
      * On success, the user object is saved to local preferences.
-     *
-     * @param email    The user's email address.
+     * @param email The user's email address.
      * @param password The user's password.
      * @param callback The callback invoked with the result.
      */
@@ -74,13 +72,12 @@ public class AuthServiceImpl implements IAuthService {
 
     /**
      * Registers a new regular user account after checking for email uniqueness.
-     *
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
+     * @param firstName The user's first name.
+     * @param lastName The user's last name.
      * @param birthDateMillis The user's birthdate in milliseconds.
-     * @param email           The user's email address.
-     * @param password        The user's password.
-     * @param callback        The callback invoked when the process completes.
+     * @param email The user's email address.
+     * @param password The user's password.
+     * @param callback The callback invoked when the process completes.
      */
     @Override
     public void register(String firstName, String lastName, long birthDateMillis, String email, String password, RegisterCallback callback) {
@@ -101,13 +98,12 @@ public class AuthServiceImpl implements IAuthService {
 
     /**
      * Adds a new regular user account (typically by an admin) without logging in as the new user.
-     *
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
+     * @param firstName The user's first name.
+     * @param lastName The user's last name.
      * @param birthDateMillis The user's birthdate in milliseconds.
-     * @param email           The user's email address.
-     * @param password        The user's password.
-     * @param callback        The callback invoked when the process completes.
+     * @param email The user's email address.
+     * @param password The user's password.
+     * @param callback The callback invoked when the process completes.
      */
     @Override
     public void addUser(String firstName, String lastName, long birthDateMillis, String email, String password, AddUserCallback callback) {
@@ -126,14 +122,13 @@ public class AuthServiceImpl implements IAuthService {
 
     /**
      * Updates an existing user's details, handling email uniqueness checks if the email was changed.
-     *
-     * @param user               The current user object.
-     * @param newFirstName       The updated first name.
-     * @param newLastName        The updated last name.
+     * @param user The current user object.
+     * @param newFirstName The updated first name.
+     * @param newLastName The updated last name.
      * @param newBirthDateMillis The updated birthdate.
-     * @param newEmail           The updated email address.
-     * @param newPassword        The updated password.
-     * @param callback           The callback invoked when the update completes.
+     * @param newEmail The updated email address.
+     * @param newPassword The updated password.
+     * @param callback The callback invoked when the update completes.
      */
     @Override
     public void updateUser(User user, String newFirstName, String newLastName, long newBirthDateMillis, String newEmail, String newPassword, UpdateUserCallback callback) {
@@ -162,7 +157,6 @@ public class AuthServiceImpl implements IAuthService {
 
     /**
      * Signs out the current user and clears local profile data.
-     *
      * @return The email of the logged-out user.
      */
     @Override

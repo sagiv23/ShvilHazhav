@@ -60,8 +60,7 @@ public class GameRoom implements Serializable, Idable {
 
     /**
      * Constructs a new waiting GameRoom initialized with player 1.
-     *
-     * @param id      The unique ID of the room.
+     * @param id The unique ID of the room.
      * @param player1 The user who created the room.
      */
     public GameRoom(String id, User player1) {

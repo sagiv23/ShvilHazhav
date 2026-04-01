@@ -44,12 +44,12 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This screen allows users to:
  * <ul>
- *     <li>View a list of current emergency contacts.</li>
- *     <li>Add new contacts manually via a dialog.</li>
- *     <li>Pick contacts directly from the device's address book.</li>
- *     <li>Edit or delete existing contact records.</li>
- *     <li>Manually trigger an emergency SMS broadcast to all contacts, including current GPS coordinates.</li>
- *     <li>Quickly dial emergency services (109).</li>
+ * <li>View a list of current emergency contacts.</li>
+ * <li>Add new contacts manually via a dialog.</li>
+ * <li>Pick contacts directly from the device's address book.</li>
+ * <li>Edit or delete existing contact records.</li>
+ * <li>Manually trigger an emergency SMS broadcast to all contacts, including current GPS coordinates.</li>
+ * <li>Quickly dial emergency services (109).</li>
  * </ul>
  * It also coordinates with the {@link IFallDetectionService} to ensure monitoring is active if contacts are present.
  * </p>
@@ -167,7 +167,6 @@ public class EmergencyContactsActivity extends BaseActivity {
 
     /**
      * Handles permission results for SMS sending and contact reading.
-     *
      * @param isGranted Map of permissions and their results.
      */
     @Override
@@ -266,7 +265,6 @@ public class EmergencyContactsActivity extends BaseActivity {
 
     /**
      * Extracts details from a URI returned by the contact picker and creates a new record.
-     *
      * @param contactUri The selected contact's URI.
      */
     private void retrieveContactDetails(Uri contactUri) {
@@ -291,7 +289,6 @@ public class EmergencyContactsActivity extends BaseActivity {
 
     /**
      * Queries the system contacts database for a specific contact's phone number.
-     *
      * @param contactId Unique ID of the contact.
      * @return Formatted phone number or null.
      */
@@ -342,7 +339,6 @@ public class EmergencyContactsActivity extends BaseActivity {
 
     /**
      * Orchestrates the final SMS transmission via the emergency service.
-     *
      * @param locationUrl Optional Google Maps link.
      */
     private void sendSmsToAll(@Nullable String locationUrl) {
