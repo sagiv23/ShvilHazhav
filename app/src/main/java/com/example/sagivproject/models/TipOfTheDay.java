@@ -31,36 +31,24 @@ public class TipOfTheDay implements Idable {
     }
 
     @Override
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
     @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
     /**
      * @return The content of the tip.
      */
-    public String getTip() {
-        return tip;
-    }
+    public String getTip() { return tip; }
 
-    public void setTip(String tip) {
-        this.tip = tip;
-    }
+    public void setTip(String tip) { this.tip = tip; }
 
     /**
      * @return The date string associated with the tip.
      */
-    public String getDate() {
-        return date;
-    }
+    public String getDate() { return date; }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+    public void setDate(String date) { this.date = date; }
 
     @NonNull
     @Override

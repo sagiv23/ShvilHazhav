@@ -59,7 +59,5 @@ public enum MedicationType {
      * Gets the user-friendly display name of the medication type.
      * @return The Hebrew display name.
      */
-    public String getDisplayName() {
-        return displayName;
-    }
+    public String getDisplayName() { return displayName; }
 }

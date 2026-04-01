@@ -87,19 +87,13 @@ public class AiActivity extends BaseActivity {
                 tts.setLanguage(new Locale("he", "IL"));
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
-                    public void onStart(String id) {
-                        runOnUiThread(() -> updateSpeakButton(true));
-                    }
+                    public void onStart(String id) { runOnUiThread(() -> updateSpeakButton(true)); }
 
                     @Override
-                    public void onDone(String id) {
-                        runOnUiThread(() -> updateSpeakButton(false));
-                    }
+                    public void onDone(String id) { runOnUiThread(() -> updateSpeakButton(false)); }
 
                     @Override
-                    public void onError(String id) {
-                        runOnUiThread(() -> updateSpeakButton(false));
-                    }
+                    public void onError(String id) { runOnUiThread(() -> updateSpeakButton(false)); }
                 });
             }
         });

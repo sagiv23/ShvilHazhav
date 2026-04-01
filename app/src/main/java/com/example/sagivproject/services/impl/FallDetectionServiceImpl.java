@@ -181,9 +181,7 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Log.e(TAG, "Failed to fetch contacts", e);
-            }
+            public void onFailed(Exception e) { Log.e(TAG, "Failed to fetch contacts", e); }
         });
     }
 
@@ -195,9 +193,7 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+    public IBinder onBind(Intent intent) { return null; }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

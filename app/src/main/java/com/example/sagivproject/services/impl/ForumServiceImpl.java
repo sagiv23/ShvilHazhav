@@ -132,9 +132,7 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (callback != null) callback.onFailed(error.toException());
-            }
+            public void onCancelled(@NonNull DatabaseError error) { if (callback != null) callback.onFailed(error.toException()); }
         });
     }
 
@@ -145,25 +143,19 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
      * @param callback An optional callback to be invoked upon completion.
      */
     @Override
-    public void deleteMessage(@NonNull String messageId, String categoryId, @Nullable DatabaseCallback<Void> callback) {
-        deleteData(getCategoryPath(categoryId) + "/" + messageId, callback);
-    }
+    public void deleteMessage(@NonNull String messageId, String categoryId, @Nullable DatabaseCallback<Void> callback) { deleteData(getCategoryPath(categoryId) + "/" + messageId, callback); }
 
     /**
      * Helper to construct the database path for a category's messages.
      * @param categoryId The unique ID of the forum category.
      * @return The full database path string.
      */
-    private String getCategoryPath(String categoryId) {
-        return FORUM_PATH + "/" + categoryId + "/messages";
-    }
+    private String getCategoryPath(String categoryId) { return FORUM_PATH + "/" + categoryId + "/messages"; }
 
     /**
      * Helper to get a DatabaseReference for a category's messages.
      * @param categoryId The unique ID of the forum category.
      * @return A DatabaseReference pointing to the messages sub-node.
      */
-    private DatabaseReference getCategoryMessagesRef(String categoryId) {
-        return databaseReference.child(getCategoryPath(categoryId));
-    }
+    private DatabaseReference getCategoryMessagesRef(String categoryId) { return databaseReference.child(getCategoryPath(categoryId)); }
 }

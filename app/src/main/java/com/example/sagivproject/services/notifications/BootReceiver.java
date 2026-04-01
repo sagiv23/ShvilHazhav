@@ -82,9 +82,7 @@ public class BootReceiver extends BroadcastReceiver {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Log.e(TAG, "Failed to get user medications for rescheduling", e);
-            }
+            public void onFailed(Exception e) { Log.e(TAG, "Failed to get user medications for rescheduling", e); }
         });
     }
 }

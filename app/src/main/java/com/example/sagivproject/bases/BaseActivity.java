@@ -93,9 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     protected DrawerLayout drawerLayout;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
 
     /**
      * Sets up the common menu UI components, including the Navigation Drawer and Top Bar.
@@ -181,9 +179,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
      * @param resId The resource ID of the target destination (e.g., {@code R.id.mainActivity}).
      */
     @Override
-    public void onNavigate(int resId) {
-        onNavigate(resId, null);
-    }
+    public void onNavigate(int resId) { onNavigate(resId, null); }
 
     /**
      * Navigates to a destination with optional arguments and a standard slide animation.
@@ -197,21 +193,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
 
         if (resId == R.id.mainActivity) {
             intent = new Intent(this, MainActivity.class);
-        } else if (resId == R.id.landingActivity) {
-            intent = new Intent(this, LandingActivity.class);
-        } else if (resId == R.id.contactActivity) {
-            intent = new Intent(this, ContactActivity.class);
-        } else if (resId == R.id.detailsAboutUserActivity) {
-            intent = new Intent(this, DetailsAboutUserActivity.class);
-        } else if (resId == R.id.settingsActivity) {
-            intent = new Intent(this, SettingsActivity.class);
-        } else if (resId == R.id.loginActivity) {
-            intent = new Intent(this, LoginActivity.class);
-        } else if (resId == R.id.registerActivity) {
-            intent = new Intent(this, RegisterActivity.class);
-        } else if (resId == R.id.adminPageActivity) {
-            intent = new Intent(this, AdminPageActivity.class);
-        } else if (resId == R.id.nav_logout) {
+        } else if (resId == R.id.landingActivity) { intent = new Intent(this, LandingActivity.class); } else if (resId == R.id.contactActivity) { intent = new Intent(this, ContactActivity.class); } else if (resId == R.id.detailsAboutUserActivity) { intent = new Intent(this, DetailsAboutUserActivity.class); } else if (resId == R.id.settingsActivity) { intent = new Intent(this, SettingsActivity.class); } else if (resId == R.id.loginActivity) { intent = new Intent(this, LoginActivity.class); } else if (resId == R.id.registerActivity) { intent = new Intent(this, RegisterActivity.class); } else if (resId == R.id.adminPageActivity) { intent = new Intent(this, AdminPageActivity.class); } else if (resId == R.id.nav_logout) {
             sharedPreferencesUtil.signOutUser();
             intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -234,9 +216,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
      * Requests a set of runtime permissions from the user.
      * @param permissions A variable list of permission strings (e.g., {@code Manifest.permission.CAMERA}).
      */
-    protected void requestPermissions(String... permissions) {
-        requestPermissionLauncher.launch(permissions);
-    }
+    protected void requestPermissions(String... permissions) { requestPermissionLauncher.launch(permissions); }
 
     /**
      * Callback method invoked when the results of a permission request are available.

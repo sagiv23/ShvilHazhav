@@ -40,47 +40,31 @@ public class EmergencyContact implements Serializable, Idable {
     }
 
     @Override
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
     @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
     /**
      * @return The contact's first name.
      */
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getFirstName() { return firstName; }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
     /**
      * @return The contact's last name.
      */
-    public String getLastName() {
-        return lastName;
-    }
+    public String getLastName() { return lastName; }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
     /**
      * @return The contact's phone number.
      */
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+    public String getPhoneNumber() { return phoneNumber; }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     /**
      * Gets the full name of the contact.
@@ -88,9 +72,7 @@ public class EmergencyContact implements Serializable, Idable {
      * @return A string combining first name and last name.
      */
     @Exclude
-    public String getFullName() {
-        return firstName + " " + lastName;
-    }
+    public String getFullName() { return firstName + " " + lastName; }
 
     @Override
     public boolean equals(Object o) {
@@ -104,7 +86,5 @@ public class EmergencyContact implements Serializable, Idable {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phoneNumber);
-    }
+    public int hashCode() { return Objects.hash(id, firstName, lastName, phoneNumber); }
 }

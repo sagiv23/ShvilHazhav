@@ -100,9 +100,7 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(MemoryGameLogsTableActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(MemoryGameLogsTableActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show(); }
         });
     }
 }

@@ -109,14 +109,10 @@ public class AuthServiceImpl implements IAuthService {
     public void addUser(String firstName, String lastName, long birthDateMillis, String email, String password, AddUserCallback callback) {
         handleUserCreation(firstName, lastName, birthDateMillis, email, password, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(User user) {
-                callback.onSuccess(user);
-            }
+            public void onCompleted(User user) { callback.onSuccess(user); }
 
             @Override
-            public void onFailed(Exception e) {
-                callback.onError(e.getMessage());
-            }
+            public void onFailed(Exception e) { callback.onError(e.getMessage()); }
         }, callback::onError);
     }
 
@@ -146,9 +142,7 @@ public class AuthServiceImpl implements IAuthService {
                 }
 
                 @Override
-                public void onFailed(Exception e) {
-                    callback.onError(ERROR_CHECKING_EMAIL);
-                }
+                public void onFailed(Exception e) { callback.onError(ERROR_CHECKING_EMAIL); }
             });
         } else {
             applyUserUpdate(user, newFirstName, newLastName, newBirthDateMillis, newEmail, newPassword, callback);
@@ -176,14 +170,10 @@ public class AuthServiceImpl implements IAuthService {
 
         userService.createNewUser(user, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(Void object) {
-                callback.onCompleted(user);
-            }
+            public void onCompleted(Void object) { callback.onCompleted(user); }
 
             @Override
-            public void onFailed(Exception e) {
-                callback.onFailed(e);
-            }
+            public void onFailed(Exception e) { callback.onFailed(e); }
         });
     }
 
@@ -199,14 +189,10 @@ public class AuthServiceImpl implements IAuthService {
 
         userService.updateUser(user, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(Void object) {
-                callback.onSuccess(user);
-            }
+            public void onCompleted(Void object) { callback.onSuccess(user); }
 
             @Override
-            public void onFailed(Exception e) {
-                callback.onError(ERROR_UPDATING_DETAILS);
-            }
+            public void onFailed(Exception e) { callback.onError(ERROR_UPDATING_DETAILS); }
         });
     }
 
@@ -225,9 +211,7 @@ public class AuthServiceImpl implements IAuthService {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                errorCallback.accept(ERROR_CHECKING_EMAIL);
-            }
+            public void onFailed(Exception e) { errorCallback.accept(ERROR_CHECKING_EMAIL); }
         });
     }
 }

@@ -37,9 +37,7 @@ public class StatsServiceImpl implements IStatsService {
      * @param databaseReference The root DatabaseReference injected by Hilt.
      */
     @Inject
-    public StatsServiceImpl(DatabaseReference databaseReference) {
-        this.databaseReference = databaseReference.child(USERS_PATH);
-    }
+    public StatsServiceImpl(DatabaseReference databaseReference) { this.databaseReference = databaseReference.child(USERS_PATH); }
 
     /**
      * Updates the daily math statistics for a specific user using a Firebase transaction.

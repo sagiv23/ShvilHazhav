@@ -43,9 +43,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
      * @param imageUtil A utility class for loading and processing profile images.
      */
     @Inject
-    public UsersTableAdapter(ImageUtil imageUtil) {
-        this.imageUtil = imageUtil;
-    }
+    public UsersTableAdapter(ImageUtil imageUtil) { this.imageUtil = imageUtil; }
 
     /**
      * Initializes the adapter with state-specific data and a listener.
@@ -61,9 +59,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
      * Updates the user list to be displayed in the table.
      * @param users The list of {@link User} objects.
      */
-    public void setUserList(List<User> users) {
-        setData(users);
-    }
+    public void setUserList(List<User> users) { setData(users); }
 
     @NonNull
     @Override

@@ -60,25 +60,19 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
      * @param context The activity context used for layout inflation and resources.
      */
     @Inject
-    public MedicationListAdapter(@ActivityContext Context context) {
-        this.context = context;
-    }
+    public MedicationListAdapter(@ActivityContext Context context) { this.context = context; }
 
     /**
      * Sets the listener for medication-related actions (edit, delete, status change).
      * @param listener The {@link OnMedicationActionListener} implementation.
      */
-    public void setListener(OnMedicationActionListener listener) {
-        this.listener = listener;
-    }
+    public void setListener(OnMedicationActionListener listener) { this.listener = listener; }
 
     /**
      * Updates the list of medications to be displayed.
      * @param medications The new list of {@link Medication} objects.
      */
-    public void setMedications(List<Medication> medications) {
-        setData(medications);
-    }
+    public void setMedications(List<Medication> medications) { setData(medications); }
 
     /**
      * Sets the medication usage logs for today to reflect the current intake status in the UI.

@@ -136,9 +136,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
         if ("draw".equals(winnerUid)) {
             message = "זה נגמר בתיקו!";
-        } else if (isWin) {
-            message = "כל הכבוד! ניצחת והתווסף לך ניצחון!";
-        } else {
+        } else if (isWin) { message = "כל הכבוד! ניצחת והתווסף לך ניצחון!"; } else {
             message = "הפעם הפסדת... לא נורא!";
         }
 
@@ -206,9 +204,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * @return true if the local user is authorized to make a move.
      */
     @Override
-    public boolean isMyTurn() {
-        return currentRoom != null && user.getId().equals(currentRoom.getCurrentTurnUid()) && !currentRoom.isProcessingMatch();
-    }
+    public boolean isMyTurn() { return currentRoom != null && user.getId().equals(currentRoom.getCurrentTurnUid()) && !currentRoom.isProcessingMatch(); }
 
     /**
      * Logic for selecting a card. Synchronizes revealed status with the database.
@@ -308,9 +304,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                         }
 
                         @Override
-                        public void onFailed(Exception e) {
-                            tvOpponentName.setText("משחק נגד: יריב");
-                        }
+                        public void onFailed(Exception e) { tvOpponentName.setText("משחק נגד: יריב"); }
                     });
                 }
                 updateScoreUI(room);
@@ -351,9 +345,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             }
 
             @Override
-            public void onFailed(Exception e) {
-                goBack();
-            }
+            public void onFailed(Exception e) { goBack(); }
         });
     }
 
@@ -375,9 +367,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         if (turnTimer != null) turnTimer.cancel();
         turnTimer = new CountDownTimer(TURN_TIME_LIMIT, 1000) {
             @Override
-            public void onTick(long millisUntilFinished) {
-                tvTimer.setText(MessageFormat.format("זמן נותר: {0}", millisUntilFinished / 1000));
-            }
+            public void onTick(long millisUntilFinished) { tvTimer.setText(MessageFormat.format("זמן נותר: {0}", millisUntilFinished / 1000)); }
 
             @Override
             public void onFinish() {

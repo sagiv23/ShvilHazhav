@@ -39,62 +39,46 @@ public class Card implements Serializable, Idable {
     }
 
     @Override
-    public String getId() {
-        return this.id;
-    }
+    public String getId() { return this.id; }
 
     @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
     /**
      * Gets the Base64 image content of the card.
      * @return Base64 string.
      */
-    public String getBase64Content() {
-        return base64Content;
-    }
+    public String getBase64Content() { return base64Content; }
 
     /**
      * Sets the Base64 image content of the card.
      * @param base64Content New image content.
      */
-    public void setBase64Content(String base64Content) {
-        this.base64Content = base64Content;
-    }
+    public void setBase64Content(String base64Content) { this.base64Content = base64Content; }
 
     /**
      * Checks if the card is currently revealed (flipped up).
      * @return true if revealed.
      */
-    public boolean getIsRevealed() {
-        return isRevealed;
-    }
+    public boolean getIsRevealed() { return isRevealed; }
 
     /**
      * Sets the revealed state of the card.
      * @param revealed true to flip up, false to flip down.
      */
-    public void setRevealed(boolean revealed) {
-        isRevealed = revealed;
-    }
+    public void setRevealed(boolean revealed) { isRevealed = revealed; }
 
     /**
      * Checks if the card has been successfully matched.
      * @return true if matched.
      */
-    public boolean getIsMatched() {
-        return isMatched;
-    }
+    public boolean getIsMatched() { return isMatched; }
 
     /**
      * Sets the matched state of the card.
      * @param matched true if the card pair was found.
      */
-    public void setMatched(boolean matched) {
-        isMatched = matched;
-    }
+    public void setMatched(boolean matched) { isMatched = matched; }
 
     /**
      * Internal flag to track if the card was previously revealed, used for animation triggers.
@@ -102,18 +86,14 @@ public class Card implements Serializable, Idable {
      * @return true if the card was revealed in the previous frame.
      */
     @Exclude
-    public boolean wasRevealed() {
-        return wasRevealed;
-    }
+    public boolean wasRevealed() { return wasRevealed; }
 
     /**
      * Sets the previous revealed state for animation tracking.
      * @param wasRevealed previous state.
      */
     @Exclude
-    public void setWasRevealed(boolean wasRevealed) {
-        this.wasRevealed = wasRevealed;
-    }
+    public void setWasRevealed(boolean wasRevealed) { this.wasRevealed = wasRevealed; }
 
     @Override
     public boolean equals(Object o) {
@@ -127,9 +107,7 @@ public class Card implements Serializable, Idable {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, base64Content, isRevealed, isMatched);
-    }
+    public int hashCode() { return Objects.hash(id, base64Content, isRevealed, isMatched); }
 
     @NonNull
     @Override

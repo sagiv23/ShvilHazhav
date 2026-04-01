@@ -41,9 +41,7 @@ public class FullImageDialog extends DialogFragment {
      * Sets the image drawable to be displayed.
      * @param imageDrawable The {@link Drawable} source.
      */
-    public void setImage(Drawable imageDrawable) {
-        this.imageDrawable = imageDrawable;
-    }
+    public void setImage(Drawable imageDrawable) { this.imageDrawable = imageDrawable; }
 
     /**
      * Configures the dialog style to be full-screen before creation.

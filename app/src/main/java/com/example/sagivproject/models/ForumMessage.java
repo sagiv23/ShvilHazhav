@@ -58,80 +58,52 @@ public class ForumMessage implements Serializable, Idable {
     }
 
     @Override
-    public String getId() {
-        return this.id;
-    }
+    public String getId() { return this.id; }
 
     @Override
-    public void setId(String messageId) {
-        this.id = messageId;
-    }
+    public void setId(String messageId) { this.id = messageId; }
 
     /**
      * @return The text content of the message.
      */
-    public String getMessage() {
-        return message;
-    }
+    public String getMessage() { return message; }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    public void setMessage(String message) { this.message = message; }
 
     /**
      * @return The message creation time in milliseconds.
      */
-    public long getTimestamp() {
-        return timestamp;
-    }
+    public long getTimestamp() { return timestamp; }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
+    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
 
     /**
      * @return The unique identifier of the user who sent the message.
      */
-    public String getUserId() {
-        return userId;
-    }
+    public String getUserId() { return userId; }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    public void setUserId(String userId) { this.userId = userId; }
 
     /**
      * @return The display name of the sender.
      */
-    public String getSenderName() {
-        return senderName;
-    }
+    public String getSenderName() { return senderName; }
 
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
+    public void setSenderName(String senderName) { this.senderName = senderName; }
 
     /**
      * @return The email address of the sender.
      */
-    public String getSenderEmail() {
-        return senderEmail;
-    }
+    public String getSenderEmail() { return senderEmail; }
 
-    public void setSenderEmail(String senderEmail) {
-        this.senderEmail = senderEmail;
-    }
+    public void setSenderEmail(String senderEmail) { this.senderEmail = senderEmail; }
 
     /**
      * @return true if the sender has administrative privileges.
      */
-    public boolean isSenderAdmin() {
-        return senderAdmin;
-    }
+    public boolean isSenderAdmin() { return senderAdmin; }
 
-    public void setSenderAdmin(boolean senderAdmin) {
-        this.senderAdmin = senderAdmin;
-    }
+    public void setSenderAdmin(boolean senderAdmin) { this.senderAdmin = senderAdmin; }
 
     @NonNull
     @Override

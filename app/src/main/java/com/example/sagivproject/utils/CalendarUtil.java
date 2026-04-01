@@ -84,9 +84,7 @@ public class CalendarUtil {
      * @param millis The timestamp in milliseconds.
      * @return The formatted date string.
      */
-    public String formatDate(long millis) {
-        return formatDate(millis, DEFAULT_DATE_FORMAT);
-    }
+    public String formatDate(long millis) { return formatDate(millis, DEFAULT_DATE_FORMAT); }
 
     /**
      * Formats a timestamp from milliseconds to a string using a specified format.

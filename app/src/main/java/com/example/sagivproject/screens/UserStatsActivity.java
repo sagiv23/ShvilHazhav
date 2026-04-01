@@ -259,9 +259,7 @@ public class UserStatsActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onFailed(Exception e) {
-                    Toast.makeText(UserStatsActivity.this, "שגיאה בטעינת משתמשים", Toast.LENGTH_SHORT).show();
-                }
+                public void onFailed(Exception e) { Toast.makeText(UserStatsActivity.this, "שגיאה בטעינת משתמשים", Toast.LENGTH_SHORT).show(); }
             });
         }
     }
@@ -291,9 +289,7 @@ public class UserStatsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                setupGraphs();
-            }
+            public void onFailed(Exception e) { setupGraphs(); }
         });
     }
 
@@ -404,9 +400,7 @@ public class UserStatsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(UserStatsActivity.this, "שגיאה באיפוס ההיסטוריה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(UserStatsActivity.this, "שגיאה באיפוס ההיסטוריה", Toast.LENGTH_SHORT).show(); }
         }));
     }
 }

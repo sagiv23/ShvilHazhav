@@ -44,9 +44,7 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
      * @return The size of the internal data list.
      */
     @Override
-    public int getItemCount() {
-        return dataList.size();
-    }
+    public int getItemCount() { return dataList.size(); }
 
     /**
      * Retrieves the data item at the specified position in the list.
@@ -54,17 +52,13 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
      * @return The data item at the given position.
      * @throws IndexOutOfBoundsException If the position is out of range.
      */
-    protected T getItem(int position) {
-        return dataList.get(position);
-    }
+    protected T getItem(int position) { return dataList.get(position); }
 
     /**
      * Returns the internal data list.
      * @return The list of items.
      */
-    public List<T> getItemList() {
-        return dataList;
-    }
+    public List<T> getItemList() { return dataList; }
 
     /**
      * Internal callback class for {@link DiffUtil} to compare items in the list.
@@ -84,14 +78,10 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
         }
 
         @Override
-        public int getOldListSize() {
-            return oldList.size();
-        }
+        public int getOldListSize() { return oldList.size(); }
 
         @Override
-        public int getNewListSize() {
-            return newList.size();
-        }
+        public int getNewListSize() { return newList.size(); }
 
         /**
          * Checks if two items represent the same entity (usually by comparing IDs).
@@ -114,8 +104,6 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
          * @return true if contents are identical.
          */
         @Override
-        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
-        }
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) { return oldList.get(oldItemPosition).equals(newList.get(newItemPosition)); }
     }
 }

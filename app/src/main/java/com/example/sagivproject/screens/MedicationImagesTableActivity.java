@@ -93,9 +93,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
         adapter = adapterService.getMedicationImagesTableAdapter();
         adapter.setListener(new MedicationImagesTableAdapter.OnImageActionListener() {
             @Override
-            public void onDeleteImage(ImageData image) {
-                deleteImageAndReorder(image);
-            }
+            public void onDeleteImage(ImageData image) { deleteImageAndReorder(image); }
 
             @Override
             public void onImageClicked(ImageData image, ImageView imageView) {
@@ -117,9 +115,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterImages(s.toString());
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { filterImages(s.toString()); }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -174,9 +170,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -217,9 +211,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show();
-                    }
+                    public void onFailed(Exception e) { Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show(); }
                 });
             }
         } catch (IOException ignored) {
@@ -241,9 +233,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(MedicationImagesTableActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(MedicationImagesTableActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -262,9 +252,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בעדכון הרשימה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בעדכון הרשימה", Toast.LENGTH_SHORT).show(); }
         });
     }
 }

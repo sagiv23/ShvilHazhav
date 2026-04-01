@@ -68,44 +68,34 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * Generates a new unique ID for a new entity in the database.
      * @return A new unique ID string.
      */
-    protected String generateId() {
-        return databaseReference.child(path).push().getKey();
-    }
+    protected String generateId() { return databaseReference.child(path).push().getKey(); }
 
     /**
      * Creates or overwrites an entity in the database.
      * @param item The entity to create or overwrite.
      * @param callback The callback to be invoked upon completion.
      */
-    protected void create(@NotNull final T item, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) {
-        writeData(path + "/" + item.getId(), item, callback);
-    }
+    protected void create(@NotNull final T item, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) { writeData(path + "/" + item.getId(), item, callback); }
 
     /**
      * Retrieves a single entity from the database by its ID.
      * @param id The ID of the entity to retrieve.
      * @param callback The callback to be invoked with the result.
      */
-    protected void get(@NotNull final String id, final @NotNull IDatabaseService.DatabaseCallback<T> callback) {
-        getData(path + "/" + id, callback);
-    }
+    protected void get(@NotNull final String id, final @NotNull IDatabaseService.DatabaseCallback<T> callback) { getData(path + "/" + id, callback); }
 
     /**
      * Retrieves all entities of this type from the database.
      * @param callback The callback to be invoked with the list of results.
      */
-    protected void getAll(final @NotNull IDatabaseService.DatabaseCallback<List<T>> callback) {
-        getDataList(path, callback);
-    }
+    protected void getAll(final @NotNull IDatabaseService.DatabaseCallback<List<T>> callback) { getDataList(path, callback); }
 
     /**
      * Deletes an entity from the database by its ID.
      * @param id The ID of the entity to delete.
      * @param callback The callback to be invoked upon completion.
      */
-    protected void delete(@NotNull final String id, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) {
-        deleteData(path + "/" + id, callback);
-    }
+    protected void delete(@NotNull final String id, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) { deleteData(path + "/" + id, callback); }
 
     /**
      * Updates an entity using a transaction to ensure atomicity.
@@ -125,9 +115,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param fullPath The full path in the database.
      * @return A {@link DatabaseReference} for the given path.
      */
-    protected DatabaseReference readData(@NotNull final String fullPath) {
-        return databaseReference.child(fullPath);
-    }
+    protected DatabaseReference readData(@NotNull final String fullPath) { return databaseReference.child(fullPath); }
 
     /**
      * Writes data to a specific path in the database.

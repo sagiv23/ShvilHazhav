@@ -37,9 +37,7 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
      * Sets the list of users to be displayed in the leaderboard.
      * @param users The list of {@link User} objects, typically pre-sorted by total wins.
      */
-    public void setUsers(List<User> users) {
-        setData(users);
-    }
+    public void setUsers(List<User> users) { setData(users); }
 
     @NonNull
     @Override

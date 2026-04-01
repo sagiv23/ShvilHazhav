@@ -35,9 +35,7 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      * Initializes the base service with the tips' path.
      */
     @Inject
-    public TipOfTheDayServiceImpl() {
-        super(TIP_OF_THE_DAY_PATH, TipOfTheDay.class);
-    }
+    public TipOfTheDayServiceImpl() { super(TIP_OF_THE_DAY_PATH, TipOfTheDay.class); }
 
     /**
      * Retrieves the tip assigned to the current calendar day.
@@ -59,7 +57,5 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      * @param callback The callback invoked with the final tip stored in the database.
      */
     @Override
-    public void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
-        runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> Objects.requireNonNullElse(currentTip, tip), callback);
-    }
+    public void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) { runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> Objects.requireNonNullElse(currentTip, tip), callback); }
 }

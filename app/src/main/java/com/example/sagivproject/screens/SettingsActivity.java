@@ -218,9 +218,7 @@ public class SettingsActivity extends BaseActivity {
      * @param switchDarkMode The switch component.
      * @param isDarkMode Current dark mode state.
      */
-    private void updateDarkModeText(SwitchMaterial switchDarkMode, boolean isDarkMode) {
-        switchDarkMode.setText(isDarkMode ? R.string.bright_mode : R.string.dark_mode);
-    }
+    private void updateDarkModeText(SwitchMaterial switchDarkMode, boolean isDarkMode) { switchDarkMode.setText(isDarkMode ? R.string.bright_mode : R.string.dark_mode); }
 
     /**
      * Logs the current user out after a confirmation dialog.

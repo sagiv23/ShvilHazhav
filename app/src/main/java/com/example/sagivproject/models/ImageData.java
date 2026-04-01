@@ -32,25 +32,17 @@ public class ImageData implements Serializable, Idable {
     }
 
     @Override
-    public String getId() {
-        return this.id;
-    }
+    public String getId() { return this.id; }
 
     @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
     /**
      * @return The Base64 encoded content of the image.
      */
-    public String getBase64() {
-        return base64;
-    }
+    public String getBase64() { return base64; }
 
-    public void setBase64(String base64) {
-        this.base64 = base64;
-    }
+    public void setBase64(String base64) { this.base64 = base64; }
 
     @NonNull
     @Override

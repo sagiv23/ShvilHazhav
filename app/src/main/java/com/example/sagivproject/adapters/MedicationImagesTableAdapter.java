@@ -36,25 +36,19 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
      * @param imageUtil A utility class for loading and processing images from Base64 strings.
      */
     @Inject
-    public MedicationImagesTableAdapter(ImageUtil imageUtil) {
-        this.imageUtil = imageUtil;
-    }
+    public MedicationImagesTableAdapter(ImageUtil imageUtil) { this.imageUtil = imageUtil; }
 
     /**
      * Sets the listener for image-related interactions (clicks and deletes).
      * @param listener The {@link OnImageActionListener} to handle events.
      */
-    public void setListener(OnImageActionListener listener) {
-        this.listener = listener;
-    }
+    public void setListener(OnImageActionListener listener) { this.listener = listener; }
 
     /**
      * Updates the data set with a new list of images.
      * @param images The new list of {@link ImageData} objects to display.
      */
-    public void setImages(List<ImageData> images) {
-        setData(images);
-    }
+    public void setImages(List<ImageData> images) { setData(images); }
 
     @NonNull
     @Override

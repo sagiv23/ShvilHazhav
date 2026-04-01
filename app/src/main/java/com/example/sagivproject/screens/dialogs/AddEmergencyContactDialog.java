@@ -52,9 +52,7 @@ public class AddEmergencyContactDialog extends DialogFragment {
      * Sets the listener for contact submission events.
      * @param listener The listener to set.
      */
-    public void setListener(AddEmergencyContactListener listener) {
-        this.listener = listener;
-    }
+    public void setListener(AddEmergencyContactListener listener) { this.listener = listener; }
 
     /**
      * Sets the initial data for the dialog.

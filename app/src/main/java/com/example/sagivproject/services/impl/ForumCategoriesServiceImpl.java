@@ -33,9 +33,7 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
      * Initializes the base service with the forum categories root path.
      */
     @Inject
-    public ForumCategoriesServiceImpl() {
-        super(CATEGORIES_PATH, ForumCategory.class);
-    }
+    public ForumCategoriesServiceImpl() { super(CATEGORIES_PATH, ForumCategory.class); }
 
     /**
      * Retrieves all forum categories from the database, ordered by an internal timestamp.
@@ -58,9 +56,7 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (callback != null) callback.onFailed(error.toException());
-            }
+            public void onCancelled(@NonNull DatabaseError error) { if (callback != null) callback.onFailed(error.toException()); }
         });
     }
 
@@ -90,10 +86,7 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
 
         deleteData(MESSAGES_PATH + "/" + categoryId, new IDatabaseService.DatabaseCallback<>() {
             @Override
-            public void onCompleted(Void result) {
-
-                delete(categoryId, callback);
-            }
+            public void onCompleted(Void result) { delete(categoryId, callback); }
 
             @Override
             public void onFailed(Exception e) {
@@ -117,14 +110,10 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
             return category;
         }, new IDatabaseService.DatabaseCallback<>() {
             @Override
-            public void onCompleted(ForumCategory result) {
-                if (callback != null) callback.onCompleted(null);
-            }
+            public void onCompleted(ForumCategory result) { if (callback != null) callback.onCompleted(null); }
 
             @Override
-            public void onFailed(Exception e) {
-                if (callback != null) callback.onFailed(e);
-            }
+            public void onFailed(Exception e) { if (callback != null) callback.onFailed(e); }
         });
     }
 }

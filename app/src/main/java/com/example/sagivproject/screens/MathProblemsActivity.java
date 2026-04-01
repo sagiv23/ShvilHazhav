@@ -104,9 +104,7 @@ public class MathProblemsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                updateStatsUI();
-            }
+            public void onFailed(Exception e) { updateStatsUI(); }
         });
     }
 
@@ -178,9 +176,7 @@ public class MathProblemsActivity extends BaseActivity {
      * @param max Maximum value (inclusive).
      * @return A random integer.
      */
-    private int rand(int min, int max) {
-        return min + (int) (Math.random() * (max - min + 1));
-    }
+    private int rand(int min, int max) { return min + (int) (Math.random() * (max - min + 1)); }
 
     /**
      * Initializes the numeric keypad by attaching click listeners to all digit buttons.

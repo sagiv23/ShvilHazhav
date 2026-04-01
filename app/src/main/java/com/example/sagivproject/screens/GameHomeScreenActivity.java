@@ -87,19 +87,13 @@ public class GameHomeScreenActivity extends BaseActivity {
                 tts.setLanguage(new Locale("he", "IL"));
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
-                    public void onStart(String utteranceId) {
-                        runOnUiThread(() -> updateSpeakButton(true));
-                    }
+                    public void onStart(String utteranceId) { runOnUiThread(() -> updateSpeakButton(true)); }
 
                     @Override
-                    public void onDone(String utteranceId) {
-                        runOnUiThread(() -> updateSpeakButton(false));
-                    }
+                    public void onDone(String utteranceId) { runOnUiThread(() -> updateSpeakButton(false)); }
 
                     @Override
-                    public void onError(String utteranceId) {
-                        runOnUiThread(() -> updateSpeakButton(false));
-                    }
+                    public void onError(String utteranceId) { runOnUiThread(() -> updateSpeakButton(false)); }
                 });
             }
         });
@@ -178,9 +172,7 @@ public class GameHomeScreenActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                displayTodayWins();
-            }
+            public void onFailed(Exception e) { displayTodayWins(); }
         });
     }
 
@@ -215,9 +207,7 @@ public class GameHomeScreenActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(GameHomeScreenActivity.this, "שגיאה בטעינת המובילים", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(GameHomeScreenActivity.this, "שגיאה בטעינת המובילים", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -298,14 +288,10 @@ public class GameHomeScreenActivity extends BaseActivity {
             }
 
             @Override
-            public void onRoomFinished(GameRoom room) {
-                cancelSearch();
-            }
+            public void onRoomFinished(GameRoom room) { cancelSearch(); }
 
             @Override
-            public void onFailed(Exception e) {
-                cancelSearch();
-            }
+            public void onFailed(Exception e) { cancelSearch(); }
         });
     }
 

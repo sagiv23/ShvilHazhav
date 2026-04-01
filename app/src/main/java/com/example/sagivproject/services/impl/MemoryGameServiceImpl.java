@@ -124,9 +124,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             public void onComplete(DatabaseError error, boolean committed, DataSnapshot snapshot) {
                 if (error != null) {
                     callback.onFailed(error.toException());
-                } else if (!committed) {
-                    callback.onFailed(new Exception("שגיאה במציאת חדר."));
-                } else {
+                } else if (!committed) { callback.onFailed(new Exception("שגיאה במציאת חדר.")); } else {
                     GameRoom finalRoom = snapshot.child(roomIdForUser).getValue(GameRoom.class);
                     if (finalRoom != null) callback.onCompleted(finalRoom);
                     else callback.onFailed(new Exception("שגיאה בנתוני החדר."));
@@ -149,9 +147,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callback.onFailed(error.toException());
-            }
+            public void onCancelled(@NonNull DatabaseError error) { callback.onFailed(error.toException()); }
         });
     }
 
@@ -176,9 +172,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callback.onFailed(error.toException());
-            }
+            public void onCancelled(@NonNull DatabaseError error) { callback.onFailed(error.toException()); }
         };
         roomsReference.child(roomId).addValueEventListener(listener);
         roomStatusListeners.put(roomId, listener);
@@ -254,9 +248,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callback.onFailed(error.toException());
-            }
+            public void onCancelled(@NonNull DatabaseError error) { callback.onFailed(error.toException()); }
         };
         roomsReference.child(roomId).addValueEventListener(activeGameListener);
     }
@@ -270,9 +262,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     }
 
     @Override
-    public void updateRoomField(String roomId, String field, Object value) {
-        roomsReference.child(roomId).child(field).setValue(value);
-    }
+    public void updateRoomField(String roomId, String field, Object value) { roomsReference.child(roomId).child(field).setValue(value); }
 
     /**
      * Atomic transaction to increment a player's score.
@@ -315,9 +305,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     }
 
     @Override
-    public void setProcessing(String roomId, boolean isProcessing) {
-        updateRoomField(roomId, FIELD_PROCESSING_MATCH, isProcessing);
-    }
+    public void setProcessing(String roomId, boolean isProcessing) { updateRoomField(roomId, FIELD_PROCESSING_MATCH, isProcessing); }
 
     /**
      * Updates daily memory game stats for a user using an atomic transaction.

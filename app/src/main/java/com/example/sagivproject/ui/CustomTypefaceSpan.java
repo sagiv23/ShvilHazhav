@@ -59,16 +59,12 @@ public class CustomTypefaceSpan extends TypefaceSpan {
      * @param ds The TextPaint used for drawing.
      */
     @Override
-    public void updateDrawState(@NonNull TextPaint ds) {
-        applyCustomTypeFace(ds, newType);
-    }
+    public void updateDrawState(@NonNull TextPaint ds) { applyCustomTypeFace(ds, newType); }
 
     /**
      * Updates the measurement state of the text (e.g., for calculating width).
      * @param paint The TextPaint used for measuring.
      */
     @Override
-    public void updateMeasureState(@NonNull TextPaint paint) {
-        applyCustomTypeFace(paint, newType);
-    }
+    public void updateMeasureState(@NonNull TextPaint paint) { applyCustomTypeFace(paint, newType); }
 }

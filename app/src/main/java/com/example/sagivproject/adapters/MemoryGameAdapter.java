@@ -35,25 +35,19 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
      * @param imageUtil A utility class for image processing and loading.
      */
     @Inject
-    public MemoryGameAdapter(ImageUtil imageUtil) {
-        this.imageUtil = imageUtil;
-    }
+    public MemoryGameAdapter(ImageUtil imageUtil) { this.imageUtil = imageUtil; }
 
     /**
      * Sets the listener for game interaction events.
      * @param listener The {@link MemoryGameListener} to be notified when a card is clicked.
      */
-    public void setListener(MemoryGameListener listener) {
-        this.listener = listener;
-    }
+    public void setListener(MemoryGameListener listener) { this.listener = listener; }
 
     /**
      * Updates the board with a new set of cards.
      * @param cards The list of {@link Card} objects to display.
      */
-    public void setCards(List<Card> cards) {
-        setData(cards);
-    }
+    public void setCards(List<Card> cards) { setData(cards); }
 
     @NonNull
     @Override

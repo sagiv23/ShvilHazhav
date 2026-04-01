@@ -64,9 +64,7 @@ public class AddUserDialog extends DialogFragment {
      * Sets the submission listener.
      * @param listener The {@link AddUserDialogListener} implementation.
      */
-    public void setListener(AddUserDialogListener listener) {
-        this.listener = listener;
-    }
+    public void setListener(AddUserDialogListener listener) { this.listener = listener; }
 
     @NonNull
     @Override

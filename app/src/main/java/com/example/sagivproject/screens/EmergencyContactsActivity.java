@@ -136,9 +136,7 @@ public class EmergencyContactsActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onFailed(Exception e) {
-                            Toast.makeText(EmergencyContactsActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
-                        }
+                        public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show(); }
                     });
                 });
             }
@@ -153,9 +151,7 @@ public class EmergencyContactsActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(EmergencyContactsActivity.this, "שגיאה במחיקת איש הקשר", Toast.LENGTH_SHORT).show();
-                    }
+                    public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה במחיקת איש הקשר", Toast.LENGTH_SHORT).show(); }
                 });
             }
         });
@@ -173,9 +169,7 @@ public class EmergencyContactsActivity extends BaseActivity {
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
         if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.SEND_SMS))) {
             fetchLocationAndSendSms();
-        } else if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_CONTACTS))) {
-            contactPickerLauncher.launch(null);
-        }
+        } else if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_CONTACTS))) { contactPickerLauncher.launch(null); }
     }
 
     /**
@@ -212,9 +206,7 @@ public class EmergencyContactsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -239,9 +231,7 @@ public class EmergencyContactsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -257,9 +247,7 @@ public class EmergencyContactsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -347,21 +335,15 @@ public class EmergencyContactsActivity extends BaseActivity {
             public void onCompleted(List<EmergencyContact> contacts) {
                 databaseService.getEmergencyService().sendEmergencyAlert(EmergencyContactsActivity.this, contacts, locationUrl, new IDatabaseService.DatabaseCallback<>() {
                     @Override
-                    public void onCompleted(Void object) {
-                        Toast.makeText(EmergencyContactsActivity.this, "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show();
-                    }
+                    public void onCompleted(Void object) { Toast.makeText(EmergencyContactsActivity.this, "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show(); }
 
                     @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                    public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show(); }
                 });
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר לשליחת SMS", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר לשליחת SMS", Toast.LENGTH_SHORT).show(); }
         });
     }
 

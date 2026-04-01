@@ -44,9 +44,7 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
      * Updates the game room data list.
      * @param newRooms The new list of {@link GameRoom} objects.
      */
-    public void setRooms(List<GameRoom> newRooms) {
-        setData(newRooms);
-    }
+    public void setRooms(List<GameRoom> newRooms) { setData(newRooms); }
 
     /**
      * Updates both the data list and the name resolution map simultaneously.

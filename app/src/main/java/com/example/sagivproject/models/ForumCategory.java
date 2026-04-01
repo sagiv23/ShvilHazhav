@@ -32,25 +32,17 @@ public class ForumCategory implements Serializable, Idable {
     }
 
     @Override
-    public String getId() {
-        return this.id;
-    }
+    public String getId() { return this.id; }
 
     @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
     /**
      * @return The display name of the category.
      */
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
     @NonNull
     @Override

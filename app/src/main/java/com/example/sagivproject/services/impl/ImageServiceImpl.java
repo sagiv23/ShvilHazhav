@@ -34,18 +34,14 @@ public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements 
      * Initializes the base service with the images' path.
      */
     @Inject
-    public ImageServiceImpl() {
-        super(IMAGES_PATH, ImageData.class);
-    }
+    public ImageServiceImpl() { super(IMAGES_PATH, ImageData.class); }
 
     /**
      * Retrieves all image records from the database.
      * @param callback The callback invoked with the list of all images.
      */
     @Override
-    public void getAllImages(DatabaseCallback<List<ImageData>> callback) {
-        super.getAll(callback);
-    }
+    public void getAllImages(DatabaseCallback<List<ImageData>> callback) { super.getAll(callback); }
 
     /**
      * Creates a new image entry in the database.
@@ -53,9 +49,7 @@ public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements 
      * @param callback An optional callback to be invoked upon completion.
      */
     @Override
-    public void createImage(@NonNull ImageData image, @Nullable DatabaseCallback<Void> callback) {
-        super.create(image, callback);
-    }
+    public void createImage(@NonNull ImageData image, @Nullable DatabaseCallback<Void> callback) { super.create(image, callback); }
 
     /**
      * Replaces the entire image collection in the database with a provided list.
@@ -82,7 +76,5 @@ public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements 
      * @param callback An optional callback invoked upon completion.
      */
     @Override
-    public void deleteImage(@NonNull String imageId, @Nullable DatabaseCallback<Void> callback) {
-        super.delete(imageId, callback);
-    }
+    public void deleteImage(@NonNull String imageId, @Nullable DatabaseCallback<Void> callback) { super.delete(imageId, callback); }
 }

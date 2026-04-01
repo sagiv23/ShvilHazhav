@@ -40,29 +40,19 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
      * Initializes the base service with an empty path as full paths are built dynamically.
      */
     @Inject
-    public MedicationServiceImpl() {
-        super("", Medication.class);
-    }
+    public MedicationServiceImpl() { super("", Medication.class); }
 
     @Override
-    public String generateMedicationId() {
-        return super.generateId();
-    }
+    public String generateMedicationId() { return super.generateId(); }
 
     @Override
-    public void createNewMedication(@NonNull String uid, @NonNull Medication medication, @Nullable DatabaseCallback<Void> callback) {
-        writeData(getMedicationItemPath(uid, medication.getId()), medication, callback);
-    }
+    public void createNewMedication(@NonNull String uid, @NonNull Medication medication, @Nullable DatabaseCallback<Void> callback) { writeData(getMedicationItemPath(uid, medication.getId()), medication, callback); }
 
     @Override
-    public void getUserMedicationList(@NonNull String uid, @NonNull DatabaseCallback<List<Medication>> callback) {
-        getDataList(getMedicationPath(uid), callback);
-    }
+    public void getUserMedicationList(@NonNull String uid, @NonNull DatabaseCallback<List<Medication>> callback) { getDataList(getMedicationPath(uid), callback); }
 
     @Override
-    public void deleteMedication(@NonNull String uid, @NonNull String medicationId, @Nullable DatabaseCallback<Void> callback) {
-        deleteData(getMedicationItemPath(uid, medicationId), callback);
-    }
+    public void deleteMedication(@NonNull String uid, @NonNull String medicationId, @Nullable DatabaseCallback<Void> callback) { deleteData(getMedicationItemPath(uid, medicationId), callback); }
 
     /**
      * Updates an existing medication record using a database transaction.
@@ -75,14 +65,10 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
         UnaryOperator<Medication> updateFunction = oldMedication -> medication;
         runTransaction(getMedicationItemPath(uid, medication.getId()), updateFunction, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(Medication result) {
-                if (callback != null) callback.onCompleted(null);
-            }
+            public void onCompleted(Medication result) { if (callback != null) callback.onCompleted(null); }
 
             @Override
-            public void onFailed(Exception e) {
-                if (callback != null) callback.onFailed(e);
-            }
+            public void onFailed(Exception e) { if (callback != null) callback.onFailed(e); }
         });
     }
 
@@ -107,9 +93,7 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
 
                 if (usage.getStatus() == MedicationStatus.TAKEN) {
                     stats.addMedicationTaken();
-                } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) {
-                    stats.addMedicationMissed();
-                }
+                } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) { stats.addMedicationMissed(); }
 
                 stats.addMedicationUsageLog(usage);
                 currentData.setValue(stats);
@@ -185,14 +169,10 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
     /**
      * Constructs path to user's medications.
      */
-    private String getMedicationPath(String uid) {
-        return USERS_PATH + "/" + uid + "/" + MEDICATIONS_PATH;
-    }
+    private String getMedicationPath(String uid) { return USERS_PATH + "/" + uid + "/" + MEDICATIONS_PATH; }
 
     /**
      * Constructs path to specific medication.
      */
-    private String getMedicationItemPath(String uid, String medicationId) {
-        return getMedicationPath(uid) + "/" + medicationId;
-    }
+    private String getMedicationItemPath(String uid, String medicationId) { return getMedicationPath(uid) + "/" + medicationId; }
 }

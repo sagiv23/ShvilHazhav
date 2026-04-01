@@ -97,19 +97,13 @@ public class TipOfTheDayActivity extends BaseActivity {
                 tts.setLanguage(new Locale("he", "IL"));
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
-                    public void onStart(String id) {
-                        runOnUiThread(() -> updateSpeakButton(id, true));
-                    }
+                    public void onStart(String id) { runOnUiThread(() -> updateSpeakButton(id, true)); }
 
                     @Override
-                    public void onDone(String id) {
-                        runOnUiThread(() -> updateSpeakButton(id, false));
-                    }
+                    public void onDone(String id) { runOnUiThread(() -> updateSpeakButton(id, false)); }
 
                     @Override
-                    public void onError(String id) {
-                        runOnUiThread(() -> updateSpeakButton(id, false));
-                    }
+                    public void onError(String id) { runOnUiThread(() -> updateSpeakButton(id, false)); }
                 });
             }
         });
@@ -166,9 +160,7 @@ public class TipOfTheDayActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                tipContent.setText("שגיאה בקבלת הטיפ היומי.");
-            }
+            public void onFailed(Exception e) { tipContent.setText("שגיאה בקבלת הטיפ היומי."); }
         });
     }
 
@@ -206,16 +198,12 @@ public class TipOfTheDayActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) {
-                        tipContent.setText("שגיאה בשמירת הטיפ היומי.");
-                    }
+                    public void onFailed(Exception e) { tipContent.setText("שגיאה בשמירת הטיפ היומי."); }
                 });
             }
 
             @Override
-            public void onFailure(@NonNull Throwable t) {
-                tipContent.setText(String.format("שגיאה: %s", t.getMessage()));
-            }
+            public void onFailure(@NonNull Throwable t) { tipContent.setText(String.format("שגיאה: %s", t.getMessage())); }
         }, mainExecutor);
     }
 

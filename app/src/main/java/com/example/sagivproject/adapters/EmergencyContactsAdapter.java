@@ -37,9 +37,7 @@ public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, Emer
      * Sets the listener for contact-specific actions (edit and delete).
      * @param listener The {@link OnContactActionListener} to handle user interactions.
      */
-    public void setListener(OnContactActionListener listener) {
-        this.listener = listener;
-    }
+    public void setListener(OnContactActionListener listener) { this.listener = listener; }
 
     @NonNull
     @Override

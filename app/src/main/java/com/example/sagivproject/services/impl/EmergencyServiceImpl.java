@@ -36,14 +36,10 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
      * Initializes the base service with an empty path as full paths are built dynamically.
      */
     @Inject
-    public EmergencyServiceImpl() {
-        super("", EmergencyContact.class);
-    }
+    public EmergencyServiceImpl() { super("", EmergencyContact.class); }
 
     @Override
-    public String generateContactId() {
-        return super.generateId();
-    }
+    public String generateContactId() { return super.generateId(); }
 
     /**
      * Adds a new emergency contact to the database.
@@ -72,21 +68,15 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
             }
 
             @Override
-            public void onFailed(Exception e) {
-                if (callback != null) callback.onFailed(e);
-            }
+            public void onFailed(Exception e) { if (callback != null) callback.onFailed(e); }
         });
     }
 
     @Override
-    public void getContacts(@NonNull String uid, @NonNull DatabaseCallback<List<EmergencyContact>> callback) {
-        getDataList(getContactsPath(uid), callback);
-    }
+    public void getContacts(@NonNull String uid, @NonNull DatabaseCallback<List<EmergencyContact>> callback) { getDataList(getContactsPath(uid), callback); }
 
     @Override
-    public void deleteContact(@NonNull String uid, @NonNull String contactId, @Nullable DatabaseCallback<Void> callback) {
-        deleteData(getContactItemPath(uid, contactId), callback);
-    }
+    public void deleteContact(@NonNull String uid, @NonNull String contactId, @Nullable DatabaseCallback<Void> callback) { deleteData(getContactItemPath(uid, contactId), callback); }
 
     /**
      * Updates an existing contact record using a database transaction.
@@ -99,14 +89,10 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
         UnaryOperator<EmergencyContact> updateFunction = oldContact -> contact;
         runTransaction(getContactItemPath(uid, contact.getId()), updateFunction, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(EmergencyContact result) {
-                if (callback != null) callback.onCompleted(null);
-            }
+            public void onCompleted(EmergencyContact result) { if (callback != null) callback.onCompleted(null); }
 
             @Override
-            public void onFailed(Exception e) {
-                if (callback != null) callback.onFailed(e);
-            }
+            public void onFailed(Exception e) { if (callback != null) callback.onFailed(e); }
         });
     }
 
@@ -149,14 +135,10 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
     /**
      * Constructs the database path for a user's emergency contacts collection.
      */
-    private String getContactsPath(String uid) {
-        return USERS_PATH + "/" + uid + "/" + CONTACTS_PATH;
-    }
+    private String getContactsPath(String uid) { return USERS_PATH + "/" + uid + "/" + CONTACTS_PATH; }
 
     /**
      * Constructs the database path for a specific emergency contact record.
      */
-    private String getContactItemPath(String uid, String contactId) {
-        return getContactsPath(uid) + "/" + contactId;
-    }
+    private String getContactItemPath(String uid, String contactId) { return getContactsPath(uid) + "/" + contactId; }
 }

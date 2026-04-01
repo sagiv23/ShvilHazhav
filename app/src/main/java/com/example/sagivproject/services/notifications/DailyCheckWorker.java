@@ -97,9 +97,7 @@ public class DailyCheckWorker extends Worker {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                latch.countDown();
-            }
+            public void onFailed(Exception e) { latch.countDown(); }
         });
 
         try {

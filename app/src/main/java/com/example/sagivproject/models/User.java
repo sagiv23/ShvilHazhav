@@ -100,47 +100,31 @@ public class User implements Serializable, Idable {
     }
 
     @Override
-    public String getId() {
-        return this.id;
-    }
+    public String getId() { return this.id; }
 
     @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
     /**
      * @return The user's first name.
      */
-    public String getFirstName() {
-        return this.firstName;
-    }
+    public String getFirstName() { return this.firstName; }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
     /**
      * @return The user's last name.
      */
-    public String getLastName() {
-        return this.lastName;
-    }
+    public String getLastName() { return this.lastName; }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
     /**
      * @return The user's birthdate in milliseconds.
      */
-    public long getBirthDateMillis() {
-        return this.birthDateMillis;
-    }
+    public long getBirthDateMillis() { return this.birthDateMillis; }
 
-    public void setBirthDateMillis(long birthDateMillis) {
-        this.birthDateMillis = birthDateMillis;
-    }
+    public void setBirthDateMillis(long birthDateMillis) { this.birthDateMillis = birthDateMillis; }
 
     /**
      * Calculates the user's age based on their birthdate.
@@ -162,35 +146,23 @@ public class User implements Serializable, Idable {
     /**
      * @return The user's email address.
      */
-    public String getEmail() {
-        return this.email;
-    }
+    public String getEmail() { return this.email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
     /**
      * @return The user's password.
      */
-    public String getPassword() {
-        return this.password;
-    }
+    public String getPassword() { return this.password; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) { this.password = password; }
 
     /**
      * @return The user's role, defaults to REGULAR if null.
      */
-    public UserRole getRole() {
-        return role == null ? UserRole.REGULAR : role;
-    }
+    public UserRole getRole() { return role == null ? UserRole.REGULAR : role; }
 
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
+    public void setRole(UserRole role) { this.role = role; }
 
     /**
      * Checks if the user has an administrative role.
@@ -198,31 +170,21 @@ public class User implements Serializable, Idable {
      * @return true if the user is an admin.
      */
     @Exclude
-    public boolean isAdmin() {
-        return this.role == UserRole.ADMIN;
-    }
+    public boolean isAdmin() { return this.role == UserRole.ADMIN; }
 
     /**
      * @return Base64 encoded profile image string.
      */
-    public String getProfileImage() {
-        return profileImage;
-    }
+    public String getProfileImage() { return profileImage; }
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
+    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
 
     /**
      * @return Map of medications indexed by ID.
      */
-    public HashMap<String, Medication> getMedications() {
-        return this.medications;
-    }
+    public HashMap<String, Medication> getMedications() { return this.medications; }
 
-    public void setMedications(HashMap<String, Medication> medications) {
-        this.medications = medications;
-    }
+    public void setMedications(HashMap<String, Medication> medications) { this.medications = medications; }
 
     /**
      * @return Map of daily statistics indexed by date (yyyy-MM-dd).
@@ -232,9 +194,7 @@ public class User implements Serializable, Idable {
         return dailyStats;
     }
 
-    public void setDailyStats(HashMap<String, DailyStats> dailyStats) {
-        this.dailyStats = dailyStats;
-    }
+    public void setDailyStats(HashMap<String, DailyStats> dailyStats) { this.dailyStats = dailyStats; }
 
     /**
      * Helper to get today's {@link DailyStats}. If it doesn't exist, a new entry is created.
@@ -260,9 +220,7 @@ public class User implements Serializable, Idable {
         return emergencyContacts;
     }
 
-    public void setEmergencyContacts(HashMap<String, EmergencyContact> emergencyContacts) {
-        this.emergencyContacts = emergencyContacts;
-    }
+    public void setEmergencyContacts(HashMap<String, EmergencyContact> emergencyContacts) { this.emergencyContacts = emergencyContacts; }
 
     /**
      * Gets the full name of the user.
@@ -270,9 +228,7 @@ public class User implements Serializable, Idable {
      * @return A string combining first name and last name.
      */
     @Exclude
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
-    }
+    public String getFullName() { return this.firstName + " " + this.lastName; }
 
     @Override
     public boolean equals(Object o) {
@@ -288,13 +244,9 @@ public class User implements Serializable, Idable {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, email, role, firstName, lastName, birthDateMillis);
-    }
+    public int hashCode() { return Objects.hash(id, email, role, firstName, lastName, birthDateMillis); }
 
     @NonNull
     @Override
-    public String toString() {
-        return "User{" + "id='" + id + '\'' + ", email='" + email + '\'' + ", role=" + role + ", fullName='" + getFullName() + '\'' + '}';
-    }
+    public String toString() { return "User{" + "id='" + id + '\'' + ", email='" + email + '\'' + ", role=" + role + ", fullName='" + getFullName() + '\'' + '}'; }
 }

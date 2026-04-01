@@ -35,7 +35,5 @@ public enum MedicationStatus {
      * Gets the user-friendly display name of the status.
      * @return The Hebrew display name.
      */
-    public String getDisplayName() {
-        return displayName;
-    }
+    public String getDisplayName() { return displayName; }
 }

@@ -33,9 +33,7 @@ public class GraphAdapter extends BaseAdapter<GraphData, GraphAdapter.GraphViewH
      * @param context The {@link ActivityContext} used for layout inflation and resources.
      */
     @Inject
-    public GraphAdapter(@ActivityContext Context context) {
-        this.context = context;
-    }
+    public GraphAdapter(@ActivityContext Context context) { this.context = context; }
 
     @NonNull
     @Override

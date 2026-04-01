@@ -46,9 +46,7 @@ public class MedicationUsage implements Serializable, Idable {
      * @param date The record date.
      * @param status The resulting status.
      */
-    public MedicationUsage(String medicationId, String medicationName, String time, String date, MedicationStatus status) {
-        this(medicationId, medicationName, time, date, null, status);
-    }
+    public MedicationUsage(String medicationId, String medicationName, String time, String date, MedicationStatus status) { this(medicationId, medicationName, time, date, null, status); }
 
     /**
      * Constructs a full MedicationUsage record.
@@ -71,65 +69,41 @@ public class MedicationUsage implements Serializable, Idable {
     /**
      * @return The name of the medication used.
      */
-    public String getMedicationName() {
-        return medicationName;
-    }
+    public String getMedicationName() { return medicationName; }
 
-    public void setMedicationName(String medicationName) {
-        this.medicationName = medicationName;
-    }
+    public void setMedicationName(String medicationName) { this.medicationName = medicationName; }
 
     /**
      * @return The time of action in "HH:mm".
      */
-    public String getTime() {
-        return time;
-    }
+    public String getTime() { return time; }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
+    public void setTime(String time) { this.time = time; }
 
     /**
      * @return The date of action in "yyyy-MM-dd".
      */
-    public String getDate() {
-        return date;
-    }
+    public String getDate() { return date; }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+    public void setDate(String date) { this.date = date; }
 
     /**
      * @return The scheduled time for this dose.
      */
-    public String getScheduledTime() {
-        return scheduledTime;
-    }
+    public String getScheduledTime() { return scheduledTime; }
 
-    public void setScheduledTime(String scheduledTime) {
-        this.scheduledTime = scheduledTime;
-    }
+    public void setScheduledTime(String scheduledTime) { this.scheduledTime = scheduledTime; }
 
     /**
      * @return The {@link MedicationStatus} resulting from the action.
      */
-    public MedicationStatus getStatus() {
-        return status;
-    }
+    public MedicationStatus getStatus() { return status; }
 
-    public void setStatus(MedicationStatus status) {
-        this.status = status;
-    }
+    public void setStatus(MedicationStatus status) { this.status = status; }
 
     @Override
-    public String getId() {
-        return medicationId;
-    }
+    public String getId() { return medicationId; }
 
     @Override
-    public void setId(String id) {
-        medicationId = id;
-    }
+    public void setId(String id) { medicationId = id; }
 }

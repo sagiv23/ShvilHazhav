@@ -277,9 +277,7 @@ public class MedicationDialog extends DialogFragment {
         }
     }
 
-    private void showToast(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-    }
+    private void showToast(String message) { Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show(); }
 
     /**
      * Listener interface for returning medication data results.

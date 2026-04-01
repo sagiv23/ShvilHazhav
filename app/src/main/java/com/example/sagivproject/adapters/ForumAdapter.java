@@ -117,17 +117,13 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      * Sets the listener for message-specific actions (e.g., deletion).
      * @param listener The {@link ForumMessageListener} implementation.
      */
-    public void setForumMessageListener(ForumMessageListener listener) {
-        this.listener = listener;
-    }
+    public void setForumMessageListener(ForumMessageListener listener) { this.listener = listener; }
 
     /**
      * Updates the entire message list.
      * @param newMessages The new list of {@link ForumMessage} objects.
      */
-    public void setMessages(List<ForumMessage> newMessages) {
-        setData(newMessages);
-    }
+    public void setMessages(List<ForumMessage> newMessages) { setData(newMessages); }
 
     /**
      * Removes a specific message from the list and notifies the adapter.

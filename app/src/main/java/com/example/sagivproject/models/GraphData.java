@@ -40,21 +40,15 @@ public class GraphData implements Idable {
     }
 
     @Override
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
     @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
     /**
      * @return The title of the graph.
      */
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
 
     /**
      * @return The list of XY points to plot.
@@ -66,23 +60,17 @@ public class GraphData implements Idable {
     /**
      * @return The list of labels for the X-axis markers.
      */
-    public List<String> getXLabels() {
-        return xLabels;
-    }
+    public List<String> getXLabels() { return xLabels; }
 
     /**
      * @return The X-axis descriptive label.
      */
-    public String getLabelX() {
-        return labelX;
-    }
+    public String getLabelX() { return labelX; }
 
     /**
      * @return The Y-axis descriptive label.
      */
-    public String getLabelY() {
-        return labelY;
-    }
+    public String getLabelY() { return labelY; }
 
     @Override
     public boolean equals(Object o) {
@@ -93,7 +81,5 @@ public class GraphData implements Idable {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, title);
-    }
+    public int hashCode() { return Objects.hash(id, title); }
 }

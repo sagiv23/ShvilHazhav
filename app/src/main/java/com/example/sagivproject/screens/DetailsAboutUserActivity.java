@@ -178,9 +178,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -230,9 +228,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onError(String message) {
-                        Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show();
-                    }
+                    public void onError(String message) { Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show(); }
                 }));
     }
 
@@ -262,9 +258,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
             }
 
             @Override
-            public void onDelete() {
-                deleteProfileImage();
-            }
+            public void onDelete() { deleteProfileImage(); }
         });
     }
 
@@ -283,9 +277,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(DetailsAboutUserActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -312,9 +304,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה: " + e.getMessage(), Toast.LENGTH_SHORT).show(); }
         });
     }
 }

@@ -69,19 +69,13 @@ public class ForumCategoriesActivity extends BaseActivity {
         adapter = adapterService.getForumCategoryAdapter();
         adapter.init(new ForumCategoryAdapter.OnCategoryInteractionListener() {
             @Override
-            public void onDelete(ForumCategory category) {
-                if (isAdmin) deleteCategory(category);
-            }
+            public void onDelete(ForumCategory category) { if (isAdmin) deleteCategory(category); }
 
             @Override
-            public void onEdit(ForumCategory category) {
-                if (isAdmin) showEditDialog(category);
-            }
+            public void onEdit(ForumCategory category) { if (isAdmin) showEditDialog(category); }
 
             @Override
-            public void onLongClick(ForumCategory category) {
-                if (isAdmin) showEditDialog(category);
-            }
+            public void onLongClick(ForumCategory category) { if (isAdmin) showEditDialog(category); }
 
             @Override
             public void onClick(ForumCategory category) {
@@ -124,14 +118,10 @@ public class ForumCategoriesActivity extends BaseActivity {
     private void loadCategories() {
         databaseService.getForumCategoriesService().getCategories(new DatabaseCallback<>() {
             @Override
-            public void onCompleted(List<ForumCategory> data) {
-                adapter.setCategories(data);
-            }
+            public void onCompleted(List<ForumCategory> data) { adapter.setCategories(data); }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(ForumCategoriesActivity.this, "שגיאה בטעינת קטגוריות", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(ForumCategoriesActivity.this, "שגיאה בטעינת קטגוריות", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -150,9 +140,7 @@ public class ForumCategoriesActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(ForumCategoriesActivity.this, "שגיאה בהוספה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(ForumCategoriesActivity.this, "שגיאה בהוספה", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -170,9 +158,7 @@ public class ForumCategoriesActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(ForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show();
-                    }
+                    public void onFailed(Exception e) { Toast.makeText(ForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show(); }
                 }));
     }
 
@@ -189,9 +175,7 @@ public class ForumCategoriesActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(ForumCategoriesActivity.this, "שגיאה במחיקת הקטגוריה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(ForumCategoriesActivity.this, "שגיאה במחיקת הקטגוריה", Toast.LENGTH_SHORT).show(); }
         });
     }
 }

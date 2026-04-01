@@ -96,22 +96,16 @@ public class UsersTableActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onError(String message) {
-                        Toast.makeText(UsersTableActivity.this, message, Toast.LENGTH_LONG).show();
-                    }
+                    public void onError(String message) { Toast.makeText(UsersTableActivity.this, message, Toast.LENGTH_LONG).show(); }
                 })));
 
         adapter = adapterService.getUsersTableAdapter();
         adapter.init(currentUser, new UsersTableAdapter.OnUserActionListener() {
             @Override
-            public void onToggleAdmin(User user) {
-                handleToggleAdmin(user);
-            }
+            public void onToggleAdmin(User user) { handleToggleAdmin(user); }
 
             @Override
-            public void onDeleteUser(User user) {
-                handleDeleteUser(user);
-            }
+            public void onDeleteUser(User user) { handleDeleteUser(user); }
 
             @Override
             public void onUserClicked(User clickedUser) {
@@ -136,9 +130,7 @@ public class UsersTableActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onError(String message) {
-                                Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון: " + message, Toast.LENGTH_LONG).show();
-                            }
+                            public void onError(String message) { Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון: " + message, Toast.LENGTH_LONG).show(); }
                         }));
             }
 
@@ -171,9 +163,7 @@ public class UsersTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterUsers(s.toString().trim());
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { filterUsers(s.toString().trim()); }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -227,9 +217,7 @@ public class UsersTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(UsersTableActivity.this, "שגיאה בהעלאת משתמשים", Toast.LENGTH_LONG).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(UsersTableActivity.this, "שגיאה בהעלאת משתמשים", Toast.LENGTH_LONG).show(); }
         });
     }
 
@@ -261,9 +249,7 @@ public class UsersTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -292,9 +278,7 @@ public class UsersTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(UsersTableActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(UsersTableActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show(); }
         });
     }
 

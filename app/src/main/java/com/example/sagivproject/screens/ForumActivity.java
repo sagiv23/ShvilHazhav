@@ -152,16 +152,12 @@ public class ForumActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(ForumActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
-                    }
+                    public void onFailed(Exception e) { Toast.makeText(ForumActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show(); }
                 });
             }
 
             @Override
-            public boolean isShowMenuOptions(ForumMessage message) {
-                return canDelete(message);
-            }
+            public boolean isShowMenuOptions(ForumMessage message) { return canDelete(message); }
         });
 
         loadMessages();
@@ -181,15 +177,11 @@ public class ForumActivity extends BaseActivity {
 
                 if (previousItemCount == 0 || wasAtBottom) {
                     scrollToBottom(false);
-                } else if (list.size() > previousItemCount && btnNewMessagesIndicator != null) {
-                    btnNewMessagesIndicator.setVisibility(View.VISIBLE);
-                }
+                } else if (list.size() > previousItemCount && btnNewMessagesIndicator != null) { btnNewMessagesIndicator.setVisibility(View.VISIBLE); }
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(ForumActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(ForumActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -210,9 +202,7 @@ public class ForumActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(ForumActivity.this, "שגיאה בשליחה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(ForumActivity.this, "שגיאה בשליחה", Toast.LENGTH_SHORT).show(); }
         });
     }
 

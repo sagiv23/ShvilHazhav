@@ -113,9 +113,7 @@ public class SimpleXYGraphView extends View {
     }
 
     @Override
-    public boolean performClick() {
-        return super.performClick();
-    }
+    public boolean performClick() { return super.performClick(); }
 
     /**
      * Handles touch interactions to support horizontal scrolling.

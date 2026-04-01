@@ -34,9 +34,7 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
      * @param context The {@link ActivityContext} used for resource access.
      */
     @Inject
-    public MedicationUsageAdapter(@ActivityContext Context context) {
-        this.context = context;
-    }
+    public MedicationUsageAdapter(@ActivityContext Context context) { this.context = context; }
 
     @NonNull
     @Override

@@ -27,9 +27,7 @@ public class FallDetectionManager implements IFallDetectionService {
      * @param context The application context used to start/stop the background service.
      */
     @Inject
-    public FallDetectionManager(@ApplicationContext Context context) {
-        this.context = context;
-    }
+    public FallDetectionManager(@ApplicationContext Context context) { this.context = context; }
 
     /**
      * Triggers the start of the fall detection foreground service.

@@ -1,8 +1,7 @@
 """
 This module provides utility functions to clean up Java source code by removing
 non-Javadoc comments and excessive empty lines, while preserving Javadoc comments
-and the general formatting. It also minifies Javadoc comments by removing extra spaces
-and empty Javadoc lines.
+and minifying single-line methods (like getters/setters).
 """
 
 import os
@@ -53,11 +52,33 @@ def minify_javadoc_block(text):
 
     return "\n".join(processed_lines)
 
+def minify_single_line_methods(code):
+    """
+    Finds methods that contain only one line of code in their body and
+    reformats them to be on a single line.
+    Example:
+    public String getName() {
+        return name;
+    }
+    becomes:
+    public String getName() { return name; }
+    """
+    # Regex to find method signatures followed by a single line body
+    # This is a simplified regex and might not catch all cases, but should work for most getters/setters
+    pattern = r'(\s*(?:public|protected|private|static|\s)+[\w<>[\]]+\s+\w+\s*\(.*?\)\s*\{)\s*\n\s*(.*?);\s*\n\s*\}'
+
+    def replacer(match):
+        signature = match.group(1)
+        body = match.group(2)
+        return f"{signature} {body}; }}"
+
+    return re.sub(pattern, replacer, code)
+
 def remove_comments_keep_javadoc(code):
     """
     Removes single-line (//) and multi-line (/* */) comments from Java code,
     but preserves Javadoc (/** */) comments and string/character literals.
-    Also minifies Javadoc comments by removing extra spaces and empty Javadoc lines.
+    Also minifies Javadoc comments.
     """
     result = []
     i = 0
@@ -94,7 +115,6 @@ def remove_comments_keep_javadoc(code):
             javadoc_buffer.append(c)
             if c == '*' and next_c == '/':
                 javadoc_buffer.append(next_c)
-                # Process and append the minified Javadoc
                 javadoc_text = "".join(javadoc_buffer)
                 result.append(minify_javadoc_block(javadoc_text))
                 javadoc_buffer = []
@@ -143,14 +163,12 @@ def remove_comments_keep_javadoc(code):
             i += 2
             continue
 
-        # Javadoc
         if c == '/' and next_c == '*' and next_next == '*':
             in_javadoc = True
             javadoc_buffer = ['/**']
             i += 3
             continue
 
-        # Standard multi-line comment
         if c == '/' and next_c == '*':
             in_multi = True
             i += 2
@@ -173,7 +191,7 @@ def remove_extra_empty_lines(code):
     for line in lines:
         if line.strip() == "":
             empty_count += 1
-            if empty_count <= 1:  # Keep at most one empty line
+            if empty_count <= 1:
                 new_lines.append("")
         else:
             empty_count = 0
@@ -184,10 +202,9 @@ def remove_extra_empty_lines(code):
 
 def clean_java_keep_format(project_path):
     """
-    Recursively scans the project path for .java files and applies cleaning.
+    Recursively scans and cleans .java files.
     """
     for root, dirs, files in os.walk(project_path):
-        # Skip common non-source directories
         if any(x in root for x in [".git", ".idea", "build", "gradle"]):
             continue
 
@@ -204,6 +221,7 @@ def clean_java_keep_format(project_path):
 
                     code = remove_comments_keep_javadoc(code)
                     code = remove_extra_empty_lines(code)
+                    code = minify_single_line_methods(code)
 
                     with open(path, 'w', encoding='utf-8') as f:
                         f.write(code)
@@ -211,7 +229,7 @@ def clean_java_keep_format(project_path):
                 except Exception as e:
                     print(f"Error: {rel} -> {e}")
 
-    print("\nDone! Minified Javadocs and cleaned code.")
+    print("\nDone! Minified Javadocs, single-line methods, and cleaned code.")
 
 
 if __name__ == "__main__":

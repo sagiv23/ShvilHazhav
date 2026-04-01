@@ -103,9 +103,7 @@ public class RegisterActivity extends BaseActivity {
             }
 
             @Override
-            public void onError(String message) {
-                Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
-            }
+            public void onError(String message) { Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show(); }
         });
     }
 

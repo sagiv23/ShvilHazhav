@@ -50,9 +50,7 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
      * Updates the data set with a new list of categories.
      * @param newCategories The list of {@link ForumCategory} objects to display.
      */
-    public void setCategories(List<ForumCategory> newCategories) {
-        setData(newCategories);
-    }
+    public void setCategories(List<ForumCategory> newCategories) { setData(newCategories); }
 
     /**
      * Removes a specific category from the adapter's data set and notifies changes.

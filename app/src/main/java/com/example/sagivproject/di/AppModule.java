@@ -64,9 +64,7 @@ public abstract class AppModule {
      */
     @Provides
     @Singleton
-    public static DatabaseReference provideDatabaseReference() {
-        return FirebaseDatabase.getInstance().getReference();
-    }
+    public static DatabaseReference provideDatabaseReference() { return FirebaseDatabase.getInstance().getReference(); }
 
     /**
      * Provides a singleton instance of {@link FirebaseDatabase}.
@@ -74,9 +72,7 @@ public abstract class AppModule {
      */
     @Provides
     @Singleton
-    public static FirebaseDatabase provideFirebaseDatabase() {
-        return FirebaseDatabase.getInstance();
-    }
+    public static FirebaseDatabase provideFirebaseDatabase() { return FirebaseDatabase.getInstance(); }
 
     /**
      * Provides a singleton instance of {@link Gson} for JSON serialization and deserialization.
@@ -84,9 +80,7 @@ public abstract class AppModule {
      */
     @Provides
     @Singleton
-    public static Gson provideGson() {
-        return new Gson();
-    }
+    public static Gson provideGson() { return new Gson(); }
 
     /**
      * Provides the system's {@link AlarmManager} service.
@@ -95,9 +89,7 @@ public abstract class AppModule {
      */
     @Provides
     @Singleton
-    public static AlarmManager provideAlarmManager(@ApplicationContext Context context) {
-        return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-    }
+    public static AlarmManager provideAlarmManager(@ApplicationContext Context context) { return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE); }
 
     /**
      * Binds the {@link IDatabaseService} interface to its implementation.

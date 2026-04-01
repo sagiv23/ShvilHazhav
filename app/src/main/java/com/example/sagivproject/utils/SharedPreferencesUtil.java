@@ -47,9 +47,7 @@ public class SharedPreferencesUtil {
      * @param key The unique key for the preference.
      * @param value The string value to store.
      */
-    public void saveString(String key, String value) {
-        sharedPreferences.edit().putString(key, value).apply();
-    }
+    public void saveString(String key, String value) { sharedPreferences.edit().putString(key, value).apply(); }
 
     /**
      * Retrieves a string value from preferences.
@@ -57,18 +55,14 @@ public class SharedPreferencesUtil {
      * @param defaultValue The value to return if the key does not exist.
      * @return The stored string or the default value.
      */
-    public String getString(String key, String defaultValue) {
-        return sharedPreferences.getString(key, defaultValue);
-    }
+    public String getString(String key, String defaultValue) { return sharedPreferences.getString(key, defaultValue); }
 
     /**
      * Saves an integer value to preferences.
      * @param key The unique key for the preference.
      * @param value The integer value to store.
      */
-    public void saveInt(String key, int value) {
-        sharedPreferences.edit().putInt(key, value).apply();
-    }
+    public void saveInt(String key, int value) { sharedPreferences.edit().putInt(key, value).apply(); }
 
     /**
      * Retrieves an integer value from preferences.
@@ -76,18 +70,14 @@ public class SharedPreferencesUtil {
      * @param defaultValue The value to return if the key does not exist.
      * @return The stored integer or the default value.
      */
-    public int getInt(String key, int defaultValue) {
-        return sharedPreferences.getInt(key, defaultValue);
-    }
+    public int getInt(String key, int defaultValue) { return sharedPreferences.getInt(key, defaultValue); }
 
     /**
      * Saves a boolean value to preferences.
      * @param key The unique key for the preference.
      * @param value The boolean value to store.
      */
-    public void saveBoolean(String key, boolean value) {
-        sharedPreferences.edit().putBoolean(key, value).apply();
-    }
+    public void saveBoolean(String key, boolean value) { sharedPreferences.edit().putBoolean(key, value).apply(); }
 
     /**
      * Retrieves a boolean value from preferences.
@@ -95,33 +85,25 @@ public class SharedPreferencesUtil {
      * @param defaultValue The value to return if the key does not exist.
      * @return The stored boolean or the default value.
      */
-    public boolean getBoolean(String key, boolean defaultValue) {
-        return sharedPreferences.getBoolean(key, defaultValue);
-    }
+    public boolean getBoolean(String key, boolean defaultValue) { return sharedPreferences.getBoolean(key, defaultValue); }
 
     /**
      * Removes all data stored in this preferences file.
      */
-    public void clear() {
-        sharedPreferences.edit().clear().apply();
-    }
+    public void clear() { sharedPreferences.edit().clear().apply(); }
 
     /**
      * Removes a specific preference entry.
      * @param key The key of the entry to remove.
      */
-    public void remove(String key) {
-        sharedPreferences.edit().remove(key).apply();
-    }
+    public void remove(String key) { sharedPreferences.edit().remove(key).apply(); }
 
     /**
      * Checks if a specific key exists in the preferences.
      * @param key The key to check.
      * @return true if the key is present.
      */
-    public boolean contains(String key) {
-        return sharedPreferences.contains(key);
-    }
+    public boolean contains(String key) { return sharedPreferences.contains(key); }
 
     /**
      * Serializes an object to JSON and saves it to preferences.
@@ -153,48 +135,36 @@ public class SharedPreferencesUtil {
      * Saves the current {@link User} object to persistent storage.
      * @param user The user profile to save.
      */
-    public void saveUser(User user) {
-        saveObject(KEY_USER, user);
-    }
+    public void saveUser(User user) { saveObject(KEY_USER, user); }
 
     /**
      * Retrieves the stored {@link User} profile.
      * @return The User object, or null if no user is authenticated.
      */
-    public User getUser() {
-        return getObject(KEY_USER, User.class);
-    }
+    public User getUser() { return getObject(KEY_USER, User.class); }
 
     /**
      * Logs out the user by removing their profile data from preferences.
      */
-    public void signOutUser() {
-        remove(KEY_USER);
-    }
+    public void signOutUser() { remove(KEY_USER); }
 
     /**
      * Checks if there is no authenticated user session.
      * @return true if no user data is stored.
      */
-    public boolean isUserNotLoggedIn() {
-        return !contains(KEY_USER);
-    }
+    public boolean isUserNotLoggedIn() { return !contains(KEY_USER); }
 
     /**
      * Checks the user's preferred theme setting.
      * @return true if Dark Mode is enabled.
      */
-    public boolean isDarkMode() {
-        return getBoolean(KEY_DARK_MODE, false);
-    }
+    public boolean isDarkMode() { return getBoolean(KEY_DARK_MODE, false); }
 
     /**
      * Sets the user's preferred theme setting.
      * @param isDarkMode true to enable Dark Mode.
      */
-    public void setDarkMode(boolean isDarkMode) {
-        saveBoolean(KEY_DARK_MODE, isDarkMode);
-    }
+    public void setDarkMode(boolean isDarkMode) { saveBoolean(KEY_DARK_MODE, isDarkMode); }
 
     /**
      * Safely retrieves the unique identifier of the logged-in user.
@@ -213,15 +183,11 @@ public class SharedPreferencesUtil {
      * Checks if the fall detection background service is enabled.
      * @return true if fall detection is active.
      */
-    public boolean isFallDetectionEnabled() {
-        return getBoolean(KEY_FALL_DETECTION_ENABLED, false);
-    }
+    public boolean isFallDetectionEnabled() { return getBoolean(KEY_FALL_DETECTION_ENABLED, false); }
 
     /**
      * Updates the fall detection service state in preferences.
      * @param isEnabled true to enable monitoring.
      */
-    public void setFallDetectionEnabled(boolean isEnabled) {
-        saveBoolean(KEY_FALL_DETECTION_ENABLED, isEnabled);
-    }
+    public void setFallDetectionEnabled(boolean isEnabled) { saveBoolean(KEY_FALL_DETECTION_ENABLED, isEnabled); }
 }

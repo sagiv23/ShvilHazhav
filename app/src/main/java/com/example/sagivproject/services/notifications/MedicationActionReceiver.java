@@ -83,16 +83,12 @@ public class MedicationActionReceiver extends BroadcastReceiver {
                     stats.addMedicationUsageLog(usage);
                     if (status == MedicationStatus.TAKEN) {
                         stats.addMedicationTaken();
-                    } else if (status == MedicationStatus.NOT_TAKEN) {
-                        stats.addMedicationMissed();
-                    }
+                    } else if (status == MedicationStatus.NOT_TAKEN) { stats.addMedicationMissed(); }
                     sharedPreferencesUtil.saveUser(user);
                 }
 
                 @Override
-                public void onFailed(Exception e) {
-                    Log.e(TAG, "Failed to log usage from notification", e);
-                }
+                public void onFailed(Exception e) { Log.e(TAG, "Failed to log usage from notification", e); }
             });
         }
 

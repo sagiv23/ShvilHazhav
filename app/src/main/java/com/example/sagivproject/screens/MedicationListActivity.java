@@ -114,19 +114,13 @@ public class MedicationListActivity extends BaseActivity {
         adapter = adapterService.getMedicationListAdapter();
         adapter.setListener(new MedicationListAdapter.OnMedicationActionListener() {
             @Override
-            public void onEdit(Medication medication) {
-                openMedicationDialog(medication);
-            }
+            public void onEdit(Medication medication) { openMedicationDialog(medication); }
 
             @Override
-            public void onDelete(Medication medication) {
-                deleteMedicationById(medication);
-            }
+            public void onDelete(Medication medication) { deleteMedicationById(medication); }
 
             @Override
-            public void onStatusChanged(Medication medication, String scheduledTime, MedicationStatus status) {
-                logMedicationStatus(medication, scheduledTime, status);
-            }
+            public void onStatusChanged(Medication medication, String scheduledTime, MedicationStatus status) { logMedicationStatus(medication, scheduledTime, status); }
         });
         viewPager_medications.setAdapter(adapter);
 
@@ -168,9 +162,7 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterMedications(s.toString());
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { filterMedications(s.toString()); }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -266,14 +258,10 @@ public class MedicationListActivity extends BaseActivity {
     private void fetchMedicationsFromServer() {
         databaseService.getMedicationService().getUserMedicationList(uid, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(List<Medication> list) {
-                updateMedicationList(list);
-            }
+            public void onCompleted(List<Medication> list) { updateMedicationList(list); }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(MedicationListActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(MedicationListActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -349,9 +337,7 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(MedicationListActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(MedicationListActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -396,9 +382,7 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(MedicationListActivity.this, "שגיאה בעדכון", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(MedicationListActivity.this, "שגיאה בעדכון", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -417,9 +401,7 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(MedicationListActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailed(Exception e) { Toast.makeText(MedicationListActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show(); }
         });
     }
 
@@ -429,14 +411,10 @@ public class MedicationListActivity extends BaseActivity {
     private void openMedicationDialog(Medication medToEdit) {
         dialogService.showMedicationDialog(getSupportFragmentManager(), medToEdit, new MedicationDialog.OnMedicationSubmitListener() {
             @Override
-            public void onAdd(Medication medication) {
-                saveMedication(medication);
-            }
+            public void onAdd(Medication medication) { saveMedication(medication); }
 
             @Override
-            public void onEdit(Medication medication) {
-                updateMedication(medication);
-            }
+            public void onEdit(Medication medication) { updateMedication(medication); }
         });
     }
 
