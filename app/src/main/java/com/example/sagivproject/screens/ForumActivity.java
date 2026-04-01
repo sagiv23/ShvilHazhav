@@ -38,34 +38,22 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ForumActivity extends BaseActivity {
-    /**
-     * The RecyclerView displaying the forum messages.
-     */
+    /** The RecyclerView displaying the forum messages. */
     private RecyclerView recycler;
 
-    /**
-     * The input field for typing new messages.
-     */
+    /** The input field for typing new messages. */
     private EditText edtMessage;
 
-    /**
-     * A button that appears to alert the user of new messages below the current scroll position.
-     */
+    /** A button that appears to alert the user of new messages below the current scroll position. */
     private Button btnNewMessagesIndicator;
 
-    /**
-     * The adapter managing the binding of {@link ForumMessage} objects.
-     */
+    /** The adapter managing the binding of {@link ForumMessage} objects. */
     private ForumAdapter adapter;
 
-    /**
-     * The ID of the current forum category being displayed.
-     */
+    /** The ID of the current forum category being displayed. */
     private String categoryId;
 
-    /**
-     * The currently logged-in user.
-     */
+    /** The currently logged-in user. */
     private User user;
 
     @Override
@@ -163,9 +151,7 @@ public class ForumActivity extends BaseActivity {
         loadMessages();
     }
 
-    /**
-     * Starts listening for real-time message updates in the current category.
-     */
+    /** Starts listening for real-time message updates in the current category. */
     private void loadMessages() {
         databaseService.getForumService().listenToMessages(categoryId, new DatabaseCallback<>() {
             @Override
@@ -185,9 +171,7 @@ public class ForumActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Sends the text currently in the EditText as a new message.
-     */
+    /** Sends the text currently in the EditText as a new message. */
     private void sendMessage() {
         String text = edtMessage.getText().toString().trim();
         if (text.isEmpty()) return;

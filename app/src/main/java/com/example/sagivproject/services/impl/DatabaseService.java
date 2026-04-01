@@ -75,63 +75,43 @@ public class DatabaseService implements IDatabaseService {
         this.emergencyService = emergencyService;
     }
 
-    /**
-     * @return The authentication and account management service.
-     */
+    /** @return The authentication and account management service. */
     @Override
     public IAuthService getAuthService() { return authService; }
 
-    /**
-     * @return The primary user data service.
-     */
+    /** @return The primary user data service. */
     @Override
     public IUserService getUserService() { return userService; }
 
-    /**
-     * @return The medication management and logging service.
-     */
+    /** @return The medication management and logging service. */
     @Override
     public IMedicationService getMedicationService() { return medicationService; }
 
-    /**
-     * @return The memory game coordination service.
-     */
+    /** @return The memory game coordination service. */
     @Override
     public IMemoryGameService getGameService() { return gameService; }
 
-    /**
-     * @return The performance tracking and statistics service.
-     */
+    /** @return The performance tracking and statistics service. */
     @Override
     public IStatsService getStatsService() { return statsService; }
 
-    /**
-     * @return The forum message management service.
-     */
+    /** @return The forum message management service. */
     @Override
     public IForumService getForumService() { return forumService; }
 
-    /**
-     * @return The image asset management service.
-     */
+    /** @return The image asset management service. */
     @Override
     public IImageService getImageService() { return imageService; }
 
-    /**
-     * @return The forum category management service.
-     */
+    /** @return The forum category management service. */
     @Override
     public IForumCategoriesService getForumCategoriesService() { return forumCategoriesService; }
 
-    /**
-     * @return The daily advice and motivational tip service.
-     */
+    /** @return The daily advice and motivational tip service. */
     @Override
     public ITipOfTheDayService getTipOfTheDayService() { return tipOfTheDayService; }
 
-    /**
-     * @return The emergency contact and alerting service.
-     */
+    /** @return The emergency contact and alerting service. */
     @Override
     public IEmergencyService getEmergencyService() { return emergencyService; }
 }

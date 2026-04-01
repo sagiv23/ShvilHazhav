@@ -8,41 +8,23 @@ package com.example.sagivproject.models.enums;
  * </p>
  */
 public enum MedicationType {
-    /**
-     * A solid, oral dosage form.
-     */
+    /** A solid, oral dosage form. */
     PILL("כדור"),
-    /**
-     * Half of a solid pill.
-     */
+    /** Half of a solid pill. */
     HALF_TABLET("חצי כדור"),
-    /**
-     * A liquid medication for oral use.
-     */
+    /** A liquid medication for oral use. */
     SYRUP("סירופ"),
-    /**
-     * A topical medication.
-     */
+    /** A topical medication. */
     CREAM("משחה"),
-    /**
-     * An injectable medication.
-     */
+    /** An injectable medication. */
     INJECTION("זריקה"),
-    /**
-     * A vitamin or mineral supplement.
-     */
+    /** A vitamin or mineral supplement. */
     VITAMIN("ויטמין"),
-    /**
-     * Liquid drops for oral administration.
-     */
+    /** Liquid drops for oral administration. */
     DROPS_FOR_SWALLOWING("טיפות לבליעה"),
-    /**
-     * Liquid drops for ocular administration.
-     */
+    /** Liquid drops for ocular administration. */
     EYE_DROPS("טיפות עיניים"),
-    /**
-     * Liquid drops for otic administration.
-     */
+    /** Liquid drops for otic administration. */
     EAR_DROPS("טיפות אוזניים");
 
     private final String displayName;

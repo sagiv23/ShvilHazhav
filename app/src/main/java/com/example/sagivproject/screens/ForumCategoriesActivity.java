@@ -112,9 +112,7 @@ public class ForumCategoriesActivity extends BaseActivity {
         loadCategories();
     }
 
-    /**
-     * Fetches the current list of forum categories from the database.
-     */
+    /** Fetches the current list of forum categories from the database. */
     private void loadCategories() {
         databaseService.getForumCategoriesService().getCategories(new DatabaseCallback<>() {
             @Override

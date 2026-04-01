@@ -105,23 +105,17 @@ public class User implements Serializable, Idable {
     @Override
     public void setId(String id) { this.id = id; }
 
-    /**
-     * @return The user's first name.
-     */
+    /** @return The user's first name. */
     public String getFirstName() { return this.firstName; }
 
     public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    /**
-     * @return The user's last name.
-     */
+    /** @return The user's last name. */
     public String getLastName() { return this.lastName; }
 
     public void setLastName(String lastName) { this.lastName = lastName; }
 
-    /**
-     * @return The user's birthdate in milliseconds.
-     */
+    /** @return The user's birthdate in milliseconds. */
     public long getBirthDateMillis() { return this.birthDateMillis; }
 
     public void setBirthDateMillis(long birthDateMillis) { this.birthDateMillis = birthDateMillis; }
@@ -143,23 +137,17 @@ public class User implements Serializable, Idable {
         return age;
     }
 
-    /**
-     * @return The user's email address.
-     */
+    /** @return The user's email address. */
     public String getEmail() { return this.email; }
 
     public void setEmail(String email) { this.email = email; }
 
-    /**
-     * @return The user's password.
-     */
+    /** @return The user's password. */
     public String getPassword() { return this.password; }
 
     public void setPassword(String password) { this.password = password; }
 
-    /**
-     * @return The user's role, defaults to REGULAR if null.
-     */
+    /** @return The user's role, defaults to REGULAR if null. */
     public UserRole getRole() { return role == null ? UserRole.REGULAR : role; }
 
     public void setRole(UserRole role) { this.role = role; }
@@ -172,23 +160,17 @@ public class User implements Serializable, Idable {
     @Exclude
     public boolean isAdmin() { return this.role == UserRole.ADMIN; }
 
-    /**
-     * @return Base64 encoded profile image string.
-     */
+    /** @return Base64 encoded profile image string. */
     public String getProfileImage() { return profileImage; }
 
     public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
 
-    /**
-     * @return Map of medications indexed by ID.
-     */
+    /** @return Map of medications indexed by ID. */
     public HashMap<String, Medication> getMedications() { return this.medications; }
 
     public void setMedications(HashMap<String, Medication> medications) { this.medications = medications; }
 
-    /**
-     * @return Map of daily statistics indexed by date (yyyy-MM-dd).
-     */
+    /** @return Map of daily statistics indexed by date (yyyy-MM-dd). */
     public HashMap<String, DailyStats> getDailyStats() {
         if (dailyStats == null) dailyStats = new HashMap<>();
         return dailyStats;
@@ -212,9 +194,7 @@ public class User implements Serializable, Idable {
         return stats;
     }
 
-    /**
-     * @return Map of emergency contacts indexed by ID.
-     */
+    /** @return Map of emergency contacts indexed by ID. */
     public HashMap<String, EmergencyContact> getEmergencyContacts() {
         if (emergencyContacts == null) emergencyContacts = new HashMap<>();
         return emergencyContacts;

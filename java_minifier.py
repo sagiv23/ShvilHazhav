@@ -2,6 +2,8 @@
 This module provides utility functions to clean up Java source code by removing
 non-Javadoc comments and excessive empty lines, while preserving Javadoc comments
 and minifying single-line methods (like getters/setters).
+It also minifies Javadoc comments by removing extra spaces, empty lines, and
+collapsing single-line Javadoc comments into a single line.
 """
 
 import os
@@ -9,11 +11,13 @@ import re
 
 def minify_javadoc_block(text):
     """
-    Collapses multiple spaces within a Javadoc block and removes lines
-    that only contain the '*' character (empty Javadoc lines).
+    Collapses multiple spaces within a Javadoc block, removes empty Javadoc lines,
+    and collapses single-content Javadoc blocks into a single line.
     """
     lines = text.splitlines()
     processed_lines = []
+
+    # First pass: clean up lines and remove "empty" lines (only *)
     for line in lines:
         stripped = line.strip()
 
@@ -26,14 +30,11 @@ def minify_javadoc_block(text):
         match = re.match(r'^(\s*)\*(\s*)(.*)', line)
         if match:
             indent, spaces, content = match.groups()
-            # Collapse multiple spaces in content
             content = re.sub(r' +', ' ', content).strip()
 
             if not content:
-                # This is an "empty" Javadoc line like " * ", skip it
                 continue
 
-            # Reconstruct the line with a single space after the asterisk
             processed_lines.append(f"{indent}* {content}")
         else:
             # Handle lines like the start line if it has content: /** Content
@@ -41,7 +42,6 @@ def minify_javadoc_block(text):
                 content = stripped[3:].strip()
                 if content:
                     content = re.sub(r' +', ' ', content)
-                    # Find indent of /**
                     match_indent = re.match(r'^(\s*)', line)
                     indent = match_indent.group(1) if match_indent else ""
                     processed_lines.append(f"{indent}/** {content}")
@@ -50,21 +50,28 @@ def minify_javadoc_block(text):
             else:
                 processed_lines.append(line.rstrip())
 
+    # Second pass: check if it's a single-content block
+    # A single-content block usually looks like:
+    # /**
+    #  * Content
+    #  */
+    if len(processed_lines) == 3:
+        start = processed_lines[0].strip()
+        middle = processed_lines[1].strip()
+        end = processed_lines[2].strip()
+
+        if start == "/**" and middle.startswith("* ") and end == "*/":
+            indent = processed_lines[0][:processed_lines[0].find("/**")]
+            content = middle[2:].strip()
+            return f"{indent}/** {content} */"
+
     return "\n".join(processed_lines)
 
 def minify_single_line_methods(code):
     """
     Finds methods that contain only one line of code in their body and
     reformats them to be on a single line.
-    Example:
-    public String getName() {
-        return name;
-    }
-    becomes:
-    public String getName() { return name; }
     """
-    # Regex to find method signatures followed by a single line body
-    # This is a simplified regex and might not catch all cases, but should work for most getters/setters
     pattern = r'(\s*(?:public|protected|private|static|\s)+[\w<>[\]]+\s+\w+\s*\(.*?\)\s*\{)\s*\n\s*(.*?);\s*\n\s*\}'
 
     def replacer(match):
@@ -78,7 +85,6 @@ def remove_comments_keep_javadoc(code):
     """
     Removes single-line (//) and multi-line (/* */) comments from Java code,
     but preserves Javadoc (/** */) comments and string/character literals.
-    Also minifies Javadoc comments.
     """
     result = []
     i = 0

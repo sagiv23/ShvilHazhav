@@ -34,22 +34,16 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class RegisterActivity extends BaseActivity {
-    /**
-     * Utility for standardized date picking.
-     */
+    /** Utility for standardized date picking. */
     @Inject
     protected CalendarUtil calendarUtil;
 
-    /**
-     * Utility for validating form fields.
-     */
+    /** Utility for validating form fields. */
     @Inject
     protected Validator validator;
 
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword, editTextBirthDate;
-    /**
-     * Holds the selected birthdate in milliseconds.
-     */
+    /** Holds the selected birthdate in milliseconds. */
     private long birthDateMillis = -1;
 
     @Override
@@ -78,9 +72,7 @@ public class RegisterActivity extends BaseActivity {
         btnRegister.setOnClickListener(v -> tryRegister());
     }
 
-    /**
-     * Attempts to register a new user using the form data.
-     */
+    /** Attempts to register a new user using the form data. */
     private void tryRegister() {
         String firstName = editTextFirstName.getText().toString().trim();
         String lastName = editTextLastName.getText().toString().trim();
@@ -161,9 +153,7 @@ public class RegisterActivity extends BaseActivity {
         return true;
     }
 
-    /**
-     * Displays the date picker dialog to select the user's birthdate.
-     */
+    /** Displays the date picker dialog to select the user's birthdate. */
     private void openDatePicker() {
         calendarUtil.openDatePicker(this, birthDateMillis, (dateMillis, formattedDate) -> {
             this.birthDateMillis = dateMillis;

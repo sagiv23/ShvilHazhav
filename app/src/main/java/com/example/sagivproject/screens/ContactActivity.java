@@ -31,9 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ContactActivity extends BaseActivity {
-    /**
-     * The duration required for a long press to trigger the secret navigation, in milliseconds.
-     */
+    /** The duration required for a long press to trigger the secret navigation, in milliseconds. */
     private static final int LONG_PRESS_DURATION = 3000;
 
     private final Handler handler = new Handler(Looper.getMainLooper());

@@ -9,54 +9,34 @@ package com.example.sagivproject.services;
  * </p>
  */
 public interface IDatabaseService {
-    /**
-     * @return The authentication and session management service.
-     */
+    /** @return The authentication and session management service. */
     IAuthService getAuthService();
 
-    /**
-     * @return The primary user data and account service.
-     */
+    /** @return The primary user data and account service. */
     IUserService getUserService();
 
-    /**
-     * @return The medication prescription and usage logging service.
-     */
+    /** @return The medication prescription and usage logging service. */
     IMedicationService getMedicationService();
 
-    /**
-     * @return The online memory game coordination service.
-     */
+    /** @return The online memory game coordination service. */
     IMemoryGameService getGameService();
 
-    /**
-     * @return The activity performance and historical statistics service.
-     */
+    /** @return The activity performance and historical statistics service. */
     IStatsService getStatsService();
 
-    /**
-     * @return The forum message persistence and retrieval service.
-     */
+    /** @return The forum message persistence and retrieval service. */
     IForumService getForumService();
 
-    /**
-     * @return The image asset management service for game content.
-     */
+    /** @return The image asset management service for game content. */
     IImageService getImageService();
 
-    /**
-     * @return The forum discussion topic management service.
-     */
+    /** @return The forum discussion topic management service. */
     IForumCategoriesService getForumCategoriesService();
 
-    /**
-     * @return The daily advice and motivational tips service.
-     */
+    /** @return The daily advice and motivational tips service. */
     ITipOfTheDayService getTipOfTheDayService();
 
-    /**
-     * @return The emergency contact and SMS alerting service.
-     */
+    /** @return The emergency contact and SMS alerting service. */
     IEmergencyService getEmergencyService();
 
     /**

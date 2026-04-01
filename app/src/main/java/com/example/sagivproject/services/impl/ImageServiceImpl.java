@@ -24,9 +24,7 @@ import javax.inject.Inject;
  * </p>
  */
 public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements IImageService {
-    /**
-     * The database path where game images are stored.
-     */
+    /** The database path where game images are stored. */
     private static final String IMAGES_PATH = "images";
 
     /**

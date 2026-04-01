@@ -42,9 +42,7 @@ public class DialogService implements IDialogService {
     private final Provider<ConfirmDialog> confirmDialogProvider;
     private final Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider;
 
-    /**
-     * Constructs a new DialogService with providers for all dialog fragments.
-     */
+    /** Constructs a new DialogService with providers for all dialog fragments. */
     @Inject
     public DialogService(
             Provider<MedicationDialog> medicationDialogProvider,

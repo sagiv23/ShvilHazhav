@@ -244,9 +244,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         }
     }
 
-    /**
-     * Interface for handling interactions with forum messages.
-     */
+    /** Interface for handling interactions with forum messages. */
     public interface ForumMessageListener {
         /**
          * Called when a message is clicked (e.g., for deletion).
@@ -262,23 +260,15 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         boolean isShowMenuOptions(ForumMessage message);
     }
 
-    /**
-     * ViewHolder for forum message items.
-     */
+    /** ViewHolder for forum message items. */
     public static class ForumViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /**
-         * TextViews for sender, metadata, and content.
-         */
+        /** TextViews for sender, metadata, and content. */
         final TextView txtUser, txtEmail, txtIsAdmin, txtMessage, txtTime;
 
-        /**
-         * Button to open the moderation menu.
-         */
+        /** Button to open the moderation menu. */
         final ImageButton btnMenu;
 
-        /**
-         * Button to toggle TTS playback for the message.
-         */
+        /** Button to toggle TTS playback for the message. */
         final MaterialButton btnSpeak;
 
         /**

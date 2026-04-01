@@ -22,9 +22,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
  */
 @Singleton
 public class CalendarUtil {
-    /**
-     * The default date display format used throughout the app.
-     */
+    /** The default date display format used throughout the app. */
     public static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 
     /**
@@ -97,9 +95,7 @@ public class CalendarUtil {
         return sdf.format(new Date(millis));
     }
 
-    /**
-     * A listener interface for receiving the result from the date picker dialog.
-     */
+    /** A listener interface for receiving the result from the date picker dialog. */
     public interface OnDateSelectedListener {
         /**
          * Called when the user confirms their date selection.

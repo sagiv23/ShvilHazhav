@@ -56,9 +56,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class EmergencyContactsActivity extends BaseActivity {
-    /**
-     * Service for background fall monitoring.
-     */
+    /** Service for background fall monitoring. */
     @Inject
     protected IFallDetectionService fallDetectionService;
 
@@ -67,9 +65,7 @@ public class EmergencyContactsActivity extends BaseActivity {
     private View cardFallDetectionReminder;
     private User user;
 
-    /**
-     * Launcher for the system contact picker.
-     */
+    /** Launcher for the system contact picker. */
     private final ActivityResultLauncher<Void> contactPickerLauncher =
             registerForActivityResult(new ActivityResultContracts.PickContact(), uri -> {
                 if (uri != null) {
@@ -77,9 +73,7 @@ public class EmergencyContactsActivity extends BaseActivity {
                 }
             });
 
-    /**
-     * Client for retrieving device location coordinates.
-     */
+    /** Client for retrieving device location coordinates. */
     private FusedLocationProviderClient fusedLocationClient;
 
     @Override
@@ -172,9 +166,7 @@ public class EmergencyContactsActivity extends BaseActivity {
         } else if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_CONTACTS))) { contactPickerLauncher.launch(null); }
     }
 
-    /**
-     * Refreshes the visibility of the fall detection prompt based on user settings.
-     */
+    /** Refreshes the visibility of the fall detection prompt based on user settings. */
     private void updateFallDetectionUI() {
         if (sharedPreferencesUtil.isFallDetectionEnabled()) {
             cardFallDetectionReminder.setVisibility(View.GONE);
@@ -190,9 +182,7 @@ public class EmergencyContactsActivity extends BaseActivity {
         updateFallDetectionUI();
     }
 
-    /**
-     * Fetches the latest user profile from the database to ensure UI consistency.
-     */
+    /** Fetches the latest user profile from the database to ensure UI consistency. */
     private void loadUserFromDatabase() {
         if (user == null) return;
         databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
@@ -235,9 +225,7 @@ public class EmergencyContactsActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Logic for adding a new contact record.
-     */
+    /** Logic for adding a new contact record. */
     private void addEmergencyContact(String firstName, String lastName, String phoneNumber) {
         databaseService.getEmergencyService().addContact(user.getId(), firstName, lastName, phoneNumber, new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -295,9 +283,7 @@ public class EmergencyContactsActivity extends BaseActivity {
         return phone;
     }
 
-    /**
-     * Checks for SMS and high-accuracy location permissions before triggering an alert.
-     */
+    /** Checks for SMS and high-accuracy location permissions before triggering an alert. */
     private void checkSmsAndLocationPermissions() {
         requestPermissions(
                 Manifest.permission.SEND_SMS,
@@ -306,9 +292,7 @@ public class EmergencyContactsActivity extends BaseActivity {
         );
     }
 
-    /**
-     * Fetches coordinates and proceeds to broadcast the SOS message.
-     */
+    /** Fetches coordinates and proceeds to broadcast the SOS message. */
     private void fetchLocationAndSendSms() {
         try {
             fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
@@ -347,9 +331,7 @@ public class EmergencyContactsActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Launches the system dialer with the emergency number pre-filled.
-     */
+    /** Launches the system dialer with the emergency number pre-filled. */
     private void callEmergency() {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:109"));

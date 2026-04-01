@@ -31,31 +31,21 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class AddUserDialog extends DialogFragment {
-    /**
-     * Utility for validating user input data.
-     */
+    /** Utility for validating user input data. */
     @Inject
     Validator validator;
 
-    /**
-     * Utility for displaying a standardized date picker.
-     */
+    /** Utility for displaying a standardized date picker. */
     @Inject
     CalendarUtil calendarUtil;
 
-    /**
-     * The selected birthdate in milliseconds.
-     */
+    /** The selected birthdate in milliseconds. */
     private long birthDateMillis = -1;
 
-    /**
-     * Listener for returning the new user data to the caller.
-     */
+    /** Listener for returning the new user data to the caller. */
     private AddUserDialogListener listener;
 
-    /**
-     * Constructs a new AddUserDialog.
-     */
+    /** Constructs a new AddUserDialog. */
     @Inject
     public AddUserDialog() {
     }
@@ -123,9 +113,7 @@ public class AddUserDialog extends DialogFragment {
                 isFieldValid(passwordEdt, validator::isPasswordNotValid, "הסיסמה קצרה מדי");
     }
 
-    /**
-     * Helper to validate a specific field and provide visual feedback on failure.
-     */
+    /** Helper to validate a specific field and provide visual feedback on failure. */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -135,9 +123,7 @@ public class AddUserDialog extends DialogFragment {
         return true;
     }
 
-    /**
-     * Interface for communicating user creation events.
-     */
+    /** Interface for communicating user creation events. */
     public interface AddUserDialogListener {
         /**
          * Called when the administrator submits a valid user profile.

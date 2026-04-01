@@ -15,9 +15,7 @@ public class ForumCategory implements Serializable, Idable {
     private String id;
     private String name;
 
-    /**
-     * Default constructor required for Firebase deserialization.
-     */
+    /** Default constructor required for Firebase deserialization. */
     public ForumCategory() {
     }
 
@@ -37,9 +35,7 @@ public class ForumCategory implements Serializable, Idable {
     @Override
     public void setId(String id) { this.id = id; }
 
-    /**
-     * @return The display name of the category.
-     */
+    /** @return The display name of the category. */
     public String getName() { return name; }
 
     public void setName(String name) { this.name = name; }

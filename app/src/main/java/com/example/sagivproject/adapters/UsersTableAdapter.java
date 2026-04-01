@@ -115,9 +115,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         });
     }
 
-    /**
-     * Interface for listening to administrative actions on user accounts.
-     */
+    /** Interface for listening to administrative actions on user accounts. */
     public interface OnUserActionListener {
         /**
          * Called when the administrative role toggle button is clicked.
@@ -145,23 +143,15 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         void onUserImageClicked(User user, ImageView imageView);
     }
 
-    /**
-     * ViewHolder for user account table rows.
-     */
+    /** ViewHolder for user account table rows. */
     public static class UserViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /**
-         * TextViews for name, email, role status, and birthdate.
-         */
+        /** TextViews for name, email, role status, and birthdate. */
         final TextView txtUserFullName, txtUserEmail, txtUserIsAdmin, txtUserBirthDate;
 
-        /**
-         * Buttons for administrative actions.
-         */
+        /** Buttons for administrative actions. */
         final ImageButton btnDeleteUser, btnToggleAdmin;
 
-        /**
-         * ImageView for user profile picture.
-         */
+        /** ImageView for user profile picture. */
         final ImageView imgUserProfile;
 
         /**

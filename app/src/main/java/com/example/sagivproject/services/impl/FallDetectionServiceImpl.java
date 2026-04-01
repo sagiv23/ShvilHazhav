@@ -43,9 +43,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class FallDetectionServiceImpl extends Service implements SensorEventListener {
     private static final String TAG = "FallDetectionService";
-    /**
-     * Unique ID for the foreground service notification.
-     */
+    /** Unique ID for the foreground service notification. */
     private static final int NOTIFICATION_ID = 1001;
 
     /**
@@ -73,9 +71,7 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
     private long lastAlertTime = 0;
     private boolean isMonitoring = false;
 
-    /**
-     * Default constructor required for Android services.
-     */
+    /** Default constructor required for Android services. */
     public FallDetectionServiceImpl() {
     }
 
@@ -98,9 +94,7 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
         return START_STICKY;
     }
 
-    /**
-     * Registers the accelerometer sensor listener with UI delay for responsiveness.
-     */
+    /** Registers the accelerometer sensor listener with UI delay for responsiveness. */
     private void startMonitoring() {
         if (!isMonitoring && accelerometer != null) {
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
@@ -109,9 +103,7 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
         }
     }
 
-    /**
-     * Unregisters the sensor listener and terminates the service.
-     */
+    /** Unregisters the sensor listener and terminates the service. */
     private void stopMonitoring() {
         if (isMonitoring) {
             sensorManager.unregisterListener(this);
@@ -144,9 +136,7 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
         }
     }
 
-    /**
-     * Coordinates the emergency response flow: Notification -> Location -> SMS.
-     */
+    /** Coordinates the emergency response flow: Notification -> Location -> SMS. */
     private void handleFallDetected() {
         User user = sharedPreferencesUtil.getUser();
         if (user == null) return;

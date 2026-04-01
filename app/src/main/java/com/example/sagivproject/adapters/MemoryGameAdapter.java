@@ -169,9 +169,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }
     }
 
-    /**
-     * Interface for handling interaction events in the memory game.
-     */
+    /** Interface for handling interaction events in the memory game. */
     public interface MemoryGameListener {
         /**
          * Called when a card item is clicked.
@@ -187,13 +185,9 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         boolean isMyTurn();
     }
 
-    /**
-     * ViewHolder for memory game card items.
-     */
+    /** ViewHolder for memory game card items. */
     public static class CardViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /**
-         * The ImageView representing the card surface.
-         */
+        /** The ImageView representing the card surface. */
         final ImageView cardImage;
 
         /**

@@ -95,9 +95,7 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
         }
     }
 
-    /**
-     * Interface for listening to user interactions with forum categories.
-     */
+    /** Interface for listening to user interactions with forum categories. */
     public interface OnCategoryInteractionListener {
         /**
          * Called when the delete button is clicked for a category.
@@ -124,23 +122,15 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
         void onClick(ForumCategory category);
     }
 
-    /**
-     * ViewHolder for forum category items.
-     */
+    /** ViewHolder for forum category items. */
     public static class CategoryViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /**
-         * TextView displaying the category name.
-         */
+        /** TextView displaying the category name. */
         final TextView categoryName;
 
-        /**
-         * Button for deleting the category (Admin only).
-         */
+        /** Button for deleting the category (Admin only). */
         final ImageButton deleteButton;
 
-        /**
-         * Button for editing the category (Admin only).
-         */
+        /** Button for editing the category (Admin only). */
         final ImageButton editButton;
 
         /**

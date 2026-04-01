@@ -19,9 +19,7 @@ public class EmergencyContact implements Serializable, Idable {
     private String lastName;
     private String phoneNumber;
 
-    /**
-     * Default constructor required for Firebase deserialization.
-     */
+    /** Default constructor required for Firebase deserialization. */
     public EmergencyContact() {
     }
 
@@ -45,23 +43,17 @@ public class EmergencyContact implements Serializable, Idable {
     @Override
     public void setId(String id) { this.id = id; }
 
-    /**
-     * @return The contact's first name.
-     */
+    /** @return The contact's first name. */
     public String getFirstName() { return firstName; }
 
     public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    /**
-     * @return The contact's last name.
-     */
+    /** @return The contact's last name. */
     public String getLastName() { return lastName; }
 
     public void setLastName(String lastName) { this.lastName = lastName; }
 
-    /**
-     * @return The contact's phone number.
-     */
+    /** @return The contact's phone number. */
     public String getPhoneNumber() { return phoneNumber; }
 
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }

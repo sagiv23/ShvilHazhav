@@ -31,19 +31,13 @@ import dagger.assisted.AssistedInject;
  */
 @HiltWorker
 public class DailyCheckWorker extends Worker {
-    /**
-     * Central database service for fetching user data.
-     */
+    /** Central database service for fetching user data. */
     protected final IDatabaseService databaseService;
 
-    /**
-     * Service for triggering local notifications.
-     */
+    /** Service for triggering local notifications. */
     protected final NotificationService notificationService;
 
-    /**
-     * Utility for checking user session state.
-     */
+    /** Utility for checking user session state. */
     protected final SharedPreferencesUtil sharedPreferencesUtil;
 
     /**

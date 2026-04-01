@@ -34,15 +34,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MedicationActionReceiver extends BroadcastReceiver {
     private static final String TAG = "MedicationActionReceiver";
 
-    /**
-     * Central database service for logging usage.
-     */
+    /** Central database service for logging usage. */
     @Inject
     IDatabaseService databaseService;
 
-    /**
-     * Utility for keeping local session data in sync.
-     */
+    /** Utility for keeping local session data in sync. */
     @Inject
     SharedPreferencesUtil sharedPreferencesUtil;
 

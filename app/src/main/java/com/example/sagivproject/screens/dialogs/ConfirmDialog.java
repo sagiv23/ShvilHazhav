@@ -33,14 +33,10 @@ public class ConfirmDialog extends DialogFragment {
     private static final String ARG_CONFIRM_TEXT = "confirm_text";
     private static final String ARG_CANCEL_TEXT = "cancel_text";
 
-    /**
-     * The logic to execute when the user clicks the positive button.
-     */
+    /** The logic to execute when the user clicks the positive button. */
     private Runnable onConfirm;
 
-    /**
-     * Constructs a new ConfirmDialog.
-     */
+    /** Constructs a new ConfirmDialog. */
     @Inject
     public ConfirmDialog() {
     }

@@ -8,17 +8,11 @@ package com.example.sagivproject.models.enums;
  * </p>
  */
 public enum MedicationStatus {
-    /**
-     * The medication was successfully taken by the user.
-     */
+    /** The medication was successfully taken by the user. */
     TAKEN("נטל"),
-    /**
-     * The medication was explicitly marked as not taken.
-     */
+    /** The medication was explicitly marked as not taken. */
     NOT_TAKEN("לא נטל"),
-    /**
-     * The medication intake was postponed to a later time.
-     */
+    /** The medication intake was postponed to a later time. */
     SNOOZED("בהמשך היום");
 
     private final String displayName;

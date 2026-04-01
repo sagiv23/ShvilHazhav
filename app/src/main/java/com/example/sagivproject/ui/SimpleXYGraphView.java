@@ -311,18 +311,12 @@ public class SimpleXYGraphView extends View {
         canvas.drawText(msg, (float) getWidth() / 2 - textPaint.measureText(msg) / 2, (float) getHeight() / 2, textPaint);
     }
 
-    /**
-     * Data model for a single coordinate on the XY graph.
-     */
+    /** Data model for a single coordinate on the XY graph. */
     public static class Point {
-        /**
-         * The horizontal position (index-based).
-         */
+        /** The horizontal position (index-based). */
         public final float x;
 
-        /**
-         * The vertical value.
-         */
+        /** The vertical value. */
         public final float y;
 
         /**

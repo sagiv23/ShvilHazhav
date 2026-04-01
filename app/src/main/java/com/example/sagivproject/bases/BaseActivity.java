@@ -63,33 +63,23 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     protected final ActivityResultLauncher<String[]> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), this::onPermissionsResult);
 
-    /**
-     * Utility for managing local user preferences and session.
-     */
+    /** Utility for managing local user preferences and session. */
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
 
-    /**
-     * The central database service façade.
-     */
+    /** The central database service façade. */
     @Inject
     protected IDatabaseService databaseService;
 
-    /**
-     * Activity-scoped service for providing RecyclerView adapters.
-     */
+    /** Activity-scoped service for providing RecyclerView adapters. */
     @Inject
     protected IAdapterService adapterService;
 
-    /**
-     * Activity-scoped service for showing UI dialogs.
-     */
+    /** Activity-scoped service for showing UI dialogs. */
     @Inject
     protected IDialogService dialogService;
 
-    /**
-     * The root layout for the navigation drawer.
-     */
+    /** The root layout for the navigation drawer. */
     protected DrawerLayout drawerLayout;
 
     @Override
@@ -156,18 +146,14 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
         }
     }
 
-    /**
-     * Opens the navigation drawer if it exists in the current layout.
-     */
+    /** Opens the navigation drawer if it exists in the current layout. */
     public void openDrawer() {
         if (drawerLayout != null) {
             drawerLayout.openDrawer(GravityCompat.START);
         }
     }
 
-    /**
-     * Closes the navigation drawer if it is currently open.
-     */
+    /** Closes the navigation drawer if it is currently open. */
     public void closeDrawer() {
         if (drawerLayout != null) {
             drawerLayout.closeDrawer(GravityCompat.START);

@@ -56,18 +56,14 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class UsersTableActivity extends BaseActivity {
-    /**
-     * Internal list of all users fetched from the database.
-     */
+    /** Internal list of all users fetched from the database. */
     private final List<User> usersList = new ArrayList<>();
 
     private UsersTableAdapter adapter;
     private EditText editSearch;
     private Spinner spinnerSearchType;
 
-    /**
-     * The profile of the currently logged-in administrator.
-     */
+    /** The profile of the currently logged-in administrator. */
     private User currentUser;
 
     @Override
@@ -151,9 +147,7 @@ public class UsersTableActivity extends BaseActivity {
         setupSearch();
     }
 
-    /**
-     * Configures the search UI, including the type filter spinner and text listener.
-     */
+    /** Configures the search UI, including the type filter spinner and text listener. */
     private void setupSearch() {
         spinnerSearchType.setAdapter(getStringArrayAdapter());
 
@@ -188,9 +182,7 @@ public class UsersTableActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Sorts the user list alphabetically by full name and reapplies the current search filter.
-     */
+    /** Sorts the user list alphabetically by full name and reapplies the current search filter. */
     private void refreshList() {
         usersList.sort((u1, u2) -> u1.getFullName().compareToIgnoreCase(u2.getFullName()));
         filterUsers(editSearch.getText().toString().trim());
@@ -202,9 +194,7 @@ public class UsersTableActivity extends BaseActivity {
         loadUsers();
     }
 
-    /**
-     * Fetches the complete user database from Firebase.
-     */
+    /** Fetches the complete user database from Firebase. */
     private void loadUsers() {
         databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -311,9 +301,7 @@ public class UsersTableActivity extends BaseActivity {
         adapter.setUserList(filtered);
     }
 
-    /**
-     * Helper to create a styled adapter for the search filter dropdown.
-     */
+    /** Helper to create a styled adapter for the search filter dropdown. */
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "משתמשים רגילים"};

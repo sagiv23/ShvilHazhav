@@ -37,15 +37,11 @@ import dagger.hilt.android.HiltAndroidApp;
 @HiltAndroidApp
 public class MainApplication extends Application implements Configuration.Provider {
 
-    /**
-     * Factory for creating Hilt-injected WorkManager workers.
-     */
+    /** Factory for creating Hilt-injected WorkManager workers. */
     @Inject
     HiltWorkerFactory workerFactory;
 
-    /**
-     * Utility for accessing persistent application preferences.
-     */
+    /** Utility for accessing persistent application preferences. */
     @Inject
     SharedPreferencesUtil sharedPreferencesUtil;
 

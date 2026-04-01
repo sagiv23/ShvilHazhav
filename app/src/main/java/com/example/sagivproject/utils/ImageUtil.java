@@ -27,9 +27,7 @@ import javax.inject.Singleton;
 public class ImageUtil {
     private static final String BASE64_PREFIX = "data:image/jpeg;base64,";
 
-    /**
-     * Default constructor for Hilt dependency injection.
-     */
+    /** Default constructor for Hilt dependency injection. */
     @Inject
     public ImageUtil() {
     }

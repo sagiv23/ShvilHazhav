@@ -19,14 +19,10 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class Validator {
-    /**
-     * The minimum age required to register for the application.
-     */
+    /** The minimum age required to register for the application. */
     private static final int MIN_AGE = 12;
 
-    /**
-     * Constructs a new Validator.
-     */
+    /** Constructs a new Validator. */
     @Inject
     public Validator() {
     }

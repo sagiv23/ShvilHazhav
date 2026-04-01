@@ -32,18 +32,14 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class AddEmergencyContactDialog extends DialogFragment {
 
-    /**
-     * Utility for validating contact information.
-     */
+    /** Utility for validating contact information. */
     @Inject
     Validator validator;
 
     private AddEmergencyContactListener listener;
     private EmergencyContact contactToEdit;
 
-    /**
-     * Constructs a new AddEmergencyContactDialog.
-     */
+    /** Constructs a new AddEmergencyContactDialog. */
     @Inject
     public AddEmergencyContactDialog() {
     }
@@ -124,9 +120,7 @@ public class AddEmergencyContactDialog extends DialogFragment {
                 isFieldValid(phoneEdt, validator::isPhoneNotValid, "מספר טלפון לא תקין");
     }
 
-    /**
-     * Helper to validate a single field and show an error message.
-     */
+    /** Helper to validate a single field and show an error message. */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -136,9 +130,7 @@ public class AddEmergencyContactDialog extends DialogFragment {
         return true;
     }
 
-    /**
-     * Interface for listening to contact submission events.
-     */
+    /** Interface for listening to contact submission events. */
     public interface AddEmergencyContactListener {
         /**
          * Called when the contact details are submitted and valid.

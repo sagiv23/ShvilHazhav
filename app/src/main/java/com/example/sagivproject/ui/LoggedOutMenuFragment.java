@@ -24,9 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class LoggedOutMenuFragment extends Fragment {
-    /**
-     * Listener for handling navigation events in the host activity.
-     */
+    /** Listener for handling navigation events in the host activity. */
     private MenuNavigationListener navigationListener;
 
     /**
@@ -85,9 +83,7 @@ public class LoggedOutMenuFragment extends Fragment {
         }
     }
 
-    /**
-     * Cleans up the listener reference when the fragment is detached.
-     */
+    /** Cleans up the listener reference when the fragment is detached. */
     @Override
     public void onDetach() {
         super.onDetach();

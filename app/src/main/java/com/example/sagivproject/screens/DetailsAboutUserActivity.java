@@ -53,9 +53,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class DetailsAboutUserActivity extends BaseActivity {
-    /**
-     * Utility for handling image conversions and loading.
-     */
+    /** Utility for handling image conversions and loading. */
     @Inject
     protected ImageUtil imageUtil;
 
@@ -63,14 +61,10 @@ public class DetailsAboutUserActivity extends BaseActivity {
     private ImageView imgUserProfile;
     private User user;
 
-    /**
-     * Launcher for the modern Android Photo Picker.
-     */
+    /** Launcher for the modern Android Photo Picker. */
     private ActivityResultLauncher<PickVisualMediaRequest> photoPickerLauncher;
 
-    /**
-     * Launcher for capturing a temporary bitmap from the camera.
-     */
+    /** Launcher for capturing a temporary bitmap from the camera. */
     private ActivityResultLauncher<Void> cameraLauncher;
 
     @Override
@@ -110,9 +104,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         loadUserDetailsToUI();
     }
 
-    /**
-     * Initializes activity result launchers for camera and gallery interactions.
-     */
+    /** Initializes activity result launchers for camera and gallery interactions. */
     private void setupLaunchers() {
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.TakePicturePreview(),
@@ -153,18 +145,14 @@ public class DetailsAboutUserActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Refreshes user data from the database whenever the activity resumes.
-     */
+    /** Refreshes user data from the database whenever the activity resumes. */
     @Override
     protected void onResume() {
         super.onResume();
         loadUserFromDatabase();
     }
 
-    /**
-     * Fetches the latest user profile from the database to ensure UI consistency.
-     */
+    /** Fetches the latest user profile from the database to ensure UI consistency. */
     private void loadUserFromDatabase() {
         if (user == null) return;
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
@@ -182,9 +170,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Populates UI components with the current user's data.
-     */
+    /** Populates UI components with the current user's data. */
     private void loadUserDetailsToUI() {
         if (user == null) {
             return;
@@ -213,9 +199,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         txtBirthDate.setText(birthDate);
     }
 
-    /**
-     * Displays the dialog for editing user profile details.
-     */
+    /** Displays the dialog for editing user profile details. */
     private void openEditDialog() {
         dialogService.showEditUserDialog(getSupportFragmentManager(), user, (fName, lName, birthDate, email, password) ->
                 databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
@@ -232,9 +216,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
                 }));
     }
 
-    /**
-     * Displays the image picker dialog to choose between camera, gallery, or deletion.
-     */
+    /** Displays the image picker dialog to choose between camera, gallery, or deletion. */
     private void openImagePicker() {
         boolean hasImage = user.getProfileImage() != null && !user.getProfileImage().isEmpty();
 
@@ -262,9 +244,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Removes the profile image from the user's account.
-     */
+    /** Removes the profile image from the user's account. */
     private void deleteProfileImage() {
         user.setProfileImage(null);
         imgUserProfile.setImageResource(R.drawable.ic_user);
@@ -292,9 +272,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         saveProfileImage();
     }
 
-    /**
-     * Commits the updated profile image string to the database.
-     */
+    /** Commits the updated profile image string to the database. */
     private void saveProfileImage() {
         databaseService.getUserService().updateUser(user, new DatabaseCallback<>() {
             @Override

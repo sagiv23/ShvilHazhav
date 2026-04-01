@@ -52,18 +52,14 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MedicationDialog extends DialogFragment {
     private static final String ARG_MEDICATION = "arg_medication";
 
-    /**
-     * Internal list of selected reminder times in "HH:mm" format.
-     */
+    /** Internal list of selected reminder times in "HH:mm" format. */
     private final ArrayList<String> selectedHours = new ArrayList<>();
 
     private ChipGroup chipGroupSelectedHours;
     private Medication medToEdit;
     private OnMedicationSubmitListener listener;
 
-    /**
-     * Constructs a new MedicationDialog.
-     */
+    /** Constructs a new MedicationDialog. */
     @Inject
     public MedicationDialog() {
     }
@@ -179,9 +175,7 @@ public class MedicationDialog extends DialogFragment {
         return true;
     }
 
-    /**
-     * Maps a display name string back to its corresponding enum constant.
-     */
+    /** Maps a display name string back to its corresponding enum constant. */
     private MedicationType getTypeFromString(String typeString) {
         for (MedicationType type : MedicationType.values()) {
             if (type.getDisplayName().equals(typeString)) {
@@ -191,9 +185,7 @@ public class MedicationDialog extends DialogFragment {
         return null;
     }
 
-    /**
-     * Opens the system time picker to add a new reminder hour.
-     */
+    /** Opens the system time picker to add a new reminder hour. */
     private void showHourPicker() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -217,9 +209,7 @@ public class MedicationDialog extends DialogFragment {
         timePickerDialog.show();
     }
 
-    /**
-     * Refreshes the display of chosen reminder times using Material Chips.
-     */
+    /** Refreshes the display of chosen reminder times using Material Chips. */
     private void updateSelectedHoursChips() {
         chipGroupSelectedHours.removeAllViews();
         Collections.sort(selectedHours);
@@ -235,9 +225,7 @@ public class MedicationDialog extends DialogFragment {
         }
     }
 
-    /**
-     * Creates a styled adapter for the medication form dropdown.
-     */
+    /** Creates a styled adapter for the medication form dropdown. */
     private ArrayAdapter<String> createMedicationTypeAdapter(List<String> typeNames) {
         return new ArrayAdapter<>(
                 requireContext(),
@@ -261,9 +249,7 @@ public class MedicationDialog extends DialogFragment {
         };
     }
 
-    /**
-     * Applies custom Hebrew typography and sizing to dropdown items.
-     */
+    /** Applies custom Hebrew typography and sizing to dropdown items. */
     private void styleTextView(TextView tv, boolean isDropdown) {
         tv.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.text_hebrew));
         tv.setTextSize(22);
@@ -279,18 +265,12 @@ public class MedicationDialog extends DialogFragment {
 
     private void showToast(String message) { Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show(); }
 
-    /**
-     * Listener interface for returning medication data results.
-     */
+    /** Listener interface for returning medication data results. */
     public interface OnMedicationSubmitListener {
-        /**
-         * Called when a new medication is ready to be added.
-         */
+        /** Called when a new medication is ready to be added. */
         void onAdd(Medication medication);
 
-        /**
-         * Called when existing medication details have been modified.
-         */
+        /** Called when existing medication details have been modified. */
         void onEdit(Medication medication);
     }
 }

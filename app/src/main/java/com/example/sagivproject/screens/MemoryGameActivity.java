@@ -49,13 +49,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapter.MemoryGameListener {
-    /**
-     * The time limit for each turn in milliseconds (15 seconds).
-     */
+    /** The time limit for each turn in milliseconds (15 seconds). */
     private static final long TURN_TIME_LIMIT = 15000;
-    /**
-     * The total time limit for the entire game in milliseconds (1.5 minutes).
-     */
+    /** The total time limit for the entire game in milliseconds (1.5 minutes). */
     private static final long TOTAL_GAME_TIME_LIMIT = 90000;
 
     private RecyclerView recyclerCards;
@@ -190,9 +186,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }
     }
 
-    /**
-     * Handler for card clicks. Validates move eligibility before processing selection.
-     */
+    /** Handler for card clicks. Validates move eligibility before processing selection. */
     @Override
     public void onCardClicked(Card card, int position) {
         if (currentRoom == null || localLock || !isMyTurn()) return;
@@ -200,15 +194,11 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         handleCardSelection(position);
     }
 
-    /**
-     * @return true if the local user is authorized to make a move.
-     */
+    /** @return true if the local user is authorized to make a move. */
     @Override
     public boolean isMyTurn() { return currentRoom != null && user.getId().equals(currentRoom.getCurrentTurnUid()) && !currentRoom.isProcessingMatch(); }
 
-    /**
-     * Logic for selecting a card. Synchronizes revealed status with the database.
-     */
+    /** Logic for selecting a card. Synchronizes revealed status with the database. */
     private void handleCardSelection(int clickedIndex) {
         Integer firstIndex = currentRoom.getFirstSelectedCardIndex();
         if (firstIndex == null) {
@@ -223,9 +213,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }
     }
 
-    /**
-     * Compares two revealed cards and updates matches/turns accordingly.
-     */
+    /** Compares two revealed cards and updates matches/turns accordingly. */
     private void checkMatch(int idx1, int idx2) {
         List<Card> cards = currentRoom.getCards();
         Card c1 = cards.get(idx1);
@@ -257,9 +245,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }, 700);
     }
 
-    /**
-     * Scans the board to determine if all pairs have been found.
-     */
+    /** Scans the board to determine if all pairs have been found. */
     private void checkIfGameFinished() {
         if (currentRoom.getCards() == null) return;
         boolean allCardsMatched = true;
@@ -272,9 +258,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         if (allCardsMatched) finishGame(currentRoom);
     }
 
-    /**
-     * Marks the game as finished and identifies the winner based on final scores.
-     */
+    /** Marks the game as finished and identifies the winner based on final scores. */
     private void finishGame(GameRoom room) {
         if ("finished".equals(room.getStatus())) return;
         String winnerUid = calculateWinner(room);
@@ -282,9 +266,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         databaseService.getGameService().updateRoomField(roomId, "status", "finished");
     }
 
-    /**
-     * Establishes a persistent listener for the game room's database node.
-     */
+    /** Establishes a persistent listener for the game room's database node. */
     private void listenToGame() {
         databaseService.getGameService().listenToGame(roomId, new DatabaseCallback<>() {
             @Override
@@ -349,9 +331,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         });
     }
 
-    /**
-     * Determines the winner UID or returns "draw".
-     */
+    /** Determines the winner UID or returns "draw". */
     private String calculateWinner(GameRoom room) {
         int p1 = room.getPlayer1Score();
         int p2 = room.getPlayer2Score();
@@ -360,9 +340,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         return "draw";
     }
 
-    /**
-     * Manages the countdown for the active player's turn.
-     */
+    /** Manages the countdown for the active player's turn. */
     private void startTurnTimer() {
         if (turnTimer != null) turnTimer.cancel();
         turnTimer = new CountDownTimer(TURN_TIME_LIMIT, 1000) {
@@ -381,9 +359,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }.start();
     }
 
-    /**
-     * Manages the countdown for the total game time.
-     */
+    /** Manages the countdown for the total game time. */
     private void startTotalGameTimer() {
         if (totalGameTimer != null) totalGameTimer.cancel();
         totalGameTimer = new CountDownTimer(TOTAL_GAME_TIME_LIMIT, 1000) {
@@ -402,9 +378,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }.start();
     }
 
-    /**
-     * Returns the user to the game matchmaking screen.
-     */
+    /** Returns the user to the game matchmaking screen. */
     private void goBack() {
         Intent intent = new Intent(this, GameHomeScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -27,9 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class SplashActivity extends BaseActivity {
-    /**
-     * The duration for which the splash screen is displayed, in milliseconds.
-     */
+    /** The duration for which the splash screen is displayed, in milliseconds. */
     private static final long SPLASH_DELAY = 3000;
 
     @Override
@@ -95,9 +93,7 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Navigates to the landing screen and passes a flag to trigger the entry animation.
-     */
+    /** Navigates to the landing screen and passes a flag to trigger the entry animation. */
     private void navigateToLandingWithAnimation() {
         Intent intent = new Intent(this, LandingActivity.class);
         intent.putExtra("shouldAnimate", true);

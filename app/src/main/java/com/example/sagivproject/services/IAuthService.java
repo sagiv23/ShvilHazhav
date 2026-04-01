@@ -58,9 +58,7 @@ public interface IAuthService {
      */
     String logout();
 
-    /**
-     * Callback interface for user login results.
-     */
+    /** Callback interface for user login results. */
     interface LoginCallback {
         /**
          * Invoked when authentication is successful.
@@ -75,9 +73,7 @@ public interface IAuthService {
         void onError(String message);
     }
 
-    /**
-     * Callback interface for user registration results.
-     */
+    /** Callback interface for user registration results. */
     interface RegisterCallback {
         /**
          * Invoked when the account is successfully created and the user is logged in.
@@ -92,9 +88,7 @@ public interface IAuthService {
         void onError(String message);
     }
 
-    /**
-     * Callback interface for administrative user creation results.
-     */
+    /** Callback interface for administrative user creation results. */
     interface AddUserCallback {
         /**
          * Invoked when the user account is successfully added to the database.
@@ -109,9 +103,7 @@ public interface IAuthService {
         void onError(String message);
     }
 
-    /**
-     * Callback interface for user profile update results.
-     */
+    /** Callback interface for user profile update results. */
     interface UpdateUserCallback {
         /**
          * Invoked when the profile information is successfully updated.

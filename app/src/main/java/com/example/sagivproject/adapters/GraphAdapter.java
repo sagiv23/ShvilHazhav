@@ -48,13 +48,9 @@ public class GraphAdapter extends BaseAdapter<GraphData, GraphAdapter.GraphViewH
         holder.graphView.setData(data.getPoints(), data.getXLabels(), data.getTitle(), data.getLabelX(), data.getLabelY());
     }
 
-    /**
-     * ViewHolder class for individual graph items.
-     */
+    /** ViewHolder class for individual graph items. */
     public static class GraphViewHolder extends RecyclerView.ViewHolder {
-        /**
-         * The custom view responsible for rendering the XY graph.
-         */
+        /** The custom view responsible for rendering the XY graph. */
         final SimpleXYGraphView graphView;
 
         /**

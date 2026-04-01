@@ -22,24 +22,16 @@ public class ForumMessage implements Serializable, Idable {
     private long timestamp;
     private String userId;
 
-    /**
-     * The full name of the sender, populated at runtime. Not stored in the forum database node.
-     */
+    /** The full name of the sender, populated at runtime. Not stored in the forum database node. */
     private String senderName;
 
-    /**
-     * The email of the sender, populated at runtime. Not stored in the forum database node.
-     */
+    /** The email of the sender, populated at runtime. Not stored in the forum database node. */
     private String senderEmail;
 
-    /**
-     * Whether the sender was an admin, populated at runtime. Not stored in the forum database node.
-     */
+    /** Whether the sender was an admin, populated at runtime. Not stored in the forum database node. */
     private boolean senderAdmin;
 
-    /**
-     * Default constructor required for Firebase deserialization.
-     */
+    /** Default constructor required for Firebase deserialization. */
     public ForumMessage() {
     }
 
@@ -63,44 +55,32 @@ public class ForumMessage implements Serializable, Idable {
     @Override
     public void setId(String messageId) { this.id = messageId; }
 
-    /**
-     * @return The text content of the message.
-     */
+    /** @return The text content of the message. */
     public String getMessage() { return message; }
 
     public void setMessage(String message) { this.message = message; }
 
-    /**
-     * @return The message creation time in milliseconds.
-     */
+    /** @return The message creation time in milliseconds. */
     public long getTimestamp() { return timestamp; }
 
     public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
 
-    /**
-     * @return The unique identifier of the user who sent the message.
-     */
+    /** @return The unique identifier of the user who sent the message. */
     public String getUserId() { return userId; }
 
     public void setUserId(String userId) { this.userId = userId; }
 
-    /**
-     * @return The display name of the sender.
-     */
+    /** @return The display name of the sender. */
     public String getSenderName() { return senderName; }
 
     public void setSenderName(String senderName) { this.senderName = senderName; }
 
-    /**
-     * @return The email address of the sender.
-     */
+    /** @return The email address of the sender. */
     public String getSenderEmail() { return senderEmail; }
 
     public void setSenderEmail(String senderEmail) { this.senderEmail = senderEmail; }
 
-    /**
-     * @return true if the sender has administrative privileges.
-     */
+    /** @return true if the sender has administrative privileges. */
     public boolean isSenderAdmin() { return senderAdmin; }
 
     public void setSenderAdmin(boolean senderAdmin) { this.senderAdmin = senderAdmin; }

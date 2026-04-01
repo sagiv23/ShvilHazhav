@@ -27,9 +27,7 @@ import javax.inject.Inject;
  * </p>
  */
 public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAdapter.ViewHolder> {
-    /**
-     * A map for resolving user UIDs to full names for display purposes.
-     */
+    /** A map for resolving user UIDs to full names for display purposes. */
     private Map<String, String> uidToNameMap;
 
     /**
@@ -75,13 +73,9 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
         holder.txtStatus.setText(String.format("סטטוס: %s", room.getStatus()));
     }
 
-    /**
-     * ViewHolder class for memory game log entries.
-     */
+    /** ViewHolder class for memory game log entries. */
     public static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /**
-         * TextViews for player names, scores, and room status.
-         */
+        /** TextViews for player names, scores, and room status. */
         final TextView txtPlayers, txtScore, txtStatus;
 
         /**

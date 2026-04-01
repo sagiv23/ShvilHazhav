@@ -68,14 +68,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class UserStatsActivity extends BaseActivity {
-    /**
-     * Internal list of users available for selection in Admin mode.
-     */
+    /** Internal list of users available for selection in Admin mode. */
     private final List<User> selectableUsers = new ArrayList<>();
 
-    /**
-     * Utility for standardized date picking and formatting.
-     */
+    /** Utility for standardized date picking and formatting. */
     @Inject
     protected CalendarUtil calendarUtil;
 
@@ -86,24 +82,16 @@ public class UserStatsActivity extends BaseActivity {
     private RecyclerView recyclerMedicationLogs;
     private MedicationUsageAdapter usageAdapter;
 
-    /**
-     * The user whose statistics are currently being displayed.
-     */
+    /** The user whose statistics are currently being displayed. */
     private User currentUser;
-    /**
-     * The actual authenticated user session.
-     */
+    /** The actual authenticated user session. */
     private User loggedInUser;
 
     private Spinner spinnerUserSelector;
     private TextView txtSelectedDate;
-    /**
-     * Date string (yyyy-MM-dd) used to filter the usage log.
-     */
+    /** Date string (yyyy-MM-dd) used to filter the usage log. */
     private String filteredDate = null;
-    /**
-     * The complete list of usage logs for the current user.
-     */
+    /** The complete list of usage logs for the current user. */
     private List<MedicationUsage> allLogs = new ArrayList<>();
 
     @Override
@@ -142,9 +130,7 @@ public class UserStatsActivity extends BaseActivity {
         txtSelectedDate.setVisibility(View.VISIBLE);
     }
 
-    /**
-     * Initializes the ViewPager2 and TabLayout used to display the XY graphs.
-     */
+    /** Initializes the ViewPager2 and TabLayout used to display the XY graphs. */
     private void setupGraphsUI() {
         graphAdapter = adapterService.getGraphAdapter();
         viewPagerGraphs.setAdapter(graphAdapter);
@@ -167,9 +153,7 @@ public class UserStatsActivity extends BaseActivity {
         }).attach();
     }
 
-    /**
-     * Opens a date picker to filter the medication usage history.
-     */
+    /** Opens a date picker to filter the medication usage history. */
     private void openCalendar() {
         calendarUtil.openDatePicker(this, System.currentTimeMillis(), (dateMillis, formattedDate) -> {
             filteredDate = calendarUtil.formatDate(dateMillis, "yyyy-MM-dd");
@@ -179,9 +163,7 @@ public class UserStatsActivity extends BaseActivity {
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
     }
 
-    /**
-     * Filters the {@link #allLogs} list based on the selected {@link #filteredDate}.
-     */
+    /** Filters the {@link #allLogs} list based on the selected {@link #filteredDate}. */
     private void applyFilter() {
         if (filteredDate == null) {
             usageAdapter.setData(allLogs);
@@ -196,9 +178,7 @@ public class UserStatsActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Sets up the administrator-only UI for selecting different users to view their stats.
-     */
+    /** Sets up the administrator-only UI for selecting different users to view their stats. */
     private void setupAdminUI() {
         if (loggedInUser.isAdmin()) {
             findViewById(R.id.card_user_selector).setVisibility(View.VISIBLE);
@@ -264,17 +244,13 @@ public class UserStatsActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Refreshes the data for the currently selected user from the database.
-     */
+    /** Refreshes the data for the currently selected user from the database. */
     private void refreshData() {
         fetchLatestUserData();
         loadMedicationLogs();
     }
 
-    /**
-     * Fetches the latest {@link User} object to ensure graphs display up-to-date information.
-     */
+    /** Fetches the latest {@link User} object to ensure graphs display up-to-date information. */
     private void fetchLatestUserData() {
         databaseService.getUserService().getUser(currentUser.getId(), new DatabaseCallback<>() {
             @Override
@@ -293,9 +269,7 @@ public class UserStatsActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Processes historical daily statistics into {@link GraphData} objects for rendering.
-     */
+    /** Processes historical daily statistics into {@link GraphData} objects for rendering. */
     private void setupGraphs() {
         List<GraphData> graphs = new ArrayList<>();
 
@@ -353,18 +327,14 @@ public class UserStatsActivity extends BaseActivity {
         graphAdapter.setData(graphs);
     }
 
-    /**
-     * Configures the RecyclerView for displaying medication logs.
-     */
+    /** Configures the RecyclerView for displaying medication logs. */
     private void setupMedicationLogs() {
         recyclerMedicationLogs.setLayoutManager(new LinearLayoutManager(this));
         usageAdapter = adapterService.getMedicationUsageAdapter();
         recyclerMedicationLogs.setAdapter(usageAdapter);
     }
 
-    /**
-     * Loads the full medication usage history for the current user.
-     */
+    /** Loads the full medication usage history for the current user. */
     private void loadMedicationLogs() {
         databaseService.getMedicationService().getMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
             @Override
@@ -387,9 +357,7 @@ public class UserStatsActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Clears all historical usage logs for the user after user confirmation.
-     */
+    /** Clears all historical usage logs for the user after user confirmation. */
     private void clearMedicationLogs() {
         dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס היסטוריה", "האם לאפס?", "אפס", "בטל", () -> databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
             @Override

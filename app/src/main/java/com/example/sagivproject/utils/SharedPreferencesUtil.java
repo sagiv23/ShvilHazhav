@@ -87,9 +87,7 @@ public class SharedPreferencesUtil {
      */
     public boolean getBoolean(String key, boolean defaultValue) { return sharedPreferences.getBoolean(key, defaultValue); }
 
-    /**
-     * Removes all data stored in this preferences file.
-     */
+    /** Removes all data stored in this preferences file. */
     public void clear() { sharedPreferences.edit().clear().apply(); }
 
     /**
@@ -143,9 +141,7 @@ public class SharedPreferencesUtil {
      */
     public User getUser() { return getObject(KEY_USER, User.class); }
 
-    /**
-     * Logs out the user by removing their profile data from preferences.
-     */
+    /** Logs out the user by removing their profile data from preferences. */
     public void signOutUser() { remove(KEY_USER); }
 
     /**

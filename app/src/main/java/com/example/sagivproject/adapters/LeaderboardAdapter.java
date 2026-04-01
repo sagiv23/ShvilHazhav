@@ -76,18 +76,12 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
         return total;
     }
 
-    /**
-     * ViewHolder class for leaderboard rows.
-     */
+    /** ViewHolder class for leaderboard rows. */
     public static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /**
-         * TextView for the user's full name.
-         */
+        /** TextView for the user's full name. */
         final TextView tvName;
 
-        /**
-         * TextView for the win count or rank.
-         */
+        /** TextView for the win count or rank. */
         final TextView tvWins;
 
         /**

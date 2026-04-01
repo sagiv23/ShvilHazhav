@@ -125,9 +125,7 @@ public interface IMemoryGameService {
      */
     void removeForfeitOnDisconnect(String roomId);
 
-    /**
-     * Callback interface for receiving significant game room status transitions.
-     */
+    /** Callback interface for receiving significant game room status transitions. */
     interface IRoomStatusCallback {
         /**
          * Invoked when the room is fully populated and the match begins.
@@ -135,9 +133,7 @@ public interface IMemoryGameService {
          */
         void onRoomStarted(GameRoom room);
 
-        /**
-         * Invoked if the room is deleted (e.g., host canceled or opponent left while waiting).
-         */
+        /** Invoked if the room is deleted (e.g., host canceled or opponent left while waiting). */
         void onRoomDeleted();
 
         /**

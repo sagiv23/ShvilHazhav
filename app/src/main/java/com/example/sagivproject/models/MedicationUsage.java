@@ -15,26 +15,16 @@ import java.io.Serializable;
 public class MedicationUsage implements Serializable, Idable {
     private String medicationId;
     private String medicationName;
-    /**
-     * The actual time the user recorded the status.
-     */
+    /** The actual time the user recorded the status. */
     private String time;
-    /**
-     * The date of the recording in "yyyy-MM-dd" format.
-     */
+    /** The date of the recording in "yyyy-MM-dd" format. */
     private String date;
-    /**
-     * The originally scheduled time for this dose in "HH:mm" format.
-     */
+    /** The originally scheduled time for this dose in "HH:mm" format. */
     private String scheduledTime;
-    /**
-     * The intake status of this specific dose.
-     */
+    /** The intake status of this specific dose. */
     private MedicationStatus status;
 
-    /**
-     * Default constructor required for Firebase deserialization.
-     */
+    /** Default constructor required for Firebase deserialization. */
     public MedicationUsage() {
     }
 
@@ -66,37 +56,27 @@ public class MedicationUsage implements Serializable, Idable {
         this.status = status;
     }
 
-    /**
-     * @return The name of the medication used.
-     */
+    /** @return The name of the medication used. */
     public String getMedicationName() { return medicationName; }
 
     public void setMedicationName(String medicationName) { this.medicationName = medicationName; }
 
-    /**
-     * @return The time of action in "HH:mm".
-     */
+    /** @return The time of action in "HH:mm". */
     public String getTime() { return time; }
 
     public void setTime(String time) { this.time = time; }
 
-    /**
-     * @return The date of action in "yyyy-MM-dd".
-     */
+    /** @return The date of action in "yyyy-MM-dd". */
     public String getDate() { return date; }
 
     public void setDate(String date) { this.date = date; }
 
-    /**
-     * @return The scheduled time for this dose.
-     */
+    /** @return The scheduled time for this dose. */
     public String getScheduledTime() { return scheduledTime; }
 
     public void setScheduledTime(String scheduledTime) { this.scheduledTime = scheduledTime; }
 
-    /**
-     * @return The {@link MedicationStatus} resulting from the action.
-     */
+    /** @return The {@link MedicationStatus} resulting from the action. */
     public MedicationStatus getStatus() { return status; }
 
     public void setStatus(MedicationStatus status) { this.status = status; }

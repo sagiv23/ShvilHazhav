@@ -110,9 +110,7 @@ public class GameHomeScreenActivity extends BaseActivity {
         updateUI(SearchState.IDLE);
     }
 
-    /**
-     * Toggles the playback of game rules using the TTS engine.
-     */
+    /** Toggles the playback of game rules using the TTS engine. */
     private void toggleInstructionsSpeech() {
         if (isSpeaking) {
             tts.stop();
@@ -157,9 +155,7 @@ public class GameHomeScreenActivity extends BaseActivity {
         updateSpeakButton(false);
     }
 
-    /**
-     * Fetches current user data from the database to refresh win/game counts.
-     */
+    /** Fetches current user data from the database to refresh win/game counts. */
     private void loadWins() {
         databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -176,9 +172,7 @@ public class GameHomeScreenActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Calculates and displays today's statistics in the UI.
-     */
+    /** Calculates and displays today's statistics in the UI. */
     private void displayTodayWins() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DailyStats stats = user.getDailyStats().get(today);
@@ -191,9 +185,7 @@ public class GameHomeScreenActivity extends BaseActivity {
         tvGamesTotal.setText(MessageFormat.format("משחקים סך הכל: {0}", totalGames));
     }
 
-    /**
-     * Fetches all users and populates the leaderboard adapter, sorted by total wins.
-     */
+    /** Fetches all users and populates the leaderboard adapter, sorted by total wins. */
     private void setupLeaderboard() {
         databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -211,9 +203,7 @@ public class GameHomeScreenActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Helper to calculate cumulative wins for a user across all days.
-     */
+    /** Helper to calculate cumulative wins for a user across all days. */
     private int getTotalWins(User u) {
         int total = 0;
         if (u.getDailyStats() != null) {
@@ -224,9 +214,7 @@ public class GameHomeScreenActivity extends BaseActivity {
         return total;
     }
 
-    /**
-     * Initiates the matchmaking process via the game service.
-     */
+    /** Initiates the matchmaking process via the game service. */
     private void findEnemy() {
         updateUI(SearchState.SEARCHING);
         databaseService.getGameService().findOrCreateRoom(user, new IDatabaseService.DatabaseCallback<>() {
@@ -246,9 +234,7 @@ public class GameHomeScreenActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Cancels an active search and cleans up the pending room in the database.
-     */
+    /** Cancels an active search and cleans up the pending room in the database. */
     private void cancelSearch() {
         if (currentRoom != null) {
             databaseService.getGameService().removeRoomListener(currentRoom.getId());
@@ -329,9 +315,7 @@ public class GameHomeScreenActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    /**
-     * Enumerates the possible states of the matchmaking search process.
-     */
+    /** Enumerates the possible states of the matchmaking search process. */
     private enum SearchState {
         IDLE,
         SEARCHING,

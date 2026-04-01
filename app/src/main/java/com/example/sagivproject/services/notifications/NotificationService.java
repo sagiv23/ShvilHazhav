@@ -33,19 +33,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
  */
 @Singleton
 public class NotificationService {
-    /**
-     * Channel ID for medication-related notifications.
-     */
+    /** Channel ID for medication-related notifications. */
     public static final String MEDICATIONS_CHANNEL_ID = "medication_notifications";
 
-    /**
-     * Channel ID for birthday-related notifications.
-     */
+    /** Channel ID for birthday-related notifications. */
     public static final String BIRTHDAYS_CHANNEL_ID = "birthday_notifications";
 
-    /**
-     * Channel ID for fall detection service notifications.
-     */
+    /** Channel ID for fall detection service notifications. */
     public static final String FALL_DETECTION_CHANNEL_ID = "fall_detection_notifications";
 
     private static final String MEDICATIONS_GROUP = "com.example.sagivproject.MEDICATIONS_GROUP";
@@ -115,9 +109,7 @@ public class NotificationService {
                 .build();
     }
 
-    /**
-     * Displays an immediate alert notification when a fall is detected.
-     */
+    /** Displays an immediate alert notification when a fall is detected. */
     public void showFallDetectedNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, FALL_DETECTION_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)

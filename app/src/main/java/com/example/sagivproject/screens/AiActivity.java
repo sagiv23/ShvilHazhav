@@ -107,9 +107,7 @@ public class AiActivity extends BaseActivity {
         speakBtn.setOnClickListener(v -> toggleSpeech());
     }
 
-    /**
-     * Toggles playback of the AI response text using Text-to-Speech.
-     */
+    /** Toggles playback of the AI response text using Text-to-Speech. */
     private void toggleSpeech() {
         if (isSpeaking) {
             tts.stop();
@@ -132,9 +130,7 @@ public class AiActivity extends BaseActivity {
         speakBtn.setText(speaking ? R.string.cancel_playback : R.string.playback_answer);
     }
 
-    /**
-     * Sends the user's question to the AI model and manages the asynchronous response.
-     */
+    /** Sends the user's question to the AI model and manages the asynchronous response. */
     private void sendQuestion() {
         String q = questionInput.getText().toString().trim();
         if (q.isEmpty()) return;
@@ -197,9 +193,7 @@ public class AiActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Shuts down the TTS engine when the activity is destroyed.
-     */
+    /** Shuts down the TTS engine when the activity is destroyed. */
     @Override
     public void onDestroy() {
         if (tts != null) tts.shutdown();

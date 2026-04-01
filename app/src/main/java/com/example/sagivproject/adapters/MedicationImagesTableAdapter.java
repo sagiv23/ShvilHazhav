@@ -82,9 +82,7 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
         });
     }
 
-    /**
-     * Interface for handling user interactions with image items in the table.
-     */
+    /** Interface for handling user interactions with image items in the table. */
     public interface OnImageActionListener {
         /**
          * Called when the delete button for an image is clicked.
@@ -100,23 +98,15 @@ public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, Medicat
         void onImageClicked(ImageData image, ImageView imageView);
     }
 
-    /**
-     * ViewHolder class for image items in the table.
-     */
+    /** ViewHolder class for image items in the table. */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        /**
-         * ImageView displaying the card's content.
-         */
+        /** ImageView displaying the card's content. */
         final ImageView imgView;
 
-        /**
-         * TextView displaying the unique ID of the image.
-         */
+        /** TextView displaying the unique ID of the image. */
         final TextView txtId;
 
-        /**
-         * Button for deleting the image from the database.
-         */
+        /** Button for deleting the image from the database. */
         final MaterialButton btnDelete;
 
         /**

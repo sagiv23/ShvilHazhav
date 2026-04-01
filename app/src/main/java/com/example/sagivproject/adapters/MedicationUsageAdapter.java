@@ -64,13 +64,9 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
         holder.txtStatus.setTextColor(ContextCompat.getColor(context, color));
     }
 
-    /**
-     * ViewHolder class for medication usage log rows.
-     */
+    /** ViewHolder class for medication usage log rows. */
     public static class UsageViewHolder extends RecyclerView.ViewHolder {
-        /**
-         * TextViews for medication name, date/time of the event, and intake status.
-         */
+        /** TextViews for medication name, date/time of the event, and intake status. */
         final TextView txtName, txtDateTime, txtStatus;
 
         /**

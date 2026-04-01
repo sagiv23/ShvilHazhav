@@ -15,9 +15,7 @@ public class ImageData implements Serializable, Idable {
     private String id;
     private String base64;
 
-    /**
-     * Default constructor required for Firebase deserialization.
-     */
+    /** Default constructor required for Firebase deserialization. */
     public ImageData() {
     }
 
@@ -37,9 +35,7 @@ public class ImageData implements Serializable, Idable {
     @Override
     public void setId(String id) { this.id = id; }
 
-    /**
-     * @return The Base64 encoded content of the image.
-     */
+    /** @return The Base64 encoded content of the image. */
     public String getBase64() { return base64; }
 
     public void setBase64(String base64) { this.base64 = base64; }

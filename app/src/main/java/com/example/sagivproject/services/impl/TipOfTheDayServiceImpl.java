@@ -21,13 +21,9 @@ import javax.inject.Inject;
  * </p>
  */
 public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> implements ITipOfTheDayService {
-    /**
-     * The root database path for daily tips.
-     */
+    /** The root database path for daily tips. */
     private static final String TIP_OF_THE_DAY_PATH = "tip_of_the_day";
-    /**
-     * The date format used for generating daily identifiers.
-     */
+    /** The date format used for generating daily identifiers. */
     private static final String DATE_FORMAT = "yyyyMMdd";
 
     /**

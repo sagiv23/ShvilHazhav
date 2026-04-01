@@ -7,12 +7,8 @@ package com.example.sagivproject.models.enums;
  * </p>
  */
 public enum UserRole {
-    /**
-     * A standard user with regular permissions (Games, Forum, Medications).
-     */
+    /** A standard user with regular permissions (Games, Forum, Medications). */
     REGULAR,
-    /**
-     * An administrative user with elevated permissions (User management, moderation).
-     */
+    /** An administrative user with elevated permissions (User management, moderation). */
     ADMIN
 }

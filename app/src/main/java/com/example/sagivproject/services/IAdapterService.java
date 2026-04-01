@@ -21,58 +21,36 @@ import com.example.sagivproject.adapters.UsersTableAdapter;
  */
 public interface IAdapterService {
 
-    /**
-     * @return The adapter for forum message lists.
-     */
+    /** @return The adapter for forum message lists. */
     ForumAdapter getForumAdapter();
 
-    /**
-     * @return The adapter for forum category lists.
-     */
+    /** @return The adapter for forum category lists. */
     ForumCategoryAdapter getForumCategoryAdapter();
 
-    /**
-     * @return The adapter for the user's medication schedule.
-     */
+    /** @return The adapter for the user's medication schedule. */
     MedicationListAdapter getMedicationListAdapter();
 
-    /**
-     * @return The adapter for memory game card grids.
-     */
+    /** @return The adapter for memory game card grids. */
     MemoryGameAdapter getMemoryGameAdapter();
 
-    /**
-     * @return The adapter for memory game history logs.
-     */
+    /** @return The adapter for memory game history logs. */
     MemoryGameLogAdapter getMemoryGameLogAdapter();
 
-    /**
-     * @return The adapter for the administrative user table.
-     */
+    /** @return The adapter for the administrative user table. */
     UsersTableAdapter getUsersTableAdapter();
 
-    /**
-     * @return The adapter for managing medication card images.
-     */
+    /** @return The adapter for managing medication card images. */
     MedicationImagesTableAdapter getMedicationImagesTableAdapter();
 
-    /**
-     * @return The adapter for the ranked user leaderboard.
-     */
+    /** @return The adapter for the ranked user leaderboard. */
     LeaderboardAdapter getLeaderboardAdapter();
 
-    /**
-     * @return The adapter for viewing historical medication logs.
-     */
+    /** @return The adapter for viewing historical medication logs. */
     MedicationUsageAdapter getMedicationUsageAdapter();
 
-    /**
-     * @return The adapter for emergency contact cards.
-     */
+    /** @return The adapter for emergency contact cards. */
     EmergencyContactsAdapter getEmergencyContactsAdapter();
 
-    /**
-     * @return The adapter for statistical XY graphs.
-     */
+    /** @return The adapter for statistical XY graphs. */
     GraphAdapter getGraphAdapter();
 }

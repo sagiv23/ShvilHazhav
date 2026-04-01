@@ -49,9 +49,7 @@ import dagger.hilt.android.qualifiers.ActivityContext;
 public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
     private final Context context;
     private final Set<String> processingMedications = new HashSet<>();
-    /**
-     * Key: medicationId, Value: Map of scheduledTime -> MedicationStatus
-     */
+    /** Key: medicationId, Value: Map of scheduledTime -> MedicationStatus */
     private final Map<String, Map<String, MedicationStatus>> loggedTodayMedications = new HashMap<>();
     private OnMedicationActionListener listener;
 
@@ -258,9 +256,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         }
     }
 
-    /**
-     * Interface for listening to actions on medication items.
-     */
+    /** Interface for listening to actions on medication items. */
     public interface OnMedicationActionListener {
         /**
          * Called when the edit option is selected for a medication.
@@ -283,23 +279,15 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         void onStatusChanged(Medication medication, String scheduledTime, MedicationStatus status);
     }
 
-    /**
-     * ViewHolder class for medication items.
-     */
+    /** ViewHolder class for medication items. */
     public static class MedicationViewHolder extends RecyclerView.ViewHolder {
-        /**
-         * TextViews for medication name, type, and dosage details.
-         */
+        /** TextViews for medication name, type, and dosage details. */
         final TextView txtMedicationName, txtMedicationType, txtMedicationDetails;
 
-        /**
-         * Button to open the medication options menu.
-         */
+        /** Button to open the medication options menu. */
         final ImageButton btnMenu;
 
-        /**
-         * Container for dynamically added dose status rows.
-         */
+        /** Container for dynamically added dose status rows. */
         final LinearLayout statusContainer;
 
         /**

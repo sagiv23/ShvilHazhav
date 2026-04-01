@@ -42,9 +42,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class SettingsActivity extends BaseActivity {
-    /**
-     * Service for starting and stopping background movement monitoring.
-     */
+    /** Service for starting and stopping background movement monitoring. */
     @Inject
     protected IFallDetectionService fallDetectionService;
 
@@ -175,18 +173,14 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Disables the fall detection background service and updates preferences.
-     */
+    /** Disables the fall detection background service and updates preferences. */
     private void disableFallDetection() {
         sharedPreferencesUtil.setFallDetectionEnabled(false);
         fallDetectionService.stopMonitoring();
         Toast.makeText(this, "זיהוי נפילות הופסק", Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * Final validation step before enabling fall detection: ensures the user has at least one emergency contact.
-     */
+    /** Final validation step before enabling fall detection: ensures the user has at least one emergency contact. */
     private void checkContactsAndEnableFallDetection() {
         User user = sharedPreferencesUtil.getUser();
         if (user == null) return;
@@ -220,9 +214,7 @@ public class SettingsActivity extends BaseActivity {
      */
     private void updateDarkModeText(SwitchMaterial switchDarkMode, boolean isDarkMode) { switchDarkMode.setText(isDarkMode ? R.string.bright_mode : R.string.dark_mode); }
 
-    /**
-     * Logs the current user out after a confirmation dialog.
-     */
+    /** Logs the current user out after a confirmation dialog. */
     private void logout() {
         Runnable onConfirm = () -> {
             fallDetectionService.stopMonitoring();

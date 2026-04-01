@@ -37,9 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MemoryGameLogsTableActivity extends BaseActivity {
-    /**
-     * A local map used to resolve participant UIDs to human-readable names in the log.
-     */
+    /** A local map used to resolve participant UIDs to human-readable names in the log. */
     private final Map<String, String> uidToNameMap = new HashMap<>();
 
     private MemoryGameLogAdapter adapter;
@@ -66,9 +64,7 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
         fetchUsersAndListenToGames();
     }
 
-    /**
-     * Orchestrates the data loading sequence: first resolves names, then starts the game listener.
-     */
+    /** Orchestrates the data loading sequence: first resolves names, then starts the game listener. */
     private void fetchUsersAndListenToGames() {
         databaseService.getUserService().getUserList(new DatabaseCallback<>() {
             @Override
@@ -88,9 +84,7 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Establishes a persistent, real-time listener for all game room updates in the database.
-     */
+    /** Establishes a persistent, real-time listener for all game room updates in the database. */
     private void listenToGamesRealtime() {
         databaseService.getGameService().getAllRoomsRealtime(new DatabaseCallback<>() {
             @Override

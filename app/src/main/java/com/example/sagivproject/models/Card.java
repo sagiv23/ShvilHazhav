@@ -22,9 +22,7 @@ public class Card implements Serializable, Idable {
     private boolean isMatched = false;
     private boolean wasRevealed;
 
-    /**
-     * Default constructor required for Firebase deserialization (DataSnapshot.getValue).
-     */
+    /** Default constructor required for Firebase deserialization (DataSnapshot.getValue). */
     public Card() {
     }
 

@@ -61,9 +61,7 @@ public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, Emer
         });
     }
 
-    /**
-     * Interface for listening to user actions on emergency contacts.
-     */
+    /** Interface for listening to user actions on emergency contacts. */
     public interface OnContactActionListener {
         /**
          * Called when the edit button is clicked for a specific contact.
@@ -78,28 +76,18 @@ public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, Emer
         void onDelete(EmergencyContact contact);
     }
 
-    /**
-     * ViewHolder for emergency contact items.
-     */
+    /** ViewHolder for emergency contact items. */
     public static class EmergencyContactViewHolder extends RecyclerView.ViewHolder {
-        /**
-         * TextView displaying the contact's full name.
-         */
+        /** TextView displaying the contact's full name. */
         final TextView txtName;
 
-        /**
-         * TextView displaying the contact's phone number.
-         */
+        /** TextView displaying the contact's phone number. */
         final TextView txtPhone;
 
-        /**
-         * ImageButton for editing the contact.
-         */
+        /** ImageButton for editing the contact. */
         final ImageButton btnEdit;
 
-        /**
-         * ImageButton for deleting the contact.
-         */
+        /** ImageButton for deleting the contact. */
         final ImageButton btnDelete;
 
         /**

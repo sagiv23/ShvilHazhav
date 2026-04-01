@@ -14,9 +14,7 @@ public class TipOfTheDay implements Idable {
     private String tip;
     private String date;
 
-    /**
-     * Default constructor required for Firebase deserialization.
-     */
+    /** Default constructor required for Firebase deserialization. */
     public TipOfTheDay() {
     }
 
@@ -36,16 +34,12 @@ public class TipOfTheDay implements Idable {
     @Override
     public void setId(String id) { this.id = id; }
 
-    /**
-     * @return The content of the tip.
-     */
+    /** @return The content of the tip. */
     public String getTip() { return tip; }
 
     public void setTip(String tip) { this.tip = tip; }
 
-    /**
-     * @return The date string associated with the tip.
-     */
+    /** @return The date string associated with the tip. */
     public String getDate() { return date; }
 
     public void setDate(String date) { this.date = date; }

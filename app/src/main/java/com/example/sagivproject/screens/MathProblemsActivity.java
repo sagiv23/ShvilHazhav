@@ -47,9 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MathProblemsActivity extends BaseActivity {
-    /**
-     * Buffer for current user-entered answer string.
-     */
+    /** Buffer for current user-entered answer string. */
     private final StringBuilder userInput = new StringBuilder();
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -58,9 +56,7 @@ public class MathProblemsActivity extends BaseActivity {
     private TextView tvQuestion, tvAnswer;
     private MaterialCardView cvAnswerContainer;
 
-    /**
-     * The correct answer for the current active problem.
-     */
+    /** The correct answer for the current active problem. */
     private int correctAnswer;
 
     @Override
@@ -89,9 +85,7 @@ public class MathProblemsActivity extends BaseActivity {
         setupKeypad();
     }
 
-    /**
-     * Refreshes the user's daily statistics from the database to ensure the UI is current.
-     */
+    /** Refreshes the user's daily statistics from the database to ensure the UI is current. */
     private void fetchLatestStats() {
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
             @Override
@@ -108,9 +102,7 @@ public class MathProblemsActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Updates the text views displaying the count of correct and incorrect answers for today.
-     */
+    /** Updates the text views displaying the count of correct and incorrect answers for today. */
     private void updateStatsUI() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DailyStats stats = user.getDailyStats().get(today);
@@ -178,9 +170,7 @@ public class MathProblemsActivity extends BaseActivity {
      */
     private int rand(int min, int max) { return min + (int) (Math.random() * (max - min + 1)); }
 
-    /**
-     * Initializes the numeric keypad by attaching click listeners to all digit buttons.
-     */
+    /** Initializes the numeric keypad by attaching click listeners to all digit buttons. */
     private void setupKeypad() {
         GridLayout keypad = findViewById(R.id.keypad_MathProblemsPage);
         for (int i = 0; i < keypad.getChildCount(); i++) {
@@ -201,9 +191,7 @@ public class MathProblemsActivity extends BaseActivity {
         findViewById(R.id.btn_MathProblemsPage_submit).setOnClickListener(v -> checkAnswer());
     }
 
-    /**
-     * Removes the last digit from the user's current input.
-     */
+    /** Removes the last digit from the user's current input. */
     private void deleteLast() {
         if (userInput.length() > 0) {
             userInput.deleteCharAt(userInput.length() - 1);
@@ -211,9 +199,7 @@ public class MathProblemsActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Resets the user's current input buffer.
-     */
+    /** Resets the user's current input buffer. */
     private void clearInput() {
         userInput.setLength(0);
         tvAnswer.setText("");

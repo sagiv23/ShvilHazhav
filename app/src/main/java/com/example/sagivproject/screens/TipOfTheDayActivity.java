@@ -51,9 +51,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class TipOfTheDayActivity extends BaseActivity {
-    /**
-     * Static list of fallback inspirational quotes.
-     */
+    /** Static list of fallback inspirational quotes. */
     private final String[] inspirationalQuotes = {
             "ההצלחה היא סך הכל של מאמצים קטנים, שחוזרים עליהם יום יום.",
             "הדרך הטובה ביותר לחזות את העתיד היא ליצור אותו.",
@@ -66,9 +64,7 @@ public class TipOfTheDayActivity extends BaseActivity {
     private Button btnTipSpeak, btnInspirationSpeak;
     private GenerativeModelFutures model;
     private TextToSpeech tts;
-    /**
-     * Tracks which content ID is currently being played via TTS.
-     */
+    /** Tracks which content ID is currently being played via TTS. */
     private String currentlySpeakingId = null;
 
     @Override
@@ -146,9 +142,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         btn.setText(speaking ? R.string.cancel_playback : R.string.playback);
     }
 
-    /**
-     * Checks Firebase for an existing tip for today. Triggers AI generation if missing.
-     */
+    /** Checks Firebase for an existing tip for today. Triggers AI generation if missing. */
     private void checkDailyTip() {
         databaseService.getTipOfTheDayService().getTipForToday(new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -164,9 +158,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Uses Vertex AI to generate a localized tip and persists it to the database.
-     */
+    /** Uses Vertex AI to generate a localized tip and persists it to the database. */
     private void fetchDailyTipFromAI() {
         tipContent.setText("טוען טיפ יומי...");
         btnTipSpeak.setVisibility(View.GONE);
@@ -207,9 +199,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         }, mainExecutor);
     }
 
-    /**
-     * Releases TTS resources on activity close.
-     */
+    /** Releases TTS resources on activity close. */
     @Override
     public void onDestroy() {
         if (tts != null) tts.shutdown();

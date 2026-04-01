@@ -59,14 +59,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MedicationImagesTableActivity extends BaseActivity {
-    /**
-     * Cached list of all images currently in the database.
-     */
+    /** Cached list of all images currently in the database. */
     private final List<ImageData> allImages = new ArrayList<>();
 
-    /**
-     * Utility for image decoding and Base64 conversion.
-     */
+    /** Utility for image decoding and Base64 conversion. */
     @Inject
     protected ImageUtil imageUtil;
 
@@ -129,9 +125,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
         loadImages();
     }
 
-    /**
-     * Validates gallery access permissions before launching the photo picker.
-     */
+    /** Validates gallery access permissions before launching the photo picker. */
     private void checkGalleryPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openGallery();
@@ -140,9 +134,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Launches the system photo picker.
-     */
+    /** Launches the system photo picker. */
     private void openGallery() {
         photoPickerLauncher.launch(new PickVisualMediaRequest.Builder()
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
@@ -157,9 +149,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Synchronizes the local image cache with the Firebase database.
-     */
+    /** Synchronizes the local image cache with the Firebase database. */
     private void loadImages() {
         databaseService.getImageService().getAllImages(new DatabaseCallback<>() {
             @Override
@@ -237,9 +227,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Re-assigns sequential IDs (card1, card2, etc.) to all remaining images and syncs with the database.
-     */
+    /** Re-assigns sequential IDs (card1, card2, etc.) to all remaining images and syncs with the database. */
     private void reorderImages() {
         for (int i = 0; i < allImages.size(); i++)
             allImages.get(i).setId("card" + (i + 1));

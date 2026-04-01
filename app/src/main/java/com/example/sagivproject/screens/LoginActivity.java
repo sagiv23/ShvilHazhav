@@ -33,9 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class LoginActivity extends BaseActivity {
-    /**
-     * Utility for validating form inputs.
-     */
+    /** Utility for validating form inputs. */
     @Inject
     protected Validator validator;
 
@@ -66,9 +64,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Orchestrates the login flow: validation, service call, and navigation.
-     */
+    /** Orchestrates the login flow: validation, service call, and navigation. */
     private void tryLogin() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();

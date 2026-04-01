@@ -29,18 +29,14 @@ public class FallDetectionManager implements IFallDetectionService {
     @Inject
     public FallDetectionManager(@ApplicationContext Context context) { this.context = context; }
 
-    /**
-     * Triggers the start of the fall detection foreground service.
-     */
+    /** Triggers the start of the fall detection foreground service. */
     @Override
     public void startMonitoring() {
         Intent intent = new Intent(context, FallDetectionServiceImpl.class);
         context.startForegroundService(intent);
     }
 
-    /**
-     * Terminates the fall detection background service.
-     */
+    /** Terminates the fall detection background service. */
     @Override
     public void stopMonitoring() {
         Intent intent = new Intent(context, FallDetectionServiceImpl.class);

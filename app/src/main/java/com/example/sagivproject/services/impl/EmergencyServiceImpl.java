@@ -132,13 +132,9 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
         }
     }
 
-    /**
-     * Constructs the database path for a user's emergency contacts collection.
-     */
+    /** Constructs the database path for a user's emergency contacts collection. */
     private String getContactsPath(String uid) { return USERS_PATH + "/" + uid + "/" + CONTACTS_PATH; }
 
-    /**
-     * Constructs the database path for a specific emergency contact record.
-     */
+    /** Constructs the database path for a specific emergency contact record. */
     private String getContactItemPath(String uid, String contactId) { return getContactsPath(uid) + "/" + contactId; }
 }

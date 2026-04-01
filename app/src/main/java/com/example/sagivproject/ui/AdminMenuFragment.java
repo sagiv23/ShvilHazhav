@@ -23,9 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class AdminMenuFragment extends Fragment {
-    /**
-     * Listener for handling navigation requests back to the host activity.
-     */
+    /** Listener for handling navigation requests back to the host activity. */
     private MenuNavigationListener navigationListener;
 
     /**

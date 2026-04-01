@@ -35,15 +35,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class EditUserDialog extends DialogFragment {
     private static final String ARG_USER = "arg_user";
 
-    /**
-     * Utility for validating user input.
-     */
+    /** Utility for validating user input. */
     @Inject
     Validator validator;
 
-    /**
-     * Utility for date formatting and picking.
-     */
+    /** Utility for date formatting and picking. */
     @Inject
     CalendarUtil calendarUtil;
 
@@ -51,9 +47,7 @@ public class EditUserDialog extends DialogFragment {
     private long birthDateMillis = -1;
     private EditUserDialogListener listener;
 
-    /**
-     * Constructs a new EditUserDialog.
-     */
+    /** Constructs a new EditUserDialog. */
     @Inject
     public EditUserDialog() {
     }
@@ -148,9 +142,7 @@ public class EditUserDialog extends DialogFragment {
                 isFieldValid(passEdt, validator::isPasswordNotValid, "הסיסמה קצרה מדי");
     }
 
-    /**
-     * Helper to validate a single field and show feedback on error.
-     */
+    /** Helper to validate a single field and show feedback on error. */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -160,9 +152,7 @@ public class EditUserDialog extends DialogFragment {
         return true;
     }
 
-    /**
-     * Listener interface for profile update events.
-     */
+    /** Listener interface for profile update events. */
     public interface EditUserDialogListener {
         /**
          * Called when the user submits valid updated profile information.

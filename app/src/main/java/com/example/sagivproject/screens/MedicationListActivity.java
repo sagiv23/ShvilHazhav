@@ -73,14 +73,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MedicationListActivity extends BaseActivity {
-    /**
-     * The complete, unfiltered list of medications owned by the user.
-     */
+    /** The complete, unfiltered list of medications owned by the user. */
     private final List<Medication> fullMedicationList = new ArrayList<>();
 
-    /**
-     * Utility for scheduling system alarms for medication reminders.
-     */
+    /** Utility for scheduling system alarms for medication reminders. */
     @Inject
     AlarmScheduler alarmScheduler;
 
@@ -149,9 +145,7 @@ public class MedicationListActivity extends BaseActivity {
         fetchTodayUsageLogs();
     }
 
-    /**
-     * Initializes the search bar and filter logic.
-     */
+    /** Initializes the search bar and filter logic. */
     private void setupSearch() {
         ArrayAdapter<String> spinnerAdapter = getStringArrayAdapter();
         spinnerSearchType.setAdapter(spinnerAdapter);
@@ -183,9 +177,7 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Retrieves usage history for the current day to update the "Taken" status rows.
-     */
+    /** Retrieves usage history for the current day to update the "Taken" status rows. */
     private void fetchTodayUsageLogs() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         databaseService.getMedicationService().getMedicationUsageLogs(uid, new DatabaseCallback<>() {
@@ -243,18 +235,14 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Loads medication data from SharedPreferences for immediate UI population.
-     */
+    /** Loads medication data from SharedPreferences for immediate UI population. */
     private void loadMedicationsFromCache() {
         if (user.getMedications() != null) {
             updateMedicationList(new ArrayList<>(user.getMedications().values()));
         }
     }
 
-    /**
-     * Fetches the latest medication prescriptions from Firebase.
-     */
+    /** Fetches the latest medication prescriptions from Firebase. */
     private void fetchMedicationsFromServer() {
         databaseService.getMedicationService().getUserMedicationList(uid, new DatabaseCallback<>() {
             @Override
@@ -265,9 +253,7 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Updates the persistent local cache with the latest data list.
-     */
+    /** Updates the persistent local cache with the latest data list. */
     private void updateUserCache(List<Medication> medicationList) {
         HashMap<String, Medication> updatedMedicationsMap = new HashMap<>();
         for (Medication med : medicationList) {
@@ -277,9 +263,7 @@ public class MedicationListActivity extends BaseActivity {
         sharedPreferencesUtil.saveUser(user);
     }
 
-    /**
-     * Processes a new list of medications: sorts alphabetically and updates UI.
-     */
+    /** Processes a new list of medications: sorts alphabetically and updates UI. */
     private void updateMedicationList(List<Medication> medicationList) {
         fullMedicationList.clear();
         fullMedicationList.addAll(medicationList);
@@ -288,9 +272,7 @@ public class MedicationListActivity extends BaseActivity {
         filterMedications(editSearch.getText().toString());
     }
 
-    /**
-     * Creates a styled adapter for the search filter dropdown.
-     */
+    /** Creates a styled adapter for the search filter dropdown. */
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         String[] searchOptions = {"הכל", "שם תרופה", "סוג תרופה"};
@@ -319,9 +301,7 @@ public class MedicationListActivity extends BaseActivity {
         };
     }
 
-    /**
-     * Saves a new medication entry and configures its reminders.
-     */
+    /** Saves a new medication entry and configures its reminders. */
     private void saveMedication(Medication medication) {
         String medicationId = databaseService.getMedicationService().generateMedicationId();
         medication.setId(medicationId);
@@ -341,9 +321,7 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Validates notification permissions before scheduling reminders.
-     */
+    /** Validates notification permissions before scheduling reminders. */
     private void checkNotificationPermissionAndSchedule(Medication medication) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             alarmScheduler.schedule(medication);
@@ -360,9 +338,7 @@ public class MedicationListActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Commits medication updates and refreshes active alarms.
-     */
+    /** Commits medication updates and refreshes active alarms. */
     private void updateMedication(Medication med) {
         med.setUserId(uid);
         databaseService.getMedicationService().updateMedication(uid, med, new DatabaseCallback<>() {
@@ -386,9 +362,7 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Removes a medication record and terminates its scheduled alarms.
-     */
+    /** Removes a medication record and terminates its scheduled alarms. */
     private void deleteMedicationById(Medication medication) {
         databaseService.getMedicationService().deleteMedication(uid, medication.getId(), new DatabaseCallback<>() {
             @Override
@@ -405,9 +379,7 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Opens the specialized dialog for adding or modifying medications.
-     */
+    /** Opens the specialized dialog for adding or modifying medications. */
     private void openMedicationDialog(Medication medToEdit) {
         dialogService.showMedicationDialog(getSupportFragmentManager(), medToEdit, new MedicationDialog.OnMedicationSubmitListener() {
             @Override

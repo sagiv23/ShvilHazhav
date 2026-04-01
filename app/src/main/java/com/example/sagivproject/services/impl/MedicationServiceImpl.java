@@ -166,13 +166,9 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
         });
     }
 
-    /**
-     * Constructs path to user's medications.
-     */
+    /** Constructs path to user's medications. */
     private String getMedicationPath(String uid) { return USERS_PATH + "/" + uid + "/" + MEDICATIONS_PATH; }
 
-    /**
-     * Constructs path to specific medication.
-     */
+    /** Constructs path to specific medication. */
     private String getMedicationItemPath(String uid, String medicationId) { return getMedicationPath(uid) + "/" + medicationId; }
 }

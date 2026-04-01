@@ -30,24 +30,16 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class EditForumCategoryDialog extends DialogFragment {
-    /**
-     * Argument key for passing the category object.
-     */
+    /** Argument key for passing the category object. */
     private static final String ARG_CATEGORY = "arg_category";
 
-    /**
-     * The category being edited.
-     */
+    /** The category being edited. */
     private ForumCategory category;
 
-    /**
-     * Listener for returning the updated category name.
-     */
+    /** Listener for returning the updated category name. */
     private EditForumCategoryDialogListener listener;
 
-    /**
-     * Default constructor for Hilt.
-     */
+    /** Default constructor for Hilt. */
     @Inject
     public EditForumCategoryDialog() {
     }
@@ -66,9 +58,7 @@ public class EditForumCategoryDialog extends DialogFragment {
         this.listener = listener;
     }
 
-    /**
-     * Retrieves the category object from the arguments bundle.
-     */
+    /** Retrieves the category object from the arguments bundle. */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,9 +99,7 @@ public class EditForumCategoryDialog extends DialogFragment {
         return dialog;
     }
 
-    /**
-     * Interface for listening to forum category update events.
-     */
+    /** Interface for listening to forum category update events. */
     public interface EditForumCategoryDialogListener {
         /**
          * Called when the administrator submits a valid new name for the category.

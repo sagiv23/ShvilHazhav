@@ -161,9 +161,7 @@ public class AuthServiceImpl implements IAuthService {
         return email;
     }
 
-    /**
-     * Internal helper to generate a UID and create a new user record in the database.
-     */
+    /** Internal helper to generate a UID and create a new user record in the database. */
     private void createUser(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> callback) {
         String uid = userService.generateUserId();
         User user = new User(uid, firstName, lastName, birthDateMillis, email, password, UserRole.REGULAR);
@@ -177,9 +175,7 @@ public class AuthServiceImpl implements IAuthService {
         });
     }
 
-    /**
-     * Internal helper to commit profile updates to the database.
-     */
+    /** Internal helper to commit profile updates to the database. */
     private void applyUserUpdate(User user, String firstName, String lastName, long birthDate, String email, String password, UpdateUserCallback callback) {
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -196,9 +192,7 @@ public class AuthServiceImpl implements IAuthService {
         });
     }
 
-    /**
-     * Internal helper to validate email availability before proceeding with account creation.
-     */
+    /** Internal helper to validate email availability before proceeding with account creation. */
     private void handleUserCreation(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> successCallback, Consumer<String> errorCallback) {
         userService.checkIfEmailExists(email, new DatabaseCallback<>() {
             @Override

@@ -19,9 +19,7 @@ import java.util.List;
  */
 public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
-    /**
-     * The internal list containing the data items to be displayed.
-     */
+    /** The internal list containing the data items to be displayed. */
     protected final List<T> dataList = new ArrayList<>();
 
     /**
@@ -60,9 +58,7 @@ public abstract class BaseAdapter<T extends Idable, VH extends RecyclerView.View
      */
     public List<T> getItemList() { return dataList; }
 
-    /**
-     * Internal callback class for {@link DiffUtil} to compare items in the list.
-     */
+    /** Internal callback class for {@link DiffUtil} to compare items in the list. */
     private class DiffCallback extends DiffUtil.Callback {
         private final List<T> oldList;
         private final List<T> newList;

@@ -25,14 +25,10 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class FullImageDialog extends DialogFragment {
-    /**
-     * The image content to display.
-     */
+    /** The image content to display. */
     private Drawable imageDrawable;
 
-    /**
-     * Constructs a new FullImageDialog.
-     */
+    /** Constructs a new FullImageDialog. */
     @Inject
     public FullImageDialog() {
     }
@@ -43,9 +39,7 @@ public class FullImageDialog extends DialogFragment {
      */
     public void setImage(Drawable imageDrawable) { this.imageDrawable = imageDrawable; }
 
-    /**
-     * Configures the dialog style to be full-screen before creation.
-     */
+    /** Configures the dialog style to be full-screen before creation. */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -36,9 +36,7 @@ public class ProfileImageDialog extends DialogFragment {
     private boolean hasImage;
     private ImagePickerListener listener;
 
-    /**
-     * Default constructor for Hilt.
-     */
+    /** Default constructor for Hilt. */
     @Inject
     public ProfileImageDialog() {
     }
@@ -98,23 +96,15 @@ public class ProfileImageDialog extends DialogFragment {
         return dialog;
     }
 
-    /**
-     * Interface for handling profile image picker interactions.
-     */
+    /** Interface for handling profile image picker interactions. */
     public interface ImagePickerListener {
-        /**
-         * Called when the 'Camera' option is selected.
-         */
+        /** Called when the 'Camera' option is selected. */
         void onCamera();
 
-        /**
-         * Called when the 'Gallery' option is selected.
-         */
+        /** Called when the 'Gallery' option is selected. */
         void onGallery();
 
-        /**
-         * Called when the 'Delete' option is selected.
-         */
+        /** Called when the 'Delete' option is selected. */
         void onDelete();
     }
 }

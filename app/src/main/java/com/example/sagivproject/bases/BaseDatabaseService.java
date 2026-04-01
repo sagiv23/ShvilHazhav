@@ -32,24 +32,16 @@ import java.util.function.UnaryOperator;
  * @param <T> The type of the data model, which must extend {@link Idable}.
  */
 public abstract class BaseDatabaseService<T extends Idable> {
-    /**
-     * Tag for logging.
-     */
+    /** Tag for logging. */
     private static final String TAG = "BaseFirebaseService";
 
-    /**
-     * The reference to the Firebase database.
-     */
+    /** The reference to the Firebase database. */
     protected final DatabaseReference databaseReference;
 
-    /**
-     * The path in the database for this entity type.
-     */
+    /** The path in the database for this entity type. */
     private final String path;
 
-    /**
-     * The class of the entity type (needed for Firebase deserialization).
-     */
+    /** The class of the entity type (needed for Firebase deserialization). */
     private final Class<T> clazz;
 
     /**

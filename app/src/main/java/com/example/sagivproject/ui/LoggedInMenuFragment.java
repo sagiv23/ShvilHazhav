@@ -24,9 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class LoggedInMenuFragment extends Fragment {
-    /**
-     * Listener for handling navigation events in the host activity.
-     */
+    /** Listener for handling navigation events in the host activity. */
     private MenuNavigationListener navigationListener;
 
     /**

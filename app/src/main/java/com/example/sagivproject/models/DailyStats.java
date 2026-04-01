@@ -21,9 +21,7 @@ public class DailyStats implements Serializable {
     private int medicationsMissed;
     private List<MedicationUsage> medicationUsageLogs;
 
-    /**
-     * Constructs a new DailyStats object with all counters initialized to zero.
-     */
+    /** Constructs a new DailyStats object with all counters initialized to zero. */
     public DailyStats() {
         this.memoryWins = 0;
         this.memoryGamesPlayed = 0;
@@ -34,44 +32,32 @@ public class DailyStats implements Serializable {
         this.medicationUsageLogs = new ArrayList<>();
     }
 
-    /**
-     * @return Total number of memory games won on this day.
-     */
+    /** @return Total number of memory games won on this day. */
     public int getMemoryWins() { return memoryWins; }
 
     public void setMemoryWins(int memoryWins) { this.memoryWins = memoryWins; }
 
-    /**
-     * @return Total number of memory games played on this day.
-     */
+    /** @return Total number of memory games played on this day. */
     public int getMemoryGamesPlayed() { return memoryGamesPlayed; }
 
     public void setMemoryGamesPlayed(int memoryGamesPlayed) { this.memoryGamesPlayed = memoryGamesPlayed; }
 
-    /**
-     * @return Number of correct math problem answers on this day.
-     */
+    /** @return Number of correct math problem answers on this day. */
     public int getMathCorrect() { return mathCorrect; }
 
     public void setMathCorrect(int mathCorrect) { this.mathCorrect = mathCorrect; }
 
-    /**
-     * @return Number of incorrect math problem answers on this day.
-     */
+    /** @return Number of incorrect math problem answers on this day. */
     public int getMathWrong() { return mathWrong; }
 
     public void setMathWrong(int mathWrong) { this.mathWrong = mathWrong; }
 
-    /**
-     * @return Total count of medication doses marked as TAKEN on this day.
-     */
+    /** @return Total count of medication doses marked as TAKEN on this day. */
     public int getMedicationsTaken() { return medicationsTaken; }
 
     public void setMedicationsTaken(int medicationsTaken) { this.medicationsTaken = medicationsTaken; }
 
-    /**
-     * @return Total count of medication doses marked as NOT_TAKEN on this day.
-     */
+    /** @return Total count of medication doses marked as NOT_TAKEN on this day. */
     public int getMedicationsMissed() { return medicationsMissed; }
 
     public void setMedicationsMissed(int medicationsMissed) { this.medicationsMissed = medicationsMissed; }
@@ -89,34 +75,22 @@ public class DailyStats implements Serializable {
 
     public void setMedicationUsageLogs(List<MedicationUsage> medicationUsageLogs) { this.medicationUsageLogs = medicationUsageLogs; }
 
-    /**
-     * Increments the count of memory game wins.
-     */
+    /** Increments the count of memory game wins. */
     public void addMemoryWin() { this.memoryWins++; }
 
-    /**
-     * Increments the count of memory games played.
-     */
+    /** Increments the count of memory games played. */
     public void addMemoryGamePlayed() { this.memoryGamesPlayed++; }
 
-    /**
-     * Increments the count of correct math answers.
-     */
+    /** Increments the count of correct math answers. */
     public void addMathCorrect() { this.mathCorrect++; }
 
-    /**
-     * Increments the count of incorrect math answers.
-     */
+    /** Increments the count of incorrect math answers. */
     public void addMathWrong() { this.mathWrong++; }
 
-    /**
-     * Increments the count of medications successfully taken.
-     */
+    /** Increments the count of medications successfully taken. */
     public void addMedicationTaken() { this.medicationsTaken++; }
 
-    /**
-     * Increments the count of medications missed.
-     */
+    /** Increments the count of medications missed. */
     public void addMedicationMissed() { this.medicationsMissed++; }
 
     /**

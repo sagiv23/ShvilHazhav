@@ -45,31 +45,21 @@ public class GraphData implements Idable {
     @Override
     public void setId(String id) { this.id = id; }
 
-    /**
-     * @return The title of the graph.
-     */
+    /** @return The title of the graph. */
     public String getTitle() { return title; }
 
-    /**
-     * @return The list of XY points to plot.
-     */
+    /** @return The list of XY points to plot. */
     public List<SimpleXYGraphView.Point> getPoints() {
         return points;
     }
 
-    /**
-     * @return The list of labels for the X-axis markers.
-     */
+    /** @return The list of labels for the X-axis markers. */
     public List<String> getXLabels() { return xLabels; }
 
-    /**
-     * @return The X-axis descriptive label.
-     */
+    /** @return The X-axis descriptive label. */
     public String getLabelX() { return labelX; }
 
-    /**
-     * @return The Y-axis descriptive label.
-     */
+    /** @return The Y-axis descriptive label. */
     public String getLabelY() { return labelY; }
 
     @Override

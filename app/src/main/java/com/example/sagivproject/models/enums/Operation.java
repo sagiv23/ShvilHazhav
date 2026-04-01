@@ -8,28 +8,16 @@ package com.example.sagivproject.models.enums;
  * </p>
  */
 public enum Operation {
-    /**
-     * Addition operation (+).
-     */
+    /** Addition operation (+). */
     ADD,
-    /**
-     * Subtraction operation (-).
-     */
+    /** Subtraction operation (-). */
     SUBTRACT,
-    /**
-     * Multiplication operation (×).
-     */
+    /** Multiplication operation (×). */
     MULTIPLY,
-    /**
-     * Division operation (÷).
-     */
+    /** Division operation (÷). */
     DIVIDE,
-    /**
-     * Power/exponentiation operation (^).
-     */
+    /** Power/exponentiation operation (^). */
     POWER,
-    /**
-     * Square root operation (√).
-     */
+    /** Square root operation (√). */
     SQRT
 }
