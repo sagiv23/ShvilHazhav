@@ -77,7 +77,6 @@ public class ProfileImageDialog extends DialogFragment {
         Button btnDelete = dialog.findViewById(R.id.btn_profileImageDialog_delete);
         Button btnCancel = dialog.findViewById(R.id.btn_profileImageDialog_cancel);
 
-        // Only show delete option if there is an image to remove
         btnDelete.setVisibility(hasImage ? View.VISIBLE : View.GONE);
 
         btnCamera.setOnClickListener(v -> {

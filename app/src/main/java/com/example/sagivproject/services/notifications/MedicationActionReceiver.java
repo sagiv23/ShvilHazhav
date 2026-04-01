@@ -73,7 +73,6 @@ public class MedicationActionReceiver extends BroadcastReceiver {
             String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
             String timeNow = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
 
-            // Create a usage record: medicationId, medicationName, actualTime, date, scheduledTime, status
             MedicationUsage usage = new MedicationUsage(medicationId, medicationName, timeNow, today, hourStr, status);
 
             databaseService.getMedicationService().logMedicationUsage(user.getId(), usage, new IDatabaseService.DatabaseCallback<>() {
@@ -81,7 +80,6 @@ public class MedicationActionReceiver extends BroadcastReceiver {
                 public void onCompleted(Void object) {
                     Log.d(TAG, "Usage (" + status + ") logged successfully from notification");
 
-                    // Update local user stats for immediate consistency in the next activity launch
                     DailyStats stats = user.getTodayStats();
                     stats.addMedicationUsageLog(usage);
                     if (status == MedicationStatus.TAKEN) {
@@ -99,7 +97,6 @@ public class MedicationActionReceiver extends BroadcastReceiver {
             });
         }
 
-        // Programmatically dismiss the notification after the user interacts with it
         if (notificationId != -1) {
             NotificationManagerCompat.from(context).cancel(notificationId);
         }

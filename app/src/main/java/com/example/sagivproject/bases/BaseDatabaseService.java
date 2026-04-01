@@ -128,8 +128,6 @@ public abstract class BaseDatabaseService<T extends Idable> {
         }, callback);
     }
 
-    // region low-level helpers
-
     /**
      * Gets a DatabaseReference for a specific path.
      *
@@ -276,5 +274,4 @@ public abstract class BaseDatabaseService<T extends Idable> {
         });
     }
 
-    // endregion low-level helpers
 }

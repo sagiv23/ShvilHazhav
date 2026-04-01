@@ -85,7 +85,6 @@ public class SettingsActivity extends BaseActivity {
             }
         }
 
-        // Dark Mode Logic
         boolean isDarkMode = sharedPreferencesUtil.isDarkMode();
         switchDarkMode.setChecked(isDarkMode);
         updateDarkModeText(switchDarkMode, isDarkMode);
@@ -96,7 +95,6 @@ public class SettingsActivity extends BaseActivity {
             updateDarkModeText(switchDarkMode, isChecked);
         });
 
-        // Fall Detection Logic
         boolean isFallDetectionEnabled = sharedPreferencesUtil.isFallDetectionEnabled();
         switchFallDetection.setChecked(isFallDetectionEnabled);
 

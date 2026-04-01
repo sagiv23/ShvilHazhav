@@ -86,7 +86,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
         recyclerCards = findViewById(R.id.recycler_OnlineMemoryGame);
         recyclerCards.setLayoutManager(new GridLayoutManager(this, 3));
-        recyclerCards.setItemAnimator(null); // Disable animator to prevent detach-related crashes
+        recyclerCards.setItemAnimator(null);
 
         tvTimer = findViewById(R.id.tv_OnlineMemoryGame_timer);
         tvTurnStatus = findViewById(R.id.tv_OnlineMemoryGame_turn_status);
@@ -334,7 +334,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                     return;
                 }
 
-                // Start total game timer if not already running
                 if (totalGameTimer == null) {
                     startTotalGameTimer();
                 }

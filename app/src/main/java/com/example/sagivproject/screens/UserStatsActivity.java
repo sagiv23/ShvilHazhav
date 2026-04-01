@@ -151,7 +151,6 @@ public class UserStatsActivity extends BaseActivity {
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.text_hebrew);
 
-        // Link the ViewPager with TabLayout and apply custom typography to tabs
         new TabLayoutMediator(tabLayoutGraphs, viewPagerGraphs, (tab, position) -> {
             if (position < graphAdapter.getItemList().size()) {
                 String title = graphAdapter.getItemList().get(position).getTitle();
@@ -305,7 +304,6 @@ public class UserStatsActivity extends BaseActivity {
         List<GraphData> graphs = new ArrayList<>();
 
         if (currentUser.getDailyStats() == null || currentUser.getDailyStats().isEmpty()) {
-            // Placeholders for empty state
             graphs.add(new GraphData("memory", "זיכרון: אחוז ניצחונות", new ArrayList<>(), new ArrayList<>(), "תאריך", "% ניצחונות"));
             graphs.add(new GraphData("math", "מתמטיקה: אחוז הצלחה", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה"));
             graphs.add(new GraphData("meds", "תרופות: עמידה ביעדים", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה"));

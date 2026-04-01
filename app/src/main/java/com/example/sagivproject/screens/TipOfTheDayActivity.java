@@ -92,7 +92,6 @@ public class TipOfTheDayActivity extends BaseActivity {
         btnTipSpeak = findViewById(R.id.btn_tip_speak);
         btnInspirationSpeak = findViewById(R.id.btn_inspiration_speak);
 
-        // Initialize TTS engine
         tts = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
                 tts.setLanguage(new Locale("he", "IL"));
@@ -119,7 +118,6 @@ public class TipOfTheDayActivity extends BaseActivity {
         btnTipSpeak.setOnClickListener(v -> toggleSpeech("tip", tipContent.getText().toString()));
         btnInspirationSpeak.setOnClickListener(v -> toggleSpeech("inspiration", tvInspirationContent.getText().toString()));
 
-        // Prepare the Gemini AI model for tip generation
         GenerativeModel generativeModel = FirebaseAI.getInstance(GenerativeBackend.googleAI())
                 .generativeModel("gemini-2.5-flash-lite");
         model = GenerativeModelFutures.from(generativeModel);

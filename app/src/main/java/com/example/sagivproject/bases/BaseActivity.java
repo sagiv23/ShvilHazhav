@@ -112,7 +112,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
 
         if (drawerLayout != null) {
             if (isAdmin) {
-                // Admins use a top bar menu instead of a drawer
+
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);

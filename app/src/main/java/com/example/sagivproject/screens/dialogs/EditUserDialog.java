@@ -98,7 +98,6 @@ public class EditUserDialog extends DialogFragment {
         Button btnSave = dialog.findViewById(R.id.btnEditUserSave);
         Button btnCancel = dialog.findViewById(R.id.btnEditUserCancel);
 
-        // Pre-fill fields with current user data
         birthDateMillis = user.getBirthDateMillis();
         if (birthDateMillis > 0) {
             inputBirthDate.setText(calendarUtil.formatDate(birthDateMillis));

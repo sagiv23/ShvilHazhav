@@ -82,7 +82,6 @@ public class AiActivity extends BaseActivity {
         answerView = findViewById(R.id.TV_Ai_txt_response);
         progressBar = findViewById(R.id.progressBar_Ai);
 
-        // Initialize Text-to-Speech engine
         tts = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
                 tts.setLanguage(new Locale("he", "IL"));
@@ -105,7 +104,6 @@ public class AiActivity extends BaseActivity {
             }
         });
 
-        // Initialize Gemini model session
         GenerativeModel generativeModel = FirebaseAI.getInstance(GenerativeBackend.googleAI())
                 .generativeModel("gemini-2.5-flash-lite");
         GenerativeModelFutures modelFutures = GenerativeModelFutures.from(generativeModel);

@@ -57,7 +57,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if ("ACTION_BIRTHDAY_CHECK".equals(intent.getAction())) {
             handleBirthdayCheck();
-            // Reschedule the check for the same time tomorrow
+
             alarmScheduler.scheduleBirthdayAlarm();
             return;
         }
@@ -73,7 +73,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             return;
         }
 
-        // Optimization: Don't show a notification if the user already logged this dose as TAKEN today.
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DailyStats stats = user.getDailyStats().get(today);
         if (stats != null && stats.getMedicationUsageLogs() != null) {
@@ -83,7 +82,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                         usage.getStatus() == MedicationStatus.TAKEN) {
                     Log.d(TAG, "Medication " + medicationName + " already taken for " + hourStr + ". Rescheduling only.");
 
-                    // Reschedule for tomorrow without notifying
                     Medication medication = user.getMedications().get(medicationId);
                     if (medication != null) {
                         alarmScheduler.scheduleSpecificTime(medication, hourStr, true);
@@ -96,7 +94,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, "Showing notification for: " + medicationName + " at " + hourStr);
         notificationService.showMedicationNotification(medicationId, medicationName, hourStr, notificationId);
 
-        // Standard reschedule for the next day
         Medication medication = user.getMedications().get(medicationId);
         if (medication != null && hourStr != null) {
             alarmScheduler.scheduleSpecificTime(medication, hourStr, true);

@@ -69,7 +69,6 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         Card card = getItem(position);
 
-        // Reset state to prevent visual artifacts from view recycling
         holder.itemView.animate().cancel();
         holder.cardImage.animate().cancel();
         holder.itemView.setTranslationX(0f);
@@ -81,13 +80,12 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         if (card.getIsMatched() || card.getIsRevealed()) {
             imageUtil.loadImage(card.getBase64Content(), holder.cardImage);
             if (card.getIsMatched()) {
-                holder.itemView.setAlpha(0.6f); // Dim matched cards
+                holder.itemView.setAlpha(0.6f);
             }
         } else {
             holder.cardImage.setImageResource(R.drawable.fold_card_img);
         }
 
-        // Logic for triggering flip animations
         if (card.getIsRevealed() && !card.wasRevealed()) {
             animateFlipOpen(holder.cardImage, card.getBase64Content());
             card.setWasRevealed(true);

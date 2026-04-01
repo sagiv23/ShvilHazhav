@@ -108,14 +108,12 @@ public class MedicationDialog extends DialogFragment {
 
         selectedHours.clear();
 
-        // Populate medication type dropdown from Enum
         List<String> typeNames = new ArrayList<>();
         for (MedicationType type : MedicationType.values()) {
             typeNames.add(type.getDisplayName());
         }
         spinnerType.setAdapter(createMedicationTypeAdapter(typeNames));
 
-        // Initialize fields if editing an existing record
         if (medToEdit != null) {
             edtName.setText(medToEdit.getName());
             edtDetails.setText(medToEdit.getDetails());

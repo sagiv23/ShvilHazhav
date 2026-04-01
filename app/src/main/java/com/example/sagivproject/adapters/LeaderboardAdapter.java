@@ -57,7 +57,7 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
         int totalWins = getTotalWins(user);
 
         if (position == 0 && totalWins > 0) {
-            // Display Gold Medal for the 1st place
+
             holder.tvWins.setText(MessageFormat.format("\uD83E\uDD47 {0}", totalWins));
         } else {
             holder.tvWins.setText(String.valueOf(totalWins));

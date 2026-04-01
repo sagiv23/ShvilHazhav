@@ -102,7 +102,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
                 Objects.requireNonNull(loggedTodayMedications.get(medId)).put(scheduledTime, usage.getStatus());
             }
         }
-        // Force refresh to update status rows
+
         setData(new ArrayList<>(dataList));
     }
 

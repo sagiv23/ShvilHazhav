@@ -90,11 +90,11 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
      */
     @Override
     public void deleteCategory(String categoryId, IDatabaseService.DatabaseCallback<Void> callback) {
-        // First, delete all messages associated with this category.
+
         deleteData(MESSAGES_PATH + "/" + categoryId, new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void result) {
-                // After messages are gone, delete the category record.
+
                 delete(categoryId, callback);
             }
 

@@ -132,7 +132,6 @@ public class MedicationListActivity extends BaseActivity {
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.text_hebrew);
 
-        // Setup TabLayout with custom styled tabs matching medication names
         new TabLayoutMediator(tabLayout_medications, viewPager_medications, (tab, position) -> {
             if (position < adapter.getItemList().size()) {
                 String name = adapter.getItemList().get(position).getName();

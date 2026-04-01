@@ -70,7 +70,7 @@ public class StatsServiceImpl implements IStatsService {
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                // Log result if needed
+
             }
         });
     }

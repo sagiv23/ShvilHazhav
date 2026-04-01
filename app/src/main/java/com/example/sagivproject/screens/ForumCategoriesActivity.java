@@ -97,7 +97,6 @@ public class ForumCategoriesActivity extends BaseActivity {
         View adminAddBtn = findViewById(R.id.btn_adminForumCategory_add_category);
         EditText edtNewCategoryName = findViewById(R.id.edt_new_category_name);
 
-        // Configure admin-specific addition UI
         if (isAdmin) {
             if (adminAddLayout != null) adminAddLayout.setVisibility(View.VISIBLE);
             if (adminAddBtn != null) {

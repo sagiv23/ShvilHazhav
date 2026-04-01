@@ -60,7 +60,6 @@ public class LoginActivity extends BaseActivity {
 
         btnLogin.setOnClickListener(v -> tryLogin());
 
-        // Pre-fill email if passed from logout or registration
         String lastEmail = getIntent().getStringExtra("userEmail");
         if (lastEmail != null && !lastEmail.isEmpty()) {
             editTextEmail.setText(lastEmail);

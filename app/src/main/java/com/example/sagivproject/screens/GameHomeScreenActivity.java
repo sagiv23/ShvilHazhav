@@ -82,7 +82,6 @@ public class GameHomeScreenActivity extends BaseActivity {
         TVStatusOfFindingEnemy = findViewById(R.id.tv_GameHomeScreen_status_of_finding_enemy);
         RecyclerView rvLeaderboard = findViewById(R.id.recyclerView_GameHomeScreen_leaderboard);
 
-        // Initialize TTS for reading game rules
         tts = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
                 tts.setLanguage(new Locale("he", "IL"));

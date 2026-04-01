@@ -109,7 +109,6 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
                     return;
                 }
 
-                // Dynamically populate sender info for each message
                 AtomicInteger remaining = new AtomicInteger(messages.size());
                 for (ForumMessage msg : messages) {
                     userService.getUser(msg.getUserId(), new DatabaseCallback<>() {

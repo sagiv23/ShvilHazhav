@@ -85,7 +85,6 @@ public class Validator {
 
         int age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
 
-        // Adjust age if birthday hasn't occurred yet this year
         if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
             age--;
         }

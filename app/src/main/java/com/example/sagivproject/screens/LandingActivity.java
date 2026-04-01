@@ -45,7 +45,6 @@ public class LandingActivity extends BaseActivity {
         LinearLayout mainContent = findViewById(R.id.mainContent);
         ImageView splashImage = findViewById(R.id.splashImage);
 
-        // Determine if entry animation should be played
         boolean shouldAnimate = getIntent().getBooleanExtra("shouldAnimate", false);
 
         if (shouldAnimate) {
@@ -59,7 +58,6 @@ public class LandingActivity extends BaseActivity {
                 splashImage.setScaleX(1f);
                 splashImage.setScaleY(1f);
 
-                // Animate splash image out and main content in
                 splashImage.animate()
                         .scaleX(0.5f)
                         .scaleY(0.5f)
@@ -78,7 +76,7 @@ public class LandingActivity extends BaseActivity {
                         .start();
             }
         } else {
-            // Show content immediately without animation
+
             if (splashImage != null) {
                 splashImage.setVisibility(View.GONE);
             }

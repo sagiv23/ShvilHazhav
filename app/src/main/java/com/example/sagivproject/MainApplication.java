@@ -53,11 +53,9 @@ public class MainApplication extends Application implements Configuration.Provid
     public void onCreate() {
         super.onCreate();
 
-        // Initialize and apply the saved theme preference from SharedPreferences
         boolean isDarkMode = sharedPreferencesUtil.isDarkMode();
         AppCompatDelegate.setDefaultNightMode(isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
-        // Schedule periodic background tasks for daily maintenance
         setupDailyChecks();
     }
 
@@ -90,7 +88,6 @@ public class MainApplication extends Application implements Configuration.Provid
         dueDate.set(Calendar.MINUTE, 0);
         dueDate.set(Calendar.SECOND, 0);
 
-        // If 9 AM has already passed today, schedule for tomorrow morning
         if (dueDate.before(currentDate)) {
             dueDate.add(Calendar.HOUR_OF_DAY, 24);
         }
@@ -105,7 +102,6 @@ public class MainApplication extends Application implements Configuration.Provid
                                 .build())
                         .build();
 
-        // Enqueue the work with KEEP policy to avoid re-scheduling if already active
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 "DailyChecksWork",
                 ExistingPeriodicWorkPolicy.KEEP,

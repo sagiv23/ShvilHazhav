@@ -43,7 +43,6 @@ public class SplashActivity extends BaseActivity {
             return insets;
         });
 
-        // Start a delayed navigation timer on a separate background thread
         new Thread(() -> {
             try {
                 Thread.sleep(SPLASH_DELAY);

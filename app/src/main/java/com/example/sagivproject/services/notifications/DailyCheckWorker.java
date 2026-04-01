@@ -89,7 +89,6 @@ public class DailyCheckWorker extends Worker {
 
         final CountDownLatch latch = new CountDownLatch(1);
 
-        // Fetch the latest user data from the database to perform checks
         databaseService.getUserService().getUser(userId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(User user) {
@@ -106,7 +105,7 @@ public class DailyCheckWorker extends Worker {
         });
 
         try {
-            // Synchronously wait for the database response (timeout of 1 minute)
+
             if (!latch.await(1, TimeUnit.MINUTES)) {
                 return Result.retry();
             }
