@@ -1,6 +1,6 @@
 import os
 from docx import Document
-from docx.shared import Pt
+from docx.shared import Pt, RGBColor
 
 """
 Utility script to export all Java source files from the project into a single Microsoft Word document.
@@ -13,15 +13,18 @@ Dependencies:
 def export_java_to_word(project_path, output_docx):
     """
     Crawls the project directory and appends the content of every .java file to a Word document.
-
-    :param project_path: The root directory of the project to scan.
-    :param output_docx: The name/path of the resulting .docx file.
     """
     doc = Document()
     doc.add_heading('Shvil Hazhav - Java Source Code', 0)
 
+    # ניתוב לתיקיית המקור של ה-Java כדי שהנתיבים יהיו קצרים ויחסיים לחבילה (Package)
+    java_base_path = os.path.join(project_path, "app", "src", "main", "java", "com", "example", "sagivproject")
+
+    # בדיקה שהתיקייה קיימת, אם לא - נשתמש בנתיב הפרויקט הכללי
+    search_path = java_base_path if os.path.exists(java_base_path) else project_path
+
     # Walk through the project directory structure
-    for root, dirs, files in os.walk(project_path):
+    for root, dirs, files in os.walk(search_path):
         # Skip hidden directories like .git or .idea
         if any(hidden in root for hidden in [".git", ".idea", "build", "gradle"]):
             continue
@@ -29,12 +32,20 @@ def export_java_to_word(project_path, output_docx):
         for file in files:
             if file.endswith(".java"):
                 file_path = os.path.join(root, file)
-                relative_path = os.path.relpath(file_path, project_path)
+                # חישוב נתיב יחסי מהחבילה הראשית
+                relative_path = os.path.relpath(file_path, search_path)
+                # החלפת לוכסנים לפורמט ווינדוס והוספת הסימן מהדוגמה
+                display_path = "▶ " + relative_path.replace('/', '\\')
 
-                print(f"Processing: {relative_path}")
+                print(f"Processing: {display_path}")
 
-                # Add a heading for each file with its relative path
-                doc.add_heading(relative_path, level=1)
+                # הוספת כותרת ועיצובה (Arial, 12, #09890E, ללא Bold)
+                heading = doc.add_heading('', level=1)
+                run = heading.add_run(display_path)
+                run.font.name = 'Arial'
+                run.font.size = Pt(12)
+                run.font.bold = False  # ביטול ההדגשה (Bold)
+                run.font.color.rgb = RGBColor(0x09, 0x89, 0x0E)
 
                 try:
                     with open(file_path, 'r', encoding='utf-8') as f:
@@ -42,12 +53,12 @@ def export_java_to_word(project_path, output_docx):
 
                     # Add the code content using a monospaced font
                     paragraph = doc.add_paragraph()
-                    run = paragraph.add_run(code_content)
-                    run.font.name = 'Courier New'
-                    run.font.size = Pt(9)
+                    code_run = paragraph.add_run(code_content)
+                    code_run.font.name = 'Courier New'
+                    code_run.font.size = Pt(9)
 
                 except Exception as e:
-                    doc.add_paragraph(f"Error reading file {relative_path}: {e}")
+                    doc.add_paragraph(f"Error reading file {display_path}: {e}")
 
                 doc.add_page_break()
 
