@@ -1,15 +1,45 @@
 """
 This module provides utility functions to clean up Java source code by removing
 non-Javadoc comments and excessive empty lines, while preserving Javadoc comments
-and the general formatting.
+and the general formatting. It also minifies Javadoc comments by removing extra spaces.
 """
 
 import os
+import re
+
+def minify_javadoc_block(text):
+    """
+    Collapses multiple spaces within a Javadoc block, while preserving
+    leading indentation and the '*' character.
+    """
+    lines = text.splitlines()
+    processed_lines = []
+    for line in lines:
+        # Match: (indent)(optional *)(optional spaces)(rest)
+        match = re.match(r'^(\s*)(\*?)(\s*)(.*)', line)
+        if match:
+            indent, asterisk, spaces, rest = match.groups()
+            # Collapse multiple spaces in 'rest' to one
+            collapsed_rest = re.sub(r' +', ' ', rest).strip()
+
+            # Reconstruct the line
+            new_line = indent + asterisk
+            if asterisk and spaces:
+                new_line += ' '
+            if collapsed_rest:
+                new_line += collapsed_rest
+            else:
+                new_line = new_line.rstrip()
+            processed_lines.append(new_line)
+        else:
+            processed_lines.append(line)
+    return "\n".join(processed_lines)
 
 def remove_comments_keep_javadoc(code):
     """
     Removes single-line (//) and multi-line (/* */) comments from Java code,
     but preserves Javadoc (/** */) comments and string/character literals.
+    Also minifies Javadoc comments by removing extra spaces.
 
     Args:
         code (str): The Java source code to process.
@@ -26,6 +56,7 @@ def remove_comments_keep_javadoc(code):
     in_javadoc = False
     in_string = False
     in_char = False
+    javadoc_buffer = []
 
     while i < n:
         c = code[i]
@@ -48,9 +79,13 @@ def remove_comments_keep_javadoc(code):
             continue
 
         if in_javadoc:
-            result.append(c)
+            javadoc_buffer.append(c)
             if c == '*' and next_c == '/':
-                result.append(next_c)
+                javadoc_buffer.append(next_c)
+                # Process and append the minified Javadoc
+                javadoc_text = "".join(javadoc_buffer)
+                result.append(minify_javadoc_block(javadoc_text))
+                javadoc_buffer = []
                 in_javadoc = False
                 i += 2
             else:
@@ -99,7 +134,7 @@ def remove_comments_keep_javadoc(code):
         # Javadoc
         if c == '/' and next_c == '*' and next_next == '*':
             in_javadoc = True
-            result.append('/**')
+            javadoc_buffer = ['/**']
             i += 3
             continue
 
