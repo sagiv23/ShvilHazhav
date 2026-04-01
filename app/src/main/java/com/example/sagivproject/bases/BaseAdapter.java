@@ -2,9 +2,7 @@ package com.example.sagivproject.bases;
 
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.sagivproject.models.Idable;
-
 import java.util.ArrayList;
 import java.util.List;
 

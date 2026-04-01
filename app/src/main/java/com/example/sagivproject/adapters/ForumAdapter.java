@@ -17,20 +17,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.services.impl.AdapterService;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.google.android.material.button.MaterialButton;
-
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
 
 /**

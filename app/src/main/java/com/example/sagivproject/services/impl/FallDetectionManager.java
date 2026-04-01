@@ -2,12 +2,9 @@ package com.example.sagivproject.services.impl;
 
 import android.content.Context;
 import android.content.Intent;
-
 import com.example.sagivproject.services.IFallDetectionService;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**

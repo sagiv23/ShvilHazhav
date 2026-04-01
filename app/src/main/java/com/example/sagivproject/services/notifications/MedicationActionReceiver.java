@@ -4,22 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
 import androidx.core.app.NotificationManagerCompat;
-
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**

@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
@@ -14,16 +13,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.ForumCategoryAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
-
 import java.util.List;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**

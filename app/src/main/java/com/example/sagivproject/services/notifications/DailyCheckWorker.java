@@ -1,22 +1,18 @@
 package com.example.sagivproject.services.notifications;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.hilt.work.HiltWorker;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-
 import java.util.Calendar;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 

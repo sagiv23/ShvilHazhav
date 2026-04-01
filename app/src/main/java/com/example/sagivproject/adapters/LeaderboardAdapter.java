@@ -4,17 +4,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.User;
-
 import java.text.MessageFormat;
 import java.util.List;
-
 import javax.inject.Inject;
 
 /**

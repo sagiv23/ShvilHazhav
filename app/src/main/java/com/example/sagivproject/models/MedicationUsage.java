@@ -1,7 +1,6 @@
 package com.example.sagivproject.models;
 
 import com.example.sagivproject.models.enums.MedicationStatus;
-
 import java.io.Serializable;
 
 /**

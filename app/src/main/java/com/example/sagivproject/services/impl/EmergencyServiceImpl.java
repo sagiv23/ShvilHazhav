@@ -2,21 +2,17 @@ package com.example.sagivproject.services.impl;
 
 import android.content.Context;
 import android.telephony.SmsManager;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IEmergencyService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
-
 import javax.inject.Inject;
 
 /**

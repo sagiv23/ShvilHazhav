@@ -2,15 +2,12 @@ package com.example.sagivproject.utils;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**

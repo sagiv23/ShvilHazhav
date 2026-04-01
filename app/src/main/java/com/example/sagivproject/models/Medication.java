@@ -1,9 +1,7 @@
 package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
-
 import com.example.sagivproject.models.enums.MedicationType;
-
 import java.io.Serializable;
 import java.util.List;
 

@@ -4,6 +4,7 @@ non-Javadoc comments and excessive empty lines, while preserving Javadoc comment
 and minifying single-line methods (like getters/setters).
 It also minifies Javadoc comments by removing extra spaces, empty lines, and
 collapsing single-line Javadoc comments into a single line.
+Additionally, it removes empty lines between import statements.
 """
 
 import os
@@ -51,10 +52,6 @@ def minify_javadoc_block(text):
                 processed_lines.append(line.rstrip())
 
     # Second pass: check if it's a single-content block
-    # A single-content block usually looks like:
-    # /**
-    #  * Content
-    #  */
     if len(processed_lines) == 3:
         start = processed_lines[0].strip()
         middle = processed_lines[1].strip()
@@ -80,6 +77,39 @@ def minify_single_line_methods(code):
         return f"{signature} {body}; }}"
 
     return re.sub(pattern, replacer, code)
+
+def remove_extra_import_lines(code):
+    """
+    Removes empty lines specifically between import statements.
+    """
+    lines = code.splitlines()
+    if not lines:
+        return code
+
+    result = []
+    for idx, line in enumerate(lines):
+        if line.strip() == "":
+            # Check if it's between imports
+            has_import_above = False
+            for prev in range(idx - 1, -1, -1):
+                prev_line = lines[prev].strip()
+                if prev_line == "": continue
+                if prev_line.startswith("import "):
+                    has_import_above = True
+                break
+
+            has_import_below = False
+            for nxt in range(idx + 1, len(lines)):
+                next_line = lines[nxt].strip()
+                if next_line == "": continue
+                if next_line.startswith("import "):
+                    has_import_below = True
+                break
+
+            if has_import_above and has_import_below:
+                continue # Skip this empty line
+        result.append(line)
+    return "\n".join(result)
 
 def remove_comments_keep_javadoc(code):
     """
@@ -226,6 +256,7 @@ def clean_java_keep_format(project_path):
                         code = f.read()
 
                     code = remove_comments_keep_javadoc(code)
+                    code = remove_extra_import_lines(code)
                     code = remove_extra_empty_lines(code)
                     code = minify_single_line_methods(code)
 
@@ -235,7 +266,7 @@ def clean_java_keep_format(project_path):
                 except Exception as e:
                     print(f"Error: {rel} -> {e}")
 
-    print("\nDone! Minified Javadocs, single-line methods, and cleaned code.")
+    print("\nDone! Minified Javadocs, imports, methods, and cleaned code.")
 
 
 if __name__ == "__main__":

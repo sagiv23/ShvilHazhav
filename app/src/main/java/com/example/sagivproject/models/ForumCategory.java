@@ -1,7 +1,6 @@
 package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
-
 import java.io.Serializable;
 
 /**

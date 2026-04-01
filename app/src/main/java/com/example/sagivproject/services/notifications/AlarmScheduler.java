@@ -4,14 +4,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-
 import com.example.sagivproject.models.Medication;
-
 import java.util.Calendar;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**

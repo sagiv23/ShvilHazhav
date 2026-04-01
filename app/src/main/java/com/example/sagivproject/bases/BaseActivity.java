@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
@@ -14,7 +13,6 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.AdminPageActivity;
@@ -33,11 +31,8 @@ import com.example.sagivproject.ui.LoggedInMenuFragment;
 import com.example.sagivproject.ui.LoggedOutMenuFragment;
 import com.example.sagivproject.ui.MenuNavigationListener;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**

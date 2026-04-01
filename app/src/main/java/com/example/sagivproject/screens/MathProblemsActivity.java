@@ -8,14 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
@@ -23,13 +21,11 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.Operation;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.google.android.material.card.MaterialCardView;
-
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**

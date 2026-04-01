@@ -1,13 +1,10 @@
 package com.example.sagivproject.services;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
-
 import java.util.List;
 
 /**

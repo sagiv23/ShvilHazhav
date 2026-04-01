@@ -12,9 +12,7 @@ import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.adapters.MemoryGameLogAdapter;
 import com.example.sagivproject.adapters.UsersTableAdapter;
 import com.example.sagivproject.services.IAdapterService;
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.scopes.ActivityScoped;
 
 /**

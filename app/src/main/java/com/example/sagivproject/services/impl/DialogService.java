@@ -1,9 +1,7 @@
 package com.example.sagivproject.services.impl;
 
 import android.graphics.drawable.Drawable;
-
 import androidx.fragment.app.FragmentManager;
-
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;
@@ -17,10 +15,8 @@ import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.screens.dialogs.MedicationDialog;
 import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
 import com.example.sagivproject.services.IDialogService;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import dagger.hilt.android.scopes.ActivityScoped;
 
 /**

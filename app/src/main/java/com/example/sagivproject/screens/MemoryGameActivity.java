@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
@@ -15,7 +14,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.bases.BaseActivity;
@@ -24,13 +22,11 @@ import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**

@@ -2,15 +2,11 @@ package com.example.sagivproject.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import androidx.annotation.Nullable;
-
 import com.example.sagivproject.models.User;
 import com.google.gson.Gson;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**

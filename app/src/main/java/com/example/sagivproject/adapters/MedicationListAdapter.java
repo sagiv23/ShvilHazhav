@@ -14,18 +14,15 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,9 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.qualifiers.ActivityContext;
 
 /**

@@ -2,7 +2,6 @@ package com.example.sagivproject.di;
 
 import android.app.AlarmManager;
 import android.content.Context;
-
 import com.example.sagivproject.services.IAdapterService;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
@@ -34,9 +33,7 @@ import com.example.sagivproject.services.impl.UserServiceImpl;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
-
 import javax.inject.Singleton;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;

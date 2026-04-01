@@ -1,10 +1,8 @@
 package com.example.sagivproject.bases;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.example.sagivproject.models.Idable;
 import com.example.sagivproject.services.IDatabaseService;
 import com.google.firebase.database.DataSnapshot;
@@ -14,9 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;

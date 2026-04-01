@@ -2,7 +2,6 @@ package com.example.sagivproject.services.impl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
@@ -14,11 +13,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
-
 import javax.inject.Inject;
 
 /**

@@ -9,14 +9,11 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-
 import com.example.sagivproject.R;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

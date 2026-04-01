@@ -2,7 +2,6 @@ package com.example.sagivproject.services.impl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
@@ -13,13 +12,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.inject.Inject;
 
 /**

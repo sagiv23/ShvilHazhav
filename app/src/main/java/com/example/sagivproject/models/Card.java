@@ -1,9 +1,7 @@
 package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
-
 import com.google.firebase.database.Exclude;
-
 import java.io.Serializable;
 import java.util.Objects;
 

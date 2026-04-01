@@ -8,19 +8,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.screens.MainActivity;
 import com.example.sagivproject.screens.MedicationListActivity;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**

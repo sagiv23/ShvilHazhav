@@ -9,9 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
-
 import androidx.annotation.Nullable;
-
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
@@ -20,11 +18,8 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**

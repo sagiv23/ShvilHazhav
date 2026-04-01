@@ -1,11 +1,8 @@
 package com.example.sagivproject.utils;
 
 import android.util.Patterns;
-
 import androidx.annotation.Nullable;
-
 import java.util.Calendar;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

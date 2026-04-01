@@ -1,7 +1,6 @@
 package com.example.sagivproject.models;
 
 import com.example.sagivproject.ui.SimpleXYGraphView;
-
 import java.util.List;
 import java.util.Objects;
 

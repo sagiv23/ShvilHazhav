@@ -5,14 +5,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Base64;
 import android.widget.ImageView;
-
 import com.example.sagivproject.R;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.io.ByteArrayOutputStream;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

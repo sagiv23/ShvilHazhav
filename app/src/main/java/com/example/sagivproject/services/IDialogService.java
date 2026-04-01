@@ -1,9 +1,7 @@
 package com.example.sagivproject.services;
 
 import android.graphics.drawable.Drawable;
-
 import androidx.fragment.app.FragmentManager;
-
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;

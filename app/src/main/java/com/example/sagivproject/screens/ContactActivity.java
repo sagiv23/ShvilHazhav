@@ -8,17 +8,14 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.google.android.material.button.MaterialButton;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**

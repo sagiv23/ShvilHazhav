@@ -4,12 +4,10 @@ import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.ITipOfTheDayService;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-
 import javax.inject.Inject;
 
 /**

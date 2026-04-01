@@ -1,7 +1,6 @@
 package com.example.sagivproject;
 
 import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 /**

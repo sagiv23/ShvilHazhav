@@ -1,7 +1,6 @@
 package com.example.sagivproject;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.hilt.work.HiltWorkerFactory;
@@ -11,15 +10,11 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-
 import com.example.sagivproject.services.notifications.DailyCheckWorker;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.HiltAndroidApp;
 
 /**

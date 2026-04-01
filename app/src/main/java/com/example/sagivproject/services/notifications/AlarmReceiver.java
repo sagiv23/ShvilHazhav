@@ -4,22 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**

@@ -1,10 +1,8 @@
 package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
-
 import com.example.sagivproject.models.enums.UserRole;
 import com.google.firebase.database.Exclude;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

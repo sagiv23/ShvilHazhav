@@ -6,9 +6,7 @@ import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
-
 import java.util.function.Consumer;
-
 import javax.inject.Inject;
 
 /**

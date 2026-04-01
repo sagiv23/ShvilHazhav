@@ -6,18 +6,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.ImageUtil;
-
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
 
 /**

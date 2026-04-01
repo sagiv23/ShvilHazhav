@@ -2,17 +2,14 @@ package com.example.sagivproject.services.impl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IUserService;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
-
 import javax.inject.Inject;
 
 /**

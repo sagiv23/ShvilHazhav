@@ -4,17 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.GraphData;
 import com.example.sagivproject.ui.SimpleXYGraphView;
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.qualifiers.ActivityContext;
 
 /**

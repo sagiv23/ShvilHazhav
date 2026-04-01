@@ -1,7 +1,6 @@
 package com.example.sagivproject.services.impl;
 
 import androidx.annotation.NonNull;
-
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.services.IDatabaseService;
@@ -9,10 +8,8 @@ import com.example.sagivproject.services.IForumCategoriesService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 /**
