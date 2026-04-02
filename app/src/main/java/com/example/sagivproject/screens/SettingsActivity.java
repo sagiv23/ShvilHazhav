@@ -35,9 +35,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 /**
  * Activity that allows users to manage application preferences and account status.
  * <p>
- * This screen provides options for toggling Dark Mode, enabling or disabling the
- * background Fall Detection service (including necessary permission handling),
- * and logging out of the application.
+ * This screen provides options for toggling Dark Mode, controlling vibration and notification
+ * preferences, enabling or disabling the background Fall Detection service
+ * (including necessary permission handling), and logging out of the application.
  * </p>
  */
 @AndroidEntryPoint

@@ -247,36 +247,36 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     * Checks if vibration is enabled.
+     * Checks if haptic feedback (vibration) is globally enabled for the user.
      *
-     * @return true if vibration is enabled. Defaults to true.
+     * @return true if vibration is enabled. Defaults to true for all users.
      */
     public boolean isVibrationEnabled() {
         return getBoolean(KEY_VIBRATION_ENABLED, true);
     }
 
     /**
-     * Updates the vibration setting in preferences.
+     * Updates the user's vibration preference.
      *
-     * @param isEnabled true to enable vibration.
+     * @param isEnabled true to enable haptic feedback.
      */
     public void setVibrationEnabled(boolean isEnabled) {
         saveBoolean(KEY_VIBRATION_ENABLED, isEnabled);
     }
 
     /**
-     * Checks if notifications are enabled.
+     * Checks if push notifications are enabled for the application.
      *
-     * @return true if notifications are enabled. Defaults to true.
+     * @return true if notifications are allowed. Defaults to true.
      */
     public boolean isNotificationsEnabled() {
         return getBoolean(KEY_NOTIFICATIONS_ENABLED, true);
     }
 
     /**
-     * Updates the notifications setting in preferences.
+     * Updates the user's notification preference.
      *
-     * @param isEnabled true to enable notifications.
+     * @param isEnabled true to allow application notifications.
      */
     public void setNotificationsEnabled(boolean isEnabled) {
         saveBoolean(KEY_NOTIFICATIONS_ENABLED, isEnabled);
