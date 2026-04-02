@@ -17,16 +17,20 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.services.impl.AdapterService;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.google.android.material.button.MaterialButton;
+
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
 
 /**
@@ -59,7 +63,8 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Initializes the Text-to-Speech engine and begins speaking the provided message.
-     * @param v A view used to retrieve context for TTS initialization.
+     *
+     * @param v   A view used to retrieve context for TTS initialization.
      * @param msg The {@link ForumMessage} to read aloud after initialization.
      */
     private void initTTS(View v, ForumMessage msg) {
@@ -98,6 +103,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Finds a message by its ID and triggers a partial UI refresh for that item.
+     *
      * @param msgId The unique ID of the message.
      */
     private void notifyItemChangedById(String msgId) {
@@ -111,18 +117,25 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Sets the listener for message-specific actions (e.g., deletion).
+     *
      * @param listener The {@link ForumMessageListener} implementation.
      */
-    public void setForumMessageListener(ForumMessageListener listener) { this.listener = listener; }
+    public void setForumMessageListener(ForumMessageListener listener) {
+        this.listener = listener;
+    }
 
     /**
      * Updates the entire message list.
+     *
      * @param newMessages The new list of {@link ForumMessage} objects.
      */
-    public void setMessages(List<ForumMessage> newMessages) { setData(newMessages); }
+    public void setMessages(List<ForumMessage> newMessages) {
+        setData(newMessages);
+    }
 
     /**
      * Removes a specific message from the list and notifies the adapter.
+     *
      * @param message The message object to remove.
      */
     public void removeMessage(ForumMessage message) {
@@ -219,6 +232,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     /**
      * Triggers the TTS engine to speak the text of the given message.
+     *
      * @param msg The message to speak.
      */
     private void speak(ForumMessage msg) {
@@ -240,35 +254,48 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         }
     }
 
-    /** Interface for handling interactions with forum messages. */
+    /**
+     * Interface for handling interactions with forum messages.
+     */
     public interface ForumMessageListener {
         /**
          * Called when a message is clicked (e.g., for deletion).
+         *
          * @param message The clicked {@link ForumMessage}.
          */
         void onClick(ForumMessage message);
 
         /**
          * Determines whether the action menu should be displayed for a specific message.
+         *
          * @param message The message to check.
          * @return true to show the menu, false otherwise.
          */
         boolean isShowMenuOptions(ForumMessage message);
     }
 
-    /** ViewHolder for forum message items. */
+    /**
+     * ViewHolder for forum message items.
+     */
     public static class ForumViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /** TextViews for sender, metadata, and content. */
+        /**
+         * TextViews for sender, metadata, and content.
+         */
         final TextView txtUser, txtEmail, txtIsAdmin, txtMessage, txtTime;
 
-        /** Button to open the moderation menu. */
+        /**
+         * Button to open the moderation menu.
+         */
         final ImageButton btnMenu;
 
-        /** Button to toggle TTS playback for the message. */
+        /**
+         * Button to toggle TTS playback for the message.
+         */
         final MaterialButton btnSpeak;
 
         /**
          * Constructs a new ForumViewHolder.
+         *
          * @param itemView The view representing a single forum message.
          */
         public ForumViewHolder(@NonNull View itemView) {

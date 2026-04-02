@@ -1,6 +1,7 @@
 package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -14,13 +15,16 @@ public class ForumCategory implements Serializable, Idable {
     private String id;
     private String name;
 
-    /** Default constructor required for Firebase deserialization. */
+    /**
+     * Default constructor required for Firebase deserialization.
+     */
     public ForumCategory() {
     }
 
     /**
      * Constructs a new ForumCategory.
-     * @param id The unique ID of the category.
+     *
+     * @param id   The unique ID of the category.
      * @param name The display name of the category.
      */
     public ForumCategory(String id, String name) {
@@ -29,15 +33,25 @@ public class ForumCategory implements Serializable, Idable {
     }
 
     @Override
-    public String getId() { return this.id; }
+    public String getId() {
+        return this.id;
+    }
 
     @Override
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    /** @return The display name of the category. */
-    public String getName() { return name; }
+    /**
+     * @return The display name of the category.
+     */
+    public String getName() {
+        return name;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @NonNull
     @Override

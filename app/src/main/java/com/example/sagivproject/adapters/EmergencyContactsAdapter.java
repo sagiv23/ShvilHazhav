@@ -5,11 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.EmergencyContact;
+
 import javax.inject.Inject;
 
 /**
@@ -32,9 +35,12 @@ public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, Emer
 
     /**
      * Sets the listener for contact-specific actions (edit and delete).
+     *
      * @param listener The {@link OnContactActionListener} to handle user interactions.
      */
-    public void setListener(OnContactActionListener listener) { this.listener = listener; }
+    public void setListener(OnContactActionListener listener) {
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
@@ -58,37 +64,52 @@ public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, Emer
         });
     }
 
-    /** Interface for listening to user actions on emergency contacts. */
+    /**
+     * Interface for listening to user actions on emergency contacts.
+     */
     public interface OnContactActionListener {
         /**
          * Called when the edit button is clicked for a specific contact.
+         *
          * @param contact The {@link EmergencyContact} to edit.
          */
         void onEdit(EmergencyContact contact);
 
         /**
          * Called when the delete button is clicked for a specific contact.
+         *
          * @param contact The {@link EmergencyContact} to delete.
          */
         void onDelete(EmergencyContact contact);
     }
 
-    /** ViewHolder for emergency contact items. */
+    /**
+     * ViewHolder for emergency contact items.
+     */
     public static class EmergencyContactViewHolder extends RecyclerView.ViewHolder {
-        /** TextView displaying the contact's full name. */
+        /**
+         * TextView displaying the contact's full name.
+         */
         final TextView txtName;
 
-        /** TextView displaying the contact's phone number. */
+        /**
+         * TextView displaying the contact's phone number.
+         */
         final TextView txtPhone;
 
-        /** ImageButton for editing the contact. */
+        /**
+         * ImageButton for editing the contact.
+         */
         final ImageButton btnEdit;
 
-        /** ImageButton for deleting the contact. */
+        /**
+         * ImageButton for deleting the contact.
+         */
         final ImageButton btnDelete;
 
         /**
          * Constructs a new EmergencyContactViewHolder.
+         *
          * @param itemView The view representing a single contact row.
          */
         public EmergencyContactViewHolder(@NonNull View itemView) {

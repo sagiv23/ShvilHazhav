@@ -2,6 +2,7 @@ package com.example.sagivproject.services.impl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
@@ -13,9 +14,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
 import javax.inject.Inject;
 
 /**
@@ -37,35 +40,50 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
      * Initializes the base service with an empty path as full paths are built dynamically.
      */
     @Inject
-    public MedicationServiceImpl() { super("", Medication.class); }
+    public MedicationServiceImpl() {
+        super("", Medication.class);
+    }
 
     @Override
-    public String generateMedicationId() { return super.generateId(); }
+    public String generateMedicationId() {
+        return super.generateId();
+    }
 
     @Override
-    public void createNewMedication(@NonNull String uid, @NonNull Medication medication, @Nullable DatabaseCallback<Void> callback) { writeData(getMedicationItemPath(uid, medication.getId()), medication, callback); }
+    public void createNewMedication(@NonNull String uid, @NonNull Medication medication, @Nullable DatabaseCallback<Void> callback) {
+        writeData(getMedicationItemPath(uid, medication.getId()), medication, callback);
+    }
 
     @Override
-    public void getUserMedicationList(@NonNull String uid, @NonNull DatabaseCallback<List<Medication>> callback) { getDataList(getMedicationPath(uid), callback); }
+    public void getUserMedicationList(@NonNull String uid, @NonNull DatabaseCallback<List<Medication>> callback) {
+        getDataList(getMedicationPath(uid), callback);
+    }
 
     @Override
-    public void deleteMedication(@NonNull String uid, @NonNull String medicationId, @Nullable DatabaseCallback<Void> callback) { deleteData(getMedicationItemPath(uid, medicationId), callback); }
+    public void deleteMedication(@NonNull String uid, @NonNull String medicationId, @Nullable DatabaseCallback<Void> callback) {
+        deleteData(getMedicationItemPath(uid, medicationId), callback);
+    }
 
     /**
      * Updates an existing medication record using a database transaction.
-     * @param uid User identifier.
+     *
+     * @param uid        User identifier.
      * @param medication Updated medication object.
-     * @param callback Result callback.
+     * @param callback   Result callback.
      */
     @Override
     public void updateMedication(String uid, Medication medication, @Nullable DatabaseCallback<Void> callback) {
         UnaryOperator<Medication> updateFunction = oldMedication -> medication;
         runTransaction(getMedicationItemPath(uid, medication.getId()), updateFunction, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(Medication result) { if (callback != null) callback.onCompleted(null); }
+            public void onCompleted(Medication result) {
+                if (callback != null) callback.onCompleted(null);
+            }
 
             @Override
-            public void onFailed(Exception e) { if (callback != null) callback.onFailed(e); }
+            public void onFailed(Exception e) {
+                if (callback != null) callback.onFailed(e);
+            }
         });
     }
 
@@ -75,8 +93,9 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
      * Increments the appropriate counter in {@link DailyStats} (taken/missed) based on the
      * provided {@code usage} status.
      * </p>
-     * @param uid User identifier.
-     * @param usage Usage record details.
+     *
+     * @param uid      User identifier.
+     * @param usage    Usage record details.
      * @param callback Result callback.
      */
     @Override
@@ -90,7 +109,9 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
 
                 if (usage.getStatus() == MedicationStatus.TAKEN) {
                     stats.addMedicationTaken();
-                } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) { stats.addMedicationMissed(); }
+                } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) {
+                    stats.addMedicationMissed();
+                }
 
                 stats.addMedicationUsageLog(usage);
                 currentData.setValue(stats);
@@ -109,7 +130,8 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
 
     /**
      * Fetches all usage logs across all dates for a specific user.
-     * @param uid User identifier.
+     *
+     * @param uid      User identifier.
      * @param callback Callback invoked with the full list of logs.
      */
     @Override
@@ -132,7 +154,8 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
 
     /**
      * Resets the usage logs and compliance counters for all dates in a user's history.
-     * @param uid User identifier.
+     *
+     * @param uid      User identifier.
      * @param callback Result callback.
      */
     @Override
@@ -163,9 +186,17 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
         });
     }
 
-    /** Constructs path to user's medications. */
-    private String getMedicationPath(String uid) { return USERS_PATH + "/" + uid + "/" + MEDICATIONS_PATH; }
+    /**
+     * Constructs path to user's medications.
+     */
+    private String getMedicationPath(String uid) {
+        return USERS_PATH + "/" + uid + "/" + MEDICATIONS_PATH;
+    }
 
-    /** Constructs path to specific medication. */
-    private String getMedicationItemPath(String uid, String medicationId) { return getMedicationPath(uid) + "/" + medicationId; }
+    /**
+     * Constructs path to specific medication.
+     */
+    private String getMedicationItemPath(String uid, String medicationId) {
+        return getMedicationPath(uid) + "/" + medicationId;
+    }
 }

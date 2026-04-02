@@ -1,6 +1,7 @@
 package com.example.sagivproject.models;
 
 import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -18,15 +19,18 @@ public class EmergencyContact implements Serializable, Idable {
     private String lastName;
     private String phoneNumber;
 
-    /** Default constructor required for Firebase deserialization. */
+    /**
+     * Default constructor required for Firebase deserialization.
+     */
     public EmergencyContact() {
     }
 
     /**
      * Constructs a new EmergencyContact with the specified details.
-     * @param id The unique identifier for this contact record.
-     * @param firstName The contact's first name.
-     * @param lastName The contact's last name.
+     *
+     * @param id          The unique identifier for this contact record.
+     * @param firstName   The contact's first name.
+     * @param lastName    The contact's last name.
      * @param phoneNumber The contact's primary phone number.
      */
     public EmergencyContact(String id, String firstName, String lastName, String phoneNumber) {
@@ -37,33 +41,58 @@ public class EmergencyContact implements Serializable, Idable {
     }
 
     @Override
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
     @Override
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    /** @return The contact's first name. */
-    public String getFirstName() { return firstName; }
+    /**
+     * @return The contact's first name.
+     */
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    /** @return The contact's last name. */
-    public String getLastName() { return lastName; }
+    /**
+     * @return The contact's last name.
+     */
+    public String getLastName() {
+        return lastName;
+    }
 
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-    /** @return The contact's phone number. */
-    public String getPhoneNumber() { return phoneNumber; }
+    /**
+     * @return The contact's phone number.
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     /**
      * Gets the full name of the contact.
      * Annotated with {@code @Exclude} to prevent redundant storage in Firebase.
+     *
      * @return A string combining first name and last name.
      */
     @Exclude
-    public String getFullName() { return firstName + " " + lastName; }
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -77,5 +106,7 @@ public class EmergencyContact implements Serializable, Idable {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(id, firstName, lastName, phoneNumber); }
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, phoneNumber);
+    }
 }

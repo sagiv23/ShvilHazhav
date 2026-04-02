@@ -5,18 +5,22 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.Validator;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -30,16 +34,22 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class RegisterActivity extends BaseActivity {
-    /** Utility for standardized date picking. */
+    /**
+     * Utility for standardized date picking.
+     */
     @Inject
     protected CalendarUtil calendarUtil;
 
-    /** Utility for validating form fields. */
+    /**
+     * Utility for validating form fields.
+     */
     @Inject
     protected Validator validator;
 
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword, editTextBirthDate;
-    /** Holds the selected birthdate in milliseconds. */
+    /**
+     * Holds the selected birthdate in milliseconds.
+     */
     private long birthDateMillis = -1;
 
     @Override
@@ -68,7 +78,9 @@ public class RegisterActivity extends BaseActivity {
         btnRegister.setOnClickListener(v -> tryRegister());
     }
 
-    /** Attempts to register a new user using the form data. */
+    /**
+     * Attempts to register a new user using the form data.
+     */
     private void tryRegister() {
         String firstName = editTextFirstName.getText().toString().trim();
         String lastName = editTextLastName.getText().toString().trim();
@@ -91,17 +103,20 @@ public class RegisterActivity extends BaseActivity {
             }
 
             @Override
-            public void onError(String message) { Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show(); }
+            public void onError(String message) {
+                Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
     /**
      * Validates that all registration fields meet the required constraints.
+     *
      * @param firstName User's first name.
-     * @param lastName User's last name.
+     * @param lastName  User's last name.
      * @param birthDate Formatted birthdate string.
-     * @param email User's email.
-     * @param password User's password.
+     * @param email     User's email.
+     * @param password  User's password.
      * @return true if all inputs are valid.
      */
     private boolean validateInput(String firstName, String lastName, String birthDate, String email, String password) {
@@ -149,7 +164,9 @@ public class RegisterActivity extends BaseActivity {
         return true;
     }
 
-    /** Displays the date picker dialog to select the user's birthdate. */
+    /**
+     * Displays the date picker dialog to select the user's birthdate.
+     */
     private void openDatePicker() {
         calendarUtil.openDatePicker(this, birthDateMillis, (dateMillis, formattedDate) -> {
             this.birthDateMillis = dateMillis;

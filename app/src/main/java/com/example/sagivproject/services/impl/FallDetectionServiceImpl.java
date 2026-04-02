@@ -9,7 +9,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
+
 import androidx.annotation.Nullable;
+
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
@@ -18,8 +20,11 @@ import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -38,7 +43,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class FallDetectionServiceImpl extends Service implements SensorEventListener {
     private static final String TAG = "FallDetectionService";
-    /** Unique ID for the foreground service notification. */
+    /**
+     * Unique ID for the foreground service notification.
+     */
     private static final int NOTIFICATION_ID = 1001;
 
     /**
@@ -66,7 +73,9 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
     private long lastAlertTime = 0;
     private boolean isMonitoring = false;
 
-    /** Default constructor required for Android services. */
+    /**
+     * Default constructor required for Android services.
+     */
     public FallDetectionServiceImpl() {
     }
 
@@ -89,7 +98,9 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
         return START_STICKY;
     }
 
-    /** Registers the accelerometer sensor listener with UI delay for responsiveness. */
+    /**
+     * Registers the accelerometer sensor listener with UI delay for responsiveness.
+     */
     private void startMonitoring() {
         if (!isMonitoring && accelerometer != null) {
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
@@ -98,7 +109,9 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
         }
     }
 
-    /** Unregisters the sensor listener and terminates the service. */
+    /**
+     * Unregisters the sensor listener and terminates the service.
+     */
     private void stopMonitoring() {
         if (isMonitoring) {
             sensorManager.unregisterListener(this);
@@ -111,6 +124,7 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
 
     /**
      * Processes raw sensor data to detect sudden impacts.
+     *
      * @param event The sensor event containing X, Y, Z acceleration values.
      */
     @Override
@@ -131,7 +145,9 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
         }
     }
 
-    /** Coordinates the emergency response flow: Notification -> Location -> SMS. */
+    /**
+     * Coordinates the emergency response flow: Notification -> Location -> SMS.
+     */
     private void handleFallDetected() {
         User user = sharedPreferencesUtil.getUser();
         if (user == null) return;
@@ -153,7 +169,8 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
 
     /**
      * Fetches user contacts from the database and triggers the SMS alerting mechanism.
-     * @param uid The ID of the user who fell.
+     *
+     * @param uid         The ID of the user who fell.
      * @param locationUrl The location URL to include in the message.
      */
     private void sendEmergencyAlert(String uid, String locationUrl) {
@@ -166,7 +183,9 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
             }
 
             @Override
-            public void onFailed(Exception e) { Log.e(TAG, "Failed to fetch contacts", e); }
+            public void onFailed(Exception e) {
+                Log.e(TAG, "Failed to fetch contacts", e);
+            }
         });
     }
 
@@ -178,7 +197,9 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) { return null; }
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

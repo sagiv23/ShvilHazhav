@@ -12,14 +12,16 @@ import android.os.Bundle;
 public interface MenuNavigationListener {
     /**
      * Navigates to a specific destination in the navigation graph.
+     *
      * @param resId The resource ID of the destination or action.
      */
     void onNavigate(int resId);
 
     /**
      * Navigates to a specific destination in the navigation graph with arguments.
+     *
      * @param resId The resource ID of the destination or action.
-     * @param args The arguments to pass to the destination fragment.
+     * @param args  The arguments to pass to the destination fragment.
      */
     void onNavigate(int resId, Bundle args);
 }

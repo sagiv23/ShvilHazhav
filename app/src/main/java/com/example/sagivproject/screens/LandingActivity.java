@@ -6,13 +6,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**

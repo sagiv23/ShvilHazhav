@@ -4,11 +4,15 @@ import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
 import com.example.sagivproject.R;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -21,21 +25,30 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class FullImageDialog extends DialogFragment {
-    /** The image content to display. */
+    /**
+     * The image content to display.
+     */
     private Drawable imageDrawable;
 
-    /** Constructs a new FullImageDialog. */
+    /**
+     * Constructs a new FullImageDialog.
+     */
     @Inject
     public FullImageDialog() {
     }
 
     /**
      * Sets the image drawable to be displayed.
+     *
      * @param imageDrawable The {@link Drawable} source.
      */
-    public void setImage(Drawable imageDrawable) { this.imageDrawable = imageDrawable; }
+    public void setImage(Drawable imageDrawable) {
+        this.imageDrawable = imageDrawable;
+    }
 
-    /** Configures the dialog style to be full-screen before creation. */
+    /**
+     * Configures the dialog style to be full-screen before creation.
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

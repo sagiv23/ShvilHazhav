@@ -2,6 +2,7 @@ package com.example.sagivproject.screens;
 
 import android.os.Bundle;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
@@ -9,15 +10,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MemoryGameLogAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -33,7 +37,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MemoryGameLogsTableActivity extends BaseActivity {
-    /** A local map used to resolve participant UIDs to human-readable names in the log. */
+    /**
+     * A local map used to resolve participant UIDs to human-readable names in the log.
+     */
     private final Map<String, String> uidToNameMap = new HashMap<>();
 
     private MemoryGameLogAdapter adapter;
@@ -60,7 +66,9 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
         fetchUsersAndListenToGames();
     }
 
-    /** Orchestrates the data loading sequence: first resolves names, then starts the game listener. */
+    /**
+     * Orchestrates the data loading sequence: first resolves names, then starts the game listener.
+     */
     private void fetchUsersAndListenToGames() {
         databaseService.getUserService().getUserList(new DatabaseCallback<>() {
             @Override
@@ -80,7 +88,9 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
         });
     }
 
-    /** Establishes a persistent, real-time listener for all game room updates in the database. */
+    /**
+     * Establishes a persistent, real-time listener for all game room updates in the database.
+     */
     private void listenToGamesRealtime() {
         databaseService.getGameService().getAllRoomsRealtime(new DatabaseCallback<>() {
             @Override
@@ -90,7 +100,9 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(MemoryGameLogsTableActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(MemoryGameLogsTableActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

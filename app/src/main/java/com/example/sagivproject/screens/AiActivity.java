@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.google.common.util.concurrent.FutureCallback;
@@ -29,9 +31,11 @@ import com.google.firebase.ai.java.GenerativeModelFutures;
 import com.google.firebase.ai.type.Content;
 import com.google.firebase.ai.type.GenerateContentResponse;
 import com.google.firebase.ai.type.GenerativeBackend;
+
 import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.Executor;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -83,13 +87,19 @@ public class AiActivity extends BaseActivity {
                 tts.setLanguage(new Locale("he", "IL"));
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
-                    public void onStart(String id) { runOnUiThread(() -> updateSpeakButton(true)); }
+                    public void onStart(String id) {
+                        runOnUiThread(() -> updateSpeakButton(true));
+                    }
 
                     @Override
-                    public void onDone(String id) { runOnUiThread(() -> updateSpeakButton(false)); }
+                    public void onDone(String id) {
+                        runOnUiThread(() -> updateSpeakButton(false));
+                    }
 
                     @Override
-                    public void onError(String id) { runOnUiThread(() -> updateSpeakButton(false)); }
+                    public void onError(String id) {
+                        runOnUiThread(() -> updateSpeakButton(false));
+                    }
                 });
             }
         });
@@ -103,7 +113,9 @@ public class AiActivity extends BaseActivity {
         speakBtn.setOnClickListener(v -> toggleSpeech());
     }
 
-    /** Toggles playback of the AI response text using Text-to-Speech. */
+    /**
+     * Toggles playback of the AI response text using Text-to-Speech.
+     */
     private void toggleSpeech() {
         if (isSpeaking) {
             tts.stop();
@@ -119,6 +131,7 @@ public class AiActivity extends BaseActivity {
 
     /**
      * Updates the playback button UI state.
+     *
      * @param speaking true if text is currently being read.
      */
     private void updateSpeakButton(boolean speaking) {
@@ -126,7 +139,9 @@ public class AiActivity extends BaseActivity {
         speakBtn.setText(speaking ? R.string.cancel_playback : R.string.playback_answer);
     }
 
-    /** Sends the user's question to the AI model and manages the asynchronous response. */
+    /**
+     * Sends the user's question to the AI model and manages the asynchronous response.
+     */
     private void sendQuestion() {
         String q = questionInput.getText().toString().trim();
         if (q.isEmpty()) return;
@@ -168,6 +183,7 @@ public class AiActivity extends BaseActivity {
 
     /**
      * Animates the display of AI response text character by character.
+     *
      * @param fullText The full response string to display.
      */
     private void displayTextWithAnimation(String fullText) {
@@ -189,7 +205,9 @@ public class AiActivity extends BaseActivity {
         });
     }
 
-    /** Shuts down the TTS engine when the activity is destroyed. */
+    /**
+     * Shuts down the TTS engine when the activity is destroyed.
+     */
     @Override
     public void onDestroy() {
         if (tts != null) tts.shutdown();

@@ -5,15 +5,20 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.utils.Validator;
+
 import java.util.Objects;
 import java.util.function.Predicate;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -27,27 +32,35 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class AddEmergencyContactDialog extends DialogFragment {
 
-    /** Utility for validating contact information. */
+    /**
+     * Utility for validating contact information.
+     */
     @Inject
     Validator validator;
 
     private AddEmergencyContactListener listener;
     private EmergencyContact contactToEdit;
 
-    /** Constructs a new AddEmergencyContactDialog. */
+    /**
+     * Constructs a new AddEmergencyContactDialog.
+     */
     @Inject
     public AddEmergencyContactDialog() {
     }
 
     /**
      * Sets the listener for contact submission events.
+     *
      * @param listener The listener to set.
      */
-    public void setListener(AddEmergencyContactListener listener) { this.listener = listener; }
+    public void setListener(AddEmergencyContactListener listener) {
+        this.listener = listener;
+    }
 
     /**
      * Sets the initial data for the dialog.
-     * @param contact The {@link EmergencyContact} to edit, or null to add a new one.
+     *
+     * @param contact  The {@link EmergencyContact} to edit, or null to add a new one.
      * @param listener The listener for handling the result.
      */
     public void setData(EmergencyContact contact, AddEmergencyContactListener listener) {
@@ -102,6 +115,7 @@ public class AddEmergencyContactDialog extends DialogFragment {
 
     /**
      * Validates all input fields in the dialog.
+     *
      * @return true if all fields are valid.
      */
     private boolean areAllFieldsValid(String fName, String lName, String phone, EditText firstNameEdt, EditText lastNameEdt, EditText phoneEdt) {
@@ -115,7 +129,9 @@ public class AddEmergencyContactDialog extends DialogFragment {
                 isFieldValid(phoneEdt, validator::isPhoneNotValid, "מספר טלפון לא תקין");
     }
 
-    /** Helper to validate a single field and show an error message. */
+    /**
+     * Helper to validate a single field and show an error message.
+     */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -125,12 +141,15 @@ public class AddEmergencyContactDialog extends DialogFragment {
         return true;
     }
 
-    /** Interface for listening to contact submission events. */
+    /**
+     * Interface for listening to contact submission events.
+     */
     public interface AddEmergencyContactListener {
         /**
          * Called when the contact details are submitted and valid.
-         * @param firstName The entered first name.
-         * @param lastName The entered last name.
+         *
+         * @param firstName   The entered first name.
+         * @param lastName    The entered last name.
          * @param phoneNumber The entered phone number.
          */
         void onContactSubmit(String firstName, String lastName, String phoneNumber);

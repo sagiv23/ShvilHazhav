@@ -1,10 +1,15 @@
 package com.example.sagivproject.bases;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.os.VibratorManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
@@ -13,6 +18,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.AdminPageActivity;
@@ -31,8 +37,11 @@ import com.example.sagivproject.ui.LoggedInMenuFragment;
 import com.example.sagivproject.ui.LoggedOutMenuFragment;
 import com.example.sagivproject.ui.MenuNavigationListener;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -58,27 +67,39 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     protected final ActivityResultLauncher<String[]> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), this::onPermissionsResult);
 
-    /** Utility for managing local user preferences and session. */
+    /**
+     * Utility for managing local user preferences and session.
+     */
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
 
-    /** The central database service façade. */
+    /**
+     * The central database service façade.
+     */
     @Inject
     protected IDatabaseService databaseService;
 
-    /** Activity-scoped service for providing RecyclerView adapters. */
+    /**
+     * Activity-scoped service for providing RecyclerView adapters.
+     */
     @Inject
     protected IAdapterService adapterService;
 
-    /** Activity-scoped service for showing UI dialogs. */
+    /**
+     * Activity-scoped service for showing UI dialogs.
+     */
     @Inject
     protected IDialogService dialogService;
 
-    /** The root layout for the navigation drawer. */
+    /**
+     * The root layout for the navigation drawer.
+     */
     protected DrawerLayout drawerLayout;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     /**
      * Sets up the common menu UI components, including the Navigation Drawer and Top Bar.
@@ -141,14 +162,18 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
         }
     }
 
-    /** Opens the navigation drawer if it exists in the current layout. */
+    /**
+     * Opens the navigation drawer if it exists in the current layout.
+     */
     public void openDrawer() {
         if (drawerLayout != null) {
             drawerLayout.openDrawer(GravityCompat.START);
         }
     }
 
-    /** Closes the navigation drawer if it is currently open. */
+    /**
+     * Closes the navigation drawer if it is currently open.
+     */
     public void closeDrawer() {
         if (drawerLayout != null) {
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -157,15 +182,19 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
 
     /**
      * Navigates to a destination identified by a resource ID.
+     *
      * @param resId The resource ID of the target destination (e.g., {@code R.id.mainActivity}).
      */
     @Override
-    public void onNavigate(int resId) { onNavigate(resId, null); }
+    public void onNavigate(int resId) {
+        onNavigate(resId, null);
+    }
 
     /**
      * Navigates to a destination with optional arguments and a standard slide animation.
+     *
      * @param resId The resource ID of the target destination.
-     * @param args Optional Bundle of arguments to pass to the target activity.
+     * @param args  Optional Bundle of arguments to pass to the target activity.
      */
     @Override
     public void onNavigate(int resId, Bundle args) {
@@ -174,7 +203,21 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
 
         if (resId == R.id.mainActivity) {
             intent = new Intent(this, MainActivity.class);
-        } else if (resId == R.id.landingActivity) { intent = new Intent(this, LandingActivity.class); } else if (resId == R.id.contactActivity) { intent = new Intent(this, ContactActivity.class); } else if (resId == R.id.detailsAboutUserActivity) { intent = new Intent(this, DetailsAboutUserActivity.class); } else if (resId == R.id.settingsActivity) { intent = new Intent(this, SettingsActivity.class); } else if (resId == R.id.loginActivity) { intent = new Intent(this, LoginActivity.class); } else if (resId == R.id.registerActivity) { intent = new Intent(this, RegisterActivity.class); } else if (resId == R.id.adminPageActivity) { intent = new Intent(this, AdminPageActivity.class); } else if (resId == R.id.nav_logout) {
+        } else if (resId == R.id.landingActivity) {
+            intent = new Intent(this, LandingActivity.class);
+        } else if (resId == R.id.contactActivity) {
+            intent = new Intent(this, ContactActivity.class);
+        } else if (resId == R.id.detailsAboutUserActivity) {
+            intent = new Intent(this, DetailsAboutUserActivity.class);
+        } else if (resId == R.id.settingsActivity) {
+            intent = new Intent(this, SettingsActivity.class);
+        } else if (resId == R.id.loginActivity) {
+            intent = new Intent(this, LoginActivity.class);
+        } else if (resId == R.id.registerActivity) {
+            intent = new Intent(this, RegisterActivity.class);
+        } else if (resId == R.id.adminPageActivity) {
+            intent = new Intent(this, AdminPageActivity.class);
+        } else if (resId == R.id.nav_logout) {
             sharedPreferencesUtil.signOutUser();
             intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -194,14 +237,33 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     }
 
     /**
+     * Triggers a short vibration if enabled in preferences.
+     */
+    protected void vibrateDevice() {
+        if (!sharedPreferencesUtil.isVibrationEnabled()) return;
+
+        Vibrator vibrator;
+        VibratorManager vibratorManager = (VibratorManager) getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+        vibrator = vibratorManager.getDefaultVibrator();
+
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        }
+    }
+
+    /**
      * Requests a set of runtime permissions from the user.
+     *
      * @param permissions A variable list of permission strings (e.g., {@code Manifest.permission.CAMERA}).
      */
-    protected void requestPermissions(String... permissions) { requestPermissionLauncher.launch(permissions); }
+    protected void requestPermissions(String... permissions) {
+        requestPermissionLauncher.launch(permissions);
+    }
 
     /**
      * Callback method invoked when the results of a permission request are available.
      * Subclasses should override this to handle specific permission outcomes.
+     *
      * @param isGranted A map where the keys are permissions and values are their granted status.
      */
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {

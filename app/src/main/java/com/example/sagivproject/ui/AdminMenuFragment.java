@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.example.sagivproject.R;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -20,7 +23,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class AdminMenuFragment extends Fragment {
-    /** Listener for handling navigation requests back to the host activity. */
+    /**
+     * Listener for handling navigation requests back to the host activity.
+     */
     private MenuNavigationListener navigationListener;
 
     /**
@@ -29,6 +34,7 @@ public class AdminMenuFragment extends Fragment {
      * Verifies that the host context (Activity) implements {@link MenuNavigationListener}
      * to facilitate decoupled navigation.
      * </p>
+     *
      * @param context The host context.
      * @throws RuntimeException If the context does not implement {@link MenuNavigationListener}.
      */
@@ -44,8 +50,9 @@ public class AdminMenuFragment extends Fragment {
 
     /**
      * Initializes the fragment's UI view.
-     * @param inflater The LayoutInflater object to inflate views.
-     * @param container The parent view that the fragment's UI should be attached to.
+     *
+     * @param inflater           The LayoutInflater object to inflate views.
+     * @param container          The parent view that the fragment's UI should be attached to.
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous state.
      * @return The View for the fragment's UI.
      */

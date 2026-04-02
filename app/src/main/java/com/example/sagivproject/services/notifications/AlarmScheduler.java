@@ -4,10 +4,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+
 import com.example.sagivproject.models.Medication;
+
 import java.util.Calendar;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**
@@ -25,7 +29,8 @@ public class AlarmScheduler {
 
     /**
      * Constructs a new AlarmScheduler.
-     * @param context The application context.
+     *
+     * @param context      The application context.
      * @param alarmManager The system AlarmManager service instance.
      */
     @Inject
@@ -36,6 +41,7 @@ public class AlarmScheduler {
 
     /**
      * Schedules daily recurring alarms for all configured reminder hours of a medication.
+     *
      * @param medication The {@link Medication} object containing the list of reminder hours.
      */
     public void schedule(Medication medication) {
@@ -55,8 +61,9 @@ public class AlarmScheduler {
      * the alarm is scheduled for the next day. It uses {@code setExactAndAllowWhileIdle}
      * when possible to ensure the reminder triggers even during Doze mode.
      * </p>
-     * @param medication The medication details to include in the alarm intent.
-     * @param hourStr The target time in "HH:mm" format.
+     *
+     * @param medication    The medication details to include in the alarm intent.
+     * @param hourStr       The target time in "HH:mm" format.
      * @param forceTomorrow Whether to skip today and schedule for the following day.
      */
     public void scheduleSpecificTime(Medication medication, String hourStr, boolean forceTomorrow) {
@@ -115,6 +122,7 @@ public class AlarmScheduler {
 
     /**
      * Cancels all currently scheduled alarms associated with a specific medication.
+     *
      * @param medication The medication whose alarms should be terminated.
      */
     public void cancel(Medication medication) {
@@ -129,8 +137,9 @@ public class AlarmScheduler {
 
     /**
      * Terminates a specific alarm identified by medication ID and scheduled time.
+     *
      * @param medicationId The unique identifier of the medication.
-     * @param hourStr The scheduled hour string.
+     * @param hourStr      The scheduled hour string.
      */
     public void cancelSpecificTime(String medicationId, String hourStr) {
         Intent intent = new Intent(context, AlarmReceiver.class);

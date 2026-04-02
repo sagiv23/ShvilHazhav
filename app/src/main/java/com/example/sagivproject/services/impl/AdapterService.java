@@ -12,7 +12,9 @@ import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.adapters.MemoryGameLogAdapter;
 import com.example.sagivproject.adapters.UsersTableAdapter;
 import com.example.sagivproject.services.IAdapterService;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.scopes.ActivityScoped;
 
 /**
@@ -38,7 +40,9 @@ public class AdapterService implements IAdapterService {
     private final EmergencyContactsAdapter emergencyContactsAdapter;
     private final GraphAdapter graphAdapter;
 
-    /** Constructs a new AdapterService with all required adapters injected by Hilt. */
+    /**
+     * Constructs a new AdapterService with all required adapters injected by Hilt.
+     */
     @Inject
     public AdapterService(
             ForumAdapter forumAdapter,
@@ -66,47 +70,91 @@ public class AdapterService implements IAdapterService {
         this.graphAdapter = graphAdapter;
     }
 
-    /** @return The adapter for forum message lists. */
+    /**
+     * @return The adapter for forum message lists.
+     */
     @Override
-    public ForumAdapter getForumAdapter() { return forumAdapter; }
+    public ForumAdapter getForumAdapter() {
+        return forumAdapter;
+    }
 
-    /** @return The adapter for forum category lists. */
+    /**
+     * @return The adapter for forum category lists.
+     */
     @Override
-    public ForumCategoryAdapter getForumCategoryAdapter() { return forumCategoryAdapter; }
+    public ForumCategoryAdapter getForumCategoryAdapter() {
+        return forumCategoryAdapter;
+    }
 
-    /** @return The adapter for the user's medication schedule. */
+    /**
+     * @return The adapter for the user's medication schedule.
+     */
     @Override
-    public MedicationListAdapter getMedicationListAdapter() { return medicationListAdapter; }
+    public MedicationListAdapter getMedicationListAdapter() {
+        return medicationListAdapter;
+    }
 
-    /** @return The adapter for memory game card grids. */
+    /**
+     * @return The adapter for memory game card grids.
+     */
     @Override
-    public MemoryGameAdapter getMemoryGameAdapter() { return memoryGameAdapter; }
+    public MemoryGameAdapter getMemoryGameAdapter() {
+        return memoryGameAdapter;
+    }
 
-    /** @return The adapter for memory game history logs. */
+    /**
+     * @return The adapter for memory game history logs.
+     */
     @Override
-    public MemoryGameLogAdapter getMemoryGameLogAdapter() { return memoryGameLogAdapter; }
+    public MemoryGameLogAdapter getMemoryGameLogAdapter() {
+        return memoryGameLogAdapter;
+    }
 
-    /** @return The adapter for the administrative user table. */
+    /**
+     * @return The adapter for the administrative user table.
+     */
     @Override
-    public UsersTableAdapter getUsersTableAdapter() { return usersTableAdapter; }
+    public UsersTableAdapter getUsersTableAdapter() {
+        return usersTableAdapter;
+    }
 
-    /** @return The adapter for managing medication card images. */
+    /**
+     * @return The adapter for managing medication card images.
+     */
     @Override
-    public MedicationImagesTableAdapter getMedicationImagesTableAdapter() { return medicationImagesTableAdapter; }
+    public MedicationImagesTableAdapter getMedicationImagesTableAdapter() {
+        return medicationImagesTableAdapter;
+    }
 
-    /** @return The adapter for the ranked user leaderboard. */
+    /**
+     * @return The adapter for the ranked user leaderboard.
+     */
     @Override
-    public LeaderboardAdapter getLeaderboardAdapter() { return leaderboardAdapter; }
+    public LeaderboardAdapter getLeaderboardAdapter() {
+        return leaderboardAdapter;
+    }
 
-    /** @return The adapter for viewing historical medication logs. */
+    /**
+     * @return The adapter for viewing historical medication logs.
+     */
     @Override
-    public MedicationUsageAdapter getMedicationUsageAdapter() { return medicationUsageAdapter; }
+    public MedicationUsageAdapter getMedicationUsageAdapter() {
+        return medicationUsageAdapter;
+    }
 
-    /** @return The adapter for emergency contact cards. */
+    /**
+     * @return The adapter for emergency contact cards.
+     */
     @Override
-    public EmergencyContactsAdapter getEmergencyContactsAdapter() { return emergencyContactsAdapter; }
+    public EmergencyContactsAdapter getEmergencyContactsAdapter() {
+        return emergencyContactsAdapter;
+    }
 
-    /** @return The adapter for statistical XY graphs. */
+    /**
+     * @return The adapter for statistical XY graphs.
+     */
     @Override
-    public GraphAdapter getGraphAdapter() { return graphAdapter; }
+    public GraphAdapter getGraphAdapter() {
+        return graphAdapter;
+    }
 }

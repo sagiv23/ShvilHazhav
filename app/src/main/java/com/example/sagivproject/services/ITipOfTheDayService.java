@@ -12,13 +12,15 @@ import com.example.sagivproject.models.TipOfTheDay;
 public interface ITipOfTheDayService {
     /**
      * Retrieves the specific tip assigned to the current calendar day.
+     *
      * @param callback The callback invoked with the {@link TipOfTheDay} or null if not yet created.
      */
     void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay> callback);
 
     /**
      * Persists a daily tip in the database using a transaction to prevent overwriting existing entries.
-     * @param tip The {@link TipOfTheDay} object to save.
+     *
+     * @param tip      The {@link TipOfTheDay} object to save.
      * @param callback The callback invoked with the final tip stored in the database.
      */
     void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback);

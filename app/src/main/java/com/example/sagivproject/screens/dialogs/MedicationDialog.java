@@ -11,23 +11,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.os.BundleCompat;
 import androidx.fragment.app.DialogFragment;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.enums.MedicationType;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -47,22 +52,27 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MedicationDialog extends DialogFragment {
     private static final String ARG_MEDICATION = "arg_medication";
 
-    /** Internal list of selected reminder times in "HH:mm" format. */
+    /**
+     * Internal list of selected reminder times in "HH:mm" format.
+     */
     private final ArrayList<String> selectedHours = new ArrayList<>();
 
     private ChipGroup chipGroupSelectedHours;
     private Medication medToEdit;
     private OnMedicationSubmitListener listener;
 
-    /** Constructs a new MedicationDialog. */
+    /**
+     * Constructs a new MedicationDialog.
+     */
     @Inject
     public MedicationDialog() {
     }
 
     /**
      * Sets the initial state of the dialog and the submission callback.
+     *
      * @param medToEdit The medication record to modify, or null to create a new one.
-     * @param listener The listener to handle add or edit operations.
+     * @param listener  The listener to handle add or edit operations.
      */
     public void setData(Medication medToEdit, OnMedicationSubmitListener listener) {
         Bundle args = new Bundle();
@@ -152,6 +162,7 @@ public class MedicationDialog extends DialogFragment {
 
     /**
      * Validates that all required fields are populated correctly.
+     *
      * @return true if input is valid.
      */
     private boolean validateInputs(String name, String typeString, String details, MedicationType selectedType) {
@@ -170,7 +181,9 @@ public class MedicationDialog extends DialogFragment {
         return true;
     }
 
-    /** Maps a display name string back to its corresponding enum constant. */
+    /**
+     * Maps a display name string back to its corresponding enum constant.
+     */
     private MedicationType getTypeFromString(String typeString) {
         for (MedicationType type : MedicationType.values()) {
             if (type.getDisplayName().equals(typeString)) {
@@ -180,7 +193,9 @@ public class MedicationDialog extends DialogFragment {
         return null;
     }
 
-    /** Opens the system time picker to add a new reminder hour. */
+    /**
+     * Opens the system time picker to add a new reminder hour.
+     */
     private void showHourPicker() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -204,7 +219,9 @@ public class MedicationDialog extends DialogFragment {
         timePickerDialog.show();
     }
 
-    /** Refreshes the display of chosen reminder times using Material Chips. */
+    /**
+     * Refreshes the display of chosen reminder times using Material Chips.
+     */
     private void updateSelectedHoursChips() {
         chipGroupSelectedHours.removeAllViews();
         Collections.sort(selectedHours);
@@ -220,7 +237,9 @@ public class MedicationDialog extends DialogFragment {
         }
     }
 
-    /** Creates a styled adapter for the medication form dropdown. */
+    /**
+     * Creates a styled adapter for the medication form dropdown.
+     */
     private ArrayAdapter<String> createMedicationTypeAdapter(List<String> typeNames) {
         return new ArrayAdapter<>(
                 requireContext(),
@@ -244,7 +263,9 @@ public class MedicationDialog extends DialogFragment {
         };
     }
 
-    /** Applies custom Hebrew typography and sizing to dropdown items. */
+    /**
+     * Applies custom Hebrew typography and sizing to dropdown items.
+     */
     private void styleTextView(TextView tv, boolean isDropdown) {
         tv.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.text_hebrew));
         tv.setTextSize(22);
@@ -258,14 +279,22 @@ public class MedicationDialog extends DialogFragment {
         }
     }
 
-    private void showToast(String message) { Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show(); }
+    private void showToast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    }
 
-    /** Listener interface for returning medication data results. */
+    /**
+     * Listener interface for returning medication data results.
+     */
     public interface OnMedicationSubmitListener {
-        /** Called when a new medication is ready to be added. */
+        /**
+         * Called when a new medication is ready to be added.
+         */
         void onAdd(Medication medication);
 
-        /** Called when existing medication details have been modified. */
+        /**
+         * Called when existing medication details have been modified.
+         */
         void onEdit(Medication medication);
     }
 }

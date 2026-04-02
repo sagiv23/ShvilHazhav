@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
@@ -13,14 +14,17 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.ForumAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+
 import java.util.List;
 import java.util.Objects;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -34,22 +38,34 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ForumActivity extends BaseActivity {
-    /** The RecyclerView displaying the forum messages. */
+    /**
+     * The RecyclerView displaying the forum messages.
+     */
     private RecyclerView recycler;
 
-    /** The input field for typing new messages. */
+    /**
+     * The input field for typing new messages.
+     */
     private EditText edtMessage;
 
-    /** A button that appears to alert the user of new messages below the current scroll position. */
+    /**
+     * A button that appears to alert the user of new messages below the current scroll position.
+     */
     private Button btnNewMessagesIndicator;
 
-    /** The adapter managing the binding of {@link ForumMessage} objects. */
+    /**
+     * The adapter managing the binding of {@link ForumMessage} objects.
+     */
     private ForumAdapter adapter;
 
-    /** The ID of the current forum category being displayed. */
+    /**
+     * The ID of the current forum category being displayed.
+     */
     private String categoryId;
 
-    /** The currently logged-in user. */
+    /**
+     * The currently logged-in user.
+     */
     private User user;
 
     @Override
@@ -81,8 +97,9 @@ public class ForumActivity extends BaseActivity {
 
     /**
      * Initializes the core UI views required for the forum functionality.
-     * @param recyclerId Resource ID for the RecyclerView.
-     * @param edtId Resource ID for the message EditText.
+     *
+     * @param recyclerId     Resource ID for the RecyclerView.
+     * @param edtId          Resource ID for the message EditText.
      * @param btnIndicatorId Resource ID for the new message indicator button.
      */
     private void initForumViews(int recyclerId, int edtId, int btnIndicatorId) {
@@ -100,7 +117,8 @@ public class ForumActivity extends BaseActivity {
 
     /**
      * Sets up the forum with the specified category details and initializes the adapter.
-     * @param categoryId The unique ID of the forum category.
+     *
+     * @param categoryId   The unique ID of the forum category.
      * @param categoryName The display name of the forum category.
      */
     private void setupForum(String categoryId, String categoryName) {
@@ -136,18 +154,24 @@ public class ForumActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) { Toast.makeText(ForumActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show(); }
+                    public void onFailed(Exception e) {
+                        Toast.makeText(ForumActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
 
             @Override
-            public boolean isShowMenuOptions(ForumMessage message) { return canDelete(message); }
+            public boolean isShowMenuOptions(ForumMessage message) {
+                return canDelete(message);
+            }
         });
 
         loadMessages();
     }
 
-    /** Starts listening for real-time message updates in the current category. */
+    /**
+     * Starts listening for real-time message updates in the current category.
+     */
     private void loadMessages() {
         databaseService.getForumService().listenToMessages(categoryId, new DatabaseCallback<>() {
             @Override
@@ -159,15 +183,21 @@ public class ForumActivity extends BaseActivity {
 
                 if (previousItemCount == 0 || wasAtBottom) {
                     scrollToBottom(false);
-                } else if (list.size() > previousItemCount && btnNewMessagesIndicator != null) { btnNewMessagesIndicator.setVisibility(View.VISIBLE); }
+                } else if (list.size() > previousItemCount && btnNewMessagesIndicator != null) {
+                    btnNewMessagesIndicator.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(ForumActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(ForumActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    /** Sends the text currently in the EditText as a new message. */
+    /**
+     * Sends the text currently in the EditText as a new message.
+     */
     private void sendMessage() {
         String text = edtMessage.getText().toString().trim();
         if (text.isEmpty()) return;
@@ -182,12 +212,15 @@ public class ForumActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(ForumActivity.this, "שגיאה בשליחה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(ForumActivity.this, "שגיאה בשליחה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     /**
      * Determines if the current user has the authority to delete a specific message.
+     *
      * @param message The {@link ForumMessage} to check permissions for.
      * @return true if the current user is an admin or the author of the message.
      */
@@ -199,6 +232,7 @@ public class ForumActivity extends BaseActivity {
 
     /**
      * Checks if the last item in the RecyclerView is currently visible to the user.
+     *
      * @return true if the last item is visible, false otherwise.
      */
     private boolean isLastItemVisible() {
@@ -211,6 +245,7 @@ public class ForumActivity extends BaseActivity {
 
     /**
      * Scrolls the RecyclerView to the bottom.
+     *
      * @param smooth true to use a smooth animation, false for an immediate jump.
      */
     private void scrollToBottom(boolean smooth) {

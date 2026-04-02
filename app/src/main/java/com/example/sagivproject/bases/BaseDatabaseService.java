@@ -1,8 +1,10 @@
 package com.example.sagivproject.bases;
 
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.example.sagivproject.models.Idable;
 import com.example.sagivproject.services.IDatabaseService;
 import com.google.firebase.database.DataSnapshot;
@@ -12,7 +14,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
@@ -25,24 +29,34 @@ import java.util.function.UnaryOperator;
  * It simplifies interaction with the Firebase database by handling data serialization,
  * callbacks, and error logging.
  * </p>
+ *
  * @param <T> The type of the data model, which must extend {@link Idable}.
  */
 public abstract class BaseDatabaseService<T extends Idable> {
-    /** Tag for logging. */
+    /**
+     * Tag for logging.
+     */
     private static final String TAG = "BaseFirebaseService";
 
-    /** The reference to the Firebase database. */
+    /**
+     * The reference to the Firebase database.
+     */
     protected final DatabaseReference databaseReference;
 
-    /** The path in the database for this entity type. */
+    /**
+     * The path in the database for this entity type.
+     */
     private final String path;
 
-    /** The class of the entity type (needed for Firebase deserialization). */
+    /**
+     * The class of the entity type (needed for Firebase deserialization).
+     */
     private final Class<T> clazz;
 
     /**
      * Constructs a new BaseDatabaseService.
-     * @param path The path to the data in the Firebase Realtime Database.
+     *
+     * @param path  The path to the data in the Firebase Realtime Database.
      * @param clazz The class of the data model.
      */
     protected BaseDatabaseService(@NotNull final String path, @NotNull final Class<T> clazz) {
@@ -54,40 +68,56 @@ public abstract class BaseDatabaseService<T extends Idable> {
 
     /**
      * Generates a new unique ID for a new entity in the database.
+     *
      * @return A new unique ID string.
      */
-    protected String generateId() { return databaseReference.child(path).push().getKey(); }
+    protected String generateId() {
+        return databaseReference.child(path).push().getKey();
+    }
 
     /**
      * Creates or overwrites an entity in the database.
-     * @param item The entity to create or overwrite.
+     *
+     * @param item     The entity to create or overwrite.
      * @param callback The callback to be invoked upon completion.
      */
-    protected void create(@NotNull final T item, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) { writeData(path + "/" + item.getId(), item, callback); }
+    protected void create(@NotNull final T item, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) {
+        writeData(path + "/" + item.getId(), item, callback);
+    }
 
     /**
      * Retrieves a single entity from the database by its ID.
-     * @param id The ID of the entity to retrieve.
+     *
+     * @param id       The ID of the entity to retrieve.
      * @param callback The callback to be invoked with the result.
      */
-    protected void get(@NotNull final String id, final @NotNull IDatabaseService.DatabaseCallback<T> callback) { getData(path + "/" + id, callback); }
+    protected void get(@NotNull final String id, final @NotNull IDatabaseService.DatabaseCallback<T> callback) {
+        getData(path + "/" + id, callback);
+    }
 
     /**
      * Retrieves all entities of this type from the database.
+     *
      * @param callback The callback to be invoked with the list of results.
      */
-    protected void getAll(final @NotNull IDatabaseService.DatabaseCallback<List<T>> callback) { getDataList(path, callback); }
+    protected void getAll(final @NotNull IDatabaseService.DatabaseCallback<List<T>> callback) {
+        getDataList(path, callback);
+    }
 
     /**
      * Deletes an entity from the database by its ID.
-     * @param id The ID of the entity to delete.
+     *
+     * @param id       The ID of the entity to delete.
      * @param callback The callback to be invoked upon completion.
      */
-    protected void delete(@NotNull final String id, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) { deleteData(path + "/" + id, callback); }
+    protected void delete(@NotNull final String id, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) {
+        deleteData(path + "/" + id, callback);
+    }
 
     /**
      * Updates an entity using a transaction to ensure atomicity.
-     * @param id The ID of the entity to update.
+     *
+     * @param id       The ID of the entity to update.
      * @param function The function to apply to the current value of the entity.
      * @param callback The callback to be invoked with the updated entity.
      */
@@ -100,15 +130,19 @@ public abstract class BaseDatabaseService<T extends Idable> {
 
     /**
      * Gets a DatabaseReference for a specific path.
+     *
      * @param fullPath The full path in the database.
      * @return A {@link DatabaseReference} for the given path.
      */
-    protected DatabaseReference readData(@NotNull final String fullPath) { return databaseReference.child(fullPath); }
+    protected DatabaseReference readData(@NotNull final String fullPath) {
+        return databaseReference.child(fullPath);
+    }
 
     /**
      * Writes data to a specific path in the database.
+     *
      * @param fullPath The full path to write to.
-     * @param data The data to write.
+     * @param data     The data to write.
      * @param callback The callback to be invoked upon completion.
      */
     protected void writeData(@NotNull final String fullPath, @NotNull final Object data, final @Nullable IDatabaseService.DatabaseCallback<Void> callback) {
@@ -124,6 +158,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
 
     /**
      * Deletes data from a specific path in the database.
+     *
      * @param fullPath The full path to delete from.
      * @param callback The callback to be invoked upon completion.
      */
@@ -140,6 +175,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
 
     /**
      * Retrieves a single data object from a specific path.
+     *
      * @param fullPath The full path to read from.
      * @param callback The callback to be invoked with the result.
      */
@@ -168,6 +204,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
 
     /**
      * Retrieves a list of data objects from a specific path.
+     *
      * @param fullPath The full path to read from.
      * @param callback The callback to be invoked with the list of results.
      */
@@ -199,6 +236,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
 
     /**
      * Executes a transaction on a specific data path.
+     *
      * @param fullPath The full path for the transaction.
      * @param function The function to apply to the current value of the entity.
      * @param callback The callback to be invoked upon completion.

@@ -17,7 +17,8 @@ public interface IStatsService {
      * This method increments either the 'correct' or 'wrong' counter for the current calendar date
      * using an atomic transaction to ensure data consistency.
      * </p>
-     * @param uid The unique identifier of the user.
+     *
+     * @param uid     The unique identifier of the user.
      * @param correct true if the user's answer was correct, false otherwise.
      */
     void updateDailyMathStats(@NonNull String uid, boolean correct);

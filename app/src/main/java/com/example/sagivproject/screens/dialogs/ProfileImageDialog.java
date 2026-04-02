@@ -4,12 +4,17 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
 import com.example.sagivproject.R;
+
 import java.util.Objects;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -31,13 +36,16 @@ public class ProfileImageDialog extends DialogFragment {
     private boolean hasImage;
     private ImagePickerListener listener;
 
-    /** Default constructor for Hilt. */
+    /**
+     * Default constructor for Hilt.
+     */
     @Inject
     public ProfileImageDialog() {
     }
 
     /**
      * Configures the dialog state.
+     *
      * @param hasImage true if the user currently has a profile picture set.
      * @param listener Callback for image selection actions.
      */
@@ -91,15 +99,23 @@ public class ProfileImageDialog extends DialogFragment {
         return dialog;
     }
 
-    /** Interface for handling profile image picker interactions. */
+    /**
+     * Interface for handling profile image picker interactions.
+     */
     public interface ImagePickerListener {
-        /** Called when the 'Camera' option is selected. */
+        /**
+         * Called when the 'Camera' option is selected.
+         */
         void onCamera();
 
-        /** Called when the 'Gallery' option is selected. */
+        /**
+         * Called when the 'Gallery' option is selected.
+         */
         void onGallery();
 
-        /** Called when the 'Delete' option is selected. */
+        /**
+         * Called when the 'Delete' option is selected.
+         */
         void onDelete();
     }
 }

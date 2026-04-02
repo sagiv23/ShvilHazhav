@@ -9,49 +9,72 @@ package com.example.sagivproject.services;
  * </p>
  */
 public interface IDatabaseService {
-    /** @return The authentication and session management service. */
+    /**
+     * @return The authentication and session management service.
+     */
     IAuthService getAuthService();
 
-    /** @return The primary user data and account service. */
+    /**
+     * @return The primary user data and account service.
+     */
     IUserService getUserService();
 
-    /** @return The medication prescription and usage logging service. */
+    /**
+     * @return The medication prescription and usage logging service.
+     */
     IMedicationService getMedicationService();
 
-    /** @return The online memory game coordination service. */
+    /**
+     * @return The online memory game coordination service.
+     */
     IMemoryGameService getGameService();
 
-    /** @return The activity performance and historical statistics service. */
+    /**
+     * @return The activity performance and historical statistics service.
+     */
     IStatsService getStatsService();
 
-    /** @return The forum message persistence and retrieval service. */
+    /**
+     * @return The forum message persistence and retrieval service.
+     */
     IForumService getForumService();
 
-    /** @return The image asset management service for game content. */
+    /**
+     * @return The image asset management service for game content.
+     */
     IImageService getImageService();
 
-    /** @return The forum discussion topic management service. */
+    /**
+     * @return The forum discussion topic management service.
+     */
     IForumCategoriesService getForumCategoriesService();
 
-    /** @return The daily advice and motivational tips service. */
+    /**
+     * @return The daily advice and motivational tips service.
+     */
     ITipOfTheDayService getTipOfTheDayService();
 
-    /** @return The emergency contact and SMS alerting service. */
+    /**
+     * @return The emergency contact and SMS alerting service.
+     */
     IEmergencyService getEmergencyService();
 
     /**
      * A generic callback interface for handling the results of asynchronous database operations.
+     *
      * @param <T> The type of the data returned upon successful completion.
      */
     interface DatabaseCallback<T> {
         /**
          * Invoked when the asynchronous operation completes successfully.
+         *
          * @param object The resulting data object (can be null if the operation has no return value).
          */
         void onCompleted(T object);
 
         /**
          * Invoked when the asynchronous operation fails due to an error or exception.
+         *
          * @param e The exception that occurred during the process.
          */
         void onFailed(Exception e);

@@ -4,17 +4,22 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
 import androidx.core.app.NotificationManagerCompat;
+
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -29,11 +34,15 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MedicationActionReceiver extends BroadcastReceiver {
     private static final String TAG = "MedicationActionReceiver";
 
-    /** Central database service for logging usage. */
+    /**
+     * Central database service for logging usage.
+     */
     @Inject
     IDatabaseService databaseService;
 
-    /** Utility for keeping local session data in sync. */
+    /**
+     * Utility for keeping local session data in sync.
+     */
     @Inject
     SharedPreferencesUtil sharedPreferencesUtil;
 
@@ -44,8 +53,9 @@ public class MedicationActionReceiver extends BroadcastReceiver {
      * logs the event to Firebase, and updates the today's statistics in the local cache.
      * Finally, dismisses the notification.
      * </p>
+     *
      * @param context The application context.
-     * @param intent The intent containing medication details and selected status.
+     * @param intent  The intent containing medication details and selected status.
      */
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -74,12 +84,16 @@ public class MedicationActionReceiver extends BroadcastReceiver {
                     stats.addMedicationUsageLog(usage);
                     if (status == MedicationStatus.TAKEN) {
                         stats.addMedicationTaken();
-                    } else if (status == MedicationStatus.NOT_TAKEN) { stats.addMedicationMissed(); }
+                    } else if (status == MedicationStatus.NOT_TAKEN) {
+                        stats.addMedicationMissed();
+                    }
                     sharedPreferencesUtil.saveUser(user);
                 }
 
                 @Override
-                public void onFailed(Exception e) { Log.e(TAG, "Failed to log usage from notification", e); }
+                public void onFailed(Exception e) {
+                    Log.e(TAG, "Failed to log usage from notification", e);
+                }
             });
         }
 

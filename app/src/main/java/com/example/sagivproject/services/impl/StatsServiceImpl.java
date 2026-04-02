@@ -2,6 +2,7 @@ package com.example.sagivproject.services.impl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.services.IStatsService;
 import com.google.firebase.database.DataSnapshot;
@@ -9,9 +10,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import javax.inject.Inject;
 
 /**
@@ -31,10 +34,13 @@ public class StatsServiceImpl implements IStatsService {
 
     /**
      * Constructs a new StatsServiceImpl.
+     *
      * @param databaseReference The root DatabaseReference injected by Hilt.
      */
     @Inject
-    public StatsServiceImpl(DatabaseReference databaseReference) { this.databaseReference = databaseReference.child(USERS_PATH); }
+    public StatsServiceImpl(DatabaseReference databaseReference) {
+        this.databaseReference = databaseReference.child(USERS_PATH);
+    }
 
     /**
      * Updates the daily math statistics for a specific user using a Firebase transaction.
@@ -43,7 +49,8 @@ public class StatsServiceImpl implements IStatsService {
      * if false. The transaction handles the case where the {@link DailyStats} object
      * for the current date doesn't exist yet by creating a new instance.
      * </p>
-     * @param uid The unique identifier of the user.
+     *
+     * @param uid     The unique identifier of the user.
      * @param correct true if the answer was correct, false if it was wrong.
      */
     @Override

@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationListAdapter;
 import com.example.sagivproject.bases.BaseActivity;
@@ -40,6 +42,7 @@ import com.example.sagivproject.services.notifications.AlarmScheduler;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -49,7 +52,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -68,10 +73,14 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MedicationListActivity extends BaseActivity {
-    /** The complete, unfiltered list of medications owned by the user. */
+    /**
+     * The complete, unfiltered list of medications owned by the user.
+     */
     private final List<Medication> fullMedicationList = new ArrayList<>();
 
-    /** Utility for scheduling system alarms for medication reminders. */
+    /**
+     * Utility for scheduling system alarms for medication reminders.
+     */
     @Inject
     AlarmScheduler alarmScheduler;
 
@@ -105,13 +114,19 @@ public class MedicationListActivity extends BaseActivity {
         adapter = adapterService.getMedicationListAdapter();
         adapter.setListener(new MedicationListAdapter.OnMedicationActionListener() {
             @Override
-            public void onEdit(Medication medication) { openMedicationDialog(medication); }
+            public void onEdit(Medication medication) {
+                openMedicationDialog(medication);
+            }
 
             @Override
-            public void onDelete(Medication medication) { deleteMedicationById(medication); }
+            public void onDelete(Medication medication) {
+                deleteMedicationById(medication);
+            }
 
             @Override
-            public void onStatusChanged(Medication medication, String scheduledTime, MedicationStatus status) { logMedicationStatus(medication, scheduledTime, status); }
+            public void onStatusChanged(Medication medication, String scheduledTime, MedicationStatus status) {
+                logMedicationStatus(medication, scheduledTime, status);
+            }
         });
         viewPager_medications.setAdapter(adapter);
 
@@ -140,7 +155,9 @@ public class MedicationListActivity extends BaseActivity {
         fetchTodayUsageLogs();
     }
 
-    /** Initializes the search bar and filter logic. */
+    /**
+     * Initializes the search bar and filter logic.
+     */
     private void setupSearch() {
         ArrayAdapter<String> spinnerAdapter = getStringArrayAdapter();
         spinnerSearchType.setAdapter(spinnerAdapter);
@@ -151,7 +168,9 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { filterMedications(s.toString()); }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterMedications(s.toString());
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -172,7 +191,9 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /** Retrieves usage history for the current day to update the "Taken" status rows. */
+    /**
+     * Retrieves usage history for the current day to update the "Taken" status rows.
+     */
     private void fetchTodayUsageLogs() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         databaseService.getMedicationService().getMedicationUsageLogs(uid, new DatabaseCallback<>() {
@@ -200,9 +221,10 @@ public class MedicationListActivity extends BaseActivity {
 
     /**
      * Commits a medication status change to the database and updates daily stats.
-     * @param medication Target medication.
+     *
+     * @param medication    Target medication.
      * @param scheduledTime The time of the dose (HH:mm).
-     * @param status The result (TAKEN, etc.).
+     * @param status        The result (TAKEN, etc.).
      */
     private void logMedicationStatus(Medication medication, String scheduledTime, MedicationStatus status) {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -230,25 +252,35 @@ public class MedicationListActivity extends BaseActivity {
         });
     }
 
-    /** Loads medication data from SharedPreferences for immediate UI population. */
+    /**
+     * Loads medication data from SharedPreferences for immediate UI population.
+     */
     private void loadMedicationsFromCache() {
         if (user.getMedications() != null) {
             updateMedicationList(new ArrayList<>(user.getMedications().values()));
         }
     }
 
-    /** Fetches the latest medication prescriptions from Firebase. */
+    /**
+     * Fetches the latest medication prescriptions from Firebase.
+     */
     private void fetchMedicationsFromServer() {
         databaseService.getMedicationService().getUserMedicationList(uid, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(List<Medication> list) { updateMedicationList(list); }
+            public void onCompleted(List<Medication> list) {
+                updateMedicationList(list);
+            }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(MedicationListActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationListActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    /** Updates the persistent local cache with the latest data list. */
+    /**
+     * Updates the persistent local cache with the latest data list.
+     */
     private void updateUserCache(List<Medication> medicationList) {
         HashMap<String, Medication> updatedMedicationsMap = new HashMap<>();
         for (Medication med : medicationList) {
@@ -258,7 +290,9 @@ public class MedicationListActivity extends BaseActivity {
         sharedPreferencesUtil.saveUser(user);
     }
 
-    /** Processes a new list of medications: sorts alphabetically and updates UI. */
+    /**
+     * Processes a new list of medications: sorts alphabetically and updates UI.
+     */
     private void updateMedicationList(List<Medication> medicationList) {
         fullMedicationList.clear();
         fullMedicationList.addAll(medicationList);
@@ -267,7 +301,9 @@ public class MedicationListActivity extends BaseActivity {
         filterMedications(editSearch.getText().toString());
     }
 
-    /** Creates a styled adapter for the search filter dropdown. */
+    /**
+     * Creates a styled adapter for the search filter dropdown.
+     */
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         String[] searchOptions = {"הכל", "שם תרופה", "סוג תרופה"};
@@ -296,7 +332,9 @@ public class MedicationListActivity extends BaseActivity {
         };
     }
 
-    /** Saves a new medication entry and configures its reminders. */
+    /**
+     * Saves a new medication entry and configures its reminders.
+     */
     private void saveMedication(Medication medication) {
         String medicationId = databaseService.getMedicationService().generateMedicationId();
         medication.setId(medicationId);
@@ -312,11 +350,15 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(MedicationListActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationListActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    /** Validates notification permissions before scheduling reminders. */
+    /**
+     * Validates notification permissions before scheduling reminders.
+     */
     private void checkNotificationPermissionAndSchedule(Medication medication) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             alarmScheduler.schedule(medication);
@@ -333,7 +375,9 @@ public class MedicationListActivity extends BaseActivity {
         }
     }
 
-    /** Commits medication updates and refreshes active alarms. */
+    /**
+     * Commits medication updates and refreshes active alarms.
+     */
     private void updateMedication(Medication med) {
         med.setUserId(uid);
         databaseService.getMedicationService().updateMedication(uid, med, new DatabaseCallback<>() {
@@ -353,11 +397,15 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(MedicationListActivity.this, "שגיאה בעדכון", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationListActivity.this, "שגיאה בעדכון", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    /** Removes a medication record and terminates its scheduled alarms. */
+    /**
+     * Removes a medication record and terminates its scheduled alarms.
+     */
     private void deleteMedicationById(Medication medication) {
         databaseService.getMedicationService().deleteMedication(uid, medication.getId(), new DatabaseCallback<>() {
             @Override
@@ -370,23 +418,32 @@ public class MedicationListActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(MedicationListActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationListActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    /** Opens the specialized dialog for adding or modifying medications. */
+    /**
+     * Opens the specialized dialog for adding or modifying medications.
+     */
     private void openMedicationDialog(Medication medToEdit) {
         dialogService.showMedicationDialog(getSupportFragmentManager(), medToEdit, new MedicationDialog.OnMedicationSubmitListener() {
             @Override
-            public void onAdd(Medication medication) { saveMedication(medication); }
+            public void onAdd(Medication medication) {
+                saveMedication(medication);
+            }
 
             @Override
-            public void onEdit(Medication medication) { updateMedication(medication); }
+            public void onEdit(Medication medication) {
+                updateMedication(medication);
+            }
         });
     }
 
     /**
      * Filters the medication list based on name or type criteria.
+     *
      * @param query The search query string.
      */
     private void filterMedications(String query) {

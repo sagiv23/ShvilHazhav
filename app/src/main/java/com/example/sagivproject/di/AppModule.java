@@ -2,6 +2,7 @@ package com.example.sagivproject.di;
 
 import android.app.AlarmManager;
 import android.content.Context;
+
 import com.example.sagivproject.services.IAdapterService;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
@@ -33,7 +34,9 @@ import com.example.sagivproject.services.impl.UserServiceImpl;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
+
 import javax.inject.Singleton;
+
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
@@ -57,39 +60,52 @@ public abstract class AppModule {
 
     /**
      * Provides a singleton instance of {@link DatabaseReference}.
+     *
      * @return The root reference to the Firebase Realtime Database.
      */
     @Provides
     @Singleton
-    public static DatabaseReference provideDatabaseReference() { return FirebaseDatabase.getInstance().getReference(); }
+    public static DatabaseReference provideDatabaseReference() {
+        return FirebaseDatabase.getInstance().getReference();
+    }
 
     /**
      * Provides a singleton instance of {@link FirebaseDatabase}.
+     *
      * @return The {@link FirebaseDatabase} instance.
      */
     @Provides
     @Singleton
-    public static FirebaseDatabase provideFirebaseDatabase() { return FirebaseDatabase.getInstance(); }
+    public static FirebaseDatabase provideFirebaseDatabase() {
+        return FirebaseDatabase.getInstance();
+    }
 
     /**
      * Provides a singleton instance of {@link Gson} for JSON serialization and deserialization.
+     *
      * @return A {@link Gson} instance.
      */
     @Provides
     @Singleton
-    public static Gson provideGson() { return new Gson(); }
+    public static Gson provideGson() {
+        return new Gson();
+    }
 
     /**
      * Provides the system's {@link AlarmManager} service.
+     *
      * @param context The application context.
      * @return The {@link AlarmManager} system service.
      */
     @Provides
     @Singleton
-    public static AlarmManager provideAlarmManager(@ApplicationContext Context context) { return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE); }
+    public static AlarmManager provideAlarmManager(@ApplicationContext Context context) {
+        return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    }
 
     /**
      * Binds the {@link IDatabaseService} interface to its implementation.
+     *
      * @param databaseService The {@link DatabaseService} implementation.
      * @return The bound interface.
      */
@@ -99,6 +115,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IAuthService} interface to its implementation.
+     *
      * @param authService The {@link AuthServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -108,6 +125,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IUserService} interface to its implementation.
+     *
      * @param userService The {@link UserServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -117,6 +135,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IMedicationService} interface to its implementation.
+     *
      * @param medicationService The {@link MedicationServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -126,6 +145,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IStatsService} interface to its implementation.
+     *
      * @param statsService The {@link StatsServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -135,6 +155,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IForumService} interface to its implementation.
+     *
      * @param forumService The {@link ForumServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -144,6 +165,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IForumCategoriesService} interface to its implementation.
+     *
      * @param forumCategoryService The {@link ForumCategoriesServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -153,6 +175,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IMemoryGameService} interface to its implementation.
+     *
      * @param gameService The {@link MemoryGameServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -162,6 +185,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IImageService} interface to its implementation.
+     *
      * @param imageService The {@link ImageServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -171,6 +195,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link ITipOfTheDayService} interface to its implementation.
+     *
      * @param tipOfTheDayService The {@link TipOfTheDayServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -180,6 +205,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IEmergencyService} interface to its implementation.
+     *
      * @param emergencyService The {@link EmergencyServiceImpl} implementation.
      * @return The bound interface.
      */
@@ -189,6 +215,7 @@ public abstract class AppModule {
 
     /**
      * Binds the {@link IFallDetectionService} interface to its implementation.
+     *
      * @param fallDetectionManager The {@link FallDetectionManager} implementation.
      * @return The bound interface.
      */
@@ -208,6 +235,7 @@ public abstract class AppModule {
     public interface ActivityBindingsModule {
         /**
          * Binds the {@link IDialogService} interface to its implementation.
+         *
          * @param dialogService The {@link DialogService} implementation.
          * @return The bound interface.
          */
@@ -217,6 +245,7 @@ public abstract class AppModule {
 
         /**
          * Binds the {@link IAdapterService} interface to its implementation.
+         *
          * @param adapterService The {@link AdapterService} implementation.
          * @return The bound interface.
          */

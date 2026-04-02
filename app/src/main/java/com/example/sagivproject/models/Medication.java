@@ -1,7 +1,9 @@
 package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
+
 import com.example.sagivproject.models.enums.MedicationType;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,18 +23,21 @@ public class Medication implements Serializable, Idable {
     private MedicationType type;
     private List<String> reminderHours;
 
-    /** Default constructor required for Firebase deserialization. */
+    /**
+     * Default constructor required for Firebase deserialization.
+     */
     public Medication() {
     }
 
     /**
      * Constructs a new Medication object.
-     * @param id The unique ID of the medication record.
-     * @param name The user-friendly name of the medication.
-     * @param details Additional details (e.g., dosage, instructions).
-     * @param type The physical form of the medication (e.g., Pill, Syrup).
+     *
+     * @param id            The unique ID of the medication record.
+     * @param name          The user-friendly name of the medication.
+     * @param details       Additional details (e.g., dosage, instructions).
+     * @param type          The physical form of the medication (e.g., Pill, Syrup).
      * @param reminderHours A list of strings representing daily reminder times in "HH:mm".
-     * @param userId The ID of the user who owns this medication record.
+     * @param userId        The ID of the user who owns this medication record.
      */
     public Medication(String id, String name, String details, MedicationType type, List<String> reminderHours, String userId) {
         this.id = id;
@@ -44,35 +49,69 @@ public class Medication implements Serializable, Idable {
     }
 
     @Override
-    public String getId() { return this.id; }
+    public String getId() {
+        return this.id;
+    }
 
     @Override
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    /** @return The UID of the user who owns this medication. */
-    public String getUserId() { return userId; }
+    /**
+     * @return The UID of the user who owns this medication.
+     */
+    public String getUserId() {
+        return userId;
+    }
 
-    public void setUserId(String userId) { this.userId = userId; }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-    /** @return The name of the medication. */
-    public String getName() { return this.name; }
+    /**
+     * @return The name of the medication.
+     */
+    public String getName() {
+        return this.name;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    /** @return Dosage or other specific instructions for the user. */
-    public String getDetails() { return this.details; }
+    /**
+     * @return Dosage or other specific instructions for the user.
+     */
+    public String getDetails() {
+        return this.details;
+    }
 
-    public void setDetails(String details) { this.details = details; }
+    public void setDetails(String details) {
+        this.details = details;
+    }
 
-    /** @return The {@link MedicationType} enum representing the form. */
-    public MedicationType getType() { return type; }
+    /**
+     * @return The {@link MedicationType} enum representing the form.
+     */
+    public MedicationType getType() {
+        return type;
+    }
 
-    public void setType(MedicationType type) { this.type = type; }
+    public void setType(MedicationType type) {
+        this.type = type;
+    }
 
-    /** @return The list of daily reminder hours in "HH:mm" format. */
-    public List<String> getReminderHours() { return reminderHours; }
+    /**
+     * @return The list of daily reminder hours in "HH:mm" format.
+     */
+    public List<String> getReminderHours() {
+        return reminderHours;
+    }
 
-    public void setReminderHours(List<String> reminderHours) { this.reminderHours = reminderHours; }
+    public void setReminderHours(List<String> reminderHours) {
+        this.reminderHours = reminderHours;
+    }
 
     @NonNull
     @Override

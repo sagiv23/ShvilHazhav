@@ -2,17 +2,21 @@ package com.example.sagivproject.services.impl;
 
 import android.content.Context;
 import android.telephony.SmsManager;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IEmergencyService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
+
 import javax.inject.Inject;
 
 /**
@@ -32,19 +36,24 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
      * Initializes the base service with an empty path as full paths are built dynamically.
      */
     @Inject
-    public EmergencyServiceImpl() { super("", EmergencyContact.class); }
+    public EmergencyServiceImpl() {
+        super("", EmergencyContact.class);
+    }
 
     @Override
-    public String generateContactId() { return super.generateId(); }
+    public String generateContactId() {
+        return super.generateId();
+    }
 
     /**
      * Adds a new emergency contact to the database.
      * First validates that the phone number is not already present in the user's list.
-     * @param uid User ID.
-     * @param firstName Contact's first name.
-     * @param lastName Contact's last name.
+     *
+     * @param uid         User ID.
+     * @param firstName   Contact's first name.
+     * @param lastName    Contact's last name.
      * @param phoneNumber Contact's phone number.
-     * @param callback Result callback.
+     * @param callback    Result callback.
      */
     @Override
     public void addContact(@NonNull String uid, @NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber, @Nullable DatabaseCallback<Void> callback) {
@@ -64,20 +73,27 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
             }
 
             @Override
-            public void onFailed(Exception e) { if (callback != null) callback.onFailed(e); }
+            public void onFailed(Exception e) {
+                if (callback != null) callback.onFailed(e);
+            }
         });
     }
 
     @Override
-    public void getContacts(@NonNull String uid, @NonNull DatabaseCallback<List<EmergencyContact>> callback) { getDataList(getContactsPath(uid), callback); }
+    public void getContacts(@NonNull String uid, @NonNull DatabaseCallback<List<EmergencyContact>> callback) {
+        getDataList(getContactsPath(uid), callback);
+    }
 
     @Override
-    public void deleteContact(@NonNull String uid, @NonNull String contactId, @Nullable DatabaseCallback<Void> callback) { deleteData(getContactItemPath(uid, contactId), callback); }
+    public void deleteContact(@NonNull String uid, @NonNull String contactId, @Nullable DatabaseCallback<Void> callback) {
+        deleteData(getContactItemPath(uid, contactId), callback);
+    }
 
     /**
      * Updates an existing contact record using a database transaction.
-     * @param uid User ID.
-     * @param contact Updated contact object.
+     *
+     * @param uid      User ID.
+     * @param contact  Updated contact object.
      * @param callback Result callback.
      */
     @Override
@@ -85,20 +101,25 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
         UnaryOperator<EmergencyContact> updateFunction = oldContact -> contact;
         runTransaction(getContactItemPath(uid, contact.getId()), updateFunction, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(EmergencyContact result) { if (callback != null) callback.onCompleted(null); }
+            public void onCompleted(EmergencyContact result) {
+                if (callback != null) callback.onCompleted(null);
+            }
 
             @Override
-            public void onFailed(Exception e) { if (callback != null) callback.onFailed(e); }
+            public void onFailed(Exception e) {
+                if (callback != null) callback.onFailed(e);
+            }
         });
     }
 
     /**
      * Sends emergency SMS messages to all provided contacts.
      * Includes location URL if available.
-     * @param context App context.
-     * @param contacts List of contacts to notify.
+     *
+     * @param context     App context.
+     * @param contacts    List of contacts to notify.
      * @param locationUrl Google Maps link or null.
-     * @param callback Result callback.
+     * @param callback    Result callback.
      */
     @Override
     public void sendEmergencyAlert(@NonNull Context context, @NonNull List<EmergencyContact> contacts, @Nullable String locationUrl, @Nullable DatabaseCallback<Void> callback) {
@@ -128,9 +149,17 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
         }
     }
 
-    /** Constructs the database path for a user's emergency contacts collection. */
-    private String getContactsPath(String uid) { return USERS_PATH + "/" + uid + "/" + CONTACTS_PATH; }
+    /**
+     * Constructs the database path for a user's emergency contacts collection.
+     */
+    private String getContactsPath(String uid) {
+        return USERS_PATH + "/" + uid + "/" + CONTACTS_PATH;
+    }
 
-    /** Constructs the database path for a specific emergency contact record. */
-    private String getContactItemPath(String uid, String contactId) { return getContactsPath(uid) + "/" + contactId; }
+    /**
+     * Constructs the database path for a specific emergency contact record.
+     */
+    private String getContactItemPath(String uid, String contactId) {
+        return getContactsPath(uid) + "/" + contactId;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -14,13 +15,16 @@ public class ImageData implements Serializable, Idable {
     private String id;
     private String base64;
 
-    /** Default constructor required for Firebase deserialization. */
+    /**
+     * Default constructor required for Firebase deserialization.
+     */
     public ImageData() {
     }
 
     /**
      * Constructs a new ImageData object with specific ID and content.
-     * @param id The unique identifier for the image (e.g., "card1").
+     *
+     * @param id     The unique identifier for the image (e.g., "card1").
      * @param base64 The Base64 encoded string representing the image bitmap.
      */
     public ImageData(String id, String base64) {
@@ -29,15 +33,25 @@ public class ImageData implements Serializable, Idable {
     }
 
     @Override
-    public String getId() { return this.id; }
+    public String getId() {
+        return this.id;
+    }
 
     @Override
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    /** @return The Base64 encoded content of the image. */
-    public String getBase64() { return base64; }
+    /**
+     * @return The Base64 encoded content of the image.
+     */
+    public String getBase64() {
+        return base64;
+    }
 
-    public void setBase64(String base64) { this.base64 = base64; }
+    public void setBase64(String base64) {
+        this.base64 = base64;
+    }
 
     @NonNull
     @Override

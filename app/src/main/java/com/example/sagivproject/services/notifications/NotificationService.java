@@ -8,15 +8,19 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.screens.MainActivity;
 import com.example.sagivproject.screens.MedicationListActivity;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**
@@ -29,13 +33,19 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
  */
 @Singleton
 public class NotificationService {
-    /** Channel ID for medication-related notifications. */
+    /**
+     * Channel ID for medication-related notifications.
+     */
     public static final String MEDICATIONS_CHANNEL_ID = "medication_notifications";
 
-    /** Channel ID for birthday-related notifications. */
+    /**
+     * Channel ID for birthday-related notifications.
+     */
     public static final String BIRTHDAYS_CHANNEL_ID = "birthday_notifications";
 
-    /** Channel ID for fall detection service notifications. */
+    /**
+     * Channel ID for fall detection service notifications.
+     */
     public static final String FALL_DETECTION_CHANNEL_ID = "fall_detection_notifications";
 
     private static final String MEDICATIONS_GROUP = "com.example.sagivproject.MEDICATIONS_GROUP";
@@ -46,6 +56,7 @@ public class NotificationService {
 
     /**
      * Constructs a new NotificationService.
+     *
      * @param context The application context.
      */
     @Inject
@@ -89,6 +100,7 @@ public class NotificationService {
 
     /**
      * Builds a persistent notification for the Fall Detection foreground service.
+     *
      * @return A {@link Notification} configured for foreground service use.
      */
     public Notification getFallDetectionForegroundNotification() {
@@ -105,7 +117,9 @@ public class NotificationService {
                 .build();
     }
 
-    /** Displays an immediate alert notification when a fall is detected. */
+    /**
+     * Displays an immediate alert notification when a fall is detected.
+     */
     public void showFallDetectedNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, FALL_DETECTION_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -125,9 +139,10 @@ public class NotificationService {
      * Includes interactive actions (Taken, Not Taken, Will Take) that allow the user
      * to log their intake directly from the notification shade.
      * </p>
-     * @param medicationId The unique ID of the medication.
+     *
+     * @param medicationId   The unique ID of the medication.
      * @param medicationName The display name of the medication.
-     * @param hourStr The scheduled dose time (HH:mm).
+     * @param hourStr        The scheduled dose time (HH:mm).
      * @param notificationId The unique ID for this notification instance.
      */
     public void showMedicationNotification(String medicationId, String medicationName, String hourStr, int notificationId) {
@@ -165,12 +180,13 @@ public class NotificationService {
 
     /**
      * Helper to create a {@link NotificationCompat.Action} for medication logging.
-     * @param medicationId Medication identifier.
+     *
+     * @param medicationId   Medication identifier.
      * @param medicationName Medication name.
-     * @param hourStr Scheduled time.
+     * @param hourStr        Scheduled time.
      * @param notificationId Original notification ID.
-     * @param status The {@link MedicationStatus} to log.
-     * @param titleRes String resource for the action button label.
+     * @param status         The {@link MedicationStatus} to log.
+     * @param titleRes       String resource for the action button label.
      * @return A configured notification action.
      */
     private NotificationCompat.Action createAction(String medicationId, String medicationName, String hourStr, int notificationId, MedicationStatus status, int titleRes) {
@@ -194,7 +210,8 @@ public class NotificationService {
 
     /**
      * Displays a celebratory birthday notification.
-     * @param firstName The user's first name.
+     *
+     * @param firstName      The user's first name.
      * @param notificationId A unique ID for the notification.
      */
     public void showBirthdayNotification(String firstName, int notificationId) {
@@ -215,8 +232,9 @@ public class NotificationService {
 
     /**
      * Displays a summary notification for a group to keep the notification drawer organized.
+     *
      * @param channelId The channel ID.
-     * @param groupKey The group identifier.
+     * @param groupKey  The group identifier.
      */
     private void showSummaryNotification(String channelId, String groupKey) {
         NotificationCompat.Builder summaryBuilder = new NotificationCompat.Builder(context, channelId)
@@ -233,12 +251,13 @@ public class NotificationService {
 
     /**
      * Internal helper to build and display a standard notification.
-     * @param channelId Target channel.
-     * @param title Notification title.
-     * @param message Notification body text.
+     *
+     * @param channelId      Target channel.
+     * @param title          Notification title.
+     * @param message        Notification body text.
      * @param notificationId Unique ID.
-     * @param pendingIntent Action to perform on click.
-     * @param group Group key for stacking.
+     * @param pendingIntent  Action to perform on click.
+     * @param group          Group key for stacking.
      */
     private void show(String channelId, String title, String message, int notificationId, PendingIntent pendingIntent, String group) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)

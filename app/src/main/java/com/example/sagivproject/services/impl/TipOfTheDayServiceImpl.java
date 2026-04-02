@@ -4,10 +4,12 @@ import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.ITipOfTheDayService;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+
 import javax.inject.Inject;
 
 /**
@@ -19,9 +21,13 @@ import javax.inject.Inject;
  * </p>
  */
 public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> implements ITipOfTheDayService {
-    /** The root database path for daily tips. */
+    /**
+     * The root database path for daily tips.
+     */
     private static final String TIP_OF_THE_DAY_PATH = "tip_of_the_day";
-    /** The date format used for generating daily identifiers. */
+    /**
+     * The date format used for generating daily identifiers.
+     */
     private static final String DATE_FORMAT = "yyyyMMdd";
 
     /**
@@ -29,10 +35,13 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      * Initializes the base service with the tips' path.
      */
     @Inject
-    public TipOfTheDayServiceImpl() { super(TIP_OF_THE_DAY_PATH, TipOfTheDay.class); }
+    public TipOfTheDayServiceImpl() {
+        super(TIP_OF_THE_DAY_PATH, TipOfTheDay.class);
+    }
 
     /**
      * Retrieves the tip assigned to the current calendar day.
+     *
      * @param callback The callback invoked with the found {@link TipOfTheDay} or null.
      */
     @Override
@@ -47,9 +56,12 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      * Uses a transaction to ensure that if multiple users generate a tip simultaneously,
      * only the first one is committed, and others receive the already-stored tip.
      * </p>
-     * @param tip The {@link TipOfTheDay} object to potentially save.
+     *
+     * @param tip      The {@link TipOfTheDay} object to potentially save.
      * @param callback The callback invoked with the final tip stored in the database.
      */
     @Override
-    public void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) { runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> Objects.requireNonNullElse(currentTip, tip), callback); }
+    public void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
+        runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> Objects.requireNonNullElse(currentTip, tip), callback);
+    }
 }

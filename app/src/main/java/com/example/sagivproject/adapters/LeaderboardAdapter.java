@@ -4,13 +4,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.User;
+
 import java.text.MessageFormat;
 import java.util.List;
+
 import javax.inject.Inject;
 
 /**
@@ -31,9 +35,12 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
 
     /**
      * Sets the list of users to be displayed in the leaderboard.
+     *
      * @param users The list of {@link User} objects, typically pre-sorted by total wins.
      */
-    public void setUsers(List<User> users) { setData(users); }
+    public void setUsers(List<User> users) {
+        setData(users);
+    }
 
     @NonNull
     @Override
@@ -59,6 +66,7 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
 
     /**
      * Calculates the sum of all memory game wins across the user's daily statistics.
+     *
      * @param u The user to calculate wins for.
      * @return The total number of wins.
      */
@@ -72,16 +80,23 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
         return total;
     }
 
-    /** ViewHolder class for leaderboard rows. */
+    /**
+     * ViewHolder class for leaderboard rows.
+     */
     public static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /** TextView for the user's full name. */
+        /**
+         * TextView for the user's full name.
+         */
         final TextView tvName;
 
-        /** TextView for the win count or rank. */
+        /**
+         * TextView for the win count or rank.
+         */
         final TextView tvWins;
 
         /**
          * Constructs a new ViewHolder.
+         *
          * @param itemView The view representing a single leaderboard row.
          */
         public ViewHolder(@NonNull View itemView) {

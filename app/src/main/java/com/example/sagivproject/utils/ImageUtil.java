@@ -5,10 +5,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Base64;
 import android.widget.ImageView;
+
 import com.example.sagivproject.R;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.ByteArrayOutputStream;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -23,7 +27,9 @@ import javax.inject.Singleton;
 public class ImageUtil {
     private static final String BASE64_PREFIX = "data:image/jpeg;base64,";
 
-    /** Default constructor for Hilt dependency injection. */
+    /**
+     * Default constructor for Hilt dependency injection.
+     */
     @Inject
     public ImageUtil() {
     }
@@ -34,6 +40,7 @@ public class ImageUtil {
      * This method extracts the bitmap from the ImageView's drawable, compresses it
      * into a JPEG format, and then encodes the resulting byte array into a Base64 string.
      * </p>
+     *
      * @param imageView The ImageView containing the image to convert.
      * @return The Base64 encoded string with a data URI prefix, or null if the drawable is not present or not a bitmap.
      */
@@ -55,8 +62,9 @@ public class ImageUtil {
      * into a Bitmap and sets it as the content of the provided ImageView.
      * If the string is null or empty, a default user icon is displayed.
      * </p>
+     *
      * @param base64Code The Base64 encoded string of the image.
-     * @param imageView The ImageView to load the image into.
+     * @param imageView  The ImageView to load the image into.
      */
     public void loadImage(@Nullable final String base64Code, @NotNull final ImageView imageView) {
         if (base64Code == null || base64Code.isEmpty()) {

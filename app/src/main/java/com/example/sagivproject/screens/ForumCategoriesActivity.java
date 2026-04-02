@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
@@ -13,13 +14,16 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.ForumCategoryAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+
 import java.util.List;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -65,13 +69,19 @@ public class ForumCategoriesActivity extends BaseActivity {
         adapter = adapterService.getForumCategoryAdapter();
         adapter.init(new ForumCategoryAdapter.OnCategoryInteractionListener() {
             @Override
-            public void onDelete(ForumCategory category) { if (isAdmin) deleteCategory(category); }
+            public void onDelete(ForumCategory category) {
+                if (isAdmin) deleteCategory(category);
+            }
 
             @Override
-            public void onEdit(ForumCategory category) { if (isAdmin) showEditDialog(category); }
+            public void onEdit(ForumCategory category) {
+                if (isAdmin) showEditDialog(category);
+            }
 
             @Override
-            public void onLongClick(ForumCategory category) { if (isAdmin) showEditDialog(category); }
+            public void onLongClick(ForumCategory category) {
+                if (isAdmin) showEditDialog(category);
+            }
 
             @Override
             public void onClick(ForumCategory category) {
@@ -108,20 +118,27 @@ public class ForumCategoriesActivity extends BaseActivity {
         loadCategories();
     }
 
-    /** Fetches the current list of forum categories from the database. */
+    /**
+     * Fetches the current list of forum categories from the database.
+     */
     private void loadCategories() {
         databaseService.getForumCategoriesService().getCategories(new DatabaseCallback<>() {
             @Override
-            public void onCompleted(List<ForumCategory> data) { adapter.setCategories(data); }
+            public void onCompleted(List<ForumCategory> data) {
+                adapter.setCategories(data);
+            }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(ForumCategoriesActivity.this, "שגיאה בטעינת קטגוריות", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(ForumCategoriesActivity.this, "שגיאה בטעינת קטגוריות", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     /**
      * Adds a new category to the database and refreshes the list.
-     * @param name Name of the new category.
+     *
+     * @param name     Name of the new category.
      * @param editText Reference to the input field to clear on success.
      */
     private void addCategory(String name, EditText editText) {
@@ -134,12 +151,15 @@ public class ForumCategoriesActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(ForumCategoriesActivity.this, "שגיאה בהוספה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(ForumCategoriesActivity.this, "שגיאה בהוספה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     /**
      * Displays a dialog to rename an existing category.
+     *
      * @param category The category to edit.
      */
     private void showEditDialog(ForumCategory category) {
@@ -152,12 +172,15 @@ public class ForumCategoriesActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) { Toast.makeText(ForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show(); }
+                    public void onFailed(Exception e) {
+                        Toast.makeText(ForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show();
+                    }
                 }));
     }
 
     /**
      * Deletes a category and all its messages from the database.
+     *
      * @param category The category to remove.
      */
     private void deleteCategory(ForumCategory category) {
@@ -169,7 +192,9 @@ public class ForumCategoriesActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(ForumCategoriesActivity.this, "שגיאה במחיקת הקטגוריה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(ForumCategoriesActivity.this, "שגיאה במחיקת הקטגוריה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

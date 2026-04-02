@@ -148,4 +148,6 @@
     <string name="laster">מאוחר יותר</string>
     <string name="fall_detection_is_disabled">זיהוי נפילות אינו פעיל</string>
     <string name="click_here_to_activate_in_settings">לחץ כאן להפעלה בהגדרות</string>
+    <string name="vibration">רטט</string>
+    <string name="notifications">התראות</string>
 </resources>

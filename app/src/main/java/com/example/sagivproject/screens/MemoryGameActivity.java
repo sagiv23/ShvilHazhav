@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
@@ -14,6 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.bases.BaseActivity;
@@ -22,11 +24,13 @@ import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -45,9 +49,13 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapter.MemoryGameListener {
-    /** The time limit for each turn in milliseconds (15 seconds). */
+    /**
+     * The time limit for each turn in milliseconds (15 seconds).
+     */
     private static final long TURN_TIME_LIMIT = 15000;
-    /** The total time limit for the entire game in milliseconds (1.5 minutes). */
+    /**
+     * The total time limit for the entire game in milliseconds (1.5 minutes).
+     */
     private static final long TOTAL_GAME_TIME_LIMIT = 90000;
 
     private RecyclerView recyclerCards;
@@ -115,6 +123,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     /**
      * Displays the game conclusion dialog with the final result.
      * Triggers statistical updates in the database.
+     *
      * @param room The final state of the game session.
      */
     private void showGameEndDialog(GameRoom room) {
@@ -128,7 +137,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
         if ("draw".equals(winnerUid)) {
             message = "זה נגמר בתיקו!";
-        } else if (isWin) { message = "כל הכבוד! ניצחת והתווסף לך ניצחון!"; } else {
+        } else if (isWin) {
+            message = "כל הכבוד! ניצחת והתווסף לך ניצחון!";
+        } else {
             message = "הפעם הפסדת... לא נורא!";
         }
 
@@ -137,6 +148,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
     /**
      * Updates the scoreboard UI based on the current room state.
+     *
      * @param room Current game room data.
      */
     private void updateScoreUI(GameRoom room) {
@@ -149,6 +161,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     /**
      * Initializes the board by shuffling 6 pairs of random images.
      * Typically executed by the room host (Player 1).
+     *
      * @param room The room to configure.
      */
     private void setupGameBoard(GameRoom room) {
@@ -182,7 +195,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }
     }
 
-    /** Handler for card clicks. Validates move eligibility before processing selection. */
+    /**
+     * Handler for card clicks. Validates move eligibility before processing selection.
+     */
     @Override
     public void onCardClicked(Card card, int position) {
         if (currentRoom == null || localLock || !isMyTurn()) return;
@@ -190,11 +205,17 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         handleCardSelection(position);
     }
 
-    /** @return true if the local user is authorized to make a move. */
+    /**
+     * @return true if the local user is authorized to make a move.
+     */
     @Override
-    public boolean isMyTurn() { return currentRoom != null && user.getId().equals(currentRoom.getCurrentTurnUid()) && !currentRoom.isProcessingMatch(); }
+    public boolean isMyTurn() {
+        return currentRoom != null && user.getId().equals(currentRoom.getCurrentTurnUid()) && !currentRoom.isProcessingMatch();
+    }
 
-    /** Logic for selecting a card. Synchronizes revealed status with the database. */
+    /**
+     * Logic for selecting a card. Synchronizes revealed status with the database.
+     */
     private void handleCardSelection(int clickedIndex) {
         Integer firstIndex = currentRoom.getFirstSelectedCardIndex();
         if (firstIndex == null) {
@@ -209,7 +230,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }
     }
 
-    /** Compares two revealed cards and updates matches/turns accordingly. */
+    /**
+     * Compares two revealed cards and updates matches/turns accordingly.
+     */
     private void checkMatch(int idx1, int idx2) {
         List<Card> cards = currentRoom.getCards();
         Card c1 = cards.get(idx1);
@@ -241,7 +264,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }, 700);
     }
 
-    /** Scans the board to determine if all pairs have been found. */
+    /**
+     * Scans the board to determine if all pairs have been found.
+     */
     private void checkIfGameFinished() {
         if (currentRoom.getCards() == null) return;
         boolean allCardsMatched = true;
@@ -254,7 +279,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         if (allCardsMatched) finishGame(currentRoom);
     }
 
-    /** Marks the game as finished and identifies the winner based on final scores. */
+    /**
+     * Marks the game as finished and identifies the winner based on final scores.
+     */
     private void finishGame(GameRoom room) {
         if ("finished".equals(room.getStatus())) return;
         String winnerUid = calculateWinner(room);
@@ -262,7 +289,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         databaseService.getGameService().updateRoomField(roomId, "status", "finished");
     }
 
-    /** Establishes a persistent listener for the game room's database node. */
+    /**
+     * Establishes a persistent listener for the game room's database node.
+     */
     private void listenToGame() {
         databaseService.getGameService().listenToGame(roomId, new DatabaseCallback<>() {
             @Override
@@ -282,7 +311,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                         }
 
                         @Override
-                        public void onFailed(Exception e) { tvOpponentName.setText("משחק נגד: יריב"); }
+                        public void onFailed(Exception e) {
+                            tvOpponentName.setText("משחק נגד: יריב");
+                        }
                     });
                 }
                 updateScoreUI(room);
@@ -323,11 +354,15 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             }
 
             @Override
-            public void onFailed(Exception e) { goBack(); }
+            public void onFailed(Exception e) {
+                goBack();
+            }
         });
     }
 
-    /** Determines the winner UID or returns "draw". */
+    /**
+     * Determines the winner UID or returns "draw".
+     */
     private String calculateWinner(GameRoom room) {
         int p1 = room.getPlayer1Score();
         int p2 = room.getPlayer2Score();
@@ -336,12 +371,16 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         return "draw";
     }
 
-    /** Manages the countdown for the active player's turn. */
+    /**
+     * Manages the countdown for the active player's turn.
+     */
     private void startTurnTimer() {
         if (turnTimer != null) turnTimer.cancel();
         turnTimer = new CountDownTimer(TURN_TIME_LIMIT, 1000) {
             @Override
-            public void onTick(long millisUntilFinished) { tvTimer.setText(MessageFormat.format("זמן נותר: {0}", millisUntilFinished / 1000)); }
+            public void onTick(long millisUntilFinished) {
+                tvTimer.setText(MessageFormat.format("זמן נותר: {0}", millisUntilFinished / 1000));
+            }
 
             @Override
             public void onFinish() {
@@ -355,7 +394,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }.start();
     }
 
-    /** Manages the countdown for the total game time. */
+    /**
+     * Manages the countdown for the total game time.
+     */
     private void startTotalGameTimer() {
         if (totalGameTimer != null) totalGameTimer.cancel();
         totalGameTimer = new CountDownTimer(TOTAL_GAME_TIME_LIMIT, 1000) {
@@ -374,7 +415,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         }.start();
     }
 
-    /** Returns the user to the game matchmaking screen. */
+    /**
+     * Returns the user to the game matchmaking screen.
+     */
     private void goBack() {
         Intent intent = new Intent(this, GameHomeScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

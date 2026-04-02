@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.EmergencyContactsAdapter;
 import com.example.sagivproject.bases.BaseActivity;
@@ -29,9 +31,12 @@ import com.example.sagivproject.services.IFallDetectionService;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
+
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -51,7 +56,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class EmergencyContactsActivity extends BaseActivity {
-    /** Service for background fall monitoring. */
+    /**
+     * Service for background fall monitoring.
+     */
     @Inject
     protected IFallDetectionService fallDetectionService;
 
@@ -60,7 +67,9 @@ public class EmergencyContactsActivity extends BaseActivity {
     private View cardFallDetectionReminder;
     private User user;
 
-    /** Launcher for the system contact picker. */
+    /**
+     * Launcher for the system contact picker.
+     */
     private final ActivityResultLauncher<Void> contactPickerLauncher =
             registerForActivityResult(new ActivityResultContracts.PickContact(), uri -> {
                 if (uri != null) {
@@ -68,7 +77,9 @@ public class EmergencyContactsActivity extends BaseActivity {
                 }
             });
 
-    /** Client for retrieving device location coordinates. */
+    /**
+     * Client for retrieving device location coordinates.
+     */
     private FusedLocationProviderClient fusedLocationClient;
 
     @Override
@@ -125,7 +136,9 @@ public class EmergencyContactsActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show(); }
+                        public void onFailed(Exception e) {
+                            Toast.makeText(EmergencyContactsActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
+                        }
                     });
                 });
             }
@@ -140,7 +153,9 @@ public class EmergencyContactsActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה במחיקת איש הקשר", Toast.LENGTH_SHORT).show(); }
+                    public void onFailed(Exception e) {
+                        Toast.makeText(EmergencyContactsActivity.this, "שגיאה במחיקת איש הקשר", Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         });
@@ -152,16 +167,21 @@ public class EmergencyContactsActivity extends BaseActivity {
 
     /**
      * Handles permission results for SMS sending and contact reading.
+     *
      * @param isGranted Map of permissions and their results.
      */
     @Override
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
         if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.SEND_SMS))) {
             fetchLocationAndSendSms();
-        } else if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_CONTACTS))) { contactPickerLauncher.launch(null); }
+        } else if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_CONTACTS))) {
+            contactPickerLauncher.launch(null);
+        }
     }
 
-    /** Refreshes the visibility of the fall detection prompt based on user settings. */
+    /**
+     * Refreshes the visibility of the fall detection prompt based on user settings.
+     */
     private void updateFallDetectionUI() {
         if (sharedPreferencesUtil.isFallDetectionEnabled()) {
             cardFallDetectionReminder.setVisibility(View.GONE);
@@ -177,7 +197,9 @@ public class EmergencyContactsActivity extends BaseActivity {
         updateFallDetectionUI();
     }
 
-    /** Fetches the latest user profile from the database to ensure UI consistency. */
+    /**
+     * Fetches the latest user profile from the database to ensure UI consistency.
+     */
     private void loadUserFromDatabase() {
         if (user == null) return;
         databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
@@ -191,7 +213,9 @@ public class EmergencyContactsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -216,11 +240,15 @@ public class EmergencyContactsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    /** Logic for adding a new contact record. */
+    /**
+     * Logic for adding a new contact record.
+     */
     private void addEmergencyContact(String firstName, String lastName, String phoneNumber) {
         databaseService.getEmergencyService().addContact(user.getId(), firstName, lastName, phoneNumber, new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -230,12 +258,15 @@ public class EmergencyContactsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     /**
      * Extracts details from a URI returned by the contact picker and creates a new record.
+     *
      * @param contactUri The selected contact's URI.
      */
     private void retrieveContactDetails(Uri contactUri) {
@@ -260,6 +291,7 @@ public class EmergencyContactsActivity extends BaseActivity {
 
     /**
      * Queries the system contacts database for a specific contact's phone number.
+     *
      * @param contactId Unique ID of the contact.
      * @return Formatted phone number or null.
      */
@@ -278,7 +310,9 @@ public class EmergencyContactsActivity extends BaseActivity {
         return phone;
     }
 
-    /** Checks for SMS and high-accuracy location permissions before triggering an alert. */
+    /**
+     * Checks for SMS and high-accuracy location permissions before triggering an alert.
+     */
     private void checkSmsAndLocationPermissions() {
         requestPermissions(
                 Manifest.permission.SEND_SMS,
@@ -287,7 +321,9 @@ public class EmergencyContactsActivity extends BaseActivity {
         );
     }
 
-    /** Fetches coordinates and proceeds to broadcast the SOS message. */
+    /**
+     * Fetches coordinates and proceeds to broadcast the SOS message.
+     */
     private void fetchLocationAndSendSms() {
         try {
             fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
@@ -306,6 +342,7 @@ public class EmergencyContactsActivity extends BaseActivity {
 
     /**
      * Orchestrates the final SMS transmission via the emergency service.
+     *
      * @param locationUrl Optional Google Maps link.
      */
     private void sendSmsToAll(@Nullable String locationUrl) {
@@ -314,19 +351,28 @@ public class EmergencyContactsActivity extends BaseActivity {
             public void onCompleted(List<EmergencyContact> contacts) {
                 databaseService.getEmergencyService().sendEmergencyAlert(EmergencyContactsActivity.this, contacts, locationUrl, new IDatabaseService.DatabaseCallback<>() {
                     @Override
-                    public void onCompleted(Void object) { Toast.makeText(EmergencyContactsActivity.this, "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show(); }
+                    public void onCompleted(Void object) {
+                        Toast.makeText(EmergencyContactsActivity.this, "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show();
+                        vibrateDevice();
+                    }
 
                     @Override
-                    public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show(); }
+                    public void onFailed(Exception e) {
+                        Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר לשליחת SMS", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר לשליחת SMS", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    /** Launches the system dialer with the emergency number pre-filled. */
+    /**
+     * Launches the system dialer with the emergency number pre-filled.
+     */
     private void callEmergency() {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:109"));

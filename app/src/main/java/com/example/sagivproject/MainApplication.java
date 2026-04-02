@@ -1,6 +1,7 @@
 package com.example.sagivproject;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.hilt.work.HiltWorkerFactory;
@@ -10,11 +11,15 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
 import com.example.sagivproject.services.notifications.DailyCheckWorker;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.HiltAndroidApp;
 
 /**
@@ -32,11 +37,15 @@ import dagger.hilt.android.HiltAndroidApp;
 @HiltAndroidApp
 public class MainApplication extends Application implements Configuration.Provider {
 
-    /** Factory for creating Hilt-injected WorkManager workers. */
+    /**
+     * Factory for creating Hilt-injected WorkManager workers.
+     */
     @Inject
     HiltWorkerFactory workerFactory;
 
-    /** Utility for accessing persistent application preferences. */
+    /**
+     * Utility for accessing persistent application preferences.
+     */
     @Inject
     SharedPreferencesUtil sharedPreferencesUtil;
 
@@ -53,6 +62,7 @@ public class MainApplication extends Application implements Configuration.Provid
     /**
      * Provides the WorkManager configuration to the system.
      * This implementation enables Hilt injection for {@link androidx.work.ListenableWorker} subclasses.
+     *
      * @return A custom {@link Configuration} instance containing the Hilt worker factory.
      */
     @NonNull

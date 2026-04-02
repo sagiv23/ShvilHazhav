@@ -5,15 +5,20 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.Validator;
+
 import java.util.Objects;
 import java.util.function.Predicate;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -26,30 +31,43 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class AddUserDialog extends DialogFragment {
-    /** Utility for validating user input data. */
+    /**
+     * Utility for validating user input data.
+     */
     @Inject
     Validator validator;
 
-    /** Utility for displaying a standardized date picker. */
+    /**
+     * Utility for displaying a standardized date picker.
+     */
     @Inject
     CalendarUtil calendarUtil;
 
-    /** The selected birthdate in milliseconds. */
+    /**
+     * The selected birthdate in milliseconds.
+     */
     private long birthDateMillis = -1;
 
-    /** Listener for returning the new user data to the caller. */
+    /**
+     * Listener for returning the new user data to the caller.
+     */
     private AddUserDialogListener listener;
 
-    /** Constructs a new AddUserDialog. */
+    /**
+     * Constructs a new AddUserDialog.
+     */
     @Inject
     public AddUserDialog() {
     }
 
     /**
      * Sets the submission listener.
+     *
      * @param listener The {@link AddUserDialogListener} implementation.
      */
-    public void setListener(AddUserDialogListener listener) { this.listener = listener; }
+    public void setListener(AddUserDialogListener listener) {
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
@@ -93,6 +111,7 @@ public class AddUserDialog extends DialogFragment {
 
     /**
      * Validates all required fields in the addition form.
+     *
      * @return true if all data is formally valid.
      */
     private boolean areAllFieldsValid(String fName, String lName, String email, String password, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passwordEdt, EditText birthDateEdt) {
@@ -108,7 +127,9 @@ public class AddUserDialog extends DialogFragment {
                 isFieldValid(passwordEdt, validator::isPasswordNotValid, "הסיסמה קצרה מדי");
     }
 
-    /** Helper to validate a specific field and provide visual feedback on failure. */
+    /**
+     * Helper to validate a specific field and provide visual feedback on failure.
+     */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -118,15 +139,18 @@ public class AddUserDialog extends DialogFragment {
         return true;
     }
 
-    /** Interface for communicating user creation events. */
+    /**
+     * Interface for communicating user creation events.
+     */
     public interface AddUserDialogListener {
         /**
          * Called when the administrator submits a valid user profile.
-         * @param fName First name.
-         * @param lName Last name.
+         *
+         * @param fName           First name.
+         * @param lName           Last name.
          * @param birthDateMillis Birthdate in ms.
-         * @param email Email address.
-         * @param password Account password.
+         * @param email           Email address.
+         * @param password        Account password.
          */
         void onAddUser(String fName, String lName, long birthDateMillis, String email, String password);
     }

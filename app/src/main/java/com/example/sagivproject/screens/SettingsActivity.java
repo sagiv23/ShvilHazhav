@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.EmergencyContact;
@@ -21,10 +23,13 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IFallDetectionService;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -37,7 +42,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class SettingsActivity extends BaseActivity {
-    /** Service for starting and stopping background movement monitoring. */
+    /**
+     * Service for starting and stopping background movement monitoring.
+     */
     @Inject
     protected IFallDetectionService fallDetectionService;
 
@@ -58,6 +65,8 @@ public class SettingsActivity extends BaseActivity {
 
         Button btnLogout = findViewById(R.id.btn_logout);
         SwitchMaterial switchDarkMode = findViewById(R.id.switch_dark_mode);
+        SwitchMaterial switchVibration = findViewById(R.id.switch_vibration);
+        SwitchMaterial switchNotifications = findViewById(R.id.switch_notifications);
         switchFallDetection = findViewById(R.id.switch_fall_detection);
         View separatorLogout = findViewById(R.id.separator_logout);
         View separatorFallDetection = findViewById(R.id.separator_fall_detection);
@@ -87,6 +96,12 @@ public class SettingsActivity extends BaseActivity {
             AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
             updateDarkModeText(switchDarkMode, isChecked);
         });
+
+        switchVibration.setChecked(sharedPreferencesUtil.isVibrationEnabled());
+        switchVibration.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferencesUtil.setVibrationEnabled(isChecked));
+
+        switchNotifications.setChecked(sharedPreferencesUtil.isNotificationsEnabled());
+        switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferencesUtil.setNotificationsEnabled(isChecked));
 
         boolean isFallDetectionEnabled = sharedPreferencesUtil.isFallDetectionEnabled();
         switchFallDetection.setChecked(isFallDetectionEnabled);
@@ -147,6 +162,7 @@ public class SettingsActivity extends BaseActivity {
 
     /**
      * Processes the results of the permission request specifically for fall detection.
+     *
      * @param isGranted Map of permissions and their grant status.
      */
     @Override
@@ -168,14 +184,18 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
-    /** Disables the fall detection background service and updates preferences. */
+    /**
+     * Disables the fall detection background service and updates preferences.
+     */
     private void disableFallDetection() {
         sharedPreferencesUtil.setFallDetectionEnabled(false);
         fallDetectionService.stopMonitoring();
         Toast.makeText(this, "זיהוי נפילות הופסק", Toast.LENGTH_SHORT).show();
     }
 
-    /** Final validation step before enabling fall detection: ensures the user has at least one emergency contact. */
+    /**
+     * Final validation step before enabling fall detection: ensures the user has at least one emergency contact.
+     */
     private void checkContactsAndEnableFallDetection() {
         User user = sharedPreferencesUtil.getUser();
         if (user == null) return;
@@ -204,12 +224,17 @@ public class SettingsActivity extends BaseActivity {
 
     /**
      * Updates the text label of the Dark Mode switch.
+     *
      * @param switchDarkMode The switch component.
-     * @param isDarkMode Current dark mode state.
+     * @param isDarkMode     Current dark mode state.
      */
-    private void updateDarkModeText(SwitchMaterial switchDarkMode, boolean isDarkMode) { switchDarkMode.setText(isDarkMode ? R.string.bright_mode : R.string.dark_mode); }
+    private void updateDarkModeText(SwitchMaterial switchDarkMode, boolean isDarkMode) {
+        switchDarkMode.setText(isDarkMode ? R.string.bright_mode : R.string.dark_mode);
+    }
 
-    /** Logs the current user out after a confirmation dialog. */
+    /**
+     * Logs the current user out after a confirmation dialog.
+     */
     private void logout() {
         Runnable onConfirm = () -> {
             fallDetectionService.stopMonitoring();

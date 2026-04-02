@@ -1,6 +1,7 @@
 package com.example.sagivproject.models;
 
 import com.example.sagivproject.ui.SimpleXYGraphView;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -22,12 +23,13 @@ public class GraphData implements Idable {
 
     /**
      * Constructs a new GraphData object.
-     * @param id The unique identifier for the graph.
-     * @param title The title displayed at the top of the graph.
-     * @param points The list of data points (X, Y) to be plotted.
+     *
+     * @param id      The unique identifier for the graph.
+     * @param title   The title displayed at the top of the graph.
+     * @param points  The list of data points (X, Y) to be plotted.
      * @param xLabels Labels for the X-axis (e.g., dates).
-     * @param labelX The name or unit of the X-axis.
-     * @param labelY The name or unit of the Y-axis.
+     * @param labelX  The name or unit of the X-axis.
+     * @param labelY  The name or unit of the Y-axis.
      */
     public GraphData(String id, String title, List<SimpleXYGraphView.Point> points, List<String> xLabels, String labelX, String labelY) {
         this.id = id;
@@ -39,27 +41,49 @@ public class GraphData implements Idable {
     }
 
     @Override
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
     @Override
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    /** @return The title of the graph. */
-    public String getTitle() { return title; }
+    /**
+     * @return The title of the graph.
+     */
+    public String getTitle() {
+        return title;
+    }
 
-    /** @return The list of XY points to plot. */
+    /**
+     * @return The list of XY points to plot.
+     */
     public List<SimpleXYGraphView.Point> getPoints() {
         return points;
     }
 
-    /** @return The list of labels for the X-axis markers. */
-    public List<String> getXLabels() { return xLabels; }
+    /**
+     * @return The list of labels for the X-axis markers.
+     */
+    public List<String> getXLabels() {
+        return xLabels;
+    }
 
-    /** @return The X-axis descriptive label. */
-    public String getLabelX() { return labelX; }
+    /**
+     * @return The X-axis descriptive label.
+     */
+    public String getLabelX() {
+        return labelX;
+    }
 
-    /** @return The Y-axis descriptive label. */
-    public String getLabelY() { return labelY; }
+    /**
+     * @return The Y-axis descriptive label.
+     */
+    public String getLabelY() {
+        return labelY;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -70,5 +94,7 @@ public class GraphData implements Idable {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(id, title); }
+    public int hashCode() {
+        return Objects.hash(id, title);
+    }
 }

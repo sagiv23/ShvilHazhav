@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
@@ -26,10 +28,13 @@ import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -48,7 +53,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class DetailsAboutUserActivity extends BaseActivity {
-    /** Utility for handling image conversions and loading. */
+    /**
+     * Utility for handling image conversions and loading.
+     */
     @Inject
     protected ImageUtil imageUtil;
 
@@ -56,10 +63,14 @@ public class DetailsAboutUserActivity extends BaseActivity {
     private ImageView imgUserProfile;
     private User user;
 
-    /** Launcher for the modern Android Photo Picker. */
+    /**
+     * Launcher for the modern Android Photo Picker.
+     */
     private ActivityResultLauncher<PickVisualMediaRequest> photoPickerLauncher;
 
-    /** Launcher for capturing a temporary bitmap from the camera. */
+    /**
+     * Launcher for capturing a temporary bitmap from the camera.
+     */
     private ActivityResultLauncher<Void> cameraLauncher;
 
     @Override
@@ -99,7 +110,9 @@ public class DetailsAboutUserActivity extends BaseActivity {
         loadUserDetailsToUI();
     }
 
-    /** Initializes activity result launchers for camera and gallery interactions. */
+    /**
+     * Initializes activity result launchers for camera and gallery interactions.
+     */
     private void setupLaunchers() {
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.TakePicturePreview(),
@@ -129,6 +142,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
 
     /**
      * Handles the results of permission requests, specifically for the camera.
+     *
      * @param isGranted Map of requested permissions and their granted status.
      */
     @Override
@@ -140,14 +154,18 @@ public class DetailsAboutUserActivity extends BaseActivity {
         }
     }
 
-    /** Refreshes user data from the database whenever the activity resumes. */
+    /**
+     * Refreshes user data from the database whenever the activity resumes.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         loadUserFromDatabase();
     }
 
-    /** Fetches the latest user profile from the database to ensure UI consistency. */
+    /**
+     * Fetches the latest user profile from the database to ensure UI consistency.
+     */
     private void loadUserFromDatabase() {
         if (user == null) return;
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
@@ -161,11 +179,15 @@ public class DetailsAboutUserActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    /** Populates UI components with the current user's data. */
+    /**
+     * Populates UI components with the current user's data.
+     */
     private void loadUserDetailsToUI() {
         if (user == null) {
             return;
@@ -194,7 +216,9 @@ public class DetailsAboutUserActivity extends BaseActivity {
         txtBirthDate.setText(birthDate);
     }
 
-    /** Displays the dialog for editing user profile details. */
+    /**
+     * Displays the dialog for editing user profile details.
+     */
     private void openEditDialog() {
         dialogService.showEditUserDialog(getSupportFragmentManager(), user, (fName, lName, birthDate, email, password) ->
                 databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
@@ -207,11 +231,15 @@ public class DetailsAboutUserActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onError(String message) { Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show(); }
+                    public void onError(String message) {
+                        Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
                 }));
     }
 
-    /** Displays the image picker dialog to choose between camera, gallery, or deletion. */
+    /**
+     * Displays the image picker dialog to choose between camera, gallery, or deletion.
+     */
     private void openImagePicker() {
         boolean hasImage = user.getProfileImage() != null && !user.getProfileImage().isEmpty();
 
@@ -235,11 +263,15 @@ public class DetailsAboutUserActivity extends BaseActivity {
             }
 
             @Override
-            public void onDelete() { deleteProfileImage(); }
+            public void onDelete() {
+                deleteProfileImage();
+            }
         });
     }
 
-    /** Removes the profile image from the user's account. */
+    /**
+     * Removes the profile image from the user's account.
+     */
     private void deleteProfileImage() {
         user.setProfileImage(null);
         imgUserProfile.setImageResource(R.drawable.ic_user);
@@ -252,12 +284,15 @@ public class DetailsAboutUserActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(DetailsAboutUserActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     /**
      * Processes a new image bitmap, converts it to Base64, and updates the profile.
+     *
      * @param bitmap The new image bitmap.
      */
     private void handleImageBitmap(Bitmap bitmap) {
@@ -267,7 +302,9 @@ public class DetailsAboutUserActivity extends BaseActivity {
         saveProfileImage();
     }
 
-    /** Commits the updated profile image string to the database. */
+    /**
+     * Commits the updated profile image string to the database.
+     */
     private void saveProfileImage() {
         databaseService.getUserService().updateUser(user, new DatabaseCallback<>() {
             @Override
@@ -277,7 +314,9 @@ public class DetailsAboutUserActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה: " + e.getMessage(), Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

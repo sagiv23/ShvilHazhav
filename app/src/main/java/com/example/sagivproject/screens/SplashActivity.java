@@ -2,15 +2,18 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -24,7 +27,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class SplashActivity extends BaseActivity {
-    /** The duration for which the splash screen is displayed, in milliseconds. */
+    /**
+     * The duration for which the splash screen is displayed, in milliseconds.
+     */
     private static final long SPLASH_DELAY = 3000;
 
     @Override
@@ -90,7 +95,9 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
-    /** Navigates to the landing screen and passes a flag to trigger the entry animation. */
+    /**
+     * Navigates to the landing screen and passes a flag to trigger the entry animation.
+     */
     private void navigateToLandingWithAnimation() {
         Intent intent = new Intent(this, LandingActivity.class);
         intent.putExtra("shouldAnimate", true);

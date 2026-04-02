@@ -2,6 +2,7 @@ package com.example.sagivproject.services.impl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
@@ -12,11 +13,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.inject.Inject;
 
 /**
@@ -34,6 +37,7 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
 
     /**
      * Constructs a new ForumServiceImpl.
+     *
      * @param userService The service used to fetch sender details.
      */
     @Inject
@@ -49,10 +53,11 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
      * only the persistent fields (id, message, timestamp, userId). This prevents dynamic fields
      * like {@code senderName} from being saved to the database without needing {@code @Exclude} in the model.
      * </p>
-     * @param user The user sending the message.
-     * @param text The content of the message.
+     *
+     * @param user       The user sending the message.
+     * @param text       The content of the message.
      * @param categoryId The ID of the category to which the message will be posted.
-     * @param callback An optional callback to be invoked upon completion.
+     * @param callback   An optional callback to be invoked upon completion.
      */
     @Override
     public void sendMessage(User user, String text, String categoryId, @Nullable DatabaseCallback<Void> callback) {
@@ -82,8 +87,9 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
      * The callback is triggered only once all sender details have been successfully mapped,
      * using {@link AtomicInteger} to synchronize the asynchronous calls.
      * </p>
+     *
      * @param categoryId The ID of the category to listen to.
-     * @param callback A callback that will be invoked with the updated list of messages.
+     * @param callback   A callback that will be invoked with the updated list of messages.
      */
     @Override
     public void listenToMessages(String categoryId, DatabaseCallback<List<ForumMessage>> callback) {
@@ -129,30 +135,41 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { if (callback != null) callback.onFailed(error.toException()); }
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (callback != null) callback.onFailed(error.toException());
+            }
         });
     }
 
     /**
      * Deletes a specific message from a forum category.
-     * @param messageId The ID of the message to delete.
+     *
+     * @param messageId  The ID of the message to delete.
      * @param categoryId The ID of the category containing the message.
-     * @param callback An optional callback to be invoked upon completion.
+     * @param callback   An optional callback to be invoked upon completion.
      */
     @Override
-    public void deleteMessage(@NonNull String messageId, String categoryId, @Nullable DatabaseCallback<Void> callback) { deleteData(getCategoryPath(categoryId) + "/" + messageId, callback); }
+    public void deleteMessage(@NonNull String messageId, String categoryId, @Nullable DatabaseCallback<Void> callback) {
+        deleteData(getCategoryPath(categoryId) + "/" + messageId, callback);
+    }
 
     /**
      * Helper to construct the database path for a category's messages.
+     *
      * @param categoryId The unique ID of the forum category.
      * @return The full database path string.
      */
-    private String getCategoryPath(String categoryId) { return FORUM_PATH + "/" + categoryId + "/messages"; }
+    private String getCategoryPath(String categoryId) {
+        return FORUM_PATH + "/" + categoryId + "/messages";
+    }
 
     /**
      * Helper to get a DatabaseReference for a category's messages.
+     *
      * @param categoryId The unique ID of the forum category.
      * @return A DatabaseReference pointing to the messages sub-node.
      */
-    private DatabaseReference getCategoryMessagesRef(String categoryId) { return databaseReference.child(getCategoryPath(categoryId)); }
+    private DatabaseReference getCategoryMessagesRef(String categoryId) {
+        return databaseReference.child(getCategoryPath(categoryId));
+    }
 }

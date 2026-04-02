@@ -8,12 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
@@ -21,11 +23,13 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.Operation;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.google.android.material.card.MaterialCardView;
+
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -43,7 +47,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MathProblemsActivity extends BaseActivity {
-    /** Buffer for current user-entered answer string. */
+    /**
+     * Buffer for current user-entered answer string.
+     */
     private final StringBuilder userInput = new StringBuilder();
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -52,7 +58,9 @@ public class MathProblemsActivity extends BaseActivity {
     private TextView tvQuestion, tvAnswer;
     private MaterialCardView cvAnswerContainer;
 
-    /** The correct answer for the current active problem. */
+    /**
+     * The correct answer for the current active problem.
+     */
     private int correctAnswer;
 
     @Override
@@ -81,7 +89,9 @@ public class MathProblemsActivity extends BaseActivity {
         setupKeypad();
     }
 
-    /** Refreshes the user's daily statistics from the database to ensure the UI is current. */
+    /**
+     * Refreshes the user's daily statistics from the database to ensure the UI is current.
+     */
     private void fetchLatestStats() {
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
             @Override
@@ -94,11 +104,15 @@ public class MathProblemsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { updateStatsUI(); }
+            public void onFailed(Exception e) {
+                updateStatsUI();
+            }
         });
     }
 
-    /** Updates the text views displaying the count of correct and incorrect answers for today. */
+    /**
+     * Updates the text views displaying the count of correct and incorrect answers for today.
+     */
     private void updateStatsUI() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DailyStats stats = user.getDailyStats().get(today);
@@ -160,13 +174,18 @@ public class MathProblemsActivity extends BaseActivity {
 
     /**
      * Generates a random integer within a specified range.
+     *
      * @param min Minimum value (inclusive).
      * @param max Maximum value (inclusive).
      * @return A random integer.
      */
-    private int rand(int min, int max) { return min + (int) (Math.random() * (max - min + 1)); }
+    private int rand(int min, int max) {
+        return min + (int) (Math.random() * (max - min + 1));
+    }
 
-    /** Initializes the numeric keypad by attaching click listeners to all digit buttons. */
+    /**
+     * Initializes the numeric keypad by attaching click listeners to all digit buttons.
+     */
     private void setupKeypad() {
         GridLayout keypad = findViewById(R.id.keypad_MathProblemsPage);
         for (int i = 0; i < keypad.getChildCount(); i++) {
@@ -187,7 +206,9 @@ public class MathProblemsActivity extends BaseActivity {
         findViewById(R.id.btn_MathProblemsPage_submit).setOnClickListener(v -> checkAnswer());
     }
 
-    /** Removes the last digit from the user's current input. */
+    /**
+     * Removes the last digit from the user's current input.
+     */
     private void deleteLast() {
         if (userInput.length() > 0) {
             userInput.deleteCharAt(userInput.length() - 1);
@@ -195,7 +216,9 @@ public class MathProblemsActivity extends BaseActivity {
         }
     }
 
-    /** Resets the user's current input buffer. */
+    /**
+     * Resets the user's current input buffer.
+     */
     private void clearInput() {
         userInput.setLength(0);
         tvAnswer.setText("");
@@ -227,6 +250,7 @@ public class MathProblemsActivity extends BaseActivity {
 
     /**
      * Retrieves the daily statistics for today, creating a new entry if necessary.
+     *
      * @param date Today's date string.
      * @return The {@link DailyStats} object for the current date.
      */
@@ -240,6 +264,7 @@ public class MathProblemsActivity extends BaseActivity {
 
     /**
      * Animates the answer container to provide feedback on the answer correctness.
+     *
      * @param isCorrect true if the user's answer was right.
      */
     private void showFeedback(boolean isCorrect) {

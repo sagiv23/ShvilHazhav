@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -23,6 +24,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationImagesTableAdapter;
 import com.example.sagivproject.bases.BaseActivity;
@@ -30,12 +32,15 @@ import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.textfield.TextInputEditText;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -54,10 +59,14 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MedicationImagesTableActivity extends BaseActivity {
-    /** Cached list of all images currently in the database. */
+    /**
+     * Cached list of all images currently in the database.
+     */
     private final List<ImageData> allImages = new ArrayList<>();
 
-    /** Utility for image decoding and Base64 conversion. */
+    /**
+     * Utility for image decoding and Base64 conversion.
+     */
     @Inject
     protected ImageUtil imageUtil;
 
@@ -84,7 +93,9 @@ public class MedicationImagesTableActivity extends BaseActivity {
         adapter = adapterService.getMedicationImagesTableAdapter();
         adapter.setListener(new MedicationImagesTableAdapter.OnImageActionListener() {
             @Override
-            public void onDeleteImage(ImageData image) { deleteImageAndReorder(image); }
+            public void onDeleteImage(ImageData image) {
+                deleteImageAndReorder(image);
+            }
 
             @Override
             public void onImageClicked(ImageData image, ImageView imageView) {
@@ -106,7 +117,9 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { filterImages(s.toString()); }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterImages(s.toString());
+            }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -120,7 +133,9 @@ public class MedicationImagesTableActivity extends BaseActivity {
         loadImages();
     }
 
-    /** Validates gallery access permissions before launching the photo picker. */
+    /**
+     * Validates gallery access permissions before launching the photo picker.
+     */
     private void checkGalleryPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openGallery();
@@ -129,7 +144,9 @@ public class MedicationImagesTableActivity extends BaseActivity {
         }
     }
 
-    /** Launches the system photo picker. */
+    /**
+     * Launches the system photo picker.
+     */
     private void openGallery() {
         photoPickerLauncher.launch(new PickVisualMediaRequest.Builder()
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
@@ -144,7 +161,9 @@ public class MedicationImagesTableActivity extends BaseActivity {
         }
     }
 
-    /** Synchronizes the local image cache with the Firebase database. */
+    /**
+     * Synchronizes the local image cache with the Firebase database.
+     */
     private void loadImages() {
         databaseService.getImageService().getAllImages(new DatabaseCallback<>() {
             @Override
@@ -155,12 +174,15 @@ public class MedicationImagesTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     /**
      * Filters the grid display based on the user's ID search query.
+     *
      * @param query The search text.
      */
     private void filterImages(String query) {
@@ -175,6 +197,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
     /**
      * Decodes a selected image URI, converts it to Base64, and saves it as a new card record.
+     *
      * @param uri The URI of the selected image.
      */
     private void uploadImage(Uri uri) {
@@ -196,7 +219,9 @@ public class MedicationImagesTableActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) { Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show(); }
+                    public void onFailed(Exception e) {
+                        Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         } catch (IOException ignored) {
@@ -206,6 +231,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
     /**
      * Deletes an image from the database and triggers a batch update to re-index IDs.
+     *
      * @param imageToDelete The image object to remove.
      */
     private void deleteImageAndReorder(ImageData imageToDelete) {
@@ -218,11 +244,15 @@ public class MedicationImagesTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(MedicationImagesTableActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationImagesTableActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    /** Re-assigns sequential IDs (card1, card2, etc.) to all remaining images and syncs with the database. */
+    /**
+     * Re-assigns sequential IDs (card1, card2, etc.) to all remaining images and syncs with the database.
+     */
     private void reorderImages() {
         for (int i = 0; i < allImages.size(); i++)
             allImages.get(i).setId("card" + (i + 1));
@@ -235,7 +265,9 @@ public class MedicationImagesTableActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בעדכון הרשימה", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בעדכון הרשימה", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

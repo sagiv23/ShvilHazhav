@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.example.sagivproject.R;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -21,7 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class LoggedInMenuFragment extends Fragment {
-    /** Listener for handling navigation events in the host activity. */
+    /**
+     * Listener for handling navigation events in the host activity.
+     */
     private MenuNavigationListener navigationListener;
 
     /**
@@ -29,6 +34,7 @@ public class LoggedInMenuFragment extends Fragment {
      * <p>
      * Ensures the host context implements {@link MenuNavigationListener} for decoupled communication.
      * </p>
+     *
      * @param context The host context (Activity).
      * @throws RuntimeException If the context does not implement the required listener interface.
      */
@@ -44,8 +50,9 @@ public class LoggedInMenuFragment extends Fragment {
 
     /**
      * Initializes the fragment's UI view and sets up navigation buttons.
-     * @param inflater The LayoutInflater object to inflate views.
-     * @param container The parent view that the fragment's UI should be attached to.
+     *
+     * @param inflater           The LayoutInflater object to inflate views.
+     * @param container          The parent view that the fragment's UI should be attached to.
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous state.
      * @return The View for the fragment's UI.
      */
@@ -64,8 +71,9 @@ public class LoggedInMenuFragment extends Fragment {
 
     /**
      * Helper to set up a navigation button with a click listener.
-     * @param root The root view containing the button.
-     * @param buttonId The resource ID of the button.
+     *
+     * @param root          The root view containing the button.
+     * @param buttonId      The resource ID of the button.
      * @param destinationId The navigation destination ID.
      */
     private void setupNavigationButton(View root, int buttonId, int destinationId) {

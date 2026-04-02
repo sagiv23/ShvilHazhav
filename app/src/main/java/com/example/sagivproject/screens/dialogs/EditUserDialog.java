@@ -5,17 +5,22 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.BundleCompat;
 import androidx.fragment.app.DialogFragment;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.Validator;
+
 import java.util.Objects;
 import java.util.function.Predicate;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -30,11 +35,15 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class EditUserDialog extends DialogFragment {
     private static final String ARG_USER = "arg_user";
 
-    /** Utility for validating user input. */
+    /**
+     * Utility for validating user input.
+     */
     @Inject
     Validator validator;
 
-    /** Utility for date formatting and picking. */
+    /**
+     * Utility for date formatting and picking.
+     */
     @Inject
     CalendarUtil calendarUtil;
 
@@ -42,14 +51,17 @@ public class EditUserDialog extends DialogFragment {
     private long birthDateMillis = -1;
     private EditUserDialogListener listener;
 
-    /** Constructs a new EditUserDialog. */
+    /**
+     * Constructs a new EditUserDialog.
+     */
     @Inject
     public EditUserDialog() {
     }
 
     /**
      * Sets the user data to be edited and the submission listener.
-     * @param user The {@link User} profile to edit.
+     *
+     * @param user     The {@link User} profile to edit.
      * @param listener The listener to handle the update action.
      */
     public void setData(User user, EditUserDialogListener listener) {
@@ -122,6 +134,7 @@ public class EditUserDialog extends DialogFragment {
 
     /**
      * Validates all input fields in the edit dialog.
+     *
      * @return true if all fields are valid.
      */
     private boolean areAllFieldsValid(String fName, String lName, String email, String pass, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passEdt, EditText birthDateEdt) {
@@ -137,7 +150,9 @@ public class EditUserDialog extends DialogFragment {
                 isFieldValid(passEdt, validator::isPasswordNotValid, "הסיסמה קצרה מדי");
     }
 
-    /** Helper to validate a single field and show feedback on error. */
+    /**
+     * Helper to validate a single field and show feedback on error.
+     */
     private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
         if (predicate.test(editText.getText().toString().trim())) {
             editText.requestFocus();
@@ -147,15 +162,18 @@ public class EditUserDialog extends DialogFragment {
         return true;
     }
 
-    /** Listener interface for profile update events. */
+    /**
+     * Listener interface for profile update events.
+     */
     public interface EditUserDialogListener {
         /**
          * Called when the user submits valid updated profile information.
-         * @param fName Updated first name.
-         * @param lName Updated last name.
+         *
+         * @param fName           Updated first name.
+         * @param lName           Updated last name.
          * @param birthDateMillis Updated birthdate.
-         * @param email Updated email address.
-         * @param password Updated password.
+         * @param email           Updated email address.
+         * @param password        Updated password.
          */
         void onUpdateUser(String fName, String lName, long birthDateMillis, String email, String password);
     }

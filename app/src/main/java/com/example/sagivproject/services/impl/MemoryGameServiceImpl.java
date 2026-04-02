@@ -1,8 +1,10 @@
 package com.example.sagivproject.services.impl;
 
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.DailyStats;
@@ -18,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.inject.Inject;
 
 /**
@@ -68,6 +72,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Constructs a new MemoryGameServiceImpl.
+     *
      * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      */
     @Inject
@@ -79,7 +84,8 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Uses a Firebase transaction to atomically find a waiting room or create a new one.
-     * @param user The user seeking a match.
+     *
+     * @param user     The user seeking a match.
      * @param callback Result callback.
      */
     @Override
@@ -120,7 +126,9 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             public void onComplete(DatabaseError error, boolean committed, DataSnapshot snapshot) {
                 if (error != null) {
                     callback.onFailed(error.toException());
-                } else if (!committed) { callback.onFailed(new Exception("שגיאה במציאת חדר.")); } else {
+                } else if (!committed) {
+                    callback.onFailed(new Exception("שגיאה במציאת חדר."));
+                } else {
                     GameRoom finalRoom = snapshot.child(roomIdForUser).getValue(GameRoom.class);
                     if (finalRoom != null) callback.onCompleted(finalRoom);
                     else callback.onFailed(new Exception("שגיאה בנתוני החדר."));
@@ -143,13 +151,16 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { callback.onFailed(error.toException()); }
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailed(error.toException());
+            }
         });
     }
 
     /**
      * Attaches a listener to track room status transitions (e.g. from waiting to playing).
-     * @param roomId Room ID.
+     *
+     * @param roomId   Room ID.
      * @param callback Status events handler.
      */
     @Override
@@ -168,7 +179,9 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { callback.onFailed(error.toException()); }
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailed(error.toException());
+            }
         };
         roomsReference.child(roomId).addValueEventListener(listener);
         roomStatusListeners.put(roomId, listener);
@@ -222,7 +235,8 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Sets up a real-time listener for the active game room state.
-     * @param roomId Room ID.
+     *
+     * @param roomId   Room ID.
      * @param callback Handler for state updates.
      */
     @Override
@@ -244,7 +258,9 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { callback.onFailed(error.toException()); }
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailed(error.toException());
+            }
         };
         roomsReference.child(roomId).addValueEventListener(activeGameListener);
     }
@@ -258,13 +274,16 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     }
 
     @Override
-    public void updateRoomField(String roomId, String field, Object value) { roomsReference.child(roomId).child(field).setValue(value); }
+    public void updateRoomField(String roomId, String field, Object value) {
+        roomsReference.child(roomId).child(field).setValue(value);
+    }
 
     /**
      * Atomic transaction to increment a player's score.
-     * @param roomId Room identifier.
+     *
+     * @param roomId    Room identifier.
      * @param playerUid Player to reward.
-     * @param callback Optional result callback.
+     * @param callback  Optional result callback.
      */
     @Override
     public void incrementScore(String roomId, String playerUid, @Nullable DatabaseCallback<Void> callback) {
@@ -301,11 +320,14 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     }
 
     @Override
-    public void setProcessing(String roomId, boolean isProcessing) { updateRoomField(roomId, FIELD_PROCESSING_MATCH, isProcessing); }
+    public void setProcessing(String roomId, boolean isProcessing) {
+        updateRoomField(roomId, FIELD_PROCESSING_MATCH, isProcessing);
+    }
 
     /**
      * Updates daily memory game stats for a user using an atomic transaction.
-     * @param uid User ID.
+     *
+     * @param uid   User ID.
      * @param isWin true if session was won.
      */
     @Override

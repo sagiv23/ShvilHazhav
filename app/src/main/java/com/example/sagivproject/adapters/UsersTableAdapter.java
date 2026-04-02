@@ -6,14 +6,18 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.ImageUtil;
+
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
 
 /**
@@ -36,15 +40,19 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
 
     /**
      * Constructs a new UsersTableAdapter.
+     *
      * @param imageUtil A utility class for loading and processing profile images.
      */
     @Inject
-    public UsersTableAdapter(ImageUtil imageUtil) { this.imageUtil = imageUtil; }
+    public UsersTableAdapter(ImageUtil imageUtil) {
+        this.imageUtil = imageUtil;
+    }
 
     /**
      * Initializes the adapter with state-specific data and a listener.
+     *
      * @param currentUser The currently logged-in administrator (used for self-protection logic).
-     * @param listener The {@link OnUserActionListener} to handle administrative events.
+     * @param listener    The {@link OnUserActionListener} to handle administrative events.
      */
     public void init(User currentUser, OnUserActionListener listener) {
         this.currentUser = currentUser;
@@ -53,9 +61,12 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
 
     /**
      * Updates the user list to be displayed in the table.
+     *
      * @param users The list of {@link User} objects.
      */
-    public void setUserList(List<User> users) { setData(users); }
+    public void setUserList(List<User> users) {
+        setData(users);
+    }
 
     @NonNull
     @Override
@@ -111,47 +122,62 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         });
     }
 
-    /** Interface for listening to administrative actions on user accounts. */
+    /**
+     * Interface for listening to administrative actions on user accounts.
+     */
     public interface OnUserActionListener {
         /**
          * Called when the administrative role toggle button is clicked.
+         *
          * @param user The {@link User} whose role is being modified.
          */
         void onToggleAdmin(User user);
 
         /**
          * Called when the user deletion button is clicked.
+         *
          * @param user The {@link User} account to be deleted.
          */
         void onDeleteUser(User user);
 
         /**
          * Called when a user row is long-clicked, typically for editing details.
+         *
          * @param user The {@link User} that was clicked.
          */
         void onUserClicked(User user);
 
         /**
          * Called when a user's profile image is clicked.
-         * @param user The {@link User} whose image was clicked.
+         *
+         * @param user      The {@link User} whose image was clicked.
          * @param imageView The {@link ImageView} containing the profile image.
          */
         void onUserImageClicked(User user, ImageView imageView);
     }
 
-    /** ViewHolder for user account table rows. */
+    /**
+     * ViewHolder for user account table rows.
+     */
     public static class UserViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /** TextViews for name, email, role status, and birthdate. */
+        /**
+         * TextViews for name, email, role status, and birthdate.
+         */
         final TextView txtUserFullName, txtUserEmail, txtUserIsAdmin, txtUserBirthDate;
 
-        /** Buttons for administrative actions. */
+        /**
+         * Buttons for administrative actions.
+         */
         final ImageButton btnDeleteUser, btnToggleAdmin;
 
-        /** ImageView for user profile picture. */
+        /**
+         * ImageView for user profile picture.
+         */
         final ImageView imgUserProfile;
 
         /**
          * Constructs a new UserViewHolder.
+         *
          * @param itemView The view representing a single user row.
          */
         public UserViewHolder(@NonNull View itemView) {

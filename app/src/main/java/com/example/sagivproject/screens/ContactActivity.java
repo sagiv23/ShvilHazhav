@@ -8,14 +8,17 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.google.android.material.button.MaterialButton;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -28,7 +31,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ContactActivity extends BaseActivity {
-    /** The duration required for a long press to trigger the secret navigation, in milliseconds. */
+    /**
+     * The duration required for a long press to trigger the secret navigation, in milliseconds.
+     */
     private static final int LONG_PRESS_DURATION = 3000;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -57,6 +62,7 @@ public class ContactActivity extends BaseActivity {
 
     /**
      * Configures a view to respond to a long press by revealing a secret UI component.
+     *
      * @param view The view to attach the secret navigation logic to.
      */
     private void setupSecretNavigation(View view) {
@@ -92,8 +98,9 @@ public class ContactActivity extends BaseActivity {
 
     /**
      * Helper to configure a button to open an external URL when clicked.
+     *
      * @param buttonId The resource ID of the MaterialButton.
-     * @param url The web address to navigate to.
+     * @param url      The web address to navigate to.
      */
     private void setupSocialButton(int buttonId, String url) {
         MaterialButton button = findViewById(buttonId);

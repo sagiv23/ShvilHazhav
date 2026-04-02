@@ -4,6 +4,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.TypefaceSpan;
+
 import androidx.annotation.NonNull;
 
 /**
@@ -19,8 +20,9 @@ public class CustomTypefaceSpan extends TypefaceSpan {
 
     /**
      * Constructs a new CustomTypefaceSpan.
+     *
      * @param family Unused family name string (inherited from superclass).
-     * @param type The custom {@link Typeface} to apply.
+     * @param type   The custom {@link Typeface} to apply.
      */
     public CustomTypefaceSpan(String family, Typeface type) {
         super(family);
@@ -29,8 +31,9 @@ public class CustomTypefaceSpan extends TypefaceSpan {
 
     /**
      * Applies the custom typeface to a Paint object while maintaining style flags.
+     *
      * @param paint The Paint object to modify.
-     * @param tf The typeface to apply.
+     * @param tf    The typeface to apply.
      */
     private static void applyCustomTypeFace(Paint paint, Typeface tf) {
         int oldStyle;
@@ -55,15 +58,21 @@ public class CustomTypefaceSpan extends TypefaceSpan {
 
     /**
      * Updates the draw state of the text.
+     *
      * @param ds The TextPaint used for drawing.
      */
     @Override
-    public void updateDrawState(@NonNull TextPaint ds) { applyCustomTypeFace(ds, newType); }
+    public void updateDrawState(@NonNull TextPaint ds) {
+        applyCustomTypeFace(ds, newType);
+    }
 
     /**
      * Updates the measurement state of the text (e.g., for calculating width).
+     *
      * @param paint The TextPaint used for measuring.
      */
     @Override
-    public void updateMeasureState(@NonNull TextPaint paint) { applyCustomTypeFace(paint, newType); }
+    public void updateMeasureState(@NonNull TextPaint paint) {
+        applyCustomTypeFace(paint, newType);
+    }
 }

@@ -4,13 +4,17 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.GraphData;
 import com.example.sagivproject.ui.SimpleXYGraphView;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.qualifiers.ActivityContext;
 
 /**
@@ -26,10 +30,13 @@ public class GraphAdapter extends BaseAdapter<GraphData, GraphAdapter.GraphViewH
 
     /**
      * Constructs a new GraphAdapter.
+     *
      * @param context The {@link ActivityContext} used for layout inflation and resources.
      */
     @Inject
-    public GraphAdapter(@ActivityContext Context context) { this.context = context; }
+    public GraphAdapter(@ActivityContext Context context) {
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -44,13 +51,18 @@ public class GraphAdapter extends BaseAdapter<GraphData, GraphAdapter.GraphViewH
         holder.graphView.setData(data.getPoints(), data.getXLabels(), data.getTitle(), data.getLabelX(), data.getLabelY());
     }
 
-    /** ViewHolder class for individual graph items. */
+    /**
+     * ViewHolder class for individual graph items.
+     */
     public static class GraphViewHolder extends RecyclerView.ViewHolder {
-        /** The custom view responsible for rendering the XY graph. */
+        /**
+         * The custom view responsible for rendering the XY graph.
+         */
         final SimpleXYGraphView graphView;
 
         /**
          * Constructs a new GraphViewHolder.
+         *
          * @param itemView The view representing a single graph container.
          */
         public GraphViewHolder(@NonNull View itemView) {

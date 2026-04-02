@@ -11,12 +11,14 @@ package com.example.sagivproject.models;
 public interface Idable {
     /**
      * Gets the unique identifier of the object.
+     *
      * @return The unique ID string.
      */
     String getId();
 
     /**
      * Sets the unique identifier of the object.
+     *
      * @param id The new unique ID string.
      */
     void setId(String id);

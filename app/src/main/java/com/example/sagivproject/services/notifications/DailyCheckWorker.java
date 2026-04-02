@@ -1,18 +1,22 @@
 package com.example.sagivproject.services.notifications;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.hilt.work.HiltWorker;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+
 import java.util.Calendar;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 
@@ -27,21 +31,28 @@ import dagger.assisted.AssistedInject;
  */
 @HiltWorker
 public class DailyCheckWorker extends Worker {
-    /** Central database service for fetching user data. */
+    /**
+     * Central database service for fetching user data.
+     */
     protected final IDatabaseService databaseService;
 
-    /** Service for triggering local notifications. */
+    /**
+     * Service for triggering local notifications.
+     */
     protected final NotificationService notificationService;
 
-    /** Utility for checking user session state. */
+    /**
+     * Utility for checking user session state.
+     */
     protected final SharedPreferencesUtil sharedPreferencesUtil;
 
     /**
      * Constructs a new DailyCheckWorker.
-     * @param context The application context.
-     * @param workerParams Parameters for the worker.
-     * @param databaseService The database service provider.
-     * @param notificationService The notification manager.
+     *
+     * @param context               The application context.
+     * @param workerParams          Parameters for the worker.
+     * @param databaseService       The database service provider.
+     * @param notificationService   The notification manager.
      * @param sharedPreferencesUtil The preference utility.
      */
     @AssistedInject
@@ -64,6 +75,7 @@ public class DailyCheckWorker extends Worker {
      * Verifies user session, fetches the latest profile from Firebase, and triggers
      * specific daily logic like birthday notifications.
      * </p>
+     *
      * @return {@link androidx.work.ListenableWorker.Result#success()} if finished,
      * or {@link androidx.work.ListenableWorker.Result#retry()} on transient failures.
      */
@@ -87,7 +99,9 @@ public class DailyCheckWorker extends Worker {
             }
 
             @Override
-            public void onFailed(Exception e) { latch.countDown(); }
+            public void onFailed(Exception e) {
+                latch.countDown();
+            }
         });
 
         try {
@@ -105,6 +119,7 @@ public class DailyCheckWorker extends Worker {
     /**
      * Checks if today matches the user's birth month and day.
      * Triggers a celebratory notification if true.
+     *
      * @param user The {@link User} object to validate.
      */
     private void checkAndNotifyBirthday(User user) {

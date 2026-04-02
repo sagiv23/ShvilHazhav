@@ -2,9 +2,12 @@ package com.example.sagivproject.services.impl;
 
 import android.content.Context;
 import android.content.Intent;
+
 import com.example.sagivproject.services.IFallDetectionService;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**
@@ -21,19 +24,26 @@ public class FallDetectionManager implements IFallDetectionService {
 
     /**
      * Constructs a new FallDetectionManager.
+     *
      * @param context The application context used to start/stop the background service.
      */
     @Inject
-    public FallDetectionManager(@ApplicationContext Context context) { this.context = context; }
+    public FallDetectionManager(@ApplicationContext Context context) {
+        this.context = context;
+    }
 
-    /** Triggers the start of the fall detection foreground service. */
+    /**
+     * Triggers the start of the fall detection foreground service.
+     */
     @Override
     public void startMonitoring() {
         Intent intent = new Intent(context, FallDetectionServiceImpl.class);
         context.startForegroundService(intent);
     }
 
-    /** Terminates the fall detection background service. */
+    /**
+     * Terminates the fall detection background service.
+     */
     @Override
     public void stopMonitoring() {
         Intent intent = new Intent(context, FallDetectionServiceImpl.class);

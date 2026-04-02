@@ -6,6 +6,7 @@ import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.TipOfTheDay;
@@ -26,11 +28,13 @@ import com.google.firebase.ai.java.GenerativeModelFutures;
 import com.google.firebase.ai.type.Content;
 import com.google.firebase.ai.type.GenerateContentResponse;
 import com.google.firebase.ai.type.GenerativeBackend;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.Executor;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -47,7 +51,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class TipOfTheDayActivity extends BaseActivity {
-    /** Static list of fallback inspirational quotes. */
+    /**
+     * Static list of fallback inspirational quotes.
+     */
     private final String[] inspirationalQuotes = {
             "ההצלחה היא סך הכל של מאמצים קטנים, שחוזרים עליהם יום יום.",
             "הדרך הטובה ביותר לחזות את העתיד היא ליצור אותו.",
@@ -60,7 +66,9 @@ public class TipOfTheDayActivity extends BaseActivity {
     private Button btnTipSpeak, btnInspirationSpeak;
     private GenerativeModelFutures model;
     private TextToSpeech tts;
-    /** Tracks which content ID is currently being played via TTS. */
+    /**
+     * Tracks which content ID is currently being played via TTS.
+     */
     private String currentlySpeakingId = null;
 
     @Override
@@ -89,13 +97,19 @@ public class TipOfTheDayActivity extends BaseActivity {
                 tts.setLanguage(new Locale("he", "IL"));
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
-                    public void onStart(String id) { runOnUiThread(() -> updateSpeakButton(id, true)); }
+                    public void onStart(String id) {
+                        runOnUiThread(() -> updateSpeakButton(id, true));
+                    }
 
                     @Override
-                    public void onDone(String id) { runOnUiThread(() -> updateSpeakButton(id, false)); }
+                    public void onDone(String id) {
+                        runOnUiThread(() -> updateSpeakButton(id, false));
+                    }
 
                     @Override
-                    public void onError(String id) { runOnUiThread(() -> updateSpeakButton(id, false)); }
+                    public void onError(String id) {
+                        runOnUiThread(() -> updateSpeakButton(id, false));
+                    }
                 });
             }
         });
@@ -113,7 +127,8 @@ public class TipOfTheDayActivity extends BaseActivity {
 
     /**
      * Toggles the audio playback for a specific text block.
-     * @param id Unique ID for the content piece.
+     *
+     * @param id   Unique ID for the content piece.
      * @param text The actual text to speak.
      */
     private void toggleSpeech(String id, String text) {
@@ -129,7 +144,8 @@ public class TipOfTheDayActivity extends BaseActivity {
 
     /**
      * Updates the UI state of the relevant playback button.
-     * @param id The content ID.
+     *
+     * @param id       The content ID.
      * @param speaking true if currently playing.
      */
     private void updateSpeakButton(String id, boolean speaking) {
@@ -138,7 +154,9 @@ public class TipOfTheDayActivity extends BaseActivity {
         btn.setText(speaking ? R.string.cancel_playback : R.string.playback);
     }
 
-    /** Checks Firebase for an existing tip for today. Triggers AI generation if missing. */
+    /**
+     * Checks Firebase for an existing tip for today. Triggers AI generation if missing.
+     */
     private void checkDailyTip() {
         databaseService.getTipOfTheDayService().getTipForToday(new IDatabaseService.DatabaseCallback<>() {
             @Override
@@ -150,11 +168,15 @@ public class TipOfTheDayActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailed(Exception e) { tipContent.setText("שגיאה בקבלת הטיפ היומי."); }
+            public void onFailed(Exception e) {
+                tipContent.setText("שגיאה בקבלת הטיפ היומי.");
+            }
         });
     }
 
-    /** Uses Vertex AI to generate a localized tip and persists it to the database. */
+    /**
+     * Uses Vertex AI to generate a localized tip and persists it to the database.
+     */
     private void fetchDailyTipFromAI() {
         tipContent.setText("טוען טיפ יומי...");
         btnTipSpeak.setVisibility(View.GONE);
@@ -186,16 +208,22 @@ public class TipOfTheDayActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailed(Exception e) { tipContent.setText("שגיאה בשמירת הטיפ היומי."); }
+                    public void onFailed(Exception e) {
+                        tipContent.setText("שגיאה בשמירת הטיפ היומי.");
+                    }
                 });
             }
 
             @Override
-            public void onFailure(@NonNull Throwable t) { tipContent.setText(String.format("שגיאה: %s", t.getMessage())); }
+            public void onFailure(@NonNull Throwable t) {
+                tipContent.setText(String.format("שגיאה: %s", t.getMessage()));
+            }
         }, mainExecutor);
     }
 
-    /** Releases TTS resources on activity close. */
+    /**
+     * Releases TTS resources on activity close.
+     */
     @Override
     public void onDestroy() {
         if (tts != null) tts.shutdown();

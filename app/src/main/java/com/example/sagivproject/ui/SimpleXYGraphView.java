@@ -9,11 +9,14 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+
 import com.example.sagivproject.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -54,8 +57,9 @@ public class SimpleXYGraphView extends View {
 
     /**
      * Standard constructor for XML inflation.
+     *
      * @param context The Context the view is running in.
-     * @param attrs The attributes of the XML tag that is inflating the view.
+     * @param attrs   The attributes of the XML tag that is inflating the view.
      */
     public SimpleXYGraphView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -64,6 +68,7 @@ public class SimpleXYGraphView extends View {
 
     /**
      * Initializes the view's internal paint objects and typography.
+     *
      * @param context Application context for resource access.
      */
     private void init(Context context) {
@@ -93,11 +98,12 @@ public class SimpleXYGraphView extends View {
     /**
      * Configures the graph with new data points and labels.
      * Triggers a view redraw.
-     * @param points List of XY coordinates to plot.
+     *
+     * @param points  List of XY coordinates to plot.
      * @param xLabels Text labels for the X-axis markers.
-     * @param title Main title of the graph.
-     * @param labelX Descriptive label for the horizontal axis.
-     * @param labelY Descriptive label for the vertical axis.
+     * @param title   Main title of the graph.
+     * @param labelX  Descriptive label for the horizontal axis.
+     * @param labelY  Descriptive label for the vertical axis.
      */
     public void setData(List<Point> points, List<String> xLabels, String title, String labelX, String labelY) {
         this.points = points != null ? points : new ArrayList<>();
@@ -110,11 +116,14 @@ public class SimpleXYGraphView extends View {
     }
 
     @Override
-    public boolean performClick() { return super.performClick(); }
+    public boolean performClick() {
+        return super.performClick();
+    }
 
     /**
      * Handles touch interactions to support horizontal scrolling.
      * Prevents parent intercept when scrolling the graph content.
+     *
      * @param event The motion event.
      * @return true if handled.
      */
@@ -149,6 +158,7 @@ public class SimpleXYGraphView extends View {
 
     /**
      * Renders the graph including axes, labels, title, grid, data points, and trend line.
+     *
      * @param canvas The canvas on which the background will be drawn.
      */
     @Override
@@ -218,11 +228,12 @@ public class SimpleXYGraphView extends View {
 
     /**
      * Draws horizontal grid lines.
-     * @param canvas Target canvas.
-     * @param maxY Maximum Y value.
-     * @param totalWidth Total width of the scrollable area.
+     *
+     * @param canvas      Target canvas.
+     * @param maxY        Maximum Y value.
+     * @param totalWidth  Total width of the scrollable area.
      * @param graphHeight Pixel height of the drawing area.
-     * @param viewHeight Pixel height of the entire view.
+     * @param viewHeight  Pixel height of the entire view.
      */
     private void drawGridY(Canvas canvas, float maxY, float totalWidth, float graphHeight, float viewHeight) {
         int ySteps = 5;
@@ -235,10 +246,11 @@ public class SimpleXYGraphView extends View {
 
     /**
      * Draws numerical labels for the vertical axis.
-     * @param canvas Target canvas.
-     * @param maxY Maximum scale value.
+     *
+     * @param canvas      Target canvas.
+     * @param maxY        Maximum scale value.
      * @param graphHeight Pixel height of the drawing area.
-     * @param viewHeight Pixel height of the entire view.
+     * @param viewHeight  Pixel height of the entire view.
      */
     private void drawYLabels(Canvas canvas, float maxY, float graphHeight, float viewHeight) {
         textPaint.setTextSize(38f);
@@ -254,10 +266,11 @@ public class SimpleXYGraphView extends View {
     /**
      * Calculates and renders a regression trend line based on the data points.
      * Also displays the equation at the top of the graph.
-     * @param canvas Target canvas.
-     * @param maxY Maximum scale value.
+     *
+     * @param canvas      Target canvas.
+     * @param maxY        Maximum scale value.
      * @param graphHeight Pixel height of the drawing area.
-     * @param viewHeight Pixel height of the entire view.
+     * @param viewHeight  Pixel height of the entire view.
      */
     private void drawTrendLine(Canvas canvas, float maxY, float graphHeight, float viewHeight) {
         if (points.size() < 2) return;
@@ -300,6 +313,7 @@ public class SimpleXYGraphView extends View {
 
     /**
      * Draws a centered error message when the graph has no data points.
+     *
      * @param canvas Target canvas.
      */
     private void drawNoData(Canvas canvas) {
@@ -308,16 +322,23 @@ public class SimpleXYGraphView extends View {
         canvas.drawText(msg, (float) getWidth() / 2 - textPaint.measureText(msg) / 2, (float) getHeight() / 2, textPaint);
     }
 
-    /** Data model for a single coordinate on the XY graph. */
+    /**
+     * Data model for a single coordinate on the XY graph.
+     */
     public static class Point {
-        /** The horizontal position (index-based). */
+        /**
+         * The horizontal position (index-based).
+         */
         public final float x;
 
-        /** The vertical value. */
+        /**
+         * The vertical value.
+         */
         public final float y;
 
         /**
          * Constructs a new point.
+         *
          * @param x Index or horizontal position.
          * @param y Data value.
          */

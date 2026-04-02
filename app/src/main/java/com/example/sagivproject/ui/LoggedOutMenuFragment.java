@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.example.sagivproject.R;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -21,7 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class LoggedOutMenuFragment extends Fragment {
-    /** Listener for handling navigation events in the host activity. */
+    /**
+     * Listener for handling navigation events in the host activity.
+     */
     private MenuNavigationListener navigationListener;
 
     /**
@@ -29,6 +34,7 @@ public class LoggedOutMenuFragment extends Fragment {
      * <p>
      * Verifies that the hosting context implements the navigation listener.
      * </p>
+     *
      * @param context The host Activity.
      * @throws RuntimeException If the activity does not implement {@link MenuNavigationListener}.
      */
@@ -44,8 +50,9 @@ public class LoggedOutMenuFragment extends Fragment {
 
     /**
      * Initializes the fragment's UI and configures the navigation buttons.
-     * @param inflater The LayoutInflater.
-     * @param container The parent container view.
+     *
+     * @param inflater           The LayoutInflater.
+     * @param container          The parent container view.
      * @param savedInstanceState Fragment's saved state.
      * @return The inflated view.
      */
@@ -65,8 +72,9 @@ public class LoggedOutMenuFragment extends Fragment {
 
     /**
      * Helper to set up a navigation button with a standardized click listener.
-     * @param root The root view of the fragment.
-     * @param buttonId The resource ID of the button.
+     *
+     * @param root          The root view of the fragment.
+     * @param buttonId      The resource ID of the button.
      * @param destinationId The destination identifier.
      */
     private void setupNavigationButton(View root, int buttonId, int destinationId) {
@@ -80,7 +88,9 @@ public class LoggedOutMenuFragment extends Fragment {
         }
     }
 
-    /** Cleans up the listener reference when the fragment is detached. */
+    /**
+     * Cleans up the listener reference when the fragment is detached.
+     */
     @Override
     public void onDetach() {
         super.onDetach();

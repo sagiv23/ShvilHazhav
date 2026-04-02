@@ -5,17 +5,21 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.utils.Validator;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -29,7 +33,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class LoginActivity extends BaseActivity {
-    /** Utility for validating form inputs. */
+    /**
+     * Utility for validating form inputs.
+     */
     @Inject
     protected Validator validator;
 
@@ -60,7 +66,9 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    /** Orchestrates the login flow: validation, service call, and navigation. */
+    /**
+     * Orchestrates the login flow: validation, service call, and navigation.
+     */
     private void tryLogin() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -86,13 +94,16 @@ public class LoginActivity extends BaseActivity {
             }
 
             @Override
-            public void onError(String message) { Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show(); }
+            public void onError(String message) {
+                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
     /**
      * Validates that the login credentials meet application standards.
-     * @param email The email string to check.
+     *
+     * @param email    The email string to check.
      * @param password The password string to check.
      * @return true if both inputs are formally valid.
      */

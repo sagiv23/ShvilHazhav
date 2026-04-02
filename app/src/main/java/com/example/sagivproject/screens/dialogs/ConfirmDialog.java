@@ -5,12 +5,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
 import com.example.sagivproject.R;
+
 import java.util.Objects;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -28,21 +33,26 @@ public class ConfirmDialog extends DialogFragment {
     private static final String ARG_CONFIRM_TEXT = "confirm_text";
     private static final String ARG_CANCEL_TEXT = "cancel_text";
 
-    /** The logic to execute when the user clicks the positive button. */
+    /**
+     * The logic to execute when the user clicks the positive button.
+     */
     private Runnable onConfirm;
 
-    /** Constructs a new ConfirmDialog. */
+    /**
+     * Constructs a new ConfirmDialog.
+     */
     @Inject
     public ConfirmDialog() {
     }
 
     /**
      * Configures the dialog with specific content and behavior.
-     * @param title The text to display in the dialog title.
-     * @param message The descriptive body text.
+     *
+     * @param title       The text to display in the dialog title.
+     * @param message     The descriptive body text.
      * @param confirmText The label for the positive button (defaults to "אישור").
-     * @param cancelText The label for the negative button (if null, the button is hidden).
-     * @param onConfirm The Runnable to run upon confirmation.
+     * @param cancelText  The label for the negative button (if null, the button is hidden).
+     * @param onConfirm   The Runnable to run upon confirmation.
      */
     public void setData(String title, String message, String confirmText, String cancelText, Runnable onConfirm) {
         Bundle args = new Bundle();

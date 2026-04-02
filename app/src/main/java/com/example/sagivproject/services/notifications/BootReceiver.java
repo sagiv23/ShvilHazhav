@@ -4,11 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -35,8 +39,9 @@ public class BootReceiver extends BroadcastReceiver {
 
     /**
      * Receives the broadcast intent.
+     *
      * @param context The application context.
-     * @param intent The intent being received (expected to be {@link Intent#ACTION_BOOT_COMPLETED}).
+     * @param intent  The intent being received (expected to be {@link Intent#ACTION_BOOT_COMPLETED}).
      */
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -78,7 +83,9 @@ public class BootReceiver extends BroadcastReceiver {
             }
 
             @Override
-            public void onFailed(Exception e) { Log.e(TAG, "Failed to get user medications for rescheduling", e); }
+            public void onFailed(Exception e) {
+                Log.e(TAG, "Failed to get user medications for rescheduling", e);
+            }
         });
     }
 }

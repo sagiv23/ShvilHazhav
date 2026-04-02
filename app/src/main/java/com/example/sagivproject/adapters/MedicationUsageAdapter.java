@@ -5,13 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.MedicationUsage;
+
 import javax.inject.Inject;
+
 import dagger.hilt.android.qualifiers.ActivityContext;
 
 /**
@@ -27,10 +31,13 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
 
     /**
      * Constructs a new MedicationUsageAdapter.
+     *
      * @param context The {@link ActivityContext} used for resource access.
      */
     @Inject
-    public MedicationUsageAdapter(@ActivityContext Context context) { this.context = context; }
+    public MedicationUsageAdapter(@ActivityContext Context context) {
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -60,13 +67,18 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
         holder.txtStatus.setTextColor(ContextCompat.getColor(context, color));
     }
 
-    /** ViewHolder class for medication usage log rows. */
+    /**
+     * ViewHolder class for medication usage log rows.
+     */
     public static class UsageViewHolder extends RecyclerView.ViewHolder {
-        /** TextViews for medication name, date/time of the event, and intake status. */
+        /**
+         * TextViews for medication name, date/time of the event, and intake status.
+         */
         final TextView txtName, txtDateTime, txtStatus;
 
         /**
          * Constructs a new UsageViewHolder.
+         *
          * @param itemView The view representing a single log entry.
          */
         public UsageViewHolder(@NonNull View itemView) {
