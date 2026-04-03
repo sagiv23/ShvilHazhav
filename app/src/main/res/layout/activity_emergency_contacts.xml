@@ -22,181 +22,196 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:padding="20dp"
-            app:layout_constraintBottom_toTopOf="@id/bottom_actions"
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/headline_hebrew"
+            android:text="@string/emergency_contacts"
+            android:textColor="@color/headline"
+            android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/separatorLine">
+            app:layout_constraintTop_toBottomOf="@+id/separatorLine" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20dp"
-                android:fontFamily="@font/headline_hebrew"
-                android:text="@string/emergency_contacts"
-                android:textColor="@color/headline"
-                android:textSize="40sp" />
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_reminders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="card_notifications_reminder,card_fall_detection_reminder,txt_title" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_notifications_reminder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:visibility="gone"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
-                app:strokeColor="?attr/colorOutline"
-                app:strokeWidth="1.5dp"
-                tools:visibility="visible">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/text_hebrew"
-                        android:gravity="center"
-                        android:text="@string/sms_location_disabled_warning"
-                        android:textSize="20sp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_enable_emergency_permissions"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/text_hebrew"
-                        android:text="@string/click_here_to_enable_permissions"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
-                        app:cornerRadius="20dp"
-                        app:strokeWidth="1dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_fall_detection_reminder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:visibility="gone"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
-                app:strokeColor="?attr/colorOutline"
-                app:strokeWidth="1.5dp"
-                tools:visibility="visible">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/text_hebrew"
-                        android:text="@string/fall_detection_is_disabled"
-                        android:textSize="22sp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_go_to_settings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/text_hebrew"
-                        android:text="@string/click_here_to_activate_in_settings"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
-                        app:cornerRadius="20dp"
-                        app:strokeWidth="1dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_notifications_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:layout_constraintTop_toBottomOf="@id/txt_title"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1.5dp"
+            tools:visibility="visible">
 
             <LinearLayout
-                android:id="@+id/layout_main_content"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_add_contact_dialog"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/text_hebrew"
-                        android:text="@string/add"
-                        android:textAllCaps="false"
-                        android:textSize="18sp"
-                        app:cornerRadius="30dp"
-                        app:icon="@drawable/ic_add"
-                        app:iconGravity="textStart"
-                        app:iconPadding="8dp"
-                        app:iconSize="24dp"
-                        app:strokeWidth="1dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_pick_contact"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/text_hebrew"
-                        android:text="@string/choose_from_contacts"
-                        android:textAllCaps="false"
-                        android:textSize="18sp"
-                        app:cornerRadius="30dp"
-                        app:icon="@drawable/ic_search"
-                        app:iconGravity="textStart"
-                        app:iconPadding="8dp"
-                        app:iconSize="24dp"
-                        app:strokeWidth="1dp" />
-                </LinearLayout>
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
 
                 <TextView
-                    android:id="@+id/txt_no_contacts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="32dp"
                     android:fontFamily="@font/text_hebrew"
-                    android:text="@string/no_emergency_contacts"
-                    android:textSize="20sp"
-                    android:visibility="gone" />
+                    android:gravity="center"
+                    android:text="@string/sms_location_disabled_warning"
+                    android:textSize="18sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_emergency_contacts"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:clipToPadding="false" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_enable_emergency_permissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/click_here_to_enable_permissions"
+                    android:textAllCaps="false"
+                    app:cornerRadius="20dp"
+                    android:textSize="16sp"
+                    app:strokeWidth="1dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_fall_detection_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:layout_constraintTop_toBottomOf="@id/card_notifications_reminder"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1.5dp"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/fall_detection_is_disabled"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_go_to_settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/click_here_to_activate_in_settings"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    app:cornerRadius="20dp"
+                    app:strokeWidth="1dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_main_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintBottom_toTopOf="@id/bottom_actions"
+            app:layout_constraintTop_toBottomOf="@id/barrier_reminders">
+
+            <LinearLayout
+                android:id="@+id/layout_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="81dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingVertical="10dp"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_contact_dialog"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/text_hebrew"
+                    android:paddingVertical="12dp"
+                    android:text="@string/add"
+                    android:textAllCaps="false"
+                    android:textSize="18sp"
+                    app:cornerRadius="30dp"
+                    app:icon="@drawable/ic_add"
+                    app:iconGravity="textStart"
+                    app:iconPadding="8dp"
+                    app:iconSize="24dp"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_pick_contact"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/text_hebrew"
+                    android:paddingVertical="12dp"
+                    android:text="@string/choose_from_contacts"
+                    android:textAllCaps="false"
+                    android:textSize="18sp"
+                    app:cornerRadius="30dp"
+                    app:icon="@drawable/ic_search"
+                    app:iconGravity="textStart"
+                    app:iconPadding="8dp"
+                    app:iconSize="24dp"
+                    app:strokeWidth="1dp" />
             </LinearLayout>
 
-        </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_emergency_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:paddingBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_buttons" />
+
+            <TextView
+                android:id="@+id/txt_no_contacts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/text_hebrew"
+                android:text="@string/no_emergency_contacts"
+                android:textSize="20sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_buttons" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/bottom_actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="8dp"
+            android:elevation="12dp"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="20dp"
@@ -209,6 +224,7 @@
                 android:layout_marginBottom="12dp"
                 android:backgroundTint="@color/error"
                 android:fontFamily="@font/text_hebrew"
+                android:paddingVertical="12dp"
                 android:text="@string/send_emergency_sms"
                 android:textAllCaps="false"
                 android:textSize="22sp"
@@ -224,6 +240,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
+                android:paddingVertical="12dp"
                 android:text="@string/call_emergency_109"
                 android:textAllCaps="false"
                 android:textSize="22sp"
@@ -238,7 +255,7 @@
                 android:id="@+id/btn_skip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/laster"
                 android:textAllCaps="false"
