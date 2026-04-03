@@ -26,7 +26,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 /**
  * A singleton service responsible for creating and displaying notifications in the application.
  * <p>
- * This service manages specialized notification channels for medication reminders, birthdays,
+ * This service manages specialized notification channels for medication reminders
  * and fall detection alerts. It provides helper methods to build standardized {@link Notification}
  * objects and handles channel registration for Android 8.0+ compatibility.
  * </p>
@@ -38,10 +38,6 @@ public class NotificationService {
      */
     public static final String MEDICATIONS_CHANNEL_ID = "medication_notifications";
 
-    /**
-     * Channel ID for birthday-related notifications.
-     */
-    public static final String BIRTHDAYS_CHANNEL_ID = "birthday_notifications";
 
     /**
      * Channel ID for fall detection service notifications.
@@ -49,7 +45,6 @@ public class NotificationService {
     public static final String FALL_DETECTION_CHANNEL_ID = "fall_detection_notifications";
 
     private static final String MEDICATIONS_GROUP = "com.example.sagivproject.MEDICATIONS_GROUP";
-    private static final String BIRTHDAYS_GROUP = "com.example.sagivproject.BIRTHDAYS_GROUP";
 
     private final Context context;
     private final NotificationManagerCompat manager;
@@ -78,12 +73,6 @@ public class NotificationService {
                 NotificationManager.IMPORTANCE_HIGH
         );
 
-        NotificationChannel bdayChannel = new NotificationChannel(
-                BIRTHDAYS_CHANNEL_ID,
-                context.getString(R.string.birthday_channel_name),
-                NotificationManager.IMPORTANCE_LOW
-        );
-
         NotificationChannel fallChannel = new NotificationChannel(
                 FALL_DETECTION_CHANNEL_ID,
                 "Fall Detection Service",
@@ -93,7 +82,6 @@ public class NotificationService {
         NotificationManager systemManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (systemManager != null) {
             systemManager.createNotificationChannel(medChannel);
-            systemManager.createNotificationChannel(bdayChannel);
             systemManager.createNotificationChannel(fallChannel);
         }
     }
@@ -208,27 +196,6 @@ public class NotificationService {
         return new NotificationCompat.Action.Builder(0, context.getString(titleRes), pendingIntent).build();
     }
 
-    /**
-     * Displays a celebratory birthday notification.
-     *
-     * @param firstName      The user's first name.
-     * @param notificationId A unique ID for the notification.
-     */
-    public void showBirthdayNotification(String firstName, int notificationId) {
-        String title = context.getString(R.string.birthday_notif_title);
-        String message = context.getString(R.string.birthday_notif_body, firstName);
-
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                context,
-                notificationId,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
-        );
-
-        show(BIRTHDAYS_CHANNEL_ID, title, message, notificationId, pendingIntent, BIRTHDAYS_GROUP);
-        showSummaryNotification(BIRTHDAYS_CHANNEL_ID, BIRTHDAYS_GROUP);
-    }
 
     /**
      * Displays a summary notification for a group to keep the notification drawer organized.
@@ -246,31 +213,6 @@ public class NotificationService {
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             manager.notify(groupKey.hashCode(), summaryBuilder.build());
-        }
-    }
-
-    /**
-     * Internal helper to build and display a standard notification.
-     *
-     * @param channelId      Target channel.
-     * @param title          Notification title.
-     * @param message        Notification body text.
-     * @param notificationId Unique ID.
-     * @param pendingIntent  Action to perform on click.
-     * @param group          Group key for stacking.
-     */
-    private void show(String channelId, String title, String message, int notificationId, PendingIntent pendingIntent, String group) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .setGroup(group)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            manager.notify(notificationId, builder.build());
         }
     }
 }

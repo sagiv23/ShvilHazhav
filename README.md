@@ -62,8 +62,8 @@ intelligent sensors and community support.
 
 - **Moderated Discussion Boards:** Categorized forums for peer-to-peer support, managed by
   administrative tools to ensure a safe and positive environment.
-- **Daily Inspiration:** An automated system that generates unique daily health tips and
-  inspirational quotes, synchronized globally for all users.
+- **Daily Inspiration:** An automated system that displays unique daily health tips and
+  inspirational quotes.
 
 ---
 
@@ -87,7 +87,6 @@ intelligent sensors and community support.
     - **Vertex AI:** Implementation of Google's latest LLM models for intelligent conversational
       features.
 - **System Services:**
-    - **WorkManager:** Reliable periodic background tasks for system maintenance and daily checks.
     - **GMS Location:** High-accuracy location retrieval for emergency alerting.
     - **Sensor Framework:** Real-time accelerometer processing for fall detection.
 - **UI & Presentation:**

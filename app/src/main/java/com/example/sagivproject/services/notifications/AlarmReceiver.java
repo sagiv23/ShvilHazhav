@@ -13,10 +13,8 @@ import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -30,7 +28,6 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <li>Validates if a medication reminder is still relevant (i.e., medication hasn't been taken already today).</li>
  * <li>Triggers local notifications for relevant reminders via {@link NotificationService}.</li>
  * <li>Automatically reschedules recurring alarms for the following day.</li>
- * <li>Handles special system actions like the daily birthday check.</li>
  * </ul>
  * </p>
  */
@@ -55,13 +52,6 @@ public class AlarmReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        if ("ACTION_BIRTHDAY_CHECK".equals(intent.getAction())) {
-            handleBirthdayCheck();
-
-            alarmScheduler.scheduleBirthdayAlarm();
-            return;
-        }
-
         String medicationId = intent.getStringExtra("medication_id");
         String medicationName = intent.getStringExtra("medication_name");
         String hourStr = intent.getStringExtra("hour_str");
@@ -100,22 +90,4 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
     }
 
-    /**
-     * Logic for performing the daily birthday check.
-     * If today matches the user's birth month and day, a celebratory notification is triggered.
-     */
-    private void handleBirthdayCheck() {
-        User user = sharedPreferencesUtil.getUser();
-        if (user == null || user.getBirthDateMillis() <= 0) return;
-
-        Calendar today = Calendar.getInstance();
-        Calendar birthDate = Calendar.getInstance();
-        birthDate.setTimeInMillis(user.getBirthDateMillis());
-
-        if (today.get(Calendar.DAY_OF_MONTH) == birthDate.get(Calendar.DAY_OF_MONTH) &&
-                today.get(Calendar.MONTH) == birthDate.get(Calendar.MONTH)) {
-            int notificationId = UUID.randomUUID().hashCode();
-            notificationService.showBirthdayNotification(user.getFirstName(), notificationId);
-        }
-    }
 }

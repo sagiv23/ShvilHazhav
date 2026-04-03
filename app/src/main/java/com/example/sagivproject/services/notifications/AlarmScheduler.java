@@ -18,7 +18,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
  * A singleton service responsible for scheduling and canceling system alarms.
  * <p>
  * This class interacts with the Android {@link AlarmManager} to manage recurring events,
- * such as medication reminders and daily system checks. It handles the complexities of
+ * such as medication reminders. It handles the complexities of
  * different Android versions, including requesting exact alarm permissions where available.
  * </p>
  */
@@ -158,35 +158,4 @@ public class AlarmScheduler {
         }
     }
 
-    /**
-     * Schedules a daily recurring check for birthdays at 9:00 AM.
-     * Uses an action-specific Intent handled by {@link AlarmReceiver}.
-     */
-    public void scheduleBirthdayAlarm() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 9);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        if (calendar.before(Calendar.getInstance())) {
-            calendar.add(Calendar.DATE, 1);
-        }
-
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        intent.setAction("ACTION_BIRTHDAY_CHECK");
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context,
-                1001,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
-
-        alarmManager.setAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                pendingIntent
-        );
-    }
 }
