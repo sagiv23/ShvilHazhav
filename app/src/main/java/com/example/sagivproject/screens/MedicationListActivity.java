@@ -155,6 +155,13 @@ public class MedicationListActivity extends BaseActivity {
         fetchTodayUsageLogs();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchMedicationsFromServer();
+        fetchTodayUsageLogs();
+    }
+
     /**
      * Initializes the search bar and filter logic.
      */
@@ -372,6 +379,8 @@ public class MedicationListActivity extends BaseActivity {
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
         if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.POST_NOTIFICATIONS))) {
             Toast.makeText(this, "הרשאת התראות אושרה", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "נדרשת הרשאת התראות לצורך תזכורות נטילה", Toast.LENGTH_SHORT).show();
         }
     }
 

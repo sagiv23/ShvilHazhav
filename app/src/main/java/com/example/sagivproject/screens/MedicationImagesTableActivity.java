@@ -133,6 +133,12 @@ public class MedicationImagesTableActivity extends BaseActivity {
         loadImages();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadImages();
+    }
+
     /**
      * Validates gallery access permissions before launching the photo picker.
      */

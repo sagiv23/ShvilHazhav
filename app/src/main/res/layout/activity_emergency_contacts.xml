@@ -42,47 +42,46 @@
                 android:textColor="@color/headline"
                 android:textSize="40sp" />
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_notifications_reminder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:visibility="gone"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:strokeColor="?attr/colorOutline"
+                app:strokeWidth="1.5dp"
+                tools:visibility="visible">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_add_contact_dialog"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/text_hebrew"
-                    android:text="@string/add"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    app:cornerRadius="30dp"
-                    app:icon="@drawable/ic_add"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp"
-                    app:iconSize="24dp"
-                    app:strokeWidth="1dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_pick_contact"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/text_hebrew"
-                    android:text="@string/choose_from_contacts"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    app:cornerRadius="30dp"
-                    app:icon="@drawable/ic_search"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp"
-                    app:iconSize="24dp"
-                    app:strokeWidth="1dp" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/text_hebrew"
+                        android:gravity="center"
+                        android:text="@string/sms_location_disabled_warning"
+                        android:textSize="20sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_enable_emergency_permissions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/text_hebrew"
+                        android:text="@string/click_here_to_enable_permissions"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"
+                        app:cornerRadius="20dp"
+                        app:strokeWidth="1dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_fall_detection_reminder"
@@ -124,23 +123,73 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/txt_no_contacts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="32dp"
-                android:fontFamily="@font/text_hebrew"
-                android:text="@string/no_emergency_contacts"
-                android:textSize="20sp"
-                android:visibility="gone" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_emergency_contacts"
+            <LinearLayout
+                android:id="@+id/layout_main_content"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:clipToPadding="false" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_add_contact_dialog"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/text_hebrew"
+                        android:text="@string/add"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        app:cornerRadius="30dp"
+                        app:icon="@drawable/ic_add"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconSize="24dp"
+                        app:strokeWidth="1dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_pick_contact"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/text_hebrew"
+                        android:text="@string/choose_from_contacts"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        app:cornerRadius="30dp"
+                        app:icon="@drawable/ic_search"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconSize="24dp"
+                        app:strokeWidth="1dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_no_contacts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/no_emergency_contacts"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_emergency_contacts"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipToPadding="false" />
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.example.sagivproject.screens;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -65,6 +67,7 @@ public class EmergencyContactsActivity extends BaseActivity {
     private EmergencyContactsAdapter adapter;
     private TextView txtNoContacts;
     private View cardFallDetectionReminder;
+    private View cardNotificationsReminder;
     private User user;
 
     /**
@@ -101,6 +104,10 @@ public class EmergencyContactsActivity extends BaseActivity {
         RecyclerView rvContacts = findViewById(R.id.rv_emergency_contacts);
         txtNoContacts = findViewById(R.id.txt_no_contacts);
         cardFallDetectionReminder = findViewById(R.id.card_fall_detection_reminder);
+        cardNotificationsReminder = findViewById(R.id.card_notifications_reminder);
+
+        findViewById(R.id.btn_enable_emergency_permissions).setOnClickListener(v ->
+                requestPermissions(Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION));
 
         findViewById(R.id.btn_add_contact_dialog).setOnClickListener(v ->
                 dialogService.showEmergencyContactDialog(getSupportFragmentManager(), null, this::addEmergencyContact)
@@ -174,8 +181,34 @@ public class EmergencyContactsActivity extends BaseActivity {
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
         if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.SEND_SMS))) {
             fetchLocationAndSendSms();
+            updatePermissionUI();
         } else if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_CONTACTS))) {
             contactPickerLauncher.launch(null);
+            updatePermissionUI();
+        } else {
+            updatePermissionUI();
+        }
+    }
+
+    /**
+     * Updates the visibility of the permission reminder card based on SMS and location permission status.
+     * Blocks main content visibility if permissions are missing.
+     */
+    private void updatePermissionUI() {
+        boolean hasSms = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
+        boolean hasLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        View mainContent = findViewById(R.id.layout_main_content);
+        View bottomActions = findViewById(R.id.bottom_actions);
+
+        if (hasSms && hasLocation) {
+            cardNotificationsReminder.setVisibility(View.GONE);
+            mainContent.setVisibility(View.VISIBLE);
+            bottomActions.setVisibility(View.VISIBLE);
+        } else {
+            cardNotificationsReminder.setVisibility(View.VISIBLE);
+            mainContent.setVisibility(View.GONE);
+            bottomActions.setVisibility(View.GONE);
         }
     }
 
@@ -188,6 +221,7 @@ public class EmergencyContactsActivity extends BaseActivity {
         } else {
             cardFallDetectionReminder.setVisibility(View.VISIBLE);
         }
+        updatePermissionUI();
     }
 
     @Override

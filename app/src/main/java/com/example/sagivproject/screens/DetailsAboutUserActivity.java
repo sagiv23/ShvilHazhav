@@ -141,7 +141,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
     }
 
     /**
-     * Handles the results of permission requests, specifically for the camera.
+     * Handles the results of permission requests, specifically for the camera and gallery.
      *
      * @param isGranted Map of requested permissions and their granted status.
      */
@@ -149,8 +149,13 @@ public class DetailsAboutUserActivity extends BaseActivity {
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
         if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.CAMERA))) {
             cameraLauncher.launch(null);
-        } else {
+        } else if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_EXTERNAL_STORAGE)) ||
+                Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_MEDIA_IMAGES))) {
+            launchGallery();
+        } else if (isGranted.containsKey(Manifest.permission.CAMERA)) {
             Toast.makeText(this, "נדרשת הרשאת מצלמה כדי לצלם תמונה", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "ההרשאה נדחתה. לא ניתן להמשיך בפעולה.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -238,6 +243,17 @@ public class DetailsAboutUserActivity extends BaseActivity {
     }
 
     /**
+     * Launches the system photo picker.
+     */
+    private void launchGallery() {
+        photoPickerLauncher.launch(
+                new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build()
+        );
+    }
+
+    /**
      * Displays the image picker dialog to choose between camera, gallery, or deletion.
      */
     private void openImagePicker() {
@@ -255,11 +271,8 @@ public class DetailsAboutUserActivity extends BaseActivity {
 
             @Override
             public void onGallery() {
-                photoPickerLauncher.launch(
-                        new PickVisualMediaRequest.Builder()
-                                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                                .build()
-                );
+                // Photo Picker does not require permissions on Android 13+ (API 33+)
+                launchGallery();
             }
 
             @Override
