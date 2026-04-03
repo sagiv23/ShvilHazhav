@@ -150,4 +150,6 @@
     <string name="click_here_to_activate_in_settings">לחץ כאן להפעלה בהגדרות</string>
     <string name="vibration">רטט</string>
     <string name="notifications">התראות</string>
+    <string name="sms_location_disabled_warning">לא ניתן לשלוח הודעות חירום ללא אישור הרשאות שליחת הודעות SMS ושימוש במיקום</string>
+    <string name="click_here_to_enable_permissions">אישור הרשאות</string>
 </resources>
