@@ -15,6 +15,7 @@
         android:layoutDirection="rtl">
 
         <include
+            android:id="@+id/top_bar_include"
             layout="@layout/include_top_bar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -33,7 +34,7 @@
             android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/separatorLine" />
+            app:layout_constraintTop_toBottomOf="@+id/top_bar_include" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier_reminders"

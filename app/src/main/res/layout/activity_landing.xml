@@ -15,6 +15,7 @@
         android:layoutDirection="rtl">
 
         <include
+            android:id="@+id/top_bar_include"
             layout="@layout/include_top_bar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -29,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separatorLine">
+            app:layout_constraintTop_toBottomOf="@id/top_bar_include">
 
             <LinearLayout
                 android:id="@+id/mainContent"

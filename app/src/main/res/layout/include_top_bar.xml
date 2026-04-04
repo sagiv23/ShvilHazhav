@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/background_color_nav"
-        android:layoutDirection="rtl"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layoutDirection="rtl">
 
         <ImageButton
             android:id="@+id/btn_open_drawer"
@@ -50,8 +52,6 @@
         android:id="@+id/separatorLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/text_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topBar" />
-</merge>
+        android:background="@color/text_color" />
+
+</LinearLayout>
