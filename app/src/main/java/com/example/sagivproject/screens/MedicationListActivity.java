@@ -18,14 +18,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.sagivproject.R;
@@ -40,7 +36,6 @@ import com.example.sagivproject.screens.dialogs.MedicationDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.notifications.AlarmScheduler;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.text.SimpleDateFormat;
@@ -93,14 +88,7 @@ public class MedicationListActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_medication_list);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.medicationListPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_medication_list, R.id.medicationListPage);
         setupMenu();
 
         user = sharedPreferencesUtil.getUser();
@@ -109,7 +97,6 @@ public class MedicationListActivity extends BaseActivity {
         findViewById(R.id.btn_MedicationList_add_medication).setOnClickListener(v -> openMedicationDialog(null));
 
         ViewPager2 viewPager_medications = findViewById(R.id.viewPager_medications);
-        TabLayout tabLayout_medications = findViewById(R.id.tabLayout_medications);
 
         adapter = adapterService.getMedicationListAdapter();
         adapter.setListener(new MedicationListAdapter.OnMedicationActionListener() {
@@ -132,7 +119,7 @@ public class MedicationListActivity extends BaseActivity {
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.text_hebrew);
 
-        new TabLayoutMediator(tabLayout_medications, viewPager_medications, (tab, position) -> {
+        new TabLayoutMediator(findViewById(R.id.tabLayout_medications), viewPager_medications, (tab, position) -> {
             if (position < adapter.getItemList().size()) {
                 String name = adapter.getItemList().get(position).getName();
                 if (typeface != null) {

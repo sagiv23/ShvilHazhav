@@ -10,12 +10,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -99,6 +105,22 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * Initializes the activity with Edge-to-Edge support and window insets handling.
+     *
+     * @param layoutResID The layout resource to inflate.
+     * @param rootId      The ID of the root view to apply insets to.
+     */
+    protected void setContent(@LayoutRes int layoutResID, @IdRes int rootId) {
+        EdgeToEdge.enable(this);
+        setContentView(layoutResID);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(rootId), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 
     /**

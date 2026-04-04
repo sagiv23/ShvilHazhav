@@ -9,19 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -77,14 +72,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_medication_images_table);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.medicationImagesTablePage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_medication_images_table, R.id.medicationImagesTablePage);
         setupMenu();
 
         RecyclerView recyclerView = findViewById(R.id.recycler_MedicineImagesTablePage);
@@ -105,20 +93,18 @@ public class MedicationImagesTableActivity extends BaseActivity {
             }
         });
         recyclerView.setAdapter(adapter);
-
         etSearch = findViewById(R.id.edit_MedicineImagesTablePage_search);
-        Button btnAdd = findViewById(R.id.btn_MedicineImagesTablePage_add);
 
         photoPickerLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
             if (uri != null) uploadImage(uri);
         });
 
-        btnAdd.setOnClickListener(v -> checkGalleryPermission());
+        findViewById(R.id.btn_MedicineImagesTablePage_add).setOnClickListener(v -> checkGalleryPermission());
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterImages(s.toString());
+                filterImages();
             }
 
             @Override
@@ -176,7 +162,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             public void onCompleted(List<ImageData> list) {
                 allImages.clear();
                 if (list != null) allImages.addAll(list);
-                filterImages(Objects.requireNonNull(etSearch.getText()).toString());
+                filterImages();
             }
 
             @Override
@@ -188,10 +174,9 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
     /**
      * Filters the grid display based on the user's ID search query.
-     *
-     * @param query The search text.
      */
-    private void filterImages(String query) {
+    private void filterImages() {
+        String query = Objects.requireNonNull(etSearch.getText()).toString();
         List<ImageData> newList = new ArrayList<>();
         String lowerQuery = query.toLowerCase().trim();
         for (ImageData img : allImages) {
@@ -221,7 +206,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
                     public void onCompleted(Void object) {
                         Toast.makeText(MedicationImagesTableActivity.this, "התמונה נוספה כ-" + newId, Toast.LENGTH_SHORT).show();
                         allImages.add(newImg);
-                        filterImages(Objects.requireNonNull(etSearch.getText()).toString());
+                        filterImages();
                     }
 
                     @Override
@@ -267,7 +252,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 Toast.makeText(MedicationImagesTableActivity.this, "הרשימה סודרה מחדש", Toast.LENGTH_SHORT).show();
-                filterImages(Objects.requireNonNull(etSearch.getText()).toString());
+                filterImages();
             }
 
             @Override

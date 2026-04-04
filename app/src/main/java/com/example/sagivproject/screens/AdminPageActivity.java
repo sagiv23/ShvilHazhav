@@ -2,14 +2,9 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
@@ -37,39 +32,24 @@ public class AdminPageActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_admin_page);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.adminPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        setContent(R.layout.activity_admin_page, R.id.adminPage);
 
         User user = sharedPreferencesUtil.getUser();
 
-        Button btnToUserTable = findViewById(R.id.btn_admin_to_UsersTablePage);
-        Button btnToUserStats = findViewById(R.id.btn_admin_to_UserStats);
-        Button btnToMedicationsTable = findViewById(R.id.btn_admin_to_MedicineImagesTablePage);
-        Button btnToMemoryGameLogsTable = findViewById(R.id.btn_admin_to_MemoryGameLogsTablePage);
-        Button btnToForumCategories = findViewById(R.id.btn_admin_to_ForumCategories);
-        Button btnToDetailsAboutUser = findViewById(R.id.btn_admin_to_DetailsAboutUser);
-        Button btnToSettings = findViewById(R.id.btn_admin_to_Settings);
-        TextView txtAdminTitle = findViewById(R.id.txt_admin_title);
-
-        btnToUserTable.setOnClickListener(v -> startActivity(new Intent(this, UsersTableActivity.class)));
-        btnToUserStats.setOnClickListener(v -> startActivity(new Intent(this, UserStatsActivity.class)));
-        btnToMedicationsTable.setOnClickListener(v -> startActivity(new Intent(this, MedicationImagesTableActivity.class)));
-        btnToMemoryGameLogsTable.setOnClickListener(v -> startActivity(new Intent(this, MemoryGameLogsTableActivity.class)));
-        btnToForumCategories.setOnClickListener(v -> startActivity(new Intent(this, ForumCategoriesActivity.class)));
-        btnToDetailsAboutUser.setOnClickListener(v -> startActivity(new Intent(this, DetailsAboutUserActivity.class)));
-        btnToSettings.setOnClickListener(v -> {
+        findViewById(R.id.btn_admin_to_UsersTablePage).setOnClickListener(v -> startActivity(new Intent(this, UsersTableActivity.class)));
+        findViewById(R.id.btn_admin_to_UserStats).setOnClickListener(v -> startActivity(new Intent(this, UserStatsActivity.class)));
+        findViewById(R.id.btn_admin_to_MedicineImagesTablePage).setOnClickListener(v -> startActivity(new Intent(this, MedicationImagesTableActivity.class)));
+        findViewById(R.id.btn_admin_to_MemoryGameLogsTablePage).setOnClickListener(v -> startActivity(new Intent(this, MemoryGameLogsTableActivity.class)));
+        findViewById(R.id.btn_admin_to_ForumCategories).setOnClickListener(v -> startActivity(new Intent(this, ForumCategoriesActivity.class)));
+        findViewById(R.id.btn_admin_to_DetailsAboutUser).setOnClickListener(v -> startActivity(new Intent(this, DetailsAboutUserActivity.class)));
+        findViewById(R.id.btn_admin_to_Settings).setOnClickListener(v -> {
             Intent intent = new Intent(this, SettingsActivity.class);
             intent.putExtra("isFromLoggedIn", true);
             startActivity(intent);
         });
 
         if (user != null) {
-            txtAdminTitle.setText(String.format("שלום %s", user.getFullName()));
+            ((TextView) findViewById(R.id.txt_admin_title)).setText(String.format("שלום %s", user.getFullName()));
         }
     }
 }

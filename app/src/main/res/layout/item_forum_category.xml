@@ -24,7 +24,7 @@
             android:fontFamily="@font/headline_hebrew"
             android:gravity="center_vertical"
             android:textColor="@color/headline"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_edit_category"
             app:layout_constraintStart_toStartOf="parent"

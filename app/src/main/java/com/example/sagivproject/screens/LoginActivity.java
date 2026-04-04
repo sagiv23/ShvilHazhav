@@ -2,15 +2,10 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
@@ -44,21 +39,12 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.loginPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_login, R.id.loginPage);
         setupMenu();
 
-        Button btnLogin = findViewById(R.id.btnLogin);
+        findViewById(R.id.btnLogin).setOnClickListener(v -> tryLogin());
         editTextEmail = findViewById(R.id.edt_login_email);
         editTextPassword = findViewById(R.id.edt_login_password);
-
-        btnLogin.setOnClickListener(v -> tryLogin());
 
         String lastEmail = getIntent().getStringExtra("userEmail");
         if (lastEmail != null && !lastEmail.isEmpty()) {

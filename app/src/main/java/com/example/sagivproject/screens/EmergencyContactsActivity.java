@@ -9,17 +9,12 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,9 +60,6 @@ public class EmergencyContactsActivity extends BaseActivity {
     protected IFallDetectionService fallDetectionService;
 
     private EmergencyContactsAdapter adapter;
-    private TextView txtNoContacts;
-    private View cardFallDetectionReminder;
-    private View cardNotificationsReminder;
     private User user;
 
     /**
@@ -88,23 +80,11 @@ public class EmergencyContactsActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_emergency_contacts);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.emergencyContactsPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_emergency_contacts, R.id.emergencyContactsPage);
         setupMenu();
 
         user = sharedPreferencesUtil.getUser();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        RecyclerView rvContacts = findViewById(R.id.rv_emergency_contacts);
-        txtNoContacts = findViewById(R.id.txt_no_contacts);
-        cardFallDetectionReminder = findViewById(R.id.card_fall_detection_reminder);
-        cardNotificationsReminder = findViewById(R.id.card_notifications_reminder);
 
         findViewById(R.id.btn_enable_emergency_permissions).setOnClickListener(v ->
                 requestPermissions(Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION));
@@ -166,6 +146,7 @@ public class EmergencyContactsActivity extends BaseActivity {
                 });
             }
         });
+        RecyclerView rvContacts = findViewById(R.id.rv_emergency_contacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
         rvContacts.setAdapter(adapter);
 
@@ -200,6 +181,7 @@ public class EmergencyContactsActivity extends BaseActivity {
 
         View mainContent = findViewById(R.id.layout_main_content);
         View bottomActions = findViewById(R.id.bottom_actions);
+        View cardNotificationsReminder = findViewById(R.id.card_notifications_reminder);
 
         if (hasSms && hasLocation) {
             cardNotificationsReminder.setVisibility(View.GONE);
@@ -217,9 +199,9 @@ public class EmergencyContactsActivity extends BaseActivity {
      */
     private void updateFallDetectionUI() {
         if (sharedPreferencesUtil.isFallDetectionEnabled()) {
-            cardFallDetectionReminder.setVisibility(View.GONE);
+            findViewById(R.id.card_fall_detection_reminder).setVisibility(View.GONE);
         } else {
-            cardFallDetectionReminder.setVisibility(View.VISIBLE);
+            findViewById(R.id.card_fall_detection_reminder).setVisibility(View.VISIBLE);
         }
         updatePermissionUI();
     }
@@ -263,7 +245,7 @@ public class EmergencyContactsActivity extends BaseActivity {
             @Override
             public void onCompleted(List<EmergencyContact> contactsList) {
                 adapter.setData(contactsList);
-                txtNoContacts.setVisibility(contactsList.isEmpty() ? View.VISIBLE : View.GONE);
+                findViewById(R.id.txt_no_contacts).setVisibility(contactsList.isEmpty() ? View.VISIBLE : View.GONE);
 
                 if (contactsList.isEmpty() && sharedPreferencesUtil.isFallDetectionEnabled()) {
                     sharedPreferencesUtil.setFallDetectionEnabled(false);

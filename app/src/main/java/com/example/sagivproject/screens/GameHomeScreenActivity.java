@@ -9,11 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,7 +46,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class GameHomeScreenActivity extends BaseActivity {
     private Button btnFindEnemy, btnCancelFindEnemy, btnSpeak;
-    private TextView TVictories, tvGamesToday, tvGamesTotal, TVStatusOfFindingEnemy;
+    private TextView TVStatusOfFindingEnemy;
     private GameRoom currentRoom;
     private boolean gameStarted = false;
     private LeaderboardAdapter adapter;
@@ -61,14 +57,7 @@ public class GameHomeScreenActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_game_home_screen);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.gameHomeScreenPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_game_home_screen, R.id.gameHomeScreenPage);
         setupMenu();
 
         user = sharedPreferencesUtil.getUser();
@@ -76,9 +65,6 @@ public class GameHomeScreenActivity extends BaseActivity {
         btnFindEnemy = findViewById(R.id.btn_GameHomeScreen_find_enemy);
         btnCancelFindEnemy = findViewById(R.id.btn_GameHomeScreen_cancel_find_enemy);
         btnSpeak = findViewById(R.id.btn_GameHomeScreen_speak);
-        TVictories = findViewById(R.id.tv_GameHomeScreen_victories);
-        tvGamesToday = findViewById(R.id.tv_GameHomeScreen_games_today);
-        tvGamesTotal = findViewById(R.id.tv_GameHomeScreen_games_total);
         TVStatusOfFindingEnemy = findViewById(R.id.tv_GameHomeScreen_status_of_finding_enemy);
         RecyclerView rvLeaderboard = findViewById(R.id.recyclerView_GameHomeScreen_leaderboard);
 
@@ -195,9 +181,9 @@ public class GameHomeScreenActivity extends BaseActivity {
         int gamesToday = (stats != null) ? stats.getMemoryGamesPlayed() : 0;
         int totalGames = getTotalWins(user);
 
-        TVictories.setText(MessageFormat.format("ניצחונות היום: {0}", winsToday));
-        tvGamesToday.setText(MessageFormat.format("משחקים היום: {0}", gamesToday));
-        tvGamesTotal.setText(MessageFormat.format("משחקים סך הכל: {0}", totalGames));
+        ((TextView) findViewById(R.id.tv_GameHomeScreen_victories)).setText(MessageFormat.format("ניצחונות היום: {0}", winsToday));
+        ((TextView) findViewById(R.id.tv_GameHomeScreen_games_today)).setText(MessageFormat.format("משחקים היום: {0}", gamesToday));
+        ((TextView) findViewById(R.id.tv_GameHomeScreen_games_total)).setText(MessageFormat.format("משחקים סך הכל: {0}", totalGames));
     }
 
     /**

@@ -8,11 +8,7 @@ import android.os.Looper;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,21 +60,14 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     private User user;
     private GameRoom currentRoom;
     private MemoryGameAdapter adapter;
-    private TextView tvTimer, tvTurnStatus, tvScore, tvOpponentName, tvTotalTimer;
+    private TextView tvTimer, tvTotalTimer;
     private CountDownTimer turnTimer;
     private CountDownTimer totalGameTimer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_memory_game);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.memoryGamePage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_memory_game, R.id.memoryGamePage);
         setupMenu();
 
         roomId = getIntent().getStringExtra("roomId");
@@ -87,11 +76,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         recyclerCards = findViewById(R.id.recycler_OnlineMemoryGame);
         recyclerCards.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerCards.setItemAnimator(null);
-
         tvTimer = findViewById(R.id.tv_OnlineMemoryGame_timer);
-        tvTurnStatus = findViewById(R.id.tv_OnlineMemoryGame_turn_status);
-        tvScore = findViewById(R.id.tv_OnlineMemoryGame_score);
-        tvOpponentName = findViewById(R.id.tv_OnlineMemoryGame_opponent_name);
         tvTotalTimer = findViewById(R.id.tv_OnlineMemoryGame_total_timer);
 
         adapter = adapterService.getMemoryGameAdapter();
@@ -155,7 +140,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         boolean amIPlayer1 = user.getId().equals(room.getPlayer1Uid());
         int myScore = amIPlayer1 ? room.getPlayer1Score() : room.getPlayer2Score();
         int opponentScore = amIPlayer1 ? room.getPlayer2Score() : room.getPlayer1Score();
-        tvScore.setText(MessageFormat.format("אני: {0} | יריב: {1}", myScore, opponentScore));
+        ((TextView) findViewById(R.id.tv_OnlineMemoryGame_score)).setText(MessageFormat.format("אני: {0} | יריב: {1}", myScore, opponentScore));
     }
 
     /**
@@ -307,12 +292,12 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                         @Override
                         public void onCompleted(User opponent) {
                             if (opponent != null)
-                                tvOpponentName.setText(String.format("משחק נגד: %s", opponent.getFullName()));
+                                ((TextView) findViewById(R.id.tv_OnlineMemoryGame_opponent_name)).setText(String.format("משחק נגד: %s", opponent.getFullName()));
                         }
 
                         @Override
                         public void onFailed(Exception e) {
-                            tvOpponentName.setText("משחק נגד: יריב");
+                            ((TextView) findViewById(R.id.tv_OnlineMemoryGame_opponent_name)).setText("משחק נגד: יריב");
                         }
                     });
                 }
@@ -341,6 +326,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                 checkIfGameFinished();
 
                 boolean isMyTurn = user.getId().equals(room.getCurrentTurnUid());
+                TextView tvTurnStatus = findViewById(R.id.tv_OnlineMemoryGame_turn_status);
                 if (isMyTurn) {
                     tvTurnStatus.setText("תורך!");
                     tvTurnStatus.setTextColor(getColor(android.R.color.holo_green_dark));

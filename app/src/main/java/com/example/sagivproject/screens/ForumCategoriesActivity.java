@@ -7,11 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,23 +41,12 @@ public class ForumCategoriesActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_forum_categories);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumCategoriesPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_forum_categories, R.id.forumCategoriesPage);
         setupMenu();
 
         User currentUser = sharedPreferencesUtil.getUser();
         boolean isAdmin = currentUser != null && currentUser.isAdmin();
-
-        TextView txtTitle = findViewById(R.id.txtForumCategoriesTitle);
-        if (txtTitle != null) {
-            txtTitle.setText(isAdmin ? R.string.forum_categories_options : R.string.forum_categories);
-        }
+        ((TextView) findViewById(R.id.txtForumCategoriesTitle)).setText(isAdmin ? R.string.forum_categories_options : R.string.forum_categories);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_forumCategories);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

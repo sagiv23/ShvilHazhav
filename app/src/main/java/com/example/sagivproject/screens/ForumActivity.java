@@ -7,11 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,47 +34,16 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ForumActivity extends BaseActivity {
-    /**
-     * The RecyclerView displaying the forum messages.
-     */
     private RecyclerView recycler;
-
-    /**
-     * The input field for typing new messages.
-     */
-    private EditText edtMessage;
-
-    /**
-     * A button that appears to alert the user of new messages below the current scroll position.
-     */
     private Button btnNewMessagesIndicator;
-
-    /**
-     * The adapter managing the binding of {@link ForumMessage} objects.
-     */
     private ForumAdapter adapter;
-
-    /**
-     * The ID of the current forum category being displayed.
-     */
     private String categoryId;
-
-    /**
-     * The currently logged-in user.
-     */
     private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_forum);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_forum, R.id.forumPage);
         setupMenu();
 
         user = sharedPreferencesUtil.getUser();
@@ -86,46 +51,17 @@ public class ForumActivity extends BaseActivity {
         categoryId = getIntent().getStringExtra("categoryId");
         String categoryName = getIntent().getStringExtra("categoryName");
 
-        findViewById(R.id.btn_forum_back_to_categories).setOnClickListener(v -> finish());
-
-        Button btnSendMessage = findViewById(R.id.btn_forum_send_message);
-        btnSendMessage.setOnClickListener(v -> sendMessage());
-
-        initForumViews(R.id.recycler_forum, R.id.edt_forum_new_message, R.id.btn_forum_new_messages_indicator);
-        setupForum(categoryId, categoryName);
-    }
-
-    /**
-     * Initializes the core UI views required for the forum functionality.
-     *
-     * @param recyclerId     Resource ID for the RecyclerView.
-     * @param edtId          Resource ID for the message EditText.
-     * @param btnIndicatorId Resource ID for the new message indicator button.
-     */
-    private void initForumViews(int recyclerId, int edtId, int btnIndicatorId) {
-        this.recycler = findViewById(recyclerId);
-        this.edtMessage = findViewById(edtId);
-        this.btnNewMessagesIndicator = findViewById(btnIndicatorId);
-
-        if (btnNewMessagesIndicator != null) {
-            btnNewMessagesIndicator.setOnClickListener(v -> {
-                scrollToBottom(true);
-                btnNewMessagesIndicator.setVisibility(View.GONE);
-            });
-        }
-    }
-
-    /**
-     * Sets up the forum with the specified category details and initializes the adapter.
-     *
-     * @param categoryId   The unique ID of the forum category.
-     * @param categoryName The display name of the forum category.
-     */
-    private void setupForum(String categoryId, String categoryName) {
+        btnNewMessagesIndicator = findViewById(R.id.btn_forum_new_messages_indicator);
+        recycler = findViewById(R.id.recycler_forum);
         TextView title = findViewById(R.id.txtForumTitle);
-        if (title != null) {
-            title.setText(categoryName);
-        }
+
+        findViewById(R.id.btn_forum_back_to_categories).setOnClickListener(v -> finish());
+        findViewById(R.id.btn_forum_send_message).setOnClickListener(v -> sendMessage());
+        btnNewMessagesIndicator.setOnClickListener(v -> {
+            scrollToBottom(true);
+            btnNewMessagesIndicator.setVisibility(View.GONE);
+        });
+        title.setText(categoryName);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
@@ -199,6 +135,7 @@ public class ForumActivity extends BaseActivity {
      * Sends the text currently in the EditText as a new message.
      */
     private void sendMessage() {
+        EditText edtMessage = findViewById(R.id.edt_forum_new_message);
         String text = edtMessage.getText().toString().trim();
         if (text.isEmpty()) return;
 

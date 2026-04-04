@@ -3,15 +3,10 @@ package com.example.sagivproject.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
@@ -32,14 +27,7 @@ public class LandingActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_landing);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.landingPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_landing, R.id.landingPage);
         setupMenu();
 
         LinearLayout mainContent = findViewById(R.id.mainContent);
@@ -85,12 +73,8 @@ public class LandingActivity extends BaseActivity {
             }
         }
 
-        Button btnToContact = findViewById(R.id.btn_landingBody_to_contact);
-        Button btnToLogin = findViewById(R.id.btn_landingBody_to_login);
-        Button btnToRegister = findViewById(R.id.btn_landingBody_to_register);
-
-        btnToContact.setOnClickListener(v -> startActivity(new Intent(this, ContactActivity.class)));
-        btnToLogin.setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
-        btnToRegister.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
+        findViewById(R.id.btn_landingBody_to_contact).setOnClickListener(v -> startActivity(new Intent(this, ContactActivity.class)));
+        findViewById(R.id.btn_landingBody_to_login).setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
+        findViewById(R.id.btn_landingBody_to_register).setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
     }
 }

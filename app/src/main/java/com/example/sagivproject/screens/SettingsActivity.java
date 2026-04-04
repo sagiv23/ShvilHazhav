@@ -8,13 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
@@ -53,14 +49,7 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_settings);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settingsPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_settings, R.id.settingsPage);
         setupMenu();
 
         Button btnLogout = findViewById(R.id.btn_logout);
@@ -103,9 +92,7 @@ public class SettingsActivity extends BaseActivity {
         switchNotifications.setChecked(sharedPreferencesUtil.isNotificationsEnabled());
         switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferencesUtil.setNotificationsEnabled(isChecked));
 
-        boolean isFallDetectionEnabled = sharedPreferencesUtil.isFallDetectionEnabled();
-        switchFallDetection.setChecked(isFallDetectionEnabled);
-
+        switchFallDetection.setChecked(sharedPreferencesUtil.isFallDetectionEnabled());
         switchFallDetection.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 handleFallDetectionEnable();

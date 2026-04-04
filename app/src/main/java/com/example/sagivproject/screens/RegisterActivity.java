@@ -2,15 +2,10 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
@@ -55,17 +50,10 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_register);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registerPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_register, R.id.registerPage);
         setupMenu();
 
-        Button btnRegister = findViewById(R.id.btnRegister);
+        findViewById(R.id.btnRegister).setOnClickListener(v -> tryRegister());
         editTextFirstName = findViewById(R.id.edt_register_first_name);
         editTextLastName = findViewById(R.id.edt_register_last_name);
         editTextBirthDate = findViewById(R.id.edt_register_birth_date);
@@ -75,7 +63,6 @@ public class RegisterActivity extends BaseActivity {
         editTextBirthDate.setFocusable(false);
         editTextBirthDate.setClickable(true);
         editTextBirthDate.setOnClickListener(v -> openDatePicker());
-        btnRegister.setOnClickListener(v -> tryRegister());
     }
 
     /**

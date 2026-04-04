@@ -11,13 +11,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
@@ -54,7 +50,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class AiActivity extends BaseActivity {
     private ChatFutures chatSession;
-    private Button send, speakBtn;
+    private Button btnSend, btnSpeak;
     private ProgressBar progressBar;
     private EditText questionInput;
     private TextView answerView;
@@ -66,18 +62,11 @@ public class AiActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_ai);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.aiPage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        setContent(R.layout.activity_ai, R.id.aiPage);
         setupMenu();
 
-        send = findViewById(R.id.btn_Ai_send_to_Ai);
-        speakBtn = findViewById(R.id.btn_Ai_speak);
+        btnSend = findViewById(R.id.btn_Ai_send_to_Ai);
+        btnSpeak = findViewById(R.id.btn_Ai_speak);
         questionInput = findViewById(R.id.edit_Ai_question);
         answerView = findViewById(R.id.TV_Ai_txt_response);
         progressBar = findViewById(R.id.progressBar_Ai);
@@ -109,8 +98,8 @@ public class AiActivity extends BaseActivity {
         GenerativeModelFutures modelFutures = GenerativeModelFutures.from(generativeModel);
         chatSession = modelFutures.startChat(Collections.emptyList());
 
-        send.setOnClickListener(v -> sendQuestion());
-        speakBtn.setOnClickListener(v -> toggleSpeech());
+        btnSend.setOnClickListener(v -> sendQuestion());
+        btnSpeak.setOnClickListener(v -> toggleSpeech());
     }
 
     /**
@@ -136,7 +125,7 @@ public class AiActivity extends BaseActivity {
      */
     private void updateSpeakButton(boolean speaking) {
         isSpeaking = speaking;
-        speakBtn.setText(speaking ? R.string.cancel_playback : R.string.playback_answer);
+        btnSpeak.setText(speaking ? R.string.cancel_playback : R.string.playback_answer);
     }
 
     /**
@@ -147,7 +136,7 @@ public class AiActivity extends BaseActivity {
         if (q.isEmpty()) return;
 
         progressBar.setVisibility(View.VISIBLE);
-        send.setEnabled(false);
+        btnSend.setEnabled(false);
         answerView.setText("");
         updateSpeakButton(false);
         tts.stop();
@@ -164,7 +153,7 @@ public class AiActivity extends BaseActivity {
             @Override
             public void onSuccess(GenerateContentResponse result) {
                 progressBar.setVisibility(View.GONE);
-                send.setEnabled(true);
+                btnSend.setEnabled(true);
                 String text = result.getText();
                 if (text == null) {
                     text = "לא התקבלה תשובה.";
@@ -175,7 +164,7 @@ public class AiActivity extends BaseActivity {
             @Override
             public void onFailure(@NonNull Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                send.setEnabled(true);
+                btnSend.setEnabled(true);
                 answerView.setText(String.format("שגיאה: %s", t.getMessage()));
             }
         }, mainExecutor);
@@ -199,7 +188,7 @@ public class AiActivity extends BaseActivity {
                     answerView.append(String.valueOf(fullText.charAt(charIndex++)));
                     animationHandler.postDelayed(this, delay);
                 } else {
-                    speakBtn.setVisibility(View.VISIBLE);
+                    btnSpeak.setVisibility(View.VISIBLE);
                 }
             }
         });
