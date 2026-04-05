@@ -93,7 +93,13 @@ public class EmergencyContactsActivity extends BaseActivity {
                 dialogService.showEmergencyContactDialog(getSupportFragmentManager(), null, this::addEmergencyContact)
         );
 
-        findViewById(R.id.btn_pick_contact).setOnClickListener(v -> requestPermissions(Manifest.permission.READ_CONTACTS));
+        findViewById(R.id.btn_pick_contact).setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                contactPickerLauncher.launch(null);
+            } else {
+                requestPermissions(Manifest.permission.READ_CONTACTS);
+            }
+        });
 
         findViewById(R.id.btn_send_emergency_sms).setOnClickListener(v -> checkSmsAndLocationPermissions());
         findViewById(R.id.btn_call_109).setOnClickListener(v -> callEmergency());
@@ -162,13 +168,13 @@ public class EmergencyContactsActivity extends BaseActivity {
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
         if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.SEND_SMS))) {
             fetchLocationAndSendSms();
-            updatePermissionUI();
-        } else if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_CONTACTS))) {
-            contactPickerLauncher.launch(null);
-            updatePermissionUI();
-        } else {
-            updatePermissionUI();
         }
+
+        if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_CONTACTS))) {
+            contactPickerLauncher.launch(null);
+        }
+
+        updatePermissionUI();
     }
 
     /**
@@ -195,10 +201,17 @@ public class EmergencyContactsActivity extends BaseActivity {
     }
 
     /**
-     * Refreshes the visibility of the fall detection prompt based on user settings.
+     * Refreshes the visibility of the fall detection prompt based on system status.
      */
     private void updateFallDetectionUI() {
-        if (sharedPreferencesUtil.isFallDetectionEnabled()) {
+        boolean hasActivityRec = ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED;
+        boolean hasLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        boolean hasSms = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
+        boolean hasBackgroundLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        boolean isFallDetectionLikelyActive = hasActivityRec && hasLocation && hasSms && hasBackgroundLocation;
+
+        if (isFallDetectionLikelyActive) {
             findViewById(R.id.card_fall_detection_reminder).setVisibility(View.GONE);
         } else {
             findViewById(R.id.card_fall_detection_reminder).setVisibility(View.VISIBLE);
@@ -237,7 +250,6 @@ public class EmergencyContactsActivity extends BaseActivity {
 
     /**
      * Synchronizes the contact list with the database.
-     * Automatically disables fall detection if no contacts remain.
      */
     private void loadContacts() {
         if (user == null) return;
@@ -247,8 +259,7 @@ public class EmergencyContactsActivity extends BaseActivity {
                 adapter.setData(contactsList);
                 findViewById(R.id.txt_no_contacts).setVisibility(contactsList.isEmpty() ? View.VISIBLE : View.GONE);
 
-                if (contactsList.isEmpty() && sharedPreferencesUtil.isFallDetectionEnabled()) {
-                    sharedPreferencesUtil.setFallDetectionEnabled(false);
+                if (contactsList.isEmpty()) {
                     fallDetectionService.stopMonitoring();
                     updateFallDetectionUI();
                     Toast.makeText(EmergencyContactsActivity.this, "זיהוי נפילות הופסק כיוון שאין אנשי קשר לחירום", Toast.LENGTH_LONG).show();

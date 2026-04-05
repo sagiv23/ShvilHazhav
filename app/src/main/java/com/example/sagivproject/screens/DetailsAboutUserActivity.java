@@ -260,8 +260,11 @@ public class DetailsAboutUserActivity extends BaseActivity {
 
             @Override
             public void onGallery() {
-                // Photo Picker does not require permissions on Android 13+ (API 33+)
-                launchGallery();
+                if (ContextCompat.checkSelfPermission(DetailsAboutUserActivity.this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                    launchGallery();
+                } else {
+                    requestPermissions(Manifest.permission.READ_MEDIA_IMAGES);
+                }
             }
 
             @Override

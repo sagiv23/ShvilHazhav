@@ -26,9 +26,6 @@ public class SharedPreferencesUtil {
     private static final String PREF_NAME = "com.example.sagivproject.PREFERENCE_FILE_KEY";
     private static final String KEY_USER = "user";
     private static final String KEY_DARK_MODE = "dark_mode";
-    private static final String KEY_FALL_DETECTION_ENABLED = "fall_detection_enabled";
-    private static final String KEY_VIBRATION_ENABLED = "vibration_enabled";
-    private static final String KEY_NOTIFICATIONS_ENABLED = "notifications_enabled";
 
     private final SharedPreferences sharedPreferences;
     private final Gson gson;
@@ -226,59 +223,5 @@ public class SharedPreferencesUtil {
             return user.getId();
         }
         return null;
-    }
-
-    /**
-     * Checks if the fall detection background service is enabled.
-     *
-     * @return true if fall detection is active.
-     */
-    public boolean isFallDetectionEnabled() {
-        return getBoolean(KEY_FALL_DETECTION_ENABLED, false);
-    }
-
-    /**
-     * Updates the fall detection service state in preferences.
-     *
-     * @param isEnabled true to enable monitoring.
-     */
-    public void setFallDetectionEnabled(boolean isEnabled) {
-        saveBoolean(KEY_FALL_DETECTION_ENABLED, isEnabled);
-    }
-
-    /**
-     * Checks if haptic feedback (vibration) is globally enabled for the user.
-     *
-     * @return true if vibration is enabled. Defaults to true for all users.
-     */
-    public boolean isVibrationEnabled() {
-        return getBoolean(KEY_VIBRATION_ENABLED, true);
-    }
-
-    /**
-     * Updates the user's vibration preference.
-     *
-     * @param isEnabled true to enable haptic feedback.
-     */
-    public void setVibrationEnabled(boolean isEnabled) {
-        saveBoolean(KEY_VIBRATION_ENABLED, isEnabled);
-    }
-
-    /**
-     * Checks if push notifications are enabled for the application.
-     *
-     * @return true if notifications are allowed. Defaults to true.
-     */
-    public boolean isNotificationsEnabled() {
-        return getBoolean(KEY_NOTIFICATIONS_ENABLED, true);
-    }
-
-    /**
-     * Updates the user's notification preference.
-     *
-     * @param isEnabled true to allow application notifications.
-     */
-    public void setNotificationsEnabled(boolean isEnabled) {
-        saveBoolean(KEY_NOTIFICATIONS_ENABLED, isEnabled);
     }
 }

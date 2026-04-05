@@ -2,10 +2,12 @@ package com.example.sagivproject.bases;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.os.VibratorManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -258,11 +260,9 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     }
 
     /**
-     * Triggers a short vibration if enabled in preferences.
+     * Triggers a short vibration.
      */
     protected void vibrateDevice() {
-        if (!sharedPreferencesUtil.isVibrationEnabled()) return;
-
         Vibrator vibrator;
         VibratorManager vibratorManager = (VibratorManager) getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
         vibrator = vibratorManager.getDefaultVibrator();
@@ -279,6 +279,16 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
      */
     protected void requestPermissions(String... permissions) {
         requestPermissionLauncher.launch(permissions);
+    }
+
+    /**
+     * Opens the system settings screen for the current application.
+     */
+    protected void openAppSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
     }
 
     /**

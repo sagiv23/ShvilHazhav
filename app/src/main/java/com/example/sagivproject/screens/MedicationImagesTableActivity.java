@@ -146,7 +146,8 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
     @Override
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
-        if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_MEDIA_IMAGES))) {
+        if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_MEDIA_IMAGES)) ||
+                Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_EXTERNAL_STORAGE))) {
             openGallery();
         } else {
             Toast.makeText(this, "נדרשת הרשאת גישה לתמונות כדי להוסיף תמונה", Toast.LENGTH_SHORT).show();

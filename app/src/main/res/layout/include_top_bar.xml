@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/background_color_nav"
@@ -49,7 +48,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/separatorLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/text_color" />

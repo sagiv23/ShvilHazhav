@@ -148,7 +148,12 @@
     <string name="fall_detection_is_disabled">זיהוי נפילות אינו פעיל</string>
     <string name="click_here_to_activate_in_settings">לחץ כאן להפעלה בהגדרות</string>
     <string name="vibration">רטט</string>
-    <string name="notifications">התראות</string>
+    <string name="camera_permission">הרשאת מצלמה</string>
+    <string name="gallery_permission">הרשאת גלריה</string>
+    <string name="location_permission">הרשאת מיקום</string>
+    <string name="sms_permission">הרשאת SMS</string>
+    <string name="contacts_permission">הרשאת אנשי קשר</string>
+    <string name="notifications_permission">הרשאת התראות</string>
     <string name="sms_location_disabled_warning">לא ניתן לשלוח הודעות חירום ללא אישור הרשאות שליחת הודעות SMS ושימוש במיקום</string>
     <string name="click_here_to_enable_permissions">אישור הרשאות</string>
 </resources>
