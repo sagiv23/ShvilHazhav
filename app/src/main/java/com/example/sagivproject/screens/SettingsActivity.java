@@ -127,7 +127,6 @@ public class SettingsActivity extends BaseActivity {
                 switchCamera.setVisibility(View.VISIBLE);
                 if (separatorCamera != null) separatorCamera.setVisibility(View.VISIBLE);
                 switchGallery.setVisibility(View.VISIBLE);
-                if (separatorLogout != null) separatorLogout.setVisibility(View.VISIBLE);
             } else {
                 // Regular Logged-in User: Show everything
                 switchVibration.setVisibility(View.VISIBLE);
@@ -146,8 +145,8 @@ public class SettingsActivity extends BaseActivity {
                 if (separatorLocation != null) separatorLocation.setVisibility(View.VISIBLE);
                 if (separatorSms != null) separatorSms.setVisibility(View.VISIBLE);
                 if (separatorFallDetection != null) separatorFallDetection.setVisibility(View.VISIBLE);
-                if (separatorLogout != null) separatorLogout.setVisibility(View.VISIBLE);
             }
+            if (separatorLogout != null) separatorLogout.setVisibility(View.VISIBLE);
         }
 
         boolean isDarkMode = sharedPreferencesUtil.isDarkMode();
