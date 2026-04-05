@@ -73,20 +73,80 @@ public class SettingsActivity extends BaseActivity {
 
         View separatorLogout = findViewById(R.id.separator_logout);
         View separatorFallDetection = findViewById(R.id.separator_fall_detection);
+        View separatorVibration = findViewById(R.id.separator_vibration);
+        View separatorNotifications = findViewById(R.id.separator_notifications);
+        View separatorCamera = findViewById(R.id.separator_camera);
+        View separatorGallery = findViewById(R.id.separator_gallery);
+        View separatorLocation = findViewById(R.id.separator_location);
+        View separatorSms = findViewById(R.id.separator_sms);
 
         if (sharedPreferencesUtil.isUserNotLoggedIn()) {
-            btnLogout.setVisibility(View.GONE);
+            // Guest User: Hide everything except Dark Mode
+            switchVibration.setVisibility(View.GONE);
+            switchNotifications.setVisibility(View.GONE);
+            switchCamera.setVisibility(View.GONE);
+            switchGallery.setVisibility(View.GONE);
+            switchLocation.setVisibility(View.GONE);
+            switchSms.setVisibility(View.GONE);
+            switchContacts.setVisibility(View.GONE);
             switchFallDetection.setVisibility(View.GONE);
-            if (separatorLogout != null) separatorLogout.setVisibility(View.GONE);
+            btnLogout.setVisibility(View.GONE);
+
+            if (separatorVibration != null) separatorVibration.setVisibility(View.GONE);
+            if (separatorNotifications != null) separatorNotifications.setVisibility(View.GONE);
+            if (separatorCamera != null) separatorCamera.setVisibility(View.GONE);
+            if (separatorGallery != null) separatorGallery.setVisibility(View.GONE);
+            if (separatorLocation != null) separatorLocation.setVisibility(View.GONE);
+            if (separatorSms != null) separatorSms.setVisibility(View.GONE);
             if (separatorFallDetection != null) separatorFallDetection.setVisibility(View.GONE);
+            if (separatorLogout != null) separatorLogout.setVisibility(View.GONE);
+
         } else {
             User currentUser = sharedPreferencesUtil.getUser();
             btnLogout.setVisibility(View.VISIBLE);
             btnLogout.setOnClickListener(v -> logout());
 
             if (currentUser != null && currentUser.isAdmin()) {
+                // Admin User: Hide Vibration, Notifications, Location, SMS, Contacts, Fall Detection
+                switchVibration.setVisibility(View.GONE);
+                switchNotifications.setVisibility(View.GONE);
+                switchLocation.setVisibility(View.GONE);
+                switchSms.setVisibility(View.GONE);
+                switchContacts.setVisibility(View.GONE);
                 switchFallDetection.setVisibility(View.GONE);
+
+                // Hide corresponding separators to maintain a clean layout
+                if (separatorVibration != null) separatorVibration.setVisibility(View.GONE);
+                if (separatorNotifications != null) separatorNotifications.setVisibility(View.GONE);
+                if (separatorGallery != null) separatorGallery.setVisibility(View.GONE);
+                if (separatorLocation != null) separatorLocation.setVisibility(View.GONE);
+                if (separatorSms != null) separatorSms.setVisibility(View.GONE);
                 if (separatorFallDetection != null) separatorFallDetection.setVisibility(View.GONE);
+
+                // Ensure visible items and their necessary separators are shown
+                switchCamera.setVisibility(View.VISIBLE);
+                if (separatorCamera != null) separatorCamera.setVisibility(View.VISIBLE);
+                switchGallery.setVisibility(View.VISIBLE);
+                if (separatorLogout != null) separatorLogout.setVisibility(View.VISIBLE);
+            } else {
+                // Regular Logged-in User: Show everything
+                switchVibration.setVisibility(View.VISIBLE);
+                switchNotifications.setVisibility(View.VISIBLE);
+                switchCamera.setVisibility(View.VISIBLE);
+                switchGallery.setVisibility(View.VISIBLE);
+                switchLocation.setVisibility(View.VISIBLE);
+                switchSms.setVisibility(View.VISIBLE);
+                switchContacts.setVisibility(View.VISIBLE);
+                switchFallDetection.setVisibility(View.VISIBLE);
+
+                if (separatorVibration != null) separatorVibration.setVisibility(View.VISIBLE);
+                if (separatorNotifications != null) separatorNotifications.setVisibility(View.VISIBLE);
+                if (separatorCamera != null) separatorCamera.setVisibility(View.VISIBLE);
+                if (separatorGallery != null) separatorGallery.setVisibility(View.VISIBLE);
+                if (separatorLocation != null) separatorLocation.setVisibility(View.VISIBLE);
+                if (separatorSms != null) separatorSms.setVisibility(View.VISIBLE);
+                if (separatorFallDetection != null) separatorFallDetection.setVisibility(View.VISIBLE);
+                if (separatorLogout != null) separatorLogout.setVisibility(View.VISIBLE);
             }
         }
 

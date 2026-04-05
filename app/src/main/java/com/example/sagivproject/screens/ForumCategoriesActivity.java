@@ -46,7 +46,7 @@ public class ForumCategoriesActivity extends BaseActivity {
 
         User currentUser = sharedPreferencesUtil.getUser();
         boolean isAdmin = currentUser != null && currentUser.isAdmin();
-        ((TextView) findViewById(R.id.txtForumCategoriesTitle)).setText(isAdmin ? R.string.forum_categories_options : R.string.forum_categories);
+        ((TextView) findViewById(R.id.txtForumCategoriesTitle)).setText(isAdmin ? R.string.forum_admin : R.string.forum_categories);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_forumCategories);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

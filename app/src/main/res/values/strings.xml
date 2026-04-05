@@ -8,10 +8,10 @@
     <string name="hello_admin">שלום מנהל יקר</string>
     <string name="admin_options">אפשרויות ניהול</string>
     <string name="users_table">טבלת משתמשים</string>
-    <string name="memory_game_log_table">טבלת תיעוד המשחקים</string>
+    <string name="memory_game_log_table">טבלת תיעוד משחקי הזיכרון</string>
     <string name="medications_imgs_table">טבלת תמונות התרופות</string>
     <string name="forum">קשר קרוב</string>
-    <string name="forum_categories_options">ניהול קטגוריות קשר קרוב</string>
+    <string name="forum_admin">ניהול קשר קרוב</string>
     <string name="user">משתמש</string>
     <string name="log_out">התנתקות</string>
     <string name="main">דף הבית</string>
