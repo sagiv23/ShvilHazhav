@@ -231,6 +231,7 @@ public class SettingsActivity extends BaseActivity {
 
             Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
             intent.putExtra("userEmail", email);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         };
 

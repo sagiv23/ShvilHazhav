@@ -15,7 +15,7 @@
     <string name="user">משתמש</string>
     <string name="log_out">התנתקות</string>
     <string name="main">דף הבית</string>
-    <string name="contact">צור קשר</string>
+    <string name="contact">יצירת קשר</string>
     <string name="ai_advisor">AI יועץ</string>
     <string name="write_question_here">הקלד כאן את שאלתך…</string>
     <string name="send_question">שלח שאלה</string>
@@ -27,7 +27,9 @@
     <string name="settings">הגדרות</string>
     <string name="mail_to_contact">כתובת מייל לפניות:</string>
     <string name="mail">shvilhazhav23contact@gmail.com</string>
-    <string name="contact_text">הרעיון לפרויקט עלה לאור התקופה הקשה שהמדינה עוברת בשנים האחרונות ולא מעט אירועים בהם אוכלוסיות מיוחדות ונזקקות נדרשו לעזרה גם בדברים הקטנים היומיומיים.</string>
+    <string name="contact_text">בעידן של הזדקנות אוכלוסייה ועומס על מערכות הבריאות, עולה הצורך בפתרונות טכנולוגיים פשוטים ונגישים. קשישים רבים מתמודדים עם בדידות וקושי בניהול שגרה רפואית.
+אפליקציית "שביל הזהב" נועדה לסייע בכך - שיפור העצמאות, חיזוק תחושת הביטחון והענקת איכות חיים טובה יותר באמצעות טכנולוגיה נגישה.
+</string>
     <string name="icon_contact">אייקון צור קשר</string>
     <string name="full_name">שם מלא</string>
     <string name="confirm">אישור</string>
