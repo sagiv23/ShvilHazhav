@@ -307,7 +307,7 @@ public class UsersTableActivity extends BaseActivity {
                     return user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery);
                 case "מנהלים":
                     return user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
-                case "משתמשים רגילים":
+                case "מטופלים":
                     return !user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
                 default:
                     return user.getFullName().toLowerCase().contains(lowerQuery) || (user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery));
@@ -322,7 +322,7 @@ public class UsersTableActivity extends BaseActivity {
      */
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
-        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "משתמשים רגילים"};
+        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "מטופלים"};
         return new ArrayAdapter<>(UsersTableActivity.this, android.R.layout.simple_spinner_item, searchOptions) {
             @NonNull
             @Override
