@@ -312,6 +312,49 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     }
 
     @Override
+    public void finishGame(String roomId, String winnerUid, @Nullable DatabaseCallback<Void> callback) {
+        roomsReference.child(roomId).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                GameRoom room = currentData.getValue(GameRoom.class);
+                if (room == null) return Transaction.success(currentData);
+                
+                // If already finished or stats already updated, don't do anything
+                if (STATUS_FINISHED.equals(room.getStatus()) && room.isStatsUpdated()) {
+                    return Transaction.success(currentData);
+                }
+
+                room.setStatus(STATUS_FINISHED);
+                room.setWinnerUid(winnerUid);
+                
+                // Only update stats if they haven't been updated yet
+                if (!room.isStatsUpdated()) {
+                    room.setStatsUpdated(true);
+                    
+                    if (room.getPlayer1Uid() != null) {
+                        updateDailyMemoryStats(room.getPlayer1Uid(), room.getPlayer1Uid().equals(winnerUid));
+                    }
+                    if (room.getPlayer2Uid() != null) {
+                        updateDailyMemoryStats(room.getPlayer2Uid(), room.getPlayer2Uid().equals(winnerUid));
+                    }
+                }
+
+                currentData.setValue(room);
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (callback != null) {
+                    if (error != null) callback.onFailed(error.toException());
+                    else callback.onCompleted(null);
+                }
+            }
+        });
+    }
+
+    @Override
     public void updateCardStatus(String roomId, int index, boolean revealed, boolean matched) {
         if (index < 0) return;
         DatabaseReference cardRef = roomsReference.child(roomId).child(FIELD_CARDS).child(String.valueOf(index));

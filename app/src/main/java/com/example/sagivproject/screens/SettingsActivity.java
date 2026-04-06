@@ -139,12 +139,14 @@ public class SettingsActivity extends BaseActivity {
                 switchFallDetection.setVisibility(View.VISIBLE);
 
                 if (separatorVibration != null) separatorVibration.setVisibility(View.VISIBLE);
-                if (separatorNotifications != null) separatorNotifications.setVisibility(View.VISIBLE);
+                if (separatorNotifications != null)
+                    separatorNotifications.setVisibility(View.VISIBLE);
                 if (separatorCamera != null) separatorCamera.setVisibility(View.VISIBLE);
                 if (separatorGallery != null) separatorGallery.setVisibility(View.VISIBLE);
                 if (separatorLocation != null) separatorLocation.setVisibility(View.VISIBLE);
                 if (separatorSms != null) separatorSms.setVisibility(View.VISIBLE);
-                if (separatorFallDetection != null) separatorFallDetection.setVisibility(View.VISIBLE);
+                if (separatorFallDetection != null)
+                    separatorFallDetection.setVisibility(View.VISIBLE);
             }
             if (separatorLogout != null) separatorLogout.setVisibility(View.VISIBLE);
         }

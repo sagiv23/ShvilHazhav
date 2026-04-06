@@ -53,9 +53,15 @@ public class GameRoom implements Serializable, Idable {
     private String winnerUid;
 
     /**
+     * Flag to indicate if the stats for this game have been processed.
+     */
+    private boolean statsUpdated;
+
+    /**
      * Default constructor required for Firebase deserialization.
      */
     public GameRoom() {
+        this.statsUpdated = false;
     }
 
     /**
@@ -194,6 +200,17 @@ public class GameRoom implements Serializable, Idable {
 
     public void setWinnerUid(String winnerUid) {
         this.winnerUid = winnerUid;
+    }
+
+    /**
+     * @return true if the statistics for this game session have already been recorded.
+     */
+    public boolean isStatsUpdated() {
+        return statsUpdated;
+    }
+
+    public void setStatsUpdated(boolean statsUpdated) {
+        this.statsUpdated = statsUpdated;
     }
 
     @NonNull

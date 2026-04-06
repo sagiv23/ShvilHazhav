@@ -179,7 +179,7 @@ public class GameHomeScreenActivity extends BaseActivity {
         DailyStats stats = user.getDailyStats().get(today);
         int winsToday = (stats != null) ? stats.getMemoryWins() : 0;
         int gamesToday = (stats != null) ? stats.getMemoryGamesPlayed() : 0;
-        int totalGames = getTotalWins(user);
+        int totalGames = getTotalGamesPlayed(user);
 
         ((TextView) findViewById(R.id.tv_GameHomeScreen_victories)).setText(MessageFormat.format("ניצחונות היום: {0}", winsToday));
         ((TextView) findViewById(R.id.tv_GameHomeScreen_games_today)).setText(MessageFormat.format("משחקים היום: {0}", gamesToday));
@@ -216,6 +216,19 @@ public class GameHomeScreenActivity extends BaseActivity {
         if (u.getDailyStats() != null) {
             for (DailyStats ds : u.getDailyStats().values()) {
                 total += ds.getMemoryWins();
+            }
+        }
+        return total;
+    }
+
+    /**
+     * Helper to calculate total memory games played for a user across all days.
+     */
+    private int getTotalGamesPlayed(User u) {
+        int total = 0;
+        if (u.getDailyStats() != null) {
+            for (DailyStats ds : u.getDailyStats().values()) {
+                total += ds.getMemoryGamesPlayed();
             }
         }
         return total;

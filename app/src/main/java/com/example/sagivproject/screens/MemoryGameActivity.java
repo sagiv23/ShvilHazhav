@@ -97,8 +97,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             endDialogShown = true;
             if (currentRoom != null && !"finished".equals(currentRoom.getStatus())) {
                 String opponentUid = user.getId().equals(currentRoom.getPlayer1Uid()) ? currentRoom.getPlayer2Uid() : currentRoom.getPlayer1Uid();
-                databaseService.getGameService().updateRoomField(roomId, "winnerUid", opponentUid);
-                databaseService.getGameService().updateRoomField(roomId, "status", "finished");
+                databaseService.getGameService().finishGame(roomId, opponentUid, null);
             }
             goBack();
         };
@@ -117,10 +116,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         String winnerUid = room.getWinnerUid();
         String message;
         boolean isWin = user.getId().equals(winnerUid);
+        boolean isDraw = "draw".equals(winnerUid);
 
-        databaseService.getGameService().updateDailyMemoryStats(user.getId(), isWin);
-
-        if ("draw".equals(winnerUid)) {
+        if (isDraw) {
             message = "זה נגמר בתיקו!";
         } else if (isWin) {
             message = "כל הכבוד! ניצחת והתווסף לך ניצחון!";
@@ -253,7 +251,11 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * Scans the board to determine if all pairs have been found.
      */
     private void checkIfGameFinished() {
-        if (currentRoom.getCards() == null) return;
+        if (currentRoom.getCards() == null || currentRoom.getCards().isEmpty()) return;
+
+        // Don't check if game is already finished in DB
+        if ("finished".equals(currentRoom.getStatus())) return;
+
         boolean allCardsMatched = true;
         for (Card card : currentRoom.getCards()) {
             if (!card.getIsMatched()) {
@@ -270,8 +272,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     private void finishGame(GameRoom room) {
         if ("finished".equals(room.getStatus())) return;
         String winnerUid = calculateWinner(room);
-        databaseService.getGameService().updateRoomField(roomId, "winnerUid", winnerUid);
-        databaseService.getGameService().updateRoomField(roomId, "status", "finished");
+        databaseService.getGameService().finishGame(roomId, winnerUid, null);
     }
 
     /**
@@ -352,9 +353,8 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     private String calculateWinner(GameRoom room) {
         int p1 = room.getPlayer1Score();
         int p2 = room.getPlayer2Score();
-        if (p1 > p2) return room.getPlayer1Uid();
-        if (p2 > p1) return room.getPlayer2Uid();
-        return "draw";
+        if (p1 == p2) return "draw";
+        return p1 > p2 ? room.getPlayer1Uid() : room.getPlayer2Uid();
     }
 
     /**
@@ -370,12 +370,15 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
             @Override
             public void onFinish() {
-                if (currentRoom.getFirstSelectedCardIndex() != null) {
-                    databaseService.getGameService().updateCardStatus(roomId, currentRoom.getFirstSelectedCardIndex(), false, false);
-                    databaseService.getGameService().updateRoomField(roomId, "firstSelectedCardIndex", null);
+                // If it's my turn, only then I should handle the timer expiration
+                if (isMyTurn()) {
+                    if (currentRoom.getFirstSelectedCardIndex() != null) {
+                        databaseService.getGameService().updateCardStatus(roomId, currentRoom.getFirstSelectedCardIndex(), false, false);
+                        databaseService.getGameService().updateRoomField(roomId, "firstSelectedCardIndex", null);
+                    }
+                    String nextTurn = user.getId().equals(currentRoom.getPlayer1Uid()) ? currentRoom.getPlayer2Uid() : currentRoom.getPlayer1Uid();
+                    databaseService.getGameService().updateRoomField(roomId, "currentTurnUid", nextTurn);
                 }
-                String opponentUid = user.getId().equals(currentRoom.getPlayer1Uid()) ? currentRoom.getPlayer2Uid() : currentRoom.getPlayer1Uid();
-                databaseService.getGameService().updateRoomField(roomId, "currentTurnUid", opponentUid);
             }
         }.start();
     }

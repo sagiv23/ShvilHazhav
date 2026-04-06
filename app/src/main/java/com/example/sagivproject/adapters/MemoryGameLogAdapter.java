@@ -77,6 +77,19 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
         holder.txtPlayers.setText(String.format("%s נגד %s", p1Name, p2Name));
         holder.txtScore.setText(MessageFormat.format("תוצאה: {0} - {1}", room.getPlayer1Score(), room.getPlayer2Score()));
         holder.txtStatus.setText(String.format("סטטוס: %s", room.getStatus()));
+
+        String winnerUid = room.getWinnerUid();
+        if (winnerUid != null && !winnerUid.isEmpty()) {
+            holder.txtWinner.setVisibility(View.VISIBLE);
+            if (winnerUid.equals("draw")) {
+                holder.txtWinner.setText("תוצאה: תיקו");
+            } else {
+                String winnerName = uidToNameMap != null ? uidToNameMap.getOrDefault(winnerUid, "אנונימי") : "אנונימי";
+                holder.txtWinner.setText(String.format("מנצח: %s", winnerName));
+            }
+        } else {
+            holder.txtWinner.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -86,7 +99,7 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
         /**
          * TextViews for player names, scores, and room status.
          */
-        final TextView txtPlayers, txtScore, txtStatus;
+        final TextView txtPlayers, txtScore, txtStatus, txtWinner;
 
         /**
          * Constructs a new ViewHolder.
@@ -98,6 +111,7 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
             txtPlayers = itemView.findViewById(R.id.txt_itemGameLog_players);
             txtScore = itemView.findViewById(R.id.txt_itemGameLog_score);
             txtStatus = itemView.findViewById(R.id.txt_itemGameLog_status);
+            txtWinner = itemView.findViewById(R.id.txt_itemGameLog_winner);
         }
     }
 }

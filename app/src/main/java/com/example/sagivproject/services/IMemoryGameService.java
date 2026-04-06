@@ -126,6 +126,15 @@ public interface IMemoryGameService {
     void updateDailyMemoryStats(String uid, boolean isWin);
 
     /**
+     * Marks the game session as finished and identifies the winner based on final scores or forfeit.
+     *
+     * @param roomId    The unique identifier of the room.
+     * @param winnerUid The UID of the winner or "draw".
+     * @param callback  An optional callback invoked upon completion.
+     */
+    void finishGame(String roomId, String winnerUid, @Nullable DatabaseCallback<Void> callback);
+
+    /**
      * Configures a Firebase "onDisconnect" operation to automatically forfeit the match if a player loses connection.
      *
      * @param roomId      The unique identifier of the room.

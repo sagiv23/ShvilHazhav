@@ -46,7 +46,7 @@
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/memory_game_log_table"
                     android:textColor="@color/headline"
-                    android:textSize="35sp" />
+                    android:textSize="32sp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
