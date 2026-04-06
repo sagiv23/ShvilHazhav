@@ -128,7 +128,8 @@
                             app:icon="@drawable/ic_sound"
                             app:iconGravity="textStart"
                             app:iconPadding="12dp"
-                            app:iconSize="28dp" />
+                            app:iconSize="28dp"
+                            app:strokeWidth="1dp"/>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
