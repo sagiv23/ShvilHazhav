@@ -114,37 +114,37 @@ public class RegisterActivity extends BaseActivity {
 
         if (validator.isNameNotValid(firstName)) {
             editTextFirstName.requestFocus();
-            Toast.makeText(this, "שם פרטי קצר מדי", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "שם פרטי חייב להכיל לפחות 2 תווים", Toast.LENGTH_LONG).show();
             return false;
         }
 
         if (validator.isNameNotValid(lastName)) {
             editTextLastName.requestFocus();
-            Toast.makeText(this, "שם משפחה קצר מדי", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "שם משפחה חייב להכיל לפחות 2 תווים", Toast.LENGTH_LONG).show();
             return false;
         }
 
         if (birthDateMillis <= 0) {
             editTextBirthDate.requestFocus();
-            Toast.makeText(this, "נא לבחור תאריך לידה", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "תאריך הלידה אינו תקין, נא לבחור שוב", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (validator.isAgeNotValid(birthDateMillis)) {
             editTextBirthDate.requestFocus();
-            Toast.makeText(this, "הגיל המינימלי להרשמה הוא 12", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "הגיל המינימלי לשימוש באפליקציה הוא 12", Toast.LENGTH_LONG).show();
             return false;
         }
 
         if (validator.isEmailNotValid(email)) {
             editTextEmail.requestFocus();
-            Toast.makeText(this, "כתובת האימייל אינה תקינה", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "כתובת האימייל אינה תקינה (לדוגמה: example@mail.com)", Toast.LENGTH_LONG).show();
             return false;
         }
 
         if (validator.isPasswordNotValid(password)) {
             editTextPassword.requestFocus();
-            Toast.makeText(this, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "סיסמה חייבת להכיל לפחות 6 תווים", Toast.LENGTH_LONG).show();
             return false;
         }
 

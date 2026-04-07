@@ -101,13 +101,13 @@ public class LoginActivity extends BaseActivity {
 
         if (validator.isEmailNotValid(email)) {
             editTextEmail.requestFocus();
-            Toast.makeText(this, "כתובת האימייל אינה תקינה", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "כתובת האימייל אינה תקינה (לדוגמה: example@mail.com)", Toast.LENGTH_LONG).show();
             return false;
         }
 
         if (validator.isPasswordNotValid(password)) {
             editTextPassword.requestFocus();
-            Toast.makeText(this, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "סיסמה חייבת להכיל לפחות 6 תווים", Toast.LENGTH_LONG).show();
             return false;
         }
 
