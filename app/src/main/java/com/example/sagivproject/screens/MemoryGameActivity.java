@@ -106,18 +106,26 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
     /**
      * Displays the game conclusion dialog with the final result.
-     * Triggers statistical updates in the database.
+     * Triggers statistical updates via the service if not already processed.
      *
      * @param room The final state of the game session.
      */
     private void showGameEndDialog(GameRoom room) {
         if (endDialogShown) return;
         endDialogShown = true;
-        String winnerUid = room.getWinnerUid();
-        String message;
+
+        // If the game finished (e.g. via onDisconnect) but stats weren't updated yet,
+        // the remaining player triggers the final update for both players.
+        if (!room.isStatsUpdated()) {
+            String winnerUid = room.getWinnerUid() != null ? room.getWinnerUid() : calculateWinner(room);
+            databaseService.getGameService().finishGame(roomId, winnerUid, null);
+        }
+
+        String winnerUid = room.getWinnerUid() != null ? room.getWinnerUid() : calculateWinner(room);
         boolean isWin = user.getId().equals(winnerUid);
         boolean isDraw = "draw".equals(winnerUid);
 
+        String message;
         if (isDraw) {
             message = "זה נגמר בתיקו!";
         } else if (isWin) {
@@ -270,7 +278,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * Marks the game as finished and identifies the winner based on final scores.
      */
     private void finishGame(GameRoom room) {
-        if ("finished".equals(room.getStatus())) return;
+        if (room.isStatsUpdated()) return;
         String winnerUid = calculateWinner(room);
         databaseService.getGameService().finishGame(roomId, winnerUid, null);
     }

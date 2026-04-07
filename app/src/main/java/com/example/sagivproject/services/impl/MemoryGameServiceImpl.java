@@ -314,30 +314,30 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     @Override
     public void finishGame(String roomId, String winnerUid, @Nullable DatabaseCallback<Void> callback) {
         roomsReference.child(roomId).runTransaction(new Transaction.Handler() {
+            private boolean shouldUpdateStats = false;
+
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                shouldUpdateStats = false; // Reset on retry
                 GameRoom room = currentData.getValue(GameRoom.class);
                 if (room == null) return Transaction.success(currentData);
-                
-                // If already finished or stats already updated, don't do anything
+
+                // If already finished AND stats already updated, just return
                 if (STATUS_FINISHED.equals(room.getStatus()) && room.isStatsUpdated()) {
                     return Transaction.success(currentData);
                 }
 
+                // Mark as finished if not already
                 room.setStatus(STATUS_FINISHED);
-                room.setWinnerUid(winnerUid);
-                
-                // Only update stats if they haven't been updated yet
+                if (room.getWinnerUid() == null) {
+                    room.setWinnerUid(winnerUid);
+                }
+
+                // Only update stats once per game room session
                 if (!room.isStatsUpdated()) {
                     room.setStatsUpdated(true);
-                    
-                    if (room.getPlayer1Uid() != null) {
-                        updateDailyMemoryStats(room.getPlayer1Uid(), room.getPlayer1Uid().equals(winnerUid));
-                    }
-                    if (room.getPlayer2Uid() != null) {
-                        updateDailyMemoryStats(room.getPlayer2Uid(), room.getPlayer2Uid().equals(winnerUid));
-                    }
+                    shouldUpdateStats = true;
                 }
 
                 currentData.setValue(room);
@@ -345,7 +345,20 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             }
 
             @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot snapshot) {
+                if (error == null && committed && shouldUpdateStats && snapshot != null) {
+                    GameRoom room = snapshot.getValue(GameRoom.class);
+                    if (room != null) {
+                        String finalWinnerUid = room.getWinnerUid();
+                        if (room.getPlayer1Uid() != null) {
+                            updateDailyMemoryStats(room.getPlayer1Uid(), room.getPlayer1Uid().equals(finalWinnerUid));
+                        }
+                        if (room.getPlayer2Uid() != null) {
+                            updateDailyMemoryStats(room.getPlayer2Uid(), room.getPlayer2Uid().equals(finalWinnerUid));
+                        }
+                    }
+                }
+
                 if (callback != null) {
                     if (error != null) callback.onFailed(error.toException());
                     else callback.onCompleted(null);
