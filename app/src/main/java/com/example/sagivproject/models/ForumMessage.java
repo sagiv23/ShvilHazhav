@@ -139,9 +139,12 @@ public class ForumMessage implements Serializable, Idable {
     public String toString() {
         return "ForumMessage{" +
                 "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
                 ", message='" + message + '\'' +
+                ", timestamp=" + timestamp +
+                ", userId='" + userId + '\'' +
                 ", senderName='" + senderName + '\'' +
+                ", senderEmail='" + senderEmail + '\'' +
+                ", senderAdmin=" + senderAdmin +
                 '}';
     }
 }

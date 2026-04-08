@@ -118,8 +118,11 @@ public class Medication implements Serializable, Idable {
     public String toString() {
         return "Medication{" +
                 "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
+                ", details='" + details + '\'' +
                 ", type=" + type +
+                ", reminderHours=" + reminderHours +
                 '}';
     }
 }

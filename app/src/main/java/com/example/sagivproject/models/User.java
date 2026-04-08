@@ -301,6 +301,18 @@ public class User implements Serializable, Idable {
     @NonNull
     @Override
     public String toString() {
-        return "User{" + "id='" + id + '\'' + ", email='" + email + '\'' + ", role=" + role + ", fullName='" + getFullName() + '\'' + '}';
+        return "User{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDateMillis=" + birthDateMillis +
+                ", password='" + password + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                ", medications=" + medications +
+                ", dailyStats=" + dailyStats +
+                ", emergencyContacts=" + emergencyContacts +
+                '}';
     }
 }

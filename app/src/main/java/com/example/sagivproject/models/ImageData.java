@@ -58,6 +58,7 @@ public class ImageData implements Serializable, Idable {
     public String toString() {
         return "ImageData{" +
                 "id='" + id + '\'' +
+                ", base64='" + base64 + '\'' +
                 '}';
     }
 }

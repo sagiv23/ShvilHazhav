@@ -1,5 +1,7 @@
 package com.example.sagivproject.models;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -165,5 +167,19 @@ public class DailyStats implements Serializable {
      */
     public void addMedicationUsageLog(MedicationUsage log) {
         getMedicationUsageLogs().add(log);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "DailyStats{" +
+                "memoryWins=" + memoryWins +
+                ", memoryGamesPlayed=" + memoryGamesPlayed +
+                ", mathCorrect=" + mathCorrect +
+                ", mathWrong=" + mathWrong +
+                ", medicationsTaken=" + medicationsTaken +
+                ", medicationsMissed=" + medicationsMissed +
+                ", medicationUsageLogs=" + medicationUsageLogs +
+                '}';
     }
 }

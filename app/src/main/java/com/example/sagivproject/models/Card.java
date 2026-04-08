@@ -145,8 +145,10 @@ public class Card implements Serializable, Idable {
     public String toString() {
         return "Card{" +
                 "id='" + id + '\'' +
+                ", base64Content='" + base64Content + '\'' +
                 ", isRevealed=" + isRevealed +
                 ", isMatched=" + isMatched +
+                ", wasRevealed=" + wasRevealed +
                 '}';
     }
 }

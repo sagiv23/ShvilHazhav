@@ -1,5 +1,7 @@
 package com.example.sagivproject.models;
 
+import androidx.annotation.NonNull;
+
 import com.example.sagivproject.models.enums.MedicationStatus;
 
 import java.io.Serializable;
@@ -133,5 +135,18 @@ public class MedicationUsage implements Serializable, Idable {
     @Override
     public void setId(String id) {
         medicationId = id;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "MedicationUsage{" +
+                "medicationId='" + medicationId + '\'' +
+                ", medicationName='" + medicationName + '\'' +
+                ", time='" + time + '\'' +
+                ", date='" + date + '\'' +
+                ", scheduledTime='" + scheduledTime + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

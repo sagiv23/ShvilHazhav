@@ -1,5 +1,7 @@
 package com.example.sagivproject.models;
 
+import androidx.annotation.NonNull;
+
 import com.example.sagivproject.ui.SimpleXYGraphView;
 
 import java.util.List;
@@ -96,5 +98,18 @@ public class GraphData implements Idable {
     @Override
     public int hashCode() {
         return Objects.hash(id, title);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "GraphData{" +
+                "title='" + title + '\'' +
+                ", points=" + points +
+                ", xLabels=" + xLabels +
+                ", labelX='" + labelX + '\'' +
+                ", labelY='" + labelY + '\'' +
+                ", id='" + id + '\'' +
+                '}';
     }
 }

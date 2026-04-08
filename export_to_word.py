@@ -1,6 +1,7 @@
 import os
 from docx import Document
 from docx.shared import Pt, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from pygments.lexers import JavaLexer
 from pygments.token import Token
 
@@ -84,15 +85,16 @@ def export_java_to_word(project_path, output_docx):
                 # חישוב נתיב יחסי מהחבילה הראשית
                 relative_path = os.path.relpath(file_path, search_path)
                 # החלפת לוכסנים לפורמט ווינדוס והוספת הסימן מהדוגמה
-                display_path = "▶ " + relative_path.replace('/', '\\')
+                display_path = relative_path.replace('/', '\\')
 
                 print(f"Processing: {display_path}")
 
-                # הוספת כותרת ועיצובה (Arial, 12, #09890E, ללא Bold)
-                heading = doc.add_heading('', level=1)
+                # הוספת כותרת ועיצובה (Arial, 12, #09890E, ללא Bold, ממורכז)
+                heading = doc.add_heading('', level=3)
+                heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
                 run = heading.add_run(display_path)
                 run.font.name = 'Arial'
-                run.font.size = Pt(12)
+                run.font.size = Pt(14)
                 run.font.bold = False  # ביטול ההדגשה (Bold)
                 run.font.color.rgb = RGBColor(0x09, 0x89, 0x0E)
 

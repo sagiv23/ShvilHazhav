@@ -219,8 +219,16 @@ public class GameRoom implements Serializable, Idable {
         return "GameRoom{" +
                 "id='" + id + '\'' +
                 ", status='" + status + '\'' +
-                ", player1='" + player1Uid + '\'' +
-                ", player2='" + player2Uid + '\'' +
+                ", player1Uid='" + player1Uid + '\'' +
+                ", player2Uid='" + player2Uid + '\'' +
+                ", cards=" + cards +
+                ", currentTurnUid='" + currentTurnUid + '\'' +
+                ", player1Score=" + player1Score +
+                ", player2Score=" + player2Score +
+                ", firstSelectedCardIndex=" + firstSelectedCardIndex +
+                ", processingMatch=" + processingMatch +
+                ", winnerUid='" + winnerUid + '\'' +
+                ", statsUpdated=" + statsUpdated +
                 '}';
     }
 }

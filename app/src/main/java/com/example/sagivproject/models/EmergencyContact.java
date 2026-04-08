@@ -1,5 +1,7 @@
 package com.example.sagivproject.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
@@ -108,5 +110,16 @@ public class EmergencyContact implements Serializable, Idable {
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, phoneNumber);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "EmergencyContact{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }
