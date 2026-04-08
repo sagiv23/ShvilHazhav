@@ -44,6 +44,7 @@
     <string name="my_medications_list">רשימת התרופות שלי</string>
     <string name="memory_game">משחק זיכרון</string>
     <string name="add_medication">הוספת תרופה</string>
+    <string name="edit_medication">עריכת תרופה</string>
     <string name="save">שמור</string>
     <string name="update_user_details">עריכת פרטי משתמש</string>
     <string name="add">הוסף</string>

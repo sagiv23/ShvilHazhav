@@ -98,6 +98,7 @@ public class MedicationDialog extends DialogFragment {
         dialog.setContentView(R.layout.dialog_add_medication);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
 
+        TextView tvTitle = dialog.findViewById(R.id.tv_medication_dialog_title);
         EditText edtName = dialog.findViewById(R.id.edt_medication_name);
         AutoCompleteTextView spinnerType = dialog.findViewById(R.id.spinner_medication_type);
         EditText edtDetails = dialog.findViewById(R.id.edt_medication_details);
@@ -115,6 +116,8 @@ public class MedicationDialog extends DialogFragment {
         spinnerType.setAdapter(createMedicationTypeAdapter(typeNames));
 
         if (medToEdit != null) {
+            tvTitle.setText(R.string.edit_medication);
+            btnConfirm.setText(R.string.save);
             edtName.setText(medToEdit.getName());
             edtDetails.setText(medToEdit.getDetails());
             if (medToEdit.getType() != null) {
