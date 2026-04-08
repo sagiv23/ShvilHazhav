@@ -63,7 +63,6 @@
             android:fontFamily="@font/text_hebrew"
             android:text="@string/delete_img"
             android:textAllCaps="false"
-            android:textColor="@color/error"
             android:textSize="20sp"
             android:visibility="gone"
             app:cornerRadius="30dp"
@@ -71,7 +70,6 @@
             app:iconGravity="textStart"
             app:iconPadding="12dp"
             app:iconSize="24dp"
-            app:strokeColor="@color/error"
             app:strokeWidth="1dp" />
 
         <com.google.android.material.button.MaterialButton

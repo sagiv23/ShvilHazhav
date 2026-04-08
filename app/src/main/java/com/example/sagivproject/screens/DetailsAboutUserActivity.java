@@ -218,7 +218,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
                 databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
                     @Override
                     public void onSuccess(User updatedUser) {
-                        Toast.makeText(DetailsAboutUserActivity.this, "הפרטים עודכנו!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailsAboutUserActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
                         sharedPreferencesUtil.saveUser(updatedUser);
                         user = updatedUser;
                         loadUserDetailsToUI();
