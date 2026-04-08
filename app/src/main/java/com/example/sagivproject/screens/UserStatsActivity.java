@@ -32,6 +32,7 @@ import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.example.sagivproject.ui.SimpleXYGraphView;
 import com.example.sagivproject.utils.CalendarUtil;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -93,6 +94,7 @@ public class UserStatsActivity extends BaseActivity {
 
     private Spinner spinnerUserSelector;
     private TextView txtSelectedDate;
+    private MaterialButton btnClearMedLogs;
     /**
      * Date string (yyyy-MM-dd) used to filter the usage log.
      */
@@ -118,7 +120,10 @@ public class UserStatsActivity extends BaseActivity {
         spinnerUserSelector = findViewById(R.id.spinner_user_selector);
         txtSelectedDate = findViewById(R.id.txt_user_stats_selected_date);
 
-        findViewById(R.id.btn_user_stats_clear_med_logs).setOnClickListener(v -> clearMedicationLogs());
+        btnClearMedLogs = findViewById(R.id.btn_user_stats_clear_med_logs);
+        btnClearMedLogs.setOnClickListener(v -> clearMedicationLogs());
+        btnClearMedLogs.setEnabled(false);
+
         findViewById(R.id.btn_user_stats_open_calendar).setOnClickListener(v -> openCalendar());
 
         setupAdminUI();
@@ -370,12 +375,14 @@ public class UserStatsActivity extends BaseActivity {
                     allLogs.clear();
                     usageAdapter.setData(new ArrayList<>());
                 }
+                updateResetButtonState();
             }
 
             @Override
             public void onFailed(Exception e) {
                 allLogs.clear();
                 usageAdapter.setData(new ArrayList<>());
+                updateResetButtonState();
             }
         });
     }
@@ -389,6 +396,7 @@ public class UserStatsActivity extends BaseActivity {
             public void onCompleted(Void object) {
                 allLogs.clear();
                 usageAdapter.setData(new ArrayList<>());
+                updateResetButtonState();
                 Toast.makeText(UserStatsActivity.this, "ההיסטוריה אופסה בהצלחה", Toast.LENGTH_SHORT).show();
             }
 
@@ -397,5 +405,14 @@ public class UserStatsActivity extends BaseActivity {
                 Toast.makeText(UserStatsActivity.this, "שגיאה באיפוס ההיסטוריה", Toast.LENGTH_SHORT).show();
             }
         }));
+    }
+
+    /**
+     * Updates the enabled state of the reset history button based on whether logs exist.
+     */
+    private void updateResetButtonState() {
+        if (btnClearMedLogs != null) {
+            btnClearMedLogs.setEnabled(!allLogs.isEmpty());
+        }
     }
 }

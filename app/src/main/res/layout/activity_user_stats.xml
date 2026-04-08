@@ -136,43 +136,49 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
                             android:padding="8dp">
 
                             <TextView
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="12dp"
                                 android:fontFamily="@font/headline_hebrew"
                                 android:text="@string/medication_log"
                                 android:textSize="22sp" />
 
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_user_stats_open_calendar"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:fontFamily="@font/text_hebrew"
-                                android:text="@string/choose_date"
-                                android:textAllCaps="false"
-                                android:textSize="14sp"
-                                app:cornerRadius="20dp"
-                                app:icon="@drawable/ic_calendar"
-                                app:iconSize="20dp"
-                                app:strokeWidth="1dp" />
+                                android:layout_gravity="center"
+                                android:orientation="horizontal">
 
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_user_stats_clear_med_logs"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/text_hebrew"
-                                android:text="@string/reset_history"
-                                android:textAllCaps="false"
-                                android:textSize="14sp"
-                                app:cornerRadius="20dp"
-                                app:strokeColor="@color/error"
-                                app:strokeWidth="1dp" />
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_user_stats_open_calendar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:fontFamily="@font/text_hebrew"
+                                    android:text="@string/choose_date"
+                                    android:textAllCaps="false"
+                                    android:textSize="14sp"
+                                    app:cornerRadius="20dp"
+                                    app:icon="@drawable/ic_calendar"
+                                    app:iconSize="20dp"
+                                    app:strokeWidth="1dp" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_user_stats_clear_med_logs"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/text_hebrew"
+                                    android:text="@string/reset_history"
+                                    android:textAllCaps="false"
+                                    android:textSize="14sp"
+                                    app:cornerRadius="20dp"
+                                    app:strokeWidth="1dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <TextView
