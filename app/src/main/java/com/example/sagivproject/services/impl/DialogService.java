@@ -9,13 +9,12 @@ import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.AddEmergencyContactDialog;
-import com.example.sagivproject.screens.dialogs.AddUserDialog;
 import com.example.sagivproject.screens.dialogs.ConfirmDialog;
 import com.example.sagivproject.screens.dialogs.EditForumCategoryDialog;
-import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.screens.dialogs.FullImageDialog;
 import com.example.sagivproject.screens.dialogs.MedicationDialog;
 import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
+import com.example.sagivproject.screens.dialogs.UserDialog;
 import com.example.sagivproject.services.IDialogService;
 
 import javax.inject.Inject;
@@ -34,8 +33,7 @@ import dagger.hilt.android.scopes.ActivityScoped;
 @ActivityScoped
 public class DialogService implements IDialogService {
     private final Provider<MedicationDialog> medicationDialogProvider;
-    private final Provider<AddUserDialog> addUserDialogProvider;
-    private final Provider<EditUserDialog> editUserDialogProvider;
+    private final Provider<UserDialog> userDialogProvider;
     private final Provider<EditForumCategoryDialog> editForumCategoryDialogProvider;
     private final Provider<FullImageDialog> fullImageDialogProvider;
     private final Provider<ProfileImageDialog> profileImageDialogProvider;
@@ -48,8 +46,7 @@ public class DialogService implements IDialogService {
     @Inject
     public DialogService(
             Provider<MedicationDialog> medicationDialogProvider,
-            Provider<AddUserDialog> addUserDialogProvider,
-            Provider<EditUserDialog> editUserDialogProvider,
+            Provider<UserDialog> userDialogProvider,
             Provider<EditForumCategoryDialog> editForumCategoryDialogProvider,
             Provider<FullImageDialog> fullImageDialogProvider,
             Provider<ProfileImageDialog> profileImageDialogProvider,
@@ -57,8 +54,7 @@ public class DialogService implements IDialogService {
             Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider
     ) {
         this.medicationDialogProvider = medicationDialogProvider;
-        this.addUserDialogProvider = addUserDialogProvider;
-        this.editUserDialogProvider = editUserDialogProvider;
+        this.userDialogProvider = userDialogProvider;
         this.editForumCategoryDialogProvider = editForumCategoryDialogProvider;
         this.fullImageDialogProvider = fullImageDialogProvider;
         this.profileImageDialogProvider = profileImageDialogProvider;
@@ -81,30 +77,17 @@ public class DialogService implements IDialogService {
     }
 
     /**
-     * Displays a dialog for administrators to create a new user profile.
+     * Displays a dialog for administrators to create a new user profile or edit an existing one.
      *
      * @param fm       The {@link FragmentManager}.
-     * @param listener The listener to handle the user creation logic.
+     * @param user     The {@link User} object to edit, or null to add a new one.
+     * @param listener The listener to handle the user creation or update logic.
      */
     @Override
-    public void showAddUserDialog(FragmentManager fm, AddUserDialog.AddUserDialogListener listener) {
-        AddUserDialog dialog = addUserDialogProvider.get();
-        dialog.setListener(listener);
-        dialog.show(fm, "AddUserDialog");
-    }
-
-    /**
-     * Displays a dialog to edit an existing user's personal details.
-     *
-     * @param fm       The {@link FragmentManager}.
-     * @param user     The {@link User} object containing current data.
-     * @param listener The listener to handle the update results.
-     */
-    @Override
-    public void showEditUserDialog(FragmentManager fm, User user, EditUserDialog.EditUserDialogListener listener) {
-        EditUserDialog dialog = editUserDialogProvider.get();
+    public void showUserDialog(FragmentManager fm, User user, UserDialog.UserDialogListener listener) {
+        UserDialog dialog = userDialogProvider.get();
         dialog.setData(user, listener);
-        dialog.show(fm, "EditUserDialog");
+        dialog.show(fm, "UserDialog");
     }
 
     /**

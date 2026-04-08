@@ -214,7 +214,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
      * Displays the dialog for editing user profile details.
      */
     private void openEditDialog() {
-        dialogService.showEditUserDialog(getSupportFragmentManager(), user, (fName, lName, birthDate, email, password) ->
+        dialogService.showUserDialog(getSupportFragmentManager(), user, (fName, lName, birthDate, email, password) ->
                 databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
                     @Override
                     public void onSuccess(User updatedUser) {

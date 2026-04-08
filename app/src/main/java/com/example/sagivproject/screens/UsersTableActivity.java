@@ -73,7 +73,7 @@ public class UsersTableActivity extends BaseActivity {
 
         currentUser = sharedPreferencesUtil.getUser();
 
-        findViewById(R.id.btn_UsersTable_add_user).setOnClickListener(v -> dialogService.showAddUserDialog(getSupportFragmentManager(), (fName, lName, birthDateMillis, email, password) ->
+        findViewById(R.id.btn_UsersTable_add_user).setOnClickListener(v -> dialogService.showUserDialog(getSupportFragmentManager(), null, (fName, lName, birthDateMillis, email, password) ->
                 databaseService.getAuthService().addUser(fName, lName, birthDateMillis, email, password, new IAuthService.AddUserCallback() {
                     @Override
                     public void onSuccess(User user) {
@@ -89,7 +89,7 @@ public class UsersTableActivity extends BaseActivity {
                 })));
 
         adapter = adapterService.getUsersTableAdapter();
-        adapter.init(currentUser, new UsersTableAdapter.OnUserActionListener() {
+        adapter.init(new UsersTableAdapter.OnUserActionListener() {
             @Override
             public void onToggleAdmin(User user) {
                 handleToggleAdmin(user);
@@ -103,7 +103,7 @@ public class UsersTableActivity extends BaseActivity {
             @Override
             public void onUserClicked(User clickedUser) {
                 User userCopy = new User(clickedUser);
-                dialogService.showEditUserDialog(getSupportFragmentManager(), userCopy, (fName, lName, birthDate, email, password) ->
+                dialogService.showUserDialog(getSupportFragmentManager(), userCopy, (fName, lName, birthDate, email, password) ->
                         databaseService.getAuthService().updateUser(userCopy, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
                             @Override
                             public void onSuccess(User updatedUser) {
@@ -243,6 +243,13 @@ public class UsersTableActivity extends BaseActivity {
                 if (updatedUser.getId().equals(currentUser.getId())) {
                     sharedPreferencesUtil.saveUser(updatedUser);
                     currentUser = updatedUser;
+
+                    if (newRole == UserRole.REGULAR) {
+                        Intent intent = new Intent(UsersTableActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        return;
+                    }
                 }
                 refreshList();
                 Toast.makeText(UsersTableActivity.this, "הסטטוס עודכן", Toast.LENGTH_SHORT).show();

@@ -9,11 +9,10 @@ import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.AddEmergencyContactDialog;
-import com.example.sagivproject.screens.dialogs.AddUserDialog;
 import com.example.sagivproject.screens.dialogs.EditForumCategoryDialog;
-import com.example.sagivproject.screens.dialogs.EditUserDialog;
 import com.example.sagivproject.screens.dialogs.MedicationDialog;
 import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
+import com.example.sagivproject.screens.dialogs.UserDialog;
 
 /**
  * Interface for managing the creation and display of all dialog fragments in the application.
@@ -34,21 +33,13 @@ public interface IDialogService {
     void showMedicationDialog(FragmentManager fm, Medication medToEdit, MedicationDialog.OnMedicationSubmitListener listener);
 
     /**
-     * Displays a dialog for administrators to create a new user profile.
+     * Displays a dialog for administrators to create a new user profile or edit an existing one.
      *
      * @param fm       The {@link FragmentManager}.
-     * @param listener The listener to handle the user creation logic.
+     * @param user     The {@link User} object to edit, or null to add a new one.
+     * @param listener The listener to handle the user creation or update logic.
      */
-    void showAddUserDialog(FragmentManager fm, AddUserDialog.AddUserDialogListener listener);
-
-    /**
-     * Displays a dialog to edit an existing user's personal details.
-     *
-     * @param fm       The {@link FragmentManager}.
-     * @param user     The {@link User} object containing current data.
-     * @param listener The listener to handle the update results.
-     */
-    void showEditUserDialog(FragmentManager fm, User user, EditUserDialog.EditUserDialogListener listener);
+    void showUserDialog(FragmentManager fm, User user, UserDialog.UserDialogListener listener);
 
     /**
      * Displays a dialog to rename an existing forum category.

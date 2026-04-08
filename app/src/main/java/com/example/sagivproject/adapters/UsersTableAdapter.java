@@ -30,12 +30,10 @@ import javax.inject.Inject;
  * <li>Deleting user accounts.</li>
  * <li>Viewing profile images in detail.</li>
  * </ul>
- * It prevents the current administrator from performing self-destructive actions (deletion/role change).
  * </p>
  */
 public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserViewHolder> {
     private final ImageUtil imageUtil;
-    private User currentUser;
     private OnUserActionListener listener;
 
     /**
@@ -51,11 +49,9 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
     /**
      * Initializes the adapter with state-specific data and a listener.
      *
-     * @param currentUser The currently logged-in administrator (used for self-protection logic).
-     * @param listener    The {@link OnUserActionListener} to handle administrative events.
+     * @param listener The {@link OnUserActionListener} to handle administrative events.
      */
-    public void init(User currentUser, OnUserActionListener listener) {
-        this.currentUser = currentUser;
+    public void init(OnUserActionListener listener) {
         this.listener = listener;
     }
 
@@ -91,11 +87,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
 
         imageUtil.loadImage(user.getProfileImage(), holder.imgUserProfile);
 
-        boolean isSelf = user.equals(currentUser);
-        holder.btnToggleAdmin.setVisibility(isSelf ? View.GONE : View.VISIBLE);
-        holder.btnDeleteUser.setVisibility(isSelf ? View.GONE : View.VISIBLE);
-
-        if (!isSelf && listener != null) {
+        if (listener != null) {
             if (user.isAdmin()) {
                 holder.btnToggleAdmin.setImageResource(R.drawable.ic_remove_admin);
                 holder.btnToggleAdmin.setContentDescription("הסר מנהל");

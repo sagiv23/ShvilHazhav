@@ -14,6 +14,7 @@
         android:padding="24dp">
 
         <TextView
+            android:id="@+id/txtUserDialogTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -38,7 +39,7 @@
             app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputAddUserFirstName"
+                android:id="@+id/inputUserFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
@@ -62,7 +63,7 @@
             app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputAddUserLastName"
+                android:id="@+id/inputUserLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
@@ -85,7 +86,7 @@
             app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputAddUserBirthDate"
+                android:id="@+id/inputUserBirthDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -110,7 +111,7 @@
             app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputAddUserEmail"
+                android:id="@+id/inputUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
@@ -135,7 +136,7 @@
             app:startIconDrawable="@drawable/ic_password">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputAddUserPassword"
+                android:id="@+id/inputUserPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
@@ -152,7 +153,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddUserCancel"
+                android:id="@+id/btnUserCancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -166,13 +167,13 @@
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddUserSave"
+                android:id="@+id/btnUserSave"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
-                android:text="@string/add"
+                android:text="@string/save"
                 android:textAllCaps="false"
                 android:textSize="18sp"
                 app:cornerRadius="30dp"
