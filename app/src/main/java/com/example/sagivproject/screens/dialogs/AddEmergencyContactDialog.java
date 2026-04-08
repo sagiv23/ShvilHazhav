@@ -15,7 +15,6 @@ import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.utils.Validator;
 
 import java.util.Objects;
-import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
@@ -120,24 +119,28 @@ public class AddEmergencyContactDialog extends DialogFragment {
      */
     private boolean areAllFieldsValid(String fName, String lName, String phone, EditText firstNameEdt, EditText lastNameEdt, EditText phoneEdt) {
         if (fName.isEmpty() || lName.isEmpty() || phone.isEmpty()) {
-            Toast.makeText(requireContext(), "כל השדות חובה", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        return isFieldValid(firstNameEdt, validator::isNameNotValid, "שם פרטי קצר מדי") &&
-                isFieldValid(lastNameEdt, validator::isNameNotValid, "שם משפחה קצר מדי") &&
-                isFieldValid(phoneEdt, validator::isPhoneNotValid, "מספר טלפון לא תקין");
-    }
-
-    /**
-     * Helper to validate a single field and show an error message.
-     */
-    private boolean isFieldValid(EditText editText, Predicate<String> predicate, String errorMsg) {
-        if (predicate.test(editText.getText().toString().trim())) {
-            editText.requestFocus();
-            Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show();
+        if (validator.isNameNotValid(fName)) {
+            firstNameEdt.requestFocus();
+            Toast.makeText(requireContext(), "שם פרטי חייב להכיל לפחות 2 תווים", Toast.LENGTH_LONG).show();
             return false;
         }
+
+        if (validator.isNameNotValid(lName)) {
+            lastNameEdt.requestFocus();
+            Toast.makeText(requireContext(), "שם משפחה חייב להכיל לפחות 2 תווים", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (validator.isPhoneNotValid(phone)) {
+            phoneEdt.requestFocus();
+            Toast.makeText(requireContext(), "מספר הטלפון אינו תקין", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         return true;
     }
 
