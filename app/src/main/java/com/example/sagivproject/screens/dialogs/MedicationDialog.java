@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.os.BundleCompat;
-import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.Medication;
@@ -29,7 +28,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -49,7 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * </p>
  */
 @AndroidEntryPoint
-public class MedicationDialog extends DialogFragment {
+public class MedicationDialog extends BaseDialog {
     private static final String ARG_MEDICATION = "arg_medication";
 
     /**
@@ -91,13 +89,13 @@ public class MedicationDialog extends DialogFragment {
         }
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_add_medication);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+    protected int getLayoutResourceId() {
+        return R.layout.dialog_add_medication;
+    }
 
+    @Override
+    protected void setupView(Dialog dialog) {
         TextView tvTitle = dialog.findViewById(R.id.tv_medication_dialog_title);
         EditText edtName = dialog.findViewById(R.id.edt_medication_name);
         AutoCompleteTextView spinnerType = dialog.findViewById(R.id.spinner_medication_type);
@@ -159,8 +157,6 @@ public class MedicationDialog extends DialogFragment {
         });
 
         btnCancel.setOnClickListener(v -> dismiss());
-
-        return dialog;
     }
 
     /**

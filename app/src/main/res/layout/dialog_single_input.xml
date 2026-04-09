@@ -14,16 +14,17 @@
         android:padding="24dp">
 
         <TextView
+            android:id="@+id/txt_singleInput_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:fontFamily="@font/headline_hebrew"
             android:gravity="center"
-            android:text="@string/edit_category_name"
             android:textColor="@color/headline"
             android:textSize="28sp" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_singleInput_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -35,11 +36,10 @@
             app:boxStrokeWidth="1dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputEditCategoryName"
+                android:id="@+id/edt_singleInput_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/text_hebrew"
-                android:hint="@string/category_name"
                 android:inputType="textPersonName"
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -51,7 +51,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnEditCategoryCancel"
+                android:id="@+id/btn_singleInput_cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -65,7 +65,7 @@
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnEditCategorySave"
+                android:id="@+id/btn_singleInput_save"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -77,6 +77,5 @@
                 app:cornerRadius="30dp"
                 app:strokeWidth="1dp" />
         </LinearLayout>
-
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

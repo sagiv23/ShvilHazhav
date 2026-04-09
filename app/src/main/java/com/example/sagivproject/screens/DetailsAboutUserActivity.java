@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
+import com.example.sagivproject.screens.dialogs.ImageActionDialog;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.utils.ImageUtil;
@@ -248,7 +248,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
     private void openImagePicker() {
         boolean hasImage = user.getProfileImage() != null && !user.getProfileImage().isEmpty();
 
-        dialogService.showProfileImageDialog(getSupportFragmentManager(), hasImage, new ProfileImageDialog.ImagePickerListener() {
+        dialogService.showProfileImageDialog(getSupportFragmentManager(), imgUserProfile.getDrawable(), hasImage, new ImageActionDialog.ImageActionListener() {
             @Override
             public void onCamera() {
                 if (ContextCompat.checkSelfPermission(DetailsAboutUserActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {

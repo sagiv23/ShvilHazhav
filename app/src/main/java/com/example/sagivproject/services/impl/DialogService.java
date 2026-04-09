@@ -10,10 +10,9 @@ import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.AddEmergencyContactDialog;
 import com.example.sagivproject.screens.dialogs.ConfirmDialog;
-import com.example.sagivproject.screens.dialogs.EditForumCategoryDialog;
-import com.example.sagivproject.screens.dialogs.FullImageDialog;
+import com.example.sagivproject.screens.dialogs.ImageActionDialog;
 import com.example.sagivproject.screens.dialogs.MedicationDialog;
-import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
+import com.example.sagivproject.screens.dialogs.SingleInputDialog;
 import com.example.sagivproject.screens.dialogs.UserDialog;
 import com.example.sagivproject.services.IDialogService;
 
@@ -34,9 +33,8 @@ import dagger.hilt.android.scopes.ActivityScoped;
 public class DialogService implements IDialogService {
     private final Provider<MedicationDialog> medicationDialogProvider;
     private final Provider<UserDialog> userDialogProvider;
-    private final Provider<EditForumCategoryDialog> editForumCategoryDialogProvider;
-    private final Provider<FullImageDialog> fullImageDialogProvider;
-    private final Provider<ProfileImageDialog> profileImageDialogProvider;
+    private final Provider<SingleInputDialog> singleInputDialogProvider;
+    private final Provider<ImageActionDialog> imageActionDialogProvider;
     private final Provider<ConfirmDialog> confirmDialogProvider;
     private final Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider;
 
@@ -47,17 +45,15 @@ public class DialogService implements IDialogService {
     public DialogService(
             Provider<MedicationDialog> medicationDialogProvider,
             Provider<UserDialog> userDialogProvider,
-            Provider<EditForumCategoryDialog> editForumCategoryDialogProvider,
-            Provider<FullImageDialog> fullImageDialogProvider,
-            Provider<ProfileImageDialog> profileImageDialogProvider,
+            Provider<SingleInputDialog> singleInputDialogProvider,
+            Provider<ImageActionDialog> imageActionDialogProvider,
             Provider<ConfirmDialog> confirmDialogProvider,
             Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider
     ) {
         this.medicationDialogProvider = medicationDialogProvider;
         this.userDialogProvider = userDialogProvider;
-        this.editForumCategoryDialogProvider = editForumCategoryDialogProvider;
-        this.fullImageDialogProvider = fullImageDialogProvider;
-        this.profileImageDialogProvider = profileImageDialogProvider;
+        this.singleInputDialogProvider = singleInputDialogProvider;
+        this.imageActionDialogProvider = imageActionDialogProvider;
         this.confirmDialogProvider = confirmDialogProvider;
         this.addEmergencyContactDialogProvider = addEmergencyContactDialogProvider;
     }
@@ -98,10 +94,10 @@ public class DialogService implements IDialogService {
      * @param listener The listener to handle the name update.
      */
     @Override
-    public void showEditForumCategoryDialog(FragmentManager fm, ForumCategory category, EditForumCategoryDialog.EditForumCategoryDialogListener listener) {
-        EditForumCategoryDialog dialog = editForumCategoryDialogProvider.get();
-        dialog.setData(category, listener);
-        dialog.show(fm, "EditForumCategoryDialog");
+    public void showEditForumCategoryDialog(FragmentManager fm, ForumCategory category, SingleInputDialog.OnInputSubmitListener listener) {
+        SingleInputDialog dialog = singleInputDialogProvider.get();
+        dialog.setData("עריכת קטגוריה", "שם הקטגוריה", category.getName(), listener);
+        dialog.show(fm, "SingleInputDialog");
     }
 
     /**
@@ -112,8 +108,8 @@ public class DialogService implements IDialogService {
      */
     @Override
     public void showFullImageDialog(FragmentManager fm, Drawable imageDrawable) {
-        FullImageDialog dialog = fullImageDialogProvider.get();
-        dialog.setImage(imageDrawable);
+        ImageActionDialog dialog = imageActionDialogProvider.get();
+        dialog.setData(imageDrawable, false, false, null);
         dialog.show(fm, "FullImageDialog");
     }
 
@@ -121,13 +117,14 @@ public class DialogService implements IDialogService {
      * Displays a dialog to choose a profile image source (Camera/Gallery) or delete it.
      *
      * @param fm       The {@link FragmentManager}.
+     * @param image    The current image to display, or null.
      * @param hasImage Whether the user currently has an active profile image.
      * @param listener The listener to handle selection actions.
      */
     @Override
-    public void showProfileImageDialog(FragmentManager fm, boolean hasImage, ProfileImageDialog.ImagePickerListener listener) {
-        ProfileImageDialog dialog = profileImageDialogProvider.get();
-        dialog.setData(hasImage, listener);
+    public void showProfileImageDialog(FragmentManager fm, Drawable image, boolean hasImage, ImageActionDialog.ImageActionListener listener) {
+        ImageActionDialog dialog = imageActionDialogProvider.get();
+        dialog.setData(image, true, hasImage, listener);
         dialog.show(fm, "ProfileImageDialog");
     }
 

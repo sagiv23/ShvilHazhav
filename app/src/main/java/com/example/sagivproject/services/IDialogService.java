@@ -9,9 +9,9 @@ import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.dialogs.AddEmergencyContactDialog;
-import com.example.sagivproject.screens.dialogs.EditForumCategoryDialog;
+import com.example.sagivproject.screens.dialogs.ImageActionDialog;
 import com.example.sagivproject.screens.dialogs.MedicationDialog;
-import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
+import com.example.sagivproject.screens.dialogs.SingleInputDialog;
 import com.example.sagivproject.screens.dialogs.UserDialog;
 
 /**
@@ -48,7 +48,7 @@ public interface IDialogService {
      * @param category The {@link ForumCategory} to rename.
      * @param listener The listener to handle the name update.
      */
-    void showEditForumCategoryDialog(FragmentManager fm, ForumCategory category, EditForumCategoryDialog.EditForumCategoryDialogListener listener);
+    void showEditForumCategoryDialog(FragmentManager fm, ForumCategory category, SingleInputDialog.OnInputSubmitListener listener);
 
     /**
      * Displays a full-screen image viewer.
@@ -62,10 +62,11 @@ public interface IDialogService {
      * Displays a dialog to choose a profile image source (Camera/Gallery) or delete it.
      *
      * @param fm       The {@link FragmentManager}.
+     * @param image    The current image to display, or null.
      * @param hasImage Whether the user currently has an active profile image.
      * @param listener The listener to handle selection actions.
      */
-    void showProfileImageDialog(FragmentManager fm, boolean hasImage, ProfileImageDialog.ImagePickerListener listener);
+    void showProfileImageDialog(FragmentManager fm, Drawable image, boolean hasImage, ImageActionDialog.ImageActionListener listener);
 
     /**
      * Displays a dialog to add or edit an emergency contact.

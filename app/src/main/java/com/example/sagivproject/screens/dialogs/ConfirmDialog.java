@@ -6,13 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-
 import com.example.sagivproject.R;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -27,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * </p>
  */
 @AndroidEntryPoint
-public class ConfirmDialog extends DialogFragment {
+public class ConfirmDialog extends BaseDialog {
     private static final String ARG_TITLE = "title";
     private static final String ARG_MESSAGE = "message";
     private static final String ARG_CONFIRM_TEXT = "confirm_text";
@@ -64,15 +58,15 @@ public class ConfirmDialog extends DialogFragment {
         this.onConfirm = onConfirm;
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_confirm);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+    protected int getLayoutResourceId() {
+        return R.layout.dialog_confirm;
+    }
 
+    @Override
+    protected void setupView(Dialog dialog) {
         Bundle args = getArguments();
-        if (args == null) return dialog;
+        if (args == null) return;
 
         TextView txtTitle = dialog.findViewById(R.id.txt_DialogConfirm_title);
         TextView txtMessage = dialog.findViewById(R.id.txt_DialogConfirm_message);
@@ -98,7 +92,5 @@ public class ConfirmDialog extends DialogFragment {
             }
             dismiss();
         });
-
-        return dialog;
     }
 }
