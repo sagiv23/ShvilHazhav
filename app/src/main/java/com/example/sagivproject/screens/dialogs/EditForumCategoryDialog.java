@@ -6,15 +6,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.BundleCompat;
-import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseDialog;
 import com.example.sagivproject.models.ForumCategory;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -29,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * </p>
  */
 @AndroidEntryPoint
-public class EditForumCategoryDialog extends DialogFragment {
+public class EditForumCategoryDialog extends BaseDialog {
     /**
      * Argument key for passing the category object.
      */
@@ -78,14 +75,14 @@ public class EditForumCategoryDialog extends DialogFragment {
         }
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_edit_forum_category);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+    protected int getLayoutResId() {
+        return R.layout.dialog_edit_forum_category;
+    }
 
-        if (category == null) return dialog;
+    @Override
+    protected void setupViews(Dialog dialog) {
+        if (category == null) return;
 
         EditText inputCategoryName = dialog.findViewById(R.id.inputEditCategoryName);
         Button btnSave = dialog.findViewById(R.id.btnEditCategorySave);
@@ -107,7 +104,6 @@ public class EditForumCategoryDialog extends DialogFragment {
         });
 
         btnCancel.setOnClickListener(v -> dismiss());
-        return dialog;
     }
 
     /**

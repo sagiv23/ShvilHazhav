@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
-
-import java.util.Objects;
+import com.example.sagivproject.bases.BaseDialog;
 
 import javax.inject.Inject;
 
@@ -30,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * </p>
  */
 @AndroidEntryPoint
-public class ProfileImageDialog extends DialogFragment {
+public class ProfileImageDialog extends BaseDialog {
     private static final String ARG_HAS_IMAGE = "arg_has_image";
 
     private boolean hasImage;
@@ -64,12 +61,13 @@ public class ProfileImageDialog extends DialogFragment {
         }
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_profile_image);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+    protected int getLayoutResId() {
+        return R.layout.dialog_profile_image;
+    }
+
+    @Override
+    protected void setupViews(Dialog dialog) {
         dialog.setCancelable(true);
 
         Button btnCamera = dialog.findViewById(R.id.btn_profileImageDialog_camera);
@@ -95,8 +93,6 @@ public class ProfileImageDialog extends DialogFragment {
         });
 
         btnCancel.setOnClickListener(v -> dismiss());
-
-        return dialog;
     }
 
     /**

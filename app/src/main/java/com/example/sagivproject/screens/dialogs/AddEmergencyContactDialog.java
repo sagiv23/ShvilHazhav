@@ -1,20 +1,14 @@
 package com.example.sagivproject.screens.dialogs;
 
 import android.app.Dialog;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.utils.Validator;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -29,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * </p>
  */
 @AndroidEntryPoint
-public class AddEmergencyContactDialog extends DialogFragment {
+public class AddEmergencyContactDialog extends BaseDialog {
 
     /**
      * Utility for validating contact information.
@@ -67,13 +61,13 @@ public class AddEmergencyContactDialog extends DialogFragment {
         this.listener = listener;
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_add_emergency_contact);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+    protected int getLayoutResId() {
+        return R.layout.dialog_add_emergency_contact;
+    }
 
+    @Override
+    protected void setupViews(Dialog dialog) {
         EditText etFirstName = dialog.findViewById(R.id.et_dialog_contact_first_name);
         EditText etLastName = dialog.findViewById(R.id.et_dialog_contact_last_name);
         EditText etPhone = dialog.findViewById(R.id.et_dialog_contact_phone);
@@ -102,8 +96,6 @@ public class AddEmergencyContactDialog extends DialogFragment {
         });
 
         btnCancel.setOnClickListener(v -> dismiss());
-
-        return dialog;
     }
 
     @Override

@@ -1,11 +1,6 @@
 package com.example.sagivproject.adapters;
 
 import android.graphics.Typeface;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.format.DateFormat;
@@ -29,7 +24,6 @@ import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -48,10 +42,7 @@ import javax.inject.Inject;
  * </p>
  */
 public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
-    private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private ForumMessageListener listener;
-    private TextToSpeech tts;
-    private String currentlySpeakingMsgId = null;
 
     /**
      * Constructs a new ForumAdapter.
@@ -59,60 +50,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      */
     @Inject
     public ForumAdapter() {
-    }
-
-    /**
-     * Initializes the Text-to-Speech engine and begins speaking the provided message.
-     *
-     * @param v   A view used to retrieve context for TTS initialization.
-     * @param msg The {@link ForumMessage} to read aloud after initialization.
-     */
-    private void initTTS(View v, ForumMessage msg) {
-        if (tts == null) {
-            tts = new TextToSpeech(v.getContext(), status -> {
-                if (status == TextToSpeech.SUCCESS) {
-                    tts.setLanguage(new Locale("he", "IL"));
-                    tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                        @Override
-                        public void onStart(String utteranceId) {
-                            currentlySpeakingMsgId = utteranceId;
-                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
-                        }
-
-                        @Override
-                        public void onDone(String utteranceId) {
-                            if (utteranceId.equals(currentlySpeakingMsgId)) {
-                                currentlySpeakingMsgId = null;
-                            }
-                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
-                        }
-
-                        @Override
-                        public void onError(String utteranceId) {
-                            if (utteranceId.equals(currentlySpeakingMsgId)) {
-                                currentlySpeakingMsgId = null;
-                            }
-                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
-                        }
-                    });
-                    speak(msg);
-                }
-            });
-        }
-    }
-
-    /**
-     * Finds a message by its ID and triggers a partial UI refresh for that item.
-     *
-     * @param msgId The unique ID of the message.
-     */
-    private void notifyItemChangedById(String msgId) {
-        for (int i = 0; i < dataList.size(); i++) {
-            if (dataList.get(i).getId().equals(msgId)) {
-                notifyItemChanged(i);
-                break;
-            }
-        }
     }
 
     /**
@@ -177,28 +114,14 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         holder.txtMessage.setText(msg.getMessage());
         holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
 
+        String currentlySpeakingMsgId = listener != null ? listener.getCurrentlySpeakingMsgId() : null;
         boolean isThisSpeaking = msg.getId().equals(currentlySpeakingMsgId);
         holder.btnSpeak.setIconResource(isThisSpeaking ? R.drawable.ic_x : R.drawable.ic_sound);
         holder.btnSpeak.setContentDescription(isThisSpeaking ? "בטל השמעה" : "השמעה");
 
         holder.btnSpeak.setOnClickListener(v -> {
-            if (msg.getId().equals(currentlySpeakingMsgId)) {
-                tts.stop();
-                currentlySpeakingMsgId = null;
-                notifyItemChanged(position);
-            } else {
-                String oldId = currentlySpeakingMsgId;
-                if (oldId != null) {
-                    tts.stop();
-                    currentlySpeakingMsgId = null;
-                    notifyItemChangedById(oldId);
-                }
-
-                if (tts == null) {
-                    initTTS(v, msg);
-                } else {
-                    speak(msg);
-                }
+            if (listener != null) {
+                listener.onSpeakClicked(msg);
             }
         });
 
@@ -231,30 +154,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     }
 
     /**
-     * Triggers the TTS engine to speak the text of the given message.
-     *
-     * @param msg The message to speak.
-     */
-    private void speak(ForumMessage msg) {
-        if (tts != null) {
-            Bundle params = new Bundle();
-            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, msg.getId());
-            tts.speak(msg.getMessage(), TextToSpeech.QUEUE_FLUSH, params, msg.getId());
-        }
-    }
-
-    /**
-     * Shuts down the TTS engine and cleans up resources.
-     * Must be called from the activity's {@code onDestroy}.
-     */
-    public void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-        }
-    }
-
-    /**
      * Interface for handling interactions with forum messages.
      */
     public interface ForumMessageListener {
@@ -272,6 +171,20 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
          * @return true to show the menu, false otherwise.
          */
         boolean isShowMenuOptions(ForumMessage message);
+
+        /**
+         * Called when the speak button is clicked.
+         *
+         * @param message The message to speak or stop speaking.
+         */
+        void onSpeakClicked(ForumMessage message);
+
+        /**
+         * Returns the ID of the message currently being spoken.
+         *
+         * @return The message ID, or null if nothing is speaking.
+         */
+        String getCurrentlySpeakingMsgId();
     }
 
     /**

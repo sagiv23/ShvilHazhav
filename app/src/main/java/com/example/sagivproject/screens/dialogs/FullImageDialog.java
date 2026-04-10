@@ -5,11 +5,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseDialog;
 
 import javax.inject.Inject;
 
@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * </p>
  */
 @AndroidEntryPoint
-public class FullImageDialog extends DialogFragment {
+public class FullImageDialog extends BaseDialog {
     /**
      * The image content to display.
      */
@@ -55,11 +55,18 @@ public class FullImageDialog extends DialogFragment {
         setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.setContentView(R.layout.dialog_full_image);
+    protected boolean shouldSetTransparentBackground() {
+        return false;
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.dialog_full_image;
+    }
+
+    @Override
+    protected void setupViews(Dialog dialog) {
         dialog.setCancelable(true);
 
         ImageView dialogImage = dialog.findViewById(R.id.dialogImage);
@@ -68,7 +75,5 @@ public class FullImageDialog extends DialogFragment {
         }
 
         dialogImage.setOnClickListener(v -> dismiss());
-
-        return dialog;
     }
 }

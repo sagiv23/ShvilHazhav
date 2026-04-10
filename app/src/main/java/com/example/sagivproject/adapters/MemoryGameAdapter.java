@@ -87,10 +87,14 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         }
 
         if (card.getIsRevealed() && !card.wasRevealed()) {
-            animateFlipOpen(holder.cardImage, card.getBase64Content());
+            if (listener != null) {
+                listener.animateFlipOpen(holder.cardImage, card.getBase64Content());
+            }
             card.setWasRevealed(true);
         } else if (!card.getIsRevealed() && card.wasRevealed()) {
-            animateFlipClose(holder.cardImage);
+            if (listener != null) {
+                listener.animateFlipClose(holder.cardImage);
+            }
             card.setWasRevealed(false);
         }
 
@@ -112,75 +116,6 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         holder.cardImage.animate().cancel();
     }
 
-    /**
-     * Animates the card flipping open to reveal its content.
-     *
-     * @param imageView The {@link ImageView} to animate.
-     * @param base64    The Base64 content to load onto the card mid-flip.
-     */
-    private void animateFlipOpen(ImageView imageView, String base64) {
-        imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
-            Runnable flipIn = () -> {
-                imageView.setRotationY(-90f);
-                imageView.animate().rotationY(0f).setDuration(150).start();
-            };
-
-            if (base64 != null) {
-                imageUtil.loadImage(base64, imageView);
-                flipIn.run();
-            } else {
-                imageView.setImageResource(R.drawable.fold_card_img);
-                flipIn.run();
-            }
-        }).start();
-    }
-
-    /**
-     * Animates the card flipping closed to hide its content.
-     *
-     * @param imageView The {@link ImageView} to animate.
-     */
-    private void animateFlipClose(ImageView imageView) {
-        imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
-            imageView.setImageResource(R.drawable.fold_card_img);
-            imageView.setRotationY(-90f);
-            imageView.animate().rotationY(0f).setDuration(150).start();
-        }).start();
-    }
-
-    /**
-     * Performs a shake animation to indicate an error (e.g., mismatched cards).
-     *
-     * @param position     The position of the card in the adapter.
-     * @param recyclerView The RecyclerView containing the view holder.
-     */
-    public void animateError(int position, RecyclerView recyclerView) {
-        CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-        if (holder != null) {
-            View view = holder.itemView;
-            view.animate().translationXBy(-20f).setDuration(50).withEndAction(() ->
-                    view.animate().translationXBy(40f).setDuration(50).withEndAction(() ->
-                            view.animate().translationX(0f).setDuration(50).start()
-                    ).start()
-            ).start();
-        }
-    }
-
-    /**
-     * Performs a scale animation to indicate success (e.g., matched cards).
-     *
-     * @param position     The position of the card in the adapter.
-     * @param recyclerView The RecyclerView containing the view holder.
-     */
-    public void animateSuccess(int position, RecyclerView recyclerView) {
-        CardViewHolder holder = (CardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-        if (holder != null) {
-            View view = holder.itemView;
-            view.animate().scaleX(1.1f).scaleY(1.1f).setDuration(150).withEndAction(() ->
-                    view.animate().scaleX(0.9f).scaleY(0.9f).setDuration(150).start()
-            ).start();
-        }
-    }
 
     /**
      * Interface for handling interaction events in the memory game.
@@ -200,6 +135,21 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
          * @return true if it is the user's turn.
          */
         boolean isMyTurn();
+
+        /**
+         * Animates the card flipping open.
+         *
+         * @param imageView The {@link ImageView} to animate.
+         * @param base64    The Base64 content to load.
+         */
+        void animateFlipOpen(ImageView imageView, String base64);
+
+        /**
+         * Animates the card flipping closed.
+         *
+         * @param imageView The {@link ImageView} to animate.
+         */
+        void animateFlipClose(ImageView imageView);
     }
 
     /**

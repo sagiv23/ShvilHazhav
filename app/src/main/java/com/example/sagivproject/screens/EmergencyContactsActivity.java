@@ -61,7 +61,6 @@ public class EmergencyContactsActivity extends BaseActivity {
 
     private EmergencyContactsAdapter adapter;
     private User user;
-
     /**
      * Launcher for the system contact picker.
      */
@@ -71,7 +70,7 @@ public class EmergencyContactsActivity extends BaseActivity {
                     retrieveContactDetails(uri);
                 }
             });
-
+    private boolean isFromRegistration;
     /**
      * Client for retrieving device location coordinates.
      */
@@ -106,7 +105,7 @@ public class EmergencyContactsActivity extends BaseActivity {
         findViewById(R.id.btn_go_to_settings).setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
 
         Button btnSkip = findViewById(R.id.btn_skip);
-        boolean isFromRegistration = getIntent().getBooleanExtra("isFromRegistration", false);
+        isFromRegistration = getIntent().getBooleanExtra("isFromRegistration", false);
 
         if (isFromRegistration) {
             btnSkip.setVisibility(View.VISIBLE);
@@ -195,8 +194,13 @@ public class EmergencyContactsActivity extends BaseActivity {
             bottomActions.setVisibility(View.VISIBLE);
         } else {
             cardNotificationsReminder.setVisibility(View.VISIBLE);
-            mainContent.setVisibility(View.GONE);
-            bottomActions.setVisibility(View.GONE);
+            if (isFromRegistration) {
+                mainContent.setVisibility(View.VISIBLE);
+                bottomActions.setVisibility(View.VISIBLE);
+            } else {
+                mainContent.setVisibility(View.GONE);
+                bottomActions.setVisibility(View.GONE);
+            }
         }
     }
 

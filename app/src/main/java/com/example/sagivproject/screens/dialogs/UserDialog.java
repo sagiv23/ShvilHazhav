@@ -7,17 +7,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.BundleCompat;
-import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseDialog;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.Validator;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -31,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * </p>
  */
 @AndroidEntryPoint
-public class UserDialog extends DialogFragment {
+public class UserDialog extends BaseDialog {
     private static final String ARG_USER = "arg_user";
 
     @Inject
@@ -71,13 +68,13 @@ public class UserDialog extends DialogFragment {
         }
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_user);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+    protected int getLayoutResId() {
+        return R.layout.dialog_user;
+    }
 
+    @Override
+    protected void setupViews(Dialog dialog) {
         TextView txtTitle = dialog.findViewById(R.id.txtUserDialogTitle);
         EditText inputFirstName = dialog.findViewById(R.id.inputUserFirstName);
         EditText inputLastName = dialog.findViewById(R.id.inputUserLastName);
@@ -128,7 +125,6 @@ public class UserDialog extends DialogFragment {
         });
 
         btnCancel.setOnClickListener(v -> dismiss());
-        return dialog;
     }
 
     private boolean areAllFieldsValid(String fName, String lName, String email, String password, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passwordEdt, EditText birthDateEdt) {

@@ -1,6 +1,10 @@
 package com.example.sagivproject.screens;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +23,7 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -34,11 +39,14 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ForumActivity extends BaseActivity {
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private RecyclerView recycler;
     private Button btnNewMessagesIndicator;
     private ForumAdapter adapter;
     private String categoryId;
     private User user;
+    private TextToSpeech tts;
+    private String currentlySpeakingMsgId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +107,33 @@ public class ForumActivity extends BaseActivity {
             @Override
             public boolean isShowMenuOptions(ForumMessage message) {
                 return canDelete(message);
+            }
+
+            @Override
+            public void onSpeakClicked(ForumMessage message) {
+                if (message.getId().equals(currentlySpeakingMsgId)) {
+                    if (tts != null) tts.stop();
+                    currentlySpeakingMsgId = null;
+                    notifyItemChangedById(message.getId());
+                } else {
+                    String oldId = currentlySpeakingMsgId;
+                    if (oldId != null) {
+                        if (tts != null) tts.stop();
+                        currentlySpeakingMsgId = null;
+                        notifyItemChangedById(oldId);
+                    }
+
+                    if (tts == null) {
+                        initTTS(message);
+                    } else {
+                        speak(message);
+                    }
+                }
+            }
+
+            @Override
+            public String getCurrentlySpeakingMsgId() {
+                return currentlySpeakingMsgId;
             }
         });
 
@@ -195,6 +230,73 @@ public class ForumActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Initializes the Text-to-Speech engine and begins speaking the provided message.
+     *
+     * @param msg The {@link ForumMessage} to read aloud after initialization.
+     */
+    private void initTTS(ForumMessage msg) {
+        if (tts == null) {
+            tts = new TextToSpeech(this, status -> {
+                if (status == TextToSpeech.SUCCESS) {
+                    tts.setLanguage(new Locale("he", "IL"));
+                    tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        @Override
+                        public void onStart(String utteranceId) {
+                            currentlySpeakingMsgId = utteranceId;
+                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
+                        }
+
+                        @Override
+                        public void onDone(String utteranceId) {
+                            if (utteranceId.equals(currentlySpeakingMsgId)) {
+                                currentlySpeakingMsgId = null;
+                            }
+                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
+                        }
+
+                        @Override
+                        public void onError(String utteranceId) {
+                            if (utteranceId.equals(currentlySpeakingMsgId)) {
+                                currentlySpeakingMsgId = null;
+                            }
+                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
+                        }
+                    });
+                    speak(msg);
+                }
+            });
+        }
+    }
+
+    /**
+     * Triggers the TTS engine to speak the text of the given message.
+     *
+     * @param msg The message to speak.
+     */
+    private void speak(ForumMessage msg) {
+        if (tts != null) {
+            Bundle params = new Bundle();
+            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, msg.getId());
+            tts.speak(msg.getMessage(), TextToSpeech.QUEUE_FLUSH, params, msg.getId());
+        }
+    }
+
+    /**
+     * Finds a message by its ID and triggers a partial UI refresh for that item.
+     *
+     * @param msgId The unique ID of the message.
+     */
+    private void notifyItemChangedById(String msgId) {
+        List<ForumMessage> messages = adapter.getItemList();
+        for (int i = 0; i < messages.size(); i++) {
+            if (messages.get(i).getId().equals(msgId)) {
+                adapter.notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -203,8 +305,9 @@ public class ForumActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if (adapter != null) {
-            adapter.onDestroy();
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
         }
         super.onDestroy();
     }

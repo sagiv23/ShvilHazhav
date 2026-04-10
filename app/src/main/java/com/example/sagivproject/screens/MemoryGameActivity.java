@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,12 +22,15 @@ import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.utils.ImageUtil;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -53,6 +58,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * The total time limit for the entire game in milliseconds (1.5 minutes).
      */
     private static final long TOTAL_GAME_TIME_LIMIT = 90000;
+
+    @Inject
+    ImageUtil imageUtil;
 
     private RecyclerView recyclerCards;
     private boolean endDialogShown = false, localLock = false;
@@ -230,14 +238,14 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         Card c2 = cards.get(idx2);
 
         if (c1 != null && c2 != null && c1.getId().equals(c2.getId())) {
-            adapter.animateSuccess(idx1, recyclerCards);
-            adapter.animateSuccess(idx2, recyclerCards);
+            animateSuccess(idx1);
+            animateSuccess(idx2);
             databaseService.getGameService().updateCardStatus(roomId, idx1, true, true);
             databaseService.getGameService().updateCardStatus(roomId, idx2, true, true);
             databaseService.getGameService().incrementScore(roomId, user.getId(), null);
         } else {
-            adapter.animateError(idx1, recyclerCards);
-            adapter.animateError(idx2, recyclerCards);
+            animateError(idx1);
+            animateError(idx2);
 
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 databaseService.getGameService().updateCardStatus(roomId, idx1, false, false);
@@ -253,6 +261,65 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             databaseService.getGameService().setProcessing(roomId, false);
             localLock = false;
         }, 700);
+    }
+
+    @Override
+    public void animateFlipOpen(ImageView imageView, String base64) {
+        imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
+            Runnable flipIn = () -> {
+                imageView.setRotationY(-90f);
+                imageView.animate().rotationY(0f).setDuration(150).start();
+            };
+
+            if (base64 != null) {
+                imageUtil.loadImage(base64, imageView);
+                flipIn.run();
+            } else {
+                imageView.setImageResource(R.drawable.fold_card_img);
+                flipIn.run();
+            }
+        }).start();
+    }
+
+    @Override
+    public void animateFlipClose(ImageView imageView) {
+        imageView.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
+            imageView.setImageResource(R.drawable.fold_card_img);
+            imageView.setRotationY(-90f);
+            imageView.animate().rotationY(0f).setDuration(150).start();
+        }).start();
+    }
+
+    /**
+     * Performs a shake animation to indicate an error (e.g., mismatched cards).
+     *
+     * @param position The position of the card in the adapter.
+     */
+    private void animateError(int position) {
+        MemoryGameAdapter.CardViewHolder holder = (MemoryGameAdapter.CardViewHolder) recyclerCards.findViewHolderForAdapterPosition(position);
+        if (holder != null) {
+            View view = holder.itemView;
+            view.animate().translationXBy(-20f).setDuration(50).withEndAction(() ->
+                    view.animate().translationXBy(40f).setDuration(50).withEndAction(() ->
+                            view.animate().translationX(0f).setDuration(50).start()
+                    ).start()
+            ).start();
+        }
+    }
+
+    /**
+     * Performs a scale animation to indicate success (e.g., matched cards).
+     *
+     * @param position The position of the card in the adapter.
+     */
+    private void animateSuccess(int position) {
+        MemoryGameAdapter.CardViewHolder holder = (MemoryGameAdapter.CardViewHolder) recyclerCards.findViewHolderForAdapterPosition(position);
+        if (holder != null) {
+            View view = holder.itemView;
+            view.animate().scaleX(1.1f).scaleY(1.1f).setDuration(150).withEndAction(() ->
+                    view.animate().scaleX(0.9f).scaleY(0.9f).setDuration(150).start()
+            ).start();
+        }
     }
 
     /**
