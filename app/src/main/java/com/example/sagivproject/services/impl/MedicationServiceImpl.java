@@ -3,7 +3,6 @@ package com.example.sagivproject.services.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
@@ -12,6 +11,7 @@ import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IMedicationService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
@@ -38,10 +38,12 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
     /**
      * Constructs a new MedicationServiceImpl.
      * Initializes the base service with an empty path as full paths are built dynamically.
+     *
+     * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      */
     @Inject
-    public MedicationServiceImpl() {
-        super("", Medication.class);
+    public MedicationServiceImpl(FirebaseDatabase firebaseDatabase) {
+        super(firebaseDatabase, "", Medication.class);
     }
 
     @Override

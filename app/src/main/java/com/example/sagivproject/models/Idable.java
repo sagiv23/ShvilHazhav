@@ -1,11 +1,13 @@
 package com.example.sagivproject.models;
 
+import com.example.sagivproject.adapters.BaseAdapter;
+
 /**
  * An interface for data models that have a unique identifier.
  * <p>
  * This provides a common contract for models that can be stored and retrieved
  * from the database using a string-based ID. It is required for use with
- * the {@link com.example.sagivproject.bases.BaseAdapter}.
+ * the {@link BaseAdapter}.
  * </p>
  */
 public interface Idable {

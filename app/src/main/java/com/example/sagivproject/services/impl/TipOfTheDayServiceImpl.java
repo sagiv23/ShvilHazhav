@@ -1,9 +1,9 @@
 package com.example.sagivproject.services.impl;
 
-import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.ITipOfTheDayService;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,10 +33,12 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
     /**
      * Constructs a new TipOfTheDayServiceImpl.
      * Initializes the base service with the tips' path.
+     *
+     * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      */
     @Inject
-    public TipOfTheDayServiceImpl() {
-        super(TIP_OF_THE_DAY_PATH, TipOfTheDay.class);
+    public TipOfTheDayServiceImpl(FirebaseDatabase firebaseDatabase) {
+        super(firebaseDatabase, TIP_OF_THE_DAY_PATH, TipOfTheDay.class);
     }
 
     /**

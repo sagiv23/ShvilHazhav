@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

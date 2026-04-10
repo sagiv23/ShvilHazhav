@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,13 +24,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.GraphAdapter;
 import com.example.sagivproject.adapters.MedicationUsageAdapter;
-import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.GraphData;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
-import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.example.sagivproject.ui.SimpleXYGraphView;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.google.android.material.button.MaterialButton;
@@ -151,7 +150,7 @@ public class UserStatsActivity extends BaseActivity {
                 String tabTitle = title.split(":")[0];
                 if (typeface != null) {
                     SpannableString s = new SpannableString(tabTitle);
-                    s.setSpan(new CustomTypefaceSpan("", typeface), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    s.setSpan(new TypefaceSpan(typeface), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     s.setSpan(new AbsoluteSizeSpan(18, true), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     tab.setText(s);
                 } else {

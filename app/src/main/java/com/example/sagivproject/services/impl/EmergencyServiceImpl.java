@@ -7,10 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IEmergencyService;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +34,12 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
     /**
      * Constructs a new EmergencyServiceImpl.
      * Initializes the base service with an empty path as full paths are built dynamically.
+     *
+     * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      */
     @Inject
-    public EmergencyServiceImpl() {
-        super("", EmergencyContact.class);
+    public EmergencyServiceImpl(FirebaseDatabase firebaseDatabase) {
+        super(firebaseDatabase, "", EmergencyContact.class);
     }
 
     @Override

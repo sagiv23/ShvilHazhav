@@ -1,4 +1,4 @@
-package com.example.sagivproject.bases;
+package com.example.sagivproject.screens.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;

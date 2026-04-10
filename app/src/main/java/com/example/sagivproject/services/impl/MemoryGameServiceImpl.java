@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.GameRoom;
@@ -77,7 +76,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
      */
     @Inject
     public MemoryGameServiceImpl(FirebaseDatabase firebaseDatabase) {
-        super(ROOMS_PATH, GameRoom.class);
+        super(firebaseDatabase, ROOMS_PATH, GameRoom.class);
         this.roomsReference = firebaseDatabase.getReference(ROOMS_PATH);
         this.usersReference = firebaseDatabase.getReference(USERS_PATH);
     }

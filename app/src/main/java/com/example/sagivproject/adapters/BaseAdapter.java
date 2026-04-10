@@ -1,4 +1,4 @@
-package com.example.sagivproject.bases;
+package com.example.sagivproject.adapters;
 
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;

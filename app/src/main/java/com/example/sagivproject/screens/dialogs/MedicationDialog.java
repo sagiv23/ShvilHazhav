@@ -18,7 +18,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.os.BundleCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseDialog;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.enums.MedicationType;
 import com.google.android.material.chip.Chip;

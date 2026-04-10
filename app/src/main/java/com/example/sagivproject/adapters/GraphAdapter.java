@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.GraphData;
 import com.example.sagivproject.ui.SimpleXYGraphView;
 

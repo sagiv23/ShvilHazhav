@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseDialog;
 
 import javax.inject.Inject;
 

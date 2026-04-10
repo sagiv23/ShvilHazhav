@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.EmergencyContactsAdapter;
-import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;

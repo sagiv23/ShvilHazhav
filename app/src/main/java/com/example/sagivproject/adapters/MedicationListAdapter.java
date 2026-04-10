@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +21,9 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.enums.MedicationStatus;
-import com.example.sagivproject.ui.CustomTypefaceSpan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -137,7 +136,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
         if (typeface != null) {
             SpannableString nameSpannable = new SpannableString(med.getName());
-            nameSpannable.setSpan(new CustomTypefaceSpan("", typeface), 0, nameSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            nameSpannable.setSpan(new TypefaceSpan(typeface), 0, nameSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.txtMedicationName.setText(nameSpannable);
         } else {
             holder.txtMedicationName.setText(med.getName());
@@ -168,7 +167,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
                 for (int i = 0; i < menu.getMenu().size(); i++) {
                     MenuItem item = menu.getMenu().getItem(i);
                     SpannableString s = new SpannableString(item.getTitle());
-                    s.setSpan(new CustomTypefaceSpan("", typeface), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    s.setSpan(new TypefaceSpan(typeface), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     s.setSpan(new AbsoluteSizeSpan(20, true), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     item.setTitle(s);
                 }

@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.core.os.BundleCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseDialog;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.Validator;

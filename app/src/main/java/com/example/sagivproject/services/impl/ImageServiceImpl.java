@@ -3,10 +3,10 @@ package com.example.sagivproject.services.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IImageService;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,10 +32,12 @@ public class ImageServiceImpl extends BaseDatabaseService<ImageData> implements 
     /**
      * Constructs a new ImageServiceImpl.
      * Initializes the base service with the images' path.
+     *
+     * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      */
     @Inject
-    public ImageServiceImpl() {
-        super(IMAGES_PATH, ImageData.class);
+    public ImageServiceImpl(FirebaseDatabase firebaseDatabase) {
+        super(firebaseDatabase, IMAGES_PATH, ImageData.class);
     }
 
     /**

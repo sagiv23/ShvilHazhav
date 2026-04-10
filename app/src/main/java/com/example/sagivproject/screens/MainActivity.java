@@ -7,7 +7,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
 
 import dagger.hilt.android.AndroidEntryPoint;

@@ -61,12 +61,13 @@ public abstract class AppModule {
     /**
      * Provides a singleton instance of {@link DatabaseReference}.
      *
+     * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      * @return The root reference to the Firebase Realtime Database.
      */
     @Provides
     @Singleton
-    public static DatabaseReference provideDatabaseReference() {
-        return FirebaseDatabase.getInstance().getReference();
+    public static DatabaseReference provideDatabaseReference(FirebaseDatabase firebaseDatabase) {
+        return firebaseDatabase.getReference();
     }
 
     /**

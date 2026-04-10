@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.utils.ImageUtil;
 

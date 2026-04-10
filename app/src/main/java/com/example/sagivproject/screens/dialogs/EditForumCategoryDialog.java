@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.core.os.BundleCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseDialog;
 import com.example.sagivproject.models.ForumCategory;
 
 import javax.inject.Inject;

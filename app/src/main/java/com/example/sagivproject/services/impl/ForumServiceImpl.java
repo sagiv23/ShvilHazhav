@@ -3,7 +3,6 @@ package com.example.sagivproject.services.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
@@ -12,6 +11,7 @@ import com.example.sagivproject.services.IUserService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -38,11 +38,12 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
     /**
      * Constructs a new ForumServiceImpl.
      *
-     * @param userService The service used to fetch sender details.
+     * @param firebaseDatabase The {@link FirebaseDatabase} instance.
+     * @param userService      The service used to fetch sender details.
      */
     @Inject
-    public ForumServiceImpl(IUserService userService) {
-        super(FORUM_PATH, ForumMessage.class);
+    public ForumServiceImpl(FirebaseDatabase firebaseDatabase, IUserService userService) {
+        super(firebaseDatabase, FORUM_PATH, ForumMessage.class);
         this.userService = userService;
     }
 

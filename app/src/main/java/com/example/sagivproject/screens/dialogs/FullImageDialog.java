@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseDialog;
 
 import javax.inject.Inject;
 

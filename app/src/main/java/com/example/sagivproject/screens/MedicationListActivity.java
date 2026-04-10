@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,7 +27,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationListAdapter;
-import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
@@ -35,7 +35,6 @@ import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.screens.dialogs.MedicationDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.notifications.AlarmScheduler;
-import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.text.SimpleDateFormat;
@@ -124,7 +123,7 @@ public class MedicationListActivity extends BaseActivity {
                 String name = adapter.getItemList().get(position).getName();
                 if (typeface != null) {
                     SpannableString s = new SpannableString(name);
-                    s.setSpan(new CustomTypefaceSpan("", typeface), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    s.setSpan(new TypefaceSpan(typeface), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     s.setSpan(new AbsoluteSizeSpan(22, true), 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     tab.setText(s);
                 } else {

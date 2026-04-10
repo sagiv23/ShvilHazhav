@@ -5,6 +5,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.format.DateFormat;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,10 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.services.impl.AdapterService;
-import com.example.sagivproject.ui.CustomTypefaceSpan;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -36,7 +35,6 @@ import javax.inject.Inject;
  * by the service layer into the {@link ForumMessage} object.</li>
  * <li>Text-to-Speech (TTS) integration for reading messages aloud.</li>
  * <li>Admin moderation tools (conditional menu for deletion).</li>
- * <li>Custom Hebrew typography using {@link CustomTypefaceSpan}.</li>
  * <li>Real-time visual feedback for the currently speaking message.</li>
  * </ul>
  * </p>
@@ -101,7 +99,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
         if (customFont != null) {
             userNameSpannable.setSpan(
-                    new CustomTypefaceSpan("", customFont),
+                    new TypefaceSpan(customFont),
                     0,
                     userNameSpannable.length(),
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -134,7 +132,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
                 MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
                 if (deleteItem != null && customFont != null) {
                     SpannableString title = new SpannableString(deleteItem.getTitle());
-                    title.setSpan(new CustomTypefaceSpan("", customFont), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    title.setSpan(new TypefaceSpan(customFont), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     title.setSpan(new AbsoluteSizeSpan(20, true), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     deleteItem.setTitle(title);
                 }

@@ -1,4 +1,4 @@
-package com.example.sagivproject.bases;
+package com.example.sagivproject.services.impl;
 
 import android.util.Log;
 
@@ -56,11 +56,11 @@ public abstract class BaseDatabaseService<T extends Idable> {
     /**
      * Constructs a new BaseDatabaseService.
      *
-     * @param path  The path to the data in the Firebase Realtime Database.
-     * @param clazz The class of the data model.
+     * @param firebaseDatabase The {@link FirebaseDatabase} instance.
+     * @param path             The path to the data in the Firebase Realtime Database.
+     * @param clazz            The class of the data model.
      */
-    protected BaseDatabaseService(@NotNull final String path, @NotNull final Class<T> clazz) {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    protected BaseDatabaseService(@NotNull final FirebaseDatabase firebaseDatabase, @NotNull final String path, @NotNull final Class<T> clazz) {
         databaseReference = firebaseDatabase.getReference();
         this.path = path;
         this.clazz = clazz;

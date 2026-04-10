@@ -2,12 +2,12 @@ package com.example.sagivproject.services.impl;
 
 import androidx.annotation.NonNull;
 
-import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IForumCategoriesService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -31,10 +31,12 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
     /**
      * Constructs a new ForumCategoriesServiceImpl.
      * Initializes the base service with the forum categories root path.
+     *
+     * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      */
     @Inject
-    public ForumCategoriesServiceImpl() {
-        super(CATEGORIES_PATH, ForumCategory.class);
+    public ForumCategoriesServiceImpl(FirebaseDatabase firebaseDatabase) {
+        super(firebaseDatabase, CATEGORIES_PATH, ForumCategory.class);
     }
 
     /**

@@ -3,11 +3,11 @@ package com.example.sagivproject.services.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.sagivproject.bases.BaseDatabaseService;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IUserService;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,10 +29,12 @@ public class UserServiceImpl extends BaseDatabaseService<User> implements IUserS
     /**
      * Constructs a new UserServiceImpl.
      * Initializes the base database service with the "users" root path.
+     *
+     * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      */
     @Inject
-    public UserServiceImpl() {
-        super("users", User.class);
+    public UserServiceImpl(FirebaseDatabase firebaseDatabase) {
+        super(firebaseDatabase, "users", User.class);
     }
 
     /**
