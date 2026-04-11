@@ -19,7 +19,6 @@ import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IFallDetectionService;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -166,7 +165,7 @@ public class SettingsActivity extends BaseActivity {
         switchNotifications.setOnCheckedChangeListener((v, isChecked) -> {
             if (v.isPressed()) {
                 if (isChecked) {
-                    requestPermissions(Manifest.permission.POST_NOTIFICATIONS);
+                    runWithPermission(Manifest.permission.POST_NOTIFICATIONS, this::refreshSwitches);
                 } else {
                     v.setChecked(true);
                     showRedirectDialog();
@@ -177,7 +176,7 @@ public class SettingsActivity extends BaseActivity {
         switchCamera.setOnCheckedChangeListener((v, isChecked) -> {
             if (v.isPressed()) {
                 if (isChecked) {
-                    requestPermissions(Manifest.permission.CAMERA);
+                    runWithPermission(Manifest.permission.CAMERA, this::refreshSwitches);
                 } else {
                     v.setChecked(true);
                     showRedirectDialog();
@@ -188,7 +187,7 @@ public class SettingsActivity extends BaseActivity {
         switchGallery.setOnCheckedChangeListener((v, isChecked) -> {
             if (v.isPressed()) {
                 if (isChecked) {
-                    requestPermissions(Manifest.permission.READ_MEDIA_IMAGES);
+                    runWithPermission(Manifest.permission.READ_MEDIA_IMAGES, this::refreshSwitches);
                 } else {
                     v.setChecked(true);
                     showRedirectDialog();
@@ -199,7 +198,7 @@ public class SettingsActivity extends BaseActivity {
         switchLocation.setOnCheckedChangeListener((v, isChecked) -> {
             if (v.isPressed()) {
                 if (isChecked) {
-                    requestPermissions(Manifest.permission.ACCESS_FINE_LOCATION);
+                    runWithPermission(Manifest.permission.ACCESS_FINE_LOCATION, this::refreshSwitches);
                 } else {
                     v.setChecked(true);
                     showRedirectDialog();
@@ -210,7 +209,7 @@ public class SettingsActivity extends BaseActivity {
         switchSms.setOnCheckedChangeListener((v, isChecked) -> {
             if (v.isPressed()) {
                 if (isChecked) {
-                    requestPermissions(Manifest.permission.SEND_SMS);
+                    runWithPermission(Manifest.permission.SEND_SMS, this::refreshSwitches);
                 } else {
                     v.setChecked(true);
                     showRedirectDialog();
@@ -221,7 +220,7 @@ public class SettingsActivity extends BaseActivity {
         switchContacts.setOnCheckedChangeListener((v, isChecked) -> {
             if (v.isPressed()) {
                 if (isChecked) {
-                    requestPermissions(Manifest.permission.READ_CONTACTS);
+                    runWithPermission(Manifest.permission.READ_CONTACTS, this::refreshSwitches);
                 } else {
                     v.setChecked(true);
                     showRedirectDialog();
@@ -322,26 +321,12 @@ public class SettingsActivity extends BaseActivity {
      * Fine Location, SMS, and Notifications.
      */
     private void handleFallDetectionEnable() {
-        List<String> permissionsToRequest = new ArrayList<>();
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
-            permissionsToRequest.add(Manifest.permission.ACTIVITY_RECOGNITION);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            permissionsToRequest.add(Manifest.permission.SEND_SMS);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS);
-        }
-
-        if (!permissionsToRequest.isEmpty()) {
-            requestPermissions(permissionsToRequest.toArray(new String[0]));
-        } else {
-            checkBackgroundLocationAndEnable();
-        }
+        runWithPermissions(this::checkBackgroundLocationAndEnable,
+                Manifest.permission.ACTIVITY_RECOGNITION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.SEND_SMS,
+                Manifest.permission.POST_NOTIFICATIONS
+        );
     }
 
     /**
@@ -354,7 +339,7 @@ public class SettingsActivity extends BaseActivity {
                     "הרשאת מיקום ברקע",
                     "כדי שנוכל לשלוח את המיקום שלך לאנשי הקשר בזמן נפילה, עליך לאשר הרשאת 'אפשר תמיד' (Allow all the time) בהגדרות המיקום של האפליקציה.",
                     "להגדרות", "בטל",
-                    () -> requestPermissions(Manifest.permission.ACCESS_BACKGROUND_LOCATION));
+                    () -> runWithPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION, this::checkContactsAndEnableFallDetection));
             switchFallDetection.setChecked(false);
         } else {
             checkContactsAndEnableFallDetection();
@@ -369,30 +354,6 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
         refreshSwitches();
-
-        // Specific logic for Fall Detection multistep flow
-        if (isGranted.containsKey(Manifest.permission.ACTIVITY_RECOGNITION) || isGranted.containsKey(Manifest.permission.ACCESS_FINE_LOCATION) || isGranted.containsKey(Manifest.permission.SEND_SMS) || isGranted.containsKey(Manifest.permission.POST_NOTIFICATIONS)) {
-
-            boolean activityOk = ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED;
-            boolean locationOk = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-            boolean smsOk = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
-            boolean notificationsOk = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
-
-            if (activityOk && locationOk && smsOk && notificationsOk) {
-                checkBackgroundLocationAndEnable();
-            } else if (switchFallDetection != null && switchFallDetection.isChecked()) {
-                switchFallDetection.setChecked(false);
-                Toast.makeText(this, "יש לאשר את כל ההרשאות להפעלת השירות", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        if (isGranted.containsKey(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-            if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.ACCESS_BACKGROUND_LOCATION))) {
-                checkContactsAndEnableFallDetection();
-            } else {
-                if (switchFallDetection != null) switchFallDetection.setChecked(false);
-            }
-        }
     }
 
     /**

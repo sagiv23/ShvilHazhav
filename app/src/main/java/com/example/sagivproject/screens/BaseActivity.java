@@ -59,42 +59,52 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public abstract class BaseActivity extends AppCompatActivity implements MenuNavigationListener {
     private static final String TAG = "BaseActivity";
-
-    /**
-     * Standard launcher for requesting multiple runtime permissions.
-     * Results are handled in {@link #onPermissionsResult(Map)}.
-     */
-    protected final ActivityResultLauncher<String[]> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), this::onPermissionsResult);
-
     /**
      * Utility for managing local user preferences and session.
      */
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
-
     /**
      * The central database service façade.
      */
     @Inject
     protected IDatabaseService databaseService;
-
     /**
      * Activity-scoped service for providing RecyclerView adapters.
      */
     @Inject
     protected IAdapterService adapterService;
-
     /**
      * Activity-scoped service for showing UI dialogs.
      */
     @Inject
     protected IDialogService dialogService;
-
     /**
      * The root layout for the navigation drawer.
      */
     protected DrawerLayout drawerLayout;
+    private Runnable onPermissionGrantedCallback;
+    /**
+     * Standard launcher for requesting multiple runtime permissions.
+     * Results are handled in {@link #onPermissionsResult(Map)}.
+     */
+    protected final ActivityResultLauncher<String[]> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+                onPermissionsResult(result);
+                if (onPermissionGrantedCallback != null) {
+                    boolean allGranted = true;
+                    for (boolean granted : result.values()) {
+                        if (!granted) {
+                            allGranted = false;
+                            break;
+                        }
+                    }
+                    if (allGranted) {
+                        onPermissionGrantedCallback.run();
+                    }
+                    onPermissionGrantedCallback = null;
+                }
+            });
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -265,11 +275,36 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     }
 
     /**
-     * Requests a set of runtime permissions from the user.
-     *
-     * @param permissions A variable list of permission strings (e.g., {@code Manifest.permission.CAMERA}).
+     * Helper to check and request permissions, then execute a callback if all granted.
      */
-    protected void requestPermissions(String... permissions) {
+    protected void runWithPermissions(Runnable action, String... permissions) {
+        boolean allGranted = true;
+        for (String p : permissions) {
+            if (androidx.core.content.ContextCompat.checkSelfPermission(this, p) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                allGranted = false;
+                break;
+            }
+        }
+
+        if (allGranted) {
+            action.run();
+        } else {
+            this.onPermissionGrantedCallback = action;
+            requestPermissions(permissions);
+        }
+    }
+
+    protected void runWithPermission(String permission, Runnable action) {
+        runWithPermissions(action, permission);
+    }
+
+    /**
+     * Requests a set of runtime permissions from the user.
+     * Internal use only via runWithPermissions.
+     *
+     * @param permissions A variable list of permission strings.
+     */
+    private void requestPermissions(String... permissions) {
         requestPermissionLauncher.launch(permissions);
     }
 

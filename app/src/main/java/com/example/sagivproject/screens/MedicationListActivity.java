@@ -1,7 +1,6 @@
 package com.example.sagivproject.screens;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -353,12 +351,7 @@ public class MedicationListActivity extends BaseActivity {
      * Validates notification permissions before scheduling reminders.
      */
     private void checkNotificationPermissionAndSchedule(Medication medication) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            alarmScheduler.schedule(medication);
-        } else {
-            requestPermissions(Manifest.permission.POST_NOTIFICATIONS);
-            alarmScheduler.schedule(medication);
-        }
+        runWithPermission(Manifest.permission.POST_NOTIFICATIONS, () -> alarmScheduler.schedule(medication));
     }
 
     @Override

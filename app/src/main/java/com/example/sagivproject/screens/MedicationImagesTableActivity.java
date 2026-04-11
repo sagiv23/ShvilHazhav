@@ -1,7 +1,6 @@
 package com.example.sagivproject.screens;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.Drawable;
@@ -16,7 +15,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -128,11 +126,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
      * Validates gallery access permissions before launching the photo picker.
      */
     private void checkGalleryPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-            openGallery();
-        } else {
-            requestPermissions(Manifest.permission.READ_MEDIA_IMAGES);
-        }
+        runWithPermission(Manifest.permission.READ_MEDIA_IMAGES, this::openGallery);
     }
 
     /**
@@ -145,10 +139,8 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
     @Override
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
-        if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_MEDIA_IMAGES)) ||
-                Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_EXTERNAL_STORAGE))) {
-            openGallery();
-        } else {
+        if (!(Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_MEDIA_IMAGES)) ||
+                Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_EXTERNAL_STORAGE)))) {
             Toast.makeText(this, "נדרשת הרשאת גישה לתמונות כדי להוסיף תמונה", Toast.LENGTH_SHORT).show();
         }
     }

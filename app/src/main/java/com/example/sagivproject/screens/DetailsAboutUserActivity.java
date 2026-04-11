@@ -1,7 +1,6 @@
 package com.example.sagivproject.screens;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
@@ -135,14 +133,10 @@ public class DetailsAboutUserActivity extends BaseActivity {
      */
     @Override
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
-        if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.CAMERA))) {
-            cameraLauncher.launch(null);
-        } else if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_EXTERNAL_STORAGE)) ||
-                Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_MEDIA_IMAGES))) {
-            launchGallery();
-        } else if (isGranted.containsKey(Manifest.permission.CAMERA)) {
+        if (isGranted.containsKey(Manifest.permission.CAMERA) && !Boolean.TRUE.equals(isGranted.get(Manifest.permission.CAMERA))) {
             Toast.makeText(this, "נדרשת הרשאת מצלמה כדי לצלם תמונה", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if ((isGranted.containsKey(Manifest.permission.READ_EXTERNAL_STORAGE) || isGranted.containsKey(Manifest.permission.READ_MEDIA_IMAGES)) &&
+                !(Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_EXTERNAL_STORAGE)) || Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_MEDIA_IMAGES)))) {
             Toast.makeText(this, "ההרשאה נדחתה. לא ניתן להמשיך בפעולה.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -250,20 +244,12 @@ public class DetailsAboutUserActivity extends BaseActivity {
         dialogService.showProfileImageDialog(getSupportFragmentManager(), hasImage, new ProfileImageDialog.ImagePickerListener() {
             @Override
             public void onCamera() {
-                if (ContextCompat.checkSelfPermission(DetailsAboutUserActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    cameraLauncher.launch(null);
-                } else {
-                    requestPermissions(Manifest.permission.CAMERA);
-                }
+                runWithPermission(Manifest.permission.CAMERA, () -> cameraLauncher.launch(null));
             }
 
             @Override
             public void onGallery() {
-                if (ContextCompat.checkSelfPermission(DetailsAboutUserActivity.this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-                    launchGallery();
-                } else {
-                    requestPermissions(Manifest.permission.READ_MEDIA_IMAGES);
-                }
+                runWithPermission(Manifest.permission.READ_MEDIA_IMAGES, DetailsAboutUserActivity.this::launchGallery);
             }
 
             @Override

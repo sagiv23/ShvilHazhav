@@ -85,19 +85,15 @@ public class EmergencyContactsActivity extends BaseActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         findViewById(R.id.btn_enable_emergency_permissions).setOnClickListener(v ->
-                requestPermissions(Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION));
+                runWithPermissions(this::updatePermissionUI, Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION));
 
         findViewById(R.id.btn_add_contact_dialog).setOnClickListener(v ->
                 dialogService.showEmergencyContactDialog(getSupportFragmentManager(), null, this::addEmergencyContact)
         );
 
-        findViewById(R.id.btn_pick_contact).setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                contactPickerLauncher.launch(null);
-            } else {
-                requestPermissions(Manifest.permission.READ_CONTACTS);
-            }
-        });
+        findViewById(R.id.btn_pick_contact).setOnClickListener(v ->
+                runWithPermission(Manifest.permission.READ_CONTACTS, () -> contactPickerLauncher.launch(null))
+        );
 
         findViewById(R.id.btn_send_emergency_sms).setOnClickListener(v -> checkSmsAndLocationPermissions());
         findViewById(R.id.btn_call_109).setOnClickListener(v -> callEmergency());
@@ -164,14 +160,6 @@ public class EmergencyContactsActivity extends BaseActivity {
      */
     @Override
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
-        if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.SEND_SMS))) {
-            fetchLocationAndSendSms();
-        }
-
-        if (Boolean.TRUE.equals(isGranted.get(Manifest.permission.READ_CONTACTS))) {
-            contactPickerLauncher.launch(null);
-        }
-
         updatePermissionUI();
     }
 
@@ -344,7 +332,7 @@ public class EmergencyContactsActivity extends BaseActivity {
      * Checks for SMS and high-accuracy location permissions before triggering an alert.
      */
     private void checkSmsAndLocationPermissions() {
-        requestPermissions(
+        runWithPermissions(this::fetchLocationAndSendSms,
                 Manifest.permission.SEND_SMS,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
