@@ -11,8 +11,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.hilt.android.qualifiers.ApplicationContext;
-
 /**
  * A utility class for handling date and calendar-related operations.
  * <p>
@@ -29,11 +27,9 @@ public class CalendarUtil {
 
     /**
      * Constructs a new CalendarUtil.
-     *
-     * @param context The application context.
      */
     @Inject
-    public CalendarUtil(@ApplicationContext Context context) {
+    public CalendarUtil() {
     }
 
     /**

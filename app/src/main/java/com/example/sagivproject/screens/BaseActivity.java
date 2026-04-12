@@ -20,6 +20,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -280,7 +281,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     protected void runWithPermissions(Runnable action, String... permissions) {
         boolean allGranted = true;
         for (String p : permissions) {
-            if (androidx.core.content.ContextCompat.checkSelfPermission(this, p) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, p) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
                 allGranted = false;
                 break;
             }
