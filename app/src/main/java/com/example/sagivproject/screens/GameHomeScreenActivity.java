@@ -137,6 +137,7 @@ public class GameHomeScreenActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
+        displayTodayWins();
         loadWins();
         gameStarted = false;
     }
@@ -159,7 +160,6 @@ public class GameHomeScreenActivity extends BaseActivity {
                 if (updatedUser != null) {
                     sharedPreferencesUtil.saveUser(updatedUser);
                     user = updatedUser;
-                    displayTodayWins();
                 }
             }
 

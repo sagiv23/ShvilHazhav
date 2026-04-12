@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
-import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IMedicationService;
 import com.google.firebase.database.DataSnapshot;
@@ -85,47 +84,6 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
             @Override
             public void onFailed(Exception e) {
                 if (callback != null) callback.onFailed(e);
-            }
-        });
-    }
-
-    /**
-     * Logs a medication intake event and updates the daily performance statistics atomically.
-     * <p>
-     * Increments the appropriate counter in {@link DailyStats} (taken/missed) based on the
-     * provided {@code usage} status.
-     * </p>
-     *
-     * @param uid      User identifier.
-     * @param usage    Usage record details.
-     * @param callback Result callback.
-     */
-    @Override
-    public void logMedicationUsage(@NonNull String uid, @NonNull MedicationUsage usage, @Nullable DatabaseCallback<Void> callback) {
-        databaseReference.child(USERS_PATH).child(uid).child(FIELD_DAILY_STATS).child(usage.getDate()).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                DailyStats stats = currentData.getValue(DailyStats.class);
-                if (stats == null) stats = new DailyStats();
-
-                if (usage.getStatus() == MedicationStatus.TAKEN) {
-                    stats.addMedicationTaken();
-                } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) {
-                    stats.addMedicationMissed();
-                }
-
-                stats.addMedicationUsageLog(usage);
-                currentData.setValue(stats);
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                if (callback != null) {
-                    if (error != null) callback.onFailed(error.toException());
-                    else callback.onCompleted(null);
-                }
             }
         });
     }

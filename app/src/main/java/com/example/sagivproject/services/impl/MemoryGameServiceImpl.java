@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.Card;
-import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
@@ -20,12 +19,9 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -47,7 +43,6 @@ import javax.inject.Inject;
  */
 public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> implements IMemoryGameService {
     private static final String ROOMS_PATH = "rooms";
-    private static final String USERS_PATH = "users";
     private static final String TAG = "GameServiceImpl";
 
     private static final String FIELD_STATUS = "status";
@@ -57,15 +52,12 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     private static final String FIELD_IS_MATCHED = "isMatched";
     private static final String FIELD_PROCESSING_MATCH = "processingMatch";
     private static final String FIELD_WINNER_UID = "winnerUid";
-    private static final String FIELD_DAILY_STATS = "dailyStats";
 
     private static final String STATUS_WAITING = "waiting";
     private static final String STATUS_PLAYING = "playing";
     private static final String STATUS_FINISHED = "finished";
-    private static final String VALUE_DRAW = "draw";
 
     private final DatabaseReference roomsReference;
-    private final DatabaseReference usersReference;
     private final Map<String, ValueEventListener> roomStatusListeners = new ConcurrentHashMap<>();
     private ValueEventListener activeGameListener;
 
@@ -78,7 +70,6 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     public MemoryGameServiceImpl(FirebaseDatabase firebaseDatabase) {
         super(firebaseDatabase, ROOMS_PATH, GameRoom.class);
         this.roomsReference = firebaseDatabase.getReference(ROOMS_PATH);
-        this.usersReference = firebaseDatabase.getReference(USERS_PATH);
     }
 
     /**
@@ -311,33 +302,31 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     }
 
     @Override
-    public void finishGame(String roomId, String winnerUid, @Nullable DatabaseCallback<Void> callback) {
+    public void finishGame(String roomId, String winnerUid, @Nullable DatabaseCallback<Boolean> callback) {
         roomsReference.child(roomId).runTransaction(new Transaction.Handler() {
-            private boolean shouldUpdateStats = false;
+            private boolean transitioned = false;
 
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                shouldUpdateStats = false; // Reset on retry
+                transitioned = false;
                 GameRoom room = currentData.getValue(GameRoom.class);
                 if (room == null) return Transaction.success(currentData);
 
-                // If already finished AND stats already updated, just return
-                if (STATUS_FINISHED.equals(room.getStatus()) && room.isStatsUpdated()) {
+                // If stats already updated, do nothing and indicate no transition
+                if (room.isStatsUpdated()) {
                     return Transaction.success(currentData);
                 }
 
-                // Mark as finished if not already
+                // Mark as finished
                 room.setStatus(STATUS_FINISHED);
                 if (room.getWinnerUid() == null) {
                     room.setWinnerUid(winnerUid);
                 }
 
-                // Only update stats once per game room session
-                if (!room.isStatsUpdated()) {
-                    room.setStatsUpdated(true);
-                    shouldUpdateStats = true;
-                }
+                // Atomic check to ensure only one client triggers stats
+                room.setStatsUpdated(true);
+                transitioned = true;
 
                 currentData.setValue(room);
                 return Transaction.success(currentData);
@@ -345,22 +334,9 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot snapshot) {
-                if (error == null && committed && shouldUpdateStats && snapshot != null) {
-                    GameRoom room = snapshot.getValue(GameRoom.class);
-                    if (room != null) {
-                        String finalWinnerUid = room.getWinnerUid();
-                        if (room.getPlayer1Uid() != null) {
-                            updateDailyMemoryStats(room.getPlayer1Uid(), room.getPlayer1Uid().equals(finalWinnerUid));
-                        }
-                        if (room.getPlayer2Uid() != null) {
-                            updateDailyMemoryStats(room.getPlayer2Uid(), room.getPlayer2Uid().equals(finalWinnerUid));
-                        }
-                    }
-                }
-
                 if (callback != null) {
                     if (error != null) callback.onFailed(error.toException());
-                    else callback.onCompleted(null);
+                    else callback.onCompleted(committed && transitioned);
                 }
             }
         });
@@ -377,36 +353,6 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     @Override
     public void setProcessing(String roomId, boolean isProcessing) {
         updateRoomField(roomId, FIELD_PROCESSING_MATCH, isProcessing);
-    }
-
-    /**
-     * Updates daily memory game stats for a user using an atomic transaction.
-     *
-     * @param uid   User ID.
-     * @param isWin true if session was won.
-     */
-    @Override
-    public void updateDailyMemoryStats(String uid, boolean isWin) {
-        if (uid == null || uid.isEmpty() || VALUE_DRAW.equals(uid)) return;
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        usersReference.child(uid).child(FIELD_DAILY_STATS).child(today).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                DailyStats stats = currentData.getValue(DailyStats.class);
-                if (stats == null) stats = new DailyStats();
-                stats.addMemoryGamePlayed();
-                if (isWin) {
-                    stats.addMemoryWin();
-                }
-                currentData.setValue(stats);
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-            }
-        });
     }
 
     /**

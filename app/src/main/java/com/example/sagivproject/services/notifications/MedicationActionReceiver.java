@@ -75,7 +75,7 @@ public class MedicationActionReceiver extends BroadcastReceiver {
 
             MedicationUsage usage = new MedicationUsage(medicationId, medicationName, timeNow, today, hourStr, status);
 
-            databaseService.getMedicationService().logMedicationUsage(user.getId(), usage, new IDatabaseService.DatabaseCallback<>() {
+            databaseService.getStatsService().logMedicationUsage(user.getId(), usage, new IDatabaseService.DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void object) {
                     Log.d(TAG, "Usage (" + status + ") logged successfully from notification");

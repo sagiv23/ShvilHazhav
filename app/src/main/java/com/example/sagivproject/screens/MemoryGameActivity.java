@@ -104,7 +104,8 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             endDialogShown = true;
             if (currentRoom != null && !"finished".equals(currentRoom.getStatus())) {
                 String opponentUid = user.getId().equals(currentRoom.getPlayer1Uid()) ? currentRoom.getPlayer2Uid() : currentRoom.getPlayer1Uid();
-                databaseService.getGameService().finishGame(roomId, opponentUid, null);
+                currentRoom.setWinnerUid(opponentUid);
+                finishGame(currentRoom);
             }
             goBack();
         };
@@ -120,13 +121,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     private void showGameEndDialog(GameRoom room) {
         if (endDialogShown) return;
         endDialogShown = true;
-
-        // If the game finished (e.g. via onDisconnect) but stats weren't updated yet,
-        // the remaining player triggers the final update for both players.
-        if (!room.isStatsUpdated()) {
-            String winnerUid = room.getWinnerUid() != null ? room.getWinnerUid() : calculateWinner(room);
-            databaseService.getGameService().finishGame(roomId, winnerUid, null);
-        }
 
         String winnerUid = room.getWinnerUid() != null ? room.getWinnerUid() : calculateWinner(room);
         boolean isWin = user.getId().equals(winnerUid);
@@ -344,9 +338,34 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * Marks the game as finished and identifies the winner based on final scores.
      */
     private void finishGame(GameRoom room) {
-        if (room.isStatsUpdated()) return;
+        if (room == null || room.isStatsUpdated()) return;
+
+        // Use a local flag to prevent multiple redundant calls from this same Activity instance
+        room.setStatsUpdated(true);
+
         String winnerUid = calculateWinner(room);
-        databaseService.getGameService().finishGame(roomId, winnerUid, null);
+
+        // Update room status to finished and statsUpdated to true atomically
+        databaseService.getGameService().finishGame(roomId, winnerUid, new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Boolean isTransitioned) {
+                // Only trigger stats updates if this specific call was the one that marked the game as finished
+                if (Boolean.TRUE.equals(isTransitioned)) {
+                    if (room.getPlayer1Uid() != null) {
+                        databaseService.getStatsService().updateDailyMemoryStats(room.getPlayer1Uid(), room.getPlayer1Uid().equals(winnerUid));
+                    }
+                    if (room.getPlayer2Uid() != null) {
+                        databaseService.getStatsService().updateDailyMemoryStats(room.getPlayer2Uid(), room.getPlayer2Uid().equals(winnerUid));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                // If it failed, allow retry from this client if necessary
+                room.setStatsUpdated(false);
+            }
+        });
     }
 
     /**
@@ -390,6 +409,12 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
                     if (turnTimer != null) turnTimer.cancel();
                     if (totalGameTimer != null) totalGameTimer.cancel();
                     databaseService.getGameService().removeForfeitOnDisconnect(roomId);
+
+                    if (!room.isStatsUpdated()) {
+                        finishGame(room);
+                        return;
+                    }
+
                     showGameEndDialog(room);
                     return;
                 }
@@ -425,6 +450,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * Determines the winner UID or returns "draw".
      */
     private String calculateWinner(GameRoom room) {
+        if (room.getWinnerUid() != null) return room.getWinnerUid();
         int p1 = room.getPlayer1Score();
         int p2 = room.getPlayer2Score();
         if (p1 == p2) return "draw";

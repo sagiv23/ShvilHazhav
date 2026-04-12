@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class Medication implements Serializable, Idable {
     private String id;
-    private String userId;
     private String name;
     private String details;
     private MedicationType type;
@@ -37,15 +36,13 @@ public class Medication implements Serializable, Idable {
      * @param details       Additional details (e.g., dosage, instructions).
      * @param type          The physical form of the medication (e.g., Pill, Syrup).
      * @param reminderHours A list of strings representing daily reminder times in "HH:mm".
-     * @param userId        The ID of the user who owns this medication record.
      */
-    public Medication(String id, String name, String details, MedicationType type, List<String> reminderHours, String userId) {
+    public Medication(String id, String name, String details, MedicationType type, List<String> reminderHours) {
         this.id = id;
         this.name = name;
         this.details = details;
         this.type = type;
         this.reminderHours = reminderHours;
-        this.userId = userId;
     }
 
     @Override
@@ -56,17 +53,6 @@ public class Medication implements Serializable, Idable {
     @Override
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * @return The UID of the user who owns this medication.
-     */
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     /**
@@ -118,7 +104,6 @@ public class Medication implements Serializable, Idable {
     public String toString() {
         return "Medication{" +
                 "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", details='" + details + '\'' +
                 ", type=" + type +

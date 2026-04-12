@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.DailyStats;
+import com.example.sagivproject.models.MedicationUsage;
+import com.example.sagivproject.models.enums.MedicationStatus;
+import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IStatsService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -71,6 +74,65 @@ public class StatsServiceImpl implements IStatsService {
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
 
+            }
+        });
+    }
+
+    /**
+     * Updates the daily memory statistics for a specific user using a Firebase transaction.
+     *
+     * @param uid   The unique identifier of the user.
+     * @param isWin true if the user won the game, false otherwise.
+     */
+    @Override
+    public void updateDailyMemoryStats(@NonNull String uid, boolean isWin) {
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        databaseReference.child(uid).child(FIELD_DAILY_STATS).child(today).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                DailyStats stats = currentData.getValue(DailyStats.class);
+                if (stats == null) stats = new DailyStats();
+                stats.addMemoryGamePlayed();
+                if (isWin) {
+                    stats.addMemoryWin();
+                }
+                currentData.setValue(stats);
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+            }
+        });
+    }
+
+    @Override
+    public void logMedicationUsage(@NonNull String uid, @NonNull MedicationUsage usage, @Nullable DatabaseCallback<Void> callback) {
+        databaseReference.child(uid).child(FIELD_DAILY_STATS).child(usage.getDate()).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                DailyStats stats = currentData.getValue(DailyStats.class);
+                if (stats == null) stats = new DailyStats();
+
+                if (usage.getStatus() == MedicationStatus.TAKEN) {
+                    stats.addMedicationTaken();
+                } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) {
+                    stats.addMedicationMissed();
+                }
+
+                stats.addMedicationUsageLog(usage);
+                currentData.setValue(stats);
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (callback != null) {
+                    if (error != null) callback.onFailed(error.toException());
+                    else callback.onCompleted(null);
+                }
             }
         });
     }

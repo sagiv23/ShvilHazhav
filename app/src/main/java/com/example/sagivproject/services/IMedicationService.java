@@ -60,15 +60,6 @@ public interface IMedicationService {
     void updateMedication(String uid, Medication medication, @Nullable DatabaseCallback<Void> callback);
 
     /**
-     * Logs an intake event or status change for a specific medication dose.
-     *
-     * @param uid      The unique identifier of the user.
-     * @param usage    The {@link MedicationUsage} object representing the event.
-     * @param callback An optional callback invoked upon completion.
-     */
-    void logMedicationUsage(@NonNull String uid, @NonNull MedicationUsage usage, @Nullable DatabaseCallback<Void> callback);
-
-    /**
      * Retrieves all historical medication usage logs for a specific user.
      *
      * @param uid      The unique identifier of the user.

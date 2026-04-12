@@ -222,7 +222,7 @@ public class MedicationListActivity extends BaseActivity {
         String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
         MedicationUsage usage = new MedicationUsage(medication.getId(), medication.getName(), time, date, scheduledTime, status);
 
-        databaseService.getMedicationService().logMedicationUsage(uid, usage, new DatabaseCallback<>() {
+        databaseService.getStatsService().logMedicationUsage(uid, usage, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 DailyStats stats = user.getTodayStats();
@@ -329,7 +329,6 @@ public class MedicationListActivity extends BaseActivity {
     private void saveMedication(Medication medication) {
         String medicationId = databaseService.getMedicationService().generateMedicationId();
         medication.setId(medicationId);
-        medication.setUserId(uid);
         databaseService.getMedicationService().createNewMedication(uid, medication, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
@@ -367,7 +366,6 @@ public class MedicationListActivity extends BaseActivity {
      * Commits medication updates and refreshes active alarms.
      */
     private void updateMedication(Medication med) {
-        med.setUserId(uid);
         databaseService.getMedicationService().updateMedication(uid, med, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
