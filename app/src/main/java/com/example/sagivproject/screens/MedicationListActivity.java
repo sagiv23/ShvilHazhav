@@ -30,7 +30,7 @@ import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.MedicationStatus;
-import com.example.sagivproject.screens.dialogs.MedicationDialog;
+import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.notifications.AlarmScheduler;
 import com.google.android.material.tabs.TabLayoutMediator;

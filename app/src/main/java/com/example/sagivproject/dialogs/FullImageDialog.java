@@ -1,4 +1,4 @@
-package com.example.sagivproject.screens.dialogs;
+package com.example.sagivproject.dialogs;
 
 import android.app.Dialog;
 import android.graphics.drawable.Drawable;

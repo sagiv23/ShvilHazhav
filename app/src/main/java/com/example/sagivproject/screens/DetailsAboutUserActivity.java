@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
+import com.example.sagivproject.dialogs.ProfileImageDialog;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.utils.ImageUtil;

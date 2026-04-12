@@ -8,11 +8,11 @@ import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.screens.dialogs.AddEmergencyContactDialog;
-import com.example.sagivproject.screens.dialogs.EditForumCategoryDialog;
-import com.example.sagivproject.screens.dialogs.MedicationDialog;
-import com.example.sagivproject.screens.dialogs.ProfileImageDialog;
-import com.example.sagivproject.screens.dialogs.UserDialog;
+import com.example.sagivproject.dialogs.AddEmergencyContactDialog;
+import com.example.sagivproject.dialogs.EditForumCategoryDialog;
+import com.example.sagivproject.dialogs.MedicationDialog;
+import com.example.sagivproject.dialogs.ProfileImageDialog;
+import com.example.sagivproject.dialogs.UserDialog;
 
 /**
  * Interface for managing the creation and display of all dialog fragments in the application.
