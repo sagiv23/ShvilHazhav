@@ -7,14 +7,12 @@ import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -93,6 +91,7 @@ public class UserStatsActivity extends BaseActivity {
 
     private Spinner spinnerUserSelector;
     private TextView txtSelectedDate;
+    private TextView txtNoHistory;
     private MaterialButton btnClearMedLogs;
     /**
      * Date string (yyyy-MM-dd) used to filter the usage log.
@@ -118,6 +117,7 @@ public class UserStatsActivity extends BaseActivity {
         recyclerMedicationLogs = findViewById(R.id.recycler_medication_logs);
         spinnerUserSelector = findViewById(R.id.spinner_user_selector);
         txtSelectedDate = findViewById(R.id.txt_user_stats_selected_date);
+        txtNoHistory = findViewById(R.id.txt_user_stats_no_history);
 
         btnClearMedLogs = findViewById(R.id.btn_user_stats_clear_med_logs);
         btnClearMedLogs.setOnClickListener(v -> clearMedicationLogs());
@@ -127,7 +127,9 @@ public class UserStatsActivity extends BaseActivity {
 
         setupAdminUI();
         setupGraphsUI();
-        refreshData();
+        if (!loggedInUser.isAdmin()) {
+            refreshData();
+        }
         setupMedicationLogs();
 
         String todayDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
@@ -166,8 +168,6 @@ public class UserStatsActivity extends BaseActivity {
     private void openCalendar() {
         calendarUtil.openDatePicker(this, System.currentTimeMillis(), (dateMillis, formattedDate) -> {
             filteredDate = calendarUtil.formatDate(dateMillis, "yyyy-MM-dd");
-            txtSelectedDate.setText(String.format("מציג תוצאות לתאריך: %s", formattedDate));
-            txtSelectedDate.setVisibility(View.VISIBLE);
             applyFilter();
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
     }
@@ -176,15 +176,43 @@ public class UserStatsActivity extends BaseActivity {
      * Filters the {@link #allLogs} list based on the selected {@link #filteredDate}.
      */
     private void applyFilter() {
+        if (allLogs.isEmpty()) {
+            txtNoHistory.setVisibility(View.VISIBLE);
+            recyclerMedicationLogs.setVisibility(View.GONE);
+            txtSelectedDate.setVisibility(View.GONE);
+            return;
+        }
+
+        txtNoHistory.setVisibility(View.GONE);
+        recyclerMedicationLogs.setVisibility(View.VISIBLE);
+        txtSelectedDate.setVisibility(View.VISIBLE);
+
         if (filteredDate == null) {
             usageAdapter.setData(allLogs);
+            txtSelectedDate.setText("מציג את כל ההיסטוריה");
         } else {
             List<MedicationUsage> filtered = allLogs.stream()
                     .filter(log -> filteredDate.equals(log.getDate()))
                     .collect(Collectors.toList());
             usageAdapter.setData(filtered);
-            if (filtered.isEmpty() && !allLogs.isEmpty()) {
-                txtSelectedDate.setText("אין תיעוד לתאריך זה");
+
+            if (filtered.isEmpty()) {
+                txtSelectedDate.setText("אין תיעוד לתאריך הנבחר");
+            } else {
+                String dateDisplay = filteredDate;
+                try {
+                    SimpleDateFormat sdfIn = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    SimpleDateFormat sdfOut = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    Date d = sdfIn.parse(filteredDate);
+                    if (d != null) {
+                        dateDisplay = sdfOut.format(d);
+                    }
+                } catch (Exception ignored) {
+                }
+
+                String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                String suffix = filteredDate.equals(today) ? " (היום)" : "";
+                txtSelectedDate.setText(String.format("מציג תוצאות לתאריך: %s%s", dateDisplay, suffix));
             }
         }
     }
@@ -213,29 +241,7 @@ public class UserStatsActivity extends BaseActivity {
                         return;
                     }
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(UserStatsActivity.this, android.R.layout.simple_spinner_item, userNames) {
-                        @NonNull
-                        @Override
-                        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                            TextView tv = (TextView) super.getView(position, convertView, parent);
-                            tv.setTypeface(ResourcesCompat.getFont(UserStatsActivity.this, R.font.text_hebrew));
-                            tv.setTextSize(22);
-                            tv.setTextColor(getColor(R.color.text_color));
-                            tv.setPadding(24, 24, 24, 24);
-                            return tv;
-                        }
-
-                        @Override
-                        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-                            TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
-                            tv.setTypeface(ResourcesCompat.getFont(UserStatsActivity.this, R.font.text_hebrew));
-                            tv.setTextSize(22);
-                            tv.setTextColor(getColor(R.color.text_color));
-                            tv.setBackgroundColor(getColor(R.color.background_color_buttons));
-                            tv.setPadding(24, 24, 24, 24);
-                            return tv;
-                        }
-                    };
+                    ArrayAdapter<String> adapter = createStyledSearchAdapter(userNames);
 
                     spinnerUserSelector.setAdapter(adapter);
                     spinnerUserSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -249,6 +255,12 @@ public class UserStatsActivity extends BaseActivity {
                         public void onNothingSelected(AdapterView<?> parent) {
                         }
                     });
+
+                    // Trigger refresh for the first selected user
+                    if (!selectableUsers.isEmpty()) {
+                        currentUser = selectableUsers.get(0);
+                        refreshData();
+                    }
                 }
 
                 @Override
@@ -271,20 +283,23 @@ public class UserStatsActivity extends BaseActivity {
      * Fetches the latest {@link User} object to ensure graphs display up-to-date information.
      */
     private void fetchLatestUserData() {
-        databaseService.getUserService().getUser(currentUser.getId(), new DatabaseCallback<>() {
+        final String requestedUserId = currentUser.getId();
+        databaseService.getUserService().getUser(requestedUserId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
+                if (!requestedUserId.equals(currentUser.getId())) return;
                 if (updatedUser != null) {
                     currentUser = updatedUser;
                     if (currentUser.getId().equals(loggedInUser.getId())) {
                         sharedPreferencesUtil.saveUser(currentUser);
                     }
-                    setupGraphs();
                 }
+                setupGraphs();
             }
 
             @Override
             public void onFailed(Exception e) {
+                if (!requestedUserId.equals(currentUser.getId())) return;
                 setupGraphs();
             }
         });
@@ -363,9 +378,11 @@ public class UserStatsActivity extends BaseActivity {
      * Loads the full medication usage history for the current user.
      */
     private void loadMedicationLogs() {
-        databaseService.getMedicationService().getMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
+        final String requestedUserId = currentUser.getId();
+        databaseService.getMedicationService().getMedicationUsageLogs(requestedUserId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<MedicationUsage> list) {
+                if (!requestedUserId.equals(currentUser.getId())) return;
                 if (list != null) {
                     allLogs = new ArrayList<>(list);
                     Collections.reverse(allLogs);
@@ -373,14 +390,17 @@ public class UserStatsActivity extends BaseActivity {
                 } else {
                     allLogs.clear();
                     usageAdapter.setData(new ArrayList<>());
+                    applyFilter();
                 }
                 updateResetButtonState();
             }
 
             @Override
             public void onFailed(Exception e) {
+                if (!requestedUserId.equals(currentUser.getId())) return;
                 allLogs.clear();
                 usageAdapter.setData(new ArrayList<>());
+                applyFilter();
                 updateResetButtonState();
             }
         });
@@ -395,6 +415,7 @@ public class UserStatsActivity extends BaseActivity {
             public void onCompleted(Void object) {
                 allLogs.clear();
                 usageAdapter.setData(new ArrayList<>());
+                applyFilter();
                 updateResetButtonState();
                 Toast.makeText(UserStatsActivity.this, "ההיסטוריה אופסה בהצלחה", Toast.LENGTH_SHORT).show();
             }

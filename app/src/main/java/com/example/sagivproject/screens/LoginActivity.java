@@ -1,6 +1,5 @@
 package com.example.sagivproject.screens;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -66,16 +65,12 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(User user) {
                 sharedPreferencesUtil.saveUser(user);
-                Intent intent;
                 if (user.isAdmin()) {
                     Toast.makeText(LoginActivity.this, "התחברת למשתמש מנהל בהצלחה!", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(LoginActivity.this, AdminPageActivity.class);
                 } else {
                     Toast.makeText(LoginActivity.this, "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(LoginActivity.this, MainActivity.class);
                 }
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                navigateToUserHome(user);
             }
 
             @Override

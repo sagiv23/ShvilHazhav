@@ -6,18 +6,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -149,7 +144,8 @@ public class UsersTableActivity extends BaseActivity {
      * Configures the search UI, including the type filter spinner and text listener.
      */
     private void setupSearch() {
-        spinnerSearchType.setAdapter(getStringArrayAdapter());
+        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "מטופלים"};
+        spinnerSearchType.setAdapter(createStyledSearchAdapter(searchOptions));
 
         editSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -244,9 +240,7 @@ public class UsersTableActivity extends BaseActivity {
                     currentUser = updatedUser;
 
                     if (newRole == UserRole.REGULAR) {
-                        Intent intent = new Intent(UsersTableActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+                        navigateToUserHome(updatedUser);
                         return;
                     }
                 }
@@ -321,36 +315,5 @@ public class UsersTableActivity extends BaseActivity {
         }).collect(Collectors.toList());
 
         adapter.setUserList(filtered);
-    }
-
-    /**
-     * Helper to create a styled adapter for the search filter dropdown.
-     */
-    @NonNull
-    private ArrayAdapter<String> getStringArrayAdapter() {
-        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "מטופלים"};
-        return new ArrayAdapter<>(UsersTableActivity.this, android.R.layout.simple_spinner_item, searchOptions) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getView(position, convertView, parent);
-                tv.setTypeface(ResourcesCompat.getFont(UsersTableActivity.this, R.font.text_hebrew));
-                tv.setTextSize(22);
-                tv.setTextColor(getColor(R.color.text_color));
-                tv.setPadding(24, 24, 24, 24);
-                return tv;
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
-                tv.setTypeface(ResourcesCompat.getFont(UsersTableActivity.this, R.font.text_hebrew));
-                tv.setTextSize(22);
-                tv.setTextColor(getColor(R.color.text_color));
-                tv.setBackgroundColor(getColor(R.color.background_color_buttons));
-                tv.setPadding(24, 24, 24, 24);
-                return tv;
-            }
-        };
     }
 }

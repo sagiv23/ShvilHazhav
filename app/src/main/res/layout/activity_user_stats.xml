@@ -192,6 +192,17 @@
                             android:textSize="18sp"
                             android:visibility="gone" />
 
+                        <TextView
+                            android:id="@+id/txt_user_stats_no_history"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:gravity="center"
+                            android:text="@string/no_history_to_show"
+                            android:textSize="18sp"
+                            android:visibility="gone" />
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recycler_medication_logs"
                             android:layout_width="match_parent"

@@ -11,16 +11,20 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -39,6 +43,8 @@ import com.example.sagivproject.ui.LoggedOutMenuFragment;
 import com.example.sagivproject.ui.MenuNavigationListener;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -214,6 +220,86 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     @Override
     public void onNavigate(int resId) {
         onNavigate(resId, null);
+    }
+
+    /**
+     * Centralized navigation logic to the appropriate home screen based on user role.
+     *
+     * @param user The authenticated user.
+     */
+    protected void navigateToUserHome(User user) {
+        if (sharedPreferencesUtil.isUserNotLoggedIn()) {
+            onNavigate(R.id.landingActivity);
+            return;
+        }
+        Intent intent;
+        if (user.isAdmin()) {
+            intent = new Intent(this, AdminPageActivity.class);
+        } else {
+            intent = new Intent(this, MainActivity.class);
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * Helper to create a styled adapter for spinners used in search/filter UI.
+     *
+     * @param options Array of strings to display in the spinner.
+     * @return A styled ArrayAdapter.
+     */
+    @NonNull
+    protected ArrayAdapter<String> createStyledSearchAdapter(String[] options) {
+        return createStyledSearchAdapter(Arrays.asList(options));
+    }
+
+    /**
+     * Helper to create a styled adapter for spinners used in search/filter UI.
+     *
+     * @param options List of strings to display in the spinner.
+     * @return A styled ArrayAdapter.
+     */
+    @NonNull
+    protected ArrayAdapter<String> createStyledSearchAdapter(List<String> options) {
+        return new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                TextView tv = (TextView) super.getView(position, convertView, parent);
+                tv.setTypeface(ResourcesCompat.getFont(BaseActivity.this, R.font.text_hebrew));
+                tv.setTextSize(22);
+                tv.setTextColor(ContextCompat.getColor(BaseActivity.this, R.color.text_color));
+                tv.setPadding(24, 24, 24, 24);
+                return tv;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+                TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
+                tv.setTypeface(ResourcesCompat.getFont(BaseActivity.this, R.font.text_hebrew));
+                tv.setTextSize(22);
+                tv.setTextColor(ContextCompat.getColor(BaseActivity.this, R.color.text_color));
+                tv.setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.background_color_buttons));
+                tv.setPadding(24, 24, 24, 24);
+                return tv;
+            }
+        };
+    }
+
+    /**
+     * Sets a personalized greeting message in a TextView.
+     *
+     * @param textViewId The ID of the TextView to update.
+     * @param user       The user whose name will be displayed.
+     */
+    protected void setGreeting(int textViewId, User user) {
+        if (user != null) {
+            TextView textView = findViewById(textViewId);
+            if (textView != null) {
+                textView.setText(String.format("שלום %s", user.getFullName()));
+            }
+        }
     }
 
     /**

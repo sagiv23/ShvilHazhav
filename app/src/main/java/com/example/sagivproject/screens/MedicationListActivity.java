@@ -10,27 +10,23 @@ import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationListAdapter;
+import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.models.enums.MedicationStatus;
-import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.notifications.AlarmScheduler;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -150,8 +146,8 @@ public class MedicationListActivity extends BaseActivity {
      * Initializes the search bar and filter logic.
      */
     private void setupSearch() {
-        ArrayAdapter<String> spinnerAdapter = getStringArrayAdapter();
-        spinnerSearchType.setAdapter(spinnerAdapter);
+        String[] searchOptions = {"הכל", "שם תרופה", "סוג תרופה"};
+        spinnerSearchType.setAdapter(createStyledSearchAdapter(searchOptions));
 
         editSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -290,37 +286,6 @@ public class MedicationListActivity extends BaseActivity {
         fullMedicationList.sort(Comparator.comparing(Medication::getName));
         updateUserCache(fullMedicationList);
         filterMedications(editSearch.getText().toString());
-    }
-
-    /**
-     * Creates a styled adapter for the search filter dropdown.
-     */
-    @NonNull
-    private ArrayAdapter<String> getStringArrayAdapter() {
-        String[] searchOptions = {"הכל", "שם תרופה", "סוג תרופה"};
-        return new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, searchOptions) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getView(position, convertView, parent);
-                tv.setTypeface(ResourcesCompat.getFont(MedicationListActivity.this, R.font.text_hebrew));
-                tv.setTextSize(22);
-                tv.setTextColor(getColor(R.color.text_color));
-                tv.setPadding(24, 24, 24, 24);
-                return tv;
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
-                tv.setTypeface(ResourcesCompat.getFont(MedicationListActivity.this, R.font.text_hebrew));
-                tv.setTextSize(22);
-                tv.setTextColor(getColor(R.color.text_color));
-                tv.setBackgroundColor(getColor(R.color.background_color_buttons));
-                tv.setPadding(24, 24, 24, 24);
-                return tv;
-            }
-        };
     }
 
     /**

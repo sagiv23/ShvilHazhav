@@ -92,12 +92,15 @@ public class GraphData implements Idable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GraphData graphData = (GraphData) o;
-        return Objects.equals(id, graphData.id) && Objects.equals(title, graphData.title);
+        return Objects.equals(id, graphData.id) &&
+                Objects.equals(title, graphData.title) &&
+                Objects.equals(points, graphData.points) &&
+                Objects.equals(xLabels, graphData.xLabels);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title);
+        return Objects.hash(id, title, points, xLabels);
     }
 
     @NonNull

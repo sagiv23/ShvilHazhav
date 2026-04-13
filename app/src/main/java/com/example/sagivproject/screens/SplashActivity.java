@@ -61,13 +61,7 @@ public class SplashActivity extends BaseActivity {
             public void onCompleted(User user) {
                 if (user != null) {
                     sharedPreferencesUtil.saveUser(user);
-                    Intent intent;
-                    if (user.isAdmin()) {
-                        intent = new Intent(SplashActivity.this, AdminPageActivity.class);
-                    } else {
-                        intent = new Intent(SplashActivity.this, MainActivity.class);
-                    }
-                    startActivity(intent);
+                    navigateToUserHome(user);
                 } else {
                     sharedPreferencesUtil.signOutUser();
                     navigateToLandingWithAnimation();

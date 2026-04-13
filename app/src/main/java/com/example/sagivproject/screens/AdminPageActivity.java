@@ -2,7 +2,6 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -47,8 +46,6 @@ public class AdminPageActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        if (user != null) {
-            ((TextView) findViewById(R.id.txt_admin_title)).setText(String.format("שלום %s", user.getFullName()));
-        }
+        setGreeting(R.id.txt_admin_title, user);
     }
 }

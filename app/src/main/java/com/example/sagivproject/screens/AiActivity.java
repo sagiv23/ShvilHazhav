@@ -194,11 +194,14 @@ public class AiActivity extends BaseActivity {
     }
 
     /**
-     * Shuts down the TTS engine when the activity is destroyed.
+     * Shuts down the TTS engine and clears animation callbacks when the activity is destroyed.
      */
     @Override
     public void onDestroy() {
         if (tts != null) tts.shutdown();
+        if (animationHandler != null) {
+            animationHandler.removeCallbacksAndMessages(null);
+        }
         super.onDestroy();
     }
 }

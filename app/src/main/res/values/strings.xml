@@ -157,4 +157,5 @@
     <string name="notifications_permission">הרשאת התראות</string>
     <string name="sms_location_disabled_warning">לא ניתן לשלוח הודעות חירום ללא אישור הרשאות שליחת הודעות SMS ושימוש במיקום</string>
     <string name="click_here_to_enable_permissions">אישור הרשאות</string>
+    <string name="no_history_to_show">אין היסטוריית תרופות להצגה</string>
 </resources>

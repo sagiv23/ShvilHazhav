@@ -2,7 +2,6 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -39,8 +38,6 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.btn_home_to_Stats).setOnClickListener(v -> startActivity(new Intent(this, UserStatsActivity.class)));
         findViewById(R.id.btn_home_to_emergency).setOnClickListener(v -> startActivity(new Intent(this, EmergencyContactsActivity.class)));
 
-        if (user != null) {
-            ((TextView) findViewById(R.id.txt_home_Title)).setText(String.format("שלום %s", user.getFullName()));
-        }
+        setGreeting(R.id.txt_home_Title, user);
     }
 }

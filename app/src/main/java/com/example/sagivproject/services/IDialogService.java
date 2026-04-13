@@ -4,15 +4,15 @@ import android.graphics.drawable.Drawable;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.sagivproject.models.EmergencyContact;
-import com.example.sagivproject.models.ForumCategory;
-import com.example.sagivproject.models.Medication;
-import com.example.sagivproject.models.User;
 import com.example.sagivproject.dialogs.AddEmergencyContactDialog;
 import com.example.sagivproject.dialogs.EditForumCategoryDialog;
 import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.dialogs.ProfileImageDialog;
 import com.example.sagivproject.dialogs.UserDialog;
+import com.example.sagivproject.models.EmergencyContact;
+import com.example.sagivproject.models.ForumCategory;
+import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.models.User;
 
 /**
  * Interface for managing the creation and display of all dialog fragments in the application.
