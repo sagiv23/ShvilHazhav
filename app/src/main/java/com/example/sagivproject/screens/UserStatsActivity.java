@@ -22,6 +22,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.GraphAdapter;
 import com.example.sagivproject.adapters.MedicationUsageAdapter;
+import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.GraphData;
 import com.example.sagivproject.models.MedicationUsage;

@@ -1,4 +1,4 @@
-package com.example.sagivproject;
+package com.example.sagivproject.bases;
 
 import android.app.Application;
 

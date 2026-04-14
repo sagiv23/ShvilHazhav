@@ -1,6 +1,6 @@
 package com.example.sagivproject.models;
 
-import com.example.sagivproject.adapters.BaseAdapter;
+import com.example.sagivproject.bases.BaseAdapter;
 
 /**
  * An interface for data models that have a unique identifier.

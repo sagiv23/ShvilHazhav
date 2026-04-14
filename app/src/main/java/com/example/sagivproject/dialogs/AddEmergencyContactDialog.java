@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.utils.Validator;
 

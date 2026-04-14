@@ -1,4 +1,4 @@
-package com.example.sagivproject.screens;
+package com.example.sagivproject.bases;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +34,14 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.screens.AdminPageActivity;
+import com.example.sagivproject.screens.ContactActivity;
+import com.example.sagivproject.screens.DetailsAboutUserActivity;
+import com.example.sagivproject.screens.LandingActivity;
+import com.example.sagivproject.screens.LoginActivity;
+import com.example.sagivproject.screens.MainActivity;
+import com.example.sagivproject.screens.RegisterActivity;
+import com.example.sagivproject.screens.SettingsActivity;
 import com.example.sagivproject.services.IAdapterService;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IDialogService;

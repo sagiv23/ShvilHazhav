@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseDialog;
 
 import javax.inject.Inject;
 

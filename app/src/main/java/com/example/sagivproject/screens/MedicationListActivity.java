@@ -21,6 +21,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationListAdapter;
+import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;

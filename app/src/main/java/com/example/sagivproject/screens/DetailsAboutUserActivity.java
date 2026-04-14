@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.dialogs.ProfileImageDialog;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
