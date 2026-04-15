@@ -107,10 +107,12 @@
             android:exported="false" />
         <activity
             android:name=".screens.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".screens.RegisterActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".screens.ContactActivity"
             android:exported="false" />
@@ -122,10 +124,12 @@
             android:exported="false" />
         <activity
             android:name=".screens.ForumCategoriesActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".screens.ForumActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".screens.MedicationListActivity"
             android:exported="false" />
