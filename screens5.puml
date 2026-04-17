@@ -1,5 +1,5 @@
 @startuml
-class com.example.sagivproject.screens.TipOfTheDayActivity {
+class screens.TipOfTheDayActivity {
 - String[] inspirationalQuotes
 - TextView tipContent
 - Button btnTipSpeak
@@ -15,7 +15,7 @@ class com.example.sagivproject.screens.TipOfTheDayActivity {
 }
 
 
-class com.example.sagivproject.screens.SettingsActivity {
+class screens.SettingsActivity {
 # IFallDetectionService fallDetectionService
 - SwitchMaterial switchDarkMode
 - SwitchMaterial switchVibration
@@ -41,7 +41,7 @@ class com.example.sagivproject.screens.SettingsActivity {
 }
 
 
-class com.example.sagivproject.screens.RegisterActivity {
+class screens.RegisterActivity {
 # CalendarUtil calendarUtil
 # Validator validator
 - EditText editTextFirstName
@@ -53,7 +53,7 @@ class com.example.sagivproject.screens.RegisterActivity {
 }
 
 
-class com.example.sagivproject.screens.SplashActivity {
+class screens.SplashActivity {
 - {static} long SPLASH_DELAY
 # void onCreate(Bundle)
 - void navigateNext()
@@ -63,8 +63,8 @@ class com.example.sagivproject.screens.SplashActivity {
 
 
 
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.TipOfTheDayActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.SettingsActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.RegisterActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.SplashActivity
+bases.BaseActivity <|-- screens.TipOfTheDayActivity
+bases.BaseActivity <|-- screens.SettingsActivity
+bases.BaseActivity <|-- screens.RegisterActivity
+bases.BaseActivity <|-- screens.SplashActivity
 @enduml

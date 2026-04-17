@@ -1,9 +1,9 @@
 @startuml
-class com.example.sagivproject.screens.LandingActivity {
+class screens.LandingActivity {
 # void onCreate(Bundle)
 }
 
-class com.example.sagivproject.screens.MathProblemsActivity {
+class screens.MathProblemsActivity {
 - StringBuilder userInput
 - Handler handler
 - TextView tvCorrect
@@ -25,11 +25,11 @@ class com.example.sagivproject.screens.MathProblemsActivity {
 }
 
 
-class com.example.sagivproject.screens.MainActivity {
+class screens.MainActivity {
 # void onCreate(Bundle)
 }
 
-class com.example.sagivproject.screens.LoginActivity {
+class screens.LoginActivity {
 # Validator validator
 - EditText editTextEmail
 # void onCreate(Bundle)
@@ -40,8 +40,8 @@ class com.example.sagivproject.screens.LoginActivity {
 
 
 
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.LandingActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.MathProblemsActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.MainActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.LoginActivity
+bases.BaseActivity <|-- screens.LandingActivity
+bases.BaseActivity <|-- screens.MathProblemsActivity
+bases.BaseActivity <|-- screens.MainActivity
+bases.BaseActivity <|-- screens.LoginActivity
 @enduml

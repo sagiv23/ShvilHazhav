@@ -1,5 +1,5 @@
 @startuml
-class com.example.sagivproject.screens.MedicationListActivity {
+class screens.MedicationListActivity {
 - List<Medication> fullMedicationList
 ~ AlarmScheduler alarmScheduler
 - MedicationListAdapter adapter
@@ -26,7 +26,7 @@ class com.example.sagivproject.screens.MedicationListActivity {
 }
 
 
-class com.example.sagivproject.screens.MedicationImagesTableActivity {
+class screens.MedicationImagesTableActivity {
 - List<ImageData> allImages
 # ImageUtil imageUtil
 - MedicationImagesTableAdapter adapter
@@ -45,57 +45,58 @@ class com.example.sagivproject.screens.MedicationImagesTableActivity {
 }
 
 
-class com.example.sagivproject.screens.MemoryGameActivity {
-- {static} long TURN_TIME_LIMIT
-- {static} long TOTAL_GAME_TIME_LIMIT
-~ ImageUtil imageUtil
-- RecyclerView recyclerCards
-- boolean endDialogShown
-- String roomId
-- User user
-- GameRoom currentRoom
-- MemoryGameAdapter adapter
-- TextView tvTimer
-- CountDownTimer turnTimer
-- CountDownTimer totalGameTimer
+class screens.UsersTableActivity {
+- List<User> usersList
+- UsersTableAdapter adapter
+- EditText editSearch
+- Spinner spinnerSearchType
+- User currentUser
 # void onCreate(Bundle)
-- void showExitGameDialog()
-- void showGameEndDialog(GameRoom)
-- void updateScoreUI(GameRoom)
-- void setupGameBoard(GameRoom)
-+ void onCardClicked(Card,int)
-+ boolean isMyTurn()
-- void handleCardSelection(int)
-- void checkMatch(int,int)
-+ void animateFlipOpen(ImageView,String)
-+ void animateFlipClose(ImageView)
-- void animateError(int)
-- void animateSuccess(int)
-- void checkIfGameFinished()
-- void finishGame(GameRoom)
-- void listenToGame()
-- String calculateWinner(GameRoom)
-- void startTurnTimer()
-- void startTotalGameTimer()
-- void goBack()
-# void onDestroy()
+- void setupSearch()
+- void refreshList()
++ void onResume()
+- void loadUsers()
+- void handleToggleAdmin(User)
+- void handleDeleteUser(User)
+- void filterUsers(String)
 }
 
 
-class com.example.sagivproject.screens.MemoryGameLogsTableActivity {
-- Map<String,String> uidToNameMap
-- MemoryGameLogAdapter adapter
+class screens.UserStatsActivity {
+- List<User> selectableUsers
+# CalendarUtil calendarUtil
+- ViewPager2 viewPagerGraphs
+- GraphAdapter graphAdapter
+- TabLayout tabLayoutGraphs
+- RecyclerView recyclerMedicationLogs
+- MedicationUsageAdapter usageAdapter
+- User currentUser
+- User loggedInUser
+- Spinner spinnerUserSelector
+- TextView txtSelectedDate
+- TextView txtNoHistory
+- MaterialButton btnClearMedLogs
+- String filteredDate
+- List<MedicationUsage> allLogs
 # void onCreate(Bundle)
-- void fetchUsersAndListenToGames()
-- void listenToGamesRealtime()
+- void setupGraphsUI()
+- void openCalendar()
+- void applyFilter()
+- void setupAdminUI()
+- void refreshData()
+- void fetchLatestUserData()
+- void setupGraphs()
+- void setupMedicationLogs()
+- void loadMedicationLogs()
+- void clearMedicationLogs()
+- void updateResetButtonState()
 }
 
 
 
 
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.MedicationListActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.MedicationImagesTableActivity
-com.example.sagivproject.screens.MemoryGameListener <|.. com.example.sagivproject.screens.MemoryGameActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.MemoryGameActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.MemoryGameLogsTableActivity
+bases.BaseActivity <|-- screens.MedicationListActivity
+bases.BaseActivity <|-- screens.MedicationImagesTableActivity
+bases.BaseActivity <|-- screens.UsersTableActivity
+bases.BaseActivity <|-- screens.UserStatsActivity
 @enduml

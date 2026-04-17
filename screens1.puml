@@ -1,5 +1,5 @@
 @startuml
-class com.example.sagivproject.screens.ContactActivity {
+class screens.ContactActivity {
 - {static} int LONG_PRESS_DURATION
 - Handler handler
 - Runnable longPressedRunnable
@@ -9,7 +9,7 @@ class com.example.sagivproject.screens.ContactActivity {
 }
 
 
-class com.example.sagivproject.screens.DetailsAboutUserActivity {
+class screens.DetailsAboutUserActivity {
 # ImageUtil imageUtil
 - TextView txtTitle
 - ImageView imgUserProfile
@@ -31,7 +31,7 @@ class com.example.sagivproject.screens.DetailsAboutUserActivity {
 }
 
 
-class com.example.sagivproject.screens.AiActivity {
+class screens.AiActivity {
 - ChatFutures chatSession
 - Button btnSend
 - ProgressBar progressBar
@@ -50,14 +50,14 @@ class com.example.sagivproject.screens.AiActivity {
 }
 
 
-class com.example.sagivproject.screens.AdminPageActivity {
+class screens.AdminPageActivity {
 # void onCreate(Bundle)
 }
 
 
 
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.ContactActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.DetailsAboutUserActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.AiActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.AdminPageActivity
+bases.BaseActivity <|-- screens.ContactActivity
+bases.BaseActivity <|-- screens.DetailsAboutUserActivity
+bases.BaseActivity <|-- screens.AiActivity
+bases.BaseActivity <|-- screens.AdminPageActivity
 @enduml

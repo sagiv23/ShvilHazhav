@@ -1,5 +1,5 @@
 @startuml
-class com.example.sagivproject.screens.ForumActivity {
+class screens.ForumActivity {
 - Handler mainHandler
 - RecyclerView recycler
 - Button btnNewMessagesIndicator
@@ -22,7 +22,7 @@ class com.example.sagivproject.screens.ForumActivity {
 }
 
 
-class com.example.sagivproject.screens.EmergencyContactsActivity {
+class screens.EmergencyContactsActivity {
 # IFallDetectionService fallDetectionService
 - EmergencyContactsAdapter adapter
 - User user
@@ -46,7 +46,7 @@ class com.example.sagivproject.screens.EmergencyContactsActivity {
 }
 
 
-class com.example.sagivproject.screens.ForumCategoriesActivity {
+class screens.ForumCategoriesActivity {
 - ForumCategoryAdapter adapter
 # void onCreate(Bundle)
 - void loadCategories()
@@ -56,7 +56,7 @@ class com.example.sagivproject.screens.ForumCategoriesActivity {
 }
 
 
-class com.example.sagivproject.screens.GameHomeScreenActivity {
+class screens.GameHomeScreenActivity {
 - Button btnFindEnemy
 - TextView TVStatusOfFindingEnemy
 - GameRoom currentRoom
@@ -83,7 +83,7 @@ class com.example.sagivproject.screens.GameHomeScreenActivity {
 }
 
 
-enum com.example.sagivproject.screens.SearchState {
+enum screens.SearchState {
 +  IDLE
 +  SEARCHING
 +  GAME_FOUND
@@ -91,8 +91,8 @@ enum com.example.sagivproject.screens.SearchState {
 
 
 
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.ForumActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.EmergencyContactsActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.ForumCategoriesActivity
-com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.GameHomeScreenActivity
+bases.BaseActivity <|-- screens.ForumActivity
+bases.BaseActivity <|-- screens.EmergencyContactsActivity
+bases.BaseActivity <|-- screens.ForumCategoriesActivity
+bases.BaseActivity <|-- screens.GameHomeScreenActivity
 @enduml
