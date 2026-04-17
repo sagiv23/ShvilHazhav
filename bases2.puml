@@ -1,0 +1,25 @@
+@startuml
+class com.example.sagivproject.bases.MainApplication {
+~ HiltWorkerFactory workerFactory
+~ SharedPreferencesUtil sharedPreferencesUtil
++ void onCreate()
++ Configuration getWorkManagerConfiguration()
+}
+
+
+abstract class com.example.sagivproject.bases.BaseDialog {
+# SharedPreferencesUtil sharedPreferencesUtil
++ Dialog onCreateDialog(Bundle)
+# Dialog createDialogInstance(Bundle)
+# boolean shouldSetTransparentBackground()
+# {abstract}int getLayoutResId()
+# {abstract}void setupViews(Dialog)
+}
+
+
+
+
+com.example.sagivproject.bases.Provider <|.. com.example.sagivproject.bases.MainApplication
+android.app.Application <|-- com.example.sagivproject.bases.MainApplication
+androidx.fragment.app.DialogFragment <|-- com.example.sagivproject.bases.BaseDialog
+@enduml
