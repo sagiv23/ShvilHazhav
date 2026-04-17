@@ -1,0 +1,50 @@
+@startuml
+interface services.IAdapterService {
+~ ForumAdapter getForumAdapter()
+~ ForumCategoryAdapter getForumCategoryAdapter()
+~ MedicationListAdapter getMedicationListAdapter()
+~ MemoryGameAdapter getMemoryGameAdapter()
+~ MemoryGameLogAdapter getMemoryGameLogAdapter()
+~ UsersTableAdapter getUsersTableAdapter()
+~ MedicationImagesTableAdapter getMedicationImagesTableAdapter()
+~ LeaderboardAdapter getLeaderboardAdapter()
+~ MedicationUsageAdapter getMedicationUsageAdapter()
+~ EmergencyContactsAdapter getEmergencyContactsAdapter()
+~ GraphAdapter getGraphAdapter()
+}
+
+interface services.IAuthService {
+~ void login(String,String,LoginCallback)
+~ void register(String,String,long,String,String,RegisterCallback)
+~ void addUser(String,String,long,String,String,AddUserCallback)
+~ void updateUser(User,String,String,long,String,String,UpdateUserCallback)
+~ String logout()
+}
+
+interface services.IAuthService$LoginCallback {
+~ void onSuccess(User)
+~ void onError(String)
+}
+
+interface services.IAuthService$RegisterCallback {
+~ void onSuccess(User)
+~ void onError(String)
+}
+
+interface services.IAuthService$AddUserCallback {
+~ void onSuccess(User)
+~ void onError(String)
+}
+
+interface services.IAuthService$UpdateUserCallback {
+~ void onSuccess(User)
+~ void onError(String)
+}
+
+
+
+services.IAuthService +.. services.IAuthService$LoginCallback
+services.IAuthService +.. services.IAuthService$RegisterCallback
+services.IAuthService +.. services.IAuthService$AddUserCallback
+services.IAuthService +.. services.IAuthService$UpdateUserCallback
+@enduml

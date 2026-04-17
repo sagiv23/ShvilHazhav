@@ -1,0 +1,33 @@
+@startuml
+interface services.IDatabaseService {
+~ IAuthService getAuthService()
+~ IUserService getUserService()
+~ IMedicationService getMedicationService()
+~ IMemoryGameService getGameService()
+~ IStatsService getStatsService()
+~ IForumService getForumService()
+~ IImageService getImageService()
+~ IForumCategoriesService getForumCategoriesService()
+~ ITipOfTheDayService getTipOfTheDayService()
+~ IEmergencyService getEmergencyService()
+}
+
+interface services.IDatabaseService$DatabaseCallback {
+~ void onCompleted(T)
+~ void onFailed(Exception)
+}
+
+interface services.IDialogService {
+~ void showMedicationDialog(FragmentManager,Medication,MedicationDialog.OnMedicationSubmitListener)
+~ void showUserDialog(FragmentManager,User,UserDialog.UserDialogListener)
+~ void showEditForumCategoryDialog(FragmentManager,ForumCategory,EditForumCategoryDialog.EditForumCategoryDialogListener)
+~ void showFullImageDialog(FragmentManager,Drawable)
+~ void showProfileImageDialog(FragmentManager,boolean,ProfileImageDialog.ImagePickerListener)
+~ void showEmergencyContactDialog(FragmentManager,EmergencyContact,AddEmergencyContactDialog.AddEmergencyContactListener)
+~ void showConfirmDialog(FragmentManager,String,String,String,String,Runnable)
+}
+
+
+
+services.IDatabaseService +.. services.IDatabaseService$DatabaseCallback
+@enduml

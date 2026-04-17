@@ -1,0 +1,47 @@
+@startuml
+interface services.IMedicationService {
+~ String generateMedicationId()
+~ void createNewMedication(String,Medication,DatabaseCallback<Void>)
+~ void getUserMedicationList(String,DatabaseCallback<List<Medication>>)
+~ void deleteMedication(String,String,DatabaseCallback<Void>)
+~ void updateMedication(String,Medication,DatabaseCallback<Void>)
+~ void getMedicationUsageLogs(String,DatabaseCallback<List<MedicationUsage>>)
+~ void clearMedicationUsageLogs(String,DatabaseCallback<Void>)
+}
+
+interface services.IMemoryGameService {
+~ void findOrCreateRoom(User,DatabaseCallback<GameRoom>)
+~ void getAllRoomsRealtime(DatabaseCallback<List<GameRoom>>)
+~ void listenToRoomStatus(String,IRoomStatusCallback)
+~ void removeRoomListener(String)
+~ void cancelRoom(String,DatabaseCallback<Void>)
+~ void initGameBoard(String,List<Card>,String,DatabaseCallback<Void>)
+~ void listenToGame(String,DatabaseCallback<GameRoom>)
+~ void stopListeningToGame(String)
+~ void updateRoomField(String,String,Object)
+~ void incrementScore(String,String,DatabaseCallback<Void>)
+~ void updateCardStatus(String,int,boolean,boolean)
+~ void setProcessing(String,boolean)
+~ void finishGame(String,String,DatabaseCallback<Boolean>)
+~ void setupForfeitOnDisconnect(String,String)
+~ void removeForfeitOnDisconnect(String)
+}
+
+interface services.IMemoryGameService$IRoomStatusCallback {
+~ void onRoomStarted(GameRoom)
+~ void onRoomDeleted()
+~ void onRoomFinished(GameRoom)
+~ void onFailed(Exception)
+}
+
+interface services.IImageService {
+~ void getAllImages(DatabaseCallback<List<ImageData>>)
+~ void createImage(ImageData,DatabaseCallback<Void>)
+~ void updateAllImages(List<ImageData>,DatabaseCallback<Void>)
+~ void deleteImage(String,DatabaseCallback<Void>)
+}
+
+
+
+services.IMemoryGameService +.. services.IMemoryGameService$IRoomStatusCallback
+@enduml

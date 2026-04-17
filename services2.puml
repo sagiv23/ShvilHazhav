@@ -1,0 +1,28 @@
+@startuml
+interface services.IForumService {
+~ void sendMessage(User,String,String,DatabaseCallback<Void>)
+~ void listenToMessages(String,DatabaseCallback<List<ForumMessage>>)
+~ void deleteMessage(String,String,DatabaseCallback<Void>)
+}
+
+interface services.IFallDetectionService {
+~ void startMonitoring()
+~ void stopMonitoring()
+}
+
+interface services.IForumCategoriesService {
+~ void getCategories(DatabaseCallback<List<ForumCategory>>)
+~ void addCategory(String,DatabaseCallback<Void>)
+~ void deleteCategory(String,DatabaseCallback<Void>)
+~ void updateCategoryName(String,String,DatabaseCallback<Void>)
+}
+
+interface services.IEmergencyService {
+~ String generateContactId()
+~ void addContact(String,String,String,String,DatabaseCallback<Void>)
+~ void deleteContact(String,String,DatabaseCallback<Void>)
+~ void updateContact(String,EmergencyContact,DatabaseCallback<Void>)
+~ void sendEmergencyAlert(Context,List<EmergencyContact>,String,DatabaseCallback<Void>)
+}
+
+@enduml

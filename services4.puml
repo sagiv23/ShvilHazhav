@@ -1,0 +1,25 @@
+@startuml
+interface services.IUserService {
+~ String generateUserId()
+~ void createNewUser(User,DatabaseCallback<Void>)
+~ void getUser(String,DatabaseCallback<User>)
+~ void getUserList(DatabaseCallback<List<User>>)
+~ void deleteUser(String,DatabaseCallback<Void>)
+~ void getUserByEmailAndPassword(String,String,DatabaseCallback<User>)
+~ void checkIfEmailExists(String,DatabaseCallback<Boolean>)
+~ void updateUser(User,DatabaseCallback<Void>)
+~ void updateUserRole(String,UserRole,DatabaseCallback<Void>)
+}
+
+interface services.ITipOfTheDayService {
+~ void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay>)
+~ void saveTipIfNotExists(TipOfTheDay,IDatabaseService.DatabaseCallback<TipOfTheDay>)
+}
+
+interface services.IStatsService {
+~ void updateDailyMathStats(String,boolean)
+~ void updateDailyMemoryStats(String,boolean)
+~ void logMedicationUsage(String,MedicationUsage,DatabaseCallback<Void>)
+}
+
+@enduml
