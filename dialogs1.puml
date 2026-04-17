@@ -1,0 +1,64 @@
+@startuml
+class com.example.sagivproject.dialogs.FullImageDialog {
+- Drawable imageDrawable
++ void setImage(Drawable)
++ void onCreate(Bundle)
+# boolean shouldSetTransparentBackground()
+# int getLayoutResId()
+# void setupViews(Dialog)
+}
+
+
+class com.example.sagivproject.dialogs.AddEmergencyContactDialog {
+~ Validator validator
+- AddEmergencyContactListener listener
+- EmergencyContact contactToEdit
++ void setListener(AddEmergencyContactListener)
++ void setData(EmergencyContact,AddEmergencyContactListener)
+# int getLayoutResId()
+# void setupViews(Dialog)
++ void onDestroyView()
+- boolean areAllFieldsValid(String,String,String,EditText,EditText,EditText)
+}
+
+
+interface com.example.sagivproject.dialogs.AddEmergencyContactDialog$AddEmergencyContactListener {
+~ void onContactSubmit(String,String,String)
+}
+
+class com.example.sagivproject.dialogs.ConfirmDialog {
+- {static} String ARG_TITLE
+- {static} String ARG_MESSAGE
+- {static} String ARG_CONFIRM_TEXT
+- {static} String ARG_CANCEL_TEXT
+- Runnable onConfirm
++ void setData(String,String,String,String,Runnable)
+# int getLayoutResId()
+# void setupViews(Dialog)
+}
+
+
+class com.example.sagivproject.dialogs.EditForumCategoryDialog {
+- {static} String ARG_CATEGORY
+- ForumCategory category
+- EditForumCategoryDialogListener listener
++ void setData(ForumCategory,EditForumCategoryDialogListener)
++ void onCreate(Bundle)
+# int getLayoutResId()
+# void setupViews(Dialog)
+}
+
+
+interface com.example.sagivproject.dialogs.EditForumCategoryDialog$EditForumCategoryDialogListener {
+~ void onUpdateCategory(String)
+}
+
+
+
+com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.FullImageDialog
+com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.AddEmergencyContactDialog
+com.example.sagivproject.dialogs.AddEmergencyContactDialog +.. com.example.sagivproject.dialogs.AddEmergencyContactDialog$AddEmergencyContactListener
+com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.ConfirmDialog
+com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.EditForumCategoryDialog
+com.example.sagivproject.dialogs.EditForumCategoryDialog +.. com.example.sagivproject.dialogs.EditForumCategoryDialog$EditForumCategoryDialogListener
+@enduml

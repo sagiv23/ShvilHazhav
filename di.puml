@@ -1,0 +1,29 @@
+@startuml
+abstract class com.example.sagivproject.di.AppModule {
++ {static} DatabaseReference provideDatabaseReference(FirebaseDatabase)
++ {static} FirebaseDatabase provideFirebaseDatabase()
++ {static} Gson provideGson()
++ {static} AlarmManager provideAlarmManager(Context)
++ {abstract}IDatabaseService bindDatabaseService(DatabaseService)
++ {abstract}IAuthService bindAuthService(AuthServiceImpl)
++ {abstract}IUserService bindUserService(UserServiceImpl)
++ {abstract}IMedicationService bindMedicationService(MedicationServiceImpl)
++ {abstract}IStatsService bindStatsService(StatsServiceImpl)
++ {abstract}IForumService bindForumService(ForumServiceImpl)
++ {abstract}IForumCategoriesService bindForumCategoryService(ForumCategoriesServiceImpl)
++ {abstract}IMemoryGameService bindGameService(MemoryGameServiceImpl)
++ {abstract}IImageService bindImageService(ImageServiceImpl)
++ {abstract}ITipOfTheDayService bindTipOfTheDayService(TipOfTheDayServiceImpl)
++ {abstract}IEmergencyService bindEmergencyService(EmergencyServiceImpl)
++ {abstract}IFallDetectionService bindFallDetectionService(FallDetectionManager)
+}
+
+interface com.example.sagivproject.di.AppModule$ActivityBindingsModule {
+~ IDialogService bindDialogService(DialogService)
+~ IAdapterService bindAdapterService(AdapterService)
+}
+
+
+
+com.example.sagivproject.di.AppModule +.. com.example.sagivproject.di.AppModule$ActivityBindingsModule
+@enduml

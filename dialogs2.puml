@@ -1,0 +1,71 @@
+@startuml
+class com.example.sagivproject.dialogs.ProfileImageDialog {
+- {static} String ARG_HAS_IMAGE
+- boolean hasImage
+- ImagePickerListener listener
++ void setData(boolean,ImagePickerListener)
++ void onCreate(Bundle)
+# int getLayoutResId()
+# void setupViews(Dialog)
+}
+
+
+interface com.example.sagivproject.dialogs.ProfileImageDialog$ImagePickerListener {
+~ void onCamera()
+~ void onGallery()
+~ void onDelete()
+}
+
+class com.example.sagivproject.dialogs.UserDialog {
+- {static} String ARG_USER
+~ Validator validator
+~ CalendarUtil calendarUtil
+- User user
+- long birthDateMillis
+- UserDialogListener listener
++ void setData(User,UserDialogListener)
++ void onCreate(Bundle)
+# int getLayoutResId()
+# void setupViews(Dialog)
+- boolean areAllFieldsValid(String,String,String,String,EditText,EditText,EditText,EditText,EditText)
+}
+
+
+interface com.example.sagivproject.dialogs.UserDialog$UserDialogListener {
+~ void onSubmit(String,String,long,String,String)
+}
+
+class com.example.sagivproject.dialogs.MedicationDialog {
+- {static} String ARG_MEDICATION
+- ArrayList<String> selectedHours
+- ChipGroup chipGroupSelectedHours
+- Medication medToEdit
+- OnMedicationSubmitListener listener
++ void setData(Medication,OnMedicationSubmitListener)
++ void onCreate(Bundle)
+# int getLayoutResId()
+# void setupViews(Dialog)
+- boolean validateInputs(String,String,String,MedicationType)
+- MedicationType getTypeFromString(String)
+- void showHourPicker()
+- void updateSelectedHoursChips()
+- ArrayAdapter<String> createMedicationTypeAdapter(List<String>)
+- void styleTextView(TextView,boolean)
+- void showToast(String)
+}
+
+
+interface com.example.sagivproject.dialogs.MedicationDialog$OnMedicationSubmitListener {
+~ void onAdd(Medication)
+~ void onEdit(Medication)
+}
+
+
+
+com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.ProfileImageDialog
+com.example.sagivproject.dialogs.ProfileImageDialog +.. com.example.sagivproject.dialogs.ProfileImageDialog$ImagePickerListener
+com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.UserDialog
+com.example.sagivproject.dialogs.UserDialog +.. com.example.sagivproject.dialogs.UserDialog$UserDialogListener
+com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.MedicationDialog
+com.example.sagivproject.dialogs.MedicationDialog +.. com.example.sagivproject.dialogs.MedicationDialog$OnMedicationSubmitListener
+@enduml

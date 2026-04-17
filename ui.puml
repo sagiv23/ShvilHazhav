@@ -1,0 +1,74 @@
+@startuml
+class com.example.sagivproject.ui.SimpleXYGraphView {
+- Paint axisPaint
+- Paint gridPaint
+- Paint pointPaint
+- Paint textPaint
+- Paint trendLinePaint
+- float paddingLeft
+- float paddingBottom
+- float paddingTop
+- float pointSpacing
+- List<Point> points
+- List<String> xLabels
+- String title
+- String labelX
+- String labelY
+- float scrollXOffset
+- float lastTouchX
+- void init(Context)
++ void setData(List<Point>,List<String>,String,String,String)
++ boolean performClick()
++ boolean onTouchEvent(MotionEvent)
+# void onDraw(Canvas)
+- void drawGridY(Canvas,float,float,float,float)
+- void drawYLabels(Canvas,float,float,float)
+- void drawTrendLine(Canvas,float,float,float)
+- void drawNoData(Canvas)
+}
+
+
+class com.example.sagivproject.ui.SimpleXYGraphView$Point {
++ float x
++ float y
+}
+
+class com.example.sagivproject.ui.LoggedOutMenuFragment {
+- MenuNavigationListener navigationListener
++ void onAttach(Context)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+- void setupNavigationButton(View,int,int)
++ void onDetach()
+}
+
+
+class com.example.sagivproject.ui.AdminMenuFragment {
+- MenuNavigationListener navigationListener
++ void onAttach(Context)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ void onDetach()
+}
+
+
+class com.example.sagivproject.ui.LoggedInMenuFragment {
+- MenuNavigationListener navigationListener
++ void onAttach(Context)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+- void setupNavigationButton(View,int,int)
++ void onDetach()
+}
+
+
+interface com.example.sagivproject.ui.MenuNavigationListener {
+~ void onNavigate(int)
+~ void onNavigate(int,Bundle)
+}
+
+
+
+android.view.View <|-- com.example.sagivproject.ui.SimpleXYGraphView
+com.example.sagivproject.ui.SimpleXYGraphView +.. com.example.sagivproject.ui.SimpleXYGraphView$Point
+androidx.fragment.app.Fragment <|-- com.example.sagivproject.ui.LoggedOutMenuFragment
+androidx.fragment.app.Fragment <|-- com.example.sagivproject.ui.AdminMenuFragment
+androidx.fragment.app.Fragment <|-- com.example.sagivproject.ui.LoggedInMenuFragment
+@enduml
