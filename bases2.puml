@@ -1,13 +1,5 @@
 @startuml
-class com.example.sagivproject.bases.MainApplication {
-~ HiltWorkerFactory workerFactory
-~ SharedPreferencesUtil sharedPreferencesUtil
-+ void onCreate()
-+ Configuration getWorkManagerConfiguration()
-}
-
-
-abstract class com.example.sagivproject.bases.BaseDialog {
+abstract class bases.BaseDialog {
 # SharedPreferencesUtil sharedPreferencesUtil
 + Dialog onCreateDialog(Bundle)
 # Dialog createDialogInstance(Bundle)
@@ -17,9 +9,38 @@ abstract class com.example.sagivproject.bases.BaseDialog {
 }
 
 
+abstract class bases.BaseActivity {
+- {static} String TAG
+# SharedPreferencesUtil sharedPreferencesUtil
+# IDatabaseService databaseService
+# IAdapterService adapterService
+# IDialogService dialogService
+# DrawerLayout drawerLayout
+- Runnable onPermissionGrantedCallback
+# ActivityResultLauncher<String[]> requestPermissionLauncher
+# void onCreate(Bundle)
+# void setContent(int,int)
+# void setupMenu()
++ void openDrawer()
++ void closeDrawer()
++ void onNavigate(int)
+# void navigateToUserHome(User)
+# ArrayAdapter<String> createStyledSearchAdapter(String[])
+# ArrayAdapter<String> createStyledSearchAdapter(List<String>)
+# void setGreeting(int,User)
++ void onNavigate(int,Bundle)
+# void vibrateDevice()
+# void runWithPermissions(Runnable,String)
+# void runWithPermission(String,Runnable)
+- void requestPermissions(String)
+# void openAppSettings()
+# void onPermissionsResult(Map<String,Boolean>)
+}
 
 
-com.example.sagivproject.bases.Provider <|.. com.example.sagivproject.bases.MainApplication
-android.app.Application <|-- com.example.sagivproject.bases.MainApplication
-androidx.fragment.app.DialogFragment <|-- com.example.sagivproject.bases.BaseDialog
+
+
+androidx.fragment.app.DialogFragment <|-- bases.BaseDialog
+ui.MenuNavigationListener <|.. bases.BaseActivity
+androidx.appcompat.app.AppCompatActivity <|-- bases.BaseActivity
 @enduml

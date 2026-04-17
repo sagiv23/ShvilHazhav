@@ -2,7 +2,6 @@ package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,8 @@ import java.util.List;
  * It is used to generate graphs and insights for users and administrators.
  * </p>
  */
-public class DailyStats implements Serializable {
+public class DailyStats implements Idable {
+    private String id;
     private int memoryWins;
     private int memoryGamesPlayed;
     private int mathCorrect;
@@ -34,6 +34,16 @@ public class DailyStats implements Serializable {
         this.medicationsTaken = 0;
         this.medicationsMissed = 0;
         this.medicationUsageLogs = new ArrayList<>();
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

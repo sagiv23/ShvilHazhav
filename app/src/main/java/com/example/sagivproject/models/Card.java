@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -15,7 +14,7 @@ import java.util.Objects;
  * in the game (revealed, matched).
  * </p>
  */
-public class Card implements Serializable, Idable {
+public class Card implements Idable {
     private String id;
     private String base64Content;
     private boolean isRevealed = false;

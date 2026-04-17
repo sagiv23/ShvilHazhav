@@ -1,0 +1,97 @@
+@startuml
+class models.Card {
+- String id
+- String base64Content
+- boolean isRevealed
+- boolean isMatched
+- boolean wasRevealed
++ String getId()
++ void setId(String)
++ String getBase64Content()
++ void setBase64Content(String)
++ boolean getIsRevealed()
++ void setRevealed(boolean)
++ boolean getIsMatched()
++ void setMatched(boolean)
++ boolean wasRevealed()
++ void setWasRevealed(boolean)
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+
+
+class models.EmergencyContact {
+- String id
+- String firstName
+- String lastName
+- String phoneNumber
++ String getId()
++ void setId(String)
++ String getFirstName()
++ void setFirstName(String)
++ String getLastName()
++ void setLastName(String)
++ String getPhoneNumber()
++ void setPhoneNumber(String)
++ String getFullName()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+
+
+class models.ForumCategory {
+- String id
+- String name
++ String getId()
++ void setId(String)
++ String getName()
++ void setName(String)
++ String toString()
+}
+
+
+class models.DailyStats {
+- String id
+- int memoryWins
+- int memoryGamesPlayed
+- int mathCorrect
+- int mathWrong
+- int medicationsTaken
+- int medicationsMissed
+- List<MedicationUsage> medicationUsageLogs
++ String getId()
++ void setId(String)
++ int getMemoryWins()
++ void setMemoryWins(int)
++ int getMemoryGamesPlayed()
++ void setMemoryGamesPlayed(int)
++ int getMathCorrect()
++ void setMathCorrect(int)
++ int getMathWrong()
++ void setMathWrong(int)
++ int getMedicationsTaken()
++ void setMedicationsTaken(int)
++ int getMedicationsMissed()
++ void setMedicationsMissed(int)
++ List<MedicationUsage> getMedicationUsageLogs()
++ void setMedicationUsageLogs(List<MedicationUsage>)
++ void addMemoryWin()
++ void addMemoryGamePlayed()
++ void addMathCorrect()
++ void addMathWrong()
++ void addMedicationTaken()
++ void addMedicationMissed()
++ void addMedicationUsageLog(MedicationUsage)
++ String toString()
+}
+
+
+
+
+models.Idable <|.. models.Card
+models.Idable <|.. models.EmergencyContact
+models.Idable <|.. models.ForumCategory
+models.Idable <|.. models.DailyStats
+@enduml

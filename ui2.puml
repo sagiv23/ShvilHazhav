@@ -1,5 +1,5 @@
 @startuml
-class com.example.sagivproject.ui.SimpleXYGraphView {
+class ui.SimpleXYGraphView {
 - Paint axisPaint
 - Paint gridPaint
 - Paint pointPaint
@@ -28,18 +28,18 @@ class com.example.sagivproject.ui.SimpleXYGraphView {
 }
 
 
-class com.example.sagivproject.ui.SimpleXYGraphView$Point {
+class ui.SimpleXYGraphView$Point {
 + float x
 + float y
 }
 
-interface com.example.sagivproject.ui.MenuNavigationListener {
+interface ui.MenuNavigationListener {
 ~ void onNavigate(int)
 ~ void onNavigate(int,Bundle)
 }
 
 
 
-android.view.View <|-- com.example.sagivproject.ui.SimpleXYGraphView
-com.example.sagivproject.ui.SimpleXYGraphView +.. com.example.sagivproject.ui.SimpleXYGraphView$Point
+android.view.View <|-- ui.SimpleXYGraphView
+ui.SimpleXYGraphView +.. ui.SimpleXYGraphView$Point
 @enduml

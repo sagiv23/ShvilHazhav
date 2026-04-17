@@ -2,8 +2,6 @@ package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
-
 /**
  * Represents a single category in the application forum.
  * <p>
@@ -11,7 +9,7 @@ import java.io.Serializable;
  * and display name. Categories are used to group forum messages by topic.
  * </p>
  */
-public class ForumCategory implements Serializable, Idable {
+public class ForumCategory implements Idable {
     private String id;
     private String name;
 

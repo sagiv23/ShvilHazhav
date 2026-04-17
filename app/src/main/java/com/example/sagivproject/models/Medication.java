@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.example.sagivproject.models.enums.MedicationType;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +14,7 @@ import java.util.List;
  * schedule alarms and track intake compliance.
  * </p>
  */
-public class Medication implements Serializable, Idable {
+public class Medication implements Idable {
     private String id;
     private String name;
     private String details;

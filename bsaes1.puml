@@ -1,5 +1,5 @@
 @startuml
-abstract class com.example.sagivproject.bases.BaseAdapter {
+abstract class bases.BaseAdapter {
 # List<T> dataList
 + void setData(List<T>)
 + int getItemCount()
@@ -8,7 +8,7 @@ abstract class com.example.sagivproject.bases.BaseAdapter {
 }
 
 
-class com.example.sagivproject.bases.BaseAdapter$DiffCallback {
+class bases.BaseAdapter$DiffCallback {
 - List<T> oldList
 - List<T> newList
 + int getOldListSize()
@@ -18,40 +18,19 @@ class com.example.sagivproject.bases.BaseAdapter$DiffCallback {
 }
 
 
-abstract class com.example.sagivproject.bases.BaseActivity {
-- {static} String TAG
-# SharedPreferencesUtil sharedPreferencesUtil
-# IDatabaseService databaseService
-# IAdapterService adapterService
-# IDialogService dialogService
-# DrawerLayout drawerLayout
-- Runnable onPermissionGrantedCallback
-# ActivityResultLauncher<String[]> requestPermissionLauncher
-# void onCreate(Bundle)
-# void setContent(int,int)
-# void setupMenu()
-+ void openDrawer()
-+ void closeDrawer()
-+ void onNavigate(int)
-# void navigateToUserHome(User)
-# ArrayAdapter<String> createStyledSearchAdapter(String[])
-# ArrayAdapter<String> createStyledSearchAdapter(List<String>)
-# void setGreeting(int,User)
-+ void onNavigate(int,Bundle)
-# void vibrateDevice()
-# void runWithPermissions(Runnable,String)
-# void runWithPermission(String,Runnable)
-- void requestPermissions(String)
-# void openAppSettings()
-# void onPermissionsResult(Map<String,Boolean>)
+class bases.MainApplication {
+~ HiltWorkerFactory workerFactory
+~ SharedPreferencesUtil sharedPreferencesUtil
++ void onCreate()
++ Configuration getWorkManagerConfiguration()
 }
 
 
 
 
-com.example.sagivproject.bases.Adapter <|-- com.example.sagivproject.bases.BaseAdapter
-com.example.sagivproject.bases.BaseAdapter +.. com.example.sagivproject.bases.BaseAdapter$DiffCallback
-com.example.sagivproject.bases.Callback <|-- com.example.sagivproject.bases.BaseAdapter$DiffCallback
-com.example.sagivproject.ui.MenuNavigationListener <|.. com.example.sagivproject.bases.BaseActivity
-androidx.appcompat.app.AppCompatActivity <|-- com.example.sagivproject.bases.BaseActivity
+bases.Adapter <|-- bases.BaseAdapter
+bases.BaseAdapter +.. bases.BaseAdapter$DiffCallback
+bases.Callback <|-- bases.BaseAdapter$DiffCallback
+bases.Provider <|.. bases.MainApplication
+android.app.Application <|-- bases.MainApplication
 @enduml

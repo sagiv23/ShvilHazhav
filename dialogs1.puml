@@ -1,5 +1,5 @@
 @startuml
-class com.example.sagivproject.dialogs.FullImageDialog {
+class dialogs.FullImageDialog {
 - Drawable imageDrawable
 + void setImage(Drawable)
 + void onCreate(Bundle)
@@ -9,7 +9,7 @@ class com.example.sagivproject.dialogs.FullImageDialog {
 }
 
 
-class com.example.sagivproject.dialogs.AddEmergencyContactDialog {
+class dialogs.AddEmergencyContactDialog {
 ~ Validator validator
 - AddEmergencyContactListener listener
 - EmergencyContact contactToEdit
@@ -22,11 +22,11 @@ class com.example.sagivproject.dialogs.AddEmergencyContactDialog {
 }
 
 
-interface com.example.sagivproject.dialogs.AddEmergencyContactDialog$AddEmergencyContactListener {
+interface dialogs.AddEmergencyContactDialog$AddEmergencyContactListener {
 ~ void onContactSubmit(String,String,String)
 }
 
-class com.example.sagivproject.dialogs.ConfirmDialog {
+class dialogs.ConfirmDialog {
 - {static} String ARG_TITLE
 - {static} String ARG_MESSAGE
 - {static} String ARG_CONFIRM_TEXT
@@ -38,7 +38,7 @@ class com.example.sagivproject.dialogs.ConfirmDialog {
 }
 
 
-class com.example.sagivproject.dialogs.EditForumCategoryDialog {
+class dialogs.EditForumCategoryDialog {
 - {static} String ARG_CATEGORY
 - ForumCategory category
 - EditForumCategoryDialogListener listener
@@ -49,16 +49,16 @@ class com.example.sagivproject.dialogs.EditForumCategoryDialog {
 }
 
 
-interface com.example.sagivproject.dialogs.EditForumCategoryDialog$EditForumCategoryDialogListener {
+interface dialogs.EditForumCategoryDialog$EditForumCategoryDialogListener {
 ~ void onUpdateCategory(String)
 }
 
 
 
-com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.FullImageDialog
-com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.AddEmergencyContactDialog
-com.example.sagivproject.dialogs.AddEmergencyContactDialog +.. com.example.sagivproject.dialogs.AddEmergencyContactDialog$AddEmergencyContactListener
-com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.ConfirmDialog
-com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.EditForumCategoryDialog
-com.example.sagivproject.dialogs.EditForumCategoryDialog +.. com.example.sagivproject.dialogs.EditForumCategoryDialog$EditForumCategoryDialogListener
+bases.BaseDialog <|-- dialogs.FullImageDialog
+bases.BaseDialog <|-- dialogs.AddEmergencyContactDialog
+dialogs.AddEmergencyContactDialog +.. dialogs.AddEmergencyContactDialog$AddEmergencyContactListener
+bases.BaseDialog <|-- dialogs.ConfirmDialog
+bases.BaseDialog <|-- dialogs.EditForumCategoryDialog
+dialogs.EditForumCategoryDialog +.. dialogs.EditForumCategoryDialog$EditForumCategoryDialogListener
 @enduml

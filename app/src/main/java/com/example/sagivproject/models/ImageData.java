@@ -2,8 +2,6 @@ package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
-
 /**
  * Represents an image asset used in the application, primarily for the memory game cards.
  * <p>
@@ -11,7 +9,7 @@ import java.io.Serializable;
  * It is used for both storing images in the database and passing image data between screens.
  * </p>
  */
-public class ImageData implements Serializable, Idable {
+public class ImageData implements Idable {
     private String id;
     private String base64;
 

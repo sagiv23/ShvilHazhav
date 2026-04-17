@@ -1,0 +1,55 @@
+@startuml
+class adapters.UsersTableAdapter {
+- ImageUtil imageUtil
+- OnUserActionListener listener
++ void init(OnUserActionListener)
++ void setUserList(List<User>)
++ UserViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(UserViewHolder,int)
+}
+
+
+interface adapters.UsersTableAdapter$OnUserActionListener {
+~ void onToggleAdmin(User)
+~ void onDeleteUser(User)
+~ void onUserClicked(User)
+~ void onUserImageClicked(User,ImageView)
+}
+
+class adapters.UsersTableAdapter$UserViewHolder {
+~ TextView txtUserFullName
+~ ImageButton btnDeleteUser
+~ ImageView imgUserProfile
+}
+
+class adapters.EmergencyContactsAdapter {
+- OnContactActionListener listener
++ void setListener(OnContactActionListener)
++ EmergencyContactViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(EmergencyContactViewHolder,int)
+}
+
+
+interface adapters.EmergencyContactsAdapter$OnContactActionListener {
+~ void onEdit(EmergencyContact)
+~ void onDelete(EmergencyContact)
+}
+
+class adapters.EmergencyContactsAdapter$EmergencyContactViewHolder {
+~ TextView txtName
+~ TextView txtPhone
+~ ImageButton btnEdit
+~ ImageButton btnDelete
+}
+
+
+
+bases.BaseAdapter <|-- adapters.UsersTableAdapter
+adapters.UsersTableAdapter +.. adapters.UsersTableAdapter$OnUserActionListener
+adapters.UsersTableAdapter +.. adapters.UsersTableAdapter$UserViewHolder
+adapters.ViewHolder <|-- adapters.UsersTableAdapter$UserViewHolder
+bases.BaseAdapter <|-- adapters.EmergencyContactsAdapter
+adapters.EmergencyContactsAdapter +.. adapters.EmergencyContactsAdapter$OnContactActionListener
+adapters.EmergencyContactsAdapter +.. adapters.EmergencyContactsAdapter$EmergencyContactViewHolder
+adapters.ViewHolder <|-- adapters.EmergencyContactsAdapter$EmergencyContactViewHolder
+@enduml

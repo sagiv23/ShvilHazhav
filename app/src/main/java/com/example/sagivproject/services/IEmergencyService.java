@@ -38,14 +38,6 @@ public interface IEmergencyService {
     void addContact(@NonNull String uid, @NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber, @Nullable DatabaseCallback<Void> callback);
 
     /**
-     * Retrieves the complete list of emergency contacts for a specific user.
-     *
-     * @param uid      The unique identifier of the user.
-     * @param callback The callback invoked with the list of retrieved contacts.
-     */
-    void getContacts(@NonNull String uid, @NonNull DatabaseCallback<List<EmergencyContact>> callback);
-
-    /**
      * Deletes an emergency contact record from a user's profile.
      *
      * @param uid       The unique identifier of the user.

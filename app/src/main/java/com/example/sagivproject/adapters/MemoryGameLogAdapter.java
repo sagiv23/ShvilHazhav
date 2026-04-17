@@ -79,7 +79,7 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
         holder.txtStatus.setText(String.format("סטטוס: %s", room.getStatus()));
 
         String winnerUid = room.getWinnerUid();
-        if (winnerUid != null && !winnerUid.isEmpty()) {
+        if ("finished".equals(room.getStatus()) && winnerUid != null && !winnerUid.isEmpty()) {
             holder.txtWinner.setVisibility(View.VISIBLE);
             if (winnerUid.equals("draw")) {
                 holder.txtWinner.setText("תוצאה: תיקו");

@@ -26,6 +26,7 @@ public class SharedPreferencesUtil {
     private static final String PREF_NAME = "com.example.sagivproject.PREFERENCE_FILE_KEY";
     private static final String KEY_USER = "user";
     private static final String KEY_DARK_MODE = "dark_mode";
+    private static final String KEY_FALL_DETECTION_ENABLED = "fall_detection_enabled";
 
     private final SharedPreferences sharedPreferences;
     private final Gson gson;
@@ -209,6 +210,24 @@ public class SharedPreferencesUtil {
      */
     public void setDarkMode(boolean isDarkMode) {
         saveBoolean(KEY_DARK_MODE, isDarkMode);
+    }
+
+    /**
+     * Checks if fall detection is enabled by the user.
+     *
+     * @return true if enabled.
+     */
+    public boolean isFallDetectionEnabled() {
+        return getBoolean(KEY_FALL_DETECTION_ENABLED, false);
+    }
+
+    /**
+     * Persists the user's choice for fall detection monitoring.
+     *
+     * @param enabled true to enable.
+     */
+    public void setFallDetectionEnabled(boolean enabled) {
+        saveBoolean(KEY_FALL_DETECTION_ENABLED, enabled);
     }
 
     /**

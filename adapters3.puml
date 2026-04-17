@@ -1,0 +1,45 @@
+@startuml
+class adapters.MemoryGameAdapter {
+- {static} int CAMERA_DISTANCE
+- ImageUtil imageUtil
+- MemoryGameListener listener
++ void setListener(MemoryGameListener)
++ void setCards(List<Card>)
++ CardViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(CardViewHolder,int)
++ void onViewRecycled(CardViewHolder)
+}
+
+
+interface adapters.MemoryGameAdapter$MemoryGameListener {
+~ void onCardClicked(Card,int)
+~ boolean isMyTurn()
+~ void animateFlipOpen(ImageView,String)
+~ void animateFlipClose(ImageView)
+}
+
+class adapters.MemoryGameAdapter$CardViewHolder {
+~ ImageView cardImage
+}
+
+class adapters.MedicationUsageAdapter {
+- Context context
++ UsageViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(UsageViewHolder,int)
+}
+
+
+class adapters.MedicationUsageAdapter$UsageViewHolder {
+~ TextView txtName
+}
+
+
+
+bases.BaseAdapter <|-- adapters.MemoryGameAdapter
+adapters.MemoryGameAdapter +.. adapters.MemoryGameAdapter$MemoryGameListener
+adapters.MemoryGameAdapter +.. adapters.MemoryGameAdapter$CardViewHolder
+adapters.ViewHolder <|-- adapters.MemoryGameAdapter$CardViewHolder
+bases.BaseAdapter <|-- adapters.MedicationUsageAdapter
+adapters.MedicationUsageAdapter +.. adapters.MedicationUsageAdapter$UsageViewHolder
+adapters.ViewHolder <|-- adapters.MedicationUsageAdapter$UsageViewHolder
+@enduml

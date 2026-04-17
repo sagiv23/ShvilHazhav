@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -15,7 +14,7 @@ import java.util.Objects;
  * UI display (e.g., full name).
  * </p>
  */
-public class EmergencyContact implements Serializable, Idable {
+public class EmergencyContact implements Idable {
     private String id;
     private String firstName;
     private String lastName;

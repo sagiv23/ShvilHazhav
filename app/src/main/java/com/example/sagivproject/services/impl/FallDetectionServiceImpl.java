@@ -21,6 +21,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -159,34 +160,26 @@ public class FallDetectionServiceImpl extends Service implements SensorEventList
                     .addOnSuccessListener(location -> {
                         String locationUrl = (location != null) ?
                                 "https://www.google.com/maps/search/?api=1&query=" + location.getLatitude() + "," + location.getLongitude() : null;
-                        sendEmergencyAlert(user.getId(), locationUrl);
+                        sendEmergencyAlert(locationUrl);
                     })
-                    .addOnFailureListener(e -> sendEmergencyAlert(user.getId(), null));
+                    .addOnFailureListener(e -> sendEmergencyAlert(null));
         } catch (SecurityException e) {
-            sendEmergencyAlert(user.getId(), null);
+            sendEmergencyAlert(null);
         }
     }
 
     /**
-     * Fetches user contacts from the database and triggers the SMS alerting mechanism.
+     * Triggers the SMS alerting mechanism using contacts from the user object.
      *
-     * @param uid         The ID of the user who fell.
      * @param locationUrl The location URL to include in the message.
      */
-    private void sendEmergencyAlert(String uid, String locationUrl) {
-        databaseService.getEmergencyService().getContacts(uid, new IDatabaseService.DatabaseCallback<>() {
-            @Override
-            public void onCompleted(List<EmergencyContact> contacts) {
-                if (contacts != null && !contacts.isEmpty()) {
-                    databaseService.getEmergencyService().sendEmergencyAlert(getApplicationContext(), contacts, locationUrl, null);
-                }
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                Log.e(TAG, "Failed to fetch contacts", e);
-            }
-        });
+    private void sendEmergencyAlert(String locationUrl) {
+        User user = sharedPreferencesUtil.getUser();
+        if (user == null) return;
+        List<EmergencyContact> contacts = new ArrayList<>(user.getEmergencyContacts().values());
+        if (!contacts.isEmpty()) {
+            databaseService.getEmergencyService().sendEmergencyAlert(getApplicationContext(), contacts, locationUrl, null);
+        }
     }
 
     @Override

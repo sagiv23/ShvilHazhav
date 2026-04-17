@@ -1,0 +1,112 @@
+@startuml
+class models.GameRoom {
+- String id
+- String status
+- String player1Uid
+- String player2Uid
+- List<Card> cards
+- String currentTurnUid
+- int player1Score
+- int player2Score
+- Integer firstSelectedCardIndex
+- boolean processingMatch
+- String winnerUid
+- boolean statsUpdated
++ String getId()
++ void setId(String)
++ String getStatus()
++ void setStatus(String)
++ String getPlayer1Uid()
++ void setPlayer1Uid(String)
++ String getPlayer2Uid()
++ void setPlayer2Uid(String)
++ List<Card> getCards()
++ void setCards(List<Card>)
++ String getCurrentTurnUid()
++ void setCurrentTurnUid(String)
++ int getPlayer1Score()
++ void setPlayer1Score(int)
++ int getPlayer2Score()
++ void setPlayer2Score(int)
++ Integer getFirstSelectedCardIndex()
++ void setFirstSelectedCardIndex(Integer)
++ boolean isProcessingMatch()
++ void setProcessingMatch(boolean)
++ String getWinnerUid()
++ void setWinnerUid(String)
++ boolean isStatsUpdated()
++ void setStatsUpdated(boolean)
++ String toString()
+}
+
+
+class models.ImageData {
+- String id
+- String base64
++ String getId()
++ void setId(String)
++ String getBase64()
++ void setBase64(String)
++ String toString()
+}
+
+
+class models.ForumMessage {
+- String id
+- String message
+- long timestamp
+- String userId
+- String senderName
+- String senderEmail
+- boolean senderAdmin
++ String getId()
++ void setId(String)
++ String getMessage()
++ void setMessage(String)
++ long getTimestamp()
++ void setTimestamp(long)
++ String getUserId()
++ void setUserId(String)
++ String getSenderName()
++ void setSenderName(String)
++ String getSenderEmail()
++ void setSenderEmail(String)
++ boolean isSenderAdmin()
++ void setSenderAdmin(boolean)
++ String toString()
+}
+
+
+interface models.Idable {
+~ String getId()
+~ void setId(String)
+}
+
+class models.GraphData {
+- String title
+- List<SimpleXYGraphView.Point> points
+- List<String> xLabels
+- String labelX
+- String labelY
+- String id
++ String getId()
++ void setId(String)
++ String getTitle()
++ List<SimpleXYGraphView.Point> getPoints()
++ List<String> getXLabels()
++ String getLabelX()
++ String getLabelY()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+
+
+
+
+models.Idable <|.. models.GameRoom
+models.Idable <|.. models.ImageData
+models.Idable <|.. models.ForumMessage
+java.io.Serializable <|-- models.Idable
+models.Idable <|.. models.GraphData
+@enduml

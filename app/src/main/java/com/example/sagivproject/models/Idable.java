@@ -2,6 +2,8 @@ package com.example.sagivproject.models;
 
 import com.example.sagivproject.bases.BaseAdapter;
 
+import java.io.Serializable;
+
 /**
  * An interface for data models that have a unique identifier.
  * <p>
@@ -10,7 +12,7 @@ import com.example.sagivproject.bases.BaseAdapter;
  * the {@link BaseAdapter}.
  * </p>
  */
-public interface Idable {
+public interface Idable extends Serializable {
     /**
      * Gets the unique identifier of the object.
      *

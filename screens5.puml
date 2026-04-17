@@ -1,0 +1,70 @@
+@startuml
+class com.example.sagivproject.screens.TipOfTheDayActivity {
+- String[] inspirationalQuotes
+- TextView tipContent
+- Button btnTipSpeak
+- GenerativeModelFutures model
+- TextToSpeech tts
+- String currentlySpeakingId
+# void onCreate(Bundle)
+- void toggleSpeech(String,String)
+- void updateSpeakButton(String,boolean)
+- void checkDailyTip()
+- void fetchDailyTipFromAI()
++ void onDestroy()
+}
+
+
+class com.example.sagivproject.screens.SettingsActivity {
+# IFallDetectionService fallDetectionService
+- SwitchMaterial switchDarkMode
+- SwitchMaterial switchVibration
+- SwitchMaterial switchNotifications
+- SwitchMaterial switchCamera
+- SwitchMaterial switchGallery
+- SwitchMaterial switchLocation
+- SwitchMaterial switchSms
+- SwitchMaterial switchContacts
+- SwitchMaterial switchFallDetection
+# void onCreate(Bundle)
+- void showRedirectDialog()
+- void updatePermissionSwitches()
+- void refreshSwitches()
+# void onResume()
+- void handleFallDetectionEnable()
+- void checkBackgroundLocationAndEnable()
+# void onPermissionsResult(Map<String,Boolean>)
+- void disableFallDetection()
+- void checkContactsAndEnableFallDetection()
+- void updateDarkModeText(SwitchMaterial,boolean)
+- void logout()
+}
+
+
+class com.example.sagivproject.screens.RegisterActivity {
+# CalendarUtil calendarUtil
+# Validator validator
+- EditText editTextFirstName
+- long birthDateMillis
+# void onCreate(Bundle)
+- void tryRegister()
+- boolean validateInput(String,String,String,String,String)
+- void openDatePicker()
+}
+
+
+class com.example.sagivproject.screens.SplashActivity {
+- {static} long SPLASH_DELAY
+# void onCreate(Bundle)
+- void navigateNext()
+- void navigateToLandingWithAnimation()
+}
+
+
+
+
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.TipOfTheDayActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.SettingsActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.RegisterActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.SplashActivity
+@enduml

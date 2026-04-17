@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.example.sagivproject.models.enums.UserRole;
 import com.google.firebase.database.Exclude;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,7 +20,7 @@ import java.util.Objects;
  * It is the central data model for authentication and personalization.
  * </p>
  */
-public class User implements Serializable, Idable {
+public class User implements Idable {
     private static final int YEAR = Calendar.YEAR;
     private static final int DAY_OF_YEAR = Calendar.DAY_OF_YEAR;
     private String id;

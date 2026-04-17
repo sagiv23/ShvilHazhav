@@ -1,0 +1,63 @@
+@startuml
+class com.example.sagivproject.screens.ContactActivity {
+- {static} int LONG_PRESS_DURATION
+- Handler handler
+- Runnable longPressedRunnable
+# void onCreate(Bundle)
+- void setupSecretNavigation(View)
+- void setupSocialButton(int,String)
+}
+
+
+class com.example.sagivproject.screens.DetailsAboutUserActivity {
+# ImageUtil imageUtil
+- TextView txtTitle
+- ImageView imgUserProfile
+- User user
+- ActivityResultLauncher<PickVisualMediaRequest> photoPickerLauncher
+- ActivityResultLauncher<Void> cameraLauncher
+# void onCreate(Bundle)
+- void setupLaunchers()
+# void onPermissionsResult(Map<String,Boolean>)
+# void onResume()
+- void loadUserFromDatabase()
+- void loadUserDetailsToUI()
+- void openEditDialog()
+- void launchGallery()
+- void openImagePicker()
+- void deleteProfileImage()
+- void handleImageBitmap(Bitmap)
+- void saveProfileImage()
+}
+
+
+class com.example.sagivproject.screens.AiActivity {
+- ChatFutures chatSession
+- Button btnSend
+- ProgressBar progressBar
+- EditText questionInput
+- TextView answerView
+- Handler animationHandler
+- int charIndex
+- TextToSpeech tts
+- boolean isSpeaking
+# void onCreate(Bundle)
+- void toggleSpeech()
+- void updateSpeakButton(boolean)
+- void sendQuestion()
+- void displayTextWithAnimation(String)
++ void onDestroy()
+}
+
+
+class com.example.sagivproject.screens.AdminPageActivity {
+# void onCreate(Bundle)
+}
+
+
+
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.ContactActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.DetailsAboutUserActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.AiActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.AdminPageActivity
+@enduml

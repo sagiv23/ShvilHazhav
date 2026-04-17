@@ -1,0 +1,77 @@
+@startuml
+class adapters.MedicationImagesTableAdapter {
+- ImageUtil imageUtil
+- OnImageActionListener listener
++ void setListener(OnImageActionListener)
++ void setImages(List<ImageData>)
++ ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(ViewHolder,int)
+}
+
+
+interface adapters.MedicationImagesTableAdapter$OnImageActionListener {
+~ void onDeleteImage(ImageData)
+~ void onImageClicked(ImageData,ImageView)
+}
+
+class adapters.MedicationImagesTableAdapter$ViewHolder {
+~ ImageView imgView
+~ TextView txtId
+~ MaterialButton btnDelete
+}
+
+class adapters.MedicationListAdapter {
+- Context context
+- Set<String> processingMedications
+- Map<String,Map<String,MedicationStatus>> loggedTodayMedications
+- OnMedicationActionListener listener
++ void setListener(OnMedicationActionListener)
++ void setMedications(List<Medication>)
++ void setLoggedTodayMedications(List<MedicationUsage>)
++ void addLoggedTodayMedication(MedicationUsage)
++ MedicationViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(MedicationViewHolder,int)
+- void addStatusRow(LinearLayout,Medication,String,MedicationStatus)
+- void handleStatusClick(Medication,String,MedicationStatus)
++ void setProcessingFinished(String)
+}
+
+
+interface adapters.MedicationListAdapter$OnMedicationActionListener {
+~ void onEdit(Medication)
+~ void onDelete(Medication)
+~ void onStatusChanged(Medication,String,MedicationStatus)
+}
+
+class adapters.MedicationListAdapter$MedicationViewHolder {
+~ TextView txtMedicationName
+~ ImageButton btnMenu
+~ LinearLayout statusContainer
+}
+
+class adapters.LeaderboardAdapter {
++ void setUsers(List<User>)
++ ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(ViewHolder,int)
+- int getTotalWins(User)
+}
+
+class adapters.LeaderboardAdapter$ViewHolder {
+~ TextView tvName
+~ TextView tvWins
+}
+
+
+
+bases.BaseAdapter <|-- adapters.MedicationImagesTableAdapter
+adapters.MedicationImagesTableAdapter +.. adapters.MedicationImagesTableAdapter$OnImageActionListener
+adapters.MedicationImagesTableAdapter +.. adapters.MedicationImagesTableAdapter$ViewHolder
+adapters.ViewHolder <|-- adapters.MedicationImagesTableAdapter$ViewHolder
+bases.BaseAdapter <|-- adapters.MedicationListAdapter
+adapters.MedicationListAdapter +.. adapters.MedicationListAdapter$OnMedicationActionListener
+adapters.MedicationListAdapter +.. adapters.MedicationListAdapter$MedicationViewHolder
+adapters.ViewHolder <|-- adapters.MedicationListAdapter$MedicationViewHolder
+bases.BaseAdapter <|-- adapters.LeaderboardAdapter
+adapters.LeaderboardAdapter +.. adapters.LeaderboardAdapter$ViewHolder
+adapters.ViewHolder <|-- adapters.LeaderboardAdapter$ViewHolder
+@enduml

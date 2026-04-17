@@ -2,7 +2,6 @@ package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
  * scores, and the overall status of the match (waiting, playing, finished).
  * </p>
  */
-public class GameRoom implements Serializable, Idable {
+public class GameRoom implements Idable {
     private String id;
     /**
      * Current status of the room: "waiting", "playing", or "finished".

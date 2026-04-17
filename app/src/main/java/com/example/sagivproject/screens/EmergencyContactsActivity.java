@@ -29,6 +29,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -176,20 +177,16 @@ public class EmergencyContactsActivity extends BaseActivity {
         View bottomActions = findViewById(R.id.bottom_actions);
         View cardNotificationsReminder = findViewById(R.id.card_notifications_reminder);
 
+        // Let them see the buttons, but they will trigger permission request
         if (hasSms && hasLocation) {
             cardNotificationsReminder.setVisibility(View.GONE);
-            mainContent.setVisibility(View.VISIBLE);
-            bottomActions.setVisibility(View.VISIBLE);
         } else {
             cardNotificationsReminder.setVisibility(View.VISIBLE);
-            if (isFromRegistration) {
-                mainContent.setVisibility(View.VISIBLE);
-                bottomActions.setVisibility(View.VISIBLE);
-            } else {
-                mainContent.setVisibility(View.GONE);
-                bottomActions.setVisibility(View.GONE);
-            }
+            // Always allow seeing and managing contacts, even if permissions for sending SOS are missing
+            // Hide only the emergency actions if permissions are missing and not in registration flow
         }
+        mainContent.setVisibility(View.VISIBLE);
+        bottomActions.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -201,7 +198,11 @@ public class EmergencyContactsActivity extends BaseActivity {
         boolean hasSms = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
         boolean hasBackgroundLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
-        boolean isFallDetectionLikelyActive = hasActivityRec && hasLocation && hasSms && hasBackgroundLocation;
+        User user = sharedPreferencesUtil.getUser();
+        boolean hasContacts = user != null && !user.getEmergencyContacts().isEmpty();
+        boolean isEnabledByUser = sharedPreferencesUtil.isFallDetectionEnabled();
+
+        boolean isFallDetectionLikelyActive = hasActivityRec && hasLocation && hasSms && hasBackgroundLocation && hasContacts && isEnabledByUser;
 
         if (isFallDetectionLikelyActive) {
             findViewById(R.id.card_fall_detection_reminder).setVisibility(View.GONE);
@@ -241,28 +242,30 @@ public class EmergencyContactsActivity extends BaseActivity {
     }
 
     /**
-     * Synchronizes the contact list with the database.
+     * Synchronizes the contact list from the user object.
      */
     private void loadContacts() {
         if (user == null) return;
-        databaseService.getEmergencyService().getContacts(user.getId(), new IDatabaseService.DatabaseCallback<>() {
-            @Override
-            public void onCompleted(List<EmergencyContact> contactsList) {
-                adapter.setData(contactsList);
-                findViewById(R.id.txt_no_contacts).setVisibility(contactsList.isEmpty() ? View.VISIBLE : View.GONE);
+        List<EmergencyContact> contactsList = new ArrayList<>(user.getEmergencyContacts().values());
+        adapter.setData(contactsList);
+        findViewById(R.id.txt_no_contacts).setVisibility(contactsList.isEmpty() ? View.VISIBLE : View.GONE);
 
-                if (contactsList.isEmpty()) {
-                    fallDetectionService.stopMonitoring();
-                    updateFallDetectionUI();
-                    Toast.makeText(EmergencyContactsActivity.this, "זיהוי נפילות הופסק כיוון שאין אנשי קשר לחירום", Toast.LENGTH_LONG).show();
-                }
+        if (isFromRegistration) {
+            Button btnSkip = findViewById(R.id.btn_skip);
+            if (!contactsList.isEmpty()) {
+                btnSkip.setText("סיום");
+                btnSkip.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check, 0);
+            } else {
+                btnSkip.setText(R.string.laster);
+                btnSkip.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
+        }
 
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (contactsList.isEmpty()) {
+            fallDetectionService.stopMonitoring();
+            sharedPreferencesUtil.setFallDetectionEnabled(false);
+            updateFallDetectionUI();
+        }
     }
 
     /**
@@ -365,26 +368,18 @@ public class EmergencyContactsActivity extends BaseActivity {
      * @param locationUrl Optional Google Maps link.
      */
     private void sendSmsToAll(@Nullable String locationUrl) {
-        databaseService.getEmergencyService().getContacts(user.getId(), new IDatabaseService.DatabaseCallback<>() {
+        if (user == null) return;
+        List<EmergencyContact> contacts = new ArrayList<>(user.getEmergencyContacts().values());
+        databaseService.getEmergencyService().sendEmergencyAlert(EmergencyContactsActivity.this, contacts, locationUrl, new IDatabaseService.DatabaseCallback<>() {
             @Override
-            public void onCompleted(List<EmergencyContact> contacts) {
-                databaseService.getEmergencyService().sendEmergencyAlert(EmergencyContactsActivity.this, contacts, locationUrl, new IDatabaseService.DatabaseCallback<>() {
-                    @Override
-                    public void onCompleted(Void object) {
-                        Toast.makeText(EmergencyContactsActivity.this, "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show();
-                        vibrateDevice();
-                    }
-
-                    @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+            public void onCompleted(Void object) {
+                Toast.makeText(EmergencyContactsActivity.this, "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show();
+                vibrateDevice();
             }
 
             @Override
             public void onFailed(Exception e) {
-                Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת אנשי קשר לשליחת SMS", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

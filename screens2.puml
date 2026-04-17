@@ -1,0 +1,98 @@
+@startuml
+class com.example.sagivproject.screens.ForumActivity {
+- Handler mainHandler
+- RecyclerView recycler
+- Button btnNewMessagesIndicator
+- ForumAdapter adapter
+- String categoryId
+- User user
+- TextToSpeech tts
+- String currentlySpeakingMsgId
+# void onCreate(Bundle)
+- void loadMessages()
+- void sendMessage()
+- boolean canDelete(ForumMessage)
+- boolean isLastItemVisible()
+- void scrollToBottom(boolean)
+- void initTTS(ForumMessage)
+- void speak(ForumMessage)
+- void notifyItemChangedById(String)
++ void onResume()
+# void onDestroy()
+}
+
+
+class com.example.sagivproject.screens.EmergencyContactsActivity {
+# IFallDetectionService fallDetectionService
+- EmergencyContactsAdapter adapter
+- User user
+- ActivityResultLauncher<Void> contactPickerLauncher
+- boolean isFromRegistration
+- FusedLocationProviderClient fusedLocationClient
+# void onCreate(Bundle)
+# void onPermissionsResult(Map<String,Boolean>)
+- void updatePermissionUI()
+- void updateFallDetectionUI()
+# void onResume()
+- void loadUserFromDatabase()
+- void loadContacts()
+- void addEmergencyContact(String,String,String)
+- void retrieveContactDetails(Uri)
+- String fetchPhoneNumber(String)
+- void checkSmsAndLocationPermissions()
+- void fetchLocationAndSendSms()
+- void sendSmsToAll(String)
+- void callEmergency()
+}
+
+
+class com.example.sagivproject.screens.ForumCategoriesActivity {
+- ForumCategoryAdapter adapter
+# void onCreate(Bundle)
+- void loadCategories()
+- void addCategory(String,EditText)
+- void showEditDialog(ForumCategory)
+- void deleteCategory(ForumCategory)
+}
+
+
+class com.example.sagivproject.screens.GameHomeScreenActivity {
+- Button btnFindEnemy
+- TextView TVStatusOfFindingEnemy
+- GameRoom currentRoom
+- boolean gameStarted
+- LeaderboardAdapter adapter
+- User user
+- TextToSpeech tts
+- boolean isSpeaking
+# void onCreate(Bundle)
+- void toggleInstructionsSpeech()
+- void updateSpeakButton(boolean)
++ void onResume()
++ void onStop()
+- void loadWins()
+- void displayTodayWins()
+- void setupLeaderboard()
+- int getTotalWins(User)
+- int getTotalGamesPlayed(User)
+- void findEnemy()
+- void cancelSearch()
+- void listenToRoom(String)
+- void updateUI(SearchState)
++ void onDestroy()
+}
+
+
+enum com.example.sagivproject.screens.SearchState {
++  IDLE
++  SEARCHING
++  GAME_FOUND
+}
+
+
+
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.ForumActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.EmergencyContactsActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.ForumCategoriesActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.GameHomeScreenActivity
+@enduml

@@ -1,15 +1,16 @@
 @startuml
-class com.example.sagivproject.utils.ImageUtil {
+class utils.ImageUtil {
 - {static} String BASE64_PREFIX
 + String convertTo64Base(ImageView)
 + void loadImage(String,ImageView)
 }
 
 
-class com.example.sagivproject.utils.SharedPreferencesUtil {
+class utils.SharedPreferencesUtil {
 - {static} String PREF_NAME
 - {static} String KEY_USER
 - {static} String KEY_DARK_MODE
+- {static} String KEY_FALL_DETECTION_ENABLED
 - SharedPreferences sharedPreferences
 - Gson gson
 + void saveString(String,String)
@@ -29,11 +30,13 @@ class com.example.sagivproject.utils.SharedPreferencesUtil {
 + boolean isUserNotLoggedIn()
 + boolean isDarkMode()
 + void setDarkMode(boolean)
++ boolean isFallDetectionEnabled()
++ void setFallDetectionEnabled(boolean)
 + String getUserId()
 }
 
 
-class com.example.sagivproject.utils.CalendarUtil {
+class utils.CalendarUtil {
 + {static} String DEFAULT_DATE_FORMAT
 + void openDatePicker(Context,long,OnDateSelectedListener,boolean,boolean,String)
 + String formatDate(long)
@@ -41,11 +44,11 @@ class com.example.sagivproject.utils.CalendarUtil {
 }
 
 
-interface com.example.sagivproject.utils.CalendarUtil$OnDateSelectedListener {
+interface utils.CalendarUtil$OnDateSelectedListener {
 ~ void onDateSelected(long,String)
 }
 
-class com.example.sagivproject.utils.Validator {
+class utils.Validator {
 - {static} int MIN_AGE
 + boolean isNameNotValid(String)
 + boolean isEmailNotValid(String)
@@ -57,5 +60,5 @@ class com.example.sagivproject.utils.Validator {
 
 
 
-com.example.sagivproject.utils.CalendarUtil +.. com.example.sagivproject.utils.CalendarUtil$OnDateSelectedListener
+utils.CalendarUtil +.. utils.CalendarUtil$OnDateSelectedListener
 @enduml

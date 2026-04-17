@@ -16,10 +16,10 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IFallDetectionService;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -298,7 +298,18 @@ public class SettingsActivity extends BaseActivity {
             boolean hasSms = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
             boolean hasNotifications = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
 
-            switchFallDetection.setChecked(hasActivity && hasBackgroundLoc && hasFineLoc && hasSms && hasNotifications);
+            User user = sharedPreferencesUtil.getUser();
+            boolean hasContacts = user != null && !user.getEmergencyContacts().isEmpty();
+            boolean isEnabledByUser = sharedPreferencesUtil.isFallDetectionEnabled();
+
+            // If it was enabled but there are no contacts, disable it
+            if (isEnabledByUser && !hasContacts) {
+                sharedPreferencesUtil.setFallDetectionEnabled(false);
+                fallDetectionService.stopMonitoring();
+                isEnabledByUser = false;
+            }
+
+            switchFallDetection.setChecked(hasActivity && hasBackgroundLoc && hasFineLoc && hasSms && hasNotifications && isEnabledByUser);
         }
     }
 
@@ -362,6 +373,7 @@ public class SettingsActivity extends BaseActivity {
      */
     private void disableFallDetection() {
         fallDetectionService.stopMonitoring();
+        sharedPreferencesUtil.setFallDetectionEnabled(false);
         Toast.makeText(this, "זיהוי נפילות הופסק", Toast.LENGTH_SHORT).show();
     }
 
@@ -372,24 +384,16 @@ public class SettingsActivity extends BaseActivity {
         User user = sharedPreferencesUtil.getUser();
         if (user == null) return;
 
-        databaseService.getEmergencyService().getContacts(user.getId(), new IDatabaseService.DatabaseCallback<>() {
-            @Override
-            public void onCompleted(List<EmergencyContact> contacts) {
-                if (contacts != null && !contacts.isEmpty()) {
-                    fallDetectionService.startMonitoring();
-                    Toast.makeText(SettingsActivity.this, "זיהוי נפילות הופעל ברקע", Toast.LENGTH_SHORT).show();
-                } else {
-                    switchFallDetection.setChecked(false);
-                    Toast.makeText(SettingsActivity.this, "נא להוסיף אנשי קשר לחירום לפני הפעלת הזיהוי", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                switchFallDetection.setChecked(false);
-                Toast.makeText(SettingsActivity.this, "שגיאה בבדיקת אנשי קשר", Toast.LENGTH_SHORT).show();
-            }
-        });
+        List<EmergencyContact> contacts = new ArrayList<>(user.getEmergencyContacts().values());
+        if (!contacts.isEmpty()) {
+            fallDetectionService.startMonitoring();
+            sharedPreferencesUtil.setFallDetectionEnabled(true);
+            Toast.makeText(SettingsActivity.this, "זיהוי נפילות הופעל ברקע", Toast.LENGTH_SHORT).show();
+        } else {
+            switchFallDetection.setChecked(false);
+            sharedPreferencesUtil.setFallDetectionEnabled(false);
+            Toast.makeText(SettingsActivity.this, "נא להוסיף אנשי קשר לחירום לפני הפעלת הזיהוי", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**

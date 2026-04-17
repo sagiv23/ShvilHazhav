@@ -1,0 +1,73 @@
+@startuml
+class adapters.GraphAdapter {
+- Context context
++ GraphViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(GraphViewHolder,int)
+}
+
+
+class adapters.GraphAdapter$GraphViewHolder {
+~ SimpleXYGraphView graphView
+}
+
+class adapters.ForumCategoryAdapter {
+- OnCategoryInteractionListener listener
+- boolean isAdmin
++ void init(OnCategoryInteractionListener,boolean)
++ void setCategories(List<ForumCategory>)
++ void removeCategory(ForumCategory)
++ CategoryViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(CategoryViewHolder,int)
+}
+
+
+interface adapters.ForumCategoryAdapter$OnCategoryInteractionListener {
+~ void onDelete(ForumCategory)
+~ void onEdit(ForumCategory)
+~ void onLongClick(ForumCategory)
+~ void onClick(ForumCategory)
+}
+
+class adapters.ForumCategoryAdapter$CategoryViewHolder {
+~ TextView categoryName
+~ ImageButton deleteButton
+~ ImageButton editButton
+}
+
+class adapters.ForumAdapter {
+- ForumMessageListener listener
++ void setForumMessageListener(ForumMessageListener)
++ void setMessages(List<ForumMessage>)
++ void removeMessage(ForumMessage)
++ ForumViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(ForumViewHolder,int)
+}
+
+
+interface adapters.ForumAdapter$ForumMessageListener {
+~ void onClick(ForumMessage)
+~ boolean isShowMenuOptions(ForumMessage)
+~ void onSpeakClicked(ForumMessage)
+~ String getCurrentlySpeakingMsgId()
+}
+
+class adapters.ForumAdapter$ForumViewHolder {
+~ TextView txtUser
+~ ImageButton btnMenu
+~ MaterialButton btnSpeak
+}
+
+
+
+bases.BaseAdapter <|-- adapters.GraphAdapter
+adapters.GraphAdapter +.. adapters.GraphAdapter$GraphViewHolder
+adapters.ViewHolder <|-- adapters.GraphAdapter$GraphViewHolder
+bases.BaseAdapter <|-- adapters.ForumCategoryAdapter
+adapters.ForumCategoryAdapter +.. adapters.ForumCategoryAdapter$OnCategoryInteractionListener
+adapters.ForumCategoryAdapter +.. adapters.ForumCategoryAdapter$CategoryViewHolder
+adapters.ViewHolder <|-- adapters.ForumCategoryAdapter$CategoryViewHolder
+bases.BaseAdapter <|-- adapters.ForumAdapter
+adapters.ForumAdapter +.. adapters.ForumAdapter$ForumMessageListener
+adapters.ForumAdapter +.. adapters.ForumAdapter$ForumViewHolder
+adapters.ViewHolder <|-- adapters.ForumAdapter$ForumViewHolder
+@enduml

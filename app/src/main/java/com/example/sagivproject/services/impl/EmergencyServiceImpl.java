@@ -42,6 +42,11 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
         super(firebaseDatabase, "", EmergencyContact.class);
     }
 
+    /**
+     * Generates a unique identifier for a new emergency contact.
+     *
+     * @return A unique contact ID string.
+     */
     @Override
     public String generateContactId() {
         return super.generateId();
@@ -59,7 +64,7 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
      */
     @Override
     public void addContact(@NonNull String uid, @NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber, @Nullable DatabaseCallback<Void> callback) {
-        getContacts(uid, new DatabaseCallback<>() {
+        getDataList(getContactsPath(uid), new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<EmergencyContact> contacts) {
                 for (EmergencyContact c : contacts) {
@@ -81,11 +86,13 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
         });
     }
 
-    @Override
-    public void getContacts(@NonNull String uid, @NonNull DatabaseCallback<List<EmergencyContact>> callback) {
-        getDataList(getContactsPath(uid), callback);
-    }
-
+    /**
+     * Deletes an emergency contact from the database.
+     *
+     * @param uid       The unique identifier of the user.
+     * @param contactId The ID of the contact to delete.
+     * @param callback  An optional callback to be notified of the operation's success or failure.
+     */
     @Override
     public void deleteContact(@NonNull String uid, @NonNull String contactId, @Nullable DatabaseCallback<Void> callback) {
         deleteData(getContactItemPath(uid, contactId), callback);
@@ -153,6 +160,9 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
 
     /**
      * Constructs the database path for a user's emergency contacts collection.
+     *
+     * @param uid The unique identifier of the user.
+     * @return The database path string for the contacts' collection.
      */
     private String getContactsPath(String uid) {
         return USERS_PATH + "/" + uid + "/" + CONTACTS_PATH;
@@ -160,6 +170,10 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
 
     /**
      * Constructs the database path for a specific emergency contact record.
+     *
+     * @param uid       The unique identifier of the user.
+     * @param contactId The unique identifier of the specific contact.
+     * @return The database path string for the specific contact item.
      */
     private String getContactItemPath(String uid, String contactId) {
         return getContactsPath(uid) + "/" + contactId;

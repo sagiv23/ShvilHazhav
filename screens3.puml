@@ -1,0 +1,47 @@
+@startuml
+class com.example.sagivproject.screens.LandingActivity {
+# void onCreate(Bundle)
+}
+
+class com.example.sagivproject.screens.MathProblemsActivity {
+- StringBuilder userInput
+- Handler handler
+- TextView tvCorrect
+- User user
+- TextView tvQuestion
+- MaterialCardView cvAnswerContainer
+- int correctAnswer
+# void onCreate(Bundle)
+- void fetchLatestStats()
+- void updateStatsUI()
+- void generateProblem()
+- int rand(int,int)
+- void setupKeypad()
+- void deleteLast()
+- void clearInput()
+- void checkAnswer()
+- DailyStats getTodayStats(String)
+- void showFeedback(boolean)
+}
+
+
+class com.example.sagivproject.screens.MainActivity {
+# void onCreate(Bundle)
+}
+
+class com.example.sagivproject.screens.LoginActivity {
+# Validator validator
+- EditText editTextEmail
+# void onCreate(Bundle)
+- void tryLogin()
+- boolean validateInput(String,String)
+}
+
+
+
+
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.LandingActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.MathProblemsActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.MainActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.LoginActivity
+@enduml

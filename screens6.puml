@@ -1,0 +1,54 @@
+@startuml
+class com.example.sagivproject.screens.UsersTableActivity {
+- List<User> usersList
+- UsersTableAdapter adapter
+- EditText editSearch
+- Spinner spinnerSearchType
+- User currentUser
+# void onCreate(Bundle)
+- void setupSearch()
+- void refreshList()
++ void onResume()
+- void loadUsers()
+- void handleToggleAdmin(User)
+- void handleDeleteUser(User)
+- void filterUsers(String)
+}
+
+
+class com.example.sagivproject.screens.UserStatsActivity {
+- List<User> selectableUsers
+# CalendarUtil calendarUtil
+- ViewPager2 viewPagerGraphs
+- GraphAdapter graphAdapter
+- TabLayout tabLayoutGraphs
+- RecyclerView recyclerMedicationLogs
+- MedicationUsageAdapter usageAdapter
+- User currentUser
+- User loggedInUser
+- Spinner spinnerUserSelector
+- TextView txtSelectedDate
+- TextView txtNoHistory
+- MaterialButton btnClearMedLogs
+- String filteredDate
+- List<MedicationUsage> allLogs
+# void onCreate(Bundle)
+- void setupGraphsUI()
+- void openCalendar()
+- void applyFilter()
+- void setupAdminUI()
+- void refreshData()
+- void fetchLatestUserData()
+- void setupGraphs()
+- void setupMedicationLogs()
+- void loadMedicationLogs()
+- void clearMedicationLogs()
+- void updateResetButtonState()
+}
+
+
+
+
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.UsersTableActivity
+com.example.sagivproject.bases.BaseActivity <|-- com.example.sagivproject.screens.UserStatsActivity
+@enduml

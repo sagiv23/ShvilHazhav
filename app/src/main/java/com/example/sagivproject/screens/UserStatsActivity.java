@@ -167,7 +167,19 @@ public class UserStatsActivity extends BaseActivity {
      * Opens a date picker to filter the medication usage history.
      */
     private void openCalendar() {
-        calendarUtil.openDatePicker(this, System.currentTimeMillis(), (dateMillis, formattedDate) -> {
+        long initialDate = System.currentTimeMillis();
+        if (filteredDate != null) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                Date d = sdf.parse(filteredDate);
+                if (d != null) {
+                    initialDate = d.getTime();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
+        calendarUtil.openDatePicker(this, initialDate, (dateMillis, formattedDate) -> {
             filteredDate = calendarUtil.formatDate(dateMillis, "yyyy-MM-dd");
             applyFilter();
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
@@ -177,42 +189,43 @@ public class UserStatsActivity extends BaseActivity {
      * Filters the {@link #allLogs} list based on the selected {@link #filteredDate}.
      */
     private void applyFilter() {
-        if (allLogs.isEmpty()) {
+        if (allLogs.isEmpty() && filteredDate == null) {
             txtNoHistory.setVisibility(View.VISIBLE);
             recyclerMedicationLogs.setVisibility(View.GONE);
             txtSelectedDate.setVisibility(View.GONE);
             return;
         }
 
-        txtNoHistory.setVisibility(View.GONE);
-        recyclerMedicationLogs.setVisibility(View.VISIBLE);
+        txtNoHistory.setVisibility(allLogs.isEmpty() ? View.VISIBLE : View.GONE);
+        recyclerMedicationLogs.setVisibility(allLogs.isEmpty() ? View.GONE : View.VISIBLE);
         txtSelectedDate.setVisibility(View.VISIBLE);
 
         if (filteredDate == null) {
-            usageAdapter.setData(allLogs);
+            if (usageAdapter != null) usageAdapter.setData(allLogs);
             txtSelectedDate.setText("מציג את כל ההיסטוריה");
         } else {
             List<MedicationUsage> filtered = allLogs.stream()
                     .filter(log -> filteredDate.equals(log.getDate()))
                     .collect(Collectors.toList());
-            usageAdapter.setData(filtered);
+            if (usageAdapter != null) usageAdapter.setData(filtered);
+
+            String dateDisplay = filteredDate;
+            try {
+                SimpleDateFormat sdfIn = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                SimpleDateFormat sdfOut = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                Date d = sdfIn.parse(filteredDate);
+                if (d != null) {
+                    dateDisplay = sdfOut.format(d);
+                }
+            } catch (Exception ignored) {
+            }
+
+            String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            String suffix = filteredDate.equals(today) ? " (היום)" : "";
 
             if (filtered.isEmpty()) {
-                txtSelectedDate.setText("אין תיעוד לתאריך הנבחר");
+                txtSelectedDate.setText(String.format("אין תיעוד לתאריך: %s%s", dateDisplay, suffix));
             } else {
-                String dateDisplay = filteredDate;
-                try {
-                    SimpleDateFormat sdfIn = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    SimpleDateFormat sdfOut = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                    Date d = sdfIn.parse(filteredDate);
-                    if (d != null) {
-                        dateDisplay = sdfOut.format(d);
-                    }
-                } catch (Exception ignored) {
-                }
-
-                String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                String suffix = filteredDate.equals(today) ? " (היום)" : "";
                 txtSelectedDate.setText(String.format("מציג תוצאות לתאריך: %s%s", dateDisplay, suffix));
             }
         }

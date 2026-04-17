@@ -1,5 +1,5 @@
 @startuml
-abstract class com.example.sagivproject.di.AppModule {
+abstract class di.AppModule {
 + {static} DatabaseReference provideDatabaseReference(FirebaseDatabase)
 + {static} FirebaseDatabase provideFirebaseDatabase()
 + {static} Gson provideGson()
@@ -18,12 +18,12 @@ abstract class com.example.sagivproject.di.AppModule {
 + {abstract}IFallDetectionService bindFallDetectionService(FallDetectionManager)
 }
 
-interface com.example.sagivproject.di.AppModule$ActivityBindingsModule {
+interface di.AppModule$ActivityBindingsModule {
 ~ IDialogService bindDialogService(DialogService)
 ~ IAdapterService bindAdapterService(AdapterService)
 }
 
 
 
-com.example.sagivproject.di.AppModule +.. com.example.sagivproject.di.AppModule$ActivityBindingsModule
+di.AppModule +.. di.AppModule$ActivityBindingsModule
 @enduml

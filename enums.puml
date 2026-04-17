@@ -1,0 +1,40 @@
+@startuml
+enum enums.MedicationType {
++  PILL
++  HALF_TABLET
++  SYRUP
++  CREAM
++  INJECTION
++  VITAMIN
++  DROPS_FOR_SWALLOWING
++  EYE_DROPS
++  EAR_DROPS
+- String displayName
++ String getDisplayName()
+}
+
+
+enum enums.Operation {
++  ADD
++  SUBTRACT
++  MULTIPLY
++  DIVIDE
++  POWER
++  SQRT
+}
+
+enum enums.MedicationStatus {
++  TAKEN
++  NOT_TAKEN
++  SNOOZED
+- String displayName
++ String getDisplayName()
+}
+
+
+enum enums.UserRole {
++  REGULAR
++  ADMIN
+}
+
+@enduml

@@ -1,5 +1,5 @@
 @startuml
-class com.example.sagivproject.dialogs.ProfileImageDialog {
+class dialogs.ProfileImageDialog {
 - {static} String ARG_HAS_IMAGE
 - boolean hasImage
 - ImagePickerListener listener
@@ -10,13 +10,13 @@ class com.example.sagivproject.dialogs.ProfileImageDialog {
 }
 
 
-interface com.example.sagivproject.dialogs.ProfileImageDialog$ImagePickerListener {
+interface dialogs.ProfileImageDialog$ImagePickerListener {
 ~ void onCamera()
 ~ void onGallery()
 ~ void onDelete()
 }
 
-class com.example.sagivproject.dialogs.UserDialog {
+class dialogs.UserDialog {
 - {static} String ARG_USER
 ~ Validator validator
 ~ CalendarUtil calendarUtil
@@ -31,11 +31,11 @@ class com.example.sagivproject.dialogs.UserDialog {
 }
 
 
-interface com.example.sagivproject.dialogs.UserDialog$UserDialogListener {
+interface dialogs.UserDialog$UserDialogListener {
 ~ void onSubmit(String,String,long,String,String)
 }
 
-class com.example.sagivproject.dialogs.MedicationDialog {
+class dialogs.MedicationDialog {
 - {static} String ARG_MEDICATION
 - ArrayList<String> selectedHours
 - ChipGroup chipGroupSelectedHours
@@ -55,17 +55,17 @@ class com.example.sagivproject.dialogs.MedicationDialog {
 }
 
 
-interface com.example.sagivproject.dialogs.MedicationDialog$OnMedicationSubmitListener {
+interface dialogs.MedicationDialog$OnMedicationSubmitListener {
 ~ void onAdd(Medication)
 ~ void onEdit(Medication)
 }
 
 
 
-com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.ProfileImageDialog
-com.example.sagivproject.dialogs.ProfileImageDialog +.. com.example.sagivproject.dialogs.ProfileImageDialog$ImagePickerListener
-com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.UserDialog
-com.example.sagivproject.dialogs.UserDialog +.. com.example.sagivproject.dialogs.UserDialog$UserDialogListener
-com.example.sagivproject.bases.BaseDialog <|-- com.example.sagivproject.dialogs.MedicationDialog
-com.example.sagivproject.dialogs.MedicationDialog +.. com.example.sagivproject.dialogs.MedicationDialog$OnMedicationSubmitListener
+bases.BaseDialog <|-- dialogs.ProfileImageDialog
+dialogs.ProfileImageDialog +.. dialogs.ProfileImageDialog$ImagePickerListener
+bases.BaseDialog <|-- dialogs.UserDialog
+dialogs.UserDialog +.. dialogs.UserDialog$UserDialogListener
+bases.BaseDialog <|-- dialogs.MedicationDialog
+dialogs.MedicationDialog +.. dialogs.MedicationDialog$OnMedicationSubmitListener
 @enduml

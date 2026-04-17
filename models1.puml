@@ -1,0 +1,111 @@
+@startuml
+class models.Medication {
+- String id
+- String name
+- String details
+- MedicationType type
+- List<String> reminderHours
++ String getId()
++ void setId(String)
++ String getName()
++ void setName(String)
++ String getDetails()
++ void setDetails(String)
++ MedicationType getType()
++ void setType(MedicationType)
++ List<String> getReminderHours()
++ void setReminderHours(List<String>)
++ String toString()
+}
+
+
+class models.TipOfTheDay {
+- String id
+- String tip
+- String date
++ String getId()
++ void setId(String)
++ String getTip()
++ void setTip(String)
++ String getDate()
++ void setDate(String)
++ String toString()
+}
+
+
+class models.User {
+- {static} int YEAR
+- {static} int DAY_OF_YEAR
+- String id
+- String email
+- UserRole role
+- String firstName
+- String lastName
+- long birthDateMillis
+- String password
+- String profileImage
+- HashMap<String,Medication> medications
+- HashMap<String,DailyStats> dailyStats
+- HashMap<String,EmergencyContact> emergencyContacts
++ String getId()
++ void setId(String)
++ String getFirstName()
++ void setFirstName(String)
++ String getLastName()
++ void setLastName(String)
++ long getBirthDateMillis()
++ void setBirthDateMillis(long)
++ int getAge()
++ String getEmail()
++ void setEmail(String)
++ String getPassword()
++ void setPassword(String)
++ UserRole getRole()
++ void setRole(UserRole)
++ boolean isAdmin()
++ String getProfileImage()
++ void setProfileImage(String)
++ HashMap<String,Medication> getMedications()
++ void setMedications(HashMap<String,Medication>)
++ HashMap<String,DailyStats> getDailyStats()
++ void setDailyStats(HashMap<String,DailyStats>)
++ DailyStats getTodayStats()
++ HashMap<String,EmergencyContact> getEmergencyContacts()
++ void setEmergencyContacts(HashMap<String,EmergencyContact>)
++ String getFullName()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+
+
+class models.MedicationUsage {
+- String medicationId
+- String medicationName
+- String time
+- String date
+- String scheduledTime
+- MedicationStatus status
++ String getMedicationName()
++ void setMedicationName(String)
++ String getTime()
++ void setTime(String)
++ String getDate()
++ void setDate(String)
++ String getScheduledTime()
++ void setScheduledTime(String)
++ MedicationStatus getStatus()
++ void setStatus(MedicationStatus)
++ String getId()
++ void setId(String)
++ String toString()
+}
+
+
+
+
+models.Idable <|.. models.Medication
+models.Idable <|.. models.TipOfTheDay
+models.Idable <|.. models.User
+models.Idable <|.. models.MedicationUsage
+@enduml

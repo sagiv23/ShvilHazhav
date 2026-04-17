@@ -1,5 +1,5 @@
 @startuml
-class com.example.sagivproject.ui.LoggedOutMenuFragment {
+class ui.LoggedOutMenuFragment {
 - MenuNavigationListener navigationListener
 + void onAttach(Context)
 + View onCreateView(LayoutInflater,ViewGroup,Bundle)
@@ -8,7 +8,7 @@ class com.example.sagivproject.ui.LoggedOutMenuFragment {
 }
 
 
-class com.example.sagivproject.ui.AdminMenuFragment {
+class ui.AdminMenuFragment {
 - MenuNavigationListener navigationListener
 + void onAttach(Context)
 + View onCreateView(LayoutInflater,ViewGroup,Bundle)
@@ -16,7 +16,7 @@ class com.example.sagivproject.ui.AdminMenuFragment {
 }
 
 
-class com.example.sagivproject.ui.LoggedInMenuFragment {
+class ui.LoggedInMenuFragment {
 - MenuNavigationListener navigationListener
 + void onAttach(Context)
 + View onCreateView(LayoutInflater,ViewGroup,Bundle)
@@ -27,7 +27,7 @@ class com.example.sagivproject.ui.LoggedInMenuFragment {
 
 
 
-androidx.fragment.app.Fragment <|-- com.example.sagivproject.ui.LoggedOutMenuFragment
-androidx.fragment.app.Fragment <|-- com.example.sagivproject.ui.AdminMenuFragment
-androidx.fragment.app.Fragment <|-- com.example.sagivproject.ui.LoggedInMenuFragment
+androidx.fragment.app.Fragment <|-- ui.LoggedOutMenuFragment
+androidx.fragment.app.Fragment <|-- ui.AdminMenuFragment
+androidx.fragment.app.Fragment <|-- ui.LoggedInMenuFragment
 @enduml

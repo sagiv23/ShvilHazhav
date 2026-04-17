@@ -2,8 +2,6 @@ package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
-
 /**
  * Represents a single message within a forum category.
  * <p>
@@ -16,7 +14,7 @@ import java.io.Serializable;
  * This ensures that if a user changes their name or role, all their past messages reflect the update automatically.
  * </p>
  */
-public class ForumMessage implements Serializable, Idable {
+public class ForumMessage implements Idable {
     private String id;
     private String message;
     private long timestamp;

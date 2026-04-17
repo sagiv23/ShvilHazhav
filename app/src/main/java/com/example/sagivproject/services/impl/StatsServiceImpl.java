@@ -8,11 +8,7 @@ import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IStatsService;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,115 +19,120 @@ import javax.inject.Inject;
 /**
  * Implementation of the {@link IStatsService} interface.
  * <p>
- * This class handles updating daily statistics for the math game in the Firebase database.
- * It uses atomic transactions to ensure that the correct and wrong answer counters
- * for the current day are incremented correctly and that data remains consistent across
- * multiple updates.
+ * This class handles updating daily statistics for the math game and memory game in the Firebase database.
+ * It inherits from {@link BaseDatabaseService} to leverage common database operations and ensure
+ * consistency across services.
  * </p>
  */
-public class StatsServiceImpl implements IStatsService {
+public class StatsServiceImpl extends BaseDatabaseService<DailyStats> implements IStatsService {
     private static final String USERS_PATH = "users";
     private static final String FIELD_DAILY_STATS = "dailyStats";
-
-    private final DatabaseReference databaseReference;
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     /**
      * Constructs a new StatsServiceImpl.
      *
-     * @param databaseReference The root DatabaseReference injected by Hilt.
+     * @param firebaseDatabase The FirebaseDatabase instance injected by Hilt.
      */
     @Inject
-    public StatsServiceImpl(DatabaseReference databaseReference) {
-        this.databaseReference = databaseReference.child(USERS_PATH);
+    public StatsServiceImpl(FirebaseDatabase firebaseDatabase) {
+        super(firebaseDatabase, USERS_PATH, DailyStats.class);
     }
 
     /**
-     * Updates the daily math statistics for a specific user using a Firebase transaction.
-     * <p>
-     * Increments the 'mathCorrect' counter if {@code correct} is true, or 'mathWrong'
-     * if false. The transaction handles the case where the {@link DailyStats} object
-     * for the current date doesn't exist yet by creating a new instance.
-     * </p>
+     * Generates the database path for a user's daily stats.
      *
-     * @param uid     The unique identifier of the user.
-     * @param correct true if the answer was correct, false if it was wrong.
+     * @param uid  The user's unique identifier.
+     * @param date The date string in "yyyy-MM-dd" format.
+     * @return The database path string.
+     */
+    private String getStatsPath(String uid, String date) {
+        return USERS_PATH + "/" + uid + "/" + FIELD_DAILY_STATS + "/" + date;
+    }
+
+    /**
+     * Gets today's date string in the "yyyy-MM-dd" format.
+     *
+     * @return Today's date string.
+     */
+    private String getTodayDate() {
+        return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date());
+    }
+
+    /**
+     * Updates the daily math game statistics for a specific user.
+     * If no statistics exist for today, a new entry is created.
+     *
+     * @param uid     The user's unique identifier.
+     * @param correct True if the answer was correct, false otherwise.
      */
     @Override
     public void updateDailyMathStats(@NonNull String uid, boolean correct) {
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        databaseReference.child(uid).child(FIELD_DAILY_STATS).child(today).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                DailyStats stats = currentData.getValue(DailyStats.class);
-                if (stats == null) stats = new DailyStats();
-                if (correct) stats.addMathCorrect();
-                else stats.addMathWrong();
-                currentData.setValue(stats);
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-
-            }
-        });
+        String today = getTodayDate();
+        runTransaction(getStatsPath(uid, today), stats -> {
+            DailyStats currentStats = (stats != null) ? stats : new DailyStats();
+            currentStats.setId(today);
+            if (correct) currentStats.addMathCorrect();
+            else currentStats.addMathWrong();
+            return currentStats;
+        }, null);
     }
 
     /**
-     * Updates the daily memory statistics for a specific user using a Firebase transaction.
+     * Updates the daily memory game statistics for a specific user.
+     * Increments the games played count and win count if applicable.
      *
-     * @param uid   The unique identifier of the user.
-     * @param isWin true if the user won the game, false otherwise.
+     * @param uid   The user's unique identifier.
+     * @param isWin True if the user won the game, false otherwise.
      */
     @Override
     public void updateDailyMemoryStats(@NonNull String uid, boolean isWin) {
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        databaseReference.child(uid).child(FIELD_DAILY_STATS).child(today).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                DailyStats stats = currentData.getValue(DailyStats.class);
-                if (stats == null) stats = new DailyStats();
-                stats.addMemoryGamePlayed();
-                if (isWin) {
-                    stats.addMemoryWin();
-                }
-                currentData.setValue(stats);
-                return Transaction.success(currentData);
+        String today = getTodayDate();
+        runTransaction(getStatsPath(uid, today), stats -> {
+            DailyStats currentStats = (stats != null) ? stats : new DailyStats();
+            currentStats.setId(today);
+            currentStats.addMemoryGamePlayed();
+            if (isWin) {
+                currentStats.addMemoryWin();
             }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-            }
-        });
+            return currentStats;
+        }, null);
     }
 
+    /**
+     * Logs medication usage for a specific user and updates daily statistics.
+     * Tracks medication taken or missed and adds the usage log entry.
+     *
+     * @param uid      The user's unique identifier.
+     * @param usage    The medication usage information to log.
+     * @param callback Optional callback to be notified when the operation completes or fails.
+     */
     @Override
     public void logMedicationUsage(@NonNull String uid, @NonNull MedicationUsage usage, @Nullable DatabaseCallback<Void> callback) {
-        databaseReference.child(uid).child(FIELD_DAILY_STATS).child(usage.getDate()).runTransaction(new Transaction.Handler() {
-            @NonNull
+        runTransaction(getStatsPath(uid, usage.getDate()), stats -> {
+            DailyStats currentStats = (stats != null) ? stats : new DailyStats();
+            currentStats.setId(usage.getDate());
+
+            if (usage.getStatus() == MedicationStatus.TAKEN) {
+                currentStats.addMedicationTaken();
+            } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) {
+                currentStats.addMedicationMissed();
+            }
+
+            currentStats.addMedicationUsageLog(usage);
+            return currentStats;
+        }, new DatabaseCallback<>() {
             @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                DailyStats stats = currentData.getValue(DailyStats.class);
-                if (stats == null) stats = new DailyStats();
-
-                if (usage.getStatus() == MedicationStatus.TAKEN) {
-                    stats.addMedicationTaken();
-                } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) {
-                    stats.addMedicationMissed();
+            public void onCompleted(DailyStats result) {
+                if (callback != null) {
+                    callback.onCompleted(null);
                 }
-
-                stats.addMedicationUsageLog(usage);
-                currentData.setValue(stats);
-                return Transaction.success(currentData);
             }
 
             @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+            public void onFailed(Exception e) {
                 if (callback != null) {
-                    if (error != null) callback.onFailed(error.toException());
-                    else callback.onCompleted(null);
+                    callback.onFailed(e);
                 }
             }
         });

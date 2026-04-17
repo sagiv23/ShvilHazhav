@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.example.sagivproject.models.enums.MedicationStatus;
 
-import java.io.Serializable;
-
 /**
  * Represents a single instance of medication usage or a scheduled dose status entry.
  * <p>
@@ -14,7 +12,7 @@ import java.io.Serializable;
  * (e.g., TAKEN, NOT_TAKEN, SNOOZED). It is used for historical logging and compliance tracking.
  * </p>
  */
-public class MedicationUsage implements Serializable, Idable {
+public class MedicationUsage implements Idable {
     private String medicationId;
     private String medicationName;
     /**
