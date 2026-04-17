@@ -33,32 +33,6 @@ class com.example.sagivproject.ui.SimpleXYGraphView$Point {
 + float y
 }
 
-class com.example.sagivproject.ui.LoggedOutMenuFragment {
-- MenuNavigationListener navigationListener
-+ void onAttach(Context)
-+ View onCreateView(LayoutInflater,ViewGroup,Bundle)
-- void setupNavigationButton(View,int,int)
-+ void onDetach()
-}
-
-
-class com.example.sagivproject.ui.AdminMenuFragment {
-- MenuNavigationListener navigationListener
-+ void onAttach(Context)
-+ View onCreateView(LayoutInflater,ViewGroup,Bundle)
-+ void onDetach()
-}
-
-
-class com.example.sagivproject.ui.LoggedInMenuFragment {
-- MenuNavigationListener navigationListener
-+ void onAttach(Context)
-+ View onCreateView(LayoutInflater,ViewGroup,Bundle)
-- void setupNavigationButton(View,int,int)
-+ void onDetach()
-}
-
-
 interface com.example.sagivproject.ui.MenuNavigationListener {
 ~ void onNavigate(int)
 ~ void onNavigate(int,Bundle)
@@ -68,7 +42,4 @@ interface com.example.sagivproject.ui.MenuNavigationListener {
 
 android.view.View <|-- com.example.sagivproject.ui.SimpleXYGraphView
 com.example.sagivproject.ui.SimpleXYGraphView +.. com.example.sagivproject.ui.SimpleXYGraphView$Point
-androidx.fragment.app.Fragment <|-- com.example.sagivproject.ui.LoggedOutMenuFragment
-androidx.fragment.app.Fragment <|-- com.example.sagivproject.ui.AdminMenuFragment
-androidx.fragment.app.Fragment <|-- com.example.sagivproject.ui.LoggedInMenuFragment
 @enduml
