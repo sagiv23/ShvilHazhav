@@ -1,0 +1,35 @@
+@startuml
+class services.notifications.AlarmScheduler {
+- Context context
+- AlarmManager alarmManager
++ void schedule(Medication)
++ void scheduleSpecificTime(Medication,String,boolean)
++ void cancel(Medication)
++ void cancelSpecificTime(String,String)
+}
+
+
+class services.notifications.AlarmReceiver {
+- {static} String TAG
+~ NotificationService notificationService
+~ AlarmScheduler alarmScheduler
+~ SharedPreferencesUtil sharedPreferencesUtil
++ void onReceive(Context,Intent)
+}
+
+
+class services.notifications.BootReceiver {
+- {static} String TAG
+~ AlarmScheduler alarmScheduler
+~ IDatabaseService databaseService
+~ SharedPreferencesUtil sharedPreferencesUtil
++ void onReceive(Context,Intent)
+- void rescheduleAlarms()
+}
+
+
+
+
+android.content.BroadcastReceiver <|-- services.notifications.AlarmReceiver
+android.content.BroadcastReceiver <|-- services.notifications.BootReceiver
+@enduml

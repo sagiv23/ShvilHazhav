@@ -1,0 +1,28 @@
+@startuml
+class services.notifications.NotificationService {
++ {static} String MEDICATIONS_CHANNEL_ID
++ {static} String FALL_DETECTION_CHANNEL_ID
+- {static} String MEDICATIONS_GROUP
+- Context context
+- NotificationManagerCompat manager
+- void createChannels()
++ Notification getFallDetectionForegroundNotification()
++ void showFallDetectedNotification()
++ void showMedicationNotification(String,String,String,int)
+- NotificationCompat.Action createAction(String,String,String,int,MedicationStatus,int)
+- void showSummaryNotification(String,String)
+}
+
+
+class services.notifications.MedicationActionReceiver {
+- {static} String TAG
+~ IDatabaseService databaseService
+~ SharedPreferencesUtil sharedPreferencesUtil
++ void onReceive(Context,Intent)
+}
+
+
+
+
+android.content.BroadcastReceiver <|-- services.notifications.MedicationActionReceiver
+@enduml
