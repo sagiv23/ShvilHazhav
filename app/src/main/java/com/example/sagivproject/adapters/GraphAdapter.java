@@ -1,6 +1,5 @@
 package com.example.sagivproject.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import com.example.sagivproject.ui.SimpleXYGraphView;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.qualifiers.ActivityContext;
-
 /**
  * A RecyclerView adapter for displaying a list of graphs, typically used within a {@link androidx.viewpager2.widget.ViewPager2}.
  * <p>
@@ -26,22 +23,18 @@ import dagger.hilt.android.qualifiers.ActivityContext;
  * </p>
  */
 public class GraphAdapter extends BaseAdapter<GraphData, GraphAdapter.GraphViewHolder> {
-    private final Context context;
 
     /**
      * Constructs a new GraphAdapter.
-     *
-     * @param context The {@link ActivityContext} used for layout inflation and resources.
      */
     @Inject
-    public GraphAdapter(@ActivityContext Context context) {
-        this.context = context;
+    public GraphAdapter() {
     }
 
     @NonNull
     @Override
     public GraphViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_graph, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_graph, parent, false);
         return new GraphViewHolder(view);
     }
 

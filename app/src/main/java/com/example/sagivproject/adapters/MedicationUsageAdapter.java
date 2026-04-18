@@ -1,6 +1,5 @@
 package com.example.sagivproject.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,6 @@ import com.example.sagivproject.models.MedicationUsage;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.qualifiers.ActivityContext;
-
 /**
  * A RecyclerView adapter for displaying a user's medication usage logs.
  * <p>
@@ -27,22 +24,18 @@ import dagger.hilt.android.qualifiers.ActivityContext;
  * </p>
  */
 public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, MedicationUsageAdapter.UsageViewHolder> {
-    private final Context context;
 
     /**
      * Constructs a new MedicationUsageAdapter.
-     *
-     * @param context The {@link ActivityContext} used for resource access.
      */
     @Inject
-    public MedicationUsageAdapter(@ActivityContext Context context) {
-        this.context = context;
+    public MedicationUsageAdapter() {
     }
 
     @NonNull
     @Override
     public UsageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_medication_usage, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_medication_usage, parent, false);
         return new UsageViewHolder(view);
     }
 
@@ -64,7 +57,7 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
             default:
                 color = R.color.text_color;
         }
-        holder.txtStatus.setTextColor(ContextCompat.getColor(context, color));
+        holder.txtStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), color));
     }
 
     /**

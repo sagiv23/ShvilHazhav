@@ -1,6 +1,5 @@
 package com.example.sagivproject.adapters;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -36,8 +35,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.qualifiers.ActivityContext;
-
 /**
  * A RecyclerView adapter for displaying a list of a user's {@link Medication} objects.
  * <p>
@@ -47,7 +44,6 @@ import dagger.hilt.android.qualifiers.ActivityContext;
  * </p>
  */
 public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
-    private final Context context;
     private final Set<String> processingMedications = new HashSet<>();
     /**
      * Key: medicationId, Value: Map of scheduledTime -> MedicationStatus
@@ -57,12 +53,9 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
 
     /**
      * Constructs a new MedicationListAdapter.
-     *
-     * @param context The activity context used for layout inflation and resources.
      */
     @Inject
-    public MedicationListAdapter(@ActivityContext Context context) {
-        this.context = context;
+    public MedicationListAdapter() {
     }
 
     /**
@@ -126,14 +119,14 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
     @NonNull
     @Override
     public MedicationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_medication, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_medication, parent, false);
         return new MedicationViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MedicationViewHolder holder, int position) {
         Medication med = getItem(position);
-        Typeface typeface = ResourcesCompat.getFont(context, R.font.text_hebrew);
+        Typeface typeface = ResourcesCompat.getFont(holder.itemView.getContext(), R.font.text_hebrew);
 
         if (typeface != null) {
             SpannableString nameSpannable = new SpannableString(med.getName());
@@ -162,7 +155,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         }
 
         holder.btnMenu.setOnClickListener(v -> {
-            PopupMenu menu = new PopupMenu(context, v);
+            PopupMenu menu = new PopupMenu(v.getContext(), v);
             menu.inflate(R.menu.menu_medication_item);
             if (typeface != null) {
                 for (int i = 0; i < menu.getMenu().size(); i++) {
@@ -199,7 +192,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
      * @param status        The current {@link MedicationStatus} for this dose, or null if not yet logged.
      */
     private void addStatusRow(LinearLayout container, Medication med, String scheduledTime, MedicationStatus status) {
-        View rowView = LayoutInflater.from(context).inflate(R.layout.item_medication_status_row, container, false);
+        View rowView = LayoutInflater.from(container.getContext()).inflate(R.layout.item_medication_status_row, container, false);
         TextView txtTime = rowView.findViewById(R.id.txt_MedicationRow_ScheduledTime);
         Button btnTaken = rowView.findViewById(R.id.btn_MedicationRow_Taken);
         Button btnNotTaken = rowView.findViewById(R.id.btn_MedicationRow_NotTaken);
