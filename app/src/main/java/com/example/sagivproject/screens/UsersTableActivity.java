@@ -68,8 +68,8 @@ public class UsersTableActivity extends BaseActivity {
 
         currentUser = sharedPreferencesUtil.getUser();
 
-        findViewById(R.id.btn_UsersTable_add_user).setOnClickListener(v -> dialogService.showUserDialog(getSupportFragmentManager(), null, (fName, lName, birthDateMillis, email, password) ->
-                databaseService.getAuthService().addUser(fName, lName, birthDateMillis, email, password, new IAuthService.AddUserCallback() {
+        findViewById(R.id.btn_UsersTable_add_user).setOnClickListener(v -> dialogService.showUserDialog(getSupportFragmentManager(), null, newUser ->
+                databaseService.getAuthService().addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDateMillis(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
                     @Override
                     public void onSuccess(User user) {
                         usersList.add(user);
@@ -98,19 +98,19 @@ public class UsersTableActivity extends BaseActivity {
             @Override
             public void onUserClicked(User clickedUser) {
                 User userCopy = new User(clickedUser);
-                dialogService.showUserDialog(getSupportFragmentManager(), userCopy, (fName, lName, birthDate, email, password) ->
-                        databaseService.getAuthService().updateUser(userCopy, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
+                dialogService.showUserDialog(getSupportFragmentManager(), userCopy, updatedUser ->
+                        databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDateMillis(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
                             @Override
-                            public void onSuccess(User updatedUser) {
+                            public void onSuccess(User resultUser) {
                                 for (int i = 0; i < usersList.size(); i++) {
-                                    if (usersList.get(i).getId().equals(updatedUser.getId())) {
-                                        usersList.set(i, updatedUser);
+                                    if (usersList.get(i).getId().equals(resultUser.getId())) {
+                                        usersList.set(i, resultUser);
                                         break;
                                     }
                                 }
-                                if (updatedUser.getId().equals(currentUser.getId())) {
-                                    sharedPreferencesUtil.saveUser(updatedUser);
-                                    currentUser = updatedUser;
+                                if (resultUser.getId().equals(currentUser.getId())) {
+                                    sharedPreferencesUtil.saveUser(resultUser);
+                                    currentUser = resultUser;
                                 }
                                 refreshList();
 

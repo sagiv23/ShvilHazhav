@@ -138,8 +138,7 @@ public class GameHomeScreenActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-        displayTodayWins();
-        loadWins();
+        loadStats();
         gameStarted = false;
     }
 
@@ -154,7 +153,7 @@ public class GameHomeScreenActivity extends BaseActivity {
     /**
      * Fetches current user data from the database to refresh win/game counts.
      */
-    private void loadWins() {
+    private void loadStats() {
         databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
@@ -162,6 +161,7 @@ public class GameHomeScreenActivity extends BaseActivity {
                     sharedPreferencesUtil.saveUser(updatedUser);
                     user = updatedUser;
                 }
+                displayTodayWins();
             }
 
             @Override

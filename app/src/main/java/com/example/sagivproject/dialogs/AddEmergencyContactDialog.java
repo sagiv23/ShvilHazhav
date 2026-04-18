@@ -3,6 +3,7 @@ package com.example.sagivproject.dialogs;
 import android.app.Dialog;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sagivproject.R;
@@ -68,6 +69,7 @@ public class AddEmergencyContactDialog extends BaseDialog {
 
     @Override
     protected void setupViews(Dialog dialog) {
+        TextView tvTitle = dialog.findViewById(R.id.tv_dialog_contact_title);
         EditText etFirstName = dialog.findViewById(R.id.et_dialog_contact_first_name);
         EditText etLastName = dialog.findViewById(R.id.et_dialog_contact_last_name);
         EditText etPhone = dialog.findViewById(R.id.et_dialog_contact_phone);
@@ -75,9 +77,14 @@ public class AddEmergencyContactDialog extends BaseDialog {
         Button btnCancel = dialog.findViewById(R.id.btn_dialog_cancel_contact);
 
         if (contactToEdit != null) {
+            tvTitle.setText(R.string.edit_emergency_contact);
+            btnSave.setText(R.string.save);
             etFirstName.setText(contactToEdit.getFirstName());
             etLastName.setText(contactToEdit.getLastName());
             etPhone.setText(contactToEdit.getPhoneNumber());
+        } else {
+            tvTitle.setText(R.string.add_emergency_contact);
+            btnSave.setText(R.string.add);
         }
 
         btnSave.setOnClickListener(v -> {
@@ -90,7 +97,11 @@ public class AddEmergencyContactDialog extends BaseDialog {
             }
 
             if (listener != null) {
-                listener.onContactSubmit(fName, lName, phone);
+                EmergencyContact contact = contactToEdit == null ? new EmergencyContact() : contactToEdit;
+                contact.setFirstName(fName);
+                contact.setLastName(lName);
+                contact.setPhoneNumber(phone);
+                listener.onContactSubmit(contact);
             }
             dismiss();
         });
@@ -143,10 +154,8 @@ public class AddEmergencyContactDialog extends BaseDialog {
         /**
          * Called when the contact details are submitted and valid.
          *
-         * @param firstName   The entered first name.
-         * @param lastName    The entered last name.
-         * @param phoneNumber The entered phone number.
+         * @param contact The contact object.
          */
-        void onContactSubmit(String firstName, String lastName, String phoneNumber);
+        void onContactSubmit(EmergencyContact contact);
     }
 }

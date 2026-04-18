@@ -90,7 +90,7 @@ public class EmergencyContactsActivity extends BaseActivity {
                 runWithPermissions(this::updatePermissionUI, Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION));
 
         findViewById(R.id.btn_add_contact_dialog).setOnClickListener(v ->
-                dialogService.showEmergencyContactDialog(getSupportFragmentManager(), null, this::addEmergencyContact)
+                dialogService.showEmergencyContactDialog(getSupportFragmentManager(), null, contact -> addEmergencyContact(contact.getFirstName(), contact.getLastName(), contact.getPhoneNumber()))
         );
 
         findViewById(R.id.btn_pick_contact).setOnClickListener(v ->
@@ -115,21 +115,18 @@ public class EmergencyContactsActivity extends BaseActivity {
         adapter.setListener(new EmergencyContactsAdapter.OnContactActionListener() {
             @Override
             public void onEdit(EmergencyContact contact) {
-                dialogService.showEmergencyContactDialog(getSupportFragmentManager(), contact, (firstName, lastName, phoneNumber) -> {
-                    EmergencyContact updatedContact = new EmergencyContact(contact.getId(), firstName, lastName, phoneNumber);
-                    databaseService.getEmergencyService().updateContact(user.getId(), updatedContact, new IDatabaseService.DatabaseCallback<>() {
-                        @Override
-                        public void onCompleted(Void object) {
-                            Toast.makeText(EmergencyContactsActivity.this, "איש הקשר עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                            loadUserFromDatabase();
-                        }
+                dialogService.showEmergencyContactDialog(getSupportFragmentManager(), contact, updatedContact -> databaseService.getEmergencyService().updateContact(user.getId(), updatedContact, new IDatabaseService.DatabaseCallback<>() {
+                    @Override
+                    public void onCompleted(Void object) {
+                        Toast.makeText(EmergencyContactsActivity.this, "איש הקשר עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                        loadUserFromDatabase();
+                    }
 
-                        @Override
-                        public void onFailed(Exception e) {
-                            Toast.makeText(EmergencyContactsActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                });
+                    @Override
+                    public void onFailed(Exception e) {
+                        Toast.makeText(EmergencyContactsActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
+                    }
+                }));
             }
 
             @Override
@@ -230,13 +227,14 @@ public class EmergencyContactsActivity extends BaseActivity {
                 if (dbUser != null) {
                     user = dbUser;
                     sharedPreferencesUtil.saveUser(user);
-                    loadContacts();
                 }
+                loadContacts();
             }
 
             @Override
             public void onFailed(Exception e) {
                 Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
+                loadContacts();
             }
         });
     }

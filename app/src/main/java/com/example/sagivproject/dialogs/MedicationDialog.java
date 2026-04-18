@@ -141,17 +141,14 @@ public class MedicationDialog extends BaseDialog {
                 return;
             }
 
-            Medication medicationData = new Medication();
+            Medication medicationData = medToEdit == null ? new Medication() : medToEdit;
             medicationData.setName(name);
             medicationData.setDetails(details);
             medicationData.setType(selectedType);
             medicationData.setReminderHours(new ArrayList<>(selectedHours));
 
-            if (medToEdit == null) {
-                if (listener != null) listener.onAdd(medicationData);
-            } else {
-                medicationData.setId(medToEdit.getId());
-                if (listener != null) listener.onEdit(medicationData);
+            if (listener != null) {
+                listener.onMedicationSubmit(medicationData);
             }
 
             dismiss();
@@ -288,13 +285,8 @@ public class MedicationDialog extends BaseDialog {
      */
     public interface OnMedicationSubmitListener {
         /**
-         * Called when a new medication is ready to be added.
+         * Called when a medication is ready to be added or edited.
          */
-        void onAdd(Medication medication);
-
-        /**
-         * Called when existing medication details have been modified.
-         */
-        void onEdit(Medication medication);
+        void onMedicationSubmit(Medication medication);
     }
 }

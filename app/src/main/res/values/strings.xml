@@ -137,6 +137,7 @@
     <string name="icon_daily_tip">אייקון טיפ יומי</string>
     <string name="emergency_contacts">אנשי קשר לחירום</string>
     <string name="add_emergency_contact">הוספת איש קשר לחירום</string>
+    <string name="edit_emergency_contact">עריכת איש קשר לחירום</string>
     <string name="phone_number">מספר טלפון</string>
     <string name="send_emergency_sms">שלח הודעת חירום (SMS)</string>
     <string name="call_emergency_109">התקשר למוקד 109</string>

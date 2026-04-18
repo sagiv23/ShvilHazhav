@@ -14,9 +14,7 @@ import java.util.Objects;
  * in the game (revealed, matched).
  * </p>
  */
-public class Card implements Idable {
-    private String id;
-    private String base64Content;
+public class Card extends ImageData {
     private boolean isRevealed = false;
     private boolean isMatched = false;
     private boolean wasRevealed;
@@ -25,45 +23,17 @@ public class Card implements Idable {
      * Default constructor required for Firebase deserialization (DataSnapshot.getValue).
      */
     public Card() {
+        super();
     }
 
     /**
      * Constructs a new Card with a specific ID and image content.
      *
-     * @param id            The identifier for the card, shared with its match.
-     * @param base64Content The Base64 encoded string of the card's image.
+     * @param id     The identifier for the card, shared with its match.
+     * @param base64 The Base64 encoded string of the card's image.
      */
-    public Card(String id, String base64Content) {
-        this.id = id;
-        this.base64Content = base64Content;
-    }
-
-    @Override
-    public String getId() {
-        return this.id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-     * Gets the Base64 image content of the card.
-     *
-     * @return Base64 string.
-     */
-    public String getBase64Content() {
-        return base64Content;
-    }
-
-    /**
-     * Sets the Base64 image content of the card.
-     *
-     * @param base64Content New image content.
-     */
-    public void setBase64Content(String base64Content) {
-        this.base64Content = base64Content;
+    public Card(String id, String base64) {
+        super(id, base64);
     }
 
     /**
@@ -127,24 +97,23 @@ public class Card implements Idable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Card card = (Card) o;
         return isRevealed == card.isRevealed &&
-                isMatched == card.isMatched &&
-                Objects.equals(id, card.id) &&
-                Objects.equals(base64Content, card.base64Content);
+                isMatched == card.isMatched;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, base64Content, isRevealed, isMatched);
+        return Objects.hash(super.hashCode(), isRevealed, isMatched);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "Card{" +
-                "id='" + id + '\'' +
-                ", base64Content='" + base64Content + '\'' +
+                "id='" + getId() + '\'' +
+                ", base64='" + getBase64() + '\'' +
                 ", isRevealed=" + isRevealed +
                 ", isMatched=" + isMatched +
                 ", wasRevealed=" + wasRevealed +

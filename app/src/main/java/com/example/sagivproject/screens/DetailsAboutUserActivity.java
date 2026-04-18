@@ -208,13 +208,13 @@ public class DetailsAboutUserActivity extends BaseActivity {
      * Displays the dialog for editing user profile details.
      */
     private void openEditDialog() {
-        dialogService.showUserDialog(getSupportFragmentManager(), user, (fName, lName, birthDate, email, password) ->
-                databaseService.getAuthService().updateUser(user, fName, lName, birthDate, email, password, new IAuthService.UpdateUserCallback() {
+        dialogService.showUserDialog(getSupportFragmentManager(), user, updatedUser ->
+                databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDateMillis(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
                     @Override
-                    public void onSuccess(User updatedUser) {
+                    public void onSuccess(User resultUser) {
                         Toast.makeText(DetailsAboutUserActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
-                        sharedPreferencesUtil.saveUser(updatedUser);
-                        user = updatedUser;
+                        sharedPreferencesUtil.saveUser(resultUser);
+                        user = resultUser;
                         loadUserDetailsToUI();
                     }
 

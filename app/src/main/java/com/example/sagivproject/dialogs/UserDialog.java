@@ -118,8 +118,15 @@ public class UserDialog extends BaseDialog {
                 return;
             }
 
+            User userData = user == null ? new User() : user;
+            userData.setFirstName(fName);
+            userData.setLastName(lName);
+            userData.setBirthDateMillis(birthDateMillis);
+            userData.setEmail(email);
+            userData.setPassword(password);
+
             if (listener != null) {
-                listener.onSubmit(fName, lName, birthDateMillis, email, password);
+                listener.onSubmit(userData);
             }
             dismiss();
         });
@@ -173,6 +180,6 @@ public class UserDialog extends BaseDialog {
     }
 
     public interface UserDialogListener {
-        void onSubmit(String fName, String lName, long birthDateMillis, String email, String password);
+        void onSubmit(User user);
     }
 }

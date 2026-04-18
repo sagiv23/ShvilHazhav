@@ -78,7 +78,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         holder.cardImage.setRotationY(0f);
 
         if (card.getIsMatched() || card.getIsRevealed()) {
-            imageUtil.loadImage(card.getBase64Content(), holder.cardImage);
+            imageUtil.loadImage(card.getBase64(), holder.cardImage);
             if (card.getIsMatched()) {
                 holder.itemView.setAlpha(0.6f);
             }
@@ -88,7 +88,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
 
         if (card.getIsRevealed() && !card.wasRevealed()) {
             if (listener != null) {
-                listener.animateFlipOpen(holder.cardImage, card.getBase64Content());
+                listener.animateFlipOpen(holder.cardImage, card.getBase64());
             }
             card.setWasRevealed(true);
         } else if (!card.getIsRevealed() && card.wasRevealed()) {
