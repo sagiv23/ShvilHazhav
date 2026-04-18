@@ -1,0 +1,71 @@
+@startuml
+class services.impl.AdapterService {
+- ForumAdapter forumAdapter
+- ForumCategoryAdapter forumCategoryAdapter
+- MedicationListAdapter medicationListAdapter
+- MemoryGameAdapter memoryGameAdapter
+- MemoryGameLogAdapter memoryGameLogAdapter
+- UsersTableAdapter usersTableAdapter
+- MedicationImagesTableAdapter medicationImagesTableAdapter
+- LeaderboardAdapter leaderboardAdapter
+- MedicationUsageAdapter medicationUsageAdapter
+- EmergencyContactsAdapter emergencyContactsAdapter
+- GraphAdapter graphAdapter
++ ForumAdapter getForumAdapter()
++ ForumCategoryAdapter getForumCategoryAdapter()
++ MedicationListAdapter getMedicationListAdapter()
++ MemoryGameAdapter getMemoryGameAdapter()
++ MemoryGameLogAdapter getMemoryGameLogAdapter()
++ UsersTableAdapter getUsersTableAdapter()
++ MedicationImagesTableAdapter getMedicationImagesTableAdapter()
++ LeaderboardAdapter getLeaderboardAdapter()
++ MedicationUsageAdapter getMedicationUsageAdapter()
++ EmergencyContactsAdapter getEmergencyContactsAdapter()
++ GraphAdapter getGraphAdapter()
+}
+
+
+abstract class services.impl.BaseDatabaseService {
+- {static} String TAG
+# DatabaseReference databaseReference
+- String path
+- Class<T> clazz
+# String generateId()
+# void create(T,IDatabaseService.DatabaseCallback<Void>)
+# void get(String,IDatabaseService.DatabaseCallback<T>)
+# void getAll(IDatabaseService.DatabaseCallback<List<T>>)
+# void delete(String,IDatabaseService.DatabaseCallback<Void>)
+# void update(String,UnaryOperator<T>,IDatabaseService.DatabaseCallback<T>)
+# DatabaseReference readData(String)
+# void writeData(String,Object,IDatabaseService.DatabaseCallback<Void>)
+# void deleteData(String,IDatabaseService.DatabaseCallback<Void>)
+# void getData(String,IDatabaseService.DatabaseCallback<T>)
+# void getDataList(String,IDatabaseService.DatabaseCallback<List<T>>)
+# void runTransaction(String,UnaryOperator<T>,IDatabaseService.DatabaseCallback<T>)
+}
+
+
+class services.impl.AuthServiceImpl {
+- {static} String ERROR_INVALID_CREDENTIALS
+- {static} String ERROR_LOGIN
+- {static} String ERROR_EMAIL_TAKEN
+- {static} String ERROR_CHECKING_EMAIL
+- {static} String ERROR_UPDATING_DETAILS
+- IUserService userService
+- SharedPreferencesUtil sharedPreferencesUtil
++ void login(String,String,LoginCallback)
++ void register(String,String,long,String,String,RegisterCallback)
++ void addUser(String,String,long,String,String,AddUserCallback)
++ void updateUser(User,String,String,long,String,String,UpdateUserCallback)
++ String logout()
+- void createUser(String,String,long,String,String,DatabaseCallback<User>)
+- void applyUserUpdate(User,String,String,long,String,String,UpdateUserCallback)
+- void handleUserCreation(String,String,long,String,String,DatabaseCallback<User>,Consumer<String>)
+}
+
+
+
+
+services.IAdapterService <|.. services.impl.AdapterService
+services.IAuthService <|.. services.impl.AuthServiceImpl
+@enduml

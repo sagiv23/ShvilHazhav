@@ -1,0 +1,46 @@
+@startuml
+class services.impl.MedicationServiceImpl {
+- {static} String USERS_PATH
+- {static} String MEDICATIONS_PATH
+- {static} String FIELD_DAILY_STATS
++ String generateMedicationId()
++ void createNewMedication(String,Medication,DatabaseCallback<Void>)
++ void getUserMedicationList(String,DatabaseCallback<List<Medication>>)
++ void deleteMedication(String,String,DatabaseCallback<Void>)
++ void updateMedication(String,Medication,DatabaseCallback<Void>)
++ void getMedicationUsageLogs(String,DatabaseCallback<List<MedicationUsage>>)
++ void clearMedicationUsageLogs(String,DatabaseCallback<Void>)
+- String getMedicationPath(String)
+- String getMedicationItemPath(String,String)
+}
+
+
+class services.impl.ImageServiceImpl {
+- {static} String IMAGES_PATH
++ void getAllImages(DatabaseCallback<List<ImageData>>)
++ void createImage(ImageData,DatabaseCallback<Void>)
++ void updateAllImages(List<ImageData>,DatabaseCallback<Void>)
++ void deleteImage(String,DatabaseCallback<Void>)
+}
+
+
+class services.impl.ForumServiceImpl {
+- {static} String FORUM_PATH
+- IUserService userService
++ void sendMessage(User,String,String,DatabaseCallback<Void>)
++ void listenToMessages(String,DatabaseCallback<List<ForumMessage>>)
++ void deleteMessage(String,String,DatabaseCallback<Void>)
+- String getCategoryPath(String)
+- DatabaseReference getCategoryMessagesRef(String)
+}
+
+
+
+
+services.IMedicationService <|.. services.impl.MedicationServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.MedicationServiceImpl
+services.IImageService <|.. services.impl.ImageServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.ImageServiceImpl
+services.IForumService <|.. services.impl.ForumServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.ForumServiceImpl
+@enduml

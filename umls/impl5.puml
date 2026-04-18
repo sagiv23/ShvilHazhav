@@ -1,0 +1,28 @@
+@startuml
+class services.impl.StatsServiceImpl {
+- {static} String USERS_PATH
+- {static} String FIELD_DAILY_STATS
+- {static} String DATE_FORMAT
+- String getStatsPath(String,String)
+- String getTodayDate()
++ void updateDailyMathStats(String,boolean)
++ void updateDailyMemoryStats(String,boolean)
++ void logMedicationUsage(String,MedicationUsage,DatabaseCallback<Void>)
+}
+
+
+class services.impl.TipOfTheDayServiceImpl {
+- {static} String TIP_OF_THE_DAY_PATH
+- {static} String DATE_FORMAT
++ void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay>)
++ void saveTipIfNotExists(TipOfTheDay,IDatabaseService.DatabaseCallback<TipOfTheDay>)
+}
+
+
+
+
+services.IStatsService <|.. services.impl.StatsServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.StatsServiceImpl
+services.ITipOfTheDayService <|.. services.impl.TipOfTheDayServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.TipOfTheDayServiceImpl
+@enduml

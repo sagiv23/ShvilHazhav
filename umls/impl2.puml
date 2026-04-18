@@ -1,0 +1,63 @@
+@startuml
+class services.impl.DatabaseService {
+- IAuthService authService
+- IUserService userService
+- IMedicationService medicationService
+- IMemoryGameService gameService
+- IStatsService statsService
+- IForumService forumService
+- IImageService imageService
+- IForumCategoriesService forumCategoriesService
+- ITipOfTheDayService tipOfTheDayService
+- IEmergencyService emergencyService
++ IAuthService getAuthService()
++ IUserService getUserService()
++ IMedicationService getMedicationService()
++ IMemoryGameService getGameService()
++ IStatsService getStatsService()
++ IForumService getForumService()
++ IImageService getImageService()
++ IForumCategoriesService getForumCategoriesService()
++ ITipOfTheDayService getTipOfTheDayService()
++ IEmergencyService getEmergencyService()
+}
+
+
+class services.impl.DialogService {
+- Provider<MedicationDialog> medicationDialogProvider
+- Provider<UserDialog> userDialogProvider
+- Provider<EditForumCategoryDialog> editForumCategoryDialogProvider
+- Provider<FullImageDialog> fullImageDialogProvider
+- Provider<ProfileImageDialog> profileImageDialogProvider
+- Provider<ConfirmDialog> confirmDialogProvider
+- Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider
++ void showMedicationDialog(FragmentManager,Medication,MedicationDialog.OnMedicationSubmitListener)
++ void showUserDialog(FragmentManager,User,UserDialog.UserDialogListener)
++ void showEditForumCategoryDialog(FragmentManager,ForumCategory,EditForumCategoryDialog.EditForumCategoryDialogListener)
++ void showFullImageDialog(FragmentManager,Drawable)
++ void showProfileImageDialog(FragmentManager,boolean,ProfileImageDialog.ImagePickerListener)
++ void showEmergencyContactDialog(FragmentManager,EmergencyContact,AddEmergencyContactDialog.AddEmergencyContactListener)
++ void showConfirmDialog(FragmentManager,String,String,String,String,Runnable)
+}
+
+
+class services.impl.EmergencyServiceImpl {
+- {static} String USERS_PATH
+- {static} String CONTACTS_PATH
++ String generateContactId()
++ void addContact(String,String,String,String,DatabaseCallback<Void>)
++ void deleteContact(String,String,DatabaseCallback<Void>)
++ void updateContact(String,EmergencyContact,DatabaseCallback<Void>)
++ void sendEmergencyAlert(Context,List<EmergencyContact>,String,DatabaseCallback<Void>)
+- String getContactsPath(String)
+- String getContactItemPath(String,String)
+}
+
+
+
+
+services.IDatabaseService <|.. services.impl.DatabaseService
+services.IDialogService <|.. services.impl.DialogService
+services.IEmergencyService <|.. services.impl.EmergencyServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.EmergencyServiceImpl
+@enduml

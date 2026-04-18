@@ -1,0 +1,52 @@
+@startuml
+class services.impl.FallDetectionServiceImpl {
+- {static} String TAG
+- {static} int NOTIFICATION_ID
+- {static} float FALL_THRESHOLD
+- {static} long MIN_TIME_BETWEEN_ALERTS
+# IDatabaseService databaseService
+# SharedPreferencesUtil sharedPreferencesUtil
+# NotificationService notificationService
+- SensorManager sensorManager
+- Sensor accelerometer
+- FusedLocationProviderClient fusedLocationClient
+- long lastAlertTime
+- boolean isMonitoring
++ void onCreate()
++ int onStartCommand(Intent,int,int)
+- void startMonitoring()
+- void stopMonitoring()
++ void onSensorChanged(SensorEvent)
+- void handleFallDetected()
+- void sendEmergencyAlert(String)
++ void onDestroy()
++ IBinder onBind(Intent)
++ void onAccuracyChanged(Sensor,int)
+}
+
+
+class services.impl.FallDetectionManager {
+- Context context
++ void startMonitoring()
++ void stopMonitoring()
+}
+
+
+class services.impl.ForumCategoriesServiceImpl {
+- {static} String CATEGORIES_PATH
+- {static} String MESSAGES_PATH
++ void getCategories(IDatabaseService.DatabaseCallback<List<ForumCategory>>)
++ void addCategory(String,IDatabaseService.DatabaseCallback<Void>)
++ void deleteCategory(String,IDatabaseService.DatabaseCallback<Void>)
++ void updateCategoryName(String,String,IDatabaseService.DatabaseCallback<Void>)
+}
+
+
+
+
+android.hardware.SensorEventListener <|.. services.impl.FallDetectionServiceImpl
+android.app.Service <|-- services.impl.FallDetectionServiceImpl
+services.IFallDetectionService <|.. services.impl.FallDetectionManager
+services.IForumCategoriesService <|.. services.impl.ForumCategoriesServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.ForumCategoriesServiceImpl
+@enduml

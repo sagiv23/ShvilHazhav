@@ -1,0 +1,54 @@
+@startuml
+class services.impl.UserServiceImpl {
++ String generateUserId()
++ void createNewUser(User,DatabaseCallback<Void>)
++ void getUser(String,DatabaseCallback<User>)
++ void getUserList(DatabaseCallback<List<User>>)
++ void deleteUser(String,DatabaseCallback<Void>)
++ void getUserByEmailAndPassword(String,String,DatabaseCallback<User>)
++ void checkIfEmailExists(String,DatabaseCallback<Boolean>)
++ void updateUser(User,DatabaseCallback<Void>)
++ void updateUserRole(String,UserRole,DatabaseCallback<Void>)
+}
+
+class services.impl.MemoryGameServiceImpl {
+- {static} String ROOMS_PATH
+- {static} String TAG
+- {static} String FIELD_STATUS
+- {static} String FIELD_CARDS
+- {static} String FIELD_CURRENT_TURN_UID
+- {static} String FIELD_IS_REVEALED
+- {static} String FIELD_IS_MATCHED
+- {static} String FIELD_PROCESSING_MATCH
+- {static} String FIELD_WINNER_UID
+- {static} String STATUS_WAITING
+- {static} String STATUS_PLAYING
+- {static} String STATUS_FINISHED
+- DatabaseReference roomsReference
+- Map<String,ValueEventListener> roomStatusListeners
+- ValueEventListener activeGameListener
++ void findOrCreateRoom(User,DatabaseCallback<GameRoom>)
++ void getAllRoomsRealtime(DatabaseCallback<List<GameRoom>>)
++ void listenToRoomStatus(String,IRoomStatusCallback)
++ void removeRoomListener(String)
++ void cancelRoom(String,DatabaseCallback<Void>)
++ void initGameBoard(String,List<Card>,String,DatabaseCallback<Void>)
++ void listenToGame(String,DatabaseCallback<GameRoom>)
++ void stopListeningToGame(String)
++ void updateRoomField(String,String,Object)
++ void incrementScore(String,String,DatabaseCallback<Void>)
++ void finishGame(String,String,DatabaseCallback<Boolean>)
++ void updateCardStatus(String,int,boolean,boolean)
++ void setProcessing(String,boolean)
++ void setupForfeitOnDisconnect(String,String)
++ void removeForfeitOnDisconnect(String)
+}
+
+
+
+
+services.IUserService <|.. services.impl.UserServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.UserServiceImpl
+services.IMemoryGameService <|.. services.impl.MemoryGameServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.MemoryGameServiceImpl
+@enduml
