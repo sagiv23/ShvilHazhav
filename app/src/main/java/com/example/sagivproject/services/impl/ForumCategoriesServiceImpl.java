@@ -1,16 +1,10 @@
 package com.example.sagivproject.services.impl;
 
-import androidx.annotation.NonNull;
-
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IForumCategoriesService;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,31 +34,13 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
     }
 
     /**
-     * Retrieves all forum categories from the database, ordered by an internal timestamp.
-     * Uses a {@link ValueEventListener} to provide real-time updates to the caller.
+     * Retrieves all forum categories from the database.
      *
      * @param callback A callback invoked with the full list of {@link ForumCategory} objects.
      */
     @Override
     public void getCategories(IDatabaseService.DatabaseCallback<List<ForumCategory>> callback) {
-        databaseReference.child(CATEGORIES_PATH).orderByChild("orderTimestamp").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<ForumCategory> list = new ArrayList<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    ForumCategory category = child.getValue(ForumCategory.class);
-                    if (category != null) {
-                        list.add(category);
-                    }
-                }
-                if (callback != null) callback.onCompleted(list);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (callback != null) callback.onFailed(error.toException());
-            }
-        });
+        super.getAll(callback);
     }
 
     /**
@@ -120,16 +96,16 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
         update(categoryId, category -> {
             category.setName(newName);
             return category;
-        }, new IDatabaseService.DatabaseCallback<>() {
+        }, callback != null ? new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(ForumCategory result) {
-                if (callback != null) callback.onCompleted(null);
+                callback.onCompleted(null);
             }
 
             @Override
             public void onFailed(Exception e) {
-                if (callback != null) callback.onFailed(e);
+                callback.onFailed(e);
             }
-        });
+        } : null);
     }
 }
