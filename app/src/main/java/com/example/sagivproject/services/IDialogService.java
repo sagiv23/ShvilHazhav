@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.sagivproject.dialogs.AddEmergencyContactDialog;
+import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.dialogs.EditForumCategoryDialog;
 import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.dialogs.ProfileImageDialog;
@@ -74,7 +74,7 @@ public interface IDialogService {
      * @param contact  The {@link EmergencyContact} to edit, or null for a new one.
      * @param listener The listener to handle the contact submission.
      */
-    void showEmergencyContactDialog(FragmentManager fm, EmergencyContact contact, AddEmergencyContactDialog.AddEmergencyContactListener listener);
+    void showEmergencyContactDialog(FragmentManager fm, EmergencyContact contact, EmergencyContactDialog.AddEmergencyContactListener listener);
 
     /**
      * Displays a standardized confirmation dialog with "Confirm" and optional "Cancel" buttons.

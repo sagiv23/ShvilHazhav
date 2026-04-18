@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.sagivproject.dialogs.AddEmergencyContactDialog;
+import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.dialogs.ConfirmDialog;
 import com.example.sagivproject.dialogs.EditForumCategoryDialog;
 import com.example.sagivproject.dialogs.FullImageDialog;
@@ -38,7 +38,7 @@ public class DialogService implements IDialogService {
     private final Provider<FullImageDialog> fullImageDialogProvider;
     private final Provider<ProfileImageDialog> profileImageDialogProvider;
     private final Provider<ConfirmDialog> confirmDialogProvider;
-    private final Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider;
+    private final Provider<EmergencyContactDialog> addEmergencyContactDialogProvider;
 
     /**
      * Constructs a new DialogService with providers for all dialog fragments.
@@ -51,7 +51,7 @@ public class DialogService implements IDialogService {
             Provider<FullImageDialog> fullImageDialogProvider,
             Provider<ProfileImageDialog> profileImageDialogProvider,
             Provider<ConfirmDialog> confirmDialogProvider,
-            Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider
+            Provider<EmergencyContactDialog> addEmergencyContactDialogProvider
     ) {
         this.medicationDialogProvider = medicationDialogProvider;
         this.userDialogProvider = userDialogProvider;
@@ -139,8 +139,8 @@ public class DialogService implements IDialogService {
      * @param listener The listener to handle the contact submission.
      */
     @Override
-    public void showEmergencyContactDialog(FragmentManager fm, EmergencyContact contact, AddEmergencyContactDialog.AddEmergencyContactListener listener) {
-        AddEmergencyContactDialog dialog = addEmergencyContactDialogProvider.get();
+    public void showEmergencyContactDialog(FragmentManager fm, EmergencyContact contact, EmergencyContactDialog.AddEmergencyContactListener listener) {
+        EmergencyContactDialog dialog = addEmergencyContactDialogProvider.get();
         dialog.setData(contact, listener);
         dialog.show(fm, "AddEmergencyContactDialog");
     }

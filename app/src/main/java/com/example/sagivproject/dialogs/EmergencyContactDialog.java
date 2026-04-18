@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * </p>
  */
 @AndroidEntryPoint
-public class AddEmergencyContactDialog extends BaseDialog {
+public class EmergencyContactDialog extends BaseDialog {
 
     /**
      * Utility for validating contact information.
@@ -39,7 +39,7 @@ public class AddEmergencyContactDialog extends BaseDialog {
      * Constructs a new AddEmergencyContactDialog.
      */
     @Inject
-    public AddEmergencyContactDialog() {
+    public EmergencyContactDialog() {
     }
 
     /**
