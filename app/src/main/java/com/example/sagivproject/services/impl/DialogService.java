@@ -4,9 +4,9 @@ import android.graphics.drawable.Drawable;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.dialogs.ConfirmDialog;
 import com.example.sagivproject.dialogs.EditForumCategoryDialog;
+import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.dialogs.FullImageDialog;
 import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.dialogs.ProfileImageDialog;

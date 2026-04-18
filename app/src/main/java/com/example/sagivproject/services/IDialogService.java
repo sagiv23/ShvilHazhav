@@ -4,8 +4,8 @@ import android.graphics.drawable.Drawable;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.dialogs.EditForumCategoryDialog;
+import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.dialogs.ProfileImageDialog;
 import com.example.sagivproject.dialogs.UserDialog;
@@ -22,7 +22,6 @@ import com.example.sagivproject.models.User;
  * </p>
  */
 public interface IDialogService {
-
     /**
      * Displays a dialog to add a new medication or edit an existing one.
      *
