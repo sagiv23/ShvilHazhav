@@ -22,7 +22,7 @@ import com.example.sagivproject.services.impl.AuthServiceImpl;
 import com.example.sagivproject.services.impl.DatabaseService;
 import com.example.sagivproject.services.impl.DialogService;
 import com.example.sagivproject.services.impl.EmergencyServiceImpl;
-import com.example.sagivproject.services.impl.FallDetectionManager;
+import com.example.sagivproject.services.impl.FallDetectionServiceImpl;
 import com.example.sagivproject.services.impl.ForumCategoriesServiceImpl;
 import com.example.sagivproject.services.impl.ForumServiceImpl;
 import com.example.sagivproject.services.impl.ImageServiceImpl;
@@ -217,12 +217,12 @@ public abstract class AppModule {
     /**
      * Binds the {@link IFallDetectionService} interface to its implementation.
      *
-     * @param fallDetectionManager The {@link FallDetectionManager} implementation.
+     * @param fallDetectionService The {@link FallDetectionServiceImpl} implementation.
      * @return The bound interface.
      */
     @Binds
     @Singleton
-    public abstract IFallDetectionService bindFallDetectionService(FallDetectionManager fallDetectionManager);
+    public abstract IFallDetectionService bindFallDetectionService(FallDetectionServiceImpl fallDetectionService);
 
     /**
      * Nested Hilt module for activity-scoped bindings.

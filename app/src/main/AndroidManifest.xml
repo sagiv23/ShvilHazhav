@@ -55,7 +55,7 @@
         android:theme="@style/Theme.SagivProject">
 
         <service
-            android:name=".services.impl.FallDetectionServiceImpl"
+            android:name=".services.impl.FallDetectionManager"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="health|location" />
