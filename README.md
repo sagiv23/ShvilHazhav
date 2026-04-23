@@ -102,7 +102,7 @@ intelligent sensors and community support.
 | Package                                                                              | Responsibility                                                                  |
 |:-------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------|
 | [`screens`](app/src/main/java/com/example/sagivproject/screens)                      | Feature-specific Activities and high-level UI controllers.                      |
-| [`dialogs`](app/src/main/java/com/example/sagivproject/screens/dialogs)              | Reusable UI popups for specialized user inputs and confirmations.               |
+| [`dialogs`](app/src/main/java/com/example/sagivproject/dialogs)                      | Reusable UI popups for specialized user inputs and confirmations.               |
 | [`services`](app/src/main/java/com/example/sagivproject/services)                    | The business logic layer; interfaces defining the logic façade.                 |
 | [`impl`](app/src/main/java/com/example/sagivproject/services/impl)                   | Concrete implementations involving Firebase, Sensors, and AI orchestration.     |
 | [`notifications`](app/src/main/java/com/example/sagivproject/services/notifications) | High-precision alarm scheduling and complex notification construction.          |
