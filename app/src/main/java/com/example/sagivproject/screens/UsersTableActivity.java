@@ -24,8 +24,9 @@ import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -46,10 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class UsersTableActivity extends BaseActivity {
-    /**
-     * Internal list of all users fetched from the database.
-     */
-    private final List<User> usersList = new ArrayList<>();
+    private final Map<String, User> usersMap = new HashMap<>();
 
     private UsersTableAdapter adapter;
     private EditText editSearch;
@@ -72,7 +70,7 @@ public class UsersTableActivity extends BaseActivity {
                 databaseService.getAuthService().addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDateMillis(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
                     @Override
                     public void onSuccess(User user) {
-                        usersList.add(user);
+                        usersMap.put(user.getId(), user);
                         refreshList();
                         Toast.makeText(UsersTableActivity.this, "משתמש נוסף בהצלחה", Toast.LENGTH_SHORT).show();
                     }
@@ -102,12 +100,7 @@ public class UsersTableActivity extends BaseActivity {
                         databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDateMillis(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
                             @Override
                             public void onSuccess(User resultUser) {
-                                for (int i = 0; i < usersList.size(); i++) {
-                                    if (usersList.get(i).getId().equals(resultUser.getId())) {
-                                        usersList.set(i, resultUser);
-                                        break;
-                                    }
-                                }
+                                usersMap.put(resultUser.getId(), resultUser);
                                 if (resultUser.getId().equals(currentUser.getId())) {
                                     sharedPreferencesUtil.saveUser(resultUser);
                                     currentUser = resultUser;
@@ -185,7 +178,6 @@ public class UsersTableActivity extends BaseActivity {
      * Sorts the user list alphabetically by full name and reapplies the current search filter.
      */
     private void refreshList() {
-        usersList.sort((u1, u2) -> u1.getFullName().compareToIgnoreCase(u2.getFullName()));
         filterUsers(editSearch.getText().toString().trim());
     }
 
@@ -202,9 +194,13 @@ public class UsersTableActivity extends BaseActivity {
         databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> list) {
-                usersList.clear();
+                usersMap.clear();
                 if (list != null) {
-                    usersList.addAll(list.stream().filter(u -> u != null && u.getId() != null).collect(Collectors.toList()));
+                    for (User user : list) {
+                        if (user != null && user.getId() != null) {
+                            usersMap.put(user.getId(), user);
+                        }
+                    }
                 }
                 refreshList();
             }
@@ -229,12 +225,7 @@ public class UsersTableActivity extends BaseActivity {
                 User updatedUser = new User(user);
                 updatedUser.setRole(newRole);
 
-                for (int i = 0; i < usersList.size(); i++) {
-                    if (usersList.get(i).getId().equals(updatedUser.getId())) {
-                        usersList.set(i, updatedUser);
-                        break;
-                    }
-                }
+                usersMap.put(updatedUser.getId(), updatedUser);
 
                 if (updatedUser.getId().equals(currentUser.getId())) {
                     sharedPreferencesUtil.saveUser(updatedUser);
@@ -276,7 +267,7 @@ public class UsersTableActivity extends BaseActivity {
                     startActivity(intent);
                     return;
                 }
-                usersList.remove(user);
+                usersMap.remove(user.getId());
                 refreshList();
                 Toast.makeText(UsersTableActivity.this, "המשתמש נמחק", Toast.LENGTH_SHORT).show();
             }
@@ -297,23 +288,25 @@ public class UsersTableActivity extends BaseActivity {
         String lowerQuery = query.toLowerCase();
         String selectedType = spinnerSearchType.getSelectedItem() != null ? spinnerSearchType.getSelectedItem().toString() : "הכל";
 
-        List<User> filtered = usersList.stream().filter(user -> {
-            if (query.isEmpty() && selectedType.equals("הכל")) return true;
-            switch (selectedType) {
-                case "שם פרטי":
-                    return user.getFirstName() != null && user.getFirstName().toLowerCase().contains(lowerQuery);
-                case "שם משפחה":
-                    return user.getLastName() != null && user.getLastName().toLowerCase().contains(lowerQuery);
-                case "אימייל":
-                    return user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery);
-                case "מנהלים":
-                    return user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
-                case "מטופלים":
-                    return !user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
-                default:
-                    return user.getFullName().toLowerCase().contains(lowerQuery) || (user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery));
-            }
-        }).collect(Collectors.toList());
+        List<User> filtered = usersMap.values().stream().filter(user -> {
+                    if (query.isEmpty() && selectedType.equals("הכל")) return true;
+                    switch (selectedType) {
+                        case "שם פרטי":
+                            return user.getFirstName() != null && user.getFirstName().toLowerCase().contains(lowerQuery);
+                        case "שם משפחה":
+                            return user.getLastName() != null && user.getLastName().toLowerCase().contains(lowerQuery);
+                        case "אימייל":
+                            return user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery);
+                        case "מנהלים":
+                            return user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
+                        case "מטופלים":
+                            return !user.isAdmin() && user.getFullName().toLowerCase().contains(lowerQuery);
+                        default:
+                            return user.getFullName().toLowerCase().contains(lowerQuery) || (user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerQuery));
+                    }
+                })
+                .sorted((u1, u2) -> u1.getFullName().compareToIgnoreCase(u2.getFullName()))
+                .collect(Collectors.toList());
 
         adapter.setUserList(filtered);
     }

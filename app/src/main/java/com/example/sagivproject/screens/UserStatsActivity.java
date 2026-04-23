@@ -240,20 +240,24 @@ public class UserStatsActivity extends BaseActivity {
             databaseService.getUserService().getUserList(new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(List<User> list) {
-                    selectableUsers.clear();
-                    List<String> userNames = new ArrayList<>();
-
-                    for (User u : list) {
-                        if (!u.isAdmin()) {
-                            selectableUsers.add(u);
-                            userNames.add(u.getFullName());
-                        }
+                    if (list == null || list.isEmpty()) {
+                        findViewById(R.id.card_user_selector).setVisibility(View.GONE);
+                        return;
                     }
+
+                    selectableUsers.clear();
+                    selectableUsers.addAll(list.stream()
+                            .filter(u -> !u.isAdmin())
+                            .collect(Collectors.toList()));
 
                     if (selectableUsers.isEmpty()) {
                         findViewById(R.id.card_user_selector).setVisibility(View.GONE);
                         return;
                     }
+
+                    List<String> userNames = selectableUsers.stream()
+                            .map(User::getFullName)
+                            .collect(Collectors.toList());
 
                     ArrayAdapter<String> adapter = createStyledSearchAdapter(userNames);
 
@@ -323,13 +327,12 @@ public class UserStatsActivity extends BaseActivity {
      * Processes historical daily statistics into {@link GraphData} objects for rendering.
      */
     private void setupGraphs() {
-        List<GraphData> graphs = new ArrayList<>();
-
         if (currentUser.getDailyStats() == null || currentUser.getDailyStats().isEmpty()) {
-            graphs.add(new GraphData("memory", "זיכרון: אחוז ניצחונות", new ArrayList<>(), new ArrayList<>(), "תאריך", "% ניצחונות"));
-            graphs.add(new GraphData("math", "מתמטיקה: אחוז הצלחה", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה"));
-            graphs.add(new GraphData("meds", "תרופות: עמידה ביעדים", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה"));
-            graphAdapter.setData(graphs);
+            graphAdapter.setData(List.of(
+                    new GraphData("memory", "זיכרון: אחוז ניצחונות", new ArrayList<>(), new ArrayList<>(), "תאריך", "% ניצחונות"),
+                    new GraphData("math", "מתמטיקה: אחוז הצלחה", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה"),
+                    new GraphData("meds", "תרופות: עמידה ביעדים", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה")
+            ));
             return;
         }
 
@@ -337,46 +340,42 @@ public class UserStatsActivity extends BaseActivity {
 
         List<SimpleXYGraphView.Point> memoryWinPoints = new ArrayList<>();
         List<String> memoryDates = new ArrayList<>();
-
         List<SimpleXYGraphView.Point> mathRatioPoints = new ArrayList<>();
         List<String> mathDates = new ArrayList<>();
-
         List<SimpleXYGraphView.Point> medRatioPoints = new ArrayList<>();
         List<String> medDates = new ArrayList<>();
 
-        int memIdx = 0, mathIdx = 0, medIdx = 0;
+        final int[] indices = {0, 0, 0}; // 0: memory, 1: math, 2: meds
 
-        for (Map.Entry<String, DailyStats> entry : statsMap.entrySet()) {
-            String date = entry.getKey();
-            DailyStats stats = entry.getValue();
-            if (stats == null) continue;
+        statsMap.forEach((date, stats) -> {
+            if (stats == null) return;
 
             if (stats.getMemoryGamesPlayed() > 0) {
                 float winRatio = (stats.getMemoryWins() / (float) stats.getMemoryGamesPlayed()) * 100;
-                memoryWinPoints.add(new SimpleXYGraphView.Point(memIdx++, winRatio));
+                memoryWinPoints.add(new SimpleXYGraphView.Point(indices[0]++, winRatio));
                 memoryDates.add(date);
             }
 
             int totalMath = stats.getMathCorrect() + stats.getMathWrong();
             if (totalMath > 0) {
                 float mathRatio = (stats.getMathCorrect() / (float) totalMath) * 100;
-                mathRatioPoints.add(new SimpleXYGraphView.Point(mathIdx++, mathRatio));
+                mathRatioPoints.add(new SimpleXYGraphView.Point(indices[1]++, mathRatio));
                 mathDates.add(date);
             }
 
             int totalMeds = stats.getMedicationsTaken() + stats.getMedicationsMissed();
             if (totalMeds > 0) {
                 float medRatio = (stats.getMedicationsTaken() / (float) totalMeds) * 100;
-                medRatioPoints.add(new SimpleXYGraphView.Point(medIdx++, medRatio));
+                medRatioPoints.add(new SimpleXYGraphView.Point(indices[2]++, medRatio));
                 medDates.add(date);
             }
-        }
+        });
 
-        graphs.add(new GraphData("memory", "זיכרון: אחוז ניצחונות", memoryWinPoints, memoryDates, "תאריך", "% ניצחונות"));
-        graphs.add(new GraphData("math", "מתמטיקה: אחוז הצלחה", mathRatioPoints, mathDates, "תאריך", "% הצלחה"));
-        graphs.add(new GraphData("meds", "תרופות: עמידה ביעדים", medRatioPoints, medDates, "תאריך", "% הצלחה"));
-
-        graphAdapter.setData(graphs);
+        graphAdapter.setData(List.of(
+                new GraphData("memory", "זיכרון: אחוז ניצחונות", memoryWinPoints, memoryDates, "תאריך", "% ניצחונות"),
+                new GraphData("math", "מתמטיקה: אחוז הצלחה", mathRatioPoints, mathDates, "תאריך", "% הצלחה"),
+                new GraphData("meds", "תרופות: עמידה ביעדים", medRatioPoints, medDates, "תאריך", "% הצלחה")
+        ));
     }
 
     /**

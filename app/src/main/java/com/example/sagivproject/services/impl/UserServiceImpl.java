@@ -105,13 +105,11 @@ public class UserServiceImpl extends BaseDatabaseService<User> implements IUserS
         getAll(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> users) {
-                for (User user : users) {
-                    if (Objects.equals(user.getEmail(), email) && Objects.equals(user.getPassword(), password)) {
-                        callback.onCompleted(user);
-                        return;
-                    }
-                }
-                callback.onCompleted(null);
+                User found = users.stream()
+                        .filter(u -> Objects.equals(u.getEmail(), email) && Objects.equals(u.getPassword(), password))
+                        .findFirst()
+                        .orElse(null);
+                callback.onCompleted(found);
             }
 
             @Override
@@ -132,13 +130,9 @@ public class UserServiceImpl extends BaseDatabaseService<User> implements IUserS
         getAll(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> users) {
-                for (User user : users) {
-                    if (Objects.equals(user.getEmail(), email)) {
-                        callback.onCompleted(true);
-                        return;
-                    }
-                }
-                callback.onCompleted(false);
+                boolean exists = users.stream()
+                        .anyMatch(u -> Objects.equals(u.getEmail(), email));
+                callback.onCompleted(exists);
             }
 
             @Override

@@ -50,10 +50,10 @@ public class FallDetectionManager extends Service implements SensorEventListener
     private static final int NOTIFICATION_ID = 1001;
 
     /**
-     * The G-force threshold used to detect a fall (approx. 4.0G).
-     * Calculated as sqrt(x^2 + y^2 + z^2).
+     * The G-force threshold squared used to detect a fall.
+     * Calculated as (FALL_THRESHOLD)^2 to avoid expensive sqrt() in every sensor event.
      */
-    private static final float FALL_THRESHOLD = 40.0f;
+    private static final float FALL_THRESHOLD_SQUARED = 40.0f * 40.0f;
 
     /**
      * Minimum cooldown time between sending successive emergency alerts (30 seconds).
@@ -100,11 +100,11 @@ public class FallDetectionManager extends Service implements SensorEventListener
     }
 
     /**
-     * Registers the accelerometer sensor listener with UI delay for responsiveness.
+     * Registers the accelerometer sensor listener with normal delay to save battery.
      */
     private void startMonitoring() {
         if (!isMonitoring && accelerometer != null) {
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
             isMonitoring = true;
             Log.d(TAG, "Fall detection monitoring started");
         }
@@ -135,8 +135,9 @@ public class FallDetectionManager extends Service implements SensorEventListener
             float y = event.values[1];
             float z = event.values[2];
 
-            double acceleration = Math.sqrt(x * x + y * y + z * z);
-            if (acceleration > FALL_THRESHOLD) {
+            // Use squared acceleration to avoid expensive sqrt() call
+            float accelerationSq = x * x + y * y + z * z;
+            if (accelerationSq > FALL_THRESHOLD_SQUARED) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - lastAlertTime > MIN_TIME_BETWEEN_ALERTS) {
                     lastAlertTime = currentTime;

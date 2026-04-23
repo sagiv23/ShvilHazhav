@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -61,10 +62,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MedicationListActivity extends BaseActivity {
-    /**
-     * The complete, unfiltered list of medications owned by the user.
-     */
-    private final List<Medication> fullMedicationList = new ArrayList<>();
+    private final Map<String, Medication> medicationMap = new HashMap<>();
 
     /**
      * Utility for scheduling system alarms for medication reminders.
@@ -268,12 +266,8 @@ public class MedicationListActivity extends BaseActivity {
     /**
      * Updates the persistent local cache with the latest data list.
      */
-    private void updateUserCache(List<Medication> medicationList) {
-        HashMap<String, Medication> updatedMedicationsMap = new HashMap<>();
-        for (Medication med : medicationList) {
-            updatedMedicationsMap.put(med.getId(), med);
-        }
-        user.setMedications(updatedMedicationsMap);
+    private void updateUserCache() {
+        user.setMedications(new HashMap<>(medicationMap));
         sharedPreferencesUtil.saveUser(user);
     }
 
@@ -281,10 +275,11 @@ public class MedicationListActivity extends BaseActivity {
      * Processes a new list of medications: sorts alphabetically and updates UI.
      */
     private void updateMedicationList(List<Medication> medicationList) {
-        fullMedicationList.clear();
-        fullMedicationList.addAll(medicationList);
-        fullMedicationList.sort(Comparator.comparing(Medication::getName));
-        updateUserCache(fullMedicationList);
+        medicationMap.clear();
+        for (Medication med : medicationList) {
+            medicationMap.put(med.getId(), med);
+        }
+        updateUserCache();
         filterMedications(editSearch.getText().toString());
     }
 
@@ -298,9 +293,9 @@ public class MedicationListActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 checkNotificationPermissionAndSchedule(medication);
-                List<Medication> newList = new ArrayList<>(fullMedicationList);
-                newList.add(medication);
-                updateMedicationList(newList);
+                medicationMap.put(medication.getId(), medication);
+                updateUserCache();
+                filterMedications(editSearch.getText().toString());
                 Toast.makeText(MedicationListActivity.this, "התרופה נוספה", Toast.LENGTH_SHORT).show();
             }
 
@@ -336,14 +331,9 @@ public class MedicationListActivity extends BaseActivity {
             public void onCompleted(Void object) {
                 alarmScheduler.cancel(med);
                 checkNotificationPermissionAndSchedule(med);
-                List<Medication> newList = new ArrayList<>(fullMedicationList);
-                for (int i = 0; i < newList.size(); i++) {
-                    if (newList.get(i).getId().equals(med.getId())) {
-                        newList.set(i, med);
-                        break;
-                    }
-                }
-                updateMedicationList(newList);
+                medicationMap.put(med.getId(), med);
+                updateUserCache();
+                filterMedications(editSearch.getText().toString());
                 Toast.makeText(MedicationListActivity.this, "התרופה עודכנה", Toast.LENGTH_SHORT).show();
             }
 
@@ -362,9 +352,9 @@ public class MedicationListActivity extends BaseActivity {
             @Override
             public void onCompleted(Void object) {
                 alarmScheduler.cancel(medication);
-                List<Medication> newList = new ArrayList<>(fullMedicationList);
-                newList.removeIf(m -> m.getId().equals(medication.getId()));
-                updateMedicationList(newList);
+                medicationMap.remove(medication.getId());
+                updateUserCache();
+                filterMedications(editSearch.getText().toString());
                 Toast.makeText(MedicationListActivity.this, "התרופה נמחקה", Toast.LENGTH_SHORT).show();
             }
 
@@ -394,28 +384,26 @@ public class MedicationListActivity extends BaseActivity {
      * @param query The search query string.
      */
     private void filterMedications(String query) {
-        List<Medication> filteredMedications = new ArrayList<>();
         String selectedType = spinnerSearchType.getSelectedItem() != null ? spinnerSearchType.getSelectedItem().toString() : "הכל";
-        if (query.isEmpty() && selectedType.equals("הכל")) {
-            filteredMedications.addAll(fullMedicationList);
-        } else {
-            for (Medication med : fullMedicationList) {
-                boolean matches = false;
-                switch (selectedType) {
-                    case "הכל":
-                        matches = med.getName().toLowerCase().contains(query.toLowerCase()) ||
-                                (med.getType() != null && med.getType().getDisplayName().toLowerCase().contains(query.toLowerCase()));
-                        break;
-                    case "שם תרופה":
-                        matches = med.getName().toLowerCase().contains(query.toLowerCase());
-                        break;
-                    case "סוג תרופה":
-                        matches = med.getType() != null && med.getType().getDisplayName().toLowerCase().contains(query.toLowerCase());
-                        break;
-                }
-                if (matches) filteredMedications.add(med);
-            }
-        }
+        String lowerQuery = query.toLowerCase();
+
+        List<Medication> filteredMedications = medicationMap.values().stream()
+                .filter(med -> {
+                    if (query.isEmpty() && selectedType.equals("הכל")) return true;
+                    switch (selectedType) {
+                        case "שם תרופה":
+                            return med.getName().toLowerCase().contains(lowerQuery);
+                        case "סוג תרופה":
+                            return med.getType() != null && med.getType().getDisplayName().toLowerCase().contains(lowerQuery);
+                        case "הכל":
+                        default:
+                            return med.getName().toLowerCase().contains(lowerQuery) ||
+                                    (med.getType() != null && med.getType().getDisplayName().toLowerCase().contains(lowerQuery));
+                    }
+                })
+                .sorted(Comparator.comparing(Medication::getName))
+                .collect(Collectors.toList());
+
         adapter.setMedications(filteredMedications);
     }
 }

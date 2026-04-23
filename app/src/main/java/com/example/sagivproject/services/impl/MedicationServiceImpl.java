@@ -14,9 +14,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.inject.Inject;
 
@@ -98,13 +100,11 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
     public void getMedicationUsageLogs(@NonNull String uid, @NonNull DatabaseCallback<List<MedicationUsage>> callback) {
         databaseReference.child(USERS_PATH).child(uid).child(FIELD_DAILY_STATS).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                List<MedicationUsage> allLogs = new ArrayList<>();
-                for (DataSnapshot daySnapshot : task.getResult().getChildren()) {
-                    DailyStats stats = daySnapshot.getValue(DailyStats.class);
-                    if (stats != null && stats.getMedicationUsageLogs() != null) {
-                        allLogs.addAll(stats.getMedicationUsageLogs());
-                    }
-                }
+                List<MedicationUsage> allLogs = StreamSupport.stream(task.getResult().getChildren().spliterator(), false)
+                        .map(daySnapshot -> daySnapshot.getValue(DailyStats.class))
+                        .filter(Objects::nonNull)
+                        .flatMap(stats -> Objects.requireNonNull(stats).getMedicationUsageLogs().stream())
+                        .collect(Collectors.toList());
                 callback.onCompleted(allLogs);
             } else {
                 callback.onFailed(task.getException());

@@ -34,6 +34,7 @@ import javax.inject.Inject;
 public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implements IForumService {
     private static final String FORUM_PATH = "forum_categories";
     private final IUserService userService;
+    private final Map<String, User> userCache = new HashMap<>();
 
     /**
      * Constructs a new ForumServiceImpl.
@@ -112,26 +113,42 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
 
                 AtomicInteger remaining = new AtomicInteger(messages.size());
                 for (ForumMessage msg : messages) {
-                    userService.getUser(msg.getUserId(), new DatabaseCallback<>() {
+                    String userId = msg.getUserId();
+                    if (userCache.containsKey(userId)) {
+                        updateMessageSenderDetails(msg, userCache.get(userId));
+                        if (remaining.decrementAndGet() == 0 && callback != null) {
+                            callback.onCompleted(messages);
+                        }
+                        continue;
+                    }
+
+                    userService.getUser(userId, new DatabaseCallback<>() {
                         @Override
                         public void onCompleted(User user) {
                             if (user != null) {
-                                msg.setSenderName(user.getFullName());
-                                msg.setSenderEmail(user.getEmail());
-                                msg.setSenderAdmin(user.isAdmin());
+                                userCache.put(userId, user);
+                                updateMessageSenderDetails(msg, user);
                             }
-                            if (remaining.decrementAndGet() == 0) {
-                                if (callback != null) callback.onCompleted(messages);
+                            if (remaining.decrementAndGet() == 0 && callback != null) {
+                                callback.onCompleted(messages);
                             }
                         }
 
                         @Override
                         public void onFailed(Exception e) {
-                            if (remaining.decrementAndGet() == 0) {
-                                if (callback != null) callback.onCompleted(messages);
+                            if (remaining.decrementAndGet() == 0 && callback != null) {
+                                callback.onCompleted(messages);
                             }
                         }
                     });
+                }
+            }
+
+            private void updateMessageSenderDetails(ForumMessage msg, User user) {
+                if (user != null) {
+                    msg.setSenderName(user.getFullName());
+                    msg.setSenderEmail(user.getEmail());
+                    msg.setSenderAdmin(user.isAdmin());
                 }
             }
 
