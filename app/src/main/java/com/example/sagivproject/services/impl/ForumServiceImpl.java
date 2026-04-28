@@ -10,11 +10,12 @@ import com.example.sagivproject.services.IForumService;
 import com.example.sagivproject.services.IUserService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +28,15 @@ import javax.inject.Inject;
  * <p>
  * This class manages the persistence and retrieval of forum messages within categories
  * in the Firebase Realtime Database. It ensures data minimization by storing only
- * message IDs, text, and timestamps. Sender details (name, email, role) are dynamically
- * injected from the user database during retrieval.
+ * persistent message data (ID, text, timestamp, userId), while sender details (name, email, role)
+ * are dynamically injected during retrieval.
  * </p>
  */
 public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implements IForumService {
     private static final String FORUM_PATH = "forum_categories";
     private final IUserService userService;
     private final Map<String, User> userCache = new HashMap<>();
+    private final Map<String, ValueEventListener> listeners = new HashMap<>();
 
     /**
      * Constructs a new ForumServiceImpl.
@@ -51,20 +53,19 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
     /**
      * Sends a new message to a specific forum category.
      * <p>
-     * Instead of writing the full {@link ForumMessage} object, this method writes a map containing
-     * only the persistent fields (id, message, timestamp, userId). This prevents dynamic fields
-     * like {@code senderName} from being saved to the database without needing {@code @Exclude} in the model.
+     * Uses {@link ServerValue#TIMESTAMP} for server-side time synchronization to ensure
+     * messages are ordered correctly across all devices regardless of their local clock.
      * </p>
      *
-     * @param user       The user sending the message.
-     * @param text       The content of the message.
-     * @param categoryId The ID of the category to which the message will be posted.
-     * @param callback   An optional callback to be invoked upon completion.
+     * @param user       The {@link User} sending the message.
+     * @param text       The message content.
+     * @param categoryId The ID of the forum category.
+     * @param callback   An optional callback invoked upon completion.
      */
     @Override
     public void sendMessage(User user, String text, String categoryId, @Nullable DatabaseCallback<Void> callback) {
-        DatabaseReference categoryMessagesRef = getCategoryMessagesRef(categoryId);
-        String messageId = categoryMessagesRef.push().getKey();
+        String path = getCategoryPath(categoryId);
+        String messageId = readData(path).push().getKey();
 
         if (messageId == null) {
             if (callback != null)
@@ -75,96 +76,165 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
         Map<String, Object> msgData = new HashMap<>();
         msgData.put("id", messageId);
         msgData.put("message", text);
-        msgData.put("timestamp", System.currentTimeMillis());
+        msgData.put("timestamp", ServerValue.TIMESTAMP);
         msgData.put("userId", user.getId());
 
-        writeData(getCategoryPath(categoryId) + "/" + messageId, msgData, callback);
+        writeData(path + "/" + messageId, msgData, callback);
     }
 
     /**
-     * Listens for real-time updates to the messages in a specific forum category.
+     * Listens for real-time updates using a {@link ValueEventListener} on a limited query.
      * <p>
-     * After retrieving the messages from the forum node, this method performs a secondary
-     * fetch for each message to retrieve the sender's current details from the user database.
-     * The callback is triggered only once all sender details have been successfully mapped,
-     * using {@link AtomicInteger} to synchronize the asynchronous calls.
+     * This ensures the latest 50 messages are always synchronized as a single batch,
+     * which improves UI stability and automatically handles deletions and updates.
      * </p>
      *
-     * @param categoryId The ID of the category to listen to.
-     * @param callback   A callback that will be invoked with the updated list of messages.
+     * @param categoryId The ID of the forum category to monitor.
+     * @param callback   The callback invoked with the updated list of messages.
      */
     @Override
     public void listenToMessages(String categoryId, DatabaseCallback<List<ForumMessage>> callback) {
-        getCategoryMessagesRef(categoryId).orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<ForumMessage> messages = new ArrayList<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    ForumMessage msg = child.getValue(ForumMessage.class);
-                    if (msg != null) {
-                        messages.add(msg);
+        stopListeningToMessages(categoryId);
+
+        ValueEventListener listener = readData(getCategoryPath(categoryId))
+                .orderByChild("timestamp")
+                .limitToLast(50)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<ForumMessage> messages = new ArrayList<>();
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            ForumMessage msg = child.getValue(ForumMessage.class);
+                            if (msg != null) messages.add(msg);
+                        }
+                        messages.sort(Comparator.comparingLong(ForumMessage::getTimestamp));
+                        processMessages(messages, callback);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        if (callback != null) callback.onFailed(error.toException());
+                    }
+                });
+        listeners.put(categoryId, listener);
+    }
+
+    /**
+     * Stops listening for updates in a specific forum category.
+     *
+     * @param categoryId The ID of the category to stop monitoring.
+     */
+    @Override
+    public void stopListeningToMessages(String categoryId) {
+        ValueEventListener listener = listeners.remove(categoryId);
+        if (listener != null) {
+            readData(getCategoryPath(categoryId)).removeEventListener(listener);
+        }
+    }
+
+    /**
+     * Loads older messages for pagination.
+     *
+     * @param categoryId      The ID of the category.
+     * @param oldestTimestamp The timestamp of the oldest message currently loaded.
+     * @param limit           Maximum number of messages to fetch.
+     * @param callback        The callback with the list of older messages.
+     */
+    @Override
+    public void loadOlderMessages(String categoryId, long oldestTimestamp, int limit, DatabaseCallback<List<ForumMessage>> callback) {
+        readData(getCategoryPath(categoryId))
+                .orderByChild("timestamp")
+                .endAt(oldestTimestamp - 1)
+                .limitToLast(limit)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        if (callback != null) callback.onFailed(task.getException());
+                        return;
+                    }
+                    DataSnapshot snapshot = task.getResult();
+                    List<ForumMessage> messages = new ArrayList<>();
+                    if (snapshot != null && snapshot.exists()) {
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            ForumMessage msg = child.getValue(ForumMessage.class);
+                            if (msg != null) messages.add(msg);
+                        }
+                    }
+                    messages.sort(Comparator.comparingLong(ForumMessage::getTimestamp));
+                    processMessages(messages, callback);
+                });
+    }
+
+    /**
+     * Injects sender details (name, email, role) into a list of messages.
+     * <p>
+     * To optimize performance and reduce database hits, this method uses an internal
+     * cache to store user data. It uses an {@link AtomicInteger} to track the progress
+     * of asynchronous user lookups.
+     * </p>
+     *
+     * @param messages The list of {@link ForumMessage} objects to populate.
+     * @param callback The callback to invoke once all messages are processed.
+     */
+    private void processMessages(List<ForumMessage> messages, DatabaseCallback<List<ForumMessage>> callback) {
+        if (messages.isEmpty()) {
+            if (callback != null) callback.onCompleted(messages);
+            return;
+        }
+
+        AtomicInteger remaining = new AtomicInteger(messages.size());
+        for (ForumMessage msg : messages) {
+            String userId = msg.getUserId();
+            if (userCache.containsKey(userId)) {
+                updateMessageSenderDetails(msg, userCache.get(userId));
+                if (remaining.decrementAndGet() == 0 && callback != null) {
+                    callback.onCompleted(messages);
+                }
+                continue;
+            }
+
+            userService.getUser(userId, new DatabaseCallback<>() {
+                @Override
+                public void onCompleted(User user) {
+                    if (user != null) {
+                        userCache.put(userId, user);
+                        updateMessageSenderDetails(msg, user);
+                    }
+                    if (remaining.decrementAndGet() == 0 && callback != null) {
+                        callback.onCompleted(messages);
                     }
                 }
 
-                if (messages.isEmpty()) {
-                    if (callback != null) callback.onCompleted(messages);
-                    return;
-                }
-
-                AtomicInteger remaining = new AtomicInteger(messages.size());
-                for (ForumMessage msg : messages) {
-                    String userId = msg.getUserId();
-                    if (userCache.containsKey(userId)) {
-                        updateMessageSenderDetails(msg, userCache.get(userId));
-                        if (remaining.decrementAndGet() == 0 && callback != null) {
-                            callback.onCompleted(messages);
-                        }
-                        continue;
+                @Override
+                public void onFailed(Exception e) {
+                    if (remaining.decrementAndGet() == 0 && callback != null) {
+                        callback.onCompleted(messages);
                     }
-
-                    userService.getUser(userId, new DatabaseCallback<>() {
-                        @Override
-                        public void onCompleted(User user) {
-                            if (user != null) {
-                                userCache.put(userId, user);
-                                updateMessageSenderDetails(msg, user);
-                            }
-                            if (remaining.decrementAndGet() == 0 && callback != null) {
-                                callback.onCompleted(messages);
-                            }
-                        }
-
-                        @Override
-                        public void onFailed(Exception e) {
-                            if (remaining.decrementAndGet() == 0 && callback != null) {
-                                callback.onCompleted(messages);
-                            }
-                        }
-                    });
                 }
-            }
+            });
+        }
+    }
 
-            private void updateMessageSenderDetails(ForumMessage msg, User user) {
-                if (user != null) {
-                    msg.setSenderName(user.getFullName());
-                    msg.setSenderEmail(user.getEmail());
-                    msg.setSenderAdmin(user.isAdmin());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (callback != null) callback.onFailed(error.toException());
-            }
-        });
+    /**
+     * Updates the transient fields of a {@link ForumMessage} with details from a {@link User}.
+     *
+     * @param msg  The message to update.
+     * @param user The user whose details will be injected.
+     */
+    private void updateMessageSenderDetails(ForumMessage msg, User user) {
+        if (user != null) {
+            msg.setSenderName(user.getFullName());
+            msg.setSenderEmail(user.getEmail());
+            msg.setSenderAdmin(user.isAdmin());
+        }
     }
 
     /**
      * Deletes a specific message from a forum category.
      *
-     * @param messageId  The ID of the message to delete.
+     * @param messageId  The unique identifier of the message to delete.
      * @param categoryId The ID of the category containing the message.
-     * @param callback   An optional callback to be invoked upon completion.
+     * @param callback   An optional callback invoked upon completion.
      */
     @Override
     public void deleteMessage(@NonNull String messageId, String categoryId, @Nullable DatabaseCallback<Void> callback) {
@@ -172,22 +242,12 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
     }
 
     /**
-     * Helper to construct the database path for a category's messages.
+     * Generates the database path for a specific category's message sub-node.
      *
      * @param categoryId The unique ID of the forum category.
-     * @return The full database path string.
+     * @return The string representing the database path.
      */
     private String getCategoryPath(String categoryId) {
         return FORUM_PATH + "/" + categoryId + "/messages";
-    }
-
-    /**
-     * Helper to get a DatabaseReference for a category's messages.
-     *
-     * @param categoryId The unique ID of the forum category.
-     * @return A DatabaseReference pointing to the messages sub-node.
-     */
-    private DatabaseReference getCategoryMessagesRef(String categoryId) {
-        return databaseReference.child(getCategoryPath(categoryId));
     }
 }

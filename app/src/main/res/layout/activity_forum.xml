@@ -82,6 +82,17 @@
                     android:padding="8dp"
                     tools:listitem="@android:layout/simple_list_item_1" />
 
+                <TextView
+                    android:id="@+id/txt_no_messages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/there_are_no_messages"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_forum_new_messages_indicator"
                     android:layout_width="wrap_content"

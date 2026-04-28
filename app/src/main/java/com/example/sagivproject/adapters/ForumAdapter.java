@@ -6,11 +6,13 @@ import android.text.Spanned;
 import android.text.format.DateFormat;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.TypefaceSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -20,8 +22,8 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumMessage;
-import com.example.sagivproject.services.impl.AdapterService;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -42,13 +44,18 @@ import javax.inject.Inject;
  */
 public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
     private ForumMessageListener listener;
+    private Typeface cachedFont;
+    private String currentUserId;
 
     /**
      * Constructs a new ForumAdapter.
-     * Hilt provides instances of this adapter via {@link AdapterService}.
      */
     @Inject
     public ForumAdapter() {
+    }
+
+    public void setCurrentUserId(String userId) {
+        this.currentUserId = userId;
     }
 
     /**
@@ -67,6 +74,17 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      */
     public void setMessages(List<ForumMessage> newMessages) {
         setData(newMessages);
+    }
+
+    /**
+     * Adds older messages to the beginning of the list for pagination.
+     *
+     * @param olderMessages List of older {@link ForumMessage} objects to prepend.
+     */
+    public void addOlderMessages(List<ForumMessage> olderMessages) {
+        if (olderMessages == null || olderMessages.isEmpty()) return;
+        dataList.addAll(0, olderMessages);
+        notifyItemRangeInserted(0, olderMessages.size());
     }
 
     /**
@@ -94,13 +112,22 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     public void onBindViewHolder(@NonNull ForumViewHolder holder, int position) {
         ForumMessage msg = getItem(position);
 
+        // Alignment logic
+        boolean isMine = msg.getUserId() != null && msg.getUserId().equals(currentUserId);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.cardView.getLayoutParams();
+        params.gravity = isMine ? Gravity.START : Gravity.END;
+        holder.cardView.setLayoutParams(params);
+
+        if (cachedFont == null) {
+            cachedFont = ResourcesCompat.getFont(holder.itemView.getContext(), R.font.text_hebrew);
+        }
+
         String senderName = msg.getSenderName() != null ? msg.getSenderName() : "אנונימי";
-        Typeface customFont = ResourcesCompat.getFont(holder.itemView.getContext(), R.font.text_hebrew);
         SpannableString userNameSpannable = new SpannableString(senderName);
 
-        if (customFont != null) {
+        if (cachedFont != null) {
             userNameSpannable.setSpan(
-                    new TypefaceSpan(customFont),
+                    new TypefaceSpan(cachedFont),
                     0,
                     userNameSpannable.length(),
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -131,9 +158,9 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
                 popup.getMenuInflater().inflate(R.menu.menu_forum_message, popup.getMenu());
 
                 MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete);
-                if (deleteItem != null && customFont != null) {
+                if (deleteItem != null && cachedFont != null) {
                     SpannableString title = new SpannableString(deleteItem.getTitle());
-                    title.setSpan(new TypefaceSpan(customFont), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    title.setSpan(new TypefaceSpan(cachedFont), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     title.setSpan(new AbsoluteSizeSpan(20, true), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     deleteItem.setTitle(title);
                 }
@@ -190,28 +217,14 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      * ViewHolder for forum message items.
      */
     public static class ForumViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        /**
-         * TextViews for sender, metadata, and content.
-         */
         final TextView txtUser, txtEmail, txtIsAdmin, txtMessage, txtTime;
-
-        /**
-         * Button to open the moderation menu.
-         */
         final ImageButton btnMenu;
-
-        /**
-         * Button to toggle TTS playback for the message.
-         */
         final MaterialButton btnSpeak;
+        final MaterialCardView cardView;
 
-        /**
-         * Constructs a new ForumViewHolder.
-         *
-         * @param itemView The view representing a single forum message.
-         */
         public ForumViewHolder(@NonNull View itemView) {
             super(itemView);
+            cardView = itemView.findViewById(R.id.ItemForumMessageCard);
             txtUser = itemView.findViewById(R.id.ItemForumMessageTxtUser);
             txtEmail = itemView.findViewById(R.id.ItemForumMessageTxtEmail);
             txtIsAdmin = itemView.findViewById(R.id.ItemForumMessageTxtIsAdmin);

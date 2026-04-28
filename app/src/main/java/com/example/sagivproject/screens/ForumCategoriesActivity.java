@@ -111,6 +111,10 @@ public class ForumCategoriesActivity extends BaseActivity {
             @Override
             public void onCompleted(List<ForumCategory> data) {
                 adapter.setCategories(data);
+                TextView txtNoCategories = findViewById(R.id.txt_no_categories);
+                if (txtNoCategories != null) {
+                    txtNoCategories.setVisibility(data == null || data.isEmpty() ? View.VISIBLE : View.GONE);
+                }
             }
 
             @Override

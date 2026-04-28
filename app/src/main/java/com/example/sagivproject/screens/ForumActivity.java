@@ -22,6 +22,8 @@ import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -47,6 +49,8 @@ public class ForumActivity extends BaseActivity {
     private User user;
     private TextToSpeech tts;
     private String currentlySpeakingMsgId = null;
+    private boolean isLoadingOlder = false;
+    private boolean hasMoreOlder = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,7 @@ public class ForumActivity extends BaseActivity {
         recycler.setLayoutManager(layoutManager);
 
         adapter = adapterService.getForumAdapter();
+        adapter.setCurrentUserId(user.getId());
         recycler.setAdapter(adapter);
 
         recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -83,6 +88,12 @@ public class ForumActivity extends BaseActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 if (isLastItemVisible() && btnNewMessagesIndicator != null) {
                     btnNewMessagesIndicator.setVisibility(View.GONE);
+                }
+
+                // Pagination: detect scroll to top
+                LinearLayoutManager lm = (LinearLayoutManager) recycler.getLayoutManager();
+                if (lm != null && lm.findFirstCompletelyVisibleItemPosition() == 0 && !isLoadingOlder && hasMoreOlder) {
+                    loadMoreMessages();
                 }
             }
         });
@@ -136,32 +147,115 @@ public class ForumActivity extends BaseActivity {
                 return currentlySpeakingMsgId;
             }
         });
+    }
 
-        loadMessages();
+    /**
+     * Loads older messages for pagination.
+     * Fetches a slice of history preceding the current oldest message.
+     */
+    private void loadMoreMessages() {
+        List<ForumMessage> currentMessages = adapter.getItemList();
+        if (currentMessages.isEmpty()) return;
+
+        isLoadingOlder = true;
+        long oldestTimestamp = currentMessages.get(0).getTimestamp();
+
+        databaseService.getForumService().loadOlderMessages(categoryId, oldestTimestamp, 20, new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(List<ForumMessage> list) {
+                if (list.isEmpty()) {
+                    hasMoreOlder = false;
+                } else {
+                    adapter.addOlderMessages(list);
+                }
+                isLoadingOlder = false;
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                isLoadingOlder = false;
+                Toast.makeText(ForumActivity.this, "שגיאה בטעינת הודעות ישנות", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
      * Starts listening for real-time message updates in the current category.
+     * <p>
+     * Implements a "Smart Merge" strategy:
+     * 1. Detects deletions by identifying missing messages within the latest synchronized window.
+     * 2. Updates existing messages if their content or sender details have changed.
+     * 3. Adds new messages and triggers the "New Message" indicator if the user is scrolled up.
+     * </p>
      */
     private void loadMessages() {
         databaseService.getForumService().listenToMessages(categoryId, new DatabaseCallback<>() {
             @Override
-            public void onCompleted(List<ForumMessage> list) {
+            public void onCompleted(List<ForumMessage> latestMessages) {
+                if (latestMessages == null) return;
+
+                TextView txtNoMessages = findViewById(R.id.txt_no_messages);
+                if (txtNoMessages != null) {
+                    txtNoMessages.setVisibility(latestMessages.isEmpty() && adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+                }
+
                 boolean wasAtBottom = isLastItemVisible();
-                int previousItemCount = adapter.getItemCount();
+                List<ForumMessage> currentList = new ArrayList<>(adapter.getItemList());
 
-                adapter.setMessages(list);
+                boolean modified = false;
 
-                if (previousItemCount == 0 || wasAtBottom) {
-                    scrollToBottom(false);
-                } else if (list.size() > previousItemCount && btnNewMessagesIndicator != null) {
-                    btnNewMessagesIndicator.setVisibility(View.VISIBLE);
+                // 1. Handle Deletions: If a message is NOT in the latestMessages BUT its timestamp
+                // is within the range of latestMessages, it means it was deleted.
+                if (!latestMessages.isEmpty()) {
+                    long newestTs = latestMessages.get(latestMessages.size() - 1).getTimestamp();
+                    long oldestInWindowTs = latestMessages.get(0).getTimestamp();
+
+                    modified = currentList.removeIf(m ->
+                            m.getTimestamp() >= oldestInWindowTs &&
+                                    m.getTimestamp() <= newestTs &&
+                                    latestMessages.stream().noneMatch(lm -> lm.getId().equals(m.getId()))
+                    );
+                }
+
+                // 2. Handle Adds and Updates
+                for (ForumMessage newMsg : latestMessages) {
+                    int existingIndex = -1;
+                    for (int i = 0; i < currentList.size(); i++) {
+                        if (currentList.get(i).getId().equals(newMsg.getId())) {
+                            existingIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (existingIndex != -1) {
+                        // Update existing (check if content changed or sender details populated)
+                        if (!currentList.get(existingIndex).equals(newMsg)) {
+                            currentList.set(existingIndex, newMsg);
+                            modified = true;
+                        }
+                    } else {
+                        // Add new
+                        currentList.add(newMsg);
+                        modified = true;
+                        if (!wasAtBottom && btnNewMessagesIndicator != null) {
+                            btnNewMessagesIndicator.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+
+                if (modified) {
+                    currentList.sort(Comparator.comparingLong(ForumMessage::getTimestamp));
+                    adapter.setData(currentList);
+
+                    if (wasAtBottom) {
+                        scrollToBottom(false);
+                    }
                 }
             }
 
             @Override
             public void onFailed(Exception e) {
-                Toast.makeText(ForumActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ForumActivity.this, "שגיאה בסנכרון הודעות", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -301,6 +395,12 @@ public class ForumActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
         loadMessages();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        databaseService.getForumService().stopListeningToMessages(categoryId);
     }
 
     @Override

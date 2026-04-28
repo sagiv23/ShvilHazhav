@@ -45,6 +45,16 @@ public interface IForumService {
     void listenToMessages(String categoryId, DatabaseCallback<List<ForumMessage>> callback);
 
     /**
+     * Fetches older messages for pagination.
+     *
+     * @param categoryId      The ID of the category.
+     * @param oldestTimestamp The timestamp of the oldest message currently loaded.
+     * @param limit           How many more messages to fetch.
+     * @param callback        The callback with the list of older messages.
+     */
+    void loadOlderMessages(String categoryId, long oldestTimestamp, int limit, DatabaseCallback<List<ForumMessage>> callback);
+
+    /**
      * Deletes a specific message from a forum category.
      *
      * @param messageId  The unique identifier of the message to delete.
@@ -52,4 +62,11 @@ public interface IForumService {
      * @param callback   An optional callback invoked upon completion.
      */
     void deleteMessage(@NonNull String messageId, String categoryId, @Nullable DatabaseCallback<Void> callback);
+
+    /**
+     * Stops listening for updates in a specific forum category.
+     *
+     * @param categoryId The ID of the category to stop monitoring.
+     */
+    void stopListeningToMessages(String categoryId);
 }
