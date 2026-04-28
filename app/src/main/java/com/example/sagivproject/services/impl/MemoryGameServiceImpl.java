@@ -1,7 +1,5 @@
 package com.example.sagivproject.services.impl;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -19,11 +17,12 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.StreamSupport;
 
 import javax.inject.Inject;
 
@@ -43,7 +42,6 @@ import javax.inject.Inject;
  */
 public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> implements IMemoryGameService {
     private static final String ROOMS_PATH = "rooms";
-    private static final String TAG = "GameServiceImpl";
 
     private static final String FIELD_STATUS = "status";
     private static final String FIELD_CARDS = "cards";
@@ -90,20 +88,26 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                for (MutableData roomData : currentData.getChildren()) {
-                    try {
-                        GameRoom room = roomData.getValue(GameRoom.class);
-                        if (room != null && STATUS_WAITING.equals(room.getStatus()) && room.getPlayer2Uid() == null) {
-                            room.setPlayer2Uid(user.getId());
-                            room.setStatus(STATUS_PLAYING);
-                            roomData.setValue(room);
-                            roomIdForUser = room.getId();
-                            return Transaction.success(currentData);
-                        }
-                    } catch (DatabaseException e) {
-                        Log.e(TAG, "Error deserializing room", e);
+                // Find a waiting room using Java Streams
+                MutableData waitingRoom = StreamSupport.stream(currentData.getChildren().spliterator(), false)
+                        .filter(roomData -> {
+                            GameRoom room = roomData.getValue(GameRoom.class);
+                            return room != null && STATUS_WAITING.equals(room.getStatus()) && room.getPlayer2Uid() == null;
+                        })
+                        .findFirst()
+                        .orElse(null);
+
+                if (waitingRoom != null) {
+                    GameRoom room = waitingRoom.getValue(GameRoom.class);
+                    if (room != null) {
+                        room.setPlayer2Uid(user.getId());
+                        room.setStatus(STATUS_PLAYING);
+                        waitingRoom.setValue(room);
+                        roomIdForUser = room.getId();
+                        return Transaction.success(currentData);
                     }
                 }
+
                 String newRoomId = roomsReference.push().getKey();
                 if (newRoomId == null) return Transaction.abort();
                 GameRoom newRoom = new GameRoom(newRoomId, user);
@@ -132,11 +136,10 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
         roomsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<GameRoom> roomList = new ArrayList<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    GameRoom room = child.getValue(GameRoom.class);
-                    if (room != null) roomList.add(room);
-                }
+                List<GameRoom> roomList = StreamSupport.stream(snapshot.getChildren().spliterator(), false)
+                        .map(child -> child.getValue(GameRoom.class))
+                        .filter(Objects::nonNull)
+                        .collect(java.util.stream.Collectors.toList());
                 callback.onCompleted(roomList);
             }
 

@@ -3,8 +3,6 @@ package com.example.sagivproject.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -219,7 +217,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             localLock = true;
             databaseService.getGameService().setProcessing(roomId, true);
             databaseService.getGameService().updateCardStatus(roomId, clickedIndex, true, false);
-            new Handler(Looper.getMainLooper()).postDelayed(() -> checkMatch(firstIndex, clickedIndex), 1000);
+
+            // Safer way to delay action using view-based posting
+            recyclerCards.postDelayed(() -> checkMatch(firstIndex, clickedIndex), 1000);
         }
     }
 
@@ -227,6 +227,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * Compares two revealed cards and updates matches/turns accordingly.
      */
     private void checkMatch(int idx1, int idx2) {
+        if (currentRoom == null || currentRoom.getCards() == null) return;
         List<Card> cards = currentRoom.getCards();
         Card c1 = cards.get(idx1);
         Card c2 = cards.get(idx2);
@@ -241,7 +242,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             animateError(idx1);
             animateError(idx2);
 
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            recyclerCards.postDelayed(() -> {
                 databaseService.getGameService().updateCardStatus(roomId, idx1, false, false);
                 databaseService.getGameService().updateCardStatus(roomId, idx2, false, false);
                 String nextTurn = user.getId().equals(currentRoom.getPlayer1Uid()) ? currentRoom.getPlayer2Uid() : currentRoom.getPlayer1Uid();
@@ -251,7 +252,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
         databaseService.getGameService().updateRoomField(roomId, "firstSelectedCardIndex", null);
 
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+        recyclerCards.postDelayed(() -> {
             databaseService.getGameService().setProcessing(roomId, false);
             localLock = false;
         }, 700);
@@ -325,13 +326,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         // Don't check if game is already finished in DB
         if ("finished".equals(currentRoom.getStatus())) return;
 
-        boolean allCardsMatched = true;
-        for (Card card : currentRoom.getCards()) {
-            if (!card.getIsMatched()) {
-                allCardsMatched = false;
-                break;
-            }
-        }
+        boolean allCardsMatched = currentRoom.getCards().stream().allMatch(Card::getIsMatched);
         if (allCardsMatched) finishGame(currentRoom);
     }
 
