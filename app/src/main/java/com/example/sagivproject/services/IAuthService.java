@@ -22,39 +22,39 @@ public interface IAuthService {
     /**
      * Registers a new regular user account.
      *
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
-     * @param birthDateMillis The user's birthdate in milliseconds.
-     * @param email           The user's email address.
-     * @param password        The user's password.
-     * @param callback        The callback invoked when the registration completes.
+     * @param firstName The user's first name.
+     * @param lastName  The user's last name.
+     * @param birthDate The user's birthdate (ISO format).
+     * @param email     The user's email address.
+     * @param password  The user's password.
+     * @param callback  The callback invoked when the registration completes.
      */
-    void register(String firstName, String lastName, long birthDateMillis, String email, String password, RegisterCallback callback);
+    void register(String firstName, String lastName, String birthDate, String email, String password, RegisterCallback callback);
 
     /**
      * Adds a new regular user account (typically an administrative action).
      *
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
-     * @param birthDateMillis The user's birthdate in milliseconds.
-     * @param email           The user's email address.
-     * @param password        The user's password.
-     * @param callback        The callback invoked when the account creation completes.
+     * @param firstName The user's first name.
+     * @param lastName  The user's last name.
+     * @param birthDate The user's birthdate (ISO format).
+     * @param email     The user's email address.
+     * @param password  The user's password.
+     * @param callback  The callback invoked when the account creation completes.
      */
-    void addUser(String firstName, String lastName, long birthDateMillis, String email, String password, AddUserCallback callback);
+    void addUser(String firstName, String lastName, String birthDate, String email, String password, AddUserCallback callback);
 
     /**
      * Updates an existing user's profile information.
      *
-     * @param user               The user object representing the current state.
-     * @param newFirstName       The updated first name.
-     * @param newLastName        The updated last name.
-     * @param newBirthDateMillis The updated birthdate in milliseconds.
-     * @param newEmail           The updated email address.
-     * @param newPassword        The updated password.
-     * @param callback           The callback invoked when the update completes.
+     * @param user         The user object representing the current state.
+     * @param newFirstName The updated first name.
+     * @param newLastName  The updated last name.
+     * @param newBirthDate The updated birthdate (ISO format).
+     * @param newEmail     The updated email address.
+     * @param newPassword  The updated password.
+     * @param callback     The callback invoked when the update completes.
      */
-    void updateUser(User user, String newFirstName, String newLastName, long newBirthDateMillis, String newEmail, String newPassword, UpdateUserCallback callback);
+    void updateUser(User user, String newFirstName, String newLastName, String newBirthDate, String newEmail, String newPassword, UpdateUserCallback callback);
 
     /**
      * Logs out the current user and clears local session data.

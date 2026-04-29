@@ -67,7 +67,7 @@ public class UsersTableActivity extends BaseActivity {
         currentUser = sharedPreferencesUtil.getUser();
 
         findViewById(R.id.btn_UsersTable_add_user).setOnClickListener(v -> dialogService.showUserDialog(getSupportFragmentManager(), null, newUser ->
-                databaseService.getAuthService().addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDateMillis(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
+                databaseService.getAuthService().addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDate(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
                     @Override
                     public void onSuccess(User user) {
                         usersMap.put(user.getId(), user);
@@ -97,7 +97,7 @@ public class UsersTableActivity extends BaseActivity {
             public void onUserClicked(User clickedUser) {
                 User userCopy = new User(clickedUser);
                 dialogService.showUserDialog(getSupportFragmentManager(), userCopy, updatedUser ->
-                        databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDateMillis(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
+                        databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
                             @Override
                             public void onSuccess(User resultUser) {
                                 usersMap.put(resultUser.getId(), resultUser);

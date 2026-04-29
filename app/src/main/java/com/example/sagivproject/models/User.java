@@ -28,7 +28,7 @@ public class User implements Idable {
     private UserRole role;
     private String firstName;
     private String lastName;
-    private long birthDateMillis;
+    private String birthDate;
     private String password;
     private String profileImage;
     private HashMap<String, Medication> medications;
@@ -48,19 +48,19 @@ public class User implements Idable {
     /**
      * Constructs a new User with full details.
      *
-     * @param id              The unique identifier for the user.
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
-     * @param birthDateMillis The user's birthdate in milliseconds.
-     * @param email           The user's email address.
-     * @param password        The user's password.
-     * @param role            The user's role (ADMIN or REGULAR).
+     * @param id        The unique identifier for the user.
+     * @param firstName The user's first name.
+     * @param lastName  The user's last name.
+     * @param birthDate The user's birthdate (ISO format).
+     * @param email     The user's email address.
+     * @param password  The user's password.
+     * @param role      The user's role (ADMIN or REGULAR).
      */
-    public User(String id, String firstName, String lastName, long birthDateMillis, String email, String password, UserRole role) {
+    public User(String id, String firstName, String lastName, String birthDate, String email, String password, UserRole role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDateMillis = birthDateMillis;
+        this.birthDate = birthDate;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -82,7 +82,7 @@ public class User implements Idable {
         this.role = other.role;
         this.firstName = other.firstName;
         this.lastName = other.lastName;
-        this.birthDateMillis = other.birthDateMillis;
+        this.birthDate = other.birthDate;
         this.password = other.password;
         this.profileImage = other.profileImage;
         if (other.medications != null) {
@@ -133,32 +133,41 @@ public class User implements Idable {
     }
 
     /**
-     * @return The user's birthdate in milliseconds.
+     * @return The user's birthdate in "yyyy-MM-dd" format.
      */
-    public long getBirthDateMillis() {
-        return this.birthDateMillis;
+    public String getBirthDate() {
+        return this.birthDate;
     }
 
-    public void setBirthDateMillis(long birthDateMillis) {
-        this.birthDateMillis = birthDateMillis;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     /**
      * Calculates the user's age based on their birthdate.
      * Annotated with {@code @Exclude} to prevent storage in Firebase.
      *
-     * @return The user's current age in years.
+     * @return The user's current age in years, or -1 if birthdate is invalid.
      */
     @Exclude
     public int getAge() {
-        Calendar birth = Calendar.getInstance();
-        birth.setTimeInMillis(birthDateMillis);
-        Calendar today = Calendar.getInstance();
-        int age = today.get(YEAR) - birth.get(YEAR);
-        if (today.get(DAY_OF_YEAR) < birth.get(DAY_OF_YEAR)) {
-            age--;
+        if (birthDate == null || birthDate.isEmpty()) return -1;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date = sdf.parse(birthDate);
+            if (date == null) return -1;
+
+            Calendar birth = Calendar.getInstance();
+            birth.setTime(date);
+            Calendar today = Calendar.getInstance();
+            int age = today.get(YEAR) - birth.get(YEAR);
+            if (today.get(DAY_OF_YEAR) < birth.get(DAY_OF_YEAR)) {
+                age--;
+            }
+            return age;
+        } catch (Exception e) {
+            return -1;
         }
-        return age;
     }
 
     /**
@@ -284,7 +293,7 @@ public class User implements Idable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return birthDateMillis == user.birthDateMillis &&
+        return Objects.equals(birthDate, user.birthDate) &&
                 Objects.equals(id, user.id) &&
                 Objects.equals(email, user.email) &&
                 role == user.role &&
@@ -294,7 +303,7 @@ public class User implements Idable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, role, firstName, lastName, birthDateMillis);
+        return Objects.hash(id, email, role, firstName, lastName, birthDate);
     }
 
     @NonNull
@@ -306,7 +315,7 @@ public class User implements Idable {
                 ", role=" + role +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", birthDateMillis=" + birthDateMillis +
+                ", birthDate='" + birthDate + '\'' +
                 ", password='" + password + '\'' +
                 ", profileImage='" + profileImage + '\'' +
                 ", medications=" + medications +

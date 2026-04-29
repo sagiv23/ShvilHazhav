@@ -52,7 +52,7 @@ public interface IForumService {
      * @param limit           How many more messages to fetch.
      * @param callback        The callback with the list of older messages.
      */
-    void loadOlderMessages(String categoryId, long oldestTimestamp, int limit, DatabaseCallback<List<ForumMessage>> callback);
+    void loadOlderMessages(String categoryId, String oldestTimestamp, int limit, DatabaseCallback<List<ForumMessage>> callback);
 
     /**
      * Deletes a specific message from a forum category.

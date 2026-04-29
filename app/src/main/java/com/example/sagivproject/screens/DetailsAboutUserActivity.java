@@ -20,11 +20,10 @@ import com.example.sagivproject.dialogs.ProfileImageDialog;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -52,6 +51,12 @@ public class DetailsAboutUserActivity extends BaseActivity {
      */
     @Inject
     protected ImageUtil imageUtil;
+
+    /**
+     * Utility for date formatting.
+     */
+    @Inject
+    protected CalendarUtil calendarUtil;
 
     private TextView txtTitle, txtEmail, txtPassword, txtAge, txtBirthDate;
     private ImageView imgUserProfile;
@@ -188,20 +193,19 @@ public class DetailsAboutUserActivity extends BaseActivity {
         imageUtil.loadImage(user.getProfileImage(), imgUserProfile);
 
         int age = user.getAge();
-        txtAge.setText(String.valueOf(age));
+        txtAge.setText(age == -1 ? "לא ידוע" : String.valueOf(age));
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(user.getBirthDateMillis());
+        String birthDateStr = user.getBirthDate();
+        if (birthDateStr != null) {
+            long millis = calendarUtil.parseDateFromDatabase(birthDateStr);
+            if (millis != -1) {
+                birthDateStr = calendarUtil.formatDate(millis);
+            }
+        } else {
+            birthDateStr = "לא הוזן";
+        }
 
-        String birthDate = String.format(
-                Locale.ROOT,
-                "%02d/%02d/%04d",
-                cal.get(Calendar.DAY_OF_MONTH),
-                cal.get(Calendar.MONTH) + 1,
-                cal.get(Calendar.YEAR)
-        );
-
-        txtBirthDate.setText(birthDate);
+        txtBirthDate.setText(birthDateStr);
     }
 
     /**
@@ -209,7 +213,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
      */
     private void openEditDialog() {
         dialogService.showUserDialog(getSupportFragmentManager(), user, updatedUser ->
-                databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDateMillis(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
+                databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
                     @Override
                     public void onSuccess(User resultUser) {
                         Toast.makeText(DetailsAboutUserActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();

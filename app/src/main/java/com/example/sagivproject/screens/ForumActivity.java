@@ -158,7 +158,7 @@ public class ForumActivity extends BaseActivity {
         if (currentMessages.isEmpty()) return;
 
         isLoadingOlder = true;
-        long oldestTimestamp = currentMessages.get(0).getTimestamp();
+        String oldestTimestamp = currentMessages.get(0).getTimestamp();
 
         databaseService.getForumService().loadOlderMessages(categoryId, oldestTimestamp, 20, new DatabaseCallback<>() {
             @Override
@@ -207,12 +207,12 @@ public class ForumActivity extends BaseActivity {
                 // 1. Handle Deletions: If a message is NOT in the latestMessages BUT its timestamp
                 // is within the range of latestMessages, it means it was deleted.
                 if (!latestMessages.isEmpty()) {
-                    long newestTs = latestMessages.get(latestMessages.size() - 1).getTimestamp();
-                    long oldestInWindowTs = latestMessages.get(0).getTimestamp();
+                    String newestTs = latestMessages.get(latestMessages.size() - 1).getTimestamp();
+                    String oldestInWindowTs = latestMessages.get(0).getTimestamp();
 
                     modified = currentList.removeIf(m ->
-                            m.getTimestamp() >= oldestInWindowTs &&
-                                    m.getTimestamp() <= newestTs &&
+                            m.getTimestamp().compareTo(oldestInWindowTs) >= 0 &&
+                                    m.getTimestamp().compareTo(newestTs) <= 0 &&
                                     latestMessages.stream().noneMatch(lm -> lm.getId().equals(m.getId()))
                     );
                 }
@@ -244,7 +244,7 @@ public class ForumActivity extends BaseActivity {
                 }
 
                 if (modified) {
-                    currentList.sort(Comparator.comparingLong(ForumMessage::getTimestamp));
+                    currentList.sort(Comparator.comparing(ForumMessage::getTimestamp));
                     adapter.setData(currentList);
 
                     if (wasAtBottom) {

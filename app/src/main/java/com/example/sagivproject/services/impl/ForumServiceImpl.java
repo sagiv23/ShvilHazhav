@@ -8,6 +8,7 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IForumService;
 import com.example.sagivproject.services.IUserService;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,6 +36,7 @@ import javax.inject.Inject;
 public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implements IForumService {
     private static final String FORUM_PATH = "forum_categories";
     private final IUserService userService;
+    private final CalendarUtil calendarUtil;
     private final Map<String, User> userCache = new HashMap<>();
     private final Map<String, ValueEventListener> listeners = new HashMap<>();
 
@@ -43,11 +45,13 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
      *
      * @param firebaseDatabase The {@link FirebaseDatabase} instance.
      * @param userService      The service used to fetch sender details.
+     * @param calendarUtil     The utility for date and time operations.
      */
     @Inject
-    public ForumServiceImpl(FirebaseDatabase firebaseDatabase, IUserService userService) {
+    public ForumServiceImpl(FirebaseDatabase firebaseDatabase, IUserService userService, com.example.sagivproject.utils.CalendarUtil calendarUtil) {
         super(firebaseDatabase, FORUM_PATH, ForumMessage.class);
         this.userService = userService;
+        this.calendarUtil = calendarUtil;
     }
 
     /**
@@ -76,7 +80,7 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
         Map<String, Object> msgData = new HashMap<>();
         msgData.put("id", messageId);
         msgData.put("message", text);
-        msgData.put("timestamp", ServerValue.TIMESTAMP);
+        msgData.put("timestamp", calendarUtil.getCurrentTimestamp());
         msgData.put("userId", user.getId());
 
         writeData(path + "/" + messageId, msgData, callback);
@@ -107,7 +111,7 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
                             ForumMessage msg = child.getValue(ForumMessage.class);
                             if (msg != null) messages.add(msg);
                         }
-                        messages.sort(Comparator.comparingLong(ForumMessage::getTimestamp));
+                        messages.sort(Comparator.comparing(ForumMessage::getTimestamp));
                         processMessages(messages, callback);
                     }
 
@@ -141,10 +145,10 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
      * @param callback        The callback with the list of older messages.
      */
     @Override
-    public void loadOlderMessages(String categoryId, long oldestTimestamp, int limit, DatabaseCallback<List<ForumMessage>> callback) {
+    public void loadOlderMessages(String categoryId, String oldestTimestamp, int limit, DatabaseCallback<List<ForumMessage>> callback) {
         readData(getCategoryPath(categoryId))
                 .orderByChild("timestamp")
-                .endAt(oldestTimestamp - 1)
+                .endBefore(oldestTimestamp)
                 .limitToLast(limit)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -160,7 +164,7 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
                             if (msg != null) messages.add(msg);
                         }
                     }
-                    messages.sort(Comparator.comparingLong(ForumMessage::getTimestamp));
+                    messages.sort(Comparator.comparing(ForumMessage::getTimestamp));
                     processMessages(messages, callback);
                 });
     }

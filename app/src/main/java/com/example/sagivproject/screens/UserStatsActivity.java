@@ -167,20 +167,8 @@ public class UserStatsActivity extends BaseActivity {
      * Opens a date picker to filter the medication usage history.
      */
     private void openCalendar() {
-        long initialDate = System.currentTimeMillis();
-        if (filteredDate != null) {
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                Date d = sdf.parse(filteredDate);
-                if (d != null) {
-                    initialDate = d.getTime();
-                }
-            } catch (Exception ignored) {
-            }
-        }
-
-        calendarUtil.openDatePicker(this, initialDate, (dateMillis, formattedDate) -> {
-            filteredDate = calendarUtil.formatDate(dateMillis, "yyyy-MM-dd");
+        calendarUtil.openDatePicker(this, filteredDate, (dateMillis, dbDate, formattedDate) -> {
+            filteredDate = dbDate;
             applyFilter();
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
     }

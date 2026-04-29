@@ -75,16 +75,16 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * Registers a new regular user account after checking for email uniqueness.
      *
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
-     * @param birthDateMillis The user's birthdate in milliseconds.
-     * @param email           The user's email address.
-     * @param password        The user's password.
-     * @param callback        The callback invoked when the process completes.
+     * @param firstName The user's first name.
+     * @param lastName  The user's last name.
+     * @param birthDate The user's birthdate (ISO format).
+     * @param email     The user's email address.
+     * @param password  The user's password.
+     * @param callback  The callback invoked when the process completes.
      */
     @Override
-    public void register(String firstName, String lastName, long birthDateMillis, String email, String password, RegisterCallback callback) {
-        handleUserCreation(firstName, lastName, birthDateMillis, email, password, new DatabaseCallback<>() {
+    public void register(String firstName, String lastName, String birthDate, String email, String password, RegisterCallback callback) {
+        handleUserCreation(firstName, lastName, birthDate, email, password, new DatabaseCallback<>() {
             @Override
             public void onCompleted(User user) {
                 sharedPreferencesUtil.saveUser(user);
@@ -102,16 +102,16 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * Adds a new regular user account (typically by an admin) without logging in as the new user.
      *
-     * @param firstName       The user's first name.
-     * @param lastName        The user's last name.
-     * @param birthDateMillis The user's birthdate in milliseconds.
-     * @param email           The user's email address.
-     * @param password        The user's password.
-     * @param callback        The callback invoked when the process completes.
+     * @param firstName The user's first name.
+     * @param lastName  The user's last name.
+     * @param birthDate The user's birthdate (ISO format).
+     * @param email     The user's email address.
+     * @param password  The user's password.
+     * @param callback  The callback invoked when the process completes.
      */
     @Override
-    public void addUser(String firstName, String lastName, long birthDateMillis, String email, String password, AddUserCallback callback) {
-        handleUserCreation(firstName, lastName, birthDateMillis, email, password, new DatabaseCallback<>() {
+    public void addUser(String firstName, String lastName, String birthDate, String email, String password, AddUserCallback callback) {
+        handleUserCreation(firstName, lastName, birthDate, email, password, new DatabaseCallback<>() {
             @Override
             public void onCompleted(User user) {
                 callback.onSuccess(user);
@@ -127,16 +127,16 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * Updates an existing user's details, handling email uniqueness checks if the email was changed.
      *
-     * @param user               The current user object.
-     * @param newFirstName       The updated first name.
-     * @param newLastName        The updated last name.
-     * @param newBirthDateMillis The updated birthdate.
-     * @param newEmail           The updated email address.
-     * @param newPassword        The updated password.
-     * @param callback           The callback invoked when the update completes.
+     * @param user         The current user object.
+     * @param newFirstName The updated first name.
+     * @param newLastName  The updated last name.
+     * @param newBirthDate The updated birthdate (ISO format).
+     * @param newEmail     The updated email address.
+     * @param newPassword  The updated password.
+     * @param callback     The callback invoked when the update completes.
      */
     @Override
-    public void updateUser(User user, String newFirstName, String newLastName, long newBirthDateMillis, String newEmail, String newPassword, UpdateUserCallback callback) {
+    public void updateUser(User user, String newFirstName, String newLastName, String newBirthDate, String newEmail, String newPassword, UpdateUserCallback callback) {
         boolean emailChanged = !newEmail.equals(user.getEmail());
 
         if (emailChanged) {
@@ -146,7 +146,7 @@ public class AuthServiceImpl implements IAuthService {
                     if (exists) {
                         callback.onError(ERROR_EMAIL_TAKEN);
                     } else {
-                        applyUserUpdate(user, newFirstName, newLastName, newBirthDateMillis, newEmail, newPassword, callback);
+                        applyUserUpdate(user, newFirstName, newLastName, newBirthDate, newEmail, newPassword, callback);
                     }
                 }
 
@@ -156,7 +156,7 @@ public class AuthServiceImpl implements IAuthService {
                 }
             });
         } else {
-            applyUserUpdate(user, newFirstName, newLastName, newBirthDateMillis, newEmail, newPassword, callback);
+            applyUserUpdate(user, newFirstName, newLastName, newBirthDate, newEmail, newPassword, callback);
         }
     }
 
@@ -176,9 +176,9 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * Internal helper to generate a UID and create a new user record in the database.
      */
-    private void createUser(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> callback) {
+    private void createUser(String firstName, String lastName, String birthDate, String email, String password, DatabaseCallback<User> callback) {
         String uid = userService.generateUserId();
-        User user = new User(uid, firstName, lastName, birthDateMillis, email, password, UserRole.REGULAR);
+        User user = new User(uid, firstName, lastName, birthDate, email, password, UserRole.REGULAR);
 
         userService.createNewUser(user, new DatabaseCallback<>() {
             @Override
@@ -196,10 +196,10 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * Internal helper to commit profile updates to the database.
      */
-    private void applyUserUpdate(User user, String firstName, String lastName, long birthDate, String email, String password, UpdateUserCallback callback) {
+    private void applyUserUpdate(User user, String firstName, String lastName, String birthDate, String email, String password, UpdateUserCallback callback) {
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setBirthDateMillis(birthDate);
+        user.setBirthDate(birthDate);
         user.setEmail(email);
         user.setPassword(password);
 
@@ -219,14 +219,14 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * Internal helper to validate email availability before proceeding with account creation.
      */
-    private void handleUserCreation(String firstName, String lastName, long birthDateMillis, String email, String password, DatabaseCallback<User> successCallback, Consumer<String> errorCallback) {
+    private void handleUserCreation(String firstName, String lastName, String birthDate, String email, String password, DatabaseCallback<User> successCallback, Consumer<String> errorCallback) {
         userService.checkIfEmailExists(email, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Boolean exists) {
                 if (exists) {
                     errorCallback.accept(ERROR_EMAIL_TAKEN);
                 } else {
-                    createUser(firstName, lastName, birthDateMillis, email, password, successCallback);
+                    createUser(firstName, lastName, birthDate, email, password, successCallback);
                 }
             }
 

@@ -115,11 +115,6 @@ public class SimpleXYGraphView extends View {
         invalidate();
     }
 
-    @Override
-    public boolean performClick() {
-        return super.performClick();
-    }
-
     /**
      * Handles touch interactions to support horizontal scrolling.
      * Prevents parent intercept when scrolling the graph content.
@@ -224,6 +219,11 @@ public class SimpleXYGraphView extends View {
         canvas.restore();
         canvas.drawLine(paddingLeft, paddingTop, paddingLeft, viewHeight - paddingBottom, axisPaint);
         drawYLabels(canvas, displayMaxY, graphHeight, viewHeight);
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
     }
 
     /**

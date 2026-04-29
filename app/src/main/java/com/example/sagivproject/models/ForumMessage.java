@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 public class ForumMessage implements Idable {
     private String id;
     private String message;
-    private long timestamp;
+    private String timestamp;
     private String userId;
 
     /**
@@ -46,10 +46,10 @@ public class ForumMessage implements Idable {
      *
      * @param id        The unique ID of the message.
      * @param message   The content of the message.
-     * @param timestamp The time the message was sent, in milliseconds.
+     * @param timestamp The time the message was sent (ISO format).
      * @param userId    The unique ID of the sender.
      */
-    public ForumMessage(String id, String message, long timestamp, String userId) {
+    public ForumMessage(String id, String message, String timestamp, String userId) {
         this.id = id;
         this.message = message;
         this.timestamp = timestamp;
@@ -78,13 +78,13 @@ public class ForumMessage implements Idable {
     }
 
     /**
-     * @return The message creation time in milliseconds.
+     * @return The message creation time.
      */
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 

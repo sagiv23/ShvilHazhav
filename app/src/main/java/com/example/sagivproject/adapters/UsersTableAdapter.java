@@ -14,9 +14,7 @@ import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.utils.ImageUtil;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -34,16 +32,19 @@ import javax.inject.Inject;
  */
 public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserViewHolder> {
     private final ImageUtil imageUtil;
+    private final com.example.sagivproject.utils.CalendarUtil calendarUtil;
     private OnUserActionListener listener;
 
     /**
      * Constructs a new UsersTableAdapter.
      *
-     * @param imageUtil A utility class for loading and processing profile images.
+     * @param imageUtil    A utility class for loading and processing profile images.
+     * @param calendarUtil A utility for date formatting.
      */
     @Inject
-    public UsersTableAdapter(ImageUtil imageUtil) {
+    public UsersTableAdapter(ImageUtil imageUtil, com.example.sagivproject.utils.CalendarUtil calendarUtil) {
         this.imageUtil = imageUtil;
+        this.calendarUtil = calendarUtil;
     }
 
     /**
@@ -79,10 +80,15 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         holder.txtUserEmail.setText(user.getEmail());
         holder.txtUserIsAdmin.setText(String.format("מנהל: %s", user.isAdmin() ? "כן" : "לא"));
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(user.getBirthDateMillis());
-        String birthDateStr = String.format(Locale.ROOT, "%02d/%02d/%04d",
-                cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+        String birthDateStr = user.getBirthDate();
+        if (birthDateStr != null) {
+            long millis = calendarUtil.parseDateFromDatabase(birthDateStr);
+            if (millis != -1) {
+                birthDateStr = calendarUtil.formatDate(millis);
+            }
+        } else {
+            birthDateStr = "לא הוזן";
+        }
         holder.txtUserBirthDate.setText(String.format("תאריך לידה: %s", birthDateStr));
 
         imageUtil.loadImage(user.getProfileImage(), holder.imgUserProfile);

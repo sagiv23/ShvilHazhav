@@ -38,7 +38,7 @@ public class UserDialog extends BaseDialog {
     CalendarUtil calendarUtil;
 
     private User user;
-    private long birthDateMillis = -1;
+    private String birthDate = null;
     private UserDialogListener listener;
 
     @Inject
@@ -94,17 +94,17 @@ public class UserDialog extends BaseDialog {
             inputLastName.setText(user.getLastName());
             inputEmail.setText(user.getEmail());
             inputPassword.setText(user.getPassword());
-            birthDateMillis = user.getBirthDateMillis();
-            if (birthDateMillis > 0) {
-                inputBirthDate.setText(calendarUtil.formatDate(birthDateMillis));
+            birthDate = user.getBirthDate();
+            if (birthDate != null && !birthDate.isEmpty()) {
+                inputBirthDate.setText(calendarUtil.formatDate(calendarUtil.parseDateFromDatabase(birthDate)));
             }
         } else {
             txtTitle.setText(R.string.add_user);
             btnSave.setText(R.string.add);
         }
 
-        inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(requireContext(), birthDateMillis, (millis, dateStr) -> {
-            birthDateMillis = millis;
+        inputBirthDate.setOnClickListener(v -> calendarUtil.openDatePicker(requireContext(), birthDate, (millis, dbDate, dateStr) -> {
+            birthDate = dbDate;
             inputBirthDate.setText(dateStr);
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT));
 
@@ -121,7 +121,7 @@ public class UserDialog extends BaseDialog {
             User userData = user == null ? new User() : user;
             userData.setFirstName(fName);
             userData.setLastName(lName);
-            userData.setBirthDateMillis(birthDateMillis);
+            userData.setBirthDate(birthDate);
             userData.setEmail(email);
             userData.setPassword(password);
 
@@ -152,13 +152,13 @@ public class UserDialog extends BaseDialog {
             return false;
         }
 
-        if (birthDateMillis <= 0) {
+        if (birthDate == null || birthDate.isEmpty()) {
             birthDateEdt.requestFocus();
             Toast.makeText(requireContext(), "תאריך הלידה אינו תקין, נא לבחור שוב", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (validator.isAgeNotValid(birthDateMillis)) {
+        if (validator.isAgeNotValid(birthDate)) {
             birthDateEdt.requestFocus();
             Toast.makeText(requireContext(), "הגיל המינימלי לשימוש באפליקציה הוא 12", Toast.LENGTH_LONG).show();
             return false;

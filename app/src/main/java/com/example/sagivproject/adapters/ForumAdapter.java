@@ -3,7 +3,6 @@ package com.example.sagivproject.adapters;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.format.DateFormat;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.TypefaceSpan;
 import android.view.Gravity;
@@ -43,6 +42,7 @@ import javax.inject.Inject;
  * </p>
  */
 public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
+    private final com.example.sagivproject.utils.CalendarUtil calendarUtil;
     private ForumMessageListener listener;
     private Typeface cachedFont;
     private String currentUserId;
@@ -51,7 +51,8 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      * Constructs a new ForumAdapter.
      */
     @Inject
-    public ForumAdapter() {
+    public ForumAdapter(com.example.sagivproject.utils.CalendarUtil calendarUtil) {
+        this.calendarUtil = calendarUtil;
     }
 
     public void setCurrentUserId(String userId) {
@@ -138,7 +139,17 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
         holder.txtIsAdmin.setText(msg.isSenderAdmin() ? "מנהל" : "משתמש");
 
         holder.txtMessage.setText(msg.getMessage());
-        holder.txtTime.setText(DateFormat.format("dd/MM/yyyy HH:mm", msg.getTimestamp()));
+
+        String displayTime = msg.getTimestamp();
+        try {
+            long millis = calendarUtil.parseTimestampFromDatabase(msg.getTimestamp());
+            if (millis != -1) {
+                displayTime = calendarUtil.formatDate(millis, "dd/MM/yyyy HH:mm");
+            }
+        } catch (Exception ignored) {
+        }
+
+        holder.txtTime.setText(displayTime);
 
         String currentlySpeakingMsgId = listener != null ? listener.getCurrentlySpeakingMsgId() : null;
         boolean isThisSpeaking = msg.getId().equals(currentlySpeakingMsgId);

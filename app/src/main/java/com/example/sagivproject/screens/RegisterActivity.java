@@ -43,9 +43,9 @@ public class RegisterActivity extends BaseActivity {
 
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword, editTextBirthDate;
     /**
-     * Holds the selected birthdate in milliseconds.
+     * Holds the selected birthdate in database format ("yyyy-MM-dd").
      */
-    private long birthDateMillis = -1;
+    private String birthDate = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,15 +71,15 @@ public class RegisterActivity extends BaseActivity {
     private void tryRegister() {
         String firstName = editTextFirstName.getText().toString().trim();
         String lastName = editTextLastName.getText().toString().trim();
-        String birthDate = editTextBirthDate.getText().toString();
+        String birthDateStr = editTextBirthDate.getText().toString();
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
-        if (!validateInput(firstName, lastName, birthDate, email, password)) {
+        if (!validateInput(firstName, lastName, birthDateStr, email, password)) {
             return;
         }
 
-        databaseService.getAuthService().register(firstName, lastName, birthDateMillis, email, password, new IAuthService.RegisterCallback() {
+        databaseService.getAuthService().register(firstName, lastName, birthDate, email, password, new IAuthService.RegisterCallback() {
             @Override
             public void onSuccess(User user) {
                 Toast.makeText(RegisterActivity.this, "ההרשמה בוצעה בהצלחה!", Toast.LENGTH_SHORT).show();
@@ -124,13 +124,13 @@ public class RegisterActivity extends BaseActivity {
             return false;
         }
 
-        if (birthDateMillis <= 0) {
+        if (birthDate == null || birthDate.isEmpty()) {
             editTextBirthDate.requestFocus();
             Toast.makeText(this, "תאריך הלידה אינו תקין, נא לבחור שוב", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (validator.isAgeNotValid(birthDateMillis)) {
+        if (validator.isAgeNotValid(birthDate)) {
             editTextBirthDate.requestFocus();
             Toast.makeText(this, "הגיל המינימלי לשימוש באפליקציה הוא 12", Toast.LENGTH_LONG).show();
             return false;
@@ -155,8 +155,8 @@ public class RegisterActivity extends BaseActivity {
      * Displays the date picker dialog to select the user's birthdate.
      */
     private void openDatePicker() {
-        calendarUtil.openDatePicker(this, birthDateMillis, (dateMillis, formattedDate) -> {
-            this.birthDateMillis = dateMillis;
+        calendarUtil.openDatePicker(this, birthDate, (dateMillis, dbDate, formattedDate) -> {
+            this.birthDate = dbDate;
             editTextBirthDate.setText(formattedDate);
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
     }

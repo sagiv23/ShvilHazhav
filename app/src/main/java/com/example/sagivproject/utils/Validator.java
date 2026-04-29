@@ -4,7 +4,10 @@ import android.util.Patterns;
 
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -74,21 +77,30 @@ public class Validator {
     /**
      * Checks if a user's age meets the minimum requirement based on their birthdate.
      *
-     * @param birthDateMillis The user's birthdate in milliseconds.
+     * @param birthDate The user's birthdate string in "yyyy-MM-dd" format.
      * @return true if the calculated age is less than the required minimum age (12).
      */
-    public boolean isAgeNotValid(long birthDateMillis) {
-        Calendar birth = Calendar.getInstance();
-        birth.setTimeInMillis(birthDateMillis);
+    public boolean isAgeNotValid(String birthDate) {
+        if (birthDate == null || birthDate.isEmpty()) return true;
 
-        Calendar today = Calendar.getInstance();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date = sdf.parse(birthDate);
+            if (date == null) return true;
 
-        int age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
+            Calendar birth = Calendar.getInstance();
+            birth.setTime(date);
 
-        if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
-            age--;
+            Calendar today = Calendar.getInstance();
+            int age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
+
+            if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
+                age--;
+            }
+
+            return age < MIN_AGE;
+        } catch (Exception e) {
+            return true;
         }
-
-        return age < MIN_AGE;
     }
 }
