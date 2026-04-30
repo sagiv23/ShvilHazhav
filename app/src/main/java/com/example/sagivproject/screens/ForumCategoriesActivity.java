@@ -103,6 +103,12 @@ public class ForumCategoriesActivity extends BaseActivity {
         loadCategories();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadCategories();
+    }
+
     /**
      * Fetches the current list of forum categories from the database.
      */

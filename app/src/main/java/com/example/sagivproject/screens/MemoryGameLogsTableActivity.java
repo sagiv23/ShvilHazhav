@@ -55,6 +55,13 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
         fetchUsersAndListenToGames();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Stop listening to all rooms when the admin leaves the screen
+        databaseService.getGameService().removeRoomListener("all_rooms_placeholder_or_handle_logic");
+    }
+
     /**
      * Orchestrates the data loading sequence: first resolves names, then starts the game listener.
      */

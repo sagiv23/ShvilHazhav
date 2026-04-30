@@ -138,6 +138,12 @@ public class UserStatsActivity extends BaseActivity {
         txtSelectedDate.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshData();
+    }
+
     /**
      * Initializes the ViewPager2 and TabLayout used to display the XY graphs.
      */

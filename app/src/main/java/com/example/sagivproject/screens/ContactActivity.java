@@ -96,4 +96,12 @@ public class ContactActivity extends BaseActivity {
             startActivity(intent);
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        if (handler != null && longPressedRunnable != null) {
+            handler.removeCallbacks(longPressedRunnable);
+        }
+        super.onDestroy();
+    }
 }

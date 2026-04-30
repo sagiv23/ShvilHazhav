@@ -73,7 +73,6 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public abstract class BaseActivity extends AppCompatActivity implements MenuNavigationListener {
-    private static final String TAG = "BaseActivity";
     /**
      * Utility for managing local user preferences and session.
      */
@@ -124,6 +123,46 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("Lifecycle", "onCreate: " + getClass().getSimpleName());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("Lifecycle", "onStart: " + getClass().getSimpleName());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("Lifecycle", "onResume: " + getClass().getSimpleName());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("Lifecycle", "onPause: " + getClass().getSimpleName());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("Lifecycle", "onStop: " + getClass().getSimpleName());
+        if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            closeDrawer();
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("Lifecycle", "onRestart: " + getClass().getSimpleName());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("Lifecycle", "onDestroy: " + getClass().getSimpleName());
     }
 
     /**
@@ -168,14 +207,9 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
 
                 Fragment currentMenuFrag = getSupportFragmentManager().findFragmentById(R.id.drawer_menu_container);
                 if (currentMenuFrag == null || !currentMenuFrag.getClass().equals(targetFragmentClass)) {
-                    try {
-                        Fragment menuFragment = targetFragmentClass.getDeclaredConstructor().newInstance();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.drawer_menu_container, menuFragment)
-                                .commit();
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error creating drawer menu fragment instance", e);
-                    }
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.drawer_menu_container, targetFragmentClass, null)
+                            .commit();
                 }
             }
         }
@@ -190,7 +224,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
             if (topMenuContainer != null) {
                 topMenuContainer.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(topMenuContainer.getId(), new AdminMenuFragment())
+                        .replace(topMenuContainer.getId(), AdminMenuFragment.class, null)
                         .commit();
             }
         } else {
@@ -300,9 +334,9 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
      * Sets a personalized greeting message in a TextView.
      *
      * @param textViewId The ID of the TextView to update.
-     * @param user       The user whose name will be displayed.
      */
-    protected void setGreeting(int textViewId, User user) {
+    protected void setGreeting(int textViewId) {
+        User user = sharedPreferencesUtil.getUser();
         if (user != null) {
             TextView textView = findViewById(textViewId);
             if (textView != null) {

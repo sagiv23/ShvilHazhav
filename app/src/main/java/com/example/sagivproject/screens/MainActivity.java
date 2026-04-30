@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
-import com.example.sagivproject.models.User;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -28,8 +27,6 @@ public class MainActivity extends BaseActivity {
         setContent(R.layout.activity_main, R.id.homePage);
         setupMenu();
 
-        User user = sharedPreferencesUtil.getUser();
-
         findViewById(R.id.btn_home_to_MedicationList).setOnClickListener(v -> startActivity(new Intent(this, MedicationListActivity.class)));
         findViewById(R.id.btn_home_to_forum_categories).setOnClickListener(v -> startActivity(new Intent(this, ForumCategoriesActivity.class)));
         findViewById(R.id.btn_home_to_Ai).setOnClickListener(v -> startActivity(new Intent(this, AiActivity.class)));
@@ -39,6 +36,18 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.btn_home_to_Stats).setOnClickListener(v -> startActivity(new Intent(this, UserStatsActivity.class)));
         findViewById(R.id.btn_home_to_emergency).setOnClickListener(v -> startActivity(new Intent(this, EmergencyContactsActivity.class)));
 
-        setGreeting(R.id.txt_home_Title, user);
+        setGreeting(R.id.txt_home_Title);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setGreeting(R.id.txt_home_Title);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setGreeting(R.id.txt_home_Title);
     }
 }

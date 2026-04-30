@@ -210,12 +210,33 @@ public class TipOfTheDayActivity extends BaseActivity {
         }, mainExecutor);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkDailyTip();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Stop speech if navigating away
+        if (tts != null && tts.isSpeaking()) {
+            tts.stop();
+            if (currentlySpeakingId != null) {
+                updateSpeakButton(currentlySpeakingId, false);
+            }
+        }
+    }
+
     /**
      * Releases TTS resources on activity close.
      */
     @Override
     public void onDestroy() {
-        if (tts != null) tts.shutdown();
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
         super.onDestroy();
     }
 }

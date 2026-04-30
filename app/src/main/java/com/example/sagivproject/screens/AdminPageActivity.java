@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
-import com.example.sagivproject.models.User;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -33,8 +32,6 @@ public class AdminPageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContent(R.layout.activity_admin_page, R.id.adminPage);
 
-        User user = sharedPreferencesUtil.getUser();
-
         findViewById(R.id.btn_admin_to_UsersTablePage).setOnClickListener(v -> startActivity(new Intent(this, UsersTableActivity.class)));
         findViewById(R.id.btn_admin_to_UserStats).setOnClickListener(v -> startActivity(new Intent(this, UserStatsActivity.class)));
         findViewById(R.id.btn_admin_to_MedicineImagesTablePage).setOnClickListener(v -> startActivity(new Intent(this, MedicationImagesTableActivity.class)));
@@ -47,6 +44,18 @@ public class AdminPageActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        setGreeting(R.id.txt_admin_title, user);
+        setGreeting(R.id.txt_admin_title);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setGreeting(R.id.txt_admin_title);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setGreeting(R.id.txt_admin_title);
     }
 }

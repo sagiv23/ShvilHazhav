@@ -2,6 +2,8 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
@@ -23,24 +25,22 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class SplashActivity extends BaseActivity {
-    /**
-     * The duration for which the splash screen is displayed, in milliseconds.
-     */
     private static final long SPLASH_DELAY = 3000;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Runnable navigateRunnable = this::navigateNext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContent(R.layout.activity_splash, R.id.splashPage);
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(SPLASH_DELAY);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            runOnUiThread(this::navigateNext);
-        }).start();
+        handler.postDelayed(navigateRunnable, SPLASH_DELAY);
+    }
+
+    @Override
+    protected void onDestroy() {
+        handler.removeCallbacks(navigateRunnable);
+        super.onDestroy();
     }
 
     /**

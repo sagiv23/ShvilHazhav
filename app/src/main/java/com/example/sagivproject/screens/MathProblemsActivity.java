@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
@@ -74,8 +75,31 @@ public class MathProblemsActivity extends BaseActivity {
         cvAnswerContainer = findViewById(R.id.cv_MathProblemsPage_answer_container);
 
         fetchLatestStats();
-        generateProblem();
         setupKeypad();
+
+        if (savedInstanceState != null) {
+            correctAnswer = savedInstanceState.getInt("correctAnswer");
+            String savedInput = savedInstanceState.getString("userInput", "");
+            userInput.append(savedInput);
+            tvAnswer.setText(userInput.toString());
+            tvQuestion.setText(savedInstanceState.getString("questionText"));
+        } else {
+            generateProblem();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("correctAnswer", correctAnswer);
+        outState.putString("userInput", userInput.toString());
+        outState.putString("questionText", tvQuestion.getText().toString());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchLatestStats();
     }
 
     /**
@@ -265,5 +289,13 @@ public class MathProblemsActivity extends BaseActivity {
             cvAnswerContainer.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_color)));
             tvAnswer.setTextColor(ContextCompat.getColor(this, R.color.text_color));
         }, 600);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+        super.onDestroy();
     }
 }

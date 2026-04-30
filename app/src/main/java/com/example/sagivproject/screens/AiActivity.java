@@ -100,6 +100,21 @@ public class AiActivity extends BaseActivity {
 
         btnSend.setOnClickListener(v -> sendQuestion());
         btnSpeak.setOnClickListener(v -> toggleSpeech());
+
+        if (savedInstanceState != null) {
+            String savedAnswer = savedInstanceState.getString("answerText");
+            if (savedAnswer != null && !savedAnswer.isEmpty()) {
+                answerView.setText(savedAnswer);
+                btnSpeak.setVisibility(savedInstanceState.getInt("speakBtnVisibility", View.GONE));
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("answerText", answerView.getText().toString());
+        outState.putInt("speakBtnVisibility", btnSpeak.getVisibility());
     }
 
     /**
@@ -194,12 +209,27 @@ public class AiActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (tts != null && tts.isSpeaking()) {
+            tts.stop();
+            updateSpeakButton(false);
+        }
+        if (animationHandler != null) {
+            animationHandler.removeCallbacksAndMessages(null);
+        }
+    }
+
     /**
      * Shuts down the TTS engine and clears animation callbacks when the activity is destroyed.
      */
     @Override
     public void onDestroy() {
-        if (tts != null) tts.shutdown();
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
         if (animationHandler != null) {
             animationHandler.removeCallbacksAndMessages(null);
         }
