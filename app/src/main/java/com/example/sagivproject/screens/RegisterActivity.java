@@ -71,11 +71,10 @@ public class RegisterActivity extends BaseActivity {
     private void tryRegister() {
         String firstName = editTextFirstName.getText().toString().trim();
         String lastName = editTextLastName.getText().toString().trim();
-        String birthDateStr = editTextBirthDate.getText().toString();
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
-        if (!validateInput(firstName, lastName, birthDateStr, email, password)) {
+        if (!validateInput(firstName, lastName, this.birthDate, email, password)) {
             return;
         }
 
@@ -107,7 +106,7 @@ public class RegisterActivity extends BaseActivity {
      * @return true if all inputs are valid.
      */
     private boolean validateInput(String firstName, String lastName, String birthDate, String email, String password) {
-        if (firstName.isEmpty() || lastName.isEmpty() || birthDate.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -126,7 +125,7 @@ public class RegisterActivity extends BaseActivity {
 
         if (birthDate == null || birthDate.isEmpty()) {
             editTextBirthDate.requestFocus();
-            Toast.makeText(this, "תאריך הלידה אינו תקין, נא לבחור שוב", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "נא לבחור תאריך לידה", Toast.LENGTH_SHORT).show();
             return false;
         }
 

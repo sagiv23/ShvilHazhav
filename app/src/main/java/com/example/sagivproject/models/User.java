@@ -22,7 +22,6 @@ import java.util.Objects;
  */
 public class User implements Idable {
     private static final int YEAR = Calendar.YEAR;
-    private static final int DAY_OF_YEAR = Calendar.DAY_OF_YEAR;
     private String id;
     private String email;
     private UserRole role;
@@ -161,7 +160,10 @@ public class User implements Idable {
             birth.setTime(date);
             Calendar today = Calendar.getInstance();
             int age = today.get(YEAR) - birth.get(YEAR);
-            if (today.get(DAY_OF_YEAR) < birth.get(DAY_OF_YEAR)) {
+
+            if (today.get(Calendar.MONTH) < birth.get(Calendar.MONTH) ||
+                    (today.get(Calendar.MONTH) == birth.get(Calendar.MONTH) &&
+                            today.get(Calendar.DAY_OF_MONTH) < birth.get(Calendar.DAY_OF_MONTH))) {
                 age--;
             }
             return age;

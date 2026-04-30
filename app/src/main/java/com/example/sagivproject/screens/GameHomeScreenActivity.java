@@ -158,15 +158,15 @@ public class GameHomeScreenActivity extends BaseActivity {
             @Override
             public void onCompleted(User updatedUser) {
                 if (updatedUser != null) {
-                    sharedPreferencesUtil.saveUser(updatedUser);
                     user = updatedUser;
+                    sharedPreferencesUtil.saveUser(user);
                 }
-                displayTodayWins();
+                displayStats();
             }
 
             @Override
             public void onFailed(Exception e) {
-                displayTodayWins();
+                displayStats();
             }
         });
     }
@@ -174,7 +174,7 @@ public class GameHomeScreenActivity extends BaseActivity {
     /**
      * Calculates and displays today's statistics in the UI.
      */
-    private void displayTodayWins() {
+    private void displayStats() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DailyStats stats = user.getDailyStats().get(today);
         int winsToday = (stats != null) ? stats.getMemoryWins() : 0;
