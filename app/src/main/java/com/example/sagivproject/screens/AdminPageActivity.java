@@ -43,19 +43,11 @@ public class AdminPageActivity extends BaseActivity {
             intent.putExtra("isFromLoggedIn", true);
             startActivity(intent);
         });
-
-        setGreeting(R.id.txt_admin_title);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setGreeting(R.id.txt_admin_title);
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
         setGreeting(R.id.txt_admin_title);
     }
 }

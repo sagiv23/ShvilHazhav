@@ -70,6 +70,7 @@ public class AiActivity extends BaseActivity {
         questionInput = findViewById(R.id.edit_Ai_question);
         answerView = findViewById(R.id.TV_Ai_txt_response);
         progressBar = findViewById(R.id.progressBar_Ai);
+        animationHandler = new Handler(Looper.getMainLooper());
 
         tts = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
@@ -193,7 +194,6 @@ public class AiActivity extends BaseActivity {
     private void displayTextWithAnimation(String fullText) {
         if (fullText == null) return;
         charIndex = 0;
-        animationHandler = new Handler(Looper.getMainLooper());
         final int delay = 15;
 
         animationHandler.post(new Runnable() {

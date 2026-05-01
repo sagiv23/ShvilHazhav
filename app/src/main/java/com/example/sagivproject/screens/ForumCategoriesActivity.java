@@ -99,8 +99,6 @@ public class ForumCategoriesActivity extends BaseActivity {
                 adminAddBtn.setVisibility(View.GONE);
             }
         }
-
-        loadCategories();
     }
 
     @Override

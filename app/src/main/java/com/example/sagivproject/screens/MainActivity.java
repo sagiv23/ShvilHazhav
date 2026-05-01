@@ -35,19 +35,11 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.btn_home_to_TipOfTheDay).setOnClickListener(v -> startActivity(new Intent(this, TipOfTheDayActivity.class)));
         findViewById(R.id.btn_home_to_Stats).setOnClickListener(v -> startActivity(new Intent(this, UserStatsActivity.class)));
         findViewById(R.id.btn_home_to_emergency).setOnClickListener(v -> startActivity(new Intent(this, EmergencyContactsActivity.class)));
-
-        setGreeting(R.id.txt_home_Title);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setGreeting(R.id.txt_home_Title);
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
         setGreeting(R.id.txt_home_Title);
     }
 }
