@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
@@ -26,11 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ContactActivity extends BaseActivity {
-    /**
-     * The duration required for a long press to trigger the secret navigation, in milliseconds.
-     */
     private static final int LONG_PRESS_DURATION = 3000;
-
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable longPressedRunnable;
 
@@ -45,6 +42,19 @@ public class ContactActivity extends BaseActivity {
         setupSocialButton(R.id.btnYoutube, "https://www.youtube.com/@Sagiv23");
         setupSocialButton(R.id.btnInstagram, "https://www.instagram.com/Sagiv23");
         setupSocialButton(R.id.btnGithub, "https://github.com/sagiv23");
+
+        if (savedInstanceState != null) {
+            boolean secretVisible = savedInstanceState.getBoolean("secretVisible", false);
+            if (secretVisible) {
+                findViewById(R.id.cardSecret).setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("secretVisible", findViewById(R.id.cardSecret).getVisibility() == View.VISIBLE);
     }
 
     /**
@@ -95,6 +105,14 @@ public class ContactActivity extends BaseActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected void onPause() {
+        if (handler != null && longPressedRunnable != null) {
+            handler.removeCallbacks(longPressedRunnable);
+        }
+        super.onPause();
     }
 
     @Override

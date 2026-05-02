@@ -52,14 +52,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MedicationImagesTableActivity extends BaseActivity {
-    /**
-     * Cached list of all images currently in the database.
-     */
     private final List<ImageData> allImages = new ArrayList<>();
-
-    /**
-     * Utility for image decoding and Base64 conversion.
-     */
     @Inject
     protected ImageUtil imageUtil;
 
@@ -113,8 +106,6 @@ public class MedicationImagesTableActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-
-        loadImages();
     }
 
     @Override

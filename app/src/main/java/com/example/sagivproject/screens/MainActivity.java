@@ -26,6 +26,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContent(R.layout.activity_main, R.id.homePage);
         setupMenu();
+        setGreeting(R.id.txt_home_Title);
 
         findViewById(R.id.btn_home_to_MedicationList).setOnClickListener(v -> startActivity(new Intent(this, MedicationListActivity.class)));
         findViewById(R.id.btn_home_to_forum_categories).setOnClickListener(v -> startActivity(new Intent(this, ForumCategoriesActivity.class)));

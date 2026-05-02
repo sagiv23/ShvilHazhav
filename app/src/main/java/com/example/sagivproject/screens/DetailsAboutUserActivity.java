@@ -99,7 +99,6 @@ public class DetailsAboutUserActivity extends BaseActivity {
         });
 
         setupLaunchers();
-        loadUserDetailsToUI();
     }
 
     /**

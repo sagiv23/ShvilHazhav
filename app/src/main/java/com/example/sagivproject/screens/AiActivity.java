@@ -49,6 +49,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class AiActivity extends BaseActivity {
+    private static final String PREF_AI_QUESTION = "ai_question_text";
+    private static final String PREF_AI_ANSWER = "ai_answer_text";
+    private static final String PREF_AI_SPEAK_VISIBILITY = "ai_speak_visibility";
     private ChatFutures chatSession;
     private Button btnSend, btnSpeak;
     private ProgressBar progressBar;
@@ -56,6 +59,7 @@ public class AiActivity extends BaseActivity {
     private TextView answerView;
     private Handler animationHandler;
     private int charIndex;
+    private String currentFullResponse = "";
     private TextToSpeech tts;
     private boolean isSpeaking = false;
 
@@ -102,12 +106,25 @@ public class AiActivity extends BaseActivity {
         btnSend.setOnClickListener(v -> sendQuestion());
         btnSpeak.setOnClickListener(v -> toggleSpeech());
 
+        // Load from savedInstanceState (for config changes)
         if (savedInstanceState != null) {
             String savedAnswer = savedInstanceState.getString("answerText");
+            currentFullResponse = savedAnswer != null ? savedAnswer : "";
             if (savedAnswer != null && !savedAnswer.isEmpty()) {
                 answerView.setText(savedAnswer);
                 btnSpeak.setVisibility(savedInstanceState.getInt("speakBtnVisibility", View.GONE));
             }
+            questionInput.setText(savedInstanceState.getString("questionText", ""));
+        } else {
+            // Load from SharedPreferences (for returning to activity)
+            String savedQuestion = sharedPreferencesUtil.getString(PREF_AI_QUESTION, "");
+            String savedAnswer = sharedPreferencesUtil.getString(PREF_AI_ANSWER, "");
+            int speakVisibility = sharedPreferencesUtil.getInt(PREF_AI_SPEAK_VISIBILITY, View.GONE);
+
+            currentFullResponse = savedAnswer;
+            questionInput.setText(savedQuestion);
+            answerView.setText(savedAnswer);
+            btnSpeak.setVisibility(speakVisibility);
         }
     }
 
@@ -115,6 +132,7 @@ public class AiActivity extends BaseActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("answerText", answerView.getText().toString());
+        outState.putString("questionText", questionInput.getText().toString());
         outState.putInt("speakBtnVisibility", btnSpeak.getVisibility());
     }
 
@@ -157,6 +175,7 @@ public class AiActivity extends BaseActivity {
         updateSpeakButton(false);
         tts.stop();
         answerView.setText("");
+        currentFullResponse = "";
 
         Content userMessage = new Content.Builder()
                 .addText(q)
@@ -181,7 +200,9 @@ public class AiActivity extends BaseActivity {
             public void onFailure(@NonNull Throwable t) {
                 progressBar.setVisibility(View.GONE);
                 btnSend.setEnabled(true);
-                answerView.setText(String.format("שגיאה: %s", t.getMessage()));
+                String errorMsg = String.format("שגיאה: %s", t.getMessage());
+                answerView.setText(errorMsg);
+                currentFullResponse = errorMsg;
             }
         }, mainExecutor);
     }
@@ -193,6 +214,7 @@ public class AiActivity extends BaseActivity {
      */
     private void displayTextWithAnimation(String fullText) {
         if (fullText == null) return;
+        currentFullResponse = fullText;
         charIndex = 0;
         final int delay = 15;
 
@@ -219,6 +241,12 @@ public class AiActivity extends BaseActivity {
         if (animationHandler != null) {
             animationHandler.removeCallbacksAndMessages(null);
         }
+
+        // Save state to SharedPreferences
+        sharedPreferencesUtil.saveString(PREF_AI_QUESTION, questionInput.getText().toString());
+        // Save the full response even if it was still animating
+        sharedPreferencesUtil.saveString(PREF_AI_ANSWER, currentFullResponse);
+        sharedPreferencesUtil.saveInt(PREF_AI_SPEAK_VISIBILITY, btnSpeak.getVisibility());
     }
 
     /**

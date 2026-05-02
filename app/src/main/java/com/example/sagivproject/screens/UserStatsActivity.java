@@ -128,9 +128,6 @@ public class UserStatsActivity extends BaseActivity {
 
         setupAdminUI();
         setupGraphsUI();
-        if (!loggedInUser.isAdmin()) {
-            refreshData();
-        }
         setupMedicationLogs();
 
         String todayDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
@@ -176,6 +173,10 @@ public class UserStatsActivity extends BaseActivity {
         calendarUtil.openDatePicker(this, filteredDate, (dateMillis, dbDate, formattedDate) -> {
             filteredDate = dbDate;
             applyFilter();
+            if (usageAdapter != null && usageAdapter.getItemCount() == 0) {
+                dialogService.showConfirmDialog(getSupportFragmentManager(), "שגיאה", "לא נמצא תיעוד לתאריך זה.", "אישור", null, () -> {
+                });
+            }
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
     }
 

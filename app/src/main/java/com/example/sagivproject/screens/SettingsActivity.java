@@ -160,8 +160,6 @@ public class SettingsActivity extends BaseActivity {
             updateDarkModeText(switchDarkMode, isChecked);
         });
 
-        refreshSwitches();
-
         // Individual permission toggles
         switchNotifications.setOnCheckedChangeListener((v, isChecked) -> {
             if (v.isPressed()) {

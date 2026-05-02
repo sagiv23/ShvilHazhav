@@ -35,7 +35,7 @@ public class LandingActivity extends BaseActivity {
 
         boolean shouldAnimate = getIntent().getBooleanExtra("shouldAnimate", false);
 
-        if (shouldAnimate) {
+        if (shouldAnimate && savedInstanceState == null) {
             if (mainContent != null) {
                 mainContent.setAlpha(0f);
             }

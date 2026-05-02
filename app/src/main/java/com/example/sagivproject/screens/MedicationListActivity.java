@@ -129,8 +129,6 @@ public class MedicationListActivity extends BaseActivity {
 
         setupSearch();
         loadMedicationsFromCache();
-        fetchMedicationsFromServer();
-        fetchTodayUsageLogs();
     }
 
     @Override

@@ -44,20 +44,15 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MathProblemsActivity extends BaseActivity {
-    /**
-     * Buffer for current user-entered answer string.
-     */
+    private static final String PREF_MATH_QUESTION = "math_question_text";
+    private static final String PREF_MATH_USER_INPUT = "math_user_input";
+    private static final String PREF_MATH_CORRECT_ANSWER = "math_correct_answer";
     private final StringBuilder userInput = new StringBuilder();
     private final Handler handler = new Handler(Looper.getMainLooper());
-
     private TextView tvCorrect, tvWrong;
     private User user;
     private TextView tvQuestion, tvAnswer;
     private MaterialCardView cvAnswerContainer;
-
-    /**
-     * The correct answer for the current active problem.
-     */
     private int correctAnswer;
 
     @Override
@@ -84,7 +79,16 @@ public class MathProblemsActivity extends BaseActivity {
             tvAnswer.setText(userInput.toString());
             tvQuestion.setText(savedInstanceState.getString("questionText"));
         } else {
-            generateProblem();
+            // Load from SharedPreferences
+            if (sharedPreferencesUtil.contains(PREF_MATH_QUESTION)) {
+                correctAnswer = sharedPreferencesUtil.getInt(PREF_MATH_CORRECT_ANSWER, 0);
+                String savedInput = sharedPreferencesUtil.getString(PREF_MATH_USER_INPUT, "");
+                userInput.append(savedInput);
+                tvAnswer.setText(userInput.toString());
+                tvQuestion.setText(sharedPreferencesUtil.getString(PREF_MATH_QUESTION, ""));
+            } else {
+                generateProblem();
+            }
         }
     }
 
@@ -289,6 +293,15 @@ public class MathProblemsActivity extends BaseActivity {
             cvAnswerContainer.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_color)));
             tvAnswer.setTextColor(ContextCompat.getColor(this, R.color.text_color));
         }, 600);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Save state to SharedPreferences
+        sharedPreferencesUtil.saveInt(PREF_MATH_CORRECT_ANSWER, correctAnswer);
+        sharedPreferencesUtil.saveString(PREF_MATH_USER_INPUT, userInput.toString());
+        sharedPreferencesUtil.saveString(PREF_MATH_QUESTION, tvQuestion.getText().toString());
     }
 
     @Override
