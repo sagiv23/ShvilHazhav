@@ -2,7 +2,6 @@ package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
 
-import com.example.sagivproject.models.enums.UserRole;
 import com.google.firebase.database.Exclude;
 
 import java.text.SimpleDateFormat;
@@ -324,5 +323,22 @@ public class User implements Idable {
                 ", dailyStats=" + dailyStats +
                 ", emergencyContacts=" + emergencyContacts +
                 '}';
+    }
+
+    /**
+     * Defines the possible roles a user can have within the application.
+     * <p>
+     * Roles determine the level of access and available features for each user.
+     * </p>
+     */
+    public enum UserRole {
+        /**
+         * A standard user with regular permissions (Games, Forum, Medications).
+         */
+        REGULAR,
+        /**
+         * An administrative user with elevated permissions (User management, moderation).
+         */
+        ADMIN
     }
 }

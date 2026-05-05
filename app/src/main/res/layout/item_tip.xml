@@ -20,14 +20,15 @@
         android:padding="16dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_UserRow_userProfile"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/profile_img"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_user"
+            android:id="@+id/img_itemTip_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/icon_daily_tip"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_tip"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
-            app:strokeColor="?attr/colorOutline"
+            app:strokeColor="@color/text_color"
             app:strokeWidth="1dp" />
 
         <LinearLayout
@@ -38,66 +39,49 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txt_UserRow_fullName"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_itemTip_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/headline_hebrew"
-                android:textColor="@color/headline"
-                android:textSize="22sp"
-                tools:text="שם מלא" />
+                android:fontFamily="@font/text_hebrew"
+                android:textSize="20sp"
+                tools:text="תוכן הטיפ היומי" />
 
             <TextView
-                android:id="@+id/txt_UserRow_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/text_english"
-                android:textSize="16sp"
-                tools:text="email@example.com" />
-
-            <TextView
-                android:id="@+id/txt_UserRow_birthDate"
+                android:id="@+id/tv_itemTip_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/text_hebrew"
+                android:textColor="@color/text_color"
                 android:textSize="16sp"
-                tools:text="תאריך לידה: 01/01/2000" />
-
-            <TextView
-                android:id="@+id/txt_UserRow_IsAdmin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/text_hebrew"
-                android:textColor="@color/headline"
-                android:textSize="16sp"
-                tools:text="מנהל: לא" />
+                tools:text="23/11/2008" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_itemTip_admin_actions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <ImageButton
-                android:id="@+id/btn_UserRow_DeleteUser"
+                android:id="@+id/btn_itemTip_edit"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/delete"
-                android:src="@drawable/ic_delete" />
+                android:contentDescription="@string/edit"
+                android:src="@drawable/ic_edit" />
 
             <ImageButton
-                android:id="@+id/btn_UserRow_MakeAdmin"
+                android:id="@+id/btn_itemTip_delete"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/make_admin"
-                android:src="@drawable/ic_add_admin" />
-        </LinearLayout>
+                android:contentDescription="@string/delete"
+                android:src="@drawable/ic_delete" />
 
+        </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

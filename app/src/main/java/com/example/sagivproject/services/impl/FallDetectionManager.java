@@ -104,7 +104,7 @@ public class FallDetectionManager extends Service implements SensorEventListener
      */
     private void startMonitoring() {
         if (!isMonitoring && accelerometer != null) {
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
             isMonitoring = true;
             Log.d(TAG, "Fall detection monitoring started");
         }

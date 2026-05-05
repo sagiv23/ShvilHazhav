@@ -2,16 +2,16 @@ package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 /**
  * Represents a single message within a forum category.
  * <p>
  * This model follows a "Thin Database" strategy:
  * <ul>
- * <li><b>Persistent fields:</b> Only the message ID, content, timestamp, and sender's user ID are stored in the forum node.</li>
- * <li><b>Transient fields:</b> Sender details (name, email, admin status) are populated dynamically by the service layer
- * from the user database during retrieval.</li>
+ * <li><b>Persistent fields:</b> Only the message ID, content, timestamp, and sender's user ID are stored.</li>
  * </ul>
- * This ensures that if a user changes their name or role, all their past messages reflect the update automatically.
+ * Sender details (name, email, role) are resolved dynamically by the UI layer from the user database.
  * </p>
  */
 public class ForumMessage implements Idable {
@@ -19,21 +19,6 @@ public class ForumMessage implements Idable {
     private String message;
     private String timestamp;
     private String userId;
-
-    /**
-     * The full name of the sender, populated at runtime. Not stored in the forum database node.
-     */
-    private String senderName;
-
-    /**
-     * The email of the sender, populated at runtime. Not stored in the forum database node.
-     */
-    private String senderEmail;
-
-    /**
-     * Whether the sender was an admin, populated at runtime. Not stored in the forum database node.
-     */
-    private boolean senderAdmin;
 
     /**
      * Default constructor required for Firebase deserialization.
@@ -99,39 +84,6 @@ public class ForumMessage implements Idable {
         this.userId = userId;
     }
 
-    /**
-     * @return The display name of the sender.
-     */
-    public String getSenderName() {
-        return senderName;
-    }
-
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-    /**
-     * @return The email address of the sender.
-     */
-    public String getSenderEmail() {
-        return senderEmail;
-    }
-
-    public void setSenderEmail(String senderEmail) {
-        this.senderEmail = senderEmail;
-    }
-
-    /**
-     * @return true if the sender has administrative privileges.
-     */
-    public boolean isSenderAdmin() {
-        return senderAdmin;
-    }
-
-    public void setSenderAdmin(boolean senderAdmin) {
-        this.senderAdmin = senderAdmin;
-    }
-
     @NonNull
     @Override
     public String toString() {
@@ -140,9 +92,22 @@ public class ForumMessage implements Idable {
                 ", message='" + message + '\'' +
                 ", timestamp=" + timestamp +
                 ", userId='" + userId + '\'' +
-                ", senderName='" + senderName + '\'' +
-                ", senderEmail='" + senderEmail + '\'' +
-                ", senderAdmin=" + senderAdmin +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ForumMessage that = (ForumMessage) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(message, that.message) &&
+                Objects.equals(timestamp, that.timestamp) &&
+                Objects.equals(userId, that.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, message, timestamp, userId);
     }
 }

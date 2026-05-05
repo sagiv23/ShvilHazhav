@@ -1,10 +1,14 @@
 package com.example.sagivproject.dialogs;
 
 import android.app.Dialog;
+import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.os.BundleCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseDialog;
@@ -25,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class EmergencyContactDialog extends BaseDialog {
+    private static final String ARG_CONTACT = "arg_contact";
 
     /**
      * Utility for validating contact information.
@@ -58,8 +63,20 @@ public class EmergencyContactDialog extends BaseDialog {
      * @param listener The listener for handling the result.
      */
     public void setData(EmergencyContact contact, AddEmergencyContactListener listener) {
-        this.contactToEdit = contact;
+        Bundle args = new Bundle();
+        if (contact != null) {
+            args.putSerializable(ARG_CONTACT, contact);
+        }
+        setArguments(args);
         this.listener = listener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            contactToEdit = BundleCompat.getSerializable(getArguments(), ARG_CONTACT, EmergencyContact.class);
+        }
     }
 
     @Override
@@ -97,7 +114,11 @@ public class EmergencyContactDialog extends BaseDialog {
             }
 
             if (listener != null) {
-                EmergencyContact contact = contactToEdit == null ? new EmergencyContact() : contactToEdit;
+                // Create a new instance instead of modifying contactToEdit to ensure DiffUtil detects the change
+                EmergencyContact contact = new EmergencyContact();
+                if (contactToEdit != null) {
+                    contact.setId(contactToEdit.getId());
+                }
                 contact.setFirstName(fName);
                 contact.setLastName(lName);
                 contact.setPhoneNumber(phone);

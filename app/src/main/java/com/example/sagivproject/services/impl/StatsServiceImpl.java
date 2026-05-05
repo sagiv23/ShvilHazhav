@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.MedicationUsage;
-import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IStatsService;
 import com.google.firebase.database.FirebaseDatabase;
@@ -113,27 +112,17 @@ public class StatsServiceImpl extends BaseDatabaseService<DailyStats> implements
             DailyStats currentStats = (stats != null) ? stats : new DailyStats();
             currentStats.setId(usage.getDate());
 
-            if (usage.getStatus() == MedicationStatus.TAKEN) {
-                currentStats.addMedicationTaken();
-            } else if (usage.getStatus() == MedicationStatus.NOT_TAKEN) {
-                currentStats.addMedicationMissed();
-            }
-
             currentStats.addMedicationUsageLog(usage);
             return currentStats;
-        }, new DatabaseCallback<>() {
+        }, (callback == null) ? null : new DatabaseCallback<>() {
             @Override
             public void onCompleted(DailyStats result) {
-                if (callback != null) {
-                    callback.onCompleted(null);
-                }
+                callback.onCompleted(null);
             }
 
             @Override
             public void onFailed(Exception e) {
-                if (callback != null) {
-                    callback.onFailed(e);
-                }
+                callback.onFailed(e);
             }
         });
     }

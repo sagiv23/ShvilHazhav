@@ -22,23 +22,10 @@ public class GameRoom implements Idable {
 
     private String player1Uid;
     private String player2Uid;
-
-    /**
-     * The list of cards representing the shuffled game board.
-     */
     private List<Card> cards;
-
-    /**
-     * The unique identifier of the player who has the current turn.
-     */
     private String currentTurnUid;
-
     private int player1Score;
     private int player2Score;
-
-    /**
-     * Index of the first card selected in a turn, used for match validation.
-     */
     private Integer firstSelectedCardIndex;
 
     /**
@@ -46,9 +33,6 @@ public class GameRoom implements Idable {
      */
     private boolean processingMatch;
 
-    /**
-     * The UID of the winning player, or "draw" if scores are tied.
-     */
     private String winnerUid;
 
     /**

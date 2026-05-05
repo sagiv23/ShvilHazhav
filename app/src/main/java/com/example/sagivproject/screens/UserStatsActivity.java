@@ -307,6 +307,9 @@ public class UserStatsActivity extends BaseActivity {
                         sharedPreferencesUtil.saveUser(currentUser);
                     }
                 }
+                if (usageAdapter != null) {
+                    usageAdapter.setMedicationMap(currentUser.getMedications());
+                }
                 setupGraphs();
             }
 
@@ -324,9 +327,9 @@ public class UserStatsActivity extends BaseActivity {
     private void setupGraphs() {
         if (currentUser.getDailyStats() == null || currentUser.getDailyStats().isEmpty()) {
             graphAdapter.setData(List.of(
-                    new GraphData("memory", "זיכרון: אחוז ניצחונות", new ArrayList<>(), new ArrayList<>(), "תאריך", "% ניצחונות"),
-                    new GraphData("math", "מתמטיקה: אחוז הצלחה", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה"),
-                    new GraphData("meds", "תרופות: עמידה ביעדים", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה")
+                    new GraphData("memory", "זיכרון: אחוז ניצחונות", new ArrayList<>(), new ArrayList<>(), "תאריך", "% ניצחונות", SimpleXYGraphView.GraphType.LINE),
+                    new GraphData("math", "מתמטיקה: אחוז הצלחה", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה", SimpleXYGraphView.GraphType.LINE),
+                    new GraphData("meds", "תרופות: עמידה ביעדים", new ArrayList<>(), new ArrayList<>(), "תאריך", "% הצלחה", SimpleXYGraphView.GraphType.BAR)
             ));
             return;
         }
@@ -367,9 +370,9 @@ public class UserStatsActivity extends BaseActivity {
         });
 
         graphAdapter.setData(List.of(
-                new GraphData("memory", "זיכרון: אחוז ניצחונות", memoryWinPoints, memoryDates, "תאריך", "% ניצחונות"),
-                new GraphData("math", "מתמטיקה: אחוז הצלחה", mathRatioPoints, mathDates, "תאריך", "% הצלחה"),
-                new GraphData("meds", "תרופות: עמידה ביעדים", medRatioPoints, medDates, "תאריך", "% הצלחה")
+                new GraphData("memory", "זיכרון: אחוז ניצחונות", memoryWinPoints, memoryDates, "תאריך", "% ניצחונות", SimpleXYGraphView.GraphType.LINE),
+                new GraphData("math", "מתמטיקה: אחוז הצלחה", mathRatioPoints, mathDates, "תאריך", "% הצלחה", SimpleXYGraphView.GraphType.LINE),
+                new GraphData("meds", "תרופות: עמידה ביעדים", medRatioPoints, medDates, "תאריך", "% הצלחה", SimpleXYGraphView.GraphType.BAR)
         ));
     }
 
@@ -379,6 +382,7 @@ public class UserStatsActivity extends BaseActivity {
     private void setupMedicationLogs() {
         recyclerMedicationLogs.setLayoutManager(new LinearLayoutManager(this));
         usageAdapter = adapterService.getMedicationUsageAdapter();
+        usageAdapter.setMedicationMap(currentUser.getMedications());
         recyclerMedicationLogs.setAdapter(usageAdapter);
     }
 

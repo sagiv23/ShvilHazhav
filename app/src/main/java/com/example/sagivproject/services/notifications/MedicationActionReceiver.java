@@ -9,8 +9,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.MedicationUsage;
+import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
@@ -73,7 +73,7 @@ public class MedicationActionReceiver extends BroadcastReceiver {
             String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
             String timeNow = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
 
-            MedicationUsage usage = new MedicationUsage(medicationId, medicationName, timeNow, today, hourStr, status);
+            MedicationUsage usage = new MedicationUsage(medicationId, timeNow, today, status);
 
             databaseService.getStatsService().logMedicationUsage(user.getId(), usage, new IDatabaseService.DatabaseCallback<>() {
                 @Override
@@ -82,11 +82,6 @@ public class MedicationActionReceiver extends BroadcastReceiver {
 
                     DailyStats stats = user.getTodayStats();
                     stats.addMedicationUsageLog(usage);
-                    if (status == MedicationStatus.TAKEN) {
-                        stats.addMedicationTaken();
-                    } else if (status == MedicationStatus.NOT_TAKEN) {
-                        stats.addMedicationMissed();
-                    }
                     sharedPreferencesUtil.saveUser(user);
                 }
 

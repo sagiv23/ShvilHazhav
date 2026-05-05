@@ -10,6 +10,7 @@ import com.example.sagivproject.adapters.MedicationListAdapter;
 import com.example.sagivproject.adapters.MedicationUsageAdapter;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.adapters.MemoryGameLogAdapter;
+import com.example.sagivproject.adapters.TipAdapter;
 import com.example.sagivproject.adapters.UsersTableAdapter;
 
 /**
@@ -75,4 +76,9 @@ public interface IAdapterService {
      * @return The adapter for statistical XY graphs.
      */
     GraphAdapter getGraphAdapter();
+
+    /**
+     * @return The adapter for daily tips list.
+     */
+    TipAdapter getTipAdapter();
 }

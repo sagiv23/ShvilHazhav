@@ -44,7 +44,7 @@ public class ForumCategoriesServiceImpl extends BaseDatabaseService<ForumCategor
      */
     @Override
     public void getCategories(IDatabaseService.DatabaseCallback<List<ForumCategory>> callback) {
-        databaseReference.child(CATEGORIES_PATH).addValueEventListener(new ValueEventListener() {
+        readData(CATEGORIES_PATH).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<ForumCategory> categories = new ArrayList<>();

@@ -20,7 +20,6 @@ import androidx.core.os.BundleCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseDialog;
 import com.example.sagivproject.models.Medication;
-import com.example.sagivproject.models.enums.MedicationType;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -109,7 +108,7 @@ public class MedicationDialog extends BaseDialog {
         selectedHours.clear();
 
         List<String> typeNames = new ArrayList<>();
-        for (MedicationType type : MedicationType.values()) {
+        for (Medication.MedicationType type : Medication.MedicationType.values()) {
             typeNames.add(type.getDisplayName());
         }
         spinnerType.setAdapter(createMedicationTypeAdapter(typeNames));
@@ -135,7 +134,7 @@ public class MedicationDialog extends BaseDialog {
             String typeString = spinnerType.getText().toString();
             String details = edtDetails.getText().toString().trim();
 
-            MedicationType selectedType = getTypeFromString(typeString);
+            Medication.MedicationType selectedType = getTypeFromString(typeString);
 
             if (!validateInputs(name, typeString, details, selectedType)) {
                 return;
@@ -162,7 +161,7 @@ public class MedicationDialog extends BaseDialog {
      *
      * @return true if input is valid.
      */
-    private boolean validateInputs(String name, String typeString, String details, MedicationType selectedType) {
+    private boolean validateInputs(String name, String typeString, String details, Medication.MedicationType selectedType) {
         if (name.isEmpty() || typeString.isEmpty() || details.isEmpty()) {
             showToast("אנא מלא את כל השדות");
             return false;
@@ -181,8 +180,8 @@ public class MedicationDialog extends BaseDialog {
     /**
      * Maps a display name string back to its corresponding enum constant.
      */
-    private MedicationType getTypeFromString(String typeString) {
-        for (MedicationType type : MedicationType.values()) {
+    private Medication.MedicationType getTypeFromString(String typeString) {
+        for (Medication.MedicationType type : Medication.MedicationType.values()) {
             if (type.getDisplayName().equals(typeString)) {
                 return type;
             }

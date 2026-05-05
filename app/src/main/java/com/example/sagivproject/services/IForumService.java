@@ -8,6 +8,7 @@ import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * An interface that defines the contract for operations related to forum messages.
@@ -69,4 +70,14 @@ public interface IForumService {
      * @param categoryId The ID of the category to stop monitoring.
      */
     void stopListeningToMessages(String categoryId);
+
+    /**
+     * @return A map of cached users indexed by their unique identifier.
+     */
+    Map<String, User> getUserCache();
+
+    /**
+     * Clears the internal user cache to force re-fetching of sender details.
+     */
+    void clearUserCache();
 }

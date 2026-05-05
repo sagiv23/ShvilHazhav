@@ -119,7 +119,11 @@ public class EmergencyContactsActivity extends BaseActivity {
                     @Override
                     public void onCompleted(Void object) {
                         Toast.makeText(EmergencyContactsActivity.this, "איש הקשר עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                        loadUserFromDatabase();
+                        if (user != null) {
+                            user.getEmergencyContacts().put(updatedContact.getId(), updatedContact);
+                            sharedPreferencesUtil.saveUser(user);
+                            loadContacts();
+                        }
                     }
 
                     @Override
@@ -135,7 +139,11 @@ public class EmergencyContactsActivity extends BaseActivity {
                     @Override
                     public void onCompleted(Void object) {
                         Toast.makeText(EmergencyContactsActivity.this, "איש הקשר נמחק", Toast.LENGTH_SHORT).show();
-                        loadUserFromDatabase();
+                        if (user != null) {
+                            user.getEmergencyContacts().remove(contact.getId());
+                            sharedPreferencesUtil.saveUser(user);
+                            loadContacts();
+                        }
                     }
 
                     @Override

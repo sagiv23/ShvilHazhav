@@ -8,8 +8,8 @@ import android.util.Log;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
+import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.text.SimpleDateFormat;
@@ -67,13 +67,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         DailyStats stats = user.getDailyStats().get(today);
         if (stats != null && stats.getMedicationUsageLogs() != null) {
             for (MedicationUsage usage : stats.getMedicationUsageLogs()) {
-                if (hourStr != null && usage.getId().equals(medicationId) &&
-                        hourStr.equals(usage.getScheduledTime()) &&
+                if (usage.getMedicationId().equals(medicationId) &&
                         usage.getStatus() == MedicationStatus.TAKEN) {
-                    Log.d(TAG, "Medication " + medicationName + " already taken for " + hourStr + ". Rescheduling only.");
+                    Log.d(TAG, "Medication " + medicationName + " already taken today. Rescheduling only.");
 
                     Medication medication = user.getMedications().get(medicationId);
-                    if (medication != null) {
+                    if (medication != null && hourStr != null) {
                         alarmScheduler.scheduleSpecificTime(medication, hourStr, true);
                     }
                     return;

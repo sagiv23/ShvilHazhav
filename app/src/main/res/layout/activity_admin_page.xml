@@ -148,6 +148,22 @@
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_admin_to_TipOfTheDay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/text_hebrew"
+                        android:text="@string/tip_of_the_day_admin"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"
+                        app:cornerRadius="30dp"
+                        app:icon="@drawable/ic_tip"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconSize="28dp"
+                        app:strokeWidth="1dp" />
+
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_DetailsAboutUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

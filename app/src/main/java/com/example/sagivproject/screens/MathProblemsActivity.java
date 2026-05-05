@@ -17,7 +17,6 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.models.enums.Operation;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.google.android.material.card.MaterialCardView;
 
@@ -310,5 +309,38 @@ public class MathProblemsActivity extends BaseActivity {
             handler.removeCallbacksAndMessages(null);
         }
         super.onDestroy();
+    }
+
+    /**
+     * Defines the types of mathematical operations supported by the math problems generator.
+     * <p>
+     * This enum includes basic arithmetic operations, powers, and square roots.
+     * </p>
+     */
+    public enum Operation {
+        /**
+         * Addition operation (+).
+         */
+        ADD,
+        /**
+         * Subtraction operation (-).
+         */
+        SUBTRACT,
+        /**
+         * Multiplication operation (×).
+         */
+        MULTIPLY,
+        /**
+         * Division operation (÷).
+         */
+        DIVIDE,
+        /**
+         * Power/exponentiation operation (^).
+         */
+        POWER,
+        /**
+         * Square root operation (√).
+         */
+        SQRT
     }
 }

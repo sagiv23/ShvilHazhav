@@ -20,7 +20,6 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.UsersTableAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
 
@@ -218,7 +217,7 @@ public class UsersTableActivity extends BaseActivity {
      * @param user The user whose role is being modified.
      */
     private void handleToggleAdmin(User user) {
-        UserRole newRole = user.getRole() == UserRole.ADMIN ? UserRole.REGULAR : UserRole.ADMIN;
+        User.UserRole newRole = user.getRole() == User.UserRole.ADMIN ? User.UserRole.REGULAR : User.UserRole.ADMIN;
         databaseService.getUserService().updateUserRole(user.getId(), newRole, new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
@@ -231,7 +230,7 @@ public class UsersTableActivity extends BaseActivity {
                     sharedPreferencesUtil.saveUser(updatedUser);
                     currentUser = updatedUser;
 
-                    if (newRole == UserRole.REGULAR) {
+                    if (newRole == User.UserRole.REGULAR) {
                         navigateToUserHome(updatedUser);
                         return;
                     }

@@ -41,7 +41,7 @@ public class GraphAdapter extends BaseAdapter<GraphData, GraphAdapter.GraphViewH
     @Override
     public void onBindViewHolder(@NonNull GraphViewHolder holder, int position) {
         GraphData data = getItem(position);
-        holder.graphView.setData(data.getPoints(), data.getXLabels(), data.getTitle(), data.getLabelX(), data.getLabelY());
+        holder.graphView.setData(data.getPoints(), data.getXLabels(), data.getTitle(), data.getLabelX(), data.getLabelY(), data.getGraphType());
     }
 
     /**

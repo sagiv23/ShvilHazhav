@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.sagivproject.R;
-import com.example.sagivproject.models.enums.MedicationStatus;
+import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.screens.MainActivity;
 import com.example.sagivproject.screens.MedicationListActivity;
 

@@ -61,7 +61,7 @@
     <string name="profile_img">תמונת פרופיל</string>
     <string name="icon_camera">אייקון מצלמה</string>
     <string name="make_admin">הפוך למנהל</string>
-    <string name="delete">מחק</string>
+    <string name="delete">מחיקה</string>
     <string name="card">קלף</string>
     <string name="take_a_photo">צלם תמונה</string>
     <string name="choose_from_gallery">בחר מהגלריה</string>
@@ -135,6 +135,12 @@
     <string name="choose_date">בחר תאריך</string>
     <string name="show_all_history">מציג את כל ההיסטוריה</string>
     <string name="icon_daily_tip">אייקון טיפ יומי</string>
+    <string name="tip_of_the_day_admin">ניהול טיפ יומי</string>
+    <string name="show_calendar">הצג לוח שנה</string>
+    <string name="show_all_tips">הצג את כל הטיפים</string>
+    <string name="show_all_inspirations">הצג מאגר השראות</string>
+    <string name="static_inspiration">השראה קבועה</string>
+    <string name="selected_tip">הטיפ שנבחר:</string>
     <string name="emergency_contacts">אנשי קשר לחירום</string>
     <string name="add_emergency_contact">הוספת איש קשר לחירום</string>
     <string name="edit_emergency_contact">עריכת איש קשר לחירום</string>
@@ -161,4 +167,7 @@
     <string name="no_history_to_show">אין היסטוריית תרופות להצגה</string>
     <string name="there_are_no_messages">אין הודעות בפורום זה עדיין</string>
     <string name="there_are_no_categories">אין קטגוריות זמינות</string>
+    <string name="no_tips_to_show">אין טיפים להצגה</string>
+    <string name="tip_content">תוכן הטיפ</string>
+    <string name="tip_date_hint">תאריך (לחץ לבחירה)</string>
 </resources>

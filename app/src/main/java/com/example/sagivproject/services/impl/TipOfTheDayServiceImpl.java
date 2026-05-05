@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -28,7 +29,7 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
     /**
      * The date format used for generating daily identifiers.
      */
-    private static final String DATE_FORMAT = "yyyyMMdd";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     /**
      * Constructs a new TipOfTheDayServiceImpl.
@@ -53,6 +54,27 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
     }
 
     /**
+     * Retrieves all tips stored in the database.
+     *
+     * @param callback The callback invoked with the list of {@link TipOfTheDay} objects.
+     */
+    @Override
+    public void getAllTips(IDatabaseService.DatabaseCallback<List<TipOfTheDay>> callback) {
+        getAll(callback);
+    }
+
+    /**
+     * Retrieves a specific tip by its date ID.
+     *
+     * @param dateId   The date ID (yyyymmdd).
+     * @param callback The callback invoked with the found {@link TipOfTheDay} or null.
+     */
+    @Override
+    public void getTipByDate(String dateId, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
+        get(dateId, callback);
+    }
+
+    /**
      * Saves a daily tip only if no entry exists for its specific date ID.
      * <p>
      * Uses a transaction to ensure that if multiple users generate a tip simultaneously,
@@ -65,5 +87,15 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
     @Override
     public void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
         runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> Objects.requireNonNullElse(currentTip, tip), callback);
+    }
+
+    @Override
+    public void saveTip(TipOfTheDay tip, IDatabaseService.DatabaseCallback<Void> callback) {
+        create(tip, callback);
+    }
+
+    @Override
+    public void deleteTip(String dateId, IDatabaseService.DatabaseCallback<Void> callback) {
+        delete(dateId, callback);
     }
 }

@@ -2,34 +2,17 @@ package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
 
-import com.example.sagivproject.models.enums.MedicationStatus;
-
 /**
  * Represents a single instance of medication usage or a scheduled dose status entry.
  * <p>
- * This class tracks when a medication was supposed to be taken (scheduled time),
- * when the user actually performed an action (actual time), and what that action was
- * (e.g., TAKEN, NOT_TAKEN, SNOOZED). It is used for historical logging and compliance tracking.
+ * This class tracks when the user actually performed an action (actual time),
+ * and what that action was (e.g., TAKEN, NOT_TAKEN, SNOOZED).
  * </p>
  */
 public class MedicationUsage implements Idable {
     private String medicationId;
-    private String medicationName;
-    /**
-     * The actual time the user recorded the status.
-     */
     private String time;
-    /**
-     * The date of the recording in "yyyy-MM-dd" format.
-     */
     private String date;
-    /**
-     * The originally scheduled time for this dose in "HH:mm" format.
-     */
-    private String scheduledTime;
-    /**
-     * The intake status of this specific dose.
-     */
     private MedicationStatus status;
 
     /**
@@ -39,46 +22,29 @@ public class MedicationUsage implements Idable {
     }
 
     /**
-     * Constructs a new MedicationUsage without a specific scheduled time (legacy/manual log).
-     *
-     * @param medicationId   The unique ID of the medication.
-     * @param medicationName The display name of the medication.
-     * @param time           The actual record time.
-     * @param date           The record date.
-     * @param status         The resulting status.
-     */
-    public MedicationUsage(String medicationId, String medicationName, String time, String date, MedicationStatus status) {
-        this(medicationId, medicationName, time, date, null, status);
-    }
-
-    /**
      * Constructs a full MedicationUsage record.
      *
-     * @param medicationId   The unique ID of the medication.
-     * @param medicationName The display name of the medication.
-     * @param time           The actual record time.
-     * @param date           The record date.
-     * @param scheduledTime  The time this dose was scheduled for.
-     * @param status         The resulting status.
+     * @param medicationId The unique ID of the medication.
+     * @param time         The actual record time.
+     * @param date         The record date.
+     * @param status       The resulting status.
      */
-    public MedicationUsage(String medicationId, String medicationName, String time, String date, String scheduledTime, MedicationStatus status) {
+    public MedicationUsage(String medicationId, String time, String date, MedicationStatus status) {
         this.medicationId = medicationId;
-        this.medicationName = medicationName;
         this.time = time;
         this.date = date;
-        this.scheduledTime = scheduledTime;
         this.status = status;
     }
 
     /**
-     * @return The name of the medication used.
+     * @return The unique ID of the medication.
      */
-    public String getMedicationName() {
-        return medicationName;
+    public String getMedicationId() {
+        return medicationId;
     }
 
-    public void setMedicationName(String medicationName) {
-        this.medicationName = medicationName;
+    public void setMedicationId(String medicationId) {
+        this.medicationId = medicationId;
     }
 
     /**
@@ -104,17 +70,6 @@ public class MedicationUsage implements Idable {
     }
 
     /**
-     * @return The scheduled time for this dose.
-     */
-    public String getScheduledTime() {
-        return scheduledTime;
-    }
-
-    public void setScheduledTime(String scheduledTime) {
-        this.scheduledTime = scheduledTime;
-    }
-
-    /**
      * @return The {@link MedicationStatus} resulting from the action.
      */
     public MedicationStatus getStatus() {
@@ -132,7 +87,7 @@ public class MedicationUsage implements Idable {
 
     @Override
     public void setId(String id) {
-        medicationId = id;
+        this.medicationId = id;
     }
 
     @NonNull
@@ -140,11 +95,51 @@ public class MedicationUsage implements Idable {
     public String toString() {
         return "MedicationUsage{" +
                 "medicationId='" + medicationId + '\'' +
-                ", medicationName='" + medicationName + '\'' +
                 ", time='" + time + '\'' +
                 ", date='" + date + '\'' +
-                ", scheduledTime='" + scheduledTime + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    /**
+     * Defines the possible intake statuses for a scheduled medication dose.
+     * <p>
+     * This enum is used to track user compliance with their medication schedule.
+     * Each status has a user-friendly display name in Hebrew for UI purposes.
+     * </p>
+     */
+    public enum MedicationStatus {
+        /**
+         * The medication was successfully taken by the user.
+         */
+        TAKEN("נטל"),
+        /**
+         * The medication was explicitly marked as not taken.
+         */
+        NOT_TAKEN("לא נטל"),
+        /**
+         * The medication intake was postponed to a later time.
+         */
+        SNOOZED("בהמשך היום");
+
+        private final String displayName;
+
+        /**
+         * Constructs a new MedicationStatus.
+         *
+         * @param displayName The Hebrew display name for the status.
+         */
+        MedicationStatus(String displayName) {
+            this.displayName = displayName;
+        }
+
+        /**
+         * Gets the user-friendly display name of the status.
+         *
+         * @return The Hebrew display name.
+         */
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 }

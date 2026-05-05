@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 import java.util.List;
@@ -84,8 +83,8 @@ public interface IUserService {
      * Updates the administrative role of a specific user.
      *
      * @param uid      The ID of the user to modify.
-     * @param role     The new {@link UserRole} to assign.
+     * @param role     The new {@link User.UserRole} to assign.
      * @param callback An optional callback invoked upon completion.
      */
-    void updateUserRole(@NonNull String uid, @NonNull UserRole role, @Nullable DatabaseCallback<Void> callback);
+    void updateUserRole(@NonNull String uid, @NonNull User.UserRole role, @Nullable DatabaseCallback<Void> callback);
 }

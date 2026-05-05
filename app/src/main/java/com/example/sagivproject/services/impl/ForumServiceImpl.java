@@ -20,7 +20,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -77,13 +79,8 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
             return;
         }
 
-        Map<String, Object> msgData = new HashMap<>();
-        msgData.put("id", messageId);
-        msgData.put("message", text);
-        msgData.put("timestamp", calendarUtil.getCurrentTimestamp());
-        msgData.put("userId", user.getId());
-
-        writeData(path + "/" + messageId, msgData, callback);
+        ForumMessage forumMessage = new ForumMessage(messageId, text, calendarUtil.getCurrentTimestamp(), user.getId());
+        writeData(path + "/" + messageId, forumMessage, callback);
     }
 
     /**
@@ -186,31 +183,33 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
             return;
         }
 
-        AtomicInteger remaining = new AtomicInteger(messages.size());
-        for (ForumMessage msg : messages) {
-            String userId = msg.getUserId();
-            if (userCache.containsKey(userId)) {
-                updateMessageSenderDetails(msg, userCache.get(userId));
-                if (remaining.decrementAndGet() == 0 && callback != null) {
-                    callback.onCompleted(messages);
-                }
-                continue;
-            }
+        Set<String> uniqueUserIdsToFetch = messages.stream()
+                .map(ForumMessage::getUserId)
+                .filter(id -> !userCache.containsKey(id))
+                .collect(Collectors.toSet());
 
+        if (uniqueUserIdsToFetch.isEmpty()) {
+            if (callback != null) callback.onCompleted(messages);
+            return;
+        }
+
+        AtomicInteger remaining = new AtomicInteger(uniqueUserIdsToFetch.size());
+        for (String userId : uniqueUserIdsToFetch) {
             userService.getUser(userId, new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(User user) {
                     if (user != null) {
                         userCache.put(userId, user);
-                        updateMessageSenderDetails(msg, user);
                     }
-                    if (remaining.decrementAndGet() == 0 && callback != null) {
-                        callback.onCompleted(messages);
-                    }
+                    checkCompletion();
                 }
 
                 @Override
                 public void onFailed(Exception e) {
+                    checkCompletion();
+                }
+
+                private void checkCompletion() {
                     if (remaining.decrementAndGet() == 0 && callback != null) {
                         callback.onCompleted(messages);
                     }
@@ -219,18 +218,14 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
         }
     }
 
-    /**
-     * Updates the transient fields of a {@link ForumMessage} with details from a {@link User}.
-     *
-     * @param msg  The message to update.
-     * @param user The user whose details will be injected.
-     */
-    private void updateMessageSenderDetails(ForumMessage msg, User user) {
-        if (user != null) {
-            msg.setSenderName(user.getFullName());
-            msg.setSenderEmail(user.getEmail());
-            msg.setSenderAdmin(user.isAdmin());
-        }
+    @Override
+    public Map<String, User> getUserCache() {
+        return userCache;
+    }
+
+    @Override
+    public void clearUserCache() {
+        userCache.clear();
     }
 
     /**

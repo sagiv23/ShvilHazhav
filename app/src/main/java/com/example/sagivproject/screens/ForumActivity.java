@@ -166,6 +166,7 @@ public class ForumActivity extends BaseActivity {
                 if (list.isEmpty()) {
                     hasMoreOlder = false;
                 } else {
+                    adapter.setSenderMap(databaseService.getForumService().getUserCache());
                     adapter.addOlderMessages(list);
                 }
                 isLoadingOlder = false;
@@ -200,56 +201,13 @@ public class ForumActivity extends BaseActivity {
                 }
 
                 boolean wasAtBottom = isLastItemVisible();
-                List<ForumMessage> currentList = new ArrayList<>(adapter.getItemList());
+                List<ForumMessage> currentList = mergeMessages(adapter.getItemList(), latestMessages, wasAtBottom);
 
-                boolean modified = false;
+                adapter.setSenderMap(databaseService.getForumService().getUserCache());
+                adapter.setData(currentList);
 
-                // 1. Handle Deletions: If a message is NOT in the latestMessages BUT its timestamp
-                // is within the range of latestMessages, it means it was deleted.
-                if (!latestMessages.isEmpty()) {
-                    String newestTs = latestMessages.get(latestMessages.size() - 1).getTimestamp();
-                    String oldestInWindowTs = latestMessages.get(0).getTimestamp();
-
-                    modified = currentList.removeIf(m ->
-                            m.getTimestamp().compareTo(oldestInWindowTs) >= 0 &&
-                                    m.getTimestamp().compareTo(newestTs) <= 0 &&
-                                    latestMessages.stream().noneMatch(lm -> lm.getId().equals(m.getId()))
-                    );
-                }
-
-                // 2. Handle Adds and Updates
-                for (ForumMessage newMsg : latestMessages) {
-                    int existingIndex = -1;
-                    for (int i = 0; i < currentList.size(); i++) {
-                        if (currentList.get(i).getId().equals(newMsg.getId())) {
-                            existingIndex = i;
-                            break;
-                        }
-                    }
-
-                    if (existingIndex != -1) {
-                        // Update existing (check if content changed or sender details populated)
-                        if (!currentList.get(existingIndex).equals(newMsg)) {
-                            currentList.set(existingIndex, newMsg);
-                            modified = true;
-                        }
-                    } else {
-                        // Add new
-                        currentList.add(newMsg);
-                        modified = true;
-                        if (!wasAtBottom && btnNewMessagesIndicator != null) {
-                            btnNewMessagesIndicator.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-
-                if (modified) {
-                    currentList.sort(Comparator.comparing(ForumMessage::getTimestamp));
-                    adapter.setData(currentList);
-
-                    if (wasAtBottom) {
-                        scrollToBottom(false);
-                    }
+                if (wasAtBottom) {
+                    scrollToBottom(false);
                 }
             }
 
@@ -391,9 +349,63 @@ public class ForumActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Merges a batch of synchronized messages into the existing message list.
+     * <p>
+     * This method applies a deletion detection strategy and updates existing messages
+     * or adds new ones, while maintaining the overall chronological order.
+     * </p>
+     *
+     * @param currentList    The current list of messages in the adapter.
+     * @param latestMessages The new batch of messages from the database.
+     * @param wasAtBottom    Whether the user was at the bottom of the list before the merge.
+     * @return A new, sorted list of {@link ForumMessage} objects.
+     */
+    private List<ForumMessage> mergeMessages(List<ForumMessage> currentList, List<ForumMessage> latestMessages, boolean wasAtBottom) {
+        List<ForumMessage> result = new ArrayList<>(currentList);
+
+        if (latestMessages == null || latestMessages.isEmpty()) return result;
+
+        // 1. Handle Deletions
+        String newestTs = latestMessages.get(latestMessages.size() - 1).getTimestamp();
+        String oldestInWindowTs = latestMessages.get(0).getTimestamp();
+
+        result.removeIf(m ->
+                m.getTimestamp().compareTo(oldestInWindowTs) >= 0 &&
+                        m.getTimestamp().compareTo(newestTs) <= 0 &&
+                        latestMessages.stream().noneMatch(lm -> lm.getId().equals(m.getId()))
+        );
+
+        // 2. Handle Adds and Updates
+        for (ForumMessage newMsg : latestMessages) {
+            int existingIndex = -1;
+            for (int i = 0; i < result.size(); i++) {
+                if (result.get(i).getId().equals(newMsg.getId())) {
+                    existingIndex = i;
+                    break;
+                }
+            }
+
+            if (existingIndex != -1) {
+                if (!result.get(existingIndex).equals(newMsg)) {
+                    result.set(existingIndex, newMsg);
+                }
+            } else {
+                result.add(newMsg);
+                if (!wasAtBottom && btnNewMessagesIndicator != null) {
+                    btnNewMessagesIndicator.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+        result.sort(Comparator.comparing(ForumMessage::getTimestamp));
+        return result;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        databaseService.getForumService().clearUserCache();
         loadMessages();
     }
 

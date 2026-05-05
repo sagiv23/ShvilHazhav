@@ -23,14 +23,13 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
-import com.example.sagivproject.models.enums.MedicationStatus;
+import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -48,7 +47,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
     /**
      * Key: medicationId, Value: Map of scheduledTime -> MedicationStatus
      */
-    private final Map<String, Map<String, MedicationStatus>> loggedTodayMedications = new HashMap<>();
+    private final Map<String, MedicationStatus> loggedTodayMedications = new HashMap<>();
     private OnMedicationActionListener listener;
 
     /**
@@ -85,14 +84,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         this.loggedTodayMedications.clear();
         if (logs != null) {
             for (MedicationUsage usage : logs) {
-                String medId = usage.getId();
-                String scheduledTime = usage.getScheduledTime();
-                if (scheduledTime == null) continue;
-
-                if (!loggedTodayMedications.containsKey(medId)) {
-                    loggedTodayMedications.put(medId, new HashMap<>());
-                }
-                Objects.requireNonNull(loggedTodayMedications.get(medId)).put(scheduledTime, usage.getStatus());
+                loggedTodayMedications.put(usage.getMedicationId(), usage.getStatus());
             }
         }
 
@@ -105,15 +97,8 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
      * @param usage The {@link MedicationUsage} log to add.
      */
     public void addLoggedTodayMedication(MedicationUsage usage) {
-        String medId = usage.getId();
-        String scheduledTime = usage.getScheduledTime();
-        if (scheduledTime != null) {
-            if (!loggedTodayMedications.containsKey(medId)) {
-                loggedTodayMedications.put(medId, new HashMap<>());
-            }
-            Objects.requireNonNull(loggedTodayMedications.get(medId)).put(scheduledTime, usage.getStatus());
-        }
-        setProcessingFinished(medId);
+        loggedTodayMedications.put(usage.getMedicationId(), usage.getStatus());
+        setProcessingFinished(usage.getMedicationId());
     }
 
     @NonNull
@@ -148,9 +133,9 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         holder.statusContainer.removeAllViews();
         List<String> reminderHours = med.getReminderHours();
         if (reminderHours != null) {
-            Map<String, MedicationStatus> medLogs = loggedTodayMedications.get(med.getId());
+            MedicationStatus status = loggedTodayMedications.get(med.getId());
             for (String hour : reminderHours) {
-                addStatusRow(holder.statusContainer, med, hour, medLogs != null ? medLogs.get(hour) : null);
+                addStatusRow(holder.statusContainer, med, hour, status);
             }
         }
 

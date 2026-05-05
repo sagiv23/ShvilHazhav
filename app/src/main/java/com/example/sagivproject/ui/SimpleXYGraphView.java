@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -40,18 +41,21 @@ public class SimpleXYGraphView extends View {
     private final Paint pointPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint trendLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
+    private final Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Path linePath = new Path();
     private final float paddingLeft = 180f;
     private final float paddingBottom = 220f;
     private final float paddingTop = 120f;
     private final float pointSpacing = 200f;
-
+    private Typeface headlineFont;
+    private Typeface textFont;
     private List<Point> points = new ArrayList<>();
     private List<String> xLabels = new ArrayList<>();
     private String title = "";
     private String labelX = "";
     private String labelY = "";
-
+    private GraphType graphType = GraphType.LINE;
     private float scrollXOffset = 0f;
     private float lastTouchX = 0f;
 
@@ -72,8 +76,10 @@ public class SimpleXYGraphView extends View {
      * @param context Application context for resource access.
      */
     private void init(Context context) {
-        Typeface textFont = ResourcesCompat.getFont(context, R.font.text_hebrew);
+        textFont = ResourcesCompat.getFont(context, R.font.text_hebrew);
+        headlineFont = ResourcesCompat.getFont(context, R.font.headline_hebrew);
         int textColor = ContextCompat.getColor(context, R.color.text_color);
+        int accentColor = ContextCompat.getColor(context, R.color.headline);
 
         axisPaint.setColor(textColor);
         axisPaint.setStrokeWidth(2f);
@@ -83,8 +89,18 @@ public class SimpleXYGraphView extends View {
         gridPaint.setStyle(Paint.Style.STROKE);
         gridPaint.setPathEffect(new DashPathEffect(new float[]{15, 15}, 0));
 
-        pointPaint.setColor(ContextCompat.getColor(context, R.color.error));
+        pointPaint.setColor(accentColor);
         pointPaint.setStyle(Paint.Style.FILL);
+
+        linePaint.setColor(accentColor);
+        linePaint.setStrokeWidth(4f);
+        linePaint.setStyle(Paint.Style.STROKE);
+        linePaint.setStrokeJoin(Paint.Join.ROUND);
+        linePaint.setStrokeCap(Paint.Cap.ROUND);
+
+        barPaint.setColor(accentColor);
+        barPaint.setAlpha(180); // semi-transparent bars
+        barPaint.setStyle(Paint.Style.FILL);
 
         trendLinePaint.setColor(ContextCompat.getColor(context, R.color.error));
         trendLinePaint.setStrokeWidth(3f);
@@ -99,18 +115,20 @@ public class SimpleXYGraphView extends View {
      * Configures the graph with new data points and labels.
      * Triggers a view redraw.
      *
-     * @param points  List of XY coordinates to plot.
-     * @param xLabels Text labels for the X-axis markers.
-     * @param title   Main title of the graph.
-     * @param labelX  Descriptive label for the horizontal axis.
-     * @param labelY  Descriptive label for the vertical axis.
+     * @param points    List of XY coordinates to plot.
+     * @param xLabels   Text labels for the X-axis markers.
+     * @param title     Main title of the graph.
+     * @param labelX    Descriptive label for the horizontal axis.
+     * @param labelY    Descriptive label for the vertical axis.
+     * @param graphType The type of visualization (LINE or BAR).
      */
-    public void setData(List<Point> points, List<String> xLabels, String title, String labelX, String labelY) {
+    public void setData(List<Point> points, List<String> xLabels, String title, String labelX, String labelY, GraphType graphType) {
         this.points = points != null ? points : new ArrayList<>();
         this.xLabels = xLabels != null ? xLabels : new ArrayList<>();
         this.title = title;
         this.labelX = labelX;
         this.labelY = labelY;
+        this.graphType = graphType != null ? graphType : GraphType.LINE;
         this.scrollXOffset = 0;
         invalidate();
     }
@@ -176,11 +194,11 @@ public class SimpleXYGraphView extends View {
         float displayMaxY = maxY == 0 ? 100 : maxY * 1.2f;
 
         textPaint.setTextSize(56f);
-        textPaint.setTypeface(ResourcesCompat.getFont(getContext(), R.font.headline_hebrew));
+        textPaint.setTypeface(headlineFont);
         canvas.drawText(title, viewWidth / 2 - textPaint.measureText(title) / 2, paddingTop / 1.5f, textPaint);
 
         textPaint.setTextSize(50f);
-        textPaint.setTypeface(ResourcesCompat.getFont(getContext(), R.font.text_hebrew));
+        textPaint.setTypeface(textFont);
         canvas.save();
         canvas.rotate(-90, 60, viewHeight / 2);
         canvas.drawText(labelY, 60 - textPaint.measureText(labelY) / 2, viewHeight / 2, textPaint);
@@ -198,13 +216,29 @@ public class SimpleXYGraphView extends View {
 
         drawTrendLine(canvas, displayMaxY, graphHeight, viewHeight);
 
+        linePath.reset();
+        boolean firstPoint = true;
+
         for (int i = 0; i < points.size(); i++) {
             Point p = points.get(i);
             float px = paddingLeft + i * pointSpacing;
             float py = (viewHeight - paddingBottom) - (p.y / displayMaxY) * graphHeight;
 
             canvas.drawLine(px, paddingTop, px, viewHeight - paddingBottom, gridPaint);
-            canvas.drawCircle(px, py, 16f, pointPaint);
+
+            if (graphType == GraphType.BAR) {
+                float barWidth = pointSpacing * 0.6f;
+                canvas.drawRect(px - barWidth / 2, py, px + barWidth / 2, viewHeight - paddingBottom, barPaint);
+                canvas.drawCircle(px, py, 8f, pointPaint);
+            } else {
+                if (firstPoint) {
+                    linePath.moveTo(px, py);
+                    firstPoint = false;
+                } else {
+                    linePath.lineTo(px, py);
+                }
+                canvas.drawCircle(px, py, 16f, pointPaint);
+            }
 
             if (i < xLabels.size()) {
                 textPaint.setTextSize(40f);
@@ -214,6 +248,10 @@ public class SimpleXYGraphView extends View {
                 canvas.drawText(label, px - 40, viewHeight - paddingBottom + 80, textPaint);
                 canvas.restore();
             }
+        }
+
+        if (graphType == GraphType.LINE && !firstPoint) {
+            canvas.drawPath(linePath, linePaint);
         }
 
         canvas.restore();
@@ -320,6 +358,10 @@ public class SimpleXYGraphView extends View {
         String msg = "אין מספיק נתונים להצגת הגרף";
         textPaint.setTextSize(45f);
         canvas.drawText(msg, (float) getWidth() / 2 - textPaint.measureText(msg) / 2, (float) getHeight() / 2, textPaint);
+    }
+
+    public enum GraphType {
+        LINE, BAR
     }
 
     /**

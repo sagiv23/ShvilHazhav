@@ -1,7 +1,6 @@
 package com.example.sagivproject.services.impl;
 
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IUserService;
@@ -178,7 +177,7 @@ public class AuthServiceImpl implements IAuthService {
      */
     private void createUser(String firstName, String lastName, String birthDate, String email, String password, DatabaseCallback<User> callback) {
         String uid = userService.generateUserId();
-        User user = new User(uid, firstName, lastName, birthDate, email, password, UserRole.REGULAR);
+        User user = new User(uid, firstName, lastName, birthDate, email, password, User.UserRole.REGULAR);
 
         userService.createNewUser(user, new DatabaseCallback<>() {
             @Override

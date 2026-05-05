@@ -15,7 +15,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
@@ -107,8 +106,10 @@ public class EmergencyServiceImpl extends BaseDatabaseService<EmergencyContact> 
      */
     @Override
     public void updateContact(@NonNull String uid, @NonNull EmergencyContact contact, @Nullable DatabaseCallback<Void> callback) {
-        UnaryOperator<EmergencyContact> updateFunction = oldContact -> contact;
-        runTransaction(getContactItemPath(uid, contact.getId()), updateFunction, new DatabaseCallback<>() {
+        runTransaction(getContactItemPath(uid, contact.getId()), oldContact -> {
+            if (oldContact == null) return null;
+            return contact;
+        }, new DatabaseCallback<>() {
             @Override
             public void onCompleted(EmergencyContact result) {
                 if (callback != null) callback.onCompleted(null);

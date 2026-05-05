@@ -21,10 +21,14 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumMessage;
+import com.example.sagivproject.models.User;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -46,6 +50,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     private ForumMessageListener listener;
     private Typeface cachedFont;
     private String currentUserId;
+    private Map<String, User> senderMap = new HashMap<>();
 
     /**
      * Constructs a new ForumAdapter.
@@ -57,6 +62,17 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
     public void setCurrentUserId(String userId) {
         this.currentUserId = userId;
+    }
+
+    /**
+     * Updates the map of senders.
+     *
+     * @param senderMap Map of user details indexed by userId.
+     */
+    public void setSenderMap(Map<String, User> senderMap) {
+        if (senderMap != null) {
+            this.senderMap = new HashMap<>(senderMap);
+        }
     }
 
     /**
@@ -84,8 +100,9 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      */
     public void addOlderMessages(List<ForumMessage> olderMessages) {
         if (olderMessages == null || olderMessages.isEmpty()) return;
-        dataList.addAll(0, olderMessages);
-        notifyItemRangeInserted(0, olderMessages.size());
+        List<ForumMessage> newList = new ArrayList<>(olderMessages);
+        newList.addAll(dataList);
+        setData(newList);
     }
 
     /**
@@ -94,10 +111,9 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      * @param message The message object to remove.
      */
     public void removeMessage(ForumMessage message) {
-        int index = dataList.indexOf(message);
-        if (index != -1) {
-            dataList.remove(index);
-            notifyItemRemoved(index);
+        List<ForumMessage> newList = new ArrayList<>(dataList);
+        if (newList.remove(message)) {
+            setData(newList);
         }
     }
 
@@ -123,7 +139,11 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
             cachedFont = ResourcesCompat.getFont(holder.itemView.getContext(), R.font.text_hebrew);
         }
 
-        String senderName = msg.getSenderName() != null ? msg.getSenderName() : "אנונימי";
+        User sender = senderMap.get(msg.getUserId());
+
+        // Use default anonymous name
+        String senderName = sender != null ? sender.getFullName() : "אנונימי";
+
         SpannableString userNameSpannable = new SpannableString(senderName);
 
         if (cachedFont != null) {
@@ -135,8 +155,8 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
             );
         }
         holder.txtUser.setText(userNameSpannable);
-        holder.txtEmail.setText(msg.getSenderEmail());
-        holder.txtIsAdmin.setText(msg.isSenderAdmin() ? "מנהל" : "משתמש");
+        holder.txtEmail.setText(sender != null ? sender.getEmail() : "");
+        holder.txtIsAdmin.setText(sender != null && sender.isAdmin() ? "מנהל" : "משתמש");
 
         holder.txtMessage.setText(msg.getMessage());
 

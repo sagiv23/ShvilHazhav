@@ -2,6 +2,9 @@ package com.example.sagivproject.models;
 
 import androidx.annotation.NonNull;
 
+import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +22,6 @@ public class DailyStats implements Idable {
     private int memoryGamesPlayed;
     private int mathCorrect;
     private int mathWrong;
-    private int medicationsTaken;
-    private int medicationsMissed;
     private List<MedicationUsage> medicationUsageLogs;
 
     /**
@@ -31,8 +32,6 @@ public class DailyStats implements Idable {
         this.memoryGamesPlayed = 0;
         this.mathCorrect = 0;
         this.mathWrong = 0;
-        this.medicationsTaken = 0;
-        this.medicationsMissed = 0;
         this.medicationUsageLogs = new ArrayList<>();
     }
 
@@ -91,25 +90,35 @@ public class DailyStats implements Idable {
     }
 
     /**
-     * @return Total count of medication doses marked as TAKEN on this day.
+     * Calculates the total count of medication doses marked as TAKEN on this day from the logs.
+     * Annotated with {@code @Exclude} to prevent redundant storage in Firebase.
+     *
+     * @return The count of taken medications.
      */
+    @Exclude
     public int getMedicationsTaken() {
-        return medicationsTaken;
-    }
-
-    public void setMedicationsTaken(int medicationsTaken) {
-        this.medicationsTaken = medicationsTaken;
+        if (medicationUsageLogs == null) return 0;
+        int count = 0;
+        for (MedicationUsage log : medicationUsageLogs) {
+            if (log.getStatus() == MedicationStatus.TAKEN) count++;
+        }
+        return count;
     }
 
     /**
-     * @return Total count of medication doses marked as NOT_TAKEN on this day.
+     * Calculates the total count of medication doses marked as NOT_TAKEN on this day from the logs.
+     * Annotated with {@code @Exclude} to prevent redundant storage in Firebase.
+     *
+     * @return The count of missed medications.
      */
+    @Exclude
     public int getMedicationsMissed() {
-        return medicationsMissed;
-    }
-
-    public void setMedicationsMissed(int medicationsMissed) {
-        this.medicationsMissed = medicationsMissed;
+        if (medicationUsageLogs == null) return 0;
+        int count = 0;
+        for (MedicationUsage log : medicationUsageLogs) {
+            if (log.getStatus() == MedicationStatus.NOT_TAKEN) count++;
+        }
+        return count;
     }
 
     /**
@@ -157,20 +166,6 @@ public class DailyStats implements Idable {
     }
 
     /**
-     * Increments the count of medications successfully taken.
-     */
-    public void addMedicationTaken() {
-        this.medicationsTaken++;
-    }
-
-    /**
-     * Increments the count of medications missed.
-     */
-    public void addMedicationMissed() {
-        this.medicationsMissed++;
-    }
-
-    /**
      * Adds a detailed medication usage log entry to this day's statistics.
      *
      * @param log The {@link MedicationUsage} record to append.
@@ -187,8 +182,8 @@ public class DailyStats implements Idable {
                 ", memoryGamesPlayed=" + memoryGamesPlayed +
                 ", mathCorrect=" + mathCorrect +
                 ", mathWrong=" + mathWrong +
-                ", medicationsTaken=" + medicationsTaken +
-                ", medicationsMissed=" + medicationsMissed +
+                ", medicationsTaken=" + getMedicationsTaken() +
+                ", medicationsMissed=" + getMedicationsMissed() +
                 ", medicationUsageLogs=" + medicationUsageLogs +
                 '}';
     }

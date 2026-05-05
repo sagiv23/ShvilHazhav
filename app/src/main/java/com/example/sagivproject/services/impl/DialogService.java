@@ -10,10 +10,12 @@ import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.dialogs.FullImageDialog;
 import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.dialogs.ProfileImageDialog;
+import com.example.sagivproject.dialogs.TipDialog;
 import com.example.sagivproject.dialogs.UserDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDialogService;
 
@@ -39,6 +41,7 @@ public class DialogService implements IDialogService {
     private final Provider<ProfileImageDialog> profileImageDialogProvider;
     private final Provider<ConfirmDialog> confirmDialogProvider;
     private final Provider<EmergencyContactDialog> addEmergencyContactDialogProvider;
+    private final Provider<TipDialog> tipDialogProvider;
 
     /**
      * Constructs a new DialogService with providers for all dialog fragments.
@@ -51,7 +54,8 @@ public class DialogService implements IDialogService {
             Provider<FullImageDialog> fullImageDialogProvider,
             Provider<ProfileImageDialog> profileImageDialogProvider,
             Provider<ConfirmDialog> confirmDialogProvider,
-            Provider<EmergencyContactDialog> addEmergencyContactDialogProvider
+            Provider<EmergencyContactDialog> addEmergencyContactDialogProvider,
+            Provider<TipDialog> tipDialogProvider
     ) {
         this.medicationDialogProvider = medicationDialogProvider;
         this.userDialogProvider = userDialogProvider;
@@ -60,6 +64,7 @@ public class DialogService implements IDialogService {
         this.profileImageDialogProvider = profileImageDialogProvider;
         this.confirmDialogProvider = confirmDialogProvider;
         this.addEmergencyContactDialogProvider = addEmergencyContactDialogProvider;
+        this.tipDialogProvider = tipDialogProvider;
     }
 
     /**
@@ -143,6 +148,20 @@ public class DialogService implements IDialogService {
         EmergencyContactDialog dialog = addEmergencyContactDialogProvider.get();
         dialog.setData(contact, listener);
         dialog.show(fm, "AddEmergencyContactDialog");
+    }
+
+    /**
+     * Displays a dialog to add or edit a Tip of the Day.
+     *
+     * @param fm       The {@link FragmentManager}.
+     * @param tip      The {@link TipOfTheDay} to edit, or null for a new one.
+     * @param listener The listener for submission events.
+     */
+    @Override
+    public void showTipDialog(FragmentManager fm, TipOfTheDay tip, TipDialog.TipDialogListener listener) {
+        TipDialog dialog = tipDialogProvider.get();
+        dialog.setData(tip, listener);
+        dialog.show(fm, "TipDialog");
     }
 
     /**
