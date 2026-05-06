@@ -70,10 +70,10 @@ public class MedicationActionReceiver extends BroadcastReceiver {
         User user = sharedPreferencesUtil.getUser();
         if (user != null && medicationId != null && statusStr != null) {
             MedicationStatus status = MedicationStatus.valueOf(statusStr);
-            String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
             String timeNow = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
 
-            MedicationUsage usage = new MedicationUsage(medicationId, timeNow, today, status);
+            String usageId = databaseService.getMedicationService().generateUsageId();
+            MedicationUsage usage = new MedicationUsage(usageId, medicationId, timeNow, hourStr, status);
 
             databaseService.getStatsService().logMedicationUsage(user.getId(), usage, new IDatabaseService.DatabaseCallback<>() {
                 @Override

@@ -133,6 +133,11 @@ public class DailyStats implements Idable {
         return medicationUsageLogs;
     }
 
+    /**
+     * Sets the medication usage logs list.
+     *
+     * @param medicationUsageLogs The list of {@link MedicationUsage} objects.
+     */
     public void setMedicationUsageLogs(List<MedicationUsage> medicationUsageLogs) {
         this.medicationUsageLogs = medicationUsageLogs;
     }
@@ -166,12 +171,24 @@ public class DailyStats implements Idable {
     }
 
     /**
-     * Adds a detailed medication usage log entry to this day's statistics.
+     * Adds or updates a detailed medication usage log entry to this day's statistics.
+     * If a log for the same medication and scheduled time already exists, it is updated.
      *
-     * @param log The {@link MedicationUsage} record to append.
+     * @param log The {@link MedicationUsage} record to append or update.
      */
     public void addMedicationUsageLog(MedicationUsage log) {
-        getMedicationUsageLogs().add(log);
+        if (medicationUsageLogs == null) {
+            medicationUsageLogs = new ArrayList<>();
+        }
+        for (int i = 0; i < medicationUsageLogs.size(); i++) {
+            MedicationUsage existing = medicationUsageLogs.get(i);
+            if (existing.getMedicationId().equals(log.getMedicationId()) &&
+                    existing.getScheduledTime().equals(log.getScheduledTime())) {
+                medicationUsageLogs.set(i, log);
+                return;
+            }
+        }
+        medicationUsageLogs.add(log);
     }
 
     @NonNull

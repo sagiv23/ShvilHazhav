@@ -199,9 +199,9 @@ public class UserStatsActivity extends BaseActivity {
             if (usageAdapter != null) usageAdapter.setData(allLogs);
             txtSelectedDate.setText("מציג את כל ההיסטוריה");
         } else {
-            List<MedicationUsage> filtered = allLogs.stream()
-                    .filter(log -> filteredDate.equals(log.getDate()))
-                    .collect(Collectors.toList());
+            DailyStats stats = currentUser.getDailyStats().get(filteredDate);
+            List<MedicationUsage> filtered = (stats != null) ? stats.getMedicationUsageLogs() : new ArrayList<>();
+
             if (usageAdapter != null) usageAdapter.setData(filtered);
 
             String dateDisplay = filteredDate;

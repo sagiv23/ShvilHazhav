@@ -11,7 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
+import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -24,12 +29,23 @@ import javax.inject.Inject;
  * </p>
  */
 public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, MedicationUsageAdapter.UsageViewHolder> {
+    private Map<String, Medication> medicationMap = new HashMap<>();
 
     /**
      * Constructs a new MedicationUsageAdapter.
      */
     @Inject
     public MedicationUsageAdapter() {
+    }
+
+    /**
+     * Sets the medication map to resolve medication IDs to names.
+     *
+     * @param medicationMap A map of medication IDs to {@link Medication} objects.
+     */
+    public void setMedicationMap(Map<String, Medication> medicationMap) {
+        this.medicationMap = medicationMap != null ? medicationMap : new HashMap<>();
+        setData(new ArrayList<>(getItemList()));
     }
 
     @NonNull
@@ -42,8 +58,11 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
     @Override
     public void onBindViewHolder(@NonNull UsageViewHolder holder, int position) {
         MedicationUsage usage = getItem(position);
-        holder.txtName.setText(usage.getMedicationName());
-        holder.txtDateTime.setText(String.format("%s %s", usage.getDate(), usage.getTime()));
+        Medication medication = medicationMap.get(usage.getMedicationId());
+        String name = medication != null ? medication.getName() : "תרופה לא ידועה";
+
+        holder.txtName.setText(name);
+        holder.txtDateTime.setText(usage.getTime());
         holder.txtStatus.setText(usage.getStatus().getDisplayName());
 
         int color;

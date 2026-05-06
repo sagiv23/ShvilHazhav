@@ -99,7 +99,7 @@ public class StatsServiceImpl extends BaseDatabaseService<DailyStats> implements
     }
 
     /**
-     * Logs medication usage for a specific user and updates daily statistics.
+     * Logs medication usage for a specific user and updates daily statistics for today.
      * Tracks medication taken or missed and adds the usage log entry.
      *
      * @param uid      The user's unique identifier.
@@ -108,9 +108,10 @@ public class StatsServiceImpl extends BaseDatabaseService<DailyStats> implements
      */
     @Override
     public void logMedicationUsage(@NonNull String uid, @NonNull MedicationUsage usage, @Nullable DatabaseCallback<Void> callback) {
-        runTransaction(getStatsPath(uid, usage.getDate()), stats -> {
+        String today = getTodayDate();
+        runTransaction(getStatsPath(uid, today), stats -> {
             DailyStats currentStats = (stats != null) ? stats : new DailyStats();
-            currentStats.setId(usage.getDate());
+            currentStats.setId(today);
 
             currentStats.addMedicationUsageLog(usage);
             return currentStats;

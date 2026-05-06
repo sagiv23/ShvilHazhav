@@ -40,7 +40,7 @@ public interface IStatsService {
     void updateDailyMemoryStats(@NonNull String uid, boolean isWin);
 
     /**
-     * Logs a medication intake event and updates the daily performance statistics.
+     * Logs a medication intake event and updates the daily performance statistics for today.
      *
      * @param uid      User identifier.
      * @param usage    Usage record details.

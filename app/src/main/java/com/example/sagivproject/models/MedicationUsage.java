@@ -10,9 +10,10 @@ import androidx.annotation.NonNull;
  * </p>
  */
 public class MedicationUsage implements Idable {
+    private String id;
     private String medicationId;
     private String time;
-    private String date;
+    private String scheduledTime;
     private MedicationStatus status;
 
     /**
@@ -24,20 +25,22 @@ public class MedicationUsage implements Idable {
     /**
      * Constructs a full MedicationUsage record.
      *
-     * @param medicationId The unique ID of the medication.
-     * @param time         The actual record time.
-     * @param date         The record date.
-     * @param status       The resulting status.
+     * @param id            The unique ID for this usage record.
+     * @param medicationId  The unique ID of the medication.
+     * @param time          The actual record time.
+     * @param scheduledTime The time the medication was scheduled for.
+     * @param status        The resulting status.
      */
-    public MedicationUsage(String medicationId, String time, String date, MedicationStatus status) {
+    public MedicationUsage(String id, String medicationId, String time, String scheduledTime, MedicationStatus status) {
+        this.id = id;
         this.medicationId = medicationId;
         this.time = time;
-        this.date = date;
+        this.scheduledTime = scheduledTime;
         this.status = status;
     }
 
     /**
-     * @return The unique ID of the medication.
+     * @return The unique ID of the medication record.
      */
     public String getMedicationId() {
         return medicationId;
@@ -59,14 +62,14 @@ public class MedicationUsage implements Idable {
     }
 
     /**
-     * @return The date of action in "yyyy-MM-dd".
+     * @return The scheduled time in "HH:mm".
      */
-    public String getDate() {
-        return date;
+    public String getScheduledTime() {
+        return scheduledTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setScheduledTime(String scheduledTime) {
+        this.scheduledTime = scheduledTime;
     }
 
     /**
@@ -82,21 +85,22 @@ public class MedicationUsage implements Idable {
 
     @Override
     public String getId() {
-        return medicationId;
+        return id;
     }
 
     @Override
     public void setId(String id) {
-        this.medicationId = id;
+        this.id = id;
     }
 
     @NonNull
     @Override
     public String toString() {
         return "MedicationUsage{" +
-                "medicationId='" + medicationId + '\'' +
+                "id='" + id + '\'' +
+                ", medicationId='" + medicationId + '\'' +
                 ", time='" + time + '\'' +
-                ", date='" + date + '\'' +
+                ", scheduledTime='" + scheduledTime + '\'' +
                 ", status=" + status +
                 '}';
     }

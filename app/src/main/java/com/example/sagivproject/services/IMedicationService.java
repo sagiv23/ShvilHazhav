@@ -25,6 +25,13 @@ public interface IMedicationService {
     String generateMedicationId();
 
     /**
+     * Generates a new, unique identifier for a medication usage log.
+     *
+     * @return A unique usage ID string.
+     */
+    String generateUsageId();
+
+    /**
      * Creates a new medication record associated with a specific user.
      *
      * @param uid        The unique identifier of the user.

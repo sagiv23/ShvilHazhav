@@ -15,8 +15,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -53,6 +51,11 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
     }
 
     @Override
+    public String generateUsageId() {
+        return super.generateId();
+    }
+
+    @Override
     public void createNewMedication(@NonNull String uid, @NonNull Medication medication, @Nullable DatabaseCallback<Void> callback) {
         writeData(getMedicationItemPath(uid, medication.getId()), medication, callback);
     }
@@ -76,8 +79,10 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
      */
     @Override
     public void updateMedication(String uid, Medication medication, @Nullable DatabaseCallback<Void> callback) {
-        UnaryOperator<Medication> updateFunction = oldMedication -> medication;
-        runTransaction(getMedicationItemPath(uid, medication.getId()), updateFunction, new DatabaseCallback<>() {
+        runTransaction(getMedicationItemPath(uid, medication.getId()), oldMedication -> {
+            if (oldMedication == null) return null;
+            return medication;
+        }, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Medication result) {
                 if (callback != null) callback.onCompleted(null);
@@ -101,9 +106,11 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
         databaseReference.child(USERS_PATH).child(uid).child(FIELD_DAILY_STATS).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<MedicationUsage> allLogs = StreamSupport.stream(task.getResult().getChildren().spliterator(), false)
-                        .map(daySnapshot -> daySnapshot.getValue(DailyStats.class))
-                        .filter(Objects::nonNull)
-                        .flatMap(stats -> Objects.requireNonNull(stats).getMedicationUsageLogs().stream())
+                        .flatMap(daySnapshot -> {
+                            DailyStats stats = daySnapshot.getValue(DailyStats.class);
+                            if (stats == null) return java.util.stream.Stream.empty();
+                            return stats.getMedicationUsageLogs().stream();
+                        })
                         .collect(Collectors.toList());
                 callback.onCompleted(allLogs);
             } else {
@@ -128,8 +135,6 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
                     DailyStats stats = dayData.getValue(DailyStats.class);
                     if (stats != null) {
                         stats.getMedicationUsageLogs().clear();
-                        stats.setMedicationsTaken(0);
-                        stats.setMedicationsMissed(0);
                         dayData.setValue(stats);
                     }
                 }

@@ -25,8 +25,8 @@ import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
+import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.models.enums.MedicationStatus;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.notifications.AlarmScheduler;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -178,49 +178,28 @@ public class MedicationListActivity extends BaseActivity {
      * Retrieves usage history for the current day to update the "Taken" status rows.
      */
     private void fetchTodayUsageLogs() {
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        databaseService.getMedicationService().getMedicationUsageLogs(uid, new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(List<MedicationUsage> logs) {
-                List<MedicationUsage> todayLogs = new ArrayList<>();
-                for (MedicationUsage usage : logs) {
-                    if (today.equals(usage.getDate())) {
-                        todayLogs.add(usage);
-                    }
-                }
-
-                DailyStats stats = user.getTodayStats();
-                stats.setMedicationUsageLogs(todayLogs);
-                sharedPreferencesUtil.saveUser(user);
-
-                adapter.setLoggedTodayMedications(todayLogs);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-            }
-        });
+        DailyStats stats = user.getTodayStats();
+        List<MedicationUsage> todayLogs = stats.getMedicationUsageLogs();
+        adapter.setLoggedTodayMedications(todayLogs);
     }
 
     /**
      * Commits a medication status change to the database and updates daily stats.
      *
      * @param medication    Target medication.
-     * @param scheduledTime The time of the dose (HH:mm).
+     * @param scheduledTime The time the medication was scheduled for.
      * @param status        The result (TAKEN, etc.).
      */
     private void logMedicationStatus(Medication medication, String scheduledTime, MedicationStatus status) {
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-        MedicationUsage usage = new MedicationUsage(medication.getId(), medication.getName(), time, date, scheduledTime, status);
+        String usageId = databaseService.getMedicationService().generateUsageId();
+        MedicationUsage usage = new MedicationUsage(usageId, medication.getId(), time, scheduledTime, status);
 
         databaseService.getStatsService().logMedicationUsage(uid, usage, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 DailyStats stats = user.getTodayStats();
                 stats.addMedicationUsageLog(usage);
-                if (status == MedicationStatus.TAKEN) stats.addMedicationTaken();
-                else if (status == MedicationStatus.NOT_TAKEN) stats.addMedicationMissed();
                 sharedPreferencesUtil.saveUser(user);
 
                 adapter.addLoggedTodayMedication(usage);

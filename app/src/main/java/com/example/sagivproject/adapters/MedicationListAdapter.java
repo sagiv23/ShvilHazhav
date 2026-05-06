@@ -47,7 +47,7 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
     /**
      * Key: medicationId, Value: Map of scheduledTime -> MedicationStatus
      */
-    private final Map<String, MedicationStatus> loggedTodayMedications = new HashMap<>();
+    private final Map<String, Map<String, MedicationStatus>> loggedTodayMedications = new HashMap<>();
     private OnMedicationActionListener listener;
 
     /**
@@ -84,7 +84,8 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         this.loggedTodayMedications.clear();
         if (logs != null) {
             for (MedicationUsage usage : logs) {
-                loggedTodayMedications.put(usage.getMedicationId(), usage.getStatus());
+                Map<String, MedicationStatus> times = loggedTodayMedications.computeIfAbsent(usage.getMedicationId(), k -> new HashMap<>());
+                times.put(usage.getScheduledTime(), usage.getStatus());
             }
         }
 
@@ -97,7 +98,8 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
      * @param usage The {@link MedicationUsage} log to add.
      */
     public void addLoggedTodayMedication(MedicationUsage usage) {
-        loggedTodayMedications.put(usage.getMedicationId(), usage.getStatus());
+        Map<String, MedicationStatus> times = loggedTodayMedications.computeIfAbsent(usage.getMedicationId(), k -> new HashMap<>());
+        times.put(usage.getScheduledTime(), usage.getStatus());
         setProcessingFinished(usage.getMedicationId());
     }
 
@@ -133,8 +135,9 @@ public class MedicationListAdapter extends BaseAdapter<Medication, MedicationLis
         holder.statusContainer.removeAllViews();
         List<String> reminderHours = med.getReminderHours();
         if (reminderHours != null) {
-            MedicationStatus status = loggedTodayMedications.get(med.getId());
+            Map<String, MedicationStatus> statusMap = loggedTodayMedications.get(med.getId());
             for (String hour : reminderHours) {
+                MedicationStatus status = (statusMap != null) ? statusMap.get(hour) : null;
                 addStatusRow(holder.statusContainer, med, hour, status);
             }
         }
