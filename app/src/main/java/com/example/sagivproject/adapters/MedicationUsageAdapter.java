@@ -30,12 +30,22 @@ import javax.inject.Inject;
  */
 public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, MedicationUsageAdapter.UsageViewHolder> {
     private Map<String, Medication> medicationMap = new HashMap<>();
+    private OnUsageActionListener listener;
 
     /**
      * Constructs a new MedicationUsageAdapter.
      */
     @Inject
     public MedicationUsageAdapter() {
+    }
+
+    /**
+     * Sets the listener for usage-related actions.
+     *
+     * @param listener The {@link OnUsageActionListener} implementation.
+     */
+    public void setListener(OnUsageActionListener listener) {
+        this.listener = listener;
     }
 
     /**
@@ -77,16 +87,32 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
                 color = R.color.text_color;
         }
         holder.txtStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), color));
+
+        holder.btnDelete.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onDelete(usage);
+            }
+        });
+    }
+
+    /**
+     * Interface for listening to actions on usage logs.
+     */
+    public interface OnUsageActionListener {
+        /**
+         * Called when the delete option is selected for a usage log.
+         *
+         * @param usage The {@link MedicationUsage} to delete.
+         */
+        void onDelete(MedicationUsage usage);
     }
 
     /**
      * ViewHolder class for medication usage log rows.
      */
     public static class UsageViewHolder extends RecyclerView.ViewHolder {
-        /**
-         * TextViews for medication name, date/time of the event, and intake status.
-         */
         final TextView txtName, txtDateTime, txtStatus;
+        final View btnDelete;
 
         /**
          * Constructs a new UsageViewHolder.
@@ -98,6 +124,7 @@ public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, Medicat
             txtName = itemView.findViewById(R.id.txt_UsageRow_Name);
             txtDateTime = itemView.findViewById(R.id.txt_UsageRow_DateTime);
             txtStatus = itemView.findViewById(R.id.txt_UsageRow_Status);
+            btnDelete = itemView.findViewById(R.id.btn_UsageRow_Delete);
         }
     }
 }

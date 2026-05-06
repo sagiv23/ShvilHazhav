@@ -133,62 +133,82 @@
                         android:orientation="vertical"
                         android:padding="16dp">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="16dp"
+                            android:fontFamily="@font/headline_hebrew"
+                            android:text="@string/medication_log"
+                            android:textColor="@color/headline"
+                            android:textSize="24sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_user_stats_open_calendar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:text="@string/choose_date"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            app:cornerRadius="20dp"
+                            app:icon="@drawable/ic_calendar"
+                            app:iconGravity="textStart"
+                            app:iconSize="20dp"
+                            app:strokeWidth="1dp" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="8dp">
+                            android:layout_marginHorizontal="8dp"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_user_stats_clear_day"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="12dp"
-                                android:fontFamily="@font/headline_hebrew"
-                                android:text="@string/medication_log"
-                                android:textSize="22sp" />
+                                android:layout_marginEnd="4dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/reset_day"
+                                android:textAllCaps="false"
+                                android:textSize="14sp"
+                                app:cornerRadius="20dp"
+                                app:strokeWidth="1dp" />
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_user_stats_clear_med_logs"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:orientation="horizontal">
-
-                                <com.google.android.material.button.MaterialButton
-                                    android:id="@+id/btn_user_stats_open_calendar"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="8dp"
-                                    android:fontFamily="@font/text_hebrew"
-                                    android:text="@string/choose_date"
-                                    android:textAllCaps="false"
-                                    android:textSize="14sp"
-                                    app:cornerRadius="20dp"
-                                    app:icon="@drawable/ic_calendar"
-                                    app:iconSize="20dp"
-                                    app:strokeWidth="1dp" />
-
-                                <com.google.android.material.button.MaterialButton
-                                    android:id="@+id/btn_user_stats_clear_med_logs"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/text_hebrew"
-                                    android:text="@string/reset_history"
-                                    android:textAllCaps="false"
-                                    android:textSize="14sp"
-                                    app:cornerRadius="20dp"
-                                    app:strokeWidth="1dp" />
-                            </LinearLayout>
+                                android:layout_marginStart="4dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/text_hebrew"
+                                android:text="@string/reset_history"
+                                android:textAllCaps="false"
+                                android:textSize="14sp"
+                                app:cornerRadius="20dp"
+                                app:strokeWidth="1dp" />
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginHorizontal="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="?attr/colorOutline" />
 
                         <TextView
                             android:id="@+id/txt_user_stats_selected_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginBottom="12dp"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
                             android:text="@string/show_all_history"
+                            android:textColor="@color/headline"
                             android:textSize="18sp"
                             android:visibility="gone" />
 
@@ -196,7 +216,7 @@
                             android:id="@+id/txt_user_stats_no_history"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="8dp"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
                             android:text="@string/no_history_to_show"

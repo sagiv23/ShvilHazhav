@@ -151,6 +151,40 @@ public class MedicationServiceImpl extends BaseDatabaseService<Medication> imple
         });
     }
 
+    @Override
+    public void clearMedicationUsageLogsForDate(@NonNull String uid, @NonNull String date, @Nullable DatabaseCallback<Void> callback) {
+        databaseReference.child(USERS_PATH).child(uid).child(FIELD_DAILY_STATS).child(date).child("medicationUsageLogs").setValue(null, (error, ref) -> {
+            if (callback != null) {
+                if (error != null) callback.onFailed(error.toException());
+                else callback.onCompleted(null);
+            }
+        });
+    }
+
+    @Override
+    public void deleteMedicationUsageLog(@NonNull String uid, @NonNull String date, @NonNull String usageId, @Nullable DatabaseCallback<Void> callback) {
+        databaseReference.child(USERS_PATH).child(uid).child(FIELD_DAILY_STATS).child(date).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                DailyStats stats = currentData.getValue(DailyStats.class);
+                if (stats != null && stats.getMedicationUsageLogs() != null) {
+                    stats.getMedicationUsageLogs().removeIf(log -> log.getId().equals(usageId));
+                    currentData.setValue(stats);
+                }
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (callback != null) {
+                    if (error != null) callback.onFailed(error.toException());
+                    else callback.onCompleted(null);
+                }
+            }
+        });
+    }
+
     /**
      * Constructs path to user's medications.
      */

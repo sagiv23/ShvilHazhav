@@ -91,9 +91,8 @@ public class UserStatsActivity extends BaseActivity {
     private User loggedInUser;
 
     private Spinner spinnerUserSelector;
-    private TextView txtSelectedDate;
-    private TextView txtNoHistory;
-    private MaterialButton btnClearMedLogs;
+    private TextView txtSelectedDate, txtNoHistory;
+    private MaterialButton btnClearMedLogs, btnClearDay;
     /**
      * Date string (yyyy-MM-dd) used to filter the usage log.
      */
@@ -123,6 +122,10 @@ public class UserStatsActivity extends BaseActivity {
         btnClearMedLogs = findViewById(R.id.btn_user_stats_clear_med_logs);
         btnClearMedLogs.setOnClickListener(v -> clearMedicationLogs());
         btnClearMedLogs.setEnabled(false);
+
+        btnClearDay = findViewById(R.id.btn_user_stats_clear_day);
+        btnClearDay.setOnClickListener(v -> clearDayMedicationLogs());
+        btnClearDay.setEnabled(false);
 
         findViewById(R.id.btn_user_stats_open_calendar).setOnClickListener(v -> openCalendar());
 
@@ -224,6 +227,7 @@ public class UserStatsActivity extends BaseActivity {
                 txtSelectedDate.setText(String.format("מציג תוצאות לתאריך: %s%s", dateDisplay, suffix));
             }
         }
+        updateResetButtonState();
     }
 
     /**
@@ -383,6 +387,18 @@ public class UserStatsActivity extends BaseActivity {
         recyclerMedicationLogs.setLayoutManager(new LinearLayoutManager(this));
         usageAdapter = adapterService.getMedicationUsageAdapter();
         usageAdapter.setMedicationMap(currentUser.getMedications());
+        usageAdapter.setListener(usage -> dialogService.showConfirmDialog(getSupportFragmentManager(), "מחיקת תיעוד", "האם למחוק תיעוד זה?", "מחק", "בטל", () -> databaseService.getMedicationService().deleteMedicationUsageLog(currentUser.getId(), filteredDate, usage.getId(), new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Void object) {
+                refreshData();
+                Toast.makeText(UserStatsActivity.this, "התיעוד נמחק", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(UserStatsActivity.this, "שגיאה במחיקת התיעוד", Toast.LENGTH_SHORT).show();
+            }
+        })));
         recyclerMedicationLogs.setAdapter(usageAdapter);
     }
 
@@ -422,7 +438,7 @@ public class UserStatsActivity extends BaseActivity {
      * Clears all historical usage logs for the user after user confirmation.
      */
     private void clearMedicationLogs() {
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס היסטוריה", "האם לאפס?", "אפס", "בטל", () -> databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
+        dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס היסטוריה", "האם לאפס את כל ההיסטוריה?", "אפס הכל", "בטל", () -> databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 allLogs.clear();
@@ -440,11 +456,34 @@ public class UserStatsActivity extends BaseActivity {
     }
 
     /**
-     * Updates the enabled state of the reset history button based on whether logs exist.
+     * Clears medication usage logs for the selected day.
+     */
+    private void clearDayMedicationLogs() {
+        if (filteredDate == null) return;
+        dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס יום", "האם לאפס את התיעוד ליום זה?", "אפס יום", "בטל", () -> databaseService.getMedicationService().clearMedicationUsageLogsForDate(currentUser.getId(), filteredDate, new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(Void object) {
+                refreshData();
+                Toast.makeText(UserStatsActivity.this, "התיעוד ליום זה אופס", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(UserStatsActivity.this, "שגיאה באיפוס היום", Toast.LENGTH_SHORT).show();
+            }
+        }));
+    }
+
+    /**
+     * Updates the enabled state of the reset history buttons based on whether logs exist.
      */
     private void updateResetButtonState() {
         if (btnClearMedLogs != null) {
             btnClearMedLogs.setEnabled(!allLogs.isEmpty());
+        }
+        if (btnClearDay != null) {
+            DailyStats stats = (filteredDate != null) ? currentUser.getDailyStats().get(filteredDate) : null;
+            btnClearDay.setEnabled(stats != null && stats.getMedicationUsageLogs() != null && !stats.getMedicationUsageLogs().isEmpty());
         }
     }
 }

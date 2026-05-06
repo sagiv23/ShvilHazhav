@@ -81,4 +81,23 @@ public interface IMedicationService {
      * @param callback An optional callback invoked upon completion.
      */
     void clearMedicationUsageLogs(@NonNull String uid, @Nullable DatabaseCallback<Void> callback);
+
+    /**
+     * Clears medication usage logs for a specific date for a specific user.
+     *
+     * @param uid      The unique identifier of the user.
+     * @param date     The date to clear (yyyy-MM-dd).
+     * @param callback An optional callback invoked upon completion.
+     */
+    void clearMedicationUsageLogsForDate(@NonNull String uid, @NonNull String date, @Nullable DatabaseCallback<Void> callback);
+
+    /**
+     * Deletes a specific medication usage log entry.
+     *
+     * @param uid      The unique identifier of the user.
+     * @param date     The date of the log (yyyy-MM-dd).
+     * @param usageId  The ID of the usage log to delete.
+     * @param callback An optional callback invoked upon completion.
+     */
+    void deleteMedicationUsageLog(@NonNull String uid, @NonNull String date, @NonNull String usageId, @Nullable DatabaseCallback<Void> callback);
 }

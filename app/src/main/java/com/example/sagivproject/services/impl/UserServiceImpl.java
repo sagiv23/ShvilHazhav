@@ -4,14 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.models.enums.UserRole;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IUserService;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
@@ -102,42 +101,39 @@ public class UserServiceImpl extends BaseDatabaseService<User> implements IUserS
      */
     @Override
     public void getUserByEmailAndPassword(@NonNull String email, @NonNull String password, @NonNull DatabaseCallback<User> callback) {
-        getAll(new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(List<User> users) {
-                User found = users.stream()
-                        .filter(u -> Objects.equals(u.getEmail(), email) && Objects.equals(u.getPassword(), password))
-                        .findFirst()
-                        .orElse(null);
-                callback.onCompleted(found);
+        readData("users").orderByChild("email").equalTo(email).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                callback.onFailed(task.getException());
+                return;
             }
-
-            @Override
-            public void onFailed(Exception e) {
-                callback.onFailed(e);
+            User found = null;
+            for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                User u = snapshot.getValue(User.class);
+                if (u != null && Objects.equals(u.getPassword(), password)) {
+                    found = u;
+                    break;
+                }
             }
+            callback.onCompleted(found);
         });
     }
 
     /**
      * Checks if a given email is already in use by another user.
+     * <p>
+     * Uses a server-side query for efficiency.
+     * </p>
      *
      * @param email    The email address to check.
      * @param callback Callback invoked with true if the email exists.
      */
     @Override
     public void checkIfEmailExists(@NonNull String email, @NonNull DatabaseCallback<Boolean> callback) {
-        getAll(new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(List<User> users) {
-                boolean exists = users.stream()
-                        .anyMatch(u -> Objects.equals(u.getEmail(), email));
-                callback.onCompleted(exists);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                callback.onFailed(e);
+        readData("users").orderByChild("email").equalTo(email).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onCompleted(task.getResult().exists());
+            } else {
+                callback.onFailed(task.getException());
             }
         });
     }
@@ -150,16 +146,15 @@ public class UserServiceImpl extends BaseDatabaseService<User> implements IUserS
      */
     @Override
     public void updateUser(@NonNull User user, @Nullable DatabaseCallback<Void> callback) {
-        UnaryOperator<User> updateFunction = oldUser -> user;
-        super.update(user.getId(), updateFunction, new DatabaseCallback<>() {
+        super.update(user.getId(), oldUser -> user, (callback == null) ? null : new DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
-                if (callback != null) callback.onCompleted(null);
+                callback.onCompleted(null);
             }
 
             @Override
             public void onFailed(Exception e) {
-                if (callback != null) callback.onFailed(e);
+                callback.onFailed(e);
             }
         });
     }
@@ -168,24 +163,23 @@ public class UserServiceImpl extends BaseDatabaseService<User> implements IUserS
      * Modifies the administrative role of a specific user using an atomic transaction.
      *
      * @param uid      User identifier.
-     * @param role     The new {@link UserRole} to assign.
+     * @param role     The new {@link User.UserRole} to assign.
      * @param callback Optional callback.
      */
     @Override
-    public void updateUserRole(@NonNull String uid, @NonNull UserRole role, @Nullable DatabaseCallback<Void> callback) {
-        UnaryOperator<User> updateFunction = user -> {
+    public void updateUserRole(@NonNull String uid, @NonNull User.UserRole role, @Nullable DatabaseCallback<Void> callback) {
+        super.update(uid, user -> {
             user.setRole(role);
             return user;
-        };
-        super.update(uid, updateFunction, new DatabaseCallback<>() {
+        }, (callback == null) ? null : new DatabaseCallback<>() {
             @Override
             public void onCompleted(User user) {
-                if (callback != null) callback.onCompleted(null);
+                callback.onCompleted(null);
             }
 
             @Override
             public void onFailed(Exception e) {
-                if (callback != null) callback.onFailed(e);
+                callback.onFailed(e);
             }
         });
     }
