@@ -65,7 +65,7 @@ public class BootReceiver extends BroadcastReceiver {
             return;
         }
 
-        String userId = sharedPreferencesUtil.getUserId();
+        String userId = sharedPreferencesUtil.getUser().getId();
         if (userId == null) {
             Log.d(TAG, "User ID is null, skipping reschedule");
             return;

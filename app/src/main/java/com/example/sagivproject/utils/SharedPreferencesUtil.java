@@ -3,8 +3,6 @@ package com.example.sagivproject.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.annotation.Nullable;
-
 import com.example.sagivproject.models.User;
 import com.google.gson.Gson;
 
@@ -228,19 +226,5 @@ public class SharedPreferencesUtil {
      */
     public void setFallDetectionEnabled(boolean enabled) {
         saveBoolean(KEY_FALL_DETECTION_ENABLED, enabled);
-    }
-
-    /**
-     * Safely retrieves the unique identifier of the logged-in user.
-     *
-     * @return The user ID string, or null if not logged in.
-     */
-    @Nullable
-    public String getUserId() {
-        User user = getUser();
-        if (user != null) {
-            return user.getId();
-        }
-        return null;
     }
 }
