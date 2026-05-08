@@ -68,13 +68,11 @@ public class ImageUtil {
      */
     public void loadImage(@Nullable final String base64Code, @NotNull final ImageView imageView) {
         if (base64Code == null || base64Code.isEmpty()) {
-
             imageView.setImageResource(R.drawable.ic_user);
             return;
         }
 
         try {
-
             String pureBase64 = base64Code.contains(",") ? base64Code.substring(base64Code.indexOf(",") + 1) : base64Code;
             byte[] decodedString = Base64.decode(pureBase64, Base64.DEFAULT);
 

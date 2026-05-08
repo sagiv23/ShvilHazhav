@@ -34,12 +34,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -110,7 +107,7 @@ public class UserStatsActivity extends BaseActivity {
 
         loggedInUser = sharedPreferencesUtil.getUser();
         currentUser = loggedInUser;
-        filteredDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        filteredDate = calendarUtil.getCurrentDate();
 
         viewPagerGraphs = findViewById(R.id.viewPager_graphs);
         tabLayoutGraphs = findViewById(R.id.tabLayout_graphs);
@@ -133,7 +130,7 @@ public class UserStatsActivity extends BaseActivity {
         setupGraphsUI();
         setupMedicationLogs();
 
-        String todayDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+        String todayDisplay = calendarUtil.formatDate(System.currentTimeMillis());
         txtSelectedDate.setText(String.format("מציג תוצאות לתאריך: %s (היום)", todayDisplay));
         txtSelectedDate.setVisibility(View.VISIBLE);
     }
@@ -207,18 +204,10 @@ public class UserStatsActivity extends BaseActivity {
 
             if (usageAdapter != null) usageAdapter.setData(filtered);
 
-            String dateDisplay = filteredDate;
-            try {
-                SimpleDateFormat sdfIn = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                SimpleDateFormat sdfOut = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                Date d = sdfIn.parse(filteredDate);
-                if (d != null) {
-                    dateDisplay = sdfOut.format(d);
-                }
-            } catch (Exception ignored) {
-            }
+            long millis = calendarUtil.parseDateFromDatabase(filteredDate);
+            String dateDisplay = (millis != -1) ? calendarUtil.formatDate(millis) : filteredDate;
 
-            String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            String today = calendarUtil.getCurrentDate();
             String suffix = filteredDate.equals(today) ? " (היום)" : "";
 
             if (filtered.isEmpty()) {

@@ -46,32 +46,21 @@ public class CalendarUtil {
      * Opens a DatePickerDialog with customizable restrictions and formatting.
      *
      * @param context       The context to display the dialog in.
-     * @param initialDate   The initial date to show in the picker (in yyyy-MM-dd format).
+     * @param initialDate   The initial date in database format ("yyyy-MM-dd"). If null, current date is used.
      * @param listener      The listener for the selected date.
      * @param futureOnly    If true, restricts date selection to today and future dates.
      * @param pastOnly      If true, restricts date selection to today and past dates.
-     * @param displayFormat The date format string to use for the result display.
+     * @param displayFormat The date format string to use for the result display. If null, uses {@link #DEFAULT_DATE_FORMAT}.
      */
     public void openDatePicker(Context context, String initialDate, OnDateSelectedListener listener, boolean futureOnly, boolean pastOnly, String displayFormat) {
         long initialMillis = parseDateFromDatabase(initialDate);
-        openDatePicker(context, initialMillis, listener, futureOnly, pastOnly, displayFormat);
-    }
 
-    /**
-     * Opens a DatePickerDialog with customizable restrictions and formatting.
-     *
-     * @param context       The context to display the dialog in.
-     * @param initialMillis The initial date to show in the picker.
-     * @param listener      The listener for the selected date.
-     * @param futureOnly    If true, restricts date selection to today and future dates.
-     * @param pastOnly      If true, restricts date selection to today and past dates.
-     * @param displayFormat The date format string to use for the result display.
-     */
-    public void openDatePicker(Context context, long initialMillis, OnDateSelectedListener listener, boolean futureOnly, boolean pastOnly, String displayFormat) {
         final Calendar calendar = Calendar.getInstance();
-        if (initialMillis != -1) {
+        if (initialMillis > 0) {
             calendar.setTimeInMillis(initialMillis);
         }
+
+        String finalDisplayFormat = (displayFormat != null) ? displayFormat : DEFAULT_DATE_FORMAT;
 
         DatePickerDialog dialog = new DatePickerDialog(
                 context,
@@ -81,11 +70,12 @@ public class CalendarUtil {
                     selectedCal.set(Calendar.MILLISECOND, 0);
 
                     long selectedMillis = selectedCal.getTimeInMillis();
-                    String dbDate = formatDateForDatabase(selectedMillis);
-                    String formattedDate = formatDate(selectedMillis, displayFormat);
-
                     if (listener != null) {
-                        listener.onDateSelected(selectedMillis, dbDate, formattedDate);
+                        listener.onDateSelected(
+                                selectedMillis,
+                                formatDate(selectedMillis, DATABASE_DATE_FORMAT),
+                                formatDate(selectedMillis, finalDisplayFormat)
+                        );
                     }
                 },
                 calendar.get(Calendar.YEAR),
@@ -94,7 +84,7 @@ public class CalendarUtil {
         );
 
         if (futureOnly) {
-            dialog.getDatePicker().setMinDate(System.currentTimeMillis());
+            dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         }
         if (pastOnly) {
             dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -104,47 +94,13 @@ public class CalendarUtil {
     }
 
     /**
-     * Formats a timestamp from milliseconds to a string for database storage ("yyyy-MM-dd").
-     *
-     * @param millis The timestamp in milliseconds.
-     * @return The formatted date string.
-     */
-    public String formatDateForDatabase(long millis) {
-        return formatDate(millis, DATABASE_DATE_FORMAT);
-    }
-
-    /**
      * Parses a date string from database format ("yyyy-MM-dd") back to milliseconds.
      *
      * @param dateStr The date string.
      * @return The timestamp in milliseconds, or -1 if parsing fails.
      */
     public long parseDateFromDatabase(String dateStr) {
-        if (dateStr == null || dateStr.isEmpty()) return -1;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat(DATABASE_DATE_FORMAT, Locale.getDefault());
-            Date date = sdf.parse(dateStr);
-            return date != null ? date.getTime() : -1;
-        } catch (Exception e) {
-            return -1;
-        }
-    }
-
-    /**
-     * Formats a timestamp from milliseconds to a string for database storage ("yyyy-MM-dd HH:mm:ss").
-     *
-     * @param millis The timestamp in milliseconds.
-     * @return The formatted timestamp string.
-     */
-    public String formatTimestampForDatabase(long millis) {
-        return formatDate(millis, DATABASE_TIMESTAMP_FORMAT);
-    }
-
-    /**
-     * @return The current system time formatted for database storage.
-     */
-    public String getCurrentTimestamp() {
-        return formatTimestampForDatabase(System.currentTimeMillis());
+        return parse(dateStr, DATABASE_DATE_FORMAT);
     }
 
     /**
@@ -154,14 +110,21 @@ public class CalendarUtil {
      * @return The timestamp in milliseconds, or -1 if parsing fails.
      */
     public long parseTimestampFromDatabase(String timestampStr) {
-        if (timestampStr == null || timestampStr.isEmpty()) return -1;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat(DATABASE_TIMESTAMP_FORMAT, Locale.getDefault());
-            Date date = sdf.parse(timestampStr);
-            return date != null ? date.getTime() : -1;
-        } catch (Exception e) {
-            return -1;
-        }
+        return parse(timestampStr, DATABASE_TIMESTAMP_FORMAT);
+    }
+
+    /**
+     * @return The current system date formatted for database storage ("yyyy-MM-dd").
+     */
+    public String getCurrentDate() {
+        return formatDate(System.currentTimeMillis(), DATABASE_DATE_FORMAT);
+    }
+
+    /**
+     * @return The current system time formatted for database storage.
+     */
+    public String getCurrentTimestamp() {
+        return formatDate(System.currentTimeMillis(), DATABASE_TIMESTAMP_FORMAT);
     }
 
     /**
@@ -184,6 +147,20 @@ public class CalendarUtil {
     public String formatDate(long millis, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         return sdf.format(new Date(millis));
+    }
+
+    /**
+     * Internal helper to parse a date/timestamp string based on a given format.
+     */
+    private long parse(String str, String format) {
+        if (str == null || str.isEmpty()) return -1;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+            Date date = sdf.parse(str);
+            return date != null ? date.getTime() : -1;
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     /**
