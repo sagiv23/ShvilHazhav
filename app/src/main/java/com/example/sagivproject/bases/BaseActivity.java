@@ -45,10 +45,7 @@ import com.example.sagivproject.screens.SettingsActivity;
 import com.example.sagivproject.services.IAdapterService;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IDialogService;
-import com.example.sagivproject.ui.AdminMenuFragment;
-import com.example.sagivproject.ui.LoggedInMenuFragment;
-import com.example.sagivproject.ui.LoggedOutMenuFragment;
-import com.example.sagivproject.ui.MenuNavigationListener;
+import com.example.sagivproject.ui.AppMenuFragment;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import java.util.Arrays;
@@ -72,7 +69,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * </p>
  */
 @AndroidEntryPoint
-public abstract class BaseActivity extends AppCompatActivity implements MenuNavigationListener {
+public abstract class BaseActivity extends AppCompatActivity implements AppMenuFragment.OnNavigationListener {
     /**
      * Utility for managing local user preferences and session.
      */
@@ -201,14 +198,14 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
             } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-                Class<? extends Fragment> targetFragmentClass = (currentUser != null)
-                        ? LoggedInMenuFragment.class
-                        : LoggedOutMenuFragment.class;
+                AppMenuFragment.MenuType targetType = (currentUser != null)
+                        ? AppMenuFragment.MenuType.LOGGED_IN
+                        : AppMenuFragment.MenuType.LOGGED_OUT;
 
                 Fragment currentMenuFrag = getSupportFragmentManager().findFragmentById(R.id.drawer_menu_container);
-                if (currentMenuFrag == null || !currentMenuFrag.getClass().equals(targetFragmentClass)) {
+                if (!(currentMenuFrag instanceof AppMenuFragment) || ((AppMenuFragment) currentMenuFrag).getMenuType() != targetType) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.drawer_menu_container, targetFragmentClass, null)
+                            .replace(R.id.drawer_menu_container, AppMenuFragment.newInstance(targetType))
                             .commit();
                 }
             }
@@ -224,7 +221,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MenuNavi
             if (topMenuContainer != null) {
                 topMenuContainer.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(topMenuContainer.getId(), AdminMenuFragment.class, null)
+                        .replace(topMenuContainer.getId(), AppMenuFragment.newInstance(AppMenuFragment.MenuType.ADMIN))
                         .commit();
             }
         } else {
