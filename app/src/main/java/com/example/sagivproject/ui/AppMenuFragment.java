@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.utils.SharedPreferencesUtil;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -21,8 +24,16 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class AppMenuFragment extends Fragment {
     private static final String ARG_MENU_TYPE = "menu_type";
+    @Inject
+    protected SharedPreferencesUtil sharedPreferencesUtil;
     private OnNavigationListener navigationListener;
     private MenuType menuType;
+
+    /**
+     * Required empty constructor for Hilt or FragmentManager.
+     */
+    public AppMenuFragment() {
+    }
 
     /**
      * Creates a new instance of the fragment with the specified menu type.
@@ -80,9 +91,16 @@ public class AppMenuFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         int layoutId;
-        if (menuType == MenuType.ADMIN) {
+        MenuType activeType = menuType;
+
+        // If it's a regular user menu, determine if logged in or out dynamically using Hilt-injected SharedPreferences
+        if (activeType != MenuType.ADMIN) {
+            activeType = (sharedPreferencesUtil.getUser() != null) ? MenuType.LOGGED_IN : MenuType.LOGGED_OUT;
+        }
+
+        if (activeType == MenuType.ADMIN) {
             layoutId = R.layout.top_menu_admin;
-        } else if (menuType == MenuType.LOGGED_IN) {
+        } else if (activeType == MenuType.LOGGED_IN) {
             layoutId = R.layout.top_menu_logged_in;
         } else {
             layoutId = R.layout.top_menu_logged_out;
@@ -90,9 +108,9 @@ public class AppMenuFragment extends Fragment {
 
         View view = inflater.inflate(layoutId, container, false);
 
-        if (menuType == MenuType.ADMIN) {
+        if (activeType == MenuType.ADMIN) {
             setupNavigationButton(view, R.id.btn_menu_admin_back, R.id.adminPageActivity);
-        } else if (menuType == MenuType.LOGGED_IN) {
+        } else if (activeType == MenuType.LOGGED_IN) {
             setupNavigationButton(view, R.id.btn_menu_main, R.id.mainActivity);
             setupNavigationButton(view, R.id.btn_menu_contact, R.id.contactActivity);
             setupNavigationButton(view, R.id.btn_menu_details, R.id.detailsAboutUserActivity);

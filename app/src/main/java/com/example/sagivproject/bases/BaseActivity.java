@@ -198,14 +198,10 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
             } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-                AppMenuFragment.MenuType targetType = (currentUser != null)
-                        ? AppMenuFragment.MenuType.LOGGED_IN
-                        : AppMenuFragment.MenuType.LOGGED_OUT;
-
                 Fragment currentMenuFrag = getSupportFragmentManager().findFragmentById(R.id.drawer_menu_container);
-                if (!(currentMenuFrag instanceof AppMenuFragment) || ((AppMenuFragment) currentMenuFrag).getMenuType() != targetType) {
+                if (!(currentMenuFrag instanceof AppMenuFragment) || ((AppMenuFragment) currentMenuFrag).getMenuType() == AppMenuFragment.MenuType.ADMIN) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.drawer_menu_container, AppMenuFragment.newInstance(targetType))
+                            .replace(R.id.drawer_menu_container, AppMenuFragment.newInstance(AppMenuFragment.MenuType.LOGGED_IN))
                             .commit();
                 }
             }
