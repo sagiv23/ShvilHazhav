@@ -28,7 +28,7 @@ import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
-import com.example.sagivproject.services.notifications.AlarmScheduler;
+import com.example.sagivproject.services.notifications.NotificationService;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.text.SimpleDateFormat;
@@ -55,7 +55,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <li>Searching and filtering medications by name or type.</li>
  * <li>Logging real-time intake status (Taken, Not Taken, Snoozed).</li>
  * <li>Adding, editing, and deleting medication prescriptions.</li>
- * <li>Scheduling and managing local notification reminders via {@link AlarmScheduler}.</li>
+ * <li>Scheduling and managing local notification reminders via {@link NotificationService}.</li>
  * </ul>
  * It ensures the local UI state is synchronized with both Firebase and the local device cache.
  * </p>
@@ -68,7 +68,7 @@ public class MedicationListActivity extends BaseActivity {
      * Utility for scheduling system alarms for medication reminders.
      */
     @Inject
-    AlarmScheduler alarmScheduler;
+    NotificationService notificationService;
 
     private MedicationListAdapter adapter;
     private User user;
@@ -287,7 +287,7 @@ public class MedicationListActivity extends BaseActivity {
      * Validates notification permissions before scheduling reminders.
      */
     private void checkNotificationPermissionAndSchedule(Medication medication) {
-        runWithPermission(Manifest.permission.POST_NOTIFICATIONS, () -> alarmScheduler.schedule(medication));
+        runWithPermission(Manifest.permission.POST_NOTIFICATIONS, () -> notificationService.schedule(medication));
     }
 
     @Override
@@ -306,7 +306,7 @@ public class MedicationListActivity extends BaseActivity {
         databaseService.getMedicationService().updateMedication(uid, med, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                alarmScheduler.cancel(med);
+                notificationService.cancel(med);
                 checkNotificationPermissionAndSchedule(med);
                 medicationMap.put(med.getId(), med);
                 updateUserCache();
@@ -328,7 +328,7 @@ public class MedicationListActivity extends BaseActivity {
         databaseService.getMedicationService().deleteMedication(uid, medication.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
-                alarmScheduler.cancel(medication);
+                notificationService.cancel(medication);
                 medicationMap.remove(medication.getId());
                 updateUserCache();
                 filterMedications(editSearch.getText().toString());

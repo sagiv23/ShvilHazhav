@@ -1,23 +1,21 @@
 # Notifications
 
-> Services, workers, and receivers responsible for scheduling and delivering local reminders and
+> Services and receivers responsible for scheduling and delivering local reminders and
 > system alerts.
 
 ---
 
-| Class                      | Type              | Purpose                                                                           |
-|----------------------------|-------------------|-----------------------------------------------------------------------------------|
-| `AlarmReceiver`            | BroadcastReceiver | Processes triggered system alarms to fire notifications and reschedule events.    |
-| `AlarmScheduler`           | Utility           | Manages high-precision daily scheduling of alarms via the Android `AlarmManager`. |
-| `BootReceiver`             | BroadcastReceiver | Restores and reschedules all active medication reminders upon device restart.     |
-| `MedicationActionReceiver` | BroadcastReceiver | Handles direct user responses from notifications (Taken/Snoozed) via Intents.     |
-| `NotificationService`      | Service           | Centralizes channel management, group summary logic, and building alerts.         |
+| Class                  | Type              | Purpose                                                                             |
+|------------------------|-------------------|-------------------------------------------------------------------------------------|
+| `NotificationReceiver` | BroadcastReceiver | Unified receiver for boot events, medication alarms, and user notification actions. |
+| `NotificationService`  | Service           | Centralizes channel management, alarm scheduling, and building alerts.              |
 
 ## Key Features
 
-- **Direct Interaction**: Supports `MedicationActionReceiver` for logging intake without opening the
-  app.
-- **Persistence**: `BootReceiver` ensures alarms survive device reboots.
-- **Reliability**: Uses exact alarms to ensure critical medical alerts arrive on time.
-- **Organization**: Implements notification grouping and summary channels to avoid cluttering the
-  system tray.
+- **Unified Handling**: `NotificationReceiver` centralizes all broadcast logic, reducing
+  boilerplate.
+- **Integrated Scheduling**: `NotificationService` now manages `AlarmManager` directly, simplifying
+  the API.
+- **Persistence**: Automatically restores alarms upon device reboot.
+- **Interactive**: Supports direct logging (Taken/Snoozed) from the notification shade.
+- **Organization**: Implements notification grouping and summary channels.

@@ -61,20 +61,14 @@
             android:foregroundServiceType="health|location" />
 
         <receiver
-            android:name=".services.notifications.AlarmReceiver"
-            android:exported="false" />
-
-        <receiver
-            android:name=".services.notifications.MedicationActionReceiver"
-            android:exported="false" />
-
-        <receiver
-            android:name=".services.notifications.BootReceiver"
+            android:name=".services.notifications.NotificationReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.example.sagivproject.ACTION_MEDICATION_ALARM" />
+                <action android:name="com.example.sagivproject.ACTION_MEDICATION_LOG" />
             </intent-filter>
         </receiver>
 
