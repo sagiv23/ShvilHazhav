@@ -8,7 +8,6 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
@@ -42,19 +41,6 @@ public class ContactActivity extends BaseActivity {
         setupSocialButton(R.id.btnYoutube, "https://www.youtube.com/@Sagiv23");
         setupSocialButton(R.id.btnInstagram, "https://www.instagram.com/Sagiv23");
         setupSocialButton(R.id.btnGithub, "https://github.com/sagiv23");
-
-        if (savedInstanceState != null) {
-            boolean secretVisible = savedInstanceState.getBoolean("secretVisible", false);
-            if (secretVisible) {
-                findViewById(R.id.cardSecret).setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("secretVisible", findViewById(R.id.cardSecret).getVisibility() == View.VISIBLE);
     }
 
     /**
@@ -109,17 +95,7 @@ public class ContactActivity extends BaseActivity {
 
     @Override
     protected void onPause() {
-        if (handler != null && longPressedRunnable != null) {
-            handler.removeCallbacks(longPressedRunnable);
-        }
+        handler.removeCallbacks(longPressedRunnable);
         super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (handler != null && longPressedRunnable != null) {
-            handler.removeCallbacks(longPressedRunnable);
-        }
-        super.onDestroy();
     }
 }
