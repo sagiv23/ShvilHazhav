@@ -64,7 +64,6 @@ public class LandingActivity extends BaseActivity {
                         .start();
             }
         } else {
-
             if (splashImage != null) {
                 splashImage.setVisibility(View.GONE);
             }
