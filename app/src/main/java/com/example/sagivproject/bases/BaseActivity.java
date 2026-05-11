@@ -2,6 +2,7 @@ package com.example.sagivproject.bases;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -403,7 +404,7 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
     protected void runWithPermissions(Runnable action, String... permissions) {
         boolean allGranted = true;
         for (String p : permissions) {
-            if (ContextCompat.checkSelfPermission(this, p) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
                 allGranted = false;
                 break;
             }
