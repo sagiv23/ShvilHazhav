@@ -15,6 +15,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -25,11 +26,11 @@ import com.google.firebase.ai.type.Content;
 import com.google.firebase.ai.type.GenerateContentResponse;
 import com.google.firebase.ai.type.GenerativeBackend;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.Executor;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -58,6 +59,12 @@ public class TipOfTheDayActivity extends BaseActivity {
             "ההתחלה היא החלק החשוב ביותר בעבודה."
     };
 
+    /**
+     * Utility for calendar operations.
+     */
+    @Inject
+    protected CalendarUtil calendarUtil;
+
     private TextView tipContent, tvInspirationContent;
     private Button btnTipSpeak, btnInspirationSpeak;
     private GenerativeModelFutures model;
@@ -73,7 +80,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         setContent(R.layout.activity_tip_of_the_day, R.id.tipOfTheDayPage);
         setupMenu();
 
-        String currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+        String currentDate = calendarUtil.formatDate(System.currentTimeMillis());
         ((TextView) findViewById(R.id.tv_tip_of_the_day_date)).setText(currentDate);
 
         tipContent = findViewById(R.id.tv_tipOfTheDay_content);
@@ -110,8 +117,6 @@ public class TipOfTheDayActivity extends BaseActivity {
         GenerativeModel generativeModel = FirebaseAI.getInstance(GenerativeBackend.googleAI())
                 .generativeModel("gemini-2.5-flash-lite");
         model = GenerativeModelFutures.from(generativeModel);
-
-        checkDailyTip();
     }
 
     /**
@@ -182,9 +187,8 @@ public class TipOfTheDayActivity extends BaseActivity {
                 String text = result.getText();
                 if (text == null) text = "לא התקבלה תשובה.";
 
-                String today = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+                String today = calendarUtil.getCurrentDate();
                 TipOfTheDay newTip = new TipOfTheDay(text, today);
-                newTip.setId(today);
 
                 String finalText = text;
                 databaseService.getTipOfTheDayService().saveTipIfNotExists(newTip, new IDatabaseService.DatabaseCallback<>() {
