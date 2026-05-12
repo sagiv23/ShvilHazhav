@@ -10,7 +10,6 @@ import com.example.sagivproject.adapters.MedicationListAdapter;
 import com.example.sagivproject.adapters.MedicationUsageAdapter;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.adapters.MemoryGameLogAdapter;
-import com.example.sagivproject.adapters.TipAdapter;
 import com.example.sagivproject.adapters.UsersTableAdapter;
 import com.example.sagivproject.services.IAdapterService;
 
@@ -40,7 +39,6 @@ public class AdapterService implements IAdapterService {
     private final MedicationUsageAdapter medicationUsageAdapter;
     private final EmergencyContactsAdapter emergencyContactsAdapter;
     private final GraphAdapter graphAdapter;
-    private final TipAdapter tipAdapter;
 
     /**
      * Constructs a new AdapterService with all required adapters injected by Hilt.
@@ -57,8 +55,7 @@ public class AdapterService implements IAdapterService {
             LeaderboardAdapter leaderboardAdapter,
             MedicationUsageAdapter medicationUsageAdapter,
             EmergencyContactsAdapter emergencyContactsAdapter,
-            GraphAdapter graphAdapter,
-            TipAdapter tipAdapter
+            GraphAdapter graphAdapter
     ) {
         this.forumAdapter = forumAdapter;
         this.forumCategoryAdapter = forumCategoryAdapter;
@@ -71,7 +68,6 @@ public class AdapterService implements IAdapterService {
         this.medicationUsageAdapter = medicationUsageAdapter;
         this.emergencyContactsAdapter = emergencyContactsAdapter;
         this.graphAdapter = graphAdapter;
-        this.tipAdapter = tipAdapter;
     }
 
     /**
@@ -160,13 +156,5 @@ public class AdapterService implements IAdapterService {
     @Override
     public GraphAdapter getGraphAdapter() {
         return graphAdapter;
-    }
-
-    /**
-     * @return The adapter for daily tips list.
-     */
-    @Override
-    public TipAdapter getTipAdapter() {
-        return tipAdapter;
     }
 }
