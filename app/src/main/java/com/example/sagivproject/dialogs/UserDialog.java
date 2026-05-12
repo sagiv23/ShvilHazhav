@@ -31,22 +31,42 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class UserDialog extends BaseDialog {
     private static final String ARG_USER = "arg_user";
 
+    /**
+     * Validator utility for checking input formats (email, password, etc.).
+     */
     @Inject
     Validator validator;
 
+    /**
+     * Utility for date formatting and date picker dialogs.
+     */
     @Inject
     CalendarUtil calendarUtil;
 
+    /**
+     * The user record being edited, or null if creating a new user.
+     */
     private User user;
+
+    /**
+     * The selected birthdate in database format (yyyy-MM-dd).
+     */
     private String birthDate = null;
+
+    /**
+     * Callback for returning user data.
+     */
     private UserDialogListener listener;
 
+    /**
+     * Default constructor for Hilt dependency injection.
+     */
     @Inject
     public UserDialog() {
     }
 
     /**
-     * Sets the user data and listener.
+     * Sets the user data and listener for the dialog.
      *
      * @param user     The {@link User} to edit, or null to add a new user.
      * @param listener The listener for submission events.
@@ -134,6 +154,11 @@ public class UserDialog extends BaseDialog {
         btnCancel.setOnClickListener(v -> dismiss());
     }
 
+    /**
+     * Validates all input fields using {@link Validator}.
+     *
+     * @return true if all fields are valid, false otherwise.
+     */
     private boolean areAllFieldsValid(String fName, String lName, String email, String password, EditText firstNameEdt, EditText lastNameEdt, EditText emailEdt, EditText passwordEdt, EditText birthDateEdt) {
         if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || password.isEmpty() || birthDateEdt.getText().toString().isEmpty()) {
             Toast.makeText(requireContext(), "נא למלא את כל השדות", Toast.LENGTH_SHORT).show();
@@ -179,7 +204,15 @@ public class UserDialog extends BaseDialog {
         return true;
     }
 
+    /**
+     * Listener interface for returning user data results.
+     */
     public interface UserDialogListener {
+        /**
+         * Called when a user record is ready to be added or updated.
+         *
+         * @param user The {@link User} object containing the submitted data.
+         */
         void onSubmit(User user);
     }
 }
