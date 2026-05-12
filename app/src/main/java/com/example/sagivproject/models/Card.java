@@ -37,6 +37,29 @@ public class Card extends ImageData {
     }
 
     /**
+     * Overridden to exclude the image content from being stored in the game room node.
+     * The image should be resolved locally by the client using the card's ID.
+     *
+     * @return The Base64 content (not stored in Firebase).
+     */
+    @Exclude
+    @Override
+    public String getBase64() {
+        return super.getBase64();
+    }
+
+    /**
+     * Overridden to prevent Base64 content from being stored in the game room node.
+     *
+     * @param base64 The Base64 content.
+     */
+    @Exclude
+    @Override
+    public void setBase64(String base64) {
+        super.setBase64(base64);
+    }
+
+    /**
      * Checks if the card is currently revealed (flipped up).
      *
      * @return true if revealed.

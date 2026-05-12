@@ -58,6 +58,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     private final DatabaseReference roomsReference;
     private final Map<String, ValueEventListener> roomStatusListeners = new ConcurrentHashMap<>();
     private ValueEventListener activeGameListener;
+    private ValueEventListener allRoomsListener;
 
     /**
      * Constructs a new MemoryGameServiceImpl.
@@ -72,6 +73,10 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     /**
      * Uses a Firebase transaction to atomically find a waiting room or create a new one.
+     * Optimizes room search by:
+     * 1. Preventing a user from joining their own room.
+     * 2. Cleaning up duplicate waiting rooms for the same user.
+     * 3. Favoring joining an existing waiting room to speed up matchmaking.
      *
      * @param user     The user seeking a match.
      * @param callback Result callback.
@@ -88,31 +93,53 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                // Find a waiting room using Java Streams
-                MutableData waitingRoom = StreamSupport.stream(currentData.getChildren().spliterator(), false)
-                        .filter(roomData -> {
-                            GameRoom room = roomData.getValue(GameRoom.class);
-                            return room != null && STATUS_WAITING.equals(room.getStatus()) && room.getPlayer2Uid() == null;
-                        })
-                        .findFirst()
-                        .orElse(null);
+                String userId = user.getId();
+                MutableData myExistingWaitingRoom = null;
+                MutableData joinableRoom = null;
 
-                if (waitingRoom != null) {
-                    GameRoom room = waitingRoom.getValue(GameRoom.class);
-                    if (room != null) {
-                        room.setPlayer2Uid(user.getId());
-                        room.setStatus(STATUS_PLAYING);
-                        waitingRoom.setValue(room);
-                        roomIdForUser = room.getId();
+                // Single pass to identify an available room and any existing room belonging to the user
+                for (MutableData roomData : currentData.getChildren()) {
+                    GameRoom room = roomData.getValue(GameRoom.class);
+                    if (room == null || !STATUS_WAITING.equals(room.getStatus())) continue;
+
+                    if (userId.equals(room.getPlayer1Uid())) {
+                        myExistingWaitingRoom = roomData;
+                    } else if (room.getPlayer2Uid() == null && joinableRoom == null) {
+                        joinableRoom = roomData;
+                    }
+                }
+
+                // 1. Prioritize joining an existing room created by another player
+                if (joinableRoom != null) {
+                    // Clean up current user's old waiting room if it exists to keep database tidy
+                    if (myExistingWaitingRoom != null) {
+                        myExistingWaitingRoom.setValue(null);
+                    }
+
+                    GameRoom roomToJoin = joinableRoom.getValue(GameRoom.class);
+                    if (roomToJoin != null) {
+                        roomToJoin.setPlayer2Uid(userId);
+                        roomToJoin.setStatus(STATUS_PLAYING);
+                        joinableRoom.setValue(roomToJoin);
+                        roomIdForUser = joinableRoom.getKey();
                         return Transaction.success(currentData);
                     }
                 }
 
+                // 2. If no other rooms are available, check if the user already has a waiting room
+                if (myExistingWaitingRoom != null) {
+                    roomIdForUser = myExistingWaitingRoom.getKey();
+                    return Transaction.success(currentData);
+                }
+
+                // 3. No suitable rooms found; create a new waiting room
                 String newRoomId = roomsReference.push().getKey();
                 if (newRoomId == null) return Transaction.abort();
+
                 GameRoom newRoom = new GameRoom(newRoomId, user);
                 currentData.child(newRoomId).setValue(newRoom);
                 roomIdForUser = newRoomId;
+
                 return Transaction.success(currentData);
             }
 
@@ -121,11 +148,18 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
                 if (error != null) {
                     callback.onFailed(error.toException());
                 } else if (!committed) {
-                    callback.onFailed(new Exception("שגיאה במציאת חדר."));
+                    callback.onFailed(new Exception("שגיאה בתהליך מציאת חדר."));
                 } else {
+                    if (roomIdForUser == null) {
+                        callback.onFailed(new Exception("מזהה חדר לא נמצא."));
+                        return;
+                    }
                     GameRoom finalRoom = snapshot.child(roomIdForUser).getValue(GameRoom.class);
-                    if (finalRoom != null) callback.onCompleted(finalRoom);
-                    else callback.onFailed(new Exception("שגיאה בנתוני החדר."));
+                    if (finalRoom != null) {
+                        callback.onCompleted(finalRoom);
+                    } else {
+                        callback.onFailed(new Exception("נתוני החדר לא נמצאו לאחר העדכון."));
+                    }
                 }
             }
         });
@@ -133,7 +167,8 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     @Override
     public void getAllRoomsRealtime(@NonNull DatabaseCallback<List<GameRoom>> callback) {
-        roomsReference.addValueEventListener(new ValueEventListener() {
+        stopAllRoomsRealtime();
+        allRoomsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<GameRoom> roomList = StreamSupport.stream(snapshot.getChildren().spliterator(), false)
@@ -147,7 +182,16 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
             public void onCancelled(@NonNull DatabaseError error) {
                 callback.onFailed(error.toException());
             }
-        });
+        };
+        roomsReference.addValueEventListener(allRoomsListener);
+    }
+
+    @Override
+    public void stopAllRoomsRealtime() {
+        if (allRoomsListener != null) {
+            roomsReference.removeEventListener(allRoomsListener);
+            allRoomsListener = null;
+        }
     }
 
     /**
@@ -280,26 +324,22 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
      */
     @Override
     public void incrementScore(String roomId, String playerUid, @Nullable DatabaseCallback<Void> callback) {
-        roomsReference.child(roomId).runTransaction(new Transaction.Handler() {
-            @NonNull
+        runTransaction(ROOMS_PATH + "/" + roomId, room -> {
+            if (room == null) return null;
+            if (playerUid.equals(room.getPlayer1Uid()))
+                room.setPlayer1Score(room.getPlayer1Score() + 1);
+            else if (playerUid.equals(room.getPlayer2Uid()))
+                room.setPlayer2Score(room.getPlayer2Score() + 1);
+            return room;
+        }, (callback == null) ? null : new DatabaseCallback<>() {
             @Override
-            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                GameRoom room = mutableData.getValue(GameRoom.class);
-                if (room == null) return Transaction.success(mutableData);
-                if (playerUid.equals(room.getPlayer1Uid()))
-                    room.setPlayer1Score(room.getPlayer1Score() + 1);
-                else if (playerUid.equals(room.getPlayer2Uid()))
-                    room.setPlayer2Score(room.getPlayer2Score() + 1);
-                mutableData.setValue(room);
-                return Transaction.success(mutableData);
+            public void onCompleted(GameRoom result) {
+                callback.onCompleted(null);
             }
 
             @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                if (callback != null) {
-                    if (error != null) callback.onFailed(error.toException());
-                    else callback.onCompleted(null);
-                }
+            public void onFailed(Exception e) {
+                callback.onFailed(e);
             }
         });
     }

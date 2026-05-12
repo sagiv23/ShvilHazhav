@@ -97,7 +97,6 @@ public class GameHomeScreenActivity extends BaseActivity {
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
         adapter = adapterService.getLeaderboardAdapter();
         rvLeaderboard.setAdapter(adapter);
-        setupLeaderboard();
 
         updateUI(SearchState.IDLE);
     }
@@ -139,7 +138,9 @@ public class GameHomeScreenActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
         loadStats();
+        setupLeaderboard();
         gameStarted = false;
+        updateUI(SearchState.IDLE);
     }
 
     @Override

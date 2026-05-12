@@ -34,6 +34,11 @@ public interface IMemoryGameService {
     void getAllRoomsRealtime(@NonNull DatabaseCallback<List<GameRoom>> callback);
 
     /**
+     * Stops listening for updates on all game rooms.
+     */
+    void stopAllRoomsRealtime();
+
+    /**
      * Attaches a listener to monitor the status changes of a specific game room (e.g., transitions to "playing" or "finished").
      *
      * @param roomId   The unique identifier of the game room.

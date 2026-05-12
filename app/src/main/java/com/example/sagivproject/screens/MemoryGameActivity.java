@@ -25,8 +25,10 @@ import com.example.sagivproject.utils.ImageUtil;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -56,10 +58,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * The total time limit for the entire game in milliseconds (1.5 minutes).
      */
     private static final long TOTAL_GAME_TIME_LIMIT = 90000;
-
+    private final Map<String, String> imageCache = new HashMap<>();
     @Inject
     ImageUtil imageUtil;
-
     private RecyclerView recyclerCards;
     private boolean endDialogShown = false, localLock = false;
     private String roomId;
@@ -90,7 +91,11 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         recyclerCards.setAdapter(adapter);
 
         findViewById(R.id.btn_OnlineMemoryGame_to_exit).setOnClickListener(v -> showExitGameDialog());
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         listenToGame();
     }
 
@@ -368,6 +373,26 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * Establishes a persistent listener for the game room's database node.
      */
     private void listenToGame() {
+        databaseService.getImageService().getAllImages(new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(List<ImageData> allImages) {
+                if (allImages != null) {
+                    for (ImageData img : allImages) {
+                        imageCache.put(img.getId(), img.getBase64());
+                    }
+                }
+                adapter.setImageCache(imageCache);
+                startListeningToRoom();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                startListeningToRoom();
+            }
+        });
+    }
+
+    private void startListeningToRoom() {
         databaseService.getGameService().listenToGame(roomId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(GameRoom room) {
@@ -507,6 +532,14 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         Intent intent = new Intent(this, GameHomeScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        if (roomId != null) databaseService.getGameService().stopListeningToGame(roomId);
+        if (turnTimer != null) turnTimer.cancel();
+        if (totalGameTimer != null) totalGameTimer.cancel();
+        super.onStop();
     }
 
     @Override

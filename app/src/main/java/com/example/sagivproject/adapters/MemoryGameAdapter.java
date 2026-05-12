@@ -13,7 +13,10 @@ import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.utils.ImageUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -29,6 +32,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
     private static final int CAMERA_DISTANCE = 8000;
     private final ImageUtil imageUtil;
     private MemoryGameListener listener;
+    private Map<String, String> imageCache = new HashMap<>();
 
     /**
      * Constructs a new MemoryGameAdapter.
@@ -47,6 +51,16 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
      */
     public void setListener(MemoryGameListener listener) {
         this.listener = listener;
+    }
+
+    /**
+     * Sets the image cache to resolve card IDs to Base64 strings.
+     *
+     * @param imageCache A map of image IDs to Base64 content.
+     */
+    public void setImageCache(Map<String, String> imageCache) {
+        this.imageCache = imageCache != null ? imageCache : new HashMap<>();
+        setData(new ArrayList<>(getItemList()));
     }
 
     /**
@@ -77,8 +91,10 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         holder.itemView.setAlpha(1f);
         holder.cardImage.setRotationY(0f);
 
+        String base64 = imageCache.get(card.getId());
+
         if (card.getIsMatched() || card.getIsRevealed()) {
-            imageUtil.loadImage(card.getBase64(), holder.cardImage);
+            imageUtil.loadImage(base64, holder.cardImage);
             if (card.getIsMatched()) {
                 holder.itemView.setAlpha(0.6f);
             }
@@ -88,7 +104,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
 
         if (card.getIsRevealed() && !card.wasRevealed()) {
             if (listener != null) {
-                listener.animateFlipOpen(holder.cardImage, card.getBase64());
+                listener.animateFlipOpen(holder.cardImage, base64);
             }
             card.setWasRevealed(true);
         } else if (!card.getIsRevealed() && card.wasRevealed()) {
