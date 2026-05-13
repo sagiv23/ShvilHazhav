@@ -171,7 +171,7 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
     /**
      * ViewHolder for memory game card items.
      */
-    public static class CardViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
         /**
          * The ImageView representing the card surface.
          */

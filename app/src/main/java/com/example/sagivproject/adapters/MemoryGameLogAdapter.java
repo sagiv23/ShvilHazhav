@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
@@ -95,7 +96,7 @@ public class MemoryGameLogAdapter extends BaseAdapter<GameRoom, MemoryGameLogAda
     /**
      * ViewHolder class for memory game log entries.
      */
-    public static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         /**
          * TextViews for player names, scores, and room status.
          */

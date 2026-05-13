@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
@@ -82,7 +83,7 @@ public class LeaderboardAdapter extends BaseAdapter<User, LeaderboardAdapter.Vie
     /**
      * ViewHolder class for leaderboard rows.
      */
-    public static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         /**
          * TextView for the user's full name.
          */

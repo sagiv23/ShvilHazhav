@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
@@ -247,7 +248,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     /**
      * ViewHolder for forum message items.
      */
-    public static class ForumViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    public static class ForumViewHolder extends RecyclerView.ViewHolder {
         final TextView txtUser, txtEmail, txtIsAdmin, txtMessage, txtTime;
         final ImageButton btnMenu;
         final MaterialButton btnSpeak;

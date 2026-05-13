@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.ImageUtil;
 
 import java.util.List;
@@ -32,7 +33,7 @@ import javax.inject.Inject;
  */
 public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserViewHolder> {
     private final ImageUtil imageUtil;
-    private final com.example.sagivproject.utils.CalendarUtil calendarUtil;
+    private final CalendarUtil calendarUtil;
     private OnUserActionListener listener;
 
     /**
@@ -42,7 +43,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
      * @param calendarUtil A utility for date formatting.
      */
     @Inject
-    public UsersTableAdapter(ImageUtil imageUtil, com.example.sagivproject.utils.CalendarUtil calendarUtil) {
+    public UsersTableAdapter(ImageUtil imageUtil, CalendarUtil calendarUtil) {
         this.imageUtil = imageUtil;
         this.calendarUtil = calendarUtil;
     }

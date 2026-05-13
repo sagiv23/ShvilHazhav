@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
@@ -136,7 +137,7 @@ public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCatego
     /**
      * ViewHolder for forum category items.
      */
-    public static class CategoryViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    public static class CategoryViewHolder extends RecyclerView.ViewHolder {
         /**
          * TextView displaying the category name.
          */
