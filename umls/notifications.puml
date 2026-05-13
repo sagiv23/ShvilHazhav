@@ -5,7 +5,12 @@ class services.notifications.NotificationService {
 - {static} String MEDICATIONS_GROUP
 - Context context
 - NotificationManagerCompat manager
+- AlarmManager alarmManager
 - void createChannels()
++ void schedule(Medication)
++ void scheduleSpecificTime(Medication,String,boolean)
++ void cancel(Medication)
++ void cancelSpecificTime(String,String)
 + Notification getFallDetectionForegroundNotification()
 + void showFallDetectedNotification()
 + void showMedicationNotification(String,String,String,int)
@@ -14,15 +19,21 @@ class services.notifications.NotificationService {
 }
 
 
-class services.notifications.MedicationActionReceiver {
+class services.notifications.NotificationReceiver {
++ {static} String ACTION_MEDICATION_ALARM
++ {static} String ACTION_MEDICATION_LOG
 - {static} String TAG
+~ NotificationService notificationService
 ~ IDatabaseService databaseService
 ~ SharedPreferencesUtil sharedPreferencesUtil
 + void onReceive(Context,Intent)
+- void handleBoot()
+- void handleMedicationAlarm(Intent)
+- void handleMedicationLog(Context,Intent)
 }
 
 
 
 
-android.content.BroadcastReceiver <|-- services.notifications.MedicationActionReceiver
+android.content.BroadcastReceiver <|-- services.notifications.NotificationReceiver
 @enduml

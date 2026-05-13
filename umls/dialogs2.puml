@@ -21,7 +21,7 @@ class dialogs.UserDialog {
 ~ Validator validator
 ~ CalendarUtil calendarUtil
 - User user
-- long birthDateMillis
+- String birthDate
 - UserDialogListener listener
 + void setData(User,UserDialogListener)
 + void onCreate(Bundle)
@@ -32,7 +32,7 @@ class dialogs.UserDialog {
 
 
 interface dialogs.UserDialog$UserDialogListener {
-~ void onSubmit(String,String,long,String,String)
+~ void onSubmit(User)
 }
 
 class dialogs.MedicationDialog {
@@ -45,8 +45,8 @@ class dialogs.MedicationDialog {
 + void onCreate(Bundle)
 # int getLayoutResId()
 # void setupViews(Dialog)
-- boolean validateInputs(String,String,String,MedicationType)
-- MedicationType getTypeFromString(String)
+- boolean validateInputs(String,String,String,Medication.MedicationType)
+- Medication.MedicationType getTypeFromString(String)
 - void showHourPicker()
 - void updateSelectedHoursChips()
 - ArrayAdapter<String> createMedicationTypeAdapter(List<String>)
@@ -56,8 +56,7 @@ class dialogs.MedicationDialog {
 
 
 interface dialogs.MedicationDialog$OnMedicationSubmitListener {
-~ void onAdd(Medication)
-~ void onEdit(Medication)
+~ void onMedicationSubmit(Medication)
 }
 
 

@@ -32,20 +32,26 @@ class utils.SharedPreferencesUtil {
 + void setDarkMode(boolean)
 + boolean isFallDetectionEnabled()
 + void setFallDetectionEnabled(boolean)
-+ String getUserId()
 }
 
 
 class utils.CalendarUtil {
 + {static} String DEFAULT_DATE_FORMAT
-+ void openDatePicker(Context,long,OnDateSelectedListener,boolean,boolean,String)
++ {static} String DATABASE_DATE_FORMAT
++ {static} String DATABASE_TIMESTAMP_FORMAT
++ void openDatePicker(Context,String,OnDateSelectedListener,boolean,boolean,String)
++ long parseDateFromDatabase(String)
++ long parseTimestampFromDatabase(String)
++ String getCurrentDate()
++ String getCurrentTimestamp()
 + String formatDate(long)
 + String formatDate(long,String)
+- long parse(String,String)
 }
 
 
 interface utils.CalendarUtil$OnDateSelectedListener {
-~ void onDateSelected(long,String)
+~ void onDateSelected(long,String,String)
 }
 
 class utils.Validator {
@@ -54,7 +60,7 @@ class utils.Validator {
 + boolean isEmailNotValid(String)
 + boolean isPhoneNotValid(String)
 + boolean isPasswordNotValid(String)
-+ boolean isAgeNotValid(long)
++ boolean isAgeNotValid(String)
 }
 
 

@@ -19,10 +19,8 @@ class bases.BaseAdapter$DiffCallback {
 
 
 class bases.MainApplication {
-~ HiltWorkerFactory workerFactory
 ~ SharedPreferencesUtil sharedPreferencesUtil
 + void onCreate()
-+ Configuration getWorkManagerConfiguration()
 }
 
 
@@ -31,6 +29,5 @@ class bases.MainApplication {
 bases.Adapter <|-- bases.BaseAdapter
 bases.BaseAdapter +.. bases.BaseAdapter$DiffCallback
 bases.Callback <|-- bases.BaseAdapter$DiffCallback
-bases.Provider <|.. bases.MainApplication
 android.app.Application <|-- bases.MainApplication
 @enduml

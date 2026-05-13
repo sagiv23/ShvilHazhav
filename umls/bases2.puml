@@ -10,7 +10,6 @@ abstract class bases.BaseDialog {
 
 
 abstract class bases.BaseActivity {
-- {static} String TAG
 # SharedPreferencesUtil sharedPreferencesUtil
 # IDatabaseService databaseService
 # IAdapterService adapterService
@@ -19,6 +18,12 @@ abstract class bases.BaseActivity {
 - Runnable onPermissionGrantedCallback
 # ActivityResultLauncher<String[]> requestPermissionLauncher
 # void onCreate(Bundle)
+# void onStart()
+# void onResume()
+# void onPause()
+# void onStop()
+# void onRestart()
+# void onDestroy()
 # void setContent(int,int)
 # void setupMenu()
 + void openDrawer()
@@ -27,7 +32,7 @@ abstract class bases.BaseActivity {
 # void navigateToUserHome(User)
 # ArrayAdapter<String> createStyledSearchAdapter(String[])
 # ArrayAdapter<String> createStyledSearchAdapter(List<String>)
-# void setGreeting(int,User)
+# void setGreeting(int)
 + void onNavigate(int,Bundle)
 # void vibrateDevice()
 # void runWithPermissions(Runnable,String)
@@ -41,6 +46,6 @@ abstract class bases.BaseActivity {
 
 
 androidx.fragment.app.DialogFragment <|-- bases.BaseDialog
-ui.MenuNavigationListener <|.. bases.BaseActivity
+bases.OnNavigationListener <|.. bases.BaseActivity
 androidx.appcompat.app.AppCompatActivity <|-- bases.BaseActivity
 @enduml

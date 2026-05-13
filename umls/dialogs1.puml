@@ -9,23 +9,6 @@ class dialogs.FullImageDialog {
 }
 
 
-class dialogs.AddEmergencyContactDialog {
-~ Validator validator
-- AddEmergencyContactListener listener
-- EmergencyContact contactToEdit
-+ void setListener(AddEmergencyContactListener)
-+ void setData(EmergencyContact,AddEmergencyContactListener)
-# int getLayoutResId()
-# void setupViews(Dialog)
-+ void onDestroyView()
-- boolean areAllFieldsValid(String,String,String,EditText,EditText,EditText)
-}
-
-
-interface dialogs.AddEmergencyContactDialog$AddEmergencyContactListener {
-~ void onContactSubmit(String,String,String)
-}
-
 class dialogs.ConfirmDialog {
 - {static} String ARG_TITLE
 - {static} String ARG_MESSAGE
@@ -37,6 +20,25 @@ class dialogs.ConfirmDialog {
 # void setupViews(Dialog)
 }
 
+
+class dialogs.EmergencyContactDialog {
+- {static} String ARG_CONTACT
+~ Validator validator
+- AddEmergencyContactListener listener
+- EmergencyContact contactToEdit
++ void setListener(AddEmergencyContactListener)
++ void setData(EmergencyContact,AddEmergencyContactListener)
++ void onCreate(Bundle)
+# int getLayoutResId()
+# void setupViews(Dialog)
++ void onDestroyView()
+- boolean areAllFieldsValid(String,String,String,EditText,EditText,EditText)
+}
+
+
+interface dialogs.EmergencyContactDialog$AddEmergencyContactListener {
+~ void onContactSubmit(EmergencyContact)
+}
 
 class dialogs.EditForumCategoryDialog {
 - {static} String ARG_CATEGORY
@@ -56,9 +58,9 @@ interface dialogs.EditForumCategoryDialog$EditForumCategoryDialogListener {
 
 
 bases.BaseDialog <|-- dialogs.FullImageDialog
-bases.BaseDialog <|-- dialogs.AddEmergencyContactDialog
-dialogs.AddEmergencyContactDialog +.. dialogs.AddEmergencyContactDialog$AddEmergencyContactListener
 bases.BaseDialog <|-- dialogs.ConfirmDialog
+bases.BaseDialog <|-- dialogs.EmergencyContactDialog
+dialogs.EmergencyContactDialog +.. dialogs.EmergencyContactDialog$AddEmergencyContactListener
 bases.BaseDialog <|-- dialogs.EditForumCategoryDialog
 dialogs.EditForumCategoryDialog +.. dialogs.EditForumCategoryDialog$EditForumCategoryDialogListener
 @enduml

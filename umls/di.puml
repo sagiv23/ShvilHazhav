@@ -15,7 +15,7 @@ abstract class di.AppModule {
 + {abstract}IImageService bindImageService(ImageServiceImpl)
 + {abstract}ITipOfTheDayService bindTipOfTheDayService(TipOfTheDayServiceImpl)
 + {abstract}IEmergencyService bindEmergencyService(EmergencyServiceImpl)
-+ {abstract}IFallDetectionService bindFallDetectionService(FallDetectionManager)
++ {abstract}IFallDetectionService bindFallDetectionService(FallDetectionServiceImpl)
 }
 
 interface di.AppModule$ActivityBindingsModule {
