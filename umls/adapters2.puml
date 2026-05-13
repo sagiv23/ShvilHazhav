@@ -21,7 +21,6 @@ class adapters.MedicationImagesTableAdapter$ViewHolder {
 }
 
 class adapters.MedicationListAdapter {
-- Context context
 - Set<String> processingMedications
 - Map<String,Map<String,MedicationStatus>> loggedTodayMedications
 - OnMedicationActionListener listener

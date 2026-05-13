@@ -19,29 +19,40 @@ class models.Medication {
 }
 
 
+enum models.MedicationType {
++  PILL
++  HALF_TABLET
++  SYRUP
++  CREAM
++  INJECTION
++  VITAMIN
++  DROPS_FOR_SWALLOWING
++  EYE_DROPS
++  EAR_DROPS
+- String displayName
++ String getDisplayName()
+}
+
+
 class models.TipOfTheDay {
 - String id
 - String tip
-- String date
 + String getId()
 + void setId(String)
 + String getTip()
 + void setTip(String)
-+ String getDate()
-+ void setDate(String)
 + String toString()
 }
 
 
 class models.User {
 - {static} int YEAR
-- {static} int DAY_OF_YEAR
 - String id
 - String email
 - UserRole role
 - String firstName
 - String lastName
-- long birthDateMillis
+- String birthDate
 - String password
 - String profileImage
 - HashMap<String,Medication> medications
@@ -53,8 +64,8 @@ class models.User {
 + void setFirstName(String)
 + String getLastName()
 + void setLastName(String)
-+ long getBirthDateMillis()
-+ void setBirthDateMillis(long)
++ String getBirthDate()
++ void setBirthDate(String)
 + int getAge()
 + String getEmail()
 + void setEmail(String)
@@ -79,19 +90,21 @@ class models.User {
 }
 
 
+enum models.UserRole {
++  REGULAR
++  ADMIN
+}
+
 class models.MedicationUsage {
+- String id
 - String medicationId
-- String medicationName
 - String time
-- String date
 - String scheduledTime
 - MedicationStatus status
-+ String getMedicationName()
-+ void setMedicationName(String)
++ String getMedicationId()
++ void setMedicationId(String)
 + String getTime()
 + void setTime(String)
-+ String getDate()
-+ void setDate(String)
 + String getScheduledTime()
 + void setScheduledTime(String)
 + MedicationStatus getStatus()
@@ -99,6 +112,15 @@ class models.MedicationUsage {
 + String getId()
 + void setId(String)
 + String toString()
+}
+
+
+enum models.MedicationStatus {
++  TAKEN
++  NOT_TAKEN
++  SNOOZED
+- String displayName
++ String getDisplayName()
 }
 
 

@@ -1,14 +1,10 @@
 @startuml
 class models.Card {
-- String id
-- String base64Content
 - boolean isRevealed
 - boolean isMatched
 - boolean wasRevealed
-+ String getId()
-+ void setId(String)
-+ String getBase64Content()
-+ void setBase64Content(String)
++ String getBase64()
++ void setBase64(String)
 + boolean getIsRevealed()
 + void setRevealed(boolean)
 + boolean getIsMatched()
@@ -58,8 +54,6 @@ class models.DailyStats {
 - int memoryGamesPlayed
 - int mathCorrect
 - int mathWrong
-- int medicationsTaken
-- int medicationsMissed
 - List<MedicationUsage> medicationUsageLogs
 + String getId()
 + void setId(String)
@@ -72,17 +66,13 @@ class models.DailyStats {
 + int getMathWrong()
 + void setMathWrong(int)
 + int getMedicationsTaken()
-+ void setMedicationsTaken(int)
 + int getMedicationsMissed()
-+ void setMedicationsMissed(int)
 + List<MedicationUsage> getMedicationUsageLogs()
 + void setMedicationUsageLogs(List<MedicationUsage>)
 + void addMemoryWin()
 + void addMemoryGamePlayed()
 + void addMathCorrect()
 + void addMathWrong()
-+ void addMedicationTaken()
-+ void addMedicationMissed()
 + void addMedicationUsageLog(MedicationUsage)
 + String toString()
 }
@@ -90,7 +80,7 @@ class models.DailyStats {
 
 
 
-models.Idable <|.. models.Card
+models.ImageData <|-- models.Card
 models.Idable <|.. models.EmergencyContact
 models.Idable <|.. models.ForumCategory
 models.Idable <|.. models.DailyStats

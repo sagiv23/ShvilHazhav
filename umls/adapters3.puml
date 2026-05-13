@@ -3,7 +3,9 @@ class adapters.MemoryGameAdapter {
 - {static} int CAMERA_DISTANCE
 - ImageUtil imageUtil
 - MemoryGameListener listener
+- Map<String,String> imageCache
 + void setListener(MemoryGameListener)
++ void setImageCache(Map<String,String>)
 + void setCards(List<Card>)
 + CardViewHolder onCreateViewHolder(ViewGroup,int)
 + void onBindViewHolder(CardViewHolder,int)
@@ -23,14 +25,22 @@ class adapters.MemoryGameAdapter$CardViewHolder {
 }
 
 class adapters.MedicationUsageAdapter {
-- Context context
+- Map<String,Medication> medicationMap
+- OnUsageActionListener listener
++ void setListener(OnUsageActionListener)
++ void setMedicationMap(Map<String,Medication>)
 + UsageViewHolder onCreateViewHolder(ViewGroup,int)
 + void onBindViewHolder(UsageViewHolder,int)
 }
 
 
+interface adapters.MedicationUsageAdapter$OnUsageActionListener {
+~ void onDelete(MedicationUsage)
+}
+
 class adapters.MedicationUsageAdapter$UsageViewHolder {
 ~ TextView txtName
+~ View btnDelete
 }
 
 
@@ -40,6 +50,7 @@ adapters.MemoryGameAdapter +.. adapters.MemoryGameAdapter$MemoryGameListener
 adapters.MemoryGameAdapter +.. adapters.MemoryGameAdapter$CardViewHolder
 adapters.ViewHolder <|-- adapters.MemoryGameAdapter$CardViewHolder
 bases.BaseAdapter <|-- adapters.MedicationUsageAdapter
+adapters.MedicationUsageAdapter +.. adapters.MedicationUsageAdapter$OnUsageActionListener
 adapters.MedicationUsageAdapter +.. adapters.MedicationUsageAdapter$UsageViewHolder
 adapters.ViewHolder <|-- adapters.MedicationUsageAdapter$UsageViewHolder
 @enduml

@@ -1,6 +1,20 @@
 @startuml
+class adapters.MemoryGameLogAdapter {
+- Map<String,String> uidToNameMap
++ void setRooms(List<GameRoom>)
++ void submitData(List<GameRoom>,Map<String,String>)
++ ViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(ViewHolder,int)
+}
+
+
+class adapters.MemoryGameLogAdapter$ViewHolder {
+~ TextView txtPlayers
+}
+
 class adapters.UsersTableAdapter {
 - ImageUtil imageUtil
+- CalendarUtil calendarUtil
 - OnUserActionListener listener
 + void init(OnUserActionListener)
 + void setUserList(List<User>)
@@ -22,34 +36,13 @@ class adapters.UsersTableAdapter$UserViewHolder {
 ~ ImageView imgUserProfile
 }
 
-class adapters.EmergencyContactsAdapter {
-- OnContactActionListener listener
-+ void setListener(OnContactActionListener)
-+ EmergencyContactViewHolder onCreateViewHolder(ViewGroup,int)
-+ void onBindViewHolder(EmergencyContactViewHolder,int)
-}
 
 
-interface adapters.EmergencyContactsAdapter$OnContactActionListener {
-~ void onEdit(EmergencyContact)
-~ void onDelete(EmergencyContact)
-}
-
-class adapters.EmergencyContactsAdapter$EmergencyContactViewHolder {
-~ TextView txtName
-~ TextView txtPhone
-~ ImageButton btnEdit
-~ ImageButton btnDelete
-}
-
-
-
+bases.BaseAdapter <|-- adapters.MemoryGameLogAdapter
+adapters.MemoryGameLogAdapter +.. adapters.MemoryGameLogAdapter$ViewHolder
+adapters.ViewHolder <|-- adapters.MemoryGameLogAdapter$ViewHolder
 bases.BaseAdapter <|-- adapters.UsersTableAdapter
 adapters.UsersTableAdapter +.. adapters.UsersTableAdapter$OnUserActionListener
 adapters.UsersTableAdapter +.. adapters.UsersTableAdapter$UserViewHolder
 adapters.ViewHolder <|-- adapters.UsersTableAdapter$UserViewHolder
-bases.BaseAdapter <|-- adapters.EmergencyContactsAdapter
-adapters.EmergencyContactsAdapter +.. adapters.EmergencyContactsAdapter$OnContactActionListener
-adapters.EmergencyContactsAdapter +.. adapters.EmergencyContactsAdapter$EmergencyContactViewHolder
-adapters.ViewHolder <|-- adapters.EmergencyContactsAdapter$EmergencyContactViewHolder
 @enduml
