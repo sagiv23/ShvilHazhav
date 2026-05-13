@@ -411,7 +411,6 @@ public class SettingsActivity extends BaseActivity {
         Runnable onConfirm = () -> {
             fallDetectionService.stopMonitoring();
             String email = databaseService.getAuthService().logout();
-            sharedPreferencesUtil.signOutUser();
             Toast.makeText(this, "התנתקת בהצלחה", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
