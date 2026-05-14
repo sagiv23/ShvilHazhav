@@ -8,7 +8,10 @@ class screens.ForumActivity {
 - User user
 - TextToSpeech tts
 - String currentlySpeakingMsgId
+- boolean isLoadingOlder
+- boolean hasMoreOlder
 # void onCreate(Bundle)
+- void loadMoreMessages()
 - void loadMessages()
 - void sendMessage()
 - boolean canDelete(ForumMessage)
@@ -17,7 +20,9 @@ class screens.ForumActivity {
 - void initTTS(ForumMessage)
 - void speak(ForumMessage)
 - void notifyItemChangedById(String)
+- List<ForumMessage> mergeMessages(List<ForumMessage>,List<ForumMessage>,boolean)
 + void onResume()
+# void onPause()
 # void onDestroy()
 }
 
@@ -49,6 +54,7 @@ class screens.EmergencyContactsActivity {
 class screens.ForumCategoriesActivity {
 - ForumCategoryAdapter adapter
 # void onCreate(Bundle)
+# void onResume()
 - void loadCategories()
 - void addCategory(String,EditText)
 - void showEditDialog(ForumCategory)
@@ -70,8 +76,8 @@ class screens.GameHomeScreenActivity {
 - void updateSpeakButton(boolean)
 + void onResume()
 + void onStop()
-- void loadWins()
-- void displayTodayWins()
+- void loadStats()
+- void displayStats()
 - void setupLeaderboard()
 - int getTotalWins(User)
 - int getTotalGamesPlayed(User)

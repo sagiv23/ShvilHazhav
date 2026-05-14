@@ -1,7 +1,7 @@
 @startuml
 class screens.MedicationListActivity {
-- List<Medication> fullMedicationList
-~ AlarmScheduler alarmScheduler
+- Map<String,Medication> medicationMap
+~ NotificationService notificationService
 - MedicationListAdapter adapter
 - User user
 - String uid
@@ -14,7 +14,7 @@ class screens.MedicationListActivity {
 - void logMedicationStatus(Medication,String,MedicationStatus)
 - void loadMedicationsFromCache()
 - void fetchMedicationsFromServer()
-- void updateUserCache(List<Medication>)
+- void updateUserCache()
 - void updateMedicationList(List<Medication>)
 - void saveMedication(Medication)
 - void checkNotificationPermissionAndSchedule(Medication)
@@ -46,7 +46,7 @@ class screens.MedicationImagesTableActivity {
 
 
 class screens.UsersTableActivity {
-- List<User> usersList
+- Map<String,User> usersMap
 - UsersTableAdapter adapter
 - EditText editSearch
 - Spinner spinnerSearchType
@@ -74,11 +74,11 @@ class screens.UserStatsActivity {
 - User loggedInUser
 - Spinner spinnerUserSelector
 - TextView txtSelectedDate
-- TextView txtNoHistory
 - MaterialButton btnClearMedLogs
 - String filteredDate
 - List<MedicationUsage> allLogs
 # void onCreate(Bundle)
+# void onResume()
 - void setupGraphsUI()
 - void openCalendar()
 - void applyFilter()
@@ -89,6 +89,7 @@ class screens.UserStatsActivity {
 - void setupMedicationLogs()
 - void loadMedicationLogs()
 - void clearMedicationLogs()
+- void clearDayMedicationLogs()
 - void updateResetButtonState()
 }
 

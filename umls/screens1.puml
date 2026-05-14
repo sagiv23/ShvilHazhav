@@ -6,11 +6,13 @@ class screens.ContactActivity {
 # void onCreate(Bundle)
 - void setupSecretNavigation(View)
 - void setupSocialButton(int,String)
+# void onPause()
 }
 
 
 class screens.DetailsAboutUserActivity {
 # ImageUtil imageUtil
+# CalendarUtil calendarUtil
 - TextView txtTitle
 - ImageView imgUserProfile
 - User user
@@ -32,6 +34,9 @@ class screens.DetailsAboutUserActivity {
 
 
 class screens.AiActivity {
+- {static} String PREF_AI_QUESTION
+- {static} String PREF_AI_ANSWER
+- {static} String PREF_AI_SPEAK_VISIBILITY
 - ChatFutures chatSession
 - Button btnSend
 - ProgressBar progressBar
@@ -39,19 +44,23 @@ class screens.AiActivity {
 - TextView answerView
 - Handler animationHandler
 - int charIndex
+- String currentFullResponse
 - TextToSpeech tts
 - boolean isSpeaking
 # void onCreate(Bundle)
+# void onSaveInstanceState(Bundle)
 - void toggleSpeech()
 - void updateSpeakButton(boolean)
 - void sendQuestion()
 - void displayTextWithAnimation(String)
+# void onPause()
 + void onDestroy()
 }
 
 
 class screens.AdminPageActivity {
 # void onCreate(Bundle)
+# void onResume()
 }
 
 

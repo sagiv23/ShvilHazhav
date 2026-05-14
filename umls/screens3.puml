@@ -4,6 +4,9 @@ class screens.LandingActivity {
 }
 
 class screens.MathProblemsActivity {
+- {static} String PREF_MATH_QUESTION
+- {static} String PREF_MATH_USER_INPUT
+- {static} String PREF_MATH_CORRECT_ANSWER
 - StringBuilder userInput
 - Handler handler
 - TextView tvCorrect
@@ -12,6 +15,8 @@ class screens.MathProblemsActivity {
 - MaterialCardView cvAnswerContainer
 - int correctAnswer
 # void onCreate(Bundle)
+# void onSaveInstanceState(Bundle)
+# void onResume()
 - void fetchLatestStats()
 - void updateStatsUI()
 - void generateProblem()
@@ -22,11 +27,23 @@ class screens.MathProblemsActivity {
 - void checkAnswer()
 - DailyStats getTodayStats(String)
 - void showFeedback(boolean)
+# void onPause()
+# void onDestroy()
 }
 
 
+enum screens.Operation {
++  ADD
++  SUBTRACT
++  MULTIPLY
++  DIVIDE
++  POWER
++  SQRT
+}
+
 class screens.MainActivity {
 # void onCreate(Bundle)
+# void onResume()
 }
 
 class screens.LoginActivity {
