@@ -7,11 +7,8 @@ import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IStatsService;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -26,16 +23,18 @@ import javax.inject.Inject;
 public class StatsServiceImpl extends BaseDatabaseService<DailyStats> implements IStatsService {
     private static final String USERS_PATH = "users";
     private static final String FIELD_DAILY_STATS = "dailyStats";
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private final CalendarUtil calendarUtil;
 
     /**
      * Constructs a new StatsServiceImpl.
      *
      * @param firebaseDatabase The FirebaseDatabase instance injected by Hilt.
+     * @param calendarUtil     The CalendarUtil instance injected by Hilt.
      */
     @Inject
-    public StatsServiceImpl(FirebaseDatabase firebaseDatabase) {
+    public StatsServiceImpl(FirebaseDatabase firebaseDatabase, CalendarUtil calendarUtil) {
         super(firebaseDatabase, USERS_PATH, DailyStats.class);
+        this.calendarUtil = calendarUtil;
     }
 
     /**
@@ -50,15 +49,6 @@ public class StatsServiceImpl extends BaseDatabaseService<DailyStats> implements
     }
 
     /**
-     * Gets today's date string in the "yyyy-MM-dd" format.
-     *
-     * @return Today's date string.
-     */
-    private String getTodayDate() {
-        return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date());
-    }
-
-    /**
      * Updates the daily math game statistics for a specific user.
      * If no statistics exist for today, a new entry is created.
      *
@@ -67,7 +57,7 @@ public class StatsServiceImpl extends BaseDatabaseService<DailyStats> implements
      */
     @Override
     public void updateDailyMathStats(@NonNull String uid, boolean correct) {
-        String today = getTodayDate();
+        String today = calendarUtil.getCurrentDate();
         runTransaction(getStatsPath(uid, today), stats -> {
             DailyStats currentStats = (stats != null) ? stats : new DailyStats();
             currentStats.setId(today);
@@ -86,7 +76,7 @@ public class StatsServiceImpl extends BaseDatabaseService<DailyStats> implements
      */
     @Override
     public void updateDailyMemoryStats(@NonNull String uid, boolean isWin) {
-        String today = getTodayDate();
+        String today = calendarUtil.getCurrentDate();
         runTransaction(getStatsPath(uid, today), stats -> {
             DailyStats currentStats = (stats != null) ? stats : new DailyStats();
             currentStats.setId(today);
@@ -108,7 +98,7 @@ public class StatsServiceImpl extends BaseDatabaseService<DailyStats> implements
      */
     @Override
     public void logMedicationUsage(@NonNull String uid, @NonNull MedicationUsage usage, @Nullable DatabaseCallback<Void> callback) {
-        String today = getTodayDate();
+        String today = calendarUtil.getCurrentDate();
         runTransaction(getStatsPath(uid, today), stats -> {
             DailyStats currentStats = (stats != null) ? stats : new DailyStats();
             currentStats.setId(today);

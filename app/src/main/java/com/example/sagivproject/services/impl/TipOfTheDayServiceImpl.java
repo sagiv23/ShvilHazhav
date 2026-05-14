@@ -3,12 +3,10 @@ package com.example.sagivproject.services.impl;
 import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.ITipOfTheDayService;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -22,24 +20,20 @@ import javax.inject.Inject;
  * </p>
  */
 public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> implements ITipOfTheDayService {
-    /**
-     * The root database path for daily tips.
-     */
     private static final String TIP_OF_THE_DAY_PATH = "tip_of_the_day";
-    /**
-     * The date format used for generating daily identifiers.
-     */
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private final CalendarUtil calendarUtil;
 
     /**
      * Constructs a new TipOfTheDayServiceImpl.
      * Initializes the base service with the tips' path.
      *
      * @param firebaseDatabase The {@link FirebaseDatabase} instance.
+     * @param calendarUtil     The {@link CalendarUtil} instance.
      */
     @Inject
-    public TipOfTheDayServiceImpl(FirebaseDatabase firebaseDatabase) {
+    public TipOfTheDayServiceImpl(FirebaseDatabase firebaseDatabase, CalendarUtil calendarUtil) {
         super(firebaseDatabase, TIP_OF_THE_DAY_PATH, TipOfTheDay.class);
+        this.calendarUtil = calendarUtil;
     }
 
     /**
@@ -49,7 +43,7 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      */
     @Override
     public void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
-        String today = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date());
+        String today = calendarUtil.getCurrentDate();
         get(today, callback);
     }
 

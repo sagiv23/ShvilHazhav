@@ -50,7 +50,7 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
      * @param calendarUtil     The utility for date and time operations.
      */
     @Inject
-    public ForumServiceImpl(FirebaseDatabase firebaseDatabase, IUserService userService, com.example.sagivproject.utils.CalendarUtil calendarUtil) {
+    public ForumServiceImpl(FirebaseDatabase firebaseDatabase, IUserService userService, CalendarUtil calendarUtil) {
         super(firebaseDatabase, FORUM_PATH, ForumMessage.class);
         this.userService = userService;
         this.calendarUtil = calendarUtil;

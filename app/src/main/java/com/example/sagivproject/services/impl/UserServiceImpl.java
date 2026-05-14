@@ -24,7 +24,6 @@ import javax.inject.Inject;
  * </p>
  */
 public class UserServiceImpl extends BaseDatabaseService<User> implements IUserService {
-
     /**
      * Constructs a new UserServiceImpl.
      * Initializes the base database service with the "users" root path.
