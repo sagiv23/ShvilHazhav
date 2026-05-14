@@ -1,4 +1,22 @@
 @startuml
+interface services.IDatabaseService {
+~ IAuthService getAuthService()
+~ IUserService getUserService()
+~ IMedicationService getMedicationService()
+~ IMemoryGameService getGameService()
+~ IStatsService getStatsService()
+~ IForumService getForumService()
+~ IImageService getImageService()
+~ IForumCategoriesService getForumCategoriesService()
+~ ITipOfTheDayService getTipOfTheDayService()
+~ IEmergencyService getEmergencyService()
+}
+
+interface services.IDatabaseService$DatabaseCallback {
+~ void onCompleted(T)
+~ void onFailed(Exception)
+}
+
 interface services.IAdapterService {
 ~ ForumAdapter getForumAdapter()
 ~ ForumCategoryAdapter getForumCategoryAdapter()
@@ -15,9 +33,9 @@ interface services.IAdapterService {
 
 interface services.IAuthService {
 ~ void login(String,String,LoginCallback)
-~ void register(String,String,long,String,String,RegisterCallback)
-~ void addUser(String,String,long,String,String,AddUserCallback)
-~ void updateUser(User,String,String,long,String,String,UpdateUserCallback)
+~ void register(String,String,String,String,String,RegisterCallback)
+~ void addUser(String,String,String,String,String,AddUserCallback)
+~ void updateUser(User,String,String,String,String,String,UpdateUserCallback)
 ~ String logout()
 }
 
@@ -43,6 +61,7 @@ interface services.IAuthService$UpdateUserCallback {
 
 
 
+services.IDatabaseService +.. services.IDatabaseService$DatabaseCallback
 services.IAuthService +.. services.IAuthService$LoginCallback
 services.IAuthService +.. services.IAuthService$RegisterCallback
 services.IAuthService +.. services.IAuthService$AddUserCallback

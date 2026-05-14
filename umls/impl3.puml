@@ -1,31 +1,5 @@
 @startuml
 class services.impl.FallDetectionServiceImpl {
-- {static} String TAG
-- {static} int NOTIFICATION_ID
-- {static} float FALL_THRESHOLD
-- {static} long MIN_TIME_BETWEEN_ALERTS
-# IDatabaseService databaseService
-# SharedPreferencesUtil sharedPreferencesUtil
-# NotificationService notificationService
-- SensorManager sensorManager
-- Sensor accelerometer
-- FusedLocationProviderClient fusedLocationClient
-- long lastAlertTime
-- boolean isMonitoring
-+ void onCreate()
-+ int onStartCommand(Intent,int,int)
-- void startMonitoring()
-- void stopMonitoring()
-+ void onSensorChanged(SensorEvent)
-- void handleFallDetected()
-- void sendEmergencyAlert(String)
-+ void onDestroy()
-+ IBinder onBind(Intent)
-+ void onAccuracyChanged(Sensor,int)
-}
-
-
-class services.impl.FallDetectionManager {
 - Context context
 + void startMonitoring()
 + void stopMonitoring()
@@ -34,7 +8,6 @@ class services.impl.FallDetectionManager {
 
 class services.impl.ForumCategoriesServiceImpl {
 - {static} String CATEGORIES_PATH
-- {static} String MESSAGES_PATH
 + void getCategories(IDatabaseService.DatabaseCallback<List<ForumCategory>>)
 + void addCategory(String,IDatabaseService.DatabaseCallback<Void>)
 + void deleteCategory(String,IDatabaseService.DatabaseCallback<Void>)
@@ -42,11 +15,29 @@ class services.impl.ForumCategoriesServiceImpl {
 }
 
 
+abstract class services.impl.BaseDatabaseService {
+- {static} String TAG
+# DatabaseReference databaseReference
+- String path
+- Class<T> clazz
+# String generateId()
+# void create(T,IDatabaseService.DatabaseCallback<Void>)
+# void get(String,IDatabaseService.DatabaseCallback<T>)
+# void getAll(IDatabaseService.DatabaseCallback<List<T>>)
+# void delete(String,IDatabaseService.DatabaseCallback<Void>)
+# void update(String,UnaryOperator<T>,IDatabaseService.DatabaseCallback<T>)
+# DatabaseReference readData(String)
+# void writeData(String,Object,IDatabaseService.DatabaseCallback<Void>)
+# void deleteData(String,IDatabaseService.DatabaseCallback<Void>)
+# void getData(String,IDatabaseService.DatabaseCallback<T>)
+# void getDataList(String,IDatabaseService.DatabaseCallback<List<T>>)
+# void runTransaction(String,UnaryOperator<T>,IDatabaseService.DatabaseCallback<T>)
+}
 
 
-android.hardware.SensorEventListener <|.. services.impl.FallDetectionServiceImpl
-android.app.Service <|-- services.impl.FallDetectionServiceImpl
-services.IFallDetectionService <|.. services.impl.FallDetectionManager
+
+
+services.IFallDetectionService <|.. services.impl.FallDetectionServiceImpl
 services.IForumCategoriesService <|.. services.impl.ForumCategoriesServiceImpl
 services.impl.BaseDatabaseService <|-- services.impl.ForumCategoriesServiceImpl
 @enduml

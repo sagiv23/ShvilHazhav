@@ -1,4 +1,28 @@
 @startuml
+class services.impl.DatabaseService {
+- IAuthService authService
+- IUserService userService
+- IMedicationService medicationService
+- IMemoryGameService gameService
+- IStatsService statsService
+- IForumService forumService
+- IImageService imageService
+- IForumCategoriesService forumCategoriesService
+- ITipOfTheDayService tipOfTheDayService
+- IEmergencyService emergencyService
++ IAuthService getAuthService()
++ IUserService getUserService()
++ IMedicationService getMedicationService()
++ IMemoryGameService getGameService()
++ IStatsService getStatsService()
++ IForumService getForumService()
++ IImageService getImageService()
++ IForumCategoriesService getForumCategoriesService()
++ ITipOfTheDayService getTipOfTheDayService()
++ IEmergencyService getEmergencyService()
+}
+
+
 class services.impl.AdapterService {
 - ForumAdapter forumAdapter
 - ForumCategoryAdapter forumCategoryAdapter
@@ -25,26 +49,6 @@ class services.impl.AdapterService {
 }
 
 
-abstract class services.impl.BaseDatabaseService {
-- {static} String TAG
-# DatabaseReference databaseReference
-- String path
-- Class<T> clazz
-# String generateId()
-# void create(T,IDatabaseService.DatabaseCallback<Void>)
-# void get(String,IDatabaseService.DatabaseCallback<T>)
-# void getAll(IDatabaseService.DatabaseCallback<List<T>>)
-# void delete(String,IDatabaseService.DatabaseCallback<Void>)
-# void update(String,UnaryOperator<T>,IDatabaseService.DatabaseCallback<T>)
-# DatabaseReference readData(String)
-# void writeData(String,Object,IDatabaseService.DatabaseCallback<Void>)
-# void deleteData(String,IDatabaseService.DatabaseCallback<Void>)
-# void getData(String,IDatabaseService.DatabaseCallback<T>)
-# void getDataList(String,IDatabaseService.DatabaseCallback<List<T>>)
-# void runTransaction(String,UnaryOperator<T>,IDatabaseService.DatabaseCallback<T>)
-}
-
-
 class services.impl.AuthServiceImpl {
 - {static} String ERROR_INVALID_CREDENTIALS
 - {static} String ERROR_LOGIN
@@ -54,18 +58,19 @@ class services.impl.AuthServiceImpl {
 - IUserService userService
 - SharedPreferencesUtil sharedPreferencesUtil
 + void login(String,String,LoginCallback)
-+ void register(String,String,long,String,String,RegisterCallback)
-+ void addUser(String,String,long,String,String,AddUserCallback)
-+ void updateUser(User,String,String,long,String,String,UpdateUserCallback)
++ void register(String,String,String,String,String,RegisterCallback)
++ void addUser(String,String,String,String,String,AddUserCallback)
++ void updateUser(User,String,String,String,String,String,UpdateUserCallback)
 + String logout()
-- void createUser(String,String,long,String,String,DatabaseCallback<User>)
-- void applyUserUpdate(User,String,String,long,String,String,UpdateUserCallback)
-- void handleUserCreation(String,String,long,String,String,DatabaseCallback<User>,Consumer<String>)
+- void createUser(String,String,String,String,String,DatabaseCallback<User>)
+- void applyUserUpdate(User,String,String,String,String,String,UpdateUserCallback)
+- void handleUserCreation(String,String,String,String,String,DatabaseCallback<User>,Consumer<String>)
 }
 
 
 
 
+services.IDatabaseService <|.. services.impl.DatabaseService
 services.IAdapterService <|.. services.impl.AdapterService
 services.IAuthService <|.. services.impl.AuthServiceImpl
 @enduml

@@ -1,20 +1,17 @@
 @startuml
-interface services.IForumService {
-~ void sendMessage(User,String,String,DatabaseCallback<Void>)
-~ void listenToMessages(String,DatabaseCallback<List<ForumMessage>>)
-~ void deleteMessage(String,String,DatabaseCallback<Void>)
-}
-
 interface services.IFallDetectionService {
 ~ void startMonitoring()
 ~ void stopMonitoring()
 }
 
-interface services.IForumCategoriesService {
-~ void getCategories(DatabaseCallback<List<ForumCategory>>)
-~ void addCategory(String,DatabaseCallback<Void>)
-~ void deleteCategory(String,DatabaseCallback<Void>)
-~ void updateCategoryName(String,String,DatabaseCallback<Void>)
+interface services.IDialogService {
+~ void showMedicationDialog(FragmentManager,Medication,MedicationDialog.OnMedicationSubmitListener)
+~ void showUserDialog(FragmentManager,User,UserDialog.UserDialogListener)
+~ void showEditForumCategoryDialog(FragmentManager,ForumCategory,EditForumCategoryDialog.EditForumCategoryDialogListener)
+~ void showFullImageDialog(FragmentManager,Drawable)
+~ void showProfileImageDialog(FragmentManager,boolean,ProfileImageDialog.ImagePickerListener)
+~ void showEmergencyContactDialog(FragmentManager,EmergencyContact,EmergencyContactDialog.AddEmergencyContactListener)
+~ void showConfirmDialog(FragmentManager,String,String,String,String,Runnable)
 }
 
 interface services.IEmergencyService {

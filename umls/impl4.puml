@@ -1,17 +1,12 @@
 @startuml
-class services.impl.MedicationServiceImpl {
+class services.impl.StatsServiceImpl {
 - {static} String USERS_PATH
-- {static} String MEDICATIONS_PATH
 - {static} String FIELD_DAILY_STATS
-+ String generateMedicationId()
-+ void createNewMedication(String,Medication,DatabaseCallback<Void>)
-+ void getUserMedicationList(String,DatabaseCallback<List<Medication>>)
-+ void deleteMedication(String,String,DatabaseCallback<Void>)
-+ void updateMedication(String,Medication,DatabaseCallback<Void>)
-+ void getMedicationUsageLogs(String,DatabaseCallback<List<MedicationUsage>>)
-+ void clearMedicationUsageLogs(String,DatabaseCallback<Void>)
-- String getMedicationPath(String)
-- String getMedicationItemPath(String,String)
+- CalendarUtil calendarUtil
+- String getStatsPath(String,String)
++ void updateDailyMathStats(String,boolean)
++ void updateDailyMemoryStats(String,boolean)
++ void logMedicationUsage(String,MedicationUsage,DatabaseCallback<Void>)
 }
 
 
@@ -24,23 +19,47 @@ class services.impl.ImageServiceImpl {
 }
 
 
-class services.impl.ForumServiceImpl {
-- {static} String FORUM_PATH
-- IUserService userService
-+ void sendMessage(User,String,String,DatabaseCallback<Void>)
-+ void listenToMessages(String,DatabaseCallback<List<ForumMessage>>)
-+ void deleteMessage(String,String,DatabaseCallback<Void>)
-- String getCategoryPath(String)
-- DatabaseReference getCategoryMessagesRef(String)
+class services.impl.MemoryGameServiceImpl {
+- {static} String ROOMS_PATH
+- {static} String FIELD_STATUS
+- {static} String FIELD_CARDS
+- {static} String FIELD_CURRENT_TURN_UID
+- {static} String FIELD_IS_REVEALED
+- {static} String FIELD_IS_MATCHED
+- {static} String FIELD_PROCESSING_MATCH
+- {static} String FIELD_WINNER_UID
+- {static} String STATUS_WAITING
+- {static} String STATUS_PLAYING
+- {static} String STATUS_FINISHED
+- DatabaseReference roomsReference
+- Map<String,ValueEventListener> roomStatusListeners
+- ValueEventListener activeGameListener
+- ValueEventListener allRoomsListener
++ void findOrCreateRoom(User,DatabaseCallback<GameRoom>)
++ void getAllRoomsRealtime(DatabaseCallback<List<GameRoom>>)
++ void stopAllRoomsRealtime()
++ void listenToRoomStatus(String,IRoomStatusCallback)
++ void removeRoomListener(String)
++ void cancelRoom(String,DatabaseCallback<Void>)
++ void initGameBoard(String,List<Card>,String,DatabaseCallback<Void>)
++ void listenToGame(String,DatabaseCallback<GameRoom>)
++ void stopListeningToGame(String)
++ void updateRoomField(String,String,Object)
++ void incrementScore(String,String,DatabaseCallback<Void>)
++ void finishGame(String,String,DatabaseCallback<Boolean>)
++ void updateCardStatus(String,int,boolean,boolean)
++ void setProcessing(String,boolean)
++ void setupForfeitOnDisconnect(String,String)
++ void removeForfeitOnDisconnect(String)
 }
 
 
 
 
-services.IMedicationService <|.. services.impl.MedicationServiceImpl
-services.impl.BaseDatabaseService <|-- services.impl.MedicationServiceImpl
+services.IStatsService <|.. services.impl.StatsServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.StatsServiceImpl
 services.IImageService <|.. services.impl.ImageServiceImpl
 services.impl.BaseDatabaseService <|-- services.impl.ImageServiceImpl
-services.IForumService <|.. services.impl.ForumServiceImpl
-services.impl.BaseDatabaseService <|-- services.impl.ForumServiceImpl
+services.IMemoryGameService <|.. services.impl.MemoryGameServiceImpl
+services.impl.BaseDatabaseService <|-- services.impl.MemoryGameServiceImpl
 @enduml

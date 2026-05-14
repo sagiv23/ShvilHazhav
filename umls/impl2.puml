@@ -1,28 +1,4 @@
 @startuml
-class services.impl.DatabaseService {
-- IAuthService authService
-- IUserService userService
-- IMedicationService medicationService
-- IMemoryGameService gameService
-- IStatsService statsService
-- IForumService forumService
-- IImageService imageService
-- IForumCategoriesService forumCategoriesService
-- ITipOfTheDayService tipOfTheDayService
-- IEmergencyService emergencyService
-+ IAuthService getAuthService()
-+ IUserService getUserService()
-+ IMedicationService getMedicationService()
-+ IMemoryGameService getGameService()
-+ IStatsService getStatsService()
-+ IForumService getForumService()
-+ IImageService getImageService()
-+ IForumCategoriesService getForumCategoriesService()
-+ ITipOfTheDayService getTipOfTheDayService()
-+ IEmergencyService getEmergencyService()
-}
-
-
 class services.impl.DialogService {
 - Provider<MedicationDialog> medicationDialogProvider
 - Provider<UserDialog> userDialogProvider
@@ -30,14 +6,40 @@ class services.impl.DialogService {
 - Provider<FullImageDialog> fullImageDialogProvider
 - Provider<ProfileImageDialog> profileImageDialogProvider
 - Provider<ConfirmDialog> confirmDialogProvider
-- Provider<AddEmergencyContactDialog> addEmergencyContactDialogProvider
+- Provider<EmergencyContactDialog> addEmergencyContactDialogProvider
 + void showMedicationDialog(FragmentManager,Medication,MedicationDialog.OnMedicationSubmitListener)
 + void showUserDialog(FragmentManager,User,UserDialog.UserDialogListener)
 + void showEditForumCategoryDialog(FragmentManager,ForumCategory,EditForumCategoryDialog.EditForumCategoryDialogListener)
 + void showFullImageDialog(FragmentManager,Drawable)
 + void showProfileImageDialog(FragmentManager,boolean,ProfileImageDialog.ImagePickerListener)
-+ void showEmergencyContactDialog(FragmentManager,EmergencyContact,AddEmergencyContactDialog.AddEmergencyContactListener)
++ void showEmergencyContactDialog(FragmentManager,EmergencyContact,EmergencyContactDialog.AddEmergencyContactListener)
 + void showConfirmDialog(FragmentManager,String,String,String,String,Runnable)
+}
+
+
+class services.impl.FallDetectionManager {
+- {static} String TAG
+- {static} int NOTIFICATION_ID
+- {static} float FALL_THRESHOLD_SQUARED
+- {static} long MIN_TIME_BETWEEN_ALERTS
+# IDatabaseService databaseService
+# SharedPreferencesUtil sharedPreferencesUtil
+# NotificationService notificationService
+- SensorManager sensorManager
+- Sensor accelerometer
+- FusedLocationProviderClient fusedLocationClient
+- long lastAlertTime
+- boolean isMonitoring
++ void onCreate()
++ int onStartCommand(Intent,int,int)
+- void startMonitoring()
+- void stopMonitoring()
++ void onSensorChanged(SensorEvent)
+- void handleFallDetected()
+- void sendEmergencyAlert(String)
++ void onDestroy()
++ IBinder onBind(Intent)
++ void onAccuracyChanged(Sensor,int)
 }
 
 
@@ -56,8 +58,9 @@ class services.impl.EmergencyServiceImpl {
 
 
 
-services.IDatabaseService <|.. services.impl.DatabaseService
 services.IDialogService <|.. services.impl.DialogService
+android.hardware.SensorEventListener <|.. services.impl.FallDetectionManager
+android.app.Service <|-- services.impl.FallDetectionManager
 services.IEmergencyService <|.. services.impl.EmergencyServiceImpl
 services.impl.BaseDatabaseService <|-- services.impl.EmergencyServiceImpl
 @enduml

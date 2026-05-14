@@ -1,33 +1,23 @@
 @startuml
-interface services.IDatabaseService {
-~ IAuthService getAuthService()
-~ IUserService getUserService()
-~ IMedicationService getMedicationService()
-~ IMemoryGameService getGameService()
-~ IStatsService getStatsService()
-~ IForumService getForumService()
-~ IImageService getImageService()
-~ IForumCategoriesService getForumCategoriesService()
-~ ITipOfTheDayService getTipOfTheDayService()
-~ IEmergencyService getEmergencyService()
+interface services.IUserService {
+~ String generateUserId()
+~ void createNewUser(User,DatabaseCallback<Void>)
+~ void getUser(String,DatabaseCallback<User>)
+~ void getUserList(DatabaseCallback<List<User>>)
+~ void deleteUser(String,DatabaseCallback<Void>)
+~ void getUserByEmailAndPassword(String,String,DatabaseCallback<User>)
+~ void checkIfEmailExists(String,DatabaseCallback<Boolean>)
+~ void updateUser(User,DatabaseCallback<Void>)
+~ void updateUserRole(String,User.UserRole,DatabaseCallback<Void>)
 }
 
-interface services.IDatabaseService$DatabaseCallback {
-~ void onCompleted(T)
-~ void onFailed(Exception)
+interface services.ITipOfTheDayService {
+~ void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay>)
+~ void getAllTips(IDatabaseService.DatabaseCallback<List<TipOfTheDay>>)
+~ void getTipByDate(String,IDatabaseService.DatabaseCallback<TipOfTheDay>)
+~ void saveTipIfNotExists(TipOfTheDay,IDatabaseService.DatabaseCallback<TipOfTheDay>)
+~ void saveTip(TipOfTheDay,IDatabaseService.DatabaseCallback<Void>)
+~ void deleteTip(String,IDatabaseService.DatabaseCallback<Void>)
 }
 
-interface services.IDialogService {
-~ void showMedicationDialog(FragmentManager,Medication,MedicationDialog.OnMedicationSubmitListener)
-~ void showUserDialog(FragmentManager,User,UserDialog.UserDialogListener)
-~ void showEditForumCategoryDialog(FragmentManager,ForumCategory,EditForumCategoryDialog.EditForumCategoryDialogListener)
-~ void showFullImageDialog(FragmentManager,Drawable)
-~ void showProfileImageDialog(FragmentManager,boolean,ProfileImageDialog.ImagePickerListener)
-~ void showEmergencyContactDialog(FragmentManager,EmergencyContact,AddEmergencyContactDialog.AddEmergencyContactListener)
-~ void showConfirmDialog(FragmentManager,String,String,String,String,Runnable)
-}
-
-
-
-services.IDatabaseService +.. services.IDatabaseService$DatabaseCallback
 @enduml
