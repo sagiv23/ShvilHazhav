@@ -23,6 +23,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
@@ -47,7 +48,7 @@ import javax.inject.Inject;
  * </p>
  */
 public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
-    private final com.example.sagivproject.utils.CalendarUtil calendarUtil;
+    private final CalendarUtil calendarUtil;
     private ForumMessageListener listener;
     private Typeface cachedFont;
     private String currentUserId;
@@ -57,7 +58,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
      * Constructs a new ForumAdapter.
      */
     @Inject
-    public ForumAdapter(com.example.sagivproject.utils.CalendarUtil calendarUtil) {
+    public ForumAdapter(CalendarUtil calendarUtil) {
         this.calendarUtil = calendarUtil;
     }
 
