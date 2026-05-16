@@ -132,7 +132,7 @@ public class MedicationListActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchMedicationsFromServer();
+        fetchMedicationsFromDB();
         fetchTodayUsageLogs();
     }
 
@@ -224,7 +224,7 @@ public class MedicationListActivity extends BaseActivity {
     /**
      * Fetches the latest medication prescriptions from Firebase.
      */
-    private void fetchMedicationsFromServer() {
+    private void fetchMedicationsFromDB() {
         databaseService.getMedicationService().getUserMedicationList(uid, new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<Medication> list) {
