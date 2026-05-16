@@ -13,12 +13,10 @@ import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -40,11 +38,11 @@ public class NotificationReceiver extends BroadcastReceiver {
     public static final String ACTION_MEDICATION_LOG = "com.example.sagivproject.ACTION_MEDICATION_LOG";
     private static final String TAG = "NotificationReceiver";
     @Inject
+    protected CalendarUtil calendarUtil;
+    @Inject
     NotificationService notificationService;
-
     @Inject
     IDatabaseService databaseService;
-
     @Inject
     SharedPreferencesUtil sharedPreferencesUtil;
 
@@ -119,7 +117,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             return;
         }
 
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String today = calendarUtil.getCurrentDate();
         DailyStats stats = user.getDailyStats().get(today);
         if (stats != null && stats.getMedicationUsageLogs() != null) {
             for (MedicationUsage usage : stats.getMedicationUsageLogs()) {
@@ -158,7 +156,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         User user = sharedPreferencesUtil.getUser();
         if (user != null && medicationId != null && statusStr != null) {
             MedicationStatus status = MedicationStatus.valueOf(statusStr);
-            String timeNow = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+            String timeNow = calendarUtil.formatDate(System.currentTimeMillis(), "HH:mm");
 
             String usageId = databaseService.getMedicationService().generateUsageId();
             MedicationUsage usage = new MedicationUsage(usageId, medicationId, timeNow, hourStr, status);

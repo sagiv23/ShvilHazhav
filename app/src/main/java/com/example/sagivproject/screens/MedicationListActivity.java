@@ -29,15 +29,13 @@ import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.notifications.NotificationService;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -63,13 +61,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MedicationListActivity extends BaseActivity {
     private final Map<String, Medication> medicationMap = new HashMap<>();
-
+    @Inject
+    protected CalendarUtil calendarUtil;
     /**
      * Utility for scheduling system alarms for medication reminders.
      */
     @Inject
     NotificationService notificationService;
-
     private MedicationListAdapter adapter;
     private User user;
     private String uid;
@@ -191,7 +189,7 @@ public class MedicationListActivity extends BaseActivity {
      * @param status        The result (TAKEN, etc.).
      */
     private void logMedicationStatus(Medication medication, String scheduledTime, MedicationStatus status) {
-        String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        String time = calendarUtil.formatDate(System.currentTimeMillis(), "HH:mm");
         String usageId = databaseService.getMedicationService().generateUsageId();
         MedicationUsage usage = new MedicationUsage(usageId, medication.getId(), time, scheduledTime, status);
 

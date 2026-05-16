@@ -4,11 +4,6 @@ import android.util.Patterns;
 
 import androidx.annotation.Nullable;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -27,11 +22,14 @@ public class Validator {
      */
     private static final int MIN_AGE = 12;
 
+    private final CalendarUtil calendarUtil;
+
     /**
      * Constructs a new Validator.
      */
     @Inject
-    public Validator() {
+    public Validator(CalendarUtil calendarUtil) {
+        this.calendarUtil = calendarUtil;
     }
 
     /**
@@ -81,28 +79,7 @@ public class Validator {
      * @return true if the calculated age is less than the required minimum age (12).
      */
     public boolean isAgeNotValid(String birthDate) {
-        if (birthDate == null || birthDate.isEmpty()) return true;
-
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Date date = sdf.parse(birthDate);
-            if (date == null) return true;
-
-            Calendar birth = Calendar.getInstance();
-            birth.setTime(date);
-
-            Calendar today = Calendar.getInstance();
-            int age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
-
-            if (today.get(Calendar.MONTH) < birth.get(Calendar.MONTH) ||
-                    (today.get(Calendar.MONTH) == birth.get(Calendar.MONTH) &&
-                            today.get(Calendar.DAY_OF_MONTH) < birth.get(Calendar.DAY_OF_MONTH))) {
-                age--;
-            }
-
-            return age < MIN_AGE;
-        } catch (Exception e) {
-            return true;
-        }
+        int age = calendarUtil.calculateAge(birthDate);
+        return age < MIN_AGE;
     }
 }

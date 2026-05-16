@@ -18,13 +18,13 @@ import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -48,6 +48,8 @@ public class MathProblemsActivity extends BaseActivity {
     private static final String PREF_MATH_CORRECT_ANSWER = "math_correct_answer";
     private final StringBuilder userInput = new StringBuilder();
     private final Handler handler = new Handler(Looper.getMainLooper());
+    @Inject
+    protected CalendarUtil calendarUtil;
     private TextView tvCorrect, tvWrong;
     private User user;
     private TextView tvQuestion, tvAnswer;
@@ -130,7 +132,7 @@ public class MathProblemsActivity extends BaseActivity {
      * Updates the text views displaying the count of correct and incorrect answers for today.
      */
     private void updateStatsUI() {
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String today = calendarUtil.getCurrentDate();
         DailyStats stats = user.getDailyStats().get(today);
         int correct = (stats != null) ? stats.getMathCorrect() : 0;
         int wrong = (stats != null) ? stats.getMathWrong() : 0;
@@ -247,7 +249,7 @@ public class MathProblemsActivity extends BaseActivity {
     private void checkAnswer() {
         if (userInput.length() == 0) return;
         int userAnswer = Integer.parseInt(userInput.toString());
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String today = calendarUtil.getCurrentDate();
 
         if (userAnswer == correctAnswer) {
             getTodayStats(today).addMathCorrect();

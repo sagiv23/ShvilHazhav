@@ -20,6 +20,7 @@ import androidx.core.os.BundleCompat;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseDialog;
 import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.utils.CalendarUtil;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -49,12 +50,12 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MedicationDialog extends BaseDialog {
     private static final String ARG_MEDICATION = "arg_medication";
-
     /**
      * Internal list of selected reminder times in "HH:mm" format.
      */
     private final ArrayList<String> selectedHours = new ArrayList<>();
-
+    @Inject
+    protected CalendarUtil calendarUtil;
     private ChipGroup chipGroupSelectedHours;
     private Medication medToEdit;
     private OnMedicationSubmitListener listener;

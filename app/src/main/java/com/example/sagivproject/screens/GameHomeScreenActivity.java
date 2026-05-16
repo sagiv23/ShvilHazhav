@@ -21,12 +21,13 @@ import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IMemoryGameService;
+import com.example.sagivproject.utils.CalendarUtil;
 
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -45,6 +46,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class GameHomeScreenActivity extends BaseActivity {
+    @Inject
+    protected CalendarUtil calendarUtil;
+
     private Button btnFindEnemy, btnCancelFindEnemy, btnSpeak;
     private TextView TVStatusOfFindingEnemy;
     private GameRoom currentRoom;
@@ -151,6 +155,15 @@ public class GameHomeScreenActivity extends BaseActivity {
         updateSpeakButton(false);
     }
 
+    @Override
+    public void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
+    }
+
     /**
      * Fetches current user data from the database to refresh win/game counts.
      */
@@ -176,7 +189,7 @@ public class GameHomeScreenActivity extends BaseActivity {
      * Calculates and displays today's statistics in the UI.
      */
     private void displayStats() {
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String today = calendarUtil.getCurrentDate();
         DailyStats stats = user.getDailyStats().get(today);
         int winsToday = (stats != null) ? stats.getMemoryWins() : 0;
         int gamesToday = (stats != null) ? stats.getMemoryGamesPlayed() : 0;
@@ -335,15 +348,6 @@ public class GameHomeScreenActivity extends BaseActivity {
                 btnFindEnemy.setVisibility(View.GONE);
                 break;
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-        }
-        super.onDestroy();
     }
 
     /**

@@ -150,6 +150,29 @@ public class CalendarUtil {
     }
 
     /**
+     * Calculates age based on a birthdate string.
+     *
+     * @param birthDateStr Birthdate in database format ("yyyy-MM-dd").
+     * @return The age in years, or -1 if invalid.
+     */
+    public int calculateAge(String birthDateStr) {
+        long birthMillis = parseDateFromDatabase(birthDateStr);
+        if (birthMillis == -1) return -1;
+
+        Calendar birth = Calendar.getInstance();
+        birth.setTimeInMillis(birthMillis);
+        Calendar today = Calendar.getInstance();
+
+        int age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
+        if (today.get(Calendar.MONTH) < birth.get(Calendar.MONTH) ||
+                (today.get(Calendar.MONTH) == birth.get(Calendar.MONTH) &&
+                        today.get(Calendar.DAY_OF_MONTH) < birth.get(Calendar.DAY_OF_MONTH))) {
+            age--;
+        }
+        return age;
+    }
+
+    /**
      * Internal helper to parse a date/timestamp string based on a given format.
      */
     private long parse(String str, String format) {
