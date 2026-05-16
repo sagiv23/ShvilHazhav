@@ -107,6 +107,23 @@ public class MathProblemsActivity extends BaseActivity {
         fetchLatestStats();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Save state to SharedPreferences
+        sharedPreferencesUtil.saveInt(PREF_MATH_CORRECT_ANSWER, correctAnswer);
+        sharedPreferencesUtil.saveString(PREF_MATH_USER_INPUT, userInput.toString());
+        sharedPreferencesUtil.saveString(PREF_MATH_QUESTION, tvQuestion.getText().toString());
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+        super.onDestroy();
+    }
+
     /**
      * Refreshes the user's daily statistics from the database to ensure the UI is current.
      */
@@ -294,23 +311,6 @@ public class MathProblemsActivity extends BaseActivity {
             cvAnswerContainer.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_color)));
             tvAnswer.setTextColor(ContextCompat.getColor(this, R.color.text_color));
         }, 600);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Save state to SharedPreferences
-        sharedPreferencesUtil.saveInt(PREF_MATH_CORRECT_ANSWER, correctAnswer);
-        sharedPreferencesUtil.saveString(PREF_MATH_USER_INPUT, userInput.toString());
-        sharedPreferencesUtil.saveString(PREF_MATH_QUESTION, tvQuestion.getText().toString());
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
-        super.onDestroy();
     }
 
     /**
