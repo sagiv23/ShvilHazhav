@@ -44,13 +44,7 @@ public class SettingsActivity extends BaseActivity {
     protected IFallDetectionService fallDetectionService;
 
     private SwitchMaterial switchDarkMode;
-    private SwitchMaterial switchVibration;
-    private SwitchMaterial switchNotifications;
-    private SwitchMaterial switchCamera;
-    private SwitchMaterial switchGallery;
-    private SwitchMaterial switchLocation;
-    private SwitchMaterial switchSms;
-    private SwitchMaterial switchContacts;
+    private SwitchMaterial switchVibration, switchNotifications, switchCamera, switchGallery, switchLocation, switchSms, switchContacts;
     private SwitchMaterial switchFallDetection;
 
     @Override
