@@ -25,8 +25,19 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class SplashActivity extends BaseActivity {
+    /**
+     * Minimum duration in milliseconds to display the splash screen.
+     */
     private static final long SPLASH_DELAY = 3000;
+
+    /**
+     * UI thread handler for scheduling the transition.
+     */
     private final Handler handler = new Handler(Looper.getMainLooper());
+
+    /**
+     * Reusable runnable for performing the navigation logic.
+     */
     private final Runnable navigateRunnable = this::navigateNext;
 
     @Override

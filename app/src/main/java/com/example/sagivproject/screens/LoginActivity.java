@@ -33,6 +33,9 @@ public class LoginActivity extends BaseActivity {
     @Inject
     protected Validator validator;
 
+    /**
+     * Form input fields for user credentials.
+     */
     private EditText editTextEmail, editTextPassword;
 
     @Override

@@ -41,7 +41,11 @@ public class RegisterActivity extends BaseActivity {
     @Inject
     protected Validator validator;
 
+    /**
+     * Input fields for user personal details and credentials.
+     */
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword, editTextBirthDate;
+
     /**
      * Holds the selected birthdate in database format ("yyyy-MM-dd").
      */

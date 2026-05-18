@@ -50,12 +50,37 @@ public class GameHomeScreenActivity extends BaseActivity {
     protected CalendarUtil calendarUtil;
 
     private Button btnFindEnemy, btnCancelFindEnemy, btnSpeak;
+
+    /**
+     * UI component for displaying the current matchmaking status.
+     */
     private TextView TVStatusOfFindingEnemy;
+
+    /**
+     * State of the current search or active game room.
+     */
     private GameRoom currentRoom;
+
+    /**
+     * Flag indicating if a game session has officially begun.
+     */
     private boolean gameStarted = false;
+
     private LeaderboardAdapter adapter;
+
+    /**
+     * Profile of the local user.
+     */
     private User user;
+
+    /**
+     * Android Text-to-Speech engine instance.
+     */
     private TextToSpeech tts;
+
+    /**
+     * Flag indicating if the instructions are currently being read aloud.
+     */
     private boolean isSpeaking = false;
 
     @Override

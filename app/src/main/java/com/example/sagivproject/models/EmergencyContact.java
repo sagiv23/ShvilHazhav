@@ -15,9 +15,24 @@ import java.util.Objects;
  * </p>
  */
 public class EmergencyContact implements Idable {
+    /**
+     * Unique identifier for the contact record.
+     */
     private String id;
+
+    /**
+     * Contact's first name.
+     */
     private String firstName;
+
+    /**
+     * Contact's last name.
+     */
     private String lastName;
+
+    /**
+     * Contact's primary phone number.
+     */
     private String phoneNumber;
 
     /**

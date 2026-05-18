@@ -60,17 +60,35 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MedicationListActivity extends BaseActivity {
+    /**
+     * Local map for quick medication retrieval, indexed by ID.
+     */
     private final Map<String, Medication> medicationMap = new HashMap<>();
+
     @Inject
     protected CalendarUtil calendarUtil;
+
     /**
      * Utility for scheduling system alarms for medication reminders.
      */
     @Inject
     NotificationService notificationService;
+
     private MedicationListAdapter adapter;
+
+    /**
+     * Profile of the currently logged-in user.
+     */
     private User user;
+
+    /**
+     * UID of the user.
+     */
     private String uid;
+
+    /**
+     * UI controls for filtering the medication list.
+     */
     private EditText editSearch;
     private Spinner spinnerSearchType;
 

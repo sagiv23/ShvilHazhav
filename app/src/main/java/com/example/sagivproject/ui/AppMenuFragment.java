@@ -24,9 +24,21 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class AppMenuFragment extends Fragment {
     private static final String ARG_MENU_TYPE = "menu_type";
+
+    /**
+     * Utility for accessing user session data and preferences.
+     */
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
+
+    /**
+     * Callback for handling menu item navigation events.
+     */
     private OnNavigationListener navigationListener;
+
+    /**
+     * The specific menu layout to display (Admin, Logged In, or Logged Out).
+     */
     private MenuType menuType;
 
     /**

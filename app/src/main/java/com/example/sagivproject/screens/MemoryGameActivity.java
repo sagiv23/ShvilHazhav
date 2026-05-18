@@ -61,14 +61,47 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     private final Map<String, String> imageCache = new HashMap<>();
     @Inject
     ImageUtil imageUtil;
+
+    /**
+     * UI components for the game board and timers.
+     */
     private RecyclerView recyclerCards;
+
+    /**
+     * Flags for managing game conclusion and move locking.
+     */
     private boolean endDialogShown = false, localLock = false;
+
+    /**
+     * Unique identifier for the shared game session.
+     */
     private String roomId;
+
+    /**
+     * Profile of the local player.
+     */
     private User user;
+
+    /**
+     * The shared real-time state of the game room.
+     */
     private GameRoom currentRoom;
+
     private MemoryGameAdapter adapter;
+
+    /**
+     * UI elements for time tracking.
+     */
     private TextView tvTimer, tvTotalTimer;
+
+    /**
+     * Timer for the active player's turn (15 seconds).
+     */
     private CountDownTimer turnTimer;
+
+    /**
+     * Global timer for the entire game session (1.5 minutes).
+     */
     private CountDownTimer totalGameTimer;
 
     @Override

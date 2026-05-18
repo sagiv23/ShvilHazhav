@@ -29,7 +29,14 @@ import javax.inject.Inject;
  * </p>
  */
 public class MedicationUsageAdapter extends BaseAdapter<MedicationUsage, MedicationUsageAdapter.UsageViewHolder> {
+    /**
+     * Map of medication IDs to Medication objects for name resolution.
+     */
     private Map<String, Medication> medicationMap = new HashMap<>();
+
+    /**
+     * Listener for usage log actions.
+     */
     private OnUsageActionListener listener;
 
     /**

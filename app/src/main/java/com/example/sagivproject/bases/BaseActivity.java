@@ -95,6 +95,10 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
      * The root layout for the navigation drawer.
      */
     protected DrawerLayout drawerLayout;
+
+    /**
+     * Callback to execute once a pending permission request is successfully granted.
+     */
     private Runnable onPermissionGrantedCallback;
     /**
      * Standard launcher for requesting multiple runtime permissions.

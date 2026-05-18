@@ -26,7 +26,14 @@ import javax.inject.Inject;
  * </p>
  */
 public class ForumCategoryAdapter extends BaseAdapter<ForumCategory, ForumCategoryAdapter.CategoryViewHolder> {
+    /**
+     * Listener for category interactions.
+     */
     private OnCategoryInteractionListener listener;
+
+    /**
+     * Flag indicating if the current user is an administrator.
+     */
     private boolean isAdmin;
 
     /**

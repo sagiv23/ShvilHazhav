@@ -58,8 +58,16 @@ public class DetailsAboutUserActivity extends BaseActivity {
     @Inject
     protected CalendarUtil calendarUtil;
 
+    /**
+     * UI components for displaying detailed user profile data.
+     */
     private TextView txtTitle, txtEmail, txtPassword, txtAge, txtBirthDate;
+
     private ImageView imgUserProfile;
+
+    /**
+     * Local reference to the user's profile data.
+     */
     private User user;
 
     /**

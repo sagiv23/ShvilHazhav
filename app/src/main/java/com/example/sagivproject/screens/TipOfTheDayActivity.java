@@ -65,12 +65,24 @@ public class TipOfTheDayActivity extends BaseActivity {
     @Inject
     protected CalendarUtil calendarUtil;
 
+    /**
+     * UI components for displaying tips and controls for speech.
+     */
     private TextView tipContent, tvInspirationContent;
     private Button btnTipSpeak, btnInspirationSpeak;
-    private GenerativeModelFutures model;
-    private TextToSpeech tts;
+
     /**
-     * Tracks which content ID is currently being played via TTS.
+     * Google Gemini AI model for tip generation.
+     */
+    private GenerativeModelFutures model;
+
+    /**
+     * Android Text-to-Speech engine instance.
+     */
+    private TextToSpeech tts;
+
+    /**
+     * Tracks which content section (tip or inspiration) is currently being read by the TTS engine.
      */
     private String currentlySpeakingId = null;
 

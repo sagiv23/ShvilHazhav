@@ -34,8 +34,16 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class NotificationReceiver extends BroadcastReceiver {
+    /**
+     * Intent action triggered when a scheduled medication alarm expires.
+     */
     public static final String ACTION_MEDICATION_ALARM = "com.example.sagivproject.ACTION_MEDICATION_ALARM";
+
+    /**
+     * Intent action triggered when a user interacts with a medication notification button.
+     */
     public static final String ACTION_MEDICATION_LOG = "com.example.sagivproject.ACTION_MEDICATION_LOG";
+
     private static final String TAG = "NotificationReceiver";
     @Inject
     protected CalendarUtil calendarUtil;

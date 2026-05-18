@@ -55,9 +55,24 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     private static final String STATUS_PLAYING = "playing";
     private static final String STATUS_FINISHED = "finished";
 
+    /**
+     * Root database reference for game rooms.
+     */
     private final DatabaseReference roomsReference;
+
+    /**
+     * Map of active status listeners for individual game rooms.
+     */
     private final Map<String, ValueEventListener> roomStatusListeners = new ConcurrentHashMap<>();
+
+    /**
+     * Listener for the currently active game session state.
+     */
     private ValueEventListener activeGameListener;
+
+    /**
+     * Global listener for monitoring all active rooms (Admin use).
+     */
     private ValueEventListener allRoomsListener;
 
     /**

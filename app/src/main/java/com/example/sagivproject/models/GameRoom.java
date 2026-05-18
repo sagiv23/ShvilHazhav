@@ -14,18 +14,49 @@ import java.util.List;
  * </p>
  */
 public class GameRoom implements Idable {
+    /**
+     * Unique identifier for the game room.
+     */
     private String id;
+
     /**
      * Current status of the room: "waiting", "playing", or "finished".
      */
     private String status;
 
+    /**
+     * UID of the host player (Player 1).
+     */
     private String player1Uid;
+
+    /**
+     * UID of the opponent player (Player 2).
+     */
     private String player2Uid;
+
+    /**
+     * The shuffled deck of cards for this game session.
+     */
     private List<Card> cards;
+
+    /**
+     * UID of the player whose turn it currently is.
+     */
     private String currentTurnUid;
+
+    /**
+     * Current score of the first player.
+     */
     private int player1Score;
+
+    /**
+     * Current score of the second player.
+     */
     private int player2Score;
+
+    /**
+     * The index of the first card flipped in a pair attempt.
+     */
     private Integer firstSelectedCardIndex;
 
     /**
@@ -33,6 +64,9 @@ public class GameRoom implements Idable {
      */
     private boolean processingMatch;
 
+    /**
+     * UID of the player who won the match, or "draw".
+     */
     private String winnerUid;
 
     /**

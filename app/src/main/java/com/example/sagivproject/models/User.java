@@ -21,16 +21,60 @@ import java.util.Objects;
  */
 public class User implements Idable {
     private static final int YEAR = Calendar.YEAR;
+
+    /**
+     * Unique identifier for the user (UID from Firebase).
+     */
     private String id;
+
+    /**
+     * User's unique email address used for login.
+     */
     private String email;
+
+    /**
+     * The administrative or regular role assigned to the user.
+     */
     private UserRole role;
+
+    /**
+     * User's first name.
+     */
     private String firstName;
+
+    /**
+     * User's last name.
+     */
     private String lastName;
+
+    /**
+     * User's birthdate in ISO format (yyyy-MM-dd).
+     */
     private String birthDate;
+
+    /**
+     * User's account password.
+     */
     private String password;
+
+    /**
+     * Base64 encoded string of the user's profile image.
+     */
     private String profileImage;
+
+    /**
+     * Collection of the user's medications, indexed by medication ID.
+     */
     private HashMap<String, Medication> medications;
+
+    /**
+     * Collection of performance and compliance metrics, indexed by date string.
+     */
     private HashMap<String, DailyStats> dailyStats;
+
+    /**
+     * Collection of the user's emergency contacts, indexed by contact ID.
+     */
     private HashMap<String, EmergencyContact> emergencyContacts;
 
     /**

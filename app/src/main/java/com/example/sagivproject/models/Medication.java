@@ -13,10 +13,29 @@ import java.util.List;
  * </p>
  */
 public class Medication implements Idable {
+    /**
+     * Unique identifier for the medication record.
+     */
     private String id;
+
+    /**
+     * Display name of the medication.
+     */
     private String name;
+
+    /**
+     * Dosage instructions or additional notes.
+     */
     private String details;
+
+    /**
+     * The physical form of the medication (Pill, Syrup, etc.).
+     */
     private MedicationType type;
+
+    /**
+     * List of daily scheduled times for reminders (HH:mm).
+     */
     private List<String> reminderHours;
 
     /**

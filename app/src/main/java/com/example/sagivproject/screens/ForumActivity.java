@@ -41,15 +41,48 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ForumActivity extends BaseActivity {
+    /**
+     * UI thread handler for updating components from callbacks.
+     */
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
     private RecyclerView recycler;
+
+    /**
+     * Sticky button that appears when new messages arrive while the user is scrolled up.
+     */
     private Button btnNewMessagesIndicator;
+
     private ForumAdapter adapter;
+
+    /**
+     * Unique ID of the forum category being displayed.
+     */
     private String categoryId;
+
+    /**
+     * Profile of the currently logged-in user.
+     */
     private User user;
+
+    /**
+     * Android Text-to-Speech engine instance.
+     */
     private TextToSpeech tts;
+
+    /**
+     * ID of the message currently being read by the TTS engine.
+     */
     private String currentlySpeakingMsgId = null;
+
+    /**
+     * Flag to prevent multiple concurrent pagination requests.
+     */
     private boolean isLoadingOlder = false;
+
+    /**
+     * Flag indicating if more historical messages are available in the database.
+     */
     private boolean hasMoreOlder = true;
 
     @Override

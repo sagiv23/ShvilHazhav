@@ -32,8 +32,19 @@ import javax.inject.Inject;
  * </p>
  */
 public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserViewHolder> {
+    /**
+     * Utility for processing and displaying user profile images.
+     */
     private final ImageUtil imageUtil;
+
+    /**
+     * Utility for date formatting.
+     */
     private final CalendarUtil calendarUtil;
+
+    /**
+     * Listener for administrative actions on user records.
+     */
     private OnUserActionListener listener;
 
     /**

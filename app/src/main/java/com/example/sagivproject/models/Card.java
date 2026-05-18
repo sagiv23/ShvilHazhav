@@ -15,8 +15,19 @@ import java.util.Objects;
  * </p>
  */
 public class Card extends ImageData {
+    /**
+     * Flag indicating if the card is currently flipped up.
+     */
     private boolean isRevealed = false;
+
+    /**
+     * Flag indicating if this card has been successfully matched with its pair.
+     */
     private boolean isMatched = false;
+
+    /**
+     * Internal flag to track if the card was revealed in the previous UI state, used for flip animations.
+     */
     private boolean wasRevealed;
 
     /**

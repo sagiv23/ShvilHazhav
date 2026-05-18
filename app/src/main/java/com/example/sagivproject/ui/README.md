@@ -5,8 +5,7 @@
 
 ---
 
-| Component            | Purpose                                                                                             |
-|----------------------|-----------------------------------------------------------------------------------------------------|
-| `AppMenuFragment`    | Unified navigation menu (Admin, Logged In, Logged Out) with internal `OnNavigationListener`.        |
-| `CustomTypefaceSpan` | Implementation of `TypefaceSpan` used to apply custom Hebrew fonts to `Spannable` strings.          |
-| `SimpleXYGraphView`  | Custom `View` for rendering scrollable, scaled XY graphs with linear regression trend line support. |
+| Component           | Purpose                                                                                             |
+|---------------------|-----------------------------------------------------------------------------------------------------|
+| `AppMenuFragment`   | Unified navigation menu (Admin, Logged In, Logged Out) with internal `OnNavigationListener`.        |
+| `SimpleXYGraphView` | Custom `View` for rendering scrollable, scaled XY graphs with linear regression trend line support. |

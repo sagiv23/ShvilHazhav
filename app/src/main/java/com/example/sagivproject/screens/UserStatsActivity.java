@@ -71,10 +71,16 @@ public class UserStatsActivity extends BaseActivity {
     @Inject
     protected CalendarUtil calendarUtil;
 
+    /**
+     * UI components for graph display and navigation.
+     */
     private ViewPager2 viewPagerGraphs;
     private GraphAdapter graphAdapter;
     private TabLayout tabLayoutGraphs;
 
+    /**
+     * UI components for historical log display.
+     */
     private RecyclerView recyclerMedicationLogs;
     private MedicationUsageAdapter usageAdapter;
 
@@ -82,20 +88,26 @@ public class UserStatsActivity extends BaseActivity {
      * The user whose statistics are currently being displayed.
      */
     private User currentUser;
+
     /**
-     * The actual authenticated user session.
+     * The actual authenticated user session (used for Admin role detection).
      */
     private User loggedInUser;
 
+    /**
+     * UI controls for filtering and data management.
+     */
     private Spinner spinnerUserSelector;
     private TextView txtSelectedDate, txtNoHistory;
     private MaterialButton btnClearMedLogs, btnClearDay;
+
     /**
-     * Date string (yyyy-MM-dd) used to filter the usage log.
+     * Date string (yyyy-MM-dd) used to filter the usage log history.
      */
     private String filteredDate = null;
+
     /**
-     * The complete list of usage logs for the current user.
+     * The complete list of usage logs for the currently selected user.
      */
     private List<MedicationUsage> allLogs = new ArrayList<>();
 

@@ -28,7 +28,14 @@ import javax.inject.Inject;
  * </p>
  */
 public class MedicationImagesTableAdapter extends BaseAdapter<ImageData, MedicationImagesTableAdapter.ViewHolder> {
+    /**
+     * Utility for loading images from Base64 strings.
+     */
     private final ImageUtil imageUtil;
+
+    /**
+     * Listener for image-specific actions.
+     */
     private OnImageActionListener listener;
 
     /**

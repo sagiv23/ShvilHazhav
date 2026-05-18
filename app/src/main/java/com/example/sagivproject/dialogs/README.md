@@ -5,15 +5,15 @@
 
 ---
 
-| Dialog                      | Description                                                                 |
-|-----------------------------|-----------------------------------------------------------------------------|
-| `AddEmergencyContactDialog` | Form for adding or editing emergency contacts with validation.              |
-| `UserDialog`                | Unified form for creating new user accounts or updating existing profiles.  |
-| `ConfirmDialog`             | Standardized confirmation or alert prompt with callback support.            |
-| `EditForumCategoryDialog`   | Interface for renaming existing forum discussion topics.                    |
-| `FullImageDialog`           | Immersive full-screen viewer for profile pictures and game assets.          |
-| `MedicationDialog`          | Advanced form for managing medication details and multiple reminder chips.  |
-| `ProfileImageDialog`        | UI for selecting image sources (Camera/Gallery) or removing profile photos. |
+| Dialog                    | Description                                                                 |
+|---------------------------|-----------------------------------------------------------------------------|
+| `EmergencyContactDialog`  | Form for adding or editing emergency contacts with validation.              |
+| `UserDialog`              | Unified form for creating new user accounts or updating existing profiles.  |
+| `ConfirmDialog`           | Standardized confirmation or alert prompt with callback support.            |
+| `EditForumCategoryDialog` | Interface for renaming existing forum discussion topics.                    |
+| `FullImageDialog`         | Immersive full-screen viewer for profile pictures and game assets.          |
+| `MedicationDialog`        | Advanced form for managing medication details and multiple reminder chips.  |
+| `ProfileImageDialog`      | UI for selecting image sources (Camera/Gallery) or removing profile photos. |
 
 ### Key Features
 

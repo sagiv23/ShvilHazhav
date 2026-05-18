@@ -10,7 +10,14 @@ import androidx.annotation.NonNull;
  * </p>
  */
 public class ForumCategory implements Idable {
+    /**
+     * Unique identifier for the forum category.
+     */
     private String id;
+
+    /**
+     * Display name of the category (topic).
+     */
     private String name;
 
     /**

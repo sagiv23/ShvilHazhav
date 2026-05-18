@@ -29,9 +29,24 @@ import javax.inject.Inject;
  * </p>
  */
 public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardViewHolder> {
+    /**
+     * Camera distance for 3D flip animations.
+     */
     private static final int CAMERA_DISTANCE = 8000;
+
+    /**
+     * Utility for loading and processing images.
+     */
     private final ImageUtil imageUtil;
+
+    /**
+     * Listener for card click events and animations.
+     */
     private MemoryGameListener listener;
+
+    /**
+     * Cache mapping image IDs to Base64 content for quick lookups.
+     */
     private Map<String, String> imageCache = new HashMap<>();
 
     /**

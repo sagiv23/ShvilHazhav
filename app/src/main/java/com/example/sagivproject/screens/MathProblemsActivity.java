@@ -46,14 +46,31 @@ public class MathProblemsActivity extends BaseActivity {
     private static final String PREF_MATH_QUESTION = "math_question_text";
     private static final String PREF_MATH_USER_INPUT = "math_user_input";
     private static final String PREF_MATH_CORRECT_ANSWER = "math_correct_answer";
+
+    /**
+     * String buffer for tracking user numeric input from the custom keypad.
+     */
     private final StringBuilder userInput = new StringBuilder();
+
+    /**
+     * UI thread handler for managing feedback animations.
+     */
     private final Handler handler = new Handler(Looper.getMainLooper());
+
     @Inject
     protected CalendarUtil calendarUtil;
+
+    /**
+     * UI components for performance tracking and problem display.
+     */
     private TextView tvCorrect, tvWrong;
     private User user;
     private TextView tvQuestion, tvAnswer;
     private MaterialCardView cvAnswerContainer;
+
+    /**
+     * The correct numerical result for the currently displayed problem.
+     */
     private int correctAnswer;
 
     @Override

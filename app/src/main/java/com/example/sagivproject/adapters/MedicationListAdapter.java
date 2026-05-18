@@ -43,11 +43,20 @@ import javax.inject.Inject;
  * </p>
  */
 public class MedicationListAdapter extends BaseAdapter<Medication, MedicationListAdapter.MedicationViewHolder> {
-    private final Set<String> processingMedications = new HashSet<>();
     /**
+     * Set of medication IDs currently being processed to prevent duplicate clicks.
+     */
+    private final Set<String> processingMedications = new HashSet<>();
+
+    /**
+     * Map tracking the intake status for today.
      * Key: medicationId, Value: Map of scheduledTime -> MedicationStatus
      */
     private final Map<String, Map<String, MedicationStatus>> loggedTodayMedications = new HashMap<>();
+
+    /**
+     * Listener for user actions on medication items.
+     */
     private OnMedicationActionListener listener;
 
     /**

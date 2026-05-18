@@ -10,7 +10,14 @@ import androidx.annotation.NonNull;
  * </p>
  */
 public class ImageData implements Idable {
+    /**
+     * Unique identifier for the image asset.
+     */
     private String id;
+
+    /**
+     * The raw image content encoded as a Base64 string.
+     */
     private String base64;
 
     /**

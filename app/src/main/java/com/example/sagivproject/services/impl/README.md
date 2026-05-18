@@ -7,7 +7,11 @@
 
 | Implementation               | Interface                 | Responsibility                                                                   |
 |------------------------------|---------------------------|----------------------------------------------------------------------------------|
+| `AdapterService`             | `IAdapterService`         | Provides activity-scoped access to pre-configured RecyclerView adapters.         |
 | `AuthServiceImpl`            | `IAuthService`            | Manages user authentication flow, registration checks, and session persistence.  |
+| `BaseDatabaseService`        | -                         | Abstract base class providing common Firebase database reference handling.       |
+| `DatabaseService`            | `IDatabaseService`        | Singleton implementation of the central service façade for domain logic.         |
+| `DialogService`              | `IDialogService`          | Orchestrates the lazy instantiation and display of all specialized UI Dialogs.   |
 | `EmergencyServiceImpl`       | `IEmergencyService`       | Coordinates emergency contact storage and automated SMS alerting logic.          |
 | `FallDetectionManager`       | `IFallDetectionService`   | Acts as a bridge to start/stop the foreground fall detection service.            |
 | `FallDetectionServiceImpl`   | `Service`                 | Background service monitoring sensors and coordinating emergency responses.      |

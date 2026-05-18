@@ -61,6 +61,10 @@ public class EmergencyContactsActivity extends BaseActivity {
     protected IFallDetectionService fallDetectionService;
 
     private EmergencyContactsAdapter adapter;
+
+    /**
+     * Local reference to the user's profile and emergency contacts.
+     */
     private User user;
     /**
      * Launcher for the system contact picker.

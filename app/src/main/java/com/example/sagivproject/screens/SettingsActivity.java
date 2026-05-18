@@ -43,6 +43,9 @@ public class SettingsActivity extends BaseActivity {
     @Inject
     protected IFallDetectionService fallDetectionService;
 
+    /**
+     * UI switches for controlling various application preferences and permissions.
+     */
     private SwitchMaterial switchDarkMode;
     private SwitchMaterial switchVibration, switchNotifications, switchCamera, switchGallery, switchLocation, switchSms, switchContacts;
     private SwitchMaterial switchFallDetection;

@@ -10,7 +10,14 @@ import androidx.annotation.NonNull;
  * </p>
  */
 public class TipOfTheDay implements Idable {
+    /**
+     * Unique identifier for the tip (usually the date in yyyy-MM-dd format).
+     */
     private String id;
+
+    /**
+     * The textual content of the tip or advice.
+     */
     private String tip;
 
     /**

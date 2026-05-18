@@ -37,9 +37,22 @@ import javax.inject.Inject;
  */
 public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implements IForumService {
     private static final String FORUM_PATH = "forum_categories";
+
+    /**
+     * Service used to resolve sender details for forum messages.
+     */
     private final IUserService userService;
+
     private final CalendarUtil calendarUtil;
+
+    /**
+     * Local cache for user profile data to minimize database hits during message synchronization.
+     */
     private final Map<String, User> userCache = new HashMap<>();
+
+    /**
+     * Active database listeners for real-time forum monitoring, indexed by category ID.
+     */
     private final Map<String, ValueEventListener> listeners = new HashMap<>();
 
     /**

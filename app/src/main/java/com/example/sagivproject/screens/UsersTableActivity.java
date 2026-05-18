@@ -46,9 +46,16 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class UsersTableActivity extends BaseActivity {
+    /**
+     * Complete local copy of the user database, indexed by UID.
+     */
     private final Map<String, User> usersMap = new HashMap<>();
 
     private UsersTableAdapter adapter;
+
+    /**
+     * UI controls for searching and filtering the user table.
+     */
     private EditText editSearch;
     private Spinner spinnerSearchType;
 

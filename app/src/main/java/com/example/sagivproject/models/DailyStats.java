@@ -17,11 +17,34 @@ import java.util.List;
  * </p>
  */
 public class DailyStats implements Idable {
+    /**
+     * Unique identifier for the daily statistics record (usually the date).
+     */
     private String id;
+
+    /**
+     * Total number of memory game matches won on this day.
+     */
     private int memoryWins;
+
+    /**
+     * Total number of memory game sessions participated in.
+     */
     private int memoryGamesPlayed;
+
+    /**
+     * Total count of math problems answered correctly.
+     */
     private int mathCorrect;
+
+    /**
+     * Total count of math problems answered incorrectly.
+     */
     private int mathWrong;
+
+    /**
+     * List of individual medication intake events for this day.
+     */
     private List<MedicationUsage> medicationUsageLogs;
 
     /**

@@ -48,20 +48,46 @@ import javax.inject.Inject;
  * </p>
  */
 public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumViewHolder> {
+    /**
+     * Utility for date formatting and parsing.
+     */
     private final CalendarUtil calendarUtil;
+
+    /**
+     * Listener for message-related events.
+     */
     private ForumMessageListener listener;
+
+    /**
+     * Cached typeface to avoid repeated lookups.
+     */
     private Typeface cachedFont;
+
+    /**
+     * UID of the currently logged-in user to determine message alignment.
+     */
     private String currentUserId;
+
+    /**
+     * A map of sender details indexed by their UID.
+     */
     private Map<String, User> senderMap = new HashMap<>();
 
     /**
      * Constructs a new ForumAdapter.
+     *
+     * @param calendarUtil The utility for date operations.
      */
     @Inject
     public ForumAdapter(CalendarUtil calendarUtil) {
         this.calendarUtil = calendarUtil;
     }
 
+    /**
+     * Sets the current user ID for alignment logic.
+     *
+     * @param userId The UID of the current user.
+     */
     public void setCurrentUserId(String userId) {
         this.currentUserId = userId;
     }

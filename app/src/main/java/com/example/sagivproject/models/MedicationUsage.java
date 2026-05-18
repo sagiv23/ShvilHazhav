@@ -10,10 +10,29 @@ import androidx.annotation.NonNull;
  * </p>
  */
 public class MedicationUsage implements Idable {
+    /**
+     * Unique identifier for the usage log entry.
+     */
     private String id;
+
+    /**
+     * The ID of the medication this log refers to.
+     */
     private String medicationId;
+
+    /**
+     * The actual time the user recorded the intake (HH:mm).
+     */
     private String time;
+
+    /**
+     * The original scheduled time for the dose (HH:mm).
+     */
     private String scheduledTime;
+
+    /**
+     * The intake status (Taken, Not Taken, Snoozed).
+     */
     private MedicationStatus status;
 
     /**

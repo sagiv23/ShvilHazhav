@@ -44,19 +44,51 @@ public class SimpleXYGraphView extends View {
     private final Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path linePath = new Path();
+
+    /**
+     * Spacing and padding constants for graph layout.
+     */
     private final float paddingLeft = 180f;
     private final float paddingBottom = 220f;
     private final float paddingTop = 120f;
     private final float pointSpacing = 200f;
+
+    /**
+     * Custom fonts for titles and labels.
+     */
     private Typeface headlineFont;
     private Typeface textFont;
+
+    /**
+     * The data points to be rendered.
+     */
     private List<Point> points = new ArrayList<>();
+
+    /**
+     * Corresponding labels for each data point on the X-axis.
+     */
     private List<String> xLabels = new ArrayList<>();
+
+    /**
+     * Metadata for graph identification and display.
+     */
     private String title = "";
     private String labelX = "";
     private String labelY = "";
+
+    /**
+     * The rendering mode (Line or Bar chart).
+     */
     private GraphType graphType = GraphType.LINE;
+
+    /**
+     * Current horizontal scroll offset for the graph content.
+     */
     private float scrollXOffset = 0f;
+
+    /**
+     * The last recorded touch position for calculating scroll delta.
+     */
     private float lastTouchX = 0f;
 
     /**

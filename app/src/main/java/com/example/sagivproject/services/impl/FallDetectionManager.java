@@ -71,7 +71,15 @@ public class FallDetectionManager extends Service implements SensorEventListener
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private FusedLocationProviderClient fusedLocationClient;
+
+    /**
+     * Timestamp of the last broadcasted emergency alert.
+     */
     private long lastAlertTime = 0;
+
+    /**
+     * Flag tracking the current monitoring state of the service.
+     */
     private boolean isMonitoring = false;
 
     /**

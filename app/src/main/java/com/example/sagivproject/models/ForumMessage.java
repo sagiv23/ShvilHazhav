@@ -15,9 +15,24 @@ import java.util.Objects;
  * </p>
  */
 public class ForumMessage implements Idable {
+    /**
+     * Unique identifier for the forum message.
+     */
     private String id;
+
+    /**
+     * The text content of the post.
+     */
     private String message;
+
+    /**
+     * Timestamp of when the message was sent (ISO format).
+     */
     private String timestamp;
+
+    /**
+     * UID of the user who sent the message.
+     */
     private String userId;
 
     /**

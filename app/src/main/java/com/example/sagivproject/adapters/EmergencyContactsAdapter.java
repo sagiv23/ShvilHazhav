@@ -23,6 +23,9 @@ import javax.inject.Inject;
  * </p>
  */
 public class EmergencyContactsAdapter extends BaseAdapter<EmergencyContact, EmergencyContactsAdapter.EmergencyContactViewHolder> {
+    /**
+     * Listener for contact interaction events.
+     */
     private OnContactActionListener listener;
 
     /**

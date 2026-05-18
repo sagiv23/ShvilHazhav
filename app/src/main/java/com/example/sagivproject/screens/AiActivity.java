@@ -52,15 +52,40 @@ public class AiActivity extends BaseActivity {
     private static final String PREF_AI_QUESTION = "ai_question_text";
     private static final String PREF_AI_ANSWER = "ai_answer_text";
     private static final String PREF_AI_SPEAK_VISIBILITY = "ai_speak_visibility";
+
+    /**
+     * Google Gemini AI chat session.
+     */
     private ChatFutures chatSession;
+
     private Button btnSend, btnSpeak;
     private ProgressBar progressBar;
     private EditText questionInput;
     private TextView answerView;
+
+    /**
+     * Handler for managing the character-by-character typewriter animation.
+     */
     private Handler animationHandler;
+
+    /**
+     * Current character index in the typewriter animation.
+     */
     private int charIndex;
+
+    /**
+     * Buffer containing the full AI response text.
+     */
     private String currentFullResponse = "";
+
+    /**
+     * Android Text-to-Speech engine instance.
+     */
     private TextToSpeech tts;
+
+    /**
+     * Flag indicating if the response is currently being read aloud.
+     */
     private boolean isSpeaking = false;
 
     @Override
