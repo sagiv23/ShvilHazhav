@@ -147,7 +147,6 @@ public class MemoryGameAdapter extends BaseAdapter<Card, MemoryGameAdapter.CardV
         holder.cardImage.animate().cancel();
     }
 
-
     /**
      * Interface for handling interaction events in the memory game.
      */

@@ -27,9 +27,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  * <p>
  * This receiver manages:
  * <ul>
- *     <li>System boot completion to restore alarms.</li>
- *     <li>Scheduled medication reminders.</li>
- *     <li>User interactions (button clicks) from notifications.</li>
+ * <li>System boot completion to restore alarms.</li>
+ * <li>Scheduled medication reminders.</li>
+ * <li>User interactions (button clicks) from notifications.</li>
  * </ul>
  */
 @AndroidEntryPoint

@@ -6,7 +6,8 @@
 
 ## 🏗 System Overview
 
-The diagrams in this directory provide a comprehensive view of the application's structure, following the MVVM and Service-Oriented architecture.
+The diagrams in this directory provide a comprehensive view of the application's structure,
+following the MVVM and Service-Oriented architecture.
 
 ### 🧩 Core Modules
 
@@ -26,8 +27,10 @@ The diagrams in this directory provide a comprehensive view of the application's
 ## 🛠 Usage
 
 To view these diagrams:
+
 1. Install the **PlantUML** plugin in Android Studio or VS Code.
 2. Open any `.puml` file.
 3. The plugin will render the class diagrams and relationships automatically.
 
-*Note: These diagrams are kept in sync with the source code to reflect the current state of the application.*
+*Note: These diagrams are kept in sync with the source code to reflect the current state of the
+application.*

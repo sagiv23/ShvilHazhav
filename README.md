@@ -117,7 +117,8 @@ intelligent sensors and community support.
 
 ## 📊 Documentation & UML
 
-The project includes extensive architectural documentation located in the [`umls`](umls) directory. These PlantUML diagrams provide a visual representation of the system's structure and logic:
+The project includes extensive architectural documentation located in the [`umls`](umls) directory.
+These PlantUML diagrams provide a visual representation of the system's structure and logic:
 
 - **Services & Impl:** Detailed interface and class hierarchies for the business logic layer.
 - **Screens & UI:** Navigation flows and UI component structures.
