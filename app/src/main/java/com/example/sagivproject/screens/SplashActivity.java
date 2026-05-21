@@ -94,8 +94,8 @@ public class SplashActivity extends BaseActivity {
      * Navigates to the landing screen and passes a flag to trigger the entry animation.
      */
     private void navigateToLandingWithAnimation() {
-        Intent intent = new Intent(this, LandingActivity.class);
-        intent.putExtra("shouldAnimate", true);
-        startActivity(intent);
+        onNavigate(new Intent(this, LandingActivity.class)
+                .putExtra("shouldAnimate", true)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }

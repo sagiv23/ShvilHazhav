@@ -33,18 +33,15 @@ public class AdminPageActivity extends BaseActivity {
         setContent(R.layout.activity_admin_page, R.id.adminPage);
         setGreeting(R.id.txt_admin_title);
 
-        findViewById(R.id.btn_admin_to_UsersTablePage).setOnClickListener(v -> startActivity(new Intent(this, UsersTableActivity.class)));
-        findViewById(R.id.btn_admin_to_UserStats).setOnClickListener(v -> startActivity(new Intent(this, UserStatsActivity.class)));
-        findViewById(R.id.btn_admin_to_MedicineImagesTablePage).setOnClickListener(v -> startActivity(new Intent(this, MedicationImagesTableActivity.class)));
-        findViewById(R.id.btn_admin_to_MemoryGameLogsTablePage).setOnClickListener(v -> startActivity(new Intent(this, MemoryGameLogsTableActivity.class)));
-        findViewById(R.id.btn_admin_to_ForumCategories).setOnClickListener(v -> startActivity(new Intent(this, ForumCategoriesActivity.class)));
-        findViewById(R.id.btn_admin_to_TipOfTheDay).setOnClickListener(v -> startActivity(new Intent(this, TipOfTheDayActivity.class)));
-        findViewById(R.id.btn_admin_to_DetailsAboutUser).setOnClickListener(v -> startActivity(new Intent(this, DetailsAboutUserActivity.class)));
-        findViewById(R.id.btn_admin_to_Settings).setOnClickListener(v -> {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            intent.putExtra("isFromLoggedIn", true);
-            startActivity(intent);
-        });
+        findViewById(R.id.btn_admin_to_UsersTablePage).setOnClickListener(v -> onNavigate(new Intent(this, UsersTableActivity.class)));
+        findViewById(R.id.btn_admin_to_UserStats).setOnClickListener(v -> onNavigate(new Intent(this, UserStatsActivity.class)));
+        findViewById(R.id.btn_admin_to_MedicineImagesTablePage).setOnClickListener(v -> onNavigate(new Intent(this, MedicationImagesTableActivity.class)));
+        findViewById(R.id.btn_admin_to_MemoryGameLogsTablePage).setOnClickListener(v -> onNavigate(new Intent(this, MemoryGameLogsTableActivity.class)));
+        findViewById(R.id.btn_admin_to_ForumCategories).setOnClickListener(v -> onNavigate(new Intent(this, ForumCategoriesActivity.class)));
+        findViewById(R.id.btn_admin_to_TipOfTheDay).setOnClickListener(v -> onNavigate(new Intent(this, TipOfTheDayActivity.class)));
+        findViewById(R.id.btn_admin_to_DetailsAboutUser).setOnClickListener(v -> onNavigate(new Intent(this, DetailsAboutUserActivity.class)));
+        findViewById(R.id.btn_admin_to_Settings).setOnClickListener(v ->
+                onNavigate(new Intent(this, SettingsActivity.class).putExtra("isFromLoggedIn", true)));
     }
 
     @Override

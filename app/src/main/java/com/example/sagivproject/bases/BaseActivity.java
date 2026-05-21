@@ -36,13 +36,9 @@ import androidx.fragment.app.Fragment;
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.AdminPageActivity;
-import com.example.sagivproject.screens.ContactActivity;
-import com.example.sagivproject.screens.DetailsAboutUserActivity;
 import com.example.sagivproject.screens.LandingActivity;
 import com.example.sagivproject.screens.LoginActivity;
 import com.example.sagivproject.screens.MainActivity;
-import com.example.sagivproject.screens.RegisterActivity;
-import com.example.sagivproject.screens.SettingsActivity;
 import com.example.sagivproject.services.IAdapterService;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IDialogService;
@@ -254,33 +250,19 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
     }
 
     /**
-     * Navigates to a destination identified by a resource ID.
-     *
-     * @param resId The resource ID of the target destination (e.g., {@code R.id.mainActivity}).
-     */
-    @Override
-    public void onNavigate(int resId) {
-        onNavigate(resId, null);
-    }
-
-    /**
      * Centralized navigation logic to the appropriate home screen based on user role.
      *
      * @param user The authenticated user.
      */
     protected void navigateToUserHome(User user) {
         if (sharedPreferencesUtil.isUserNotLoggedIn()) {
-            onNavigate(R.id.landingActivity);
+            onNavigate(new Intent(this, LandingActivity.class));
             return;
         }
-        Intent intent;
-        if (user.isAdmin()) {
-            intent = new Intent(this, AdminPageActivity.class);
-        } else {
-            intent = new Intent(this, MainActivity.class);
-        }
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+
+        Class<? extends AppCompatActivity> homeClass = user.isAdmin() ? AdminPageActivity.class : MainActivity.class;
+        onNavigate(new Intent(this, homeClass)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
         finish();
     }
 
@@ -344,49 +326,45 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
     }
 
     /**
-     * Navigates to a destination with optional arguments and a standard slide animation.
+     * Navigates to a destination using a pre-configured Intent.
+     * Handles common logic like closing the drawer and applying animations.
      *
-     * @param resId The resource ID of the target destination.
-     * @param args  Optional Bundle of arguments to pass to the target activity.
+     * @param intent The intent to launch.
      */
     @Override
-    public void onNavigate(int resId, Bundle args) {
+    public void onNavigate(Intent intent) {
+        if (intent == null) return;
+
         closeDrawer();
-        Intent intent = null;
 
-        if (resId == R.id.mainActivity) {
-            intent = new Intent(this, MainActivity.class);
-        } else if (resId == R.id.landingActivity) {
-            intent = new Intent(this, LandingActivity.class);
-        } else if (resId == R.id.contactActivity) {
-            intent = new Intent(this, ContactActivity.class);
-        } else if (resId == R.id.detailsAboutUserActivity) {
-            intent = new Intent(this, DetailsAboutUserActivity.class);
-        } else if (resId == R.id.settingsActivity) {
-            intent = new Intent(this, SettingsActivity.class);
-        } else if (resId == R.id.loginActivity) {
-            intent = new Intent(this, LoginActivity.class);
-        } else if (resId == R.id.registerActivity) {
-            intent = new Intent(this, RegisterActivity.class);
-        } else if (resId == R.id.adminPageActivity) {
-            intent = new Intent(this, AdminPageActivity.class);
-        } else if (resId == R.id.nav_logout) {
-            databaseService.getAuthService().logout();
-            intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // Prevent navigating to the same activity (unless clearing stack via flags)
+        boolean clearStack = (intent.getFlags() & Intent.FLAG_ACTIVITY_CLEAR_TASK) != 0;
+        if (intent.getComponent() != null &&
+                this.getClass().getName().equals(intent.getComponent().getClassName()) &&
+                !clearStack) {
+            return;
         }
 
-        if (intent != null) {
-            if (intent.getComponent() != null && this.getClass().getName().equals(intent.getComponent().getClassName())) {
-                return;
-            }
-            if (args != null) intent.putExtras(args);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeCustomAnimation(
+                this, R.anim.slide_in_right, R.anim.slide_out_left);
 
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeCustomAnimation(
-                    this, R.anim.slide_in_right, R.anim.slide_out_left);
+        startActivity(intent, options.toBundle());
+    }
 
-            startActivity(intent, options.toBundle());
-        }
+    /**
+     * Logs out the user, clears the session, and redirects to the login screen.
+     */
+    @Override
+    public void onLogout() {
+        User user = sharedPreferencesUtil.getUser();
+        String email = (user != null) ? user.getEmail() : "";
+
+        sharedPreferencesUtil.signOutUser();
+
+        onNavigate(new Intent(this, LoginActivity.class)
+                .putExtra("userEmail", email)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+        finish();
     }
 
     /**

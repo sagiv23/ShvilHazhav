@@ -57,13 +57,6 @@ public interface IAuthService {
     void updateUser(User user, String newFirstName, String newLastName, String newBirthDate, String newEmail, String newPassword, UpdateUserCallback callback);
 
     /**
-     * Logs out the current user and clears local session data.
-     *
-     * @return The email address of the user who was logged out, useful for pre-filling login forms.
-     */
-    String logout();
-
-    /**
      * Callback interface for user login results.
      */
     interface LoginCallback {

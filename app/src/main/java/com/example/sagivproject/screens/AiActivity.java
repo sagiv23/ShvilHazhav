@@ -3,8 +3,6 @@ package com.example.sagivproject.screens;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +15,8 @@ import androidx.core.content.ContextCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.services.ITTSService;
+import com.example.sagivproject.services.ITTSService.TTSListener;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -29,8 +29,9 @@ import com.google.firebase.ai.type.GenerateContentResponse;
 import com.google.firebase.ai.type.GenerativeBackend;
 
 import java.util.Collections;
-import java.util.Locale;
 import java.util.concurrent.Executor;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -52,7 +53,11 @@ public class AiActivity extends BaseActivity {
     private static final String PREF_AI_QUESTION = "ai_question_text";
     private static final String PREF_AI_ANSWER = "ai_answer_text";
     private static final String PREF_AI_SPEAK_VISIBILITY = "ai_speak_visibility";
-
+    /**
+     * Singleton service for Text-to-Speech functionality.
+     */
+    @Inject
+    protected ITTSService ttsService;
     /**
      * Google Gemini AI chat session.
      */
@@ -79,11 +84,6 @@ public class AiActivity extends BaseActivity {
     private String currentFullResponse = "";
 
     /**
-     * Android Text-to-Speech engine instance.
-     */
-    private TextToSpeech tts;
-
-    /**
      * Flag indicating if the response is currently being read aloud.
      */
     private boolean isSpeaking = false;
@@ -100,28 +100,6 @@ public class AiActivity extends BaseActivity {
         answerView = findViewById(R.id.TV_Ai_txt_response);
         progressBar = findViewById(R.id.progressBar_Ai);
         animationHandler = new Handler(Looper.getMainLooper());
-
-        tts = new TextToSpeech(this, status -> {
-            if (status == TextToSpeech.SUCCESS) {
-                tts.setLanguage(new Locale("he", "IL"));
-                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                    @Override
-                    public void onStart(String id) {
-                        runOnUiThread(() -> updateSpeakButton(true));
-                    }
-
-                    @Override
-                    public void onDone(String id) {
-                        runOnUiThread(() -> updateSpeakButton(false));
-                    }
-
-                    @Override
-                    public void onError(String id) {
-                        runOnUiThread(() -> updateSpeakButton(false));
-                    }
-                });
-            }
-        });
 
         GenerativeModel generativeModel = FirebaseAI.getInstance(GenerativeBackend.googleAI())
                 .generativeModel("gemini-2.5-flash-lite");
@@ -166,13 +144,27 @@ public class AiActivity extends BaseActivity {
      */
     private void toggleSpeech() {
         if (isSpeaking) {
-            tts.stop();
+            ttsService.stop();
             updateSpeakButton(false);
         } else {
             String text = answerView.getText().toString();
             if (!text.isEmpty()) {
-                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "ai_res");
-                updateSpeakButton(true);
+                ttsService.speak(text, "ai_res", new TTSListener() {
+                    @Override
+                    public void onStart(String id) {
+                        runOnUiThread(() -> updateSpeakButton(true));
+                    }
+
+                    @Override
+                    public void onDone(String id) {
+                        runOnUiThread(() -> updateSpeakButton(false));
+                    }
+
+                    @Override
+                    public void onError(String id) {
+                        runOnUiThread(() -> updateSpeakButton(false));
+                    }
+                });
             }
         }
     }
@@ -198,7 +190,7 @@ public class AiActivity extends BaseActivity {
         btnSend.setEnabled(false);
         answerView.setText("");
         updateSpeakButton(false);
-        tts.stop();
+        ttsService.stop();
         answerView.setText("");
         currentFullResponse = "";
 
@@ -259,10 +251,8 @@ public class AiActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (tts != null && tts.isSpeaking()) {
-            tts.stop();
-            updateSpeakButton(false);
-        }
+        ttsService.stop();
+        updateSpeakButton(false);
         if (animationHandler != null) {
             animationHandler.removeCallbacksAndMessages(null);
         }
@@ -279,9 +269,8 @@ public class AiActivity extends BaseActivity {
      */
     @Override
     public void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
+        if (ttsService != null) {
+            ttsService.stop();
         }
         if (animationHandler != null) {
             animationHandler.removeCallbacksAndMessages(null);

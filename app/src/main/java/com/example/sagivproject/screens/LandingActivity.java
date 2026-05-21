@@ -72,8 +72,8 @@ public class LandingActivity extends BaseActivity {
             }
         }
 
-        findViewById(R.id.btn_landingBody_to_contact).setOnClickListener(v -> startActivity(new Intent(this, ContactActivity.class)));
-        findViewById(R.id.btn_landingBody_to_login).setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
-        findViewById(R.id.btn_landingBody_to_register).setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
+        findViewById(R.id.btn_landingBody_to_contact).setOnClickListener(v -> onNavigate(new Intent(this, ContactActivity.class)));
+        findViewById(R.id.btn_landingBody_to_login).setOnClickListener(v -> onNavigate(new Intent(this, LoginActivity.class)));
+        findViewById(R.id.btn_landingBody_to_register).setOnClickListener(v -> onNavigate(new Intent(this, RegisterActivity.class)));
     }
 }

@@ -3,8 +3,6 @@ package com.example.sagivproject.screens;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,12 +19,15 @@ import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.ITTSService;
+import com.example.sagivproject.services.ITTSService.TTSListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -45,9 +46,12 @@ public class ForumActivity extends BaseActivity {
      * UI thread handler for updating components from callbacks.
      */
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-
+    /**
+     * Singleton service for Text-to-Speech functionality.
+     */
+    @Inject
+    protected ITTSService ttsService;
     private RecyclerView recycler;
-
     /**
      * Sticky button that appears when new messages arrive while the user is scrolled up.
      */
@@ -64,11 +68,6 @@ public class ForumActivity extends BaseActivity {
      * Profile of the currently logged-in user.
      */
     private User user;
-
-    /**
-     * Android Text-to-Speech engine instance.
-     */
-    private TextToSpeech tts;
 
     /**
      * ID of the message currently being read by the TTS engine.
@@ -156,22 +155,40 @@ public class ForumActivity extends BaseActivity {
             @Override
             public void onSpeakClicked(ForumMessage message) {
                 if (message.getId().equals(currentlySpeakingMsgId)) {
-                    if (tts != null) tts.stop();
+                    ttsService.stop();
                     currentlySpeakingMsgId = null;
                     notifyItemChangedById(message.getId());
                 } else {
                     String oldId = currentlySpeakingMsgId;
                     if (oldId != null) {
-                        if (tts != null) tts.stop();
+                        ttsService.stop();
                         currentlySpeakingMsgId = null;
                         notifyItemChangedById(oldId);
                     }
 
-                    if (tts == null) {
-                        initTTS(message);
-                    } else {
-                        speak(message);
-                    }
+                    ttsService.speak(message.getMessage(), message.getId(), new TTSListener() {
+                        @Override
+                        public void onStart(String id) {
+                            currentlySpeakingMsgId = id;
+                            mainHandler.post(() -> notifyItemChangedById(id));
+                        }
+
+                        @Override
+                        public void onDone(String id) {
+                            if (id.equals(currentlySpeakingMsgId)) {
+                                currentlySpeakingMsgId = null;
+                            }
+                            mainHandler.post(() -> notifyItemChangedById(id));
+                        }
+
+                        @Override
+                        public void onError(String id) {
+                            if (id.equals(currentlySpeakingMsgId)) {
+                                currentlySpeakingMsgId = null;
+                            }
+                            mainHandler.post(() -> notifyItemChangedById(id));
+                        }
+                    });
                 }
             }
 
@@ -316,58 +333,6 @@ public class ForumActivity extends BaseActivity {
     }
 
     /**
-     * Initializes the Text-to-Speech engine and begins speaking the provided message.
-     *
-     * @param msg The {@link ForumMessage} to read aloud after initialization.
-     */
-    private void initTTS(ForumMessage msg) {
-        if (tts == null) {
-            tts = new TextToSpeech(this, status -> {
-                if (status == TextToSpeech.SUCCESS) {
-                    tts.setLanguage(new Locale("he", "IL"));
-                    tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                        @Override
-                        public void onStart(String utteranceId) {
-                            currentlySpeakingMsgId = utteranceId;
-                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
-                        }
-
-                        @Override
-                        public void onDone(String utteranceId) {
-                            if (utteranceId.equals(currentlySpeakingMsgId)) {
-                                currentlySpeakingMsgId = null;
-                            }
-                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
-                        }
-
-                        @Override
-                        public void onError(String utteranceId) {
-                            if (utteranceId.equals(currentlySpeakingMsgId)) {
-                                currentlySpeakingMsgId = null;
-                            }
-                            mainHandler.post(() -> notifyItemChangedById(utteranceId));
-                        }
-                    });
-                    speak(msg);
-                }
-            });
-        }
-    }
-
-    /**
-     * Triggers the TTS engine to speak the text of the given message.
-     *
-     * @param msg The message to speak.
-     */
-    private void speak(ForumMessage msg) {
-        if (tts != null) {
-            Bundle params = new Bundle();
-            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, msg.getId());
-            tts.speak(msg.getMessage(), TextToSpeech.QUEUE_FLUSH, params, msg.getId());
-        }
-    }
-
-    /**
      * Finds a message by its ID and triggers a partial UI refresh for that item.
      *
      * @param msgId The unique ID of the message.
@@ -436,7 +401,7 @@ public class ForumActivity extends BaseActivity {
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         databaseService.getForumService().clearUserCache();
         loadMessages();
@@ -446,13 +411,13 @@ public class ForumActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         databaseService.getForumService().stopListeningToMessages(categoryId);
+        ttsService.stop();
     }
 
     @Override
     protected void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
+        if (ttsService != null) {
+            ttsService.stop();
         }
         super.onDestroy();
     }

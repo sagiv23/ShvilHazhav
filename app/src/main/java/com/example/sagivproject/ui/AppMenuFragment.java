@@ -1,6 +1,7 @@
 package com.example.sagivproject.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,18 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.screens.AdminPageActivity;
+import com.example.sagivproject.screens.ContactActivity;
+import com.example.sagivproject.screens.DetailsAboutUserActivity;
+import com.example.sagivproject.screens.LandingActivity;
+import com.example.sagivproject.screens.LoginActivity;
+import com.example.sagivproject.screens.MainActivity;
+import com.example.sagivproject.screens.RegisterActivity;
+import com.example.sagivproject.screens.SettingsActivity;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import javax.inject.Inject;
@@ -121,18 +131,18 @@ public class AppMenuFragment extends Fragment {
         View view = inflater.inflate(layoutId, container, false);
 
         if (activeType == MenuType.ADMIN) {
-            setupNavigationButton(view, R.id.btn_menu_admin_back, R.id.adminPageActivity);
+            setupNavigationButton(view, R.id.btn_menu_admin_back, AdminPageActivity.class);
         } else if (activeType == MenuType.LOGGED_IN) {
-            setupNavigationButton(view, R.id.btn_menu_main, R.id.mainActivity);
-            setupNavigationButton(view, R.id.btn_menu_contact, R.id.contactActivity);
-            setupNavigationButton(view, R.id.btn_menu_details, R.id.detailsAboutUserActivity);
-            setupNavigationButton(view, R.id.btn_menu_settings, R.id.settingsActivity);
+            setupNavigationButton(view, R.id.btn_menu_main, MainActivity.class);
+            setupNavigationButton(view, R.id.btn_menu_contact, ContactActivity.class);
+            setupNavigationButton(view, R.id.btn_menu_details, DetailsAboutUserActivity.class);
+            setupNavigationButton(view, R.id.btn_menu_settings, SettingsActivity.class);
         } else {
-            setupNavigationButton(view, R.id.btn_menu_main, R.id.landingActivity);
-            setupNavigationButton(view, R.id.btn_menu_contact, R.id.contactActivity);
-            setupNavigationButton(view, R.id.btn_menu_login, R.id.loginActivity);
-            setupNavigationButton(view, R.id.btn_menu_register, R.id.registerActivity);
-            setupNavigationButton(view, R.id.btn_menu_settings, R.id.settingsActivity);
+            setupNavigationButton(view, R.id.btn_menu_main, LandingActivity.class);
+            setupNavigationButton(view, R.id.btn_menu_contact, ContactActivity.class);
+            setupNavigationButton(view, R.id.btn_menu_login, LoginActivity.class);
+            setupNavigationButton(view, R.id.btn_menu_register, RegisterActivity.class);
+            setupNavigationButton(view, R.id.btn_menu_settings, SettingsActivity.class);
         }
 
         return view;
@@ -141,16 +151,16 @@ public class AppMenuFragment extends Fragment {
     /**
      * Helper to set up a navigation button with a standardized click listener.
      *
-     * @param root          The root view of the fragment.
-     * @param buttonId      The resource ID of the button.
-     * @param destinationId The destination identifier (resource ID).
+     * @param root        The root view of the fragment.
+     * @param buttonId    The resource ID of the button.
+     * @param destination The destination activity class.
      */
-    private void setupNavigationButton(View root, int buttonId, int destinationId) {
+    private void setupNavigationButton(View root, int buttonId, Class<? extends AppCompatActivity> destination) {
         View button = root.findViewById(buttonId);
         if (button != null) {
             button.setOnClickListener(v -> {
                 if (navigationListener != null) {
-                    navigationListener.onNavigate(destinationId);
+                    navigationListener.onNavigate(new Intent(requireContext(), destination));
                 }
             });
         }
@@ -175,23 +185,17 @@ public class AppMenuFragment extends Fragment {
 
     public enum MenuType {ADMIN, LOGGED_IN, LOGGED_OUT}
 
-    /**
-     * Interface for communication between the menu fragment and the hosting activity.
-     */
     public interface OnNavigationListener {
         /**
-         * Navigates to a specific destination in the navigation graph.
+         * Navigates to a specific destination using a pre-configured Intent.
          *
-         * @param resId The resource ID of the destination or action.
+         * @param intent The intent containing destination and extras.
          */
-        void onNavigate(int resId);
+        void onNavigate(Intent intent);
 
         /**
-         * Navigates to a specific destination in the navigation graph with arguments.
-         *
-         * @param resId The resource ID of the destination or action.
-         * @param args  The arguments to pass to the destination fragment.
+         * Logs out the user and navigates to the login screen.
          */
-        void onNavigate(int resId, Bundle args);
+        void onLogout();
     }
 }

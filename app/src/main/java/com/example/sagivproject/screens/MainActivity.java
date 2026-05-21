@@ -28,14 +28,14 @@ public class MainActivity extends BaseActivity {
         setupMenu();
         setGreeting(R.id.txt_home_Title);
 
-        findViewById(R.id.btn_home_to_MedicationList).setOnClickListener(v -> startActivity(new Intent(this, MedicationListActivity.class)));
-        findViewById(R.id.btn_home_to_forum_categories).setOnClickListener(v -> startActivity(new Intent(this, ForumCategoriesActivity.class)));
-        findViewById(R.id.btn_home_to_Ai).setOnClickListener(v -> startActivity(new Intent(this, AiActivity.class)));
-        findViewById(R.id.btn_home_to_GameHomeScreen).setOnClickListener(v -> startActivity(new Intent(this, GameHomeScreenActivity.class)));
-        findViewById(R.id.btn_home_to_MathProblems).setOnClickListener(v -> startActivity(new Intent(this, MathProblemsActivity.class)));
-        findViewById(R.id.btn_home_to_TipOfTheDay).setOnClickListener(v -> startActivity(new Intent(this, TipOfTheDayActivity.class)));
-        findViewById(R.id.btn_home_to_Stats).setOnClickListener(v -> startActivity(new Intent(this, UserStatsActivity.class)));
-        findViewById(R.id.btn_home_to_emergency).setOnClickListener(v -> startActivity(new Intent(this, EmergencyContactsActivity.class)));
+        findViewById(R.id.btn_home_to_MedicationList).setOnClickListener(v -> onNavigate(new Intent(this, MedicationListActivity.class)));
+        findViewById(R.id.btn_home_to_forum_categories).setOnClickListener(v -> onNavigate(new Intent(this, ForumCategoriesActivity.class)));
+        findViewById(R.id.btn_home_to_Ai).setOnClickListener(v -> onNavigate(new Intent(this, AiActivity.class)));
+        findViewById(R.id.btn_home_to_GameHomeScreen).setOnClickListener(v -> onNavigate(new Intent(this, GameHomeScreenActivity.class)));
+        findViewById(R.id.btn_home_to_MathProblems).setOnClickListener(v -> onNavigate(new Intent(this, MathProblemsActivity.class)));
+        findViewById(R.id.btn_home_to_TipOfTheDay).setOnClickListener(v -> onNavigate(new Intent(this, TipOfTheDayActivity.class)));
+        findViewById(R.id.btn_home_to_Stats).setOnClickListener(v -> onNavigate(new Intent(this, UserStatsActivity.class)));
+        findViewById(R.id.btn_home_to_emergency).setOnClickListener(v -> onNavigate(new Intent(this, EmergencyContactsActivity.class)));
     }
 
     @Override

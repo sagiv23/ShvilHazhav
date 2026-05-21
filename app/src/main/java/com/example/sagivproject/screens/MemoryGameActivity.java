@@ -562,9 +562,8 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * Returns the user to the game matchmaking screen.
      */
     private void goBack() {
-        Intent intent = new Intent(this, GameHomeScreenActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        onNavigate(new Intent(this, GameHomeScreenActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     @Override

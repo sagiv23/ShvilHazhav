@@ -2,8 +2,6 @@ package com.example.sagivproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,11 +19,12 @@ import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IMemoryGameService;
+import com.example.sagivproject.services.ITTSService;
+import com.example.sagivproject.services.ITTSService.TTSListener;
 import com.example.sagivproject.utils.CalendarUtil;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -48,9 +47,12 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class GameHomeScreenActivity extends BaseActivity {
     @Inject
     protected CalendarUtil calendarUtil;
-
+    /**
+     * Singleton service for Text-to-Speech functionality.
+     */
+    @Inject
+    protected ITTSService ttsService;
     private Button btnFindEnemy, btnCancelFindEnemy, btnSpeak;
-
     /**
      * UI component for displaying the current matchmaking status.
      */
@@ -74,11 +76,6 @@ public class GameHomeScreenActivity extends BaseActivity {
     private User user;
 
     /**
-     * Android Text-to-Speech engine instance.
-     */
-    private TextToSpeech tts;
-
-    /**
      * Flag indicating if the instructions are currently being read aloud.
      */
     private boolean isSpeaking = false;
@@ -97,28 +94,6 @@ public class GameHomeScreenActivity extends BaseActivity {
         TVStatusOfFindingEnemy = findViewById(R.id.tv_GameHomeScreen_status_of_finding_enemy);
         RecyclerView rvLeaderboard = findViewById(R.id.recyclerView_GameHomeScreen_leaderboard);
 
-        tts = new TextToSpeech(this, status -> {
-            if (status == TextToSpeech.SUCCESS) {
-                tts.setLanguage(new Locale("he", "IL"));
-                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                    @Override
-                    public void onStart(String utteranceId) {
-                        runOnUiThread(() -> updateSpeakButton(true));
-                    }
-
-                    @Override
-                    public void onDone(String utteranceId) {
-                        runOnUiThread(() -> updateSpeakButton(false));
-                    }
-
-                    @Override
-                    public void onError(String utteranceId) {
-                        runOnUiThread(() -> updateSpeakButton(false));
-                    }
-                });
-            }
-        });
-
         btnFindEnemy.setOnClickListener(v -> findEnemy());
         btnCancelFindEnemy.setOnClickListener(v -> cancelSearch());
         btnSpeak.setOnClickListener(v -> toggleInstructionsSpeech());
@@ -135,7 +110,7 @@ public class GameHomeScreenActivity extends BaseActivity {
      */
     private void toggleInstructionsSpeech() {
         if (isSpeaking) {
-            tts.stop();
+            ttsService.stop();
             updateSpeakButton(false);
         } else {
             String rulesText = getString(R.string.game_rules) + ". " +
@@ -148,8 +123,22 @@ public class GameHomeScreenActivity extends BaseActivity {
                     getString(R.string.game_rules_text5) + " " +
                     getString(R.string.scoring_method) + ". " +
                     getString(R.string.game_rules_text6);
-            tts.speak(rulesText, TextToSpeech.QUEUE_FLUSH, null, "instructions");
-            updateSpeakButton(true);
+            ttsService.speak(rulesText, "instructions", new TTSListener() {
+                @Override
+                public void onStart(String id) {
+                    runOnUiThread(() -> updateSpeakButton(true));
+                }
+
+                @Override
+                public void onDone(String id) {
+                    runOnUiThread(() -> updateSpeakButton(false));
+                }
+
+                @Override
+                public void onError(String id) {
+                    runOnUiThread(() -> updateSpeakButton(false));
+                }
+            });
         }
     }
 
@@ -175,16 +164,15 @@ public class GameHomeScreenActivity extends BaseActivity {
     @Override
     public void onStop() {
         super.onStop();
-        if (tts != null) tts.stop();
+        ttsService.stop();
         if (currentRoom != null && !gameStarted) cancelSearch();
         updateSpeakButton(false);
     }
 
     @Override
     public void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
+        if (ttsService != null) {
+            ttsService.stop();
         }
         super.onDestroy();
     }
@@ -326,9 +314,8 @@ public class GameHomeScreenActivity extends BaseActivity {
                 gameStarted = true;
                 updateUI(SearchState.GAME_FOUND);
 
-                Intent intent = new Intent(GameHomeScreenActivity.this, MemoryGameActivity.class);
-                intent.putExtra("roomId", startedRoom.getId());
-                startActivity(intent);
+                onNavigate(new Intent(GameHomeScreenActivity.this, MemoryGameActivity.class)
+                        .putExtra("roomId", startedRoom.getId()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
             }
 
             @Override

@@ -268,9 +268,8 @@ public class UsersTableActivity extends BaseActivity {
             public void onCompleted(Void object) {
                 if (user.getId().equals(currentUser.getId())) {
                     sharedPreferencesUtil.signOutUser();
-                    Intent intent = new Intent(UsersTableActivity.this, LandingActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    onNavigate(new Intent(UsersTableActivity.this, LandingActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                     return;
                 }
                 usersMap.remove(user.getId());

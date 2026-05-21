@@ -70,10 +70,9 @@ public class ForumCategoriesActivity extends BaseActivity {
 
             @Override
             public void onClick(ForumCategory category) {
-                Intent intent = new Intent(ForumCategoriesActivity.this, ForumActivity.class);
-                intent.putExtra("categoryId", category.getId());
-                intent.putExtra("categoryName", category.getName());
-                startActivity(intent);
+                onNavigate(new Intent(ForumCategoriesActivity.this, ForumActivity.class)
+                        .putExtra("categoryId", category.getId())
+                        .putExtra("categoryName", category.getName()));
             }
         }, isAdmin);
         recyclerView.setAdapter(adapter);

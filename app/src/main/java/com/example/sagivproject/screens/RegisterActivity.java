@@ -87,10 +87,10 @@ public class RegisterActivity extends BaseActivity {
             public void onSuccess(User user) {
                 Toast.makeText(RegisterActivity.this, "ההרשמה בוצעה בהצלחה!", Toast.LENGTH_SHORT).show();
                 sharedPreferencesUtil.saveUser(user);
-                Intent intent = new Intent(RegisterActivity.this, EmergencyContactsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("isFromRegistration", true);
-                startActivity(intent);
+
+                onNavigate(new Intent(RegisterActivity.this, EmergencyContactsActivity.class)
+                        .putExtra("isFromRegistration", true)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
             }
 
             @Override

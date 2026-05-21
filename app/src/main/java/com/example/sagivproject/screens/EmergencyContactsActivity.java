@@ -103,14 +103,14 @@ public class EmergencyContactsActivity extends BaseActivity {
 
         findViewById(R.id.btn_send_emergency_sms).setOnClickListener(v -> checkSmsAndLocationPermissions());
         findViewById(R.id.btn_call_109).setOnClickListener(v -> callEmergency());
-        findViewById(R.id.btn_go_to_settings).setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
+        findViewById(R.id.btn_go_to_settings).setOnClickListener(v -> onNavigate(new Intent(this, SettingsActivity.class)));
 
         Button btnSkip = findViewById(R.id.btn_skip);
         isFromRegistration = getIntent().getBooleanExtra("isFromRegistration", false);
 
         if (isFromRegistration) {
             btnSkip.setVisibility(View.VISIBLE);
-            btnSkip.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
+            btnSkip.setOnClickListener(v -> onNavigate(new Intent(this, MainActivity.class)));
         } else {
             btnSkip.setVisibility(View.GONE);
         }

@@ -160,19 +160,6 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     /**
-     * Signs out the current user and clears local profile data.
-     *
-     * @return The email of the logged-out user.
-     */
-    @Override
-    public String logout() {
-        User user = sharedPreferencesUtil.getUser();
-        String email = user != null ? user.getEmail() : "";
-        sharedPreferencesUtil.signOutUser();
-        return email;
-    }
-
-    /**
      * Internal helper to generate a UID and create a new user record in the database.
      */
     private void createUser(String firstName, String lastName, String birthDate, String email, String password, DatabaseCallback<User> callback) {

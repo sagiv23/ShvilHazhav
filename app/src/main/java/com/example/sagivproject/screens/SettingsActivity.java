@@ -1,7 +1,6 @@
 package com.example.sagivproject.screens;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -407,13 +406,7 @@ public class SettingsActivity extends BaseActivity {
     private void logout() {
         Runnable onConfirm = () -> {
             fallDetectionService.stopMonitoring();
-            String email = databaseService.getAuthService().logout();
-            Toast.makeText(this, "התנתקת בהצלחה", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-            intent.putExtra("userEmail", email);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            onLogout();
         };
 
         dialogService.showConfirmDialog(getSupportFragmentManager(), "התנתקות", "האם ברצונך להתנתק?", "התנתק", "בטל", onConfirm);
