@@ -65,9 +65,11 @@ public class LoginActivity extends BaseActivity {
             return;
         }
 
+        showLoading();
         databaseService.getAuthService().login(email, password, new IAuthService.LoginCallback() {
             @Override
             public void onSuccess(User user) {
+                hideLoading();
                 sharedPreferencesUtil.saveUser(user);
                 if (user.isAdmin()) {
                     Toast.makeText(LoginActivity.this, "התחברת למשתמש מנהל בהצלחה!", Toast.LENGTH_SHORT).show();
@@ -79,6 +81,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onError(String message) {
+                hideLoading();
                 Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
             }
         });

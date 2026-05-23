@@ -145,9 +145,11 @@ public class MathProblemsActivity extends BaseActivity {
      * Refreshes the user's daily statistics from the database to ensure the UI is current.
      */
     private void fetchLatestStats() {
+        showLoading();
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
+                hideLoading();
                 if (updatedUser != null) {
                     user = updatedUser;
                     sharedPreferencesUtil.saveUser(user);
@@ -157,6 +159,7 @@ public class MathProblemsActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 updateStatsUI();
             }
         });

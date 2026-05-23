@@ -141,9 +141,11 @@ public class MedicationImagesTableActivity extends BaseActivity {
      * Synchronizes the local image cache with the Firebase database.
      */
     private void loadImages() {
+        showLoading();
         databaseService.getImageService().getAllImages(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ImageData> list) {
+                hideLoading();
                 allImages.clear();
                 if (list != null) allImages.addAll(list);
                 filterImages();
@@ -151,6 +153,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show();
             }
         });
@@ -185,9 +188,11 @@ public class MedicationImagesTableActivity extends BaseActivity {
             if (base64 != null) {
                 String newId = "card" + (allImages.size() + 1);
                 ImageData newImg = new ImageData(newId, base64);
+                showLoading();
                 databaseService.getImageService().createImage(newImg, new DatabaseCallback<>() {
                     @Override
                     public void onCompleted(Void object) {
+                        hideLoading();
                         Toast.makeText(MedicationImagesTableActivity.this, "התמונה נוספה כ-" + newId, Toast.LENGTH_SHORT).show();
                         allImages.add(newImg);
                         filterImages();
@@ -195,6 +200,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
                     @Override
                     public void onFailed(Exception e) {
+                        hideLoading();
                         Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -210,9 +216,11 @@ public class MedicationImagesTableActivity extends BaseActivity {
      * @param imageToDelete The image object to remove.
      */
     private void deleteImageAndReorder(ImageData imageToDelete) {
+        showLoading();
         databaseService.getImageService().deleteImage(imageToDelete.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 Toast.makeText(MedicationImagesTableActivity.this, "התמונה נמחקה בהצלחה", Toast.LENGTH_SHORT).show();
                 allImages.remove(imageToDelete);
                 reorderImages();
@@ -220,6 +228,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(MedicationImagesTableActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
             }
         });
@@ -232,15 +241,18 @@ public class MedicationImagesTableActivity extends BaseActivity {
         for (int i = 0; i < allImages.size(); i++)
             allImages.get(i).setId("card" + (i + 1));
 
+        showLoading();
         databaseService.getImageService().updateAllImages(allImages, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 Toast.makeText(MedicationImagesTableActivity.this, "הרשימה סודרה מחדש", Toast.LENGTH_SHORT).show();
                 filterImages();
             }
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(MedicationImagesTableActivity.this, "שגיאה בעדכון הרשימה", Toast.LENGTH_SHORT).show();
             }
         });

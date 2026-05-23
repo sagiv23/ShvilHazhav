@@ -24,6 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv_tip_of_the_day"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fillViewport="true"
@@ -58,6 +59,7 @@
                     tools:text="23/11/2008" />
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_daily_tip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
@@ -73,11 +75,21 @@
                         android:orientation="vertical"
                         android:padding="24dp">
 
+                        <TextView
+                            android:id="@+id/tv_tipOfTheDay_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/text_hebrew"
+                            android:gravity="center"
+                            android:textSize="22sp"
+                            tools:text="כאן יוצג הטיפ היומי" />
+
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_tip_speak"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="16dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/playback"
                             android:textAllCaps="false"
@@ -89,20 +101,11 @@
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
 
-                        <TextView
-                            android:id="@+id/tv_tipOfTheDay_content"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/text_hebrew"
-                            android:gravity="center"
-                            android:textSize="22sp"
-                            tools:text="כאן יוצג הטיפ היומי" />
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_inspiration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
@@ -127,6 +130,16 @@
                             android:textColor="@color/headline"
                             android:textSize="30sp" />
 
+                        <TextView
+                            android:id="@+id/tv_tipOfTheDay_inspiration_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:gravity="center"
+                            android:textSize="20sp"
+                            tools:text="כאן יופיע משפט השראה, סיפור קצר או בדיחה" />
+
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_inspiration_speak"
                             android:layout_width="wrap_content"
@@ -144,18 +157,187 @@
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
 
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tab_layout_admin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabRippleColor="@null"
+                    app:tabSelectedTextColor="@color/headline"
+                    app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Button"
+                    app:tabTextColor="@color/text_color">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all_tips" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/inspiration_pool" />
+                </com.google.android.material.tabs.TabLayout>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tab_layout_months"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"
+                    app:tabIndicatorColor="@color/headline"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabMode="scrollable"
+                    app:tabRippleColor="@null"
+                    app:tabSelectedTextColor="@color/headline"
+                    app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Button"
+                    app:tabTextColor="@color/text_color" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    app:strokeColor="?attr/colorOutline"
+                    app:strokeWidth="1.5dp">
+
+                    <CalendarView
+                        android:id="@+id/cv_tip_calendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_selected_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    app:strokeColor="@color/headline"
+                    app:strokeWidth="2dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="24dp">
+
+                        <ImageButton
+                            android:id="@+id/btn_close_selected_tip"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/exit"
+                            android:src="@drawable/ic_x"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/headline" />
+
                         <TextView
-                            android:id="@+id/tv_tipOfTheDay_inspiration_content"
-                            android:layout_width="match_parent"
+                            android:id="@+id/tv_selected_tip_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/headline_hebrew"
+                            android:text="@string/selected_tip"
+                            android:textColor="@color/headline"
+                            android:textSize="28sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_selected_tip_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_selected_tip_title"
+                            tools:text="20/05/2024" />
+
+                        <TextView
+                            android:id="@+id/tv_selected_tip_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
                             android:textSize="20sp"
-                            tools:text="כאן יופיע משפט השראה, סיפור קצר או בדיחה" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_selected_tip_date"
+                            tools:text="תוכן הטיפ שנבחר מהיומן יוצג כאן." />
 
-                    </LinearLayout>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_selected_tip_speak"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:text="@string/playback"
+                            android:textAllCaps="false"
+                            android:textSize="20sp"
+                            app:cornerRadius="30dp"
+                            app:icon="@drawable/ic_sound"
+                            app:iconGravity="textStart"
+                            app:iconPadding="12dp"
+                            app:iconSize="28dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_selected_tip_content"
+                            app:strokeWidth="1dp" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/add_new_tip"
+                    android:textAllCaps="false"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    app:cornerRadius="30dp"
+                    app:icon="@drawable/ic_add"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="28dp"
+                    app:strokeWidth="1dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_all_tips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone"
+                    tools:listitem="@layout/item_tip" />
+
+                <TextView
+                    android:id="@+id/tv_no_tips_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:fontFamily="@font/text_hebrew"
+                    android:text="@string/no_tips_to_show"
+                    android:textSize="22sp"
+                    android:visibility="gone" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

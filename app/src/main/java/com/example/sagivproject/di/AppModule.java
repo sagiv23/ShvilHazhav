@@ -15,6 +15,7 @@ import com.example.sagivproject.services.IImageService;
 import com.example.sagivproject.services.IMedicationService;
 import com.example.sagivproject.services.IMemoryGameService;
 import com.example.sagivproject.services.IStatsService;
+import com.example.sagivproject.services.ITTSService;
 import com.example.sagivproject.services.ITipOfTheDayService;
 import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.services.impl.AdapterService;
@@ -29,6 +30,7 @@ import com.example.sagivproject.services.impl.ImageServiceImpl;
 import com.example.sagivproject.services.impl.MedicationServiceImpl;
 import com.example.sagivproject.services.impl.MemoryGameServiceImpl;
 import com.example.sagivproject.services.impl.StatsServiceImpl;
+import com.example.sagivproject.services.impl.TTSServiceImpl;
 import com.example.sagivproject.services.impl.TipOfTheDayServiceImpl;
 import com.example.sagivproject.services.impl.UserServiceImpl;
 import com.google.firebase.database.DatabaseReference;
@@ -223,6 +225,10 @@ public abstract class AppModule {
     @Binds
     @Singleton
     public abstract IFallDetectionService bindFallDetectionService(FallDetectionServiceImpl fallDetectionService);
+
+    @Binds
+    @Singleton
+    public abstract ITTSService bindTTSService(TTSServiceImpl ttsService);
 
     /**
      * Nested Hilt module for activity-scoped bindings.

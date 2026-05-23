@@ -405,8 +405,13 @@ public class SettingsActivity extends BaseActivity {
      */
     private void logout() {
         Runnable onConfirm = () -> {
+            showLoading();
             fallDetectionService.stopMonitoring();
-            onLogout();
+            // We use a small delay or post to ensure the loading is visible before transition
+            getWindow().getDecorView().postDelayed(() -> {
+                hideLoading();
+                onLogout();
+            }, 500);
         };
 
         dialogService.showConfirmDialog(getSupportFragmentManager(), "התנתקות", "האם ברצונך להתנתק?", "התנתק", "בטל", onConfirm);

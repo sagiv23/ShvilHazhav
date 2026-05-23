@@ -110,9 +110,11 @@ public class ForumCategoriesActivity extends BaseActivity {
      * Fetches the current list of forum categories from the database.
      */
     private void loadCategories() {
+        showLoading();
         databaseService.getForumCategoriesService().getCategories(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ForumCategory> data) {
+                hideLoading();
                 adapter.setCategories(data);
                 TextView txtNoCategories = findViewById(R.id.txt_no_categories);
                 if (txtNoCategories != null) {
@@ -122,6 +124,7 @@ public class ForumCategoriesActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(ForumCategoriesActivity.this, "שגיאה בטעינת קטגוריות", Toast.LENGTH_SHORT).show();
             }
         });
@@ -134,9 +137,11 @@ public class ForumCategoriesActivity extends BaseActivity {
      * @param editText Reference to the input field to clear on success.
      */
     private void addCategory(String name, EditText editText) {
+        showLoading();
         databaseService.getForumCategoriesService().addCategory(name, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void data) {
+                hideLoading();
                 editText.setText("");
                 loadCategories();
                 Toast.makeText(ForumCategoriesActivity.this, "קטגוריה נוספה", Toast.LENGTH_SHORT).show();
@@ -144,6 +149,7 @@ public class ForumCategoriesActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(ForumCategoriesActivity.this, "שגיאה בהוספה", Toast.LENGTH_SHORT).show();
             }
         });
@@ -155,19 +161,23 @@ public class ForumCategoriesActivity extends BaseActivity {
      * @param category The category to edit.
      */
     private void showEditDialog(ForumCategory category) {
-        dialogService.showEditForumCategoryDialog(getSupportFragmentManager(), category, newName ->
-                databaseService.getForumCategoriesService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
-                    @Override
-                    public void onCompleted(Void data) {
-                        loadCategories();
-                        Toast.makeText(ForumCategoriesActivity.this, "שם הקטגוריה עודכן", Toast.LENGTH_SHORT).show();
-                    }
+        dialogService.showEditForumCategoryDialog(getSupportFragmentManager(), category, newName -> {
+            showLoading();
+            databaseService.getForumCategoriesService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
+                @Override
+                public void onCompleted(Void data) {
+                    hideLoading();
+                    loadCategories();
+                    Toast.makeText(ForumCategoriesActivity.this, "שם הקטגוריה עודכן", Toast.LENGTH_SHORT).show();
+                }
 
-                    @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(ForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show();
-                    }
-                }));
+                @Override
+                public void onFailed(Exception e) {
+                    hideLoading();
+                    Toast.makeText(ForumCategoriesActivity.this, "שגיאה בעדכון שם הקטגוריה", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     /**
@@ -176,15 +186,18 @@ public class ForumCategoriesActivity extends BaseActivity {
      * @param category The category to remove.
      */
     private void deleteCategory(ForumCategory category) {
+        showLoading();
         databaseService.getForumCategoriesService().deleteCategory(category.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void data) {
+                hideLoading();
                 adapter.removeCategory(category);
                 Toast.makeText(ForumCategoriesActivity.this, "הקטגוריה נמחקה", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(ForumCategoriesActivity.this, "שגיאה במחיקת הקטגוריה", Toast.LENGTH_SHORT).show();
             }
         });

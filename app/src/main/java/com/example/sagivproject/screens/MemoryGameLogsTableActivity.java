@@ -69,9 +69,11 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
      * Orchestrates the data loading sequence: first resolves names, then starts the game listener.
      */
     private void fetchUsersAndListenToGames() {
+        showLoading();
         databaseService.getUserService().getUserList(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> userList) {
+                hideLoading();
                 if (userList != null) {
                     for (User user : userList)
                         uidToNameMap.put(user.getId(), user.getFullName());
@@ -81,6 +83,7 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(MemoryGameLogsTableActivity.this, "שגיאה בטעינת שמות המשתמשים", Toast.LENGTH_SHORT).show();
                 listenToGamesRealtime();
             }

@@ -211,9 +211,11 @@ public class MedicationListActivity extends BaseActivity {
         String usageId = databaseService.getMedicationService().generateUsageId();
         MedicationUsage usage = new MedicationUsage(usageId, medication.getId(), time, scheduledTime, status);
 
+        showLoading();
         databaseService.getStatsService().logMedicationUsage(uid, usage, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 DailyStats stats = user.getTodayStats();
                 stats.addMedicationUsageLog(usage);
                 sharedPreferencesUtil.saveUser(user);
@@ -224,6 +226,7 @@ public class MedicationListActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 adapter.setProcessingFinished(medication.getId());
                 Toast.makeText(MedicationListActivity.this, "שגיאה בעדכון סטטוס", Toast.LENGTH_SHORT).show();
             }
@@ -243,14 +246,17 @@ public class MedicationListActivity extends BaseActivity {
      * Fetches the latest medication prescriptions from Firebase.
      */
     private void fetchMedicationsFromDB() {
+        showLoading();
         databaseService.getMedicationService().getUserMedicationList(uid, new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<Medication> list) {
+                hideLoading();
                 updateMedicationList(list);
             }
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(MedicationListActivity.this, "שגיאה בטעינה", Toast.LENGTH_SHORT).show();
             }
         });
@@ -282,9 +288,11 @@ public class MedicationListActivity extends BaseActivity {
     private void saveMedication(Medication medication) {
         String medicationId = databaseService.getMedicationService().generateMedicationId();
         medication.setId(medicationId);
+        showLoading();
         databaseService.getMedicationService().createNewMedication(uid, medication, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 checkNotificationPermissionAndSchedule(medication);
                 medicationMap.put(medication.getId(), medication);
                 updateUserCache();
@@ -294,6 +302,7 @@ public class MedicationListActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(MedicationListActivity.this, "שגיאה בשמירה", Toast.LENGTH_SHORT).show();
             }
         });
@@ -319,9 +328,11 @@ public class MedicationListActivity extends BaseActivity {
      * Commits medication updates and refreshes active alarms.
      */
     private void updateMedication(Medication med) {
+        showLoading();
         databaseService.getMedicationService().updateMedication(uid, med, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 notificationService.cancel(med);
                 checkNotificationPermissionAndSchedule(med);
                 medicationMap.put(med.getId(), med);
@@ -332,6 +343,7 @@ public class MedicationListActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(MedicationListActivity.this, "שגיאה בעדכון", Toast.LENGTH_SHORT).show();
             }
         });
@@ -341,9 +353,11 @@ public class MedicationListActivity extends BaseActivity {
      * Removes a medication record and terminates its scheduled alarms.
      */
     private void deleteMedicationById(Medication medication) {
+        showLoading();
         databaseService.getMedicationService().deleteMedication(uid, medication.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 notificationService.cancel(medication);
                 medicationMap.remove(medication.getId());
                 updateUserCache();
@@ -353,6 +367,7 @@ public class MedicationListActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(MedicationListActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
             }
         });

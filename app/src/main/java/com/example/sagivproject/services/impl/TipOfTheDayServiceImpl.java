@@ -21,6 +21,7 @@ import javax.inject.Inject;
  */
 public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> implements ITipOfTheDayService {
     private static final String TIP_OF_THE_DAY_PATH = "tip_of_the_day";
+    private static final String INSPIRATIONS_PATH = "inspirations";
     private final CalendarUtil calendarUtil;
 
     /**
@@ -91,5 +92,23 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
     @Override
     public void deleteTip(String dateId, IDatabaseService.DatabaseCallback<Void> callback) {
         delete(dateId, callback);
+    }
+
+    @Override
+    public void getAllInspirations(IDatabaseService.DatabaseCallback<List<TipOfTheDay>> callback) {
+        getDataList(INSPIRATIONS_PATH, callback);
+    }
+
+    @Override
+    public void saveInspiration(TipOfTheDay inspiration, IDatabaseService.DatabaseCallback<Void> callback) {
+        if (inspiration.getId() == null) {
+            inspiration.setId(databaseReference.child(INSPIRATIONS_PATH).push().getKey());
+        }
+        writeData(INSPIRATIONS_PATH + "/" + inspiration.getId(), inspiration, callback);
+    }
+
+    @Override
+    public void deleteInspiration(String id, IDatabaseService.DatabaseCallback<Void> callback) {
+        deleteData(INSPIRATIONS_PATH + "/" + id, callback);
     }
 }

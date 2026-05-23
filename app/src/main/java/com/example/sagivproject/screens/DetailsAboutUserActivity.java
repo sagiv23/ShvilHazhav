@@ -168,9 +168,11 @@ public class DetailsAboutUserActivity extends BaseActivity {
      */
     private void loadUserFromDatabase() {
         if (user == null) return;
+        showLoading();
         databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User dbUser) {
+                hideLoading();
                 if (dbUser != null) {
                     user = dbUser;
                     sharedPreferencesUtil.saveUser(user);
@@ -180,6 +182,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
             }
         });
@@ -219,21 +222,25 @@ public class DetailsAboutUserActivity extends BaseActivity {
      * Displays the dialog for editing user profile details.
      */
     private void openEditDialog() {
-        dialogService.showUserDialog(getSupportFragmentManager(), user, updatedUser ->
-                databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
-                    @Override
-                    public void onSuccess(User resultUser) {
-                        Toast.makeText(DetailsAboutUserActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
-                        sharedPreferencesUtil.saveUser(resultUser);
-                        user = resultUser;
-                        loadUserDetailsToUI();
-                    }
+        dialogService.showUserDialog(getSupportFragmentManager(), user, updatedUser -> {
+            showLoading();
+            databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
+                @Override
+                public void onSuccess(User resultUser) {
+                    hideLoading();
+                    Toast.makeText(DetailsAboutUserActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
+                    sharedPreferencesUtil.saveUser(resultUser);
+                    user = resultUser;
+                    loadUserDetailsToUI();
+                }
 
-                    @Override
-                    public void onError(String message) {
-                        Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show();
-                    }
-                }));
+                @Override
+                public void onError(String message) {
+                    hideLoading();
+                    Toast.makeText(DetailsAboutUserActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+            });
+        });
     }
 
     /**
@@ -278,15 +285,18 @@ public class DetailsAboutUserActivity extends BaseActivity {
         user.setProfileImage(null);
         imgUserProfile.setImageResource(R.drawable.ic_user);
 
+        showLoading();
         databaseService.getUserService().updateUser(user, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 sharedPreferencesUtil.saveUser(user);
                 Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל נמחקה", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(DetailsAboutUserActivity.this, "שגיאה במחיקת התמונה", Toast.LENGTH_SHORT).show();
             }
         });
@@ -308,15 +318,18 @@ public class DetailsAboutUserActivity extends BaseActivity {
      * Commits the updated profile image string to the database.
      */
     private void saveProfileImage() {
+        showLoading();
         databaseService.getUserService().updateUser(user, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 sharedPreferencesUtil.saveUser(user);
                 Toast.makeText(DetailsAboutUserActivity.this, "תמונת הפרופיל עודכנה!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(DetailsAboutUserActivity.this, "שגיאה בעדכון התמונה: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

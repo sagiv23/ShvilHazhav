@@ -72,20 +72,24 @@ public class UsersTableActivity extends BaseActivity {
 
         currentUser = sharedPreferencesUtil.getUser();
 
-        findViewById(R.id.btn_UsersTable_add_user).setOnClickListener(v -> dialogService.showUserDialog(getSupportFragmentManager(), null, newUser ->
-                databaseService.getAuthService().addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDate(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
-                    @Override
-                    public void onSuccess(User user) {
-                        usersMap.put(user.getId(), user);
-                        refreshList();
-                        Toast.makeText(UsersTableActivity.this, "משתמש נוסף בהצלחה", Toast.LENGTH_SHORT).show();
-                    }
+        findViewById(R.id.btn_UsersTable_add_user).setOnClickListener(v -> dialogService.showUserDialog(getSupportFragmentManager(), null, newUser -> {
+            showLoading();
+            databaseService.getAuthService().addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDate(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
+                @Override
+                public void onSuccess(User user) {
+                    hideLoading();
+                    usersMap.put(user.getId(), user);
+                    refreshList();
+                    Toast.makeText(UsersTableActivity.this, "משתמש נוסף בהצלחה", Toast.LENGTH_SHORT).show();
+                }
 
-                    @Override
-                    public void onError(String message) {
-                        Toast.makeText(UsersTableActivity.this, message, Toast.LENGTH_LONG).show();
-                    }
-                })));
+                @Override
+                public void onError(String message) {
+                    hideLoading();
+                    Toast.makeText(UsersTableActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+            });
+        }));
 
         adapter = adapterService.getUsersTableAdapter();
         adapter.init(new UsersTableAdapter.OnUserActionListener() {
@@ -102,25 +106,29 @@ public class UsersTableActivity extends BaseActivity {
             @Override
             public void onUserClicked(User clickedUser) {
                 User userCopy = new User(clickedUser);
-                dialogService.showUserDialog(getSupportFragmentManager(), userCopy, updatedUser ->
-                        databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
-                            @Override
-                            public void onSuccess(User resultUser) {
-                                usersMap.put(resultUser.getId(), resultUser);
-                                if (resultUser.getId().equals(currentUser.getId())) {
-                                    sharedPreferencesUtil.saveUser(resultUser);
-                                    currentUser = resultUser;
-                                }
-                                refreshList();
-
-                                Toast.makeText(UsersTableActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
+                dialogService.showUserDialog(getSupportFragmentManager(), userCopy, updatedUser -> {
+                    showLoading();
+                    databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
+                        @Override
+                        public void onSuccess(User resultUser) {
+                            hideLoading();
+                            usersMap.put(resultUser.getId(), resultUser);
+                            if (resultUser.getId().equals(currentUser.getId())) {
+                                sharedPreferencesUtil.saveUser(resultUser);
+                                currentUser = resultUser;
                             }
+                            refreshList();
 
-                            @Override
-                            public void onError(String message) {
-                                Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון: " + message, Toast.LENGTH_LONG).show();
-                            }
-                        }));
+                            Toast.makeText(UsersTableActivity.this, "פרטי המשתמש עודכנו", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            hideLoading();
+                            Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון: " + message, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                });
             }
 
             @Override
@@ -197,9 +205,11 @@ public class UsersTableActivity extends BaseActivity {
      * Fetches the complete user database from Firebase.
      */
     private void loadUsers() {
+        showLoading();
         databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> list) {
+                hideLoading();
                 usersMap.clear();
                 if (list != null) {
                     for (User user : list) {
@@ -213,6 +223,7 @@ public class UsersTableActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(UsersTableActivity.this, "שגיאה בהעלאת משתמשים", Toast.LENGTH_LONG).show();
             }
         });
@@ -225,9 +236,11 @@ public class UsersTableActivity extends BaseActivity {
      */
     private void handleToggleAdmin(User user) {
         User.UserRole newRole = user.getRole() == User.UserRole.ADMIN ? User.UserRole.REGULAR : User.UserRole.ADMIN;
+        showLoading();
         databaseService.getUserService().updateUserRole(user.getId(), newRole, new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 User updatedUser = new User(user);
                 updatedUser.setRole(newRole);
 
@@ -248,6 +261,7 @@ public class UsersTableActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(UsersTableActivity.this, "שגיאה בעדכון", Toast.LENGTH_SHORT).show();
             }
         });
@@ -263,9 +277,11 @@ public class UsersTableActivity extends BaseActivity {
      * @param user The user account to remove.
      */
     private void handleDeleteUser(User user) {
+        showLoading();
         databaseService.getUserService().deleteUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 if (user.getId().equals(currentUser.getId())) {
                     sharedPreferencesUtil.signOutUser();
                     onNavigate(new Intent(UsersTableActivity.this, LandingActivity.class)
@@ -279,6 +295,7 @@ public class UsersTableActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(UsersTableActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
             }
         });

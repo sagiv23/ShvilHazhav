@@ -82,9 +82,11 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
 
+        showLoading();
         databaseService.getAuthService().register(firstName, lastName, birthDate, email, password, new IAuthService.RegisterCallback() {
             @Override
             public void onSuccess(User user) {
+                hideLoading();
                 Toast.makeText(RegisterActivity.this, "ההרשמה בוצעה בהצלחה!", Toast.LENGTH_SHORT).show();
                 sharedPreferencesUtil.saveUser(user);
 
@@ -95,6 +97,7 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onError(String message) {
+                hideLoading();
                 Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
             }
         });

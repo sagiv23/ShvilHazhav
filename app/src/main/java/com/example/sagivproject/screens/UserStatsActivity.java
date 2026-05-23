@@ -237,9 +237,11 @@ public class UserStatsActivity extends BaseActivity {
     private void setupAdminUI() {
         if (loggedInUser.isAdmin()) {
             findViewById(R.id.card_user_selector).setVisibility(View.VISIBLE);
+            showLoading();
             databaseService.getUserService().getUserList(new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(List<User> list) {
+                    hideLoading();
                     if (list == null || list.isEmpty()) {
                         findViewById(R.id.card_user_selector).setVisibility(View.GONE);
                         return;
@@ -274,15 +276,16 @@ public class UserStatsActivity extends BaseActivity {
                         }
                     });
 
-                    // Trigger refresh for the first selected user
-                    if (!selectableUsers.isEmpty()) {
+                    // Initialize the current user to the first one in the list if it's the first load
+                    if (!selectableUsers.isEmpty() && currentUser.getId().equals(loggedInUser.getId())) {
                         currentUser = selectableUsers.get(0);
-                        refreshData();
+                        // refreshData() will be called by onResume or by the spinner listener below
                     }
                 }
 
                 @Override
                 public void onFailed(Exception e) {
+                    hideLoading();
                     Toast.makeText(UserStatsActivity.this, "שגיאה בטעינת משתמשים", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -302,9 +305,11 @@ public class UserStatsActivity extends BaseActivity {
      */
     private void fetchLatestUserData() {
         final String requestedUserId = currentUser.getId();
+        showLoading();
         databaseService.getUserService().getUser(requestedUserId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
+                hideLoading();
                 if (!requestedUserId.equals(currentUser.getId())) return;
                 if (updatedUser != null) {
                     currentUser = updatedUser;
@@ -320,6 +325,7 @@ public class UserStatsActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 if (!requestedUserId.equals(currentUser.getId())) return;
                 setupGraphs();
             }
@@ -388,18 +394,23 @@ public class UserStatsActivity extends BaseActivity {
         recyclerMedicationLogs.setLayoutManager(new LinearLayoutManager(this));
         usageAdapter = adapterService.getMedicationUsageAdapter();
         usageAdapter.setMedicationMap(currentUser.getMedications());
-        usageAdapter.setListener(usage -> dialogService.showConfirmDialog(getSupportFragmentManager(), "מחיקת תיעוד", "האם למחוק תיעוד זה?", "מחק", "בטל", () -> databaseService.getMedicationService().deleteMedicationUsageLog(currentUser.getId(), filteredDate, usage.getId(), new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(Void object) {
-                refreshData();
-                Toast.makeText(UserStatsActivity.this, "התיעוד נמחק", Toast.LENGTH_SHORT).show();
-            }
+        usageAdapter.setListener(usage -> dialogService.showConfirmDialog(getSupportFragmentManager(), "מחיקת תיעוד", "האם למחוק תיעוד זה?", "מחק", "בטל", () -> {
+            showLoading();
+            databaseService.getMedicationService().deleteMedicationUsageLog(currentUser.getId(), filteredDate, usage.getId(), new DatabaseCallback<>() {
+                @Override
+                public void onCompleted(Void object) {
+                    hideLoading();
+                    refreshData();
+                    Toast.makeText(UserStatsActivity.this, "התיעוד נמחק", Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(UserStatsActivity.this, "שגיאה במחיקת התיעוד", Toast.LENGTH_SHORT).show();
-            }
-        })));
+                @Override
+                public void onFailed(Exception e) {
+                    hideLoading();
+                    Toast.makeText(UserStatsActivity.this, "שגיאה במחיקת התיעוד", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }));
         recyclerMedicationLogs.setAdapter(usageAdapter);
     }
 
@@ -408,9 +419,11 @@ public class UserStatsActivity extends BaseActivity {
      */
     private void loadMedicationLogs() {
         final String requestedUserId = currentUser.getId();
+        showLoading();
         databaseService.getMedicationService().getMedicationUsageLogs(requestedUserId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<MedicationUsage> list) {
+                hideLoading();
                 if (!requestedUserId.equals(currentUser.getId())) return;
                 if (list != null) {
                     allLogs = new ArrayList<>(list);
@@ -426,6 +439,7 @@ public class UserStatsActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 if (!requestedUserId.equals(currentUser.getId())) return;
                 allLogs.clear();
                 usageAdapter.setData(new ArrayList<>());
@@ -439,21 +453,26 @@ public class UserStatsActivity extends BaseActivity {
      * Clears all historical usage logs for the user after user confirmation.
      */
     private void clearMedicationLogs() {
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס היסטוריה", "האם לאפס את כל ההיסטוריה?", "אפס הכל", "בטל", () -> databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(Void object) {
-                allLogs.clear();
-                usageAdapter.setData(new ArrayList<>());
-                applyFilter();
-                updateResetButtonState();
-                Toast.makeText(UserStatsActivity.this, "ההיסטוריה אופסה בהצלחה", Toast.LENGTH_SHORT).show();
-            }
+        dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס היסטוריה", "האם לאפס את כל ההיסטוריה?", "אפס הכל", "בטל", () -> {
+            showLoading();
+            databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
+                @Override
+                public void onCompleted(Void object) {
+                    hideLoading();
+                    allLogs.clear();
+                    usageAdapter.setData(new ArrayList<>());
+                    applyFilter();
+                    updateResetButtonState();
+                    Toast.makeText(UserStatsActivity.this, "ההיסטוריה אופסה בהצלחה", Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(UserStatsActivity.this, "שגיאה באיפוס ההיסטוריה", Toast.LENGTH_SHORT).show();
-            }
-        }));
+                @Override
+                public void onFailed(Exception e) {
+                    hideLoading();
+                    Toast.makeText(UserStatsActivity.this, "שגיאה באיפוס ההיסטוריה", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     /**
@@ -461,18 +480,23 @@ public class UserStatsActivity extends BaseActivity {
      */
     private void clearDayMedicationLogs() {
         if (filteredDate == null) return;
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס יום", "האם לאפס את התיעוד ליום זה?", "אפס יום", "בטל", () -> databaseService.getMedicationService().clearMedicationUsageLogsForDate(currentUser.getId(), filteredDate, new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(Void object) {
-                refreshData();
-                Toast.makeText(UserStatsActivity.this, "התיעוד ליום זה אופס", Toast.LENGTH_SHORT).show();
-            }
+        dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס יום", "האם לאפס את התיעוד ליום זה?", "אפס יום", "בטל", () -> {
+            showLoading();
+            databaseService.getMedicationService().clearMedicationUsageLogsForDate(currentUser.getId(), filteredDate, new DatabaseCallback<>() {
+                @Override
+                public void onCompleted(Void object) {
+                    hideLoading();
+                    refreshData();
+                    Toast.makeText(UserStatsActivity.this, "התיעוד ליום זה אופס", Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(UserStatsActivity.this, "שגיאה באיפוס היום", Toast.LENGTH_SHORT).show();
-            }
-        }));
+                @Override
+                public void onFailed(Exception e) {
+                    hideLoading();
+                    Toast.makeText(UserStatsActivity.this, "שגיאה באיפוס היום", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     /**

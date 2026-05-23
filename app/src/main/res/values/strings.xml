@@ -172,4 +172,10 @@
     <string name="no_tips_to_show">אין טיפים להצגה</string>
     <string name="tip_content">תוכן הטיפ</string>
     <string name="tip_date_hint">תאריך (לחץ לבחירה)</string>
+    <string name="add_new_tip">הוספת טיפ חדש</string>
+    <string name="add_new_inspiration">הוספת השראה חדשה</string>
+    <string name="all_tips">כל הטיפים</string>
+    <string name="inspiration_pool">מאגר השראות</string>
+    <string name="creating_tip">יוצר טיפ באמצעות AI…</string>
+    <string name="creating_inspiration">יוצר השראה באמצעות AI…</string>
 </resources>

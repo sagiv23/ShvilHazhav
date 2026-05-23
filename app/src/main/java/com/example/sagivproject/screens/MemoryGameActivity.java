@@ -58,6 +58,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * The total time limit for the entire game in milliseconds (1.5 minutes).
      */
     private static final long TOTAL_GAME_TIME_LIMIT = 90000;
+
     private final Map<String, String> imageCache = new HashMap<>();
     @Inject
     ImageUtil imageUtil;
@@ -195,9 +196,11 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      */
     private void setupGameBoard(GameRoom room) {
         if ((room.getCards() == null || room.getCards().isEmpty()) && user.getId().equals(room.getPlayer1Uid())) {
+            showLoading();
             databaseService.getImageService().getAllImages(new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(List<ImageData> allImages) {
+                    hideLoading();
                     if (allImages == null || allImages.size() < 6) {
                         Toast.makeText(MemoryGameActivity.this, "אין מספיק תמונות.", Toast.LENGTH_LONG).show();
                         databaseService.getGameService().cancelRoom(roomId, null);
@@ -217,6 +220,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
                 @Override
                 public void onFailed(Exception e) {
+                    hideLoading();
                     databaseService.getGameService().cancelRoom(roomId, null);
                     goBack();
                 }
@@ -356,20 +360,27 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     }
 
     /**
-     * Scans the board to determine if all pairs have been found.
+     * Scans the board to determine if all pairs have been found and scores are fully synchronized.
      */
     private void checkIfGameFinished() {
-        if (currentRoom.getCards() == null || currentRoom.getCards().isEmpty()) return;
+        if (currentRoom == null || currentRoom.getCards() == null || currentRoom.getCards().isEmpty())
+            return;
 
         // Don't check if game is already finished in DB
         if ("finished".equals(currentRoom.getStatus())) return;
 
         boolean allCardsMatched = currentRoom.getCards().stream().allMatch(Card::getIsMatched);
-        if (allCardsMatched) finishGame(currentRoom);
+        int totalScore = currentRoom.getPlayer1Score() + currentRoom.getPlayer2Score();
+        int totalPairs = currentRoom.getCards().size() / 2;
+
+        if (allCardsMatched && totalScore == totalPairs) {
+            finishGame(currentRoom);
+        }
     }
 
     /**
-     * Marks the game as finished and identifies the winner based on final scores.
+     * Mark the game as finished and identify the winner based on final scores.
+     * Note: This calculates the winner based on the provided room state.
      */
     private void finishGame(GameRoom room) {
         if (room == null || room.isStatsUpdated()) return;
@@ -377,12 +388,15 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         // Use a local flag to prevent multiple redundant calls from this same Activity instance
         room.setStatsUpdated(true);
 
+        // ALWAYS calculate winner from scores if not already set (e.g. by forfeit)
         String winnerUid = calculateWinner(room);
 
+        showLoading();
         // Update room status to finished and statsUpdated to true atomically
         databaseService.getGameService().finishGame(roomId, winnerUid, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Boolean isTransitioned) {
+                hideLoading();
                 // Only trigger stats updates if this specific call was the one that marked the game as finished
                 if (Boolean.TRUE.equals(isTransitioned)) {
                     if (room.getPlayer1Uid() != null) {
@@ -396,6 +410,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 // If it failed, allow retry from this client if necessary
                 room.setStatsUpdated(false);
             }
@@ -406,6 +421,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
      * Establishes a persistent listener for the game room's database node.
      */
     private void listenToGame() {
+        showLoading();
         databaseService.getImageService().getAllImages(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ImageData> allImages) {
@@ -420,6 +436,7 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 startListeningToRoom();
             }
         });
@@ -427,8 +444,14 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
     private void startListeningToRoom() {
         databaseService.getGameService().listenToGame(roomId, new DatabaseCallback<>() {
+            private boolean firstLoad = true;
+
             @Override
             public void onCompleted(GameRoom room) {
+                if (firstLoad) {
+                    hideLoading();
+                    firstLoad = false;
+                }
                 if (room == null) {
                     goBack();
                     return;
@@ -501,10 +524,13 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
     }
 
     /**
-     * Determines the winner UID or returns "draw".
+     * Determines the winner UID based on scores or returns "draw".
      */
     private String calculateWinner(GameRoom room) {
-        if (room.getWinnerUid() != null) return room.getWinnerUid();
+        // If a winner was already set (like in technical forfeit), respect it.
+        if (room.getWinnerUid() != null && !room.getWinnerUid().equals("draw"))
+            return room.getWinnerUid();
+
         int p1 = room.getPlayer1Score();
         int p2 = room.getPlayer2Score();
         if (p1 == p2) return "draw";

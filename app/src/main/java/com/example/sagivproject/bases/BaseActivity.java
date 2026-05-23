@@ -93,9 +93,15 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
     protected DrawerLayout drawerLayout;
 
     /**
+     * Dialog for showing loading animation.
+     */
+    private int loadingCount = 0;
+
+    /**
      * Callback to execute once a pending permission request is successfully granted.
      */
     private Runnable onPermissionGrantedCallback;
+
     /**
      * Standard launcher for requesting multiple runtime permissions.
      * Results are handled in {@link #onPermissionsResult(Map)}.
@@ -431,5 +437,27 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
      * @param isGranted A map where the keys are permissions and values are their granted status.
      */
     protected void onPermissionsResult(Map<String, Boolean> isGranted) {
+    }
+
+    /**
+     * Shows a non-cancelable loading dialog.
+     * Uses a counter to handle multiple concurrent loading processes.
+     */
+    protected void showLoading() {
+        loadingCount++;
+        if (loadingCount == 1) {
+            dialogService.showLoadingDialog(getSupportFragmentManager());
+        }
+    }
+
+    /**
+     * Hides the loading dialog if it is currently visible and no other processes are loading.
+     */
+    protected void hideLoading() {
+        loadingCount--;
+        if (loadingCount <= 0) {
+            loadingCount = 0;
+            dialogService.hideLoadingDialog();
+        }
     }
 }

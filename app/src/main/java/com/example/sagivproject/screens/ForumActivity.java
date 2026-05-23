@@ -133,15 +133,18 @@ public class ForumActivity extends BaseActivity {
         adapter.setForumMessageListener(new ForumAdapter.ForumMessageListener() {
             @Override
             public void onClick(ForumMessage message) {
+                showLoading();
                 databaseService.getForumService().deleteMessage(message.getId(), categoryId, new DatabaseCallback<>() {
                     @Override
                     public void onCompleted(Void data) {
+                        hideLoading();
                         adapter.removeMessage(message);
                         Toast.makeText(ForumActivity.this, "ההודעה נמחקה", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailed(Exception e) {
+                        hideLoading();
                         Toast.makeText(ForumActivity.this, "שגיאה במחיקה", Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -119,29 +119,36 @@ public class EmergencyContactsActivity extends BaseActivity {
         adapter.setListener(new EmergencyContactsAdapter.OnContactActionListener() {
             @Override
             public void onEdit(EmergencyContact contact) {
-                dialogService.showEmergencyContactDialog(getSupportFragmentManager(), contact, updatedContact -> databaseService.getEmergencyService().updateContact(user.getId(), updatedContact, new IDatabaseService.DatabaseCallback<>() {
-                    @Override
-                    public void onCompleted(Void object) {
-                        Toast.makeText(EmergencyContactsActivity.this, "איש הקשר עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                        if (user != null) {
-                            user.getEmergencyContacts().put(updatedContact.getId(), updatedContact);
-                            sharedPreferencesUtil.saveUser(user);
-                            loadContacts();
+                dialogService.showEmergencyContactDialog(getSupportFragmentManager(), contact, updatedContact -> {
+                    showLoading();
+                    databaseService.getEmergencyService().updateContact(user.getId(), updatedContact, new IDatabaseService.DatabaseCallback<>() {
+                        @Override
+                        public void onCompleted(Void object) {
+                            hideLoading();
+                            Toast.makeText(EmergencyContactsActivity.this, "איש הקשר עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                            if (user != null) {
+                                user.getEmergencyContacts().put(updatedContact.getId(), updatedContact);
+                                sharedPreferencesUtil.saveUser(user);
+                                loadContacts();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(EmergencyContactsActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
-                    }
-                }));
+                        @Override
+                        public void onFailed(Exception e) {
+                            hideLoading();
+                            Toast.makeText(EmergencyContactsActivity.this, "שגיאה בעדכון הנתונים", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                });
             }
 
             @Override
             public void onDelete(EmergencyContact contact) {
+                showLoading();
                 databaseService.getEmergencyService().deleteContact(user.getId(), contact.getId(), new IDatabaseService.DatabaseCallback<>() {
                     @Override
                     public void onCompleted(Void object) {
+                        hideLoading();
                         Toast.makeText(EmergencyContactsActivity.this, "איש הקשר נמחק", Toast.LENGTH_SHORT).show();
                         if (user != null) {
                             user.getEmergencyContacts().remove(contact.getId());
@@ -152,6 +159,7 @@ public class EmergencyContactsActivity extends BaseActivity {
 
                     @Override
                     public void onFailed(Exception e) {
+                        hideLoading();
                         Toast.makeText(EmergencyContactsActivity.this, "שגיאה במחיקת איש הקשר", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -233,9 +241,11 @@ public class EmergencyContactsActivity extends BaseActivity {
      */
     private void loadUserFromDatabase() {
         if (user == null) return;
+        showLoading();
         databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(User dbUser) {
+                hideLoading();
                 if (dbUser != null) {
                     user = dbUser;
                     sharedPreferencesUtil.saveUser(user);
@@ -245,6 +255,7 @@ public class EmergencyContactsActivity extends BaseActivity {
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(EmergencyContactsActivity.this, "שגיאה בטעינת נתונים", Toast.LENGTH_SHORT).show();
                 loadContacts();
             }
@@ -282,15 +293,18 @@ public class EmergencyContactsActivity extends BaseActivity {
      * Logic for adding a new contact record.
      */
     private void addEmergencyContact(String firstName, String lastName, String phoneNumber) {
+        showLoading();
         databaseService.getEmergencyService().addContact(user.getId(), firstName, lastName, phoneNumber, new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 Toast.makeText(EmergencyContactsActivity.this, "איש קשר חדש נוסף", Toast.LENGTH_SHORT).show();
                 loadUserFromDatabase();
             }
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -380,15 +394,18 @@ public class EmergencyContactsActivity extends BaseActivity {
     private void sendSmsToAll(@Nullable String locationUrl) {
         if (user == null) return;
         List<EmergencyContact> contacts = new ArrayList<>(user.getEmergencyContacts().values());
+        showLoading();
         databaseService.getEmergencyService().sendEmergencyAlert(EmergencyContactsActivity.this, contacts, locationUrl, new IDatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
+                hideLoading();
                 Toast.makeText(EmergencyContactsActivity.this, "הודעות חירום נשלחו בהצלחה", Toast.LENGTH_SHORT).show();
                 vibrateDevice();
             }
 
             @Override
             public void onFailed(Exception e) {
+                hideLoading();
                 Toast.makeText(EmergencyContactsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

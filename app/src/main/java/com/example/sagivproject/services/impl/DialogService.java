@@ -8,14 +8,19 @@ import com.example.sagivproject.dialogs.ConfirmDialog;
 import com.example.sagivproject.dialogs.EditForumCategoryDialog;
 import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.dialogs.FullImageDialog;
+import com.example.sagivproject.dialogs.LoadingDialog;
 import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.dialogs.ProfileImageDialog;
+import com.example.sagivproject.dialogs.TipDialog;
 import com.example.sagivproject.dialogs.UserDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDialogService;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -39,6 +44,10 @@ public class DialogService implements IDialogService {
     private final Provider<ProfileImageDialog> profileImageDialogProvider;
     private final Provider<ConfirmDialog> confirmDialogProvider;
     private final Provider<EmergencyContactDialog> addEmergencyContactDialogProvider;
+    private final Provider<TipDialog> tipDialogProvider;
+    private final Provider<LoadingDialog> loadingDialogProvider;
+
+    private LoadingDialog currentLoadingDialog;
 
     /**
      * Constructs a new DialogService with providers for all dialog fragments.
@@ -51,7 +60,9 @@ public class DialogService implements IDialogService {
             Provider<FullImageDialog> fullImageDialogProvider,
             Provider<ProfileImageDialog> profileImageDialogProvider,
             Provider<ConfirmDialog> confirmDialogProvider,
-            Provider<EmergencyContactDialog> addEmergencyContactDialogProvider
+            Provider<EmergencyContactDialog> addEmergencyContactDialogProvider,
+            Provider<TipDialog> tipDialogProvider,
+            Provider<LoadingDialog> loadingDialogProvider
     ) {
         this.medicationDialogProvider = medicationDialogProvider;
         this.userDialogProvider = userDialogProvider;
@@ -60,6 +71,8 @@ public class DialogService implements IDialogService {
         this.profileImageDialogProvider = profileImageDialogProvider;
         this.confirmDialogProvider = confirmDialogProvider;
         this.addEmergencyContactDialogProvider = addEmergencyContactDialogProvider;
+        this.tipDialogProvider = tipDialogProvider;
+        this.loadingDialogProvider = loadingDialogProvider;
     }
 
     /**
@@ -160,5 +173,53 @@ public class DialogService implements IDialogService {
         ConfirmDialog dialog = confirmDialogProvider.get();
         dialog.setData(title, message, confirmText, cancelText, onConfirm);
         dialog.show(fm, "ConfirmDialog");
+    }
+
+    /**
+     * Displays a dialog to add a new tip of the day or edit an existing one.
+     *
+     * @param fm            The {@link FragmentManager}.
+     * @param tip           The {@link TipOfTheDay} to edit, or null for a new one.
+     * @param existingDates List of date IDs that already have a tip.
+     * @param listener      The listener to handle the tip submission.
+     */
+    @Override
+    public void showTipDialog(FragmentManager fm, TipOfTheDay tip, List<String> existingDates, TipDialog.TipDialogListener listener) {
+        TipDialog dialog = tipDialogProvider.get();
+        dialog.setInspirationMode(false);
+        dialog.setData(tip, existingDates, listener);
+        dialog.show(fm, "TipDialog");
+    }
+
+    @Override
+    public void showInspirationDialog(FragmentManager fm, TipOfTheDay inspiration, TipDialog.TipDialogListener listener) {
+        TipDialog dialog = tipDialogProvider.get();
+        dialog.setInspirationMode(true);
+        dialog.setData(inspiration, listener);
+        dialog.show(fm, "InspirationDialog");
+    }
+
+    /**
+     * Displays a non-cancelable loading dialog.
+     *
+     * @param fm The {@link FragmentManager}.
+     */
+    @Override
+    public void showLoadingDialog(FragmentManager fm) {
+        if (currentLoadingDialog == null || !currentLoadingDialog.isAdded()) {
+            currentLoadingDialog = loadingDialogProvider.get();
+            currentLoadingDialog.show(fm, "LoadingDialog");
+        }
+    }
+
+    /**
+     * Hides the currently displayed loading dialog.
+     */
+    @Override
+    public void hideLoadingDialog() {
+        if (currentLoadingDialog != null && currentLoadingDialog.isAdded()) {
+            currentLoadingDialog.dismiss();
+            currentLoadingDialog = null;
+        }
     }
 }

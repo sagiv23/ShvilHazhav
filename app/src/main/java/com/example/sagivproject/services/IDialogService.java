@@ -8,11 +8,15 @@ import com.example.sagivproject.dialogs.EditForumCategoryDialog;
 import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.dialogs.ProfileImageDialog;
+import com.example.sagivproject.dialogs.TipDialog;
 import com.example.sagivproject.dialogs.UserDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.Medication;
+import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.models.User;
+
+import java.util.List;
 
 /**
  * Interface for managing the creation and display of all dialog fragments in the application.
@@ -86,4 +90,35 @@ public interface IDialogService {
      * @param onConfirm   The Runnable to execute upon user confirmation.
      */
     void showConfirmDialog(FragmentManager fm, String title, String message, String confirmText, String cancelText, Runnable onConfirm);
+
+    /**
+     * Displays a dialog to add a new tip of the day or edit an existing one.
+     *
+     * @param fm            The {@link FragmentManager}.
+     * @param tip           The {@link TipOfTheDay} to edit, or null for a new one.
+     * @param existingDates List of date IDs that already have a tip.
+     * @param listener      The listener to handle the tip submission.
+     */
+    void showTipDialog(FragmentManager fm, TipOfTheDay tip, List<String> existingDates, TipDialog.TipDialogListener listener);
+
+    /**
+     * Displays a dialog to add or edit an inspiration.
+     *
+     * @param fm          The {@link FragmentManager}.
+     * @param inspiration The inspiration to edit, or null for a new one.
+     * @param listener    The listener to handle submission.
+     */
+    void showInspirationDialog(FragmentManager fm, TipOfTheDay inspiration, TipDialog.TipDialogListener listener);
+
+    /**
+     * Displays a non-cancelable loading dialog.
+     *
+     * @param fm The {@link FragmentManager}.
+     */
+    void showLoadingDialog(FragmentManager fm);
+
+    /**
+     * Hides the currently displayed loading dialog.
+     */
+    void hideLoadingDialog();
 }

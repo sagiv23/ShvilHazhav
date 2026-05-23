@@ -57,4 +57,27 @@ public interface ITipOfTheDayService {
      * @param callback The callback to be invoked upon completion.
      */
     void deleteTip(String dateId, IDatabaseService.DatabaseCallback<Void> callback);
+
+    /**
+     * Retrieves all custom inspirations from the database.
+     *
+     * @param callback The callback invoked with the list of inspirations.
+     */
+    void getAllInspirations(IDatabaseService.DatabaseCallback<List<TipOfTheDay>> callback);
+
+    /**
+     * Saves a new or updated inspiration.
+     *
+     * @param inspiration The inspiration object.
+     * @param callback    The callback to be invoked upon completion.
+     */
+    void saveInspiration(TipOfTheDay inspiration, IDatabaseService.DatabaseCallback<Void> callback);
+
+    /**
+     * Deletes an inspiration by its ID.
+     *
+     * @param id       The inspiration ID.
+     * @param callback The callback to be invoked upon completion.
+     */
+    void deleteInspiration(String id, IDatabaseService.DatabaseCallback<Void> callback);
 }
