@@ -79,7 +79,6 @@
                             android:textSize="20sp" />
 
                         <View
-                            android:id="@+id/separator_dark_mode"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:alpha="0.7"

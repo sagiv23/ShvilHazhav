@@ -20,7 +20,6 @@
         android:padding="16dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_itemTip_icon"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:contentDescription="@string/icon_daily_tip"
