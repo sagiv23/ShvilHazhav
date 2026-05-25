@@ -220,6 +220,11 @@ public class MedicationListActivity extends BaseActivity {
                 stats.addMedicationUsageLog(usage);
                 sharedPreferencesUtil.saveUser(user);
 
+                if (status == MedicationStatus.TAKEN) {
+                    notificationService.cancelSpecificTime(medication.getId(), scheduledTime);
+                    notificationService.scheduleSpecificTime(medication, scheduledTime, true);
+                }
+
                 adapter.addLoggedTodayMedication(usage);
                 Toast.makeText(MedicationListActivity.this, "סטטוס עודכן: " + status.getDisplayName(), Toast.LENGTH_SHORT).show();
             }

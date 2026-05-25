@@ -129,10 +129,12 @@ public class NotificationReceiver extends BroadcastReceiver {
         DailyStats stats = user.getDailyStats().get(today);
         if (stats != null && stats.getMedicationUsageLogs() != null) {
             for (MedicationUsage usage : stats.getMedicationUsageLogs()) {
-                if (usage.getMedicationId().equals(medicationId) && usage.getStatus() == MedicationStatus.TAKEN) {
-                    // Already taken today, just reschedule for tomorrow
+                if (usage.getMedicationId().equals(medicationId) &&
+                        usage.getScheduledTime().equals(hourStr) &&
+                        usage.getStatus() == MedicationStatus.TAKEN) {
+                    // Already taken today for this scheduled time, just reschedule for tomorrow
                     Medication medication = user.getMedications().get(medicationId);
-                    if (medication != null && hourStr != null) {
+                    if (medication != null) {
                         notificationService.scheduleSpecificTime(medication, hourStr, true);
                     }
                     return;

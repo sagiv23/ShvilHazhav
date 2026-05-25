@@ -39,10 +39,7 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.fragment
-    implementation libs.navigation.fragment
-    implementation libs.navigation.ui
     implementation libs.constraintlayout
-    implementation libs.preference
     implementation libs.annotation
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
