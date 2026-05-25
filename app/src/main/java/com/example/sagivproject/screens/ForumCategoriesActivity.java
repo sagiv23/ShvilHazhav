@@ -14,11 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.ForumCategoryAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.EditForumCategoryDialog;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -36,7 +40,11 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ForumCategoriesActivity extends BaseActivity {
-    private ForumCategoryAdapter adapter;
+    @Inject
+    protected ForumCategoryAdapter adapter;
+
+    @Inject
+    protected Provider<EditForumCategoryDialog> editForumCategoryDialogProvider;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +59,6 @@ public class ForumCategoriesActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_forumCategories);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = adapterService.getForumCategoryAdapter();
         adapter.init(new ForumCategoryAdapter.OnCategoryInteractionListener() {
             @Override
             public void onDelete(ForumCategory category) {
@@ -111,7 +118,7 @@ public class ForumCategoriesActivity extends BaseActivity {
      */
     private void loadCategories() {
         showLoading();
-        databaseService.getForumCategoriesService().getCategories(new DatabaseCallback<>() {
+        databaseService.getForumService().getCategories(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ForumCategory> data) {
                 hideLoading();
@@ -138,7 +145,7 @@ public class ForumCategoriesActivity extends BaseActivity {
      */
     private void addCategory(String name, EditText editText) {
         showLoading();
-        databaseService.getForumCategoriesService().addCategory(name, new DatabaseCallback<>() {
+        databaseService.getForumService().addCategory(name, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void data) {
                 hideLoading();
@@ -161,9 +168,10 @@ public class ForumCategoriesActivity extends BaseActivity {
      * @param category The category to edit.
      */
     private void showEditDialog(ForumCategory category) {
-        dialogService.showEditForumCategoryDialog(getSupportFragmentManager(), category, newName -> {
+        EditForumCategoryDialog dialog = editForumCategoryDialogProvider.get();
+        dialog.setData(category, newName -> {
             showLoading();
-            databaseService.getForumCategoriesService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
+            databaseService.getForumService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void data) {
                     hideLoading();
@@ -178,6 +186,7 @@ public class ForumCategoriesActivity extends BaseActivity {
                 }
             });
         });
+        dialog.show(getSupportFragmentManager(), "EditForumCategoryDialog");
     }
 
     /**
@@ -187,7 +196,7 @@ public class ForumCategoriesActivity extends BaseActivity {
      */
     private void deleteCategory(ForumCategory category) {
         showLoading();
-        databaseService.getForumCategoriesService().deleteCategory(category.getId(), new DatabaseCallback<>() {
+        databaseService.getForumService().deleteCategory(category.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void data) {
                 hideLoading();

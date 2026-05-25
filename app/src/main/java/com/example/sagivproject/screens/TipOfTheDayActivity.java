@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.TipAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.ConfirmDialog;
+import com.example.sagivproject.dialogs.TipDialog;
 import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
@@ -51,6 +53,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -84,37 +87,35 @@ public class TipOfTheDayActivity extends BaseActivity {
      */
     @Inject
     protected ITTSService ttsService;
-
+    /**
+     * Adapter for managing TipOfTheDay items in the RecyclerView.
+     */
+    @Inject
+    protected TipAdapter tipAdapter;
+    @Inject
+    protected Provider<TipDialog> tipDialogProvider;
+    @Inject
+    protected Provider<ConfirmDialog> confirmDialogProvider;
     /**
      * UI components for displaying tip and inspiration content.
      */
     private TextView tipContent, tvInspirationContent, tvSelectedTipDate, tvSelectedTipContent, tvNoTipsError;
-
     /**
      * Buttons for triggering audio playback of content.
      */
     private Button btnTipSpeak, btnInspirationSpeak, btnSelectedTipSpeak;
-
     /**
      * RecyclerView for displaying a list of tips (Admin view).
      */
     private RecyclerView rvAllTips;
-
     /**
      * TabLayout for filtering tips by month.
      */
     private TabLayout tabLayoutMonths;
-
     /**
      * TabLayout for switching between Tips and Inspirations in Admin view.
      */
     private TabLayout tabLayoutAdmin;
-
-    /**
-     * Adapter for managing TipOfTheDay items in the RecyclerView.
-     */
-    private TipAdapter tipAdapter;
-
     /**
      * Container view for the details of a selected tip.
      */
@@ -199,7 +200,6 @@ public class TipOfTheDayActivity extends BaseActivity {
                 }
             }
 
-            tipAdapter = adapterService.getTipAdapter();
             tipAdapter.setAdmin(true, new TipAdapter.OnTipActionListener() {
                 @Override
                 public void onEdit(TipOfTheDay tip) {
@@ -474,7 +474,9 @@ public class TipOfTheDayActivity extends BaseActivity {
      * @param inspiration The inspiration to edit, or null for a new one.
      */
     private void showEditInspirationDialog(@Nullable TipOfTheDay inspiration) {
-        dialogService.showInspirationDialog(getSupportFragmentManager(), inspiration, updatedInspiration -> {
+        TipDialog dialog = tipDialogProvider.get();
+        dialog.setInspirationMode(true);
+        dialog.setData(inspiration, updatedInspiration -> {
             showLoading();
             databaseService.getTipOfTheDayService().saveInspiration(updatedInspiration, new IDatabaseService.DatabaseCallback<>() {
                 @Override
@@ -491,6 +493,7 @@ public class TipOfTheDayActivity extends BaseActivity {
                 }
             });
         });
+        dialog.show(getSupportFragmentManager(), "InspirationDialog");
     }
 
     /**
@@ -499,7 +502,8 @@ public class TipOfTheDayActivity extends BaseActivity {
      * @param inspiration The inspiration to delete.
      */
     private void showDeleteInspirationDialog(TipOfTheDay inspiration) {
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "מחיקת השראה", "האם למחוק השראה זו?", "מחק", "ביטול", () -> {
+        ConfirmDialog dialog = confirmDialogProvider.get();
+        dialog.setData("מחיקת השראה", "האם למחוק השראה זו?", "מחק", "ביטול", () -> {
             showLoading();
             databaseService.getTipOfTheDayService().deleteInspiration(inspiration.getId(), new IDatabaseService.DatabaseCallback<>() {
                 @Override
@@ -514,6 +518,7 @@ public class TipOfTheDayActivity extends BaseActivity {
                 }
             });
         });
+        dialog.show(getSupportFragmentManager(), "DeleteInspirationDialog");
     }
 
     /**
@@ -555,8 +560,10 @@ public class TipOfTheDayActivity extends BaseActivity {
                             android.widget.Toast.makeText(TipOfTheDayActivity.this, "יוצר טיפ יומי באמצעות AI...", android.widget.Toast.LENGTH_SHORT).show();
                             fetchDailyTipFromAI();
                         } else {
-                            dialogService.showConfirmDialog(getSupportFragmentManager(), "שגיאה", "לא נמצא טיפ לתאריך זה.", "אישור", null, () -> {
+                            ConfirmDialog dialog = confirmDialogProvider.get();
+                            dialog.setData("שגיאה", "לא נמצא טיפ לתאריך זה.", "אישור", null, () -> {
                             });
+                            dialog.show(getSupportFragmentManager(), "ErrorDialog");
                         }
                     }
                 }
@@ -564,8 +571,10 @@ public class TipOfTheDayActivity extends BaseActivity {
                 @Override
                 public void onFailed(Exception e) {
                     hideLoading();
-                    dialogService.showConfirmDialog(getSupportFragmentManager(), "שגיאה", "שגיאה בחיפוש הטיפ.", "אישור", null, () -> {
+                    ConfirmDialog dialog = confirmDialogProvider.get();
+                    dialog.setData("שגיאה", "שגיאה בחיפוש הטיפ.", "אישור", null, () -> {
                     });
+                    dialog.show(getSupportFragmentManager(), "SearchErrorDialog");
                 }
             });
         }
@@ -581,7 +590,9 @@ public class TipOfTheDayActivity extends BaseActivity {
                 .map(TipOfTheDay::getId)
                 .collect(Collectors.toList());
 
-        dialogService.showTipDialog(getSupportFragmentManager(), tip, existingDates, updatedTip -> {
+        TipDialog dialog = tipDialogProvider.get();
+        dialog.setInspirationMode(false);
+        dialog.setData(tip, existingDates, updatedTip -> {
             showLoading();
             databaseService.getTipOfTheDayService().saveTip(updatedTip, new IDatabaseService.DatabaseCallback<>() {
                 @Override
@@ -599,6 +610,7 @@ public class TipOfTheDayActivity extends BaseActivity {
                 }
             });
         });
+        dialog.show(getSupportFragmentManager(), "EditTipDialog");
     }
 
     /**
@@ -607,7 +619,8 @@ public class TipOfTheDayActivity extends BaseActivity {
      * @param tip The tip to be deleted.
      */
     private void showDeleteTipDialog(TipOfTheDay tip) {
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "מחיקת טיפ", "האם אתה בטוח שברצונך למחוק את הטיפ הזה?", "מחק", "ביטול", () -> {
+        ConfirmDialog dialog = confirmDialogProvider.get();
+        dialog.setData("מחיקת טיפ", "האם אתה בטוח שברצונך למחוק את הטיפ הזה?", "מחק", "ביטול", () -> {
             showLoading();
             databaseService.getTipOfTheDayService().deleteTip(tip.getId(), new IDatabaseService.DatabaseCallback<>() {
                 @Override
@@ -625,6 +638,7 @@ public class TipOfTheDayActivity extends BaseActivity {
                 }
             });
         });
+        dialog.show(getSupportFragmentManager(), "DeleteTipDialog");
     }
 
     /**

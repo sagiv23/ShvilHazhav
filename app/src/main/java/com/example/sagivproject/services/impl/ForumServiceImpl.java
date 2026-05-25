@@ -3,6 +3,7 @@ package com.example.sagivproject.services.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
@@ -12,7 +13,9 @@ import com.example.sagivproject.utils.CalendarUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -261,5 +264,79 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
      */
     private String getCategoryPath(String categoryId) {
         return FORUM_PATH + "/" + categoryId + "/messages";
+    }
+
+    /**
+     * Retrieves all forum categories with real-time updates.
+     *
+     * @param callback A callback invoked with the list of categories whenever the data changes.
+     */
+    @Override
+    public void getCategories(DatabaseCallback<List<ForumCategory>> callback) {
+        readData(FORUM_PATH).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<ForumCategory> categories = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    ForumCategory category = child.getValue(ForumCategory.class);
+                    if (category != null) {
+                        categories.add(category);
+                    }
+                }
+                if (callback != null) callback.onCompleted(categories);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (callback != null) callback.onFailed(error.toException());
+            }
+        });
+    }
+
+    /**
+     * Adds a new forum category to the database.
+     */
+    @Override
+    public void addCategory(String name, DatabaseCallback<Void> callback) {
+        String categoryId = generateId();
+        ForumCategory category = new ForumCategory(categoryId, name);
+        writeData(FORUM_PATH + "/" + categoryId, category, callback);
+    }
+
+    /**
+     * Deletes a forum category and all of its associated messages.
+     */
+    @Override
+    public void deleteCategory(String categoryId, DatabaseCallback<Void> callback) {
+        deleteData(FORUM_PATH + "/" + categoryId, callback);
+    }
+
+    /**
+     * Updates the display name of an existing forum category.
+     */
+    @Override
+    public void updateCategoryName(String categoryId, String newName, DatabaseCallback<Void> callback) {
+        readData(FORUM_PATH + "/" + categoryId).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                ForumCategory category = currentData.getValue(ForumCategory.class);
+                if (category != null) {
+                    category.setName(newName);
+                    currentData.setValue(category);
+                }
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (callback == null) return;
+                if (error != null) {
+                    callback.onFailed(error.toException());
+                } else {
+                    callback.onCompleted(null);
+                }
+            }
+        });
     }
 }

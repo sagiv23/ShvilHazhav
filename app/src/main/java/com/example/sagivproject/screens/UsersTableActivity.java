@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.UsersTableAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.FullImageDialog;
+import com.example.sagivproject.dialogs.UserDialog;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
@@ -27,6 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -51,7 +56,14 @@ public class UsersTableActivity extends BaseActivity {
      */
     private final Map<String, User> usersMap = new HashMap<>();
 
-    private UsersTableAdapter adapter;
+    @Inject
+    protected UsersTableAdapter adapter;
+
+    @Inject
+    protected Provider<UserDialog> userDialogProvider;
+
+    @Inject
+    protected Provider<FullImageDialog> fullImageDialogProvider;
 
     /**
      * UI controls for searching and filtering the user table.
@@ -72,26 +84,29 @@ public class UsersTableActivity extends BaseActivity {
 
         currentUser = sharedPreferencesUtil.getUser();
 
-        findViewById(R.id.btn_UsersTable_add_user).setOnClickListener(v -> dialogService.showUserDialog(getSupportFragmentManager(), null, newUser -> {
-            showLoading();
-            databaseService.getAuthService().addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDate(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
-                @Override
-                public void onSuccess(User user) {
-                    hideLoading();
-                    usersMap.put(user.getId(), user);
-                    refreshList();
-                    Toast.makeText(UsersTableActivity.this, "משתמש נוסף בהצלחה", Toast.LENGTH_SHORT).show();
-                }
+        findViewById(R.id.btn_UsersTable_add_user).setOnClickListener(v -> {
+            UserDialog dialog = userDialogProvider.get();
+            dialog.setData(null, newUser -> {
+                showLoading();
+                databaseService.getAuthService().addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDate(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
+                    @Override
+                    public void onSuccess(User user) {
+                        hideLoading();
+                        usersMap.put(user.getId(), user);
+                        refreshList();
+                        Toast.makeText(UsersTableActivity.this, "משתמש נוסף בהצלחה", Toast.LENGTH_SHORT).show();
+                    }
 
-                @Override
-                public void onError(String message) {
-                    hideLoading();
-                    Toast.makeText(UsersTableActivity.this, message, Toast.LENGTH_LONG).show();
-                }
+                    @Override
+                    public void onError(String message) {
+                        hideLoading();
+                        Toast.makeText(UsersTableActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+                });
             });
-        }));
+            dialog.show(getSupportFragmentManager(), "UserDialog");
+        });
 
-        adapter = adapterService.getUsersTableAdapter();
         adapter.init(new UsersTableAdapter.OnUserActionListener() {
             @Override
             public void onToggleAdmin(User user) {
@@ -106,7 +121,8 @@ public class UsersTableActivity extends BaseActivity {
             @Override
             public void onUserClicked(User clickedUser) {
                 User userCopy = new User(clickedUser);
-                dialogService.showUserDialog(getSupportFragmentManager(), userCopy, updatedUser -> {
+                UserDialog dialog = userDialogProvider.get();
+                dialog.setData(userCopy, updatedUser -> {
                     showLoading();
                     databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
                         @Override
@@ -129,13 +145,17 @@ public class UsersTableActivity extends BaseActivity {
                         }
                     });
                 });
+                dialog.show(getSupportFragmentManager(), "EditUserDialog");
             }
 
             @Override
             public void onUserImageClicked(User user, ImageView imageView) {
                 Drawable drawable = imageView.getDrawable();
-                if (drawable != null)
-                    dialogService.showFullImageDialog(getSupportFragmentManager(), drawable);
+                if (drawable != null) {
+                    FullImageDialog dialog = fullImageDialogProvider.get();
+                    dialog.setImage(drawable);
+                    dialog.show(getSupportFragmentManager(), "FullImageDialog");
+                }
             }
         });
 

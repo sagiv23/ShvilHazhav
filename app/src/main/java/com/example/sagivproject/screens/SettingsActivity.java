@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.ConfirmDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IFallDetectionService;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -41,6 +43,9 @@ public class SettingsActivity extends BaseActivity {
      */
     @Inject
     protected IFallDetectionService fallDetectionService;
+
+    @Inject
+    protected Provider<ConfirmDialog> confirmDialogProvider;
 
     /**
      * UI switches for controlling various application preferences and permissions.
@@ -245,11 +250,12 @@ public class SettingsActivity extends BaseActivity {
      * Displays a confirmation dialog redirecting the user to system settings to revoke permissions.
      */
     private void showRedirectDialog() {
-        dialogService.showConfirmDialog(getSupportFragmentManager(),
-                "ניהול הרשאות",
+        ConfirmDialog dialog = confirmDialogProvider.get();
+        dialog.setData("ניהול הרשאות",
                 "כדי לבטל הרשאות, עליך לעבור להגדרות המערכת של האפליקציה.",
                 "להגדרות", "ביטול",
                 this::openAppSettings);
+        dialog.show(getSupportFragmentManager(), "RedirectSettingsDialog");
     }
 
     /**
@@ -341,11 +347,12 @@ public class SettingsActivity extends BaseActivity {
      */
     private void checkBackgroundLocationAndEnable() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            dialogService.showConfirmDialog(getSupportFragmentManager(),
-                    "הרשאת מיקום ברקע",
+            ConfirmDialog dialog = confirmDialogProvider.get();
+            dialog.setData("הרשאת מיקום ברקע",
                     "כדי שנוכל לשלוח את המיקום שלך לאנשי הקשר בזמן נפילה, עליך לאשר הרשאת 'אפשר תמיד' (Allow all the time) בהגדרות המיקום של האפליקציה.",
                     "להגדרות", "בטל",
                     () -> runWithPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION, this::checkContactsAndEnableFallDetection));
+            dialog.show(getSupportFragmentManager(), "BackgroundLocationDialog");
             switchFallDetection.setChecked(false);
         } else {
             checkContactsAndEnableFallDetection();
@@ -414,6 +421,8 @@ public class SettingsActivity extends BaseActivity {
             }, 500);
         };
 
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "התנתקות", "האם ברצונך להתנתק?", "התנתק", "בטל", onConfirm);
+        ConfirmDialog dialog = confirmDialogProvider.get();
+        dialog.setData("התנתקות", "האם ברצונך להתנתק?", "התנתק", "בטל", onConfirm);
+        dialog.show(getSupportFragmentManager(), "LogoutConfirmDialog");
     }
 }

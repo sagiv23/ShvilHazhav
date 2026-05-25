@@ -3,13 +3,10 @@ package com.example.sagivproject.di;
 import android.app.AlarmManager;
 import android.content.Context;
 
-import com.example.sagivproject.services.IAdapterService;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
-import com.example.sagivproject.services.IDialogService;
 import com.example.sagivproject.services.IEmergencyService;
 import com.example.sagivproject.services.IFallDetectionService;
-import com.example.sagivproject.services.IForumCategoriesService;
 import com.example.sagivproject.services.IForumService;
 import com.example.sagivproject.services.IImageService;
 import com.example.sagivproject.services.IMedicationService;
@@ -18,13 +15,10 @@ import com.example.sagivproject.services.IStatsService;
 import com.example.sagivproject.services.ITTSService;
 import com.example.sagivproject.services.ITipOfTheDayService;
 import com.example.sagivproject.services.IUserService;
-import com.example.sagivproject.services.impl.AdapterService;
 import com.example.sagivproject.services.impl.AuthServiceImpl;
 import com.example.sagivproject.services.impl.DatabaseService;
-import com.example.sagivproject.services.impl.DialogService;
 import com.example.sagivproject.services.impl.EmergencyServiceImpl;
 import com.example.sagivproject.services.impl.FallDetectionServiceImpl;
-import com.example.sagivproject.services.impl.ForumCategoriesServiceImpl;
 import com.example.sagivproject.services.impl.ForumServiceImpl;
 import com.example.sagivproject.services.impl.ImageServiceImpl;
 import com.example.sagivproject.services.impl.MedicationServiceImpl;
@@ -43,9 +37,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
-import dagger.hilt.android.components.ActivityComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
-import dagger.hilt.android.scopes.ActivityScoped;
 import dagger.hilt.components.SingletonComponent;
 
 /**
@@ -167,16 +159,6 @@ public abstract class AppModule {
     public abstract IForumService bindForumService(ForumServiceImpl forumService);
 
     /**
-     * Binds the {@link IForumCategoriesService} interface to its implementation.
-     *
-     * @param forumCategoryService The {@link ForumCategoriesServiceImpl} implementation.
-     * @return The bound interface.
-     */
-    @Binds
-    @Singleton
-    public abstract IForumCategoriesService bindForumCategoryService(ForumCategoriesServiceImpl forumCategoryService);
-
-    /**
      * Binds the {@link IMemoryGameService} interface to its implementation.
      *
      * @param gameService The {@link MemoryGameServiceImpl} implementation.
@@ -229,35 +211,4 @@ public abstract class AppModule {
     @Binds
     @Singleton
     public abstract ITTSService bindTTSService(TTSServiceImpl ttsService);
-
-    /**
-     * Nested Hilt module for activity-scoped bindings.
-     * <p>
-     * This module must be installed in {@link ActivityComponent} because the services it binds
-     * are scoped to the activity lifecycle.
-     * </p>
-     */
-    @Module
-    @InstallIn(ActivityComponent.class)
-    public interface ActivityBindingsModule {
-        /**
-         * Binds the {@link IDialogService} interface to its implementation.
-         *
-         * @param dialogService The {@link DialogService} implementation.
-         * @return The bound interface.
-         */
-        @Binds
-        @ActivityScoped
-        IDialogService bindDialogService(DialogService dialogService);
-
-        /**
-         * Binds the {@link IAdapterService} interface to its implementation.
-         *
-         * @param adapterService The {@link AdapterService} implementation.
-         * @return The bound interface.
-         */
-        @Binds
-        @ActivityScoped
-        IAdapterService bindAdapterService(AdapterService adapterService);
-    }
 }

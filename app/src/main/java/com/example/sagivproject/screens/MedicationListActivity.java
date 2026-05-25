@@ -22,6 +22,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationListAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.MedicationDialog;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
@@ -41,6 +42,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -67,15 +69,15 @@ public class MedicationListActivity extends BaseActivity {
 
     @Inject
     protected CalendarUtil calendarUtil;
-
+    @Inject
+    protected MedicationListAdapter adapter;
+    @Inject
+    protected Provider<MedicationDialog> medicationDialogProvider;
     /**
      * Utility for scheduling system alarms for medication reminders.
      */
     @Inject
     NotificationService notificationService;
-
-    private MedicationListAdapter adapter;
-
     /**
      * Profile of the currently logged-in user.
      */
@@ -105,7 +107,6 @@ public class MedicationListActivity extends BaseActivity {
 
         ViewPager2 viewPager_medications = findViewById(R.id.viewPager_medications);
 
-        adapter = adapterService.getMedicationListAdapter();
         adapter.setListener(new MedicationListAdapter.OnMedicationActionListener() {
             @Override
             public void onEdit(Medication medication) {
@@ -382,13 +383,15 @@ public class MedicationListActivity extends BaseActivity {
      * Opens the specialized dialog for adding or modifying medications.
      */
     private void openMedicationDialog(Medication medToEdit) {
-        dialogService.showMedicationDialog(getSupportFragmentManager(), medToEdit, medication -> {
+        MedicationDialog dialog = medicationDialogProvider.get();
+        dialog.setData(medToEdit, medication -> {
             if (medToEdit == null) {
                 saveMedication(medication);
             } else {
                 updateMedication(medication);
             }
         });
+        dialog.show(getSupportFragmentManager(), "MedicationDialog");
     }
 
     /**

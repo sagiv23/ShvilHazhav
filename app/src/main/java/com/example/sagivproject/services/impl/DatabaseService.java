@@ -3,7 +3,6 @@ package com.example.sagivproject.services.impl;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IEmergencyService;
-import com.example.sagivproject.services.IForumCategoriesService;
 import com.example.sagivproject.services.IForumService;
 import com.example.sagivproject.services.IImageService;
 import com.example.sagivproject.services.IMedicationService;
@@ -33,23 +32,21 @@ public class DatabaseService implements IDatabaseService {
     private final IStatsService statsService;
     private final IForumService forumService;
     private final IImageService imageService;
-    private final IForumCategoriesService forumCategoriesService;
     private final ITipOfTheDayService tipOfTheDayService;
     private final IEmergencyService emergencyService;
 
     /**
      * Constructs a new DatabaseService with all specific sub-services injected.
      *
-     * @param authService            Service handling authentication and user creation logic.
-     * @param userService            Service for direct user-related database CRUD operations.
-     * @param medicationService      Service managing medication records and usage logs.
-     * @param gameService            Service coordinating memory game sessions and logic.
-     * @param statsService           Service for updating and retrieving activity statistics.
-     * @param forumService           Service for forum message persistence and retrieval.
-     * @param imageService           Service managing image assets for game cards.
-     * @param forumCategoriesService Service for managing forum discussion topics.
-     * @param tipOfTheDayService     Service providing daily health and motivational tips.
-     * @param emergencyService       Service managing emergency contacts and SMS alerts.
+     * @param authService        Service handling authentication and user creation logic.
+     * @param userService        Service for direct user-related database CRUD operations.
+     * @param medicationService  Service managing medication records and usage logs.
+     * @param gameService        Service coordinating memory game sessions and logic.
+     * @param statsService       Service for updating and retrieving activity statistics.
+     * @param forumService       Service for forum message persistence and retrieval.
+     * @param imageService       Service managing image assets for game cards.
+     * @param tipOfTheDayService Service providing daily health and motivational tips.
+     * @param emergencyService   Service managing emergency contacts and SMS alerts.
      */
     @Inject
     public DatabaseService(
@@ -60,7 +57,6 @@ public class DatabaseService implements IDatabaseService {
             IStatsService statsService,
             IForumService forumService,
             IImageService imageService,
-            IForumCategoriesService forumCategoriesService,
             ITipOfTheDayService tipOfTheDayService,
             IEmergencyService emergencyService
     ) {
@@ -71,7 +67,6 @@ public class DatabaseService implements IDatabaseService {
         this.statsService = statsService;
         this.forumService = forumService;
         this.imageService = imageService;
-        this.forumCategoriesService = forumCategoriesService;
         this.tipOfTheDayService = tipOfTheDayService;
         this.emergencyService = emergencyService;
     }
@@ -130,14 +125,6 @@ public class DatabaseService implements IDatabaseService {
     @Override
     public IImageService getImageService() {
         return imageService;
-    }
-
-    /**
-     * @return The forum category management service.
-     */
-    @Override
-    public IForumCategoriesService getForumCategoriesService() {
-        return forumCategoriesService;
     }
 
     /**

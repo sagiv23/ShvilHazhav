@@ -23,6 +23,7 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.GraphAdapter;
 import com.example.sagivproject.adapters.MedicationUsageAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.ConfirmDialog;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.GraphData;
 import com.example.sagivproject.models.MedicationUsage;
@@ -42,6 +43,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -70,20 +72,21 @@ public class UserStatsActivity extends BaseActivity {
      */
     @Inject
     protected CalendarUtil calendarUtil;
-
+    @Inject
+    protected GraphAdapter graphAdapter;
+    @Inject
+    protected MedicationUsageAdapter usageAdapter;
+    @Inject
+    protected Provider<ConfirmDialog> confirmDialogProvider;
     /**
      * UI components for graph display and navigation.
      */
     private ViewPager2 viewPagerGraphs;
-    private GraphAdapter graphAdapter;
     private TabLayout tabLayoutGraphs;
-
     /**
      * UI components for historical log display.
      */
     private RecyclerView recyclerMedicationLogs;
-    private MedicationUsageAdapter usageAdapter;
-
     /**
      * The user whose statistics are currently being displayed.
      */
@@ -157,7 +160,6 @@ public class UserStatsActivity extends BaseActivity {
      * Initializes the ViewPager2 and TabLayout used to display the XY graphs.
      */
     private void setupGraphsUI() {
-        graphAdapter = adapterService.getGraphAdapter();
         viewPagerGraphs.setAdapter(graphAdapter);
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.text_hebrew);
@@ -186,8 +188,10 @@ public class UserStatsActivity extends BaseActivity {
             filteredDate = dbDate;
             applyFilter();
             if (usageAdapter != null && usageAdapter.getItemCount() == 0) {
-                dialogService.showConfirmDialog(getSupportFragmentManager(), "שגיאה", "לא נמצא תיעוד לתאריך זה.", "אישור", null, () -> {
+                ConfirmDialog dialog = confirmDialogProvider.get();
+                dialog.setData("שגיאה", "לא נמצא תיעוד לתאריך זה.", "אישור", null, () -> {
                 });
+                dialog.show(getSupportFragmentManager(), "ErrorDialog");
             }
         }, false, true, CalendarUtil.DEFAULT_DATE_FORMAT);
     }
@@ -392,25 +396,28 @@ public class UserStatsActivity extends BaseActivity {
      */
     private void setupMedicationLogs() {
         recyclerMedicationLogs.setLayoutManager(new LinearLayoutManager(this));
-        usageAdapter = adapterService.getMedicationUsageAdapter();
         usageAdapter.setMedicationMap(currentUser.getMedications());
-        usageAdapter.setListener(usage -> dialogService.showConfirmDialog(getSupportFragmentManager(), "מחיקת תיעוד", "האם למחוק תיעוד זה?", "מחק", "בטל", () -> {
-            showLoading();
-            databaseService.getMedicationService().deleteMedicationUsageLog(currentUser.getId(), filteredDate, usage.getId(), new DatabaseCallback<>() {
-                @Override
-                public void onCompleted(Void object) {
-                    hideLoading();
-                    refreshData();
-                    Toast.makeText(UserStatsActivity.this, "התיעוד נמחק", Toast.LENGTH_SHORT).show();
-                }
+        usageAdapter.setListener(usage -> {
+            ConfirmDialog dialog = confirmDialogProvider.get();
+            dialog.setData("מחיקת תיעוד", "האם למחוק תיעוד זה?", "מחק", "בטל", () -> {
+                showLoading();
+                databaseService.getMedicationService().deleteMedicationUsageLog(currentUser.getId(), filteredDate, usage.getId(), new DatabaseCallback<>() {
+                    @Override
+                    public void onCompleted(Void object) {
+                        hideLoading();
+                        refreshData();
+                        Toast.makeText(UserStatsActivity.this, "התיעוד נמחק", Toast.LENGTH_SHORT).show();
+                    }
 
-                @Override
-                public void onFailed(Exception e) {
-                    hideLoading();
-                    Toast.makeText(UserStatsActivity.this, "שגיאה במחיקת התיעוד", Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onFailed(Exception e) {
+                        hideLoading();
+                        Toast.makeText(UserStatsActivity.this, "שגיאה במחיקת התיעוד", Toast.LENGTH_SHORT).show();
+                    }
+                });
             });
-        }));
+            dialog.show(getSupportFragmentManager(), "DeleteUsageDialog");
+        });
         recyclerMedicationLogs.setAdapter(usageAdapter);
     }
 
@@ -453,7 +460,8 @@ public class UserStatsActivity extends BaseActivity {
      * Clears all historical usage logs for the user after user confirmation.
      */
     private void clearMedicationLogs() {
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס היסטוריה", "האם לאפס את כל ההיסטוריה?", "אפס הכל", "בטל", () -> {
+        ConfirmDialog dialog = confirmDialogProvider.get();
+        dialog.setData("איפוס היסטוריה", "האם לאפס את כל ההיסטוריה?", "אפס הכל", "בטל", () -> {
             showLoading();
             databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
                 @Override
@@ -473,6 +481,7 @@ public class UserStatsActivity extends BaseActivity {
                 }
             });
         });
+        dialog.show(getSupportFragmentManager(), "ClearAllLogsDialog");
     }
 
     /**
@@ -480,7 +489,8 @@ public class UserStatsActivity extends BaseActivity {
      */
     private void clearDayMedicationLogs() {
         if (filteredDate == null) return;
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "איפוס יום", "האם לאפס את התיעוד ליום זה?", "אפס יום", "בטל", () -> {
+        ConfirmDialog dialog = confirmDialogProvider.get();
+        dialog.setData("איפוס יום", "האם לאפס את התיעוד ליום זה?", "אפס יום", "בטל", () -> {
             showLoading();
             databaseService.getMedicationService().clearMedicationUsageLogsForDate(currentUser.getId(), filteredDate, new DatabaseCallback<>() {
                 @Override
@@ -497,6 +507,7 @@ public class UserStatsActivity extends BaseActivity {
                 }
             });
         });
+        dialog.show(getSupportFragmentManager(), "ClearDayLogsDialog");
     }
 
     /**

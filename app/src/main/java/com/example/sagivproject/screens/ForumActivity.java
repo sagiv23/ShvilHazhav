@@ -51,14 +51,13 @@ public class ForumActivity extends BaseActivity {
      */
     @Inject
     protected ITTSService ttsService;
+    @Inject
+    protected ForumAdapter adapter;
     private RecyclerView recycler;
     /**
      * Sticky button that appears when new messages arrive while the user is scrolled up.
      */
     private Button btnNewMessagesIndicator;
-
-    private ForumAdapter adapter;
-
     /**
      * Unique ID of the forum category being displayed.
      */
@@ -111,7 +110,6 @@ public class ForumActivity extends BaseActivity {
         layoutManager.setStackFromEnd(true);
         recycler.setLayoutManager(layoutManager);
 
-        adapter = adapterService.getForumAdapter();
         adapter.setCurrentUserId(user.getId());
         recycler.setAdapter(adapter);
 

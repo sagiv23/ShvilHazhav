@@ -52,24 +52,21 @@ public class GameHomeScreenActivity extends BaseActivity {
      */
     @Inject
     protected ITTSService ttsService;
+    @Inject
+    protected LeaderboardAdapter adapter;
     private Button btnFindEnemy, btnCancelFindEnemy, btnSpeak;
     /**
      * UI component for displaying the current matchmaking status.
      */
     private TextView TVStatusOfFindingEnemy;
-
     /**
      * State of the current search or active game room.
      */
     private GameRoom currentRoom;
-
     /**
      * Flag indicating if a game session has officially begun.
      */
     private boolean gameStarted = false;
-
-    private LeaderboardAdapter adapter;
-
     /**
      * Profile of the local user.
      */
@@ -99,7 +96,6 @@ public class GameHomeScreenActivity extends BaseActivity {
         btnSpeak.setOnClickListener(v -> toggleInstructionsSpeech());
 
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
-        adapter = adapterService.getLeaderboardAdapter();
         rvLeaderboard.setAdapter(adapter);
 
         updateUI(SearchState.IDLE);

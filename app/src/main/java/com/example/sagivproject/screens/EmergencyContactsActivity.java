@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.EmergencyContactsAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IDatabaseService;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -60,7 +62,11 @@ public class EmergencyContactsActivity extends BaseActivity {
     @Inject
     protected IFallDetectionService fallDetectionService;
 
-    private EmergencyContactsAdapter adapter;
+    @Inject
+    protected EmergencyContactsAdapter adapter;
+
+    @Inject
+    protected Provider<EmergencyContactDialog> emergencyContactDialogProvider;
 
     /**
      * Local reference to the user's profile and emergency contacts.
@@ -93,9 +99,11 @@ public class EmergencyContactsActivity extends BaseActivity {
         findViewById(R.id.btn_enable_emergency_permissions).setOnClickListener(v ->
                 runWithPermissions(this::updatePermissionUI, Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION));
 
-        findViewById(R.id.btn_add_contact_dialog).setOnClickListener(v ->
-                dialogService.showEmergencyContactDialog(getSupportFragmentManager(), null, contact -> addEmergencyContact(contact.getFirstName(), contact.getLastName(), contact.getPhoneNumber()))
-        );
+        findViewById(R.id.btn_add_contact_dialog).setOnClickListener(v -> {
+            EmergencyContactDialog dialog = emergencyContactDialogProvider.get();
+            dialog.setData(null, contact -> addEmergencyContact(contact.getFirstName(), contact.getLastName(), contact.getPhoneNumber()));
+            dialog.show(getSupportFragmentManager(), "AddEmergencyContactDialog");
+        });
 
         findViewById(R.id.btn_pick_contact).setOnClickListener(v ->
                 runWithPermission(Manifest.permission.READ_CONTACTS, () -> contactPickerLauncher.launch(null))
@@ -115,11 +123,11 @@ public class EmergencyContactsActivity extends BaseActivity {
             btnSkip.setVisibility(View.GONE);
         }
 
-        adapter = adapterService.getEmergencyContactsAdapter();
         adapter.setListener(new EmergencyContactsAdapter.OnContactActionListener() {
             @Override
             public void onEdit(EmergencyContact contact) {
-                dialogService.showEmergencyContactDialog(getSupportFragmentManager(), contact, updatedContact -> {
+                EmergencyContactDialog dialog = emergencyContactDialogProvider.get();
+                dialog.setData(contact, updatedContact -> {
                     showLoading();
                     databaseService.getEmergencyService().updateContact(user.getId(), updatedContact, new IDatabaseService.DatabaseCallback<>() {
                         @Override
@@ -140,6 +148,7 @@ public class EmergencyContactsActivity extends BaseActivity {
                         }
                     });
                 });
+                dialog.show(getSupportFragmentManager(), "EditEmergencyContactDialog");
             }
 
             @Override

@@ -34,14 +34,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.sagivproject.R;
+import com.example.sagivproject.dialogs.LoadingDialog;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.screens.AdminPageActivity;
 import com.example.sagivproject.screens.LandingActivity;
 import com.example.sagivproject.screens.LoginActivity;
 import com.example.sagivproject.screens.MainActivity;
-import com.example.sagivproject.services.IAdapterService;
 import com.example.sagivproject.services.IDatabaseService;
-import com.example.sagivproject.services.IDialogService;
 import com.example.sagivproject.ui.AppMenuFragment;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
@@ -50,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -78,19 +78,14 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
     @Inject
     protected IDatabaseService databaseService;
     /**
-     * Activity-scoped service for providing RecyclerView adapters.
-     */
-    @Inject
-    protected IAdapterService adapterService;
-    /**
-     * Activity-scoped service for showing UI dialogs.
-     */
-    @Inject
-    protected IDialogService dialogService;
-    /**
      * The root layout for the navigation drawer.
      */
     protected DrawerLayout drawerLayout;
+
+    @Inject
+    protected Provider<LoadingDialog> loadingDialogProvider;
+
+    private LoadingDialog currentLoadingDialog;
 
     /**
      * Dialog for showing loading animation.
@@ -446,7 +441,10 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
     protected void showLoading() {
         loadingCount++;
         if (loadingCount == 1) {
-            dialogService.showLoadingDialog(getSupportFragmentManager());
+            if (currentLoadingDialog == null || !currentLoadingDialog.isAdded()) {
+                currentLoadingDialog = loadingDialogProvider.get();
+                currentLoadingDialog.show(getSupportFragmentManager(), "LoadingDialog");
+            }
         }
     }
 
@@ -457,7 +455,10 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
         loadingCount--;
         if (loadingCount <= 0) {
             loadingCount = 0;
-            dialogService.hideLoadingDialog();
+            if (currentLoadingDialog != null && currentLoadingDialog.isAdded()) {
+                currentLoadingDialog.dismiss();
+                currentLoadingDialog = null;
+            }
         }
     }
 }

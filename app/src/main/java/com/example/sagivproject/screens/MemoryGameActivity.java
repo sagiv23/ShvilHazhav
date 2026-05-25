@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MemoryGameAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.ConfirmDialog;
 import com.example.sagivproject.models.Card;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.ImageData;
@@ -31,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -61,35 +63,31 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
 
     private final Map<String, String> imageCache = new HashMap<>();
     @Inject
+    protected MemoryGameAdapter adapter;
+    @Inject
+    protected Provider<ConfirmDialog> confirmDialogProvider;
+    @Inject
     ImageUtil imageUtil;
-
     /**
      * UI components for the game board and timers.
      */
     private RecyclerView recyclerCards;
-
     /**
      * Flags for managing game conclusion and move locking.
      */
     private boolean endDialogShown = false, localLock = false;
-
     /**
      * Unique identifier for the shared game session.
      */
     private String roomId;
-
     /**
      * Profile of the local player.
      */
     private User user;
-
     /**
      * The shared real-time state of the game room.
      */
     private GameRoom currentRoom;
-
-    private MemoryGameAdapter adapter;
-
     /**
      * UI elements for time tracking.
      */
@@ -120,7 +118,6 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
         tvTimer = findViewById(R.id.tv_OnlineMemoryGame_timer);
         tvTotalTimer = findViewById(R.id.tv_OnlineMemoryGame_total_timer);
 
-        adapter = adapterService.getMemoryGameAdapter();
         adapter.setListener(this);
         recyclerCards.setAdapter(adapter);
 
@@ -147,7 +144,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             }
             goBack();
         };
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "יציאה מהמשחק", "האם ברצונך לצאת מהמשחק? יציאה תביא להפסד טכני.", "צא", "בטל", onConfirm);
+        ConfirmDialog dialog = confirmDialogProvider.get();
+        dialog.setData("יציאה מהמשחק", "האם ברצונך לצאת מהמשחק? יציאה תביא להפסד טכני.", "צא", "בטל", onConfirm);
+        dialog.show(getSupportFragmentManager(), "ExitGameDialog");
     }
 
     /**
@@ -173,7 +172,9 @@ public class MemoryGameActivity extends BaseActivity implements MemoryGameAdapte
             message = "הפעם הפסדת... לא נורא!";
         }
 
-        dialogService.showConfirmDialog(getSupportFragmentManager(), "המשחק הסתיים", message, "אישור", null, this::goBack);
+        ConfirmDialog dialog = confirmDialogProvider.get();
+        dialog.setData("המשחק הסתיים", message, "אישור", null, this::goBack);
+        dialog.show(getSupportFragmentManager(), "GameEndDialog");
     }
 
     /**

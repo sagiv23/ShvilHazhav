@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -38,7 +40,8 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
      */
     private final Map<String, String> uidToNameMap = new HashMap<>();
 
-    private MemoryGameLogAdapter adapter;
+    @Inject
+    protected MemoryGameLogAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +52,6 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_MemoryGameLogsTable);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = adapterService.getMemoryGameLogAdapter();
         recyclerView.setAdapter(adapter);
     }
 

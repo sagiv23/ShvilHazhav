@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.MedicationImagesTableAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.FullImageDialog;
 import com.example.sagivproject.models.ImageData;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.utils.ImageUtil;
@@ -33,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -56,7 +58,12 @@ public class MedicationImagesTableActivity extends BaseActivity {
     @Inject
     protected ImageUtil imageUtil;
 
-    private MedicationImagesTableAdapter adapter;
+    @Inject
+    protected MedicationImagesTableAdapter adapter;
+
+    @Inject
+    protected Provider<FullImageDialog> fullImageDialogProvider;
+
     private TextInputEditText etSearch;
     private ActivityResultLauncher<PickVisualMediaRequest> photoPickerLauncher;
 
@@ -69,7 +76,6 @@ public class MedicationImagesTableActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_MedicineImagesTablePage);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        adapter = adapterService.getMedicationImagesTableAdapter();
         adapter.setListener(new MedicationImagesTableAdapter.OnImageActionListener() {
             @Override
             public void onDeleteImage(ImageData image) {
@@ -79,8 +85,11 @@ public class MedicationImagesTableActivity extends BaseActivity {
             @Override
             public void onImageClicked(ImageData image, ImageView imageView) {
                 Drawable drawable = imageView.getDrawable();
-                if (drawable != null)
-                    dialogService.showFullImageDialog(getSupportFragmentManager(), drawable);
+                if (drawable != null) {
+                    FullImageDialog dialog = fullImageDialogProvider.get();
+                    dialog.setImage(drawable);
+                    dialog.show(getSupportFragmentManager(), "FullImageDialog");
+                }
             }
         });
         recyclerView.setAdapter(adapter);

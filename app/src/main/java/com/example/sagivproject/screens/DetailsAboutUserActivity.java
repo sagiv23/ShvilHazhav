@@ -16,7 +16,9 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.FullImageDialog;
 import com.example.sagivproject.dialogs.ProfileImageDialog;
+import com.example.sagivproject.dialogs.UserDialog;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IAuthService;
 import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
@@ -27,6 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -57,6 +60,15 @@ public class DetailsAboutUserActivity extends BaseActivity {
      */
     @Inject
     protected CalendarUtil calendarUtil;
+
+    @Inject
+    protected Provider<UserDialog> userDialogProvider;
+
+    @Inject
+    protected Provider<ProfileImageDialog> profileImageDialogProvider;
+
+    @Inject
+    protected Provider<FullImageDialog> fullImageDialogProvider;
 
     /**
      * UI components for displaying detailed user profile data.
@@ -102,7 +114,9 @@ public class DetailsAboutUserActivity extends BaseActivity {
         btnChangePhoto.setOnClickListener(v -> openImagePicker());
         imgUserProfile.setOnClickListener(v -> {
             if (user != null && user.getProfileImage() != null) {
-                dialogService.showFullImageDialog(getSupportFragmentManager(), imgUserProfile.getDrawable());
+                FullImageDialog dialog = fullImageDialogProvider.get();
+                dialog.setImage(imgUserProfile.getDrawable());
+                dialog.show(getSupportFragmentManager(), "FullImageDialog");
             }
         });
 
@@ -222,7 +236,8 @@ public class DetailsAboutUserActivity extends BaseActivity {
      * Displays the dialog for editing user profile details.
      */
     private void openEditDialog() {
-        dialogService.showUserDialog(getSupportFragmentManager(), user, updatedUser -> {
+        UserDialog dialog = userDialogProvider.get();
+        dialog.setData(user, updatedUser -> {
             showLoading();
             databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
                 @Override
@@ -241,6 +256,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
                 }
             });
         });
+        dialog.show(getSupportFragmentManager(), "EditUserDialog");
     }
 
     /**
@@ -260,7 +276,8 @@ public class DetailsAboutUserActivity extends BaseActivity {
     private void openImagePicker() {
         boolean hasImage = user.getProfileImage() != null && !user.getProfileImage().isEmpty();
 
-        dialogService.showProfileImageDialog(getSupportFragmentManager(), hasImage, new ProfileImageDialog.ImagePickerListener() {
+        ProfileImageDialog dialog = profileImageDialogProvider.get();
+        dialog.setData(hasImage, new ProfileImageDialog.ImagePickerListener() {
             @Override
             public void onCamera() {
                 runWithPermission(Manifest.permission.CAMERA, () -> cameraLauncher.launch(null));
@@ -276,6 +293,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
                 deleteProfileImage();
             }
         });
+        dialog.show(getSupportFragmentManager(), "ProfileImageDialog");
     }
 
     /**

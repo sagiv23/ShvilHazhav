@@ -45,11 +45,6 @@ public interface IDatabaseService {
     IImageService getImageService();
 
     /**
-     * @return The forum discussion topic management service.
-     */
-    IForumCategoriesService getForumCategoriesService();
-
-    /**
      * @return The daily advice and motivational tips service.
      */
     ITipOfTheDayService getTipOfTheDayService();
