@@ -128,7 +128,7 @@ public class TipDialog extends BaseDialog {
             inputContent.setText(tip.getTip());
             selectedDateId = tip.getId();
             if (!isInspirationMode) {
-                inputDate.setText(calendarUtil.formatDate(calendarUtil.parseDateFromDatabase(selectedDateId)));
+                inputDate.setText(calendarUtil.formatDbDateToDisplay(selectedDateId));
                 inputDate.setEnabled(false);
                 layoutDate.setEndIconVisible(false);
             }

@@ -227,11 +227,8 @@ public class DetailsAboutUserActivity extends BaseActivity {
         txtAge.setText(age == -1 ? "לא ידוע" : String.valueOf(age));
 
         String birthDateStr = user.getBirthDate();
-        if (birthDateStr != null) {
-            long millis = calendarUtil.parseDateFromDatabase(birthDateStr);
-            if (millis != -1) {
-                birthDateStr = calendarUtil.formatDate(millis);
-            }
+        if (birthDateStr != null && !birthDateStr.isEmpty()) {
+            birthDateStr = calendarUtil.formatDbDateToDisplay(birthDateStr);
         } else {
             birthDateStr = "לא הוזן";
         }
