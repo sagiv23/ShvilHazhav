@@ -113,15 +113,6 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
     }
 
     /**
-     * Updates the entire message list.
-     *
-     * @param newMessages The new list of {@link ForumMessage} objects.
-     */
-    public void setMessages(List<ForumMessage> newMessages) {
-        setData(newMessages);
-    }
-
-    /**
      * Adds older messages to the beginning of the list for pagination.
      *
      * @param olderMessages List of older {@link ForumMessage} objects to prepend.
