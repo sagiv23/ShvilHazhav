@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.R;
 import com.example.sagivproject.models.EmergencyContact;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.example.sagivproject.services.IEmergencyService;
 import com.google.firebase.database.FirebaseDatabase;
 

@@ -25,10 +25,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -194,26 +192,12 @@ public class MedicationDialog extends BaseDialog {
      * Opens the system time picker to add a new reminder hour.
      */
     private void showHourPicker() {
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(
-                requireContext(),
-                R.style.TimePickerCustomTheme,
-                (view, hourOfDay, minuteOfHour) -> {
-                    String time = String.format(Locale.US, "%02d:%02d", hourOfDay, minuteOfHour);
-                    if (!selectedHours.contains(time)) {
-                        selectedHours.add(time);
-                        updateSelectedHoursChips();
-                    }
-                },
-                hour,
-                minute,
-                true
-        );
-
-        timePickerDialog.show();
+        calendarUtil.openTimePicker(requireContext(), null, (hour, minute, formattedTime) -> {
+            if (!selectedHours.contains(formattedTime)) {
+                selectedHours.add(formattedTime);
+                updateSelectedHoursChips();
+            }
+        });
     }
 
     /**

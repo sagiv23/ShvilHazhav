@@ -1,42 +1,62 @@
 package com.example.sagivproject.utils;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import com.example.sagivproject.R;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Period;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * A utility class for handling date and calendar-related operations.
+ * A utility class for handling date and calendar-related operations using java. Time API.
  * <p>
- * This class provides methods to open a standardized {@link DatePickerDialog}
- * and to format date values into strings. It is managed as a Singleton by Hilt.
+ * This class provides methods to open standardized DatePickerDialog and TimePickerDialog,
+ * and to format date/time values into strings. It is managed as a Singleton by Hilt.
  * </p>
  */
 @Singleton
 public class CalendarUtil {
     /**
-     * The default date display format used throughout the app.
+     * Default date display format: dd/MM/yyyy
      */
     public static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
-
     /**
-     * Standard ISO date format for database storage.
+     * Database date storage format: yyyy-MM-dd
      */
     public static final String DATABASE_DATE_FORMAT = "yyyy-MM-dd";
-
     /**
-     * Standard ISO timestamp format for database storage.
+     * Database timestamp storage format: yyyy-MM-dd HH:mm:ss
      */
     public static final String DATABASE_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    /**
+     * Display timestamp format: dd/MM/yyyy HH:mm
+     */
+    public static final String DISPLAY_TIMESTAMP_FORMAT = "dd/MM/yyyy HH:mm";
+    /**
+     * Key format for month-based queries: yyyy-MM
+     */
+    public static final String MONTH_KEY_FORMAT = "yyyy-MM";
+
+    private static final DateTimeFormatter DB_DATE_FORMATTER = DateTimeFormatter.ofPattern(DATABASE_DATE_FORMAT);
+    private static final DateTimeFormatter DB_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern(DATABASE_TIMESTAMP_FORMAT);
+    private static final DateTimeFormatter DISPLAY_DATE_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT);
+    private static final DateTimeFormatter DISPLAY_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern(DISPLAY_TIMESTAMP_FORMAT);
+    private static final DateTimeFormatter MONTH_KEY_FORMATTER = DateTimeFormatter.ofPattern(MONTH_KEY_FORMAT);
 
     /**
-     * Constructs a new CalendarUtil.
+     * Constructs a new CalendarUtil. Injected by Hilt.
      */
     @Inject
     public CalendarUtil() {
@@ -45,42 +65,44 @@ public class CalendarUtil {
     /**
      * Opens a DatePickerDialog with customizable restrictions and formatting.
      *
-     * @param context       The context to display the dialog in.
-     * @param initialDate   The initial date in database format ("yyyy-MM-dd"). If null, current date is used.
-     * @param listener      The listener for the selected date.
-     * @param futureOnly    If true, restricts date selection to today and future dates.
-     * @param pastOnly      If true, restricts date selection to today and past dates.
-     * @param displayFormat The date format string to use for the result display. If null, uses {@link #DEFAULT_DATE_FORMAT}.
+     * @param context       The UI context.
+     * @param initialDate   Initial date in DATABASE_DATE_FORMAT. If null, current date is used.
+     * @param listener      Callback for the selected date.
+     * @param futureOnly    If true, prevents selecting past dates.
+     * @param pastOnly      If true, prevents selecting future dates.
+     * @param displayFormat Custom format for the display string. If null, DEFAULT_DATE_FORMAT is used.
      */
     public void openDatePicker(Context context, String initialDate, OnDateSelectedListener listener, boolean futureOnly, boolean pastOnly, String displayFormat) {
-        long initialMillis = parseDateFromDatabase(initialDate);
-
-        final Calendar calendar = Calendar.getInstance();
-        if (initialMillis > 0) {
-            calendar.setTimeInMillis(initialMillis);
+        LocalDate initial = null;
+        if (initialDate != null) {
+            try {
+                initial = LocalDate.parse(initialDate, DB_DATE_FORMATTER);
+            } catch (Exception ignored) {
+            }
+        }
+        if (initial == null) {
+            initial = LocalDate.now();
         }
 
-        String finalDisplayFormat = (displayFormat != null) ? displayFormat : DEFAULT_DATE_FORMAT;
+        DateTimeFormatter finalDisplayFormatter = (displayFormat != null)
+                ? DateTimeFormatter.ofPattern(displayFormat)
+                : DISPLAY_DATE_FORMATTER;
 
         DatePickerDialog dialog = new DatePickerDialog(
                 context,
-                (view, year, month, day) -> {
-                    Calendar selectedCal = Calendar.getInstance();
-                    selectedCal.set(year, month, day, 0, 0, 0);
-                    selectedCal.set(Calendar.MILLISECOND, 0);
-
-                    long selectedMillis = selectedCal.getTimeInMillis();
+                (view, year, month, dayOfMonth) -> {
+                    LocalDate selected = LocalDate.of(year, month + 1, dayOfMonth);
                     if (listener != null) {
                         listener.onDateSelected(
-                                selectedMillis,
-                                formatDate(selectedMillis, DATABASE_DATE_FORMAT),
-                                formatDate(selectedMillis, finalDisplayFormat)
+                                selected.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+                                selected.format(DB_DATE_FORMATTER),
+                                selected.format(finalDisplayFormatter)
                         );
                     }
                 },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
+                initial.getYear(),
+                initial.getMonthValue() - 1,
+                initial.getDayOfMonth()
         );
 
         if (futureOnly) {
@@ -94,109 +116,259 @@ public class CalendarUtil {
     }
 
     /**
-     * Parses a date string from database format ("yyyy-MM-dd") back to milliseconds.
+     * Opens a TimePickerDialog for selecting a time.
      *
-     * @param dateStr The date string.
-     * @return The timestamp in milliseconds, or -1 if parsing fails.
+     * @param context     The UI context.
+     * @param initialTime Initial time in "HH:mm" format. If null, current time is used.
+     * @param listener    Callback for the selected time.
+     */
+    public void openTimePicker(Context context, String initialTime, OnTimeSelectedListener listener) {
+        LocalTime initial = null;
+        if (initialTime != null && initialTime.contains(":")) {
+            try {
+                initial = LocalTime.parse(initialTime);
+            } catch (Exception ignored) {
+            }
+        }
+        if (initial == null) {
+            initial = LocalTime.now();
+        }
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                context,
+                R.style.TimePickerCustomTheme,
+                (view, hourOfDay, minuteOfHour) -> {
+                    if (listener != null) {
+                        listener.onTimeSelected(hourOfDay, minuteOfHour, formatTime(hourOfDay, minuteOfHour));
+                    }
+                },
+                initial.getHour(),
+                initial.getMinute(),
+                true
+        );
+
+        timePickerDialog.show();
+    }
+
+    /**
+     * Parses a date string from database format to epoch milliseconds.
+     *
+     * @param dateStr Date in DATABASE_DATE_FORMAT.
+     * @return Epoch milliseconds, or -1 on failure.
      */
     public long parseDateFromDatabase(String dateStr) {
-        return parse(dateStr, DATABASE_DATE_FORMAT);
-    }
-
-    /**
-     * Parses a timestamp string from database format ("yyyy-MM-dd HH:mm:ss") back to milliseconds.
-     *
-     * @param timestampStr The timestamp string.
-     * @return The timestamp in milliseconds, or -1 if parsing fails.
-     */
-    public long parseTimestampFromDatabase(String timestampStr) {
-        return parse(timestampStr, DATABASE_TIMESTAMP_FORMAT);
-    }
-
-    /**
-     * @return The current system date formatted for database storage ("yyyy-MM-dd").
-     */
-    public String getCurrentDate() {
-        return formatDate(System.currentTimeMillis(), DATABASE_DATE_FORMAT);
-    }
-
-    /**
-     * @return The current system time formatted for database storage.
-     */
-    public String getCurrentTimestamp() {
-        return formatDate(System.currentTimeMillis(), DATABASE_TIMESTAMP_FORMAT);
-    }
-
-    /**
-     * Formats a timestamp from milliseconds to a string using the default format ("dd/MM/yyyy").
-     *
-     * @param millis The timestamp in milliseconds.
-     * @return The formatted date string.
-     */
-    public String formatDate(long millis) {
-        return formatDate(millis, DEFAULT_DATE_FORMAT);
-    }
-
-    /**
-     * Formats a timestamp from milliseconds to a string using a specified format.
-     *
-     * @param millis The timestamp in milliseconds.
-     * @param format The desired date format (e.g., "yyyy-MM-dd").
-     * @return The formatted date string.
-     */
-    public String formatDate(long millis, String format) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-        return sdf.format(new Date(millis));
-    }
-
-    /**
-     * Calculates age based on a birthdate string.
-     *
-     * @param birthDateStr Birthdate in database format ("yyyy-MM-dd").
-     * @return The age in years, or -1 if invalid.
-     */
-    public int calculateAge(String birthDateStr) {
-        long birthMillis = parseDateFromDatabase(birthDateStr);
-        if (birthMillis == -1) return -1;
-
-        Calendar birth = Calendar.getInstance();
-        birth.setTimeInMillis(birthMillis);
-        Calendar today = Calendar.getInstance();
-
-        int age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
-        if (today.get(Calendar.MONTH) < birth.get(Calendar.MONTH) ||
-                (today.get(Calendar.MONTH) == birth.get(Calendar.MONTH) &&
-                        today.get(Calendar.DAY_OF_MONTH) < birth.get(Calendar.DAY_OF_MONTH))) {
-            age--;
-        }
-        return age;
-    }
-
-    /**
-     * Internal helper to parse a date/timestamp string based on a given format.
-     */
-    private long parse(String str, String format) {
-        if (str == null || str.isEmpty()) return -1;
+        if (dateStr == null || dateStr.isEmpty()) return -1;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-            Date date = sdf.parse(str);
-            return date != null ? date.getTime() : -1;
+            return LocalDate.parse(dateStr, DB_DATE_FORMATTER)
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli();
         } catch (Exception e) {
             return -1;
         }
     }
 
     /**
-     * A listener interface for receiving the result from the date picker dialog.
+     * Parses a month key (yyyy-MM) to epoch milliseconds of the first day of that month.
+     *
+     * @param monthKey Month in MONTH_KEY_FORMAT.
+     * @return Epoch milliseconds, or -1 on failure.
+     */
+    public long parseMonthKey(String monthKey) {
+        if (monthKey == null || monthKey.isEmpty()) return -1;
+        try {
+            return YearMonth.parse(monthKey, MONTH_KEY_FORMATTER)
+                    .atDay(1)
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli();
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /**
+     * Gets the current system date in database format.
+     *
+     * @return Formatted date string.
+     */
+    public String getCurrentDate() {
+        return LocalDate.now().format(DB_DATE_FORMATTER);
+    }
+
+    /**
+     * Gets the current system timestamp in database format.
+     *
+     * @return Formatted timestamp string.
+     */
+    public String getCurrentTimestamp() {
+        return LocalDateTime.now().format(DB_TIMESTAMP_FORMATTER);
+    }
+
+    /**
+     * Formats epoch milliseconds to display date string.
+     *
+     * @param millis Epoch milliseconds.
+     * @return Formatted date string in DEFAULT_DATE_FORMAT.
+     */
+    public String formatDate(long millis) {
+        return Instant.ofEpochMilli(millis)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+                .format(DISPLAY_DATE_FORMATTER);
+    }
+
+    /**
+     * Formats epoch milliseconds to string using custom format.
+     *
+     * @param millis Epoch milliseconds.
+     * @param format Pattern string.
+     * @return Formatted date/time string.
+     */
+    public String formatDate(long millis, String format) {
+        return Instant.ofEpochMilli(millis)
+                .atZone(ZoneId.systemDefault())
+                .format(DateTimeFormatter.ofPattern(format));
+    }
+
+    /**
+     * Formats hour and minute into "HH:mm" string.
+     *
+     * @param hour   Hour (0-23).
+     * @param minute Minute (0-59).
+     * @return Formatted time string.
+     */
+    public String formatTime(int hour, int minute) {
+        return String.format(Locale.US, "%02d:%02d", hour, minute);
+    }
+
+    /**
+     * Gets epoch milliseconds from specific year, month, and day.
+     *
+     * @param year  The year.
+     * @param month The month (0-11).
+     * @param day   The day of month.
+     * @return Epoch milliseconds.
+     */
+    public long getMillisFromDate(int year, int month, int day) {
+        return LocalDate.of(year, month + 1, day)
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+    }
+
+    /**
+     * Calculates the epoch milliseconds for the next occurrence of a given time.
+     *
+     * @param hourStr       Time in "HH:mm" format.
+     * @param forceTomorrow If true, always returns a time in the future (at least tomorrow).
+     * @return Epoch milliseconds, or -1 on failure.
+     */
+    public long getNextOccurrenceMillis(String hourStr, boolean forceTomorrow) {
+        if (hourStr == null || !hourStr.contains(":")) return -1;
+        try {
+            LocalTime time = LocalTime.parse(hourStr);
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime occurrence = now.with(time).withSecond(0).withNano(0);
+
+            if (forceTomorrow || occurrence.isBefore(now)) {
+                occurrence = occurrence.plusDays(1);
+            }
+            return occurrence.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /**
+     * Formats a month key (yyyy-MM) to display format (MM/yyyy).
+     *
+     * @param monthKey Month in MONTH_KEY_FORMAT.
+     * @return Formatted display string.
+     */
+    public String formatMonthKeyForDisplay(String monthKey) {
+        if (monthKey == null || !monthKey.contains("-")) return monthKey;
+        try {
+            return YearMonth.parse(monthKey, MONTH_KEY_FORMATTER)
+                    .format(DateTimeFormatter.ofPattern("MM/yyyy"));
+        } catch (Exception e) {
+            return monthKey;
+        }
+    }
+
+    /**
+     * Converts a database date string (yyyy-MM-dd) to display format (dd/MM/yyyy).
+     *
+     * @param dbDate Date in DATABASE_DATE_FORMAT.
+     * @return Formatted display string.
+     */
+    public String formatDbDateToDisplay(String dbDate) {
+        if (dbDate == null || dbDate.isEmpty()) return "";
+        try {
+            return LocalDate.parse(dbDate, DB_DATE_FORMATTER)
+                    .format(DISPLAY_DATE_FORMATTER);
+        } catch (Exception e) {
+            return dbDate;
+        }
+    }
+
+    /**
+     * Converts a database timestamp string (yyyy-MM-dd HH:mm:ss) to display format (dd/MM/yyyy HH:mm).
+     *
+     * @param dbTimestamp Timestamp in DATABASE_TIMESTAMP_FORMAT.
+     * @return Formatted display string.
+     */
+    public String formatDbTimestampToDisplay(String dbTimestamp) {
+        if (dbTimestamp == null || dbTimestamp.isEmpty()) return "";
+        try {
+            return LocalDateTime.parse(dbTimestamp, DB_TIMESTAMP_FORMATTER)
+                    .format(DISPLAY_TIMESTAMP_FORMATTER);
+        } catch (Exception e) {
+            return dbTimestamp;
+        }
+    }
+
+    /**
+     * Calculates age based on a birthdate string.
+     *
+     * @param birthDateStr Birthdate in DATABASE_DATE_FORMAT.
+     * @return Age in years, or -1 on failure.
+     */
+    public int calculateAge(String birthDateStr) {
+        if (birthDateStr == null || birthDateStr.isEmpty()) return -1;
+        try {
+            LocalDate birthDate = LocalDate.parse(birthDateStr, DB_DATE_FORMATTER);
+            return Period.between(birthDate, LocalDate.now()).getYears();
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /**
+     * Interface for date selection callback.
      */
     public interface OnDateSelectedListener {
         /**
-         * Called when the user confirms their date selection.
+         * Called when a date is selected.
          *
-         * @param dateMillis    The selected date in milliseconds.
-         * @param dbDate        The date formatted for database (yyyy-MM-dd).
-         * @param formattedDate The selected date formatted for display.
+         * @param dateMillis    Epoch milliseconds.
+         * @param dbDate        Date in DATABASE_DATE_FORMAT.
+         * @param formattedDate Date in display format.
          */
         void onDateSelected(long dateMillis, String dbDate, String formattedDate);
+    }
+
+    /**
+     * Interface for time selection callback.
+     */
+    public interface OnTimeSelectedListener {
+        /**
+         * Called when a time is selected.
+         *
+         * @param hour          Selected hour.
+         * @param minute        Selected minute.
+         * @param formattedTime Time in "HH:mm" format.
+         */
+        void onTimeSelected(int hour, int minute, String formattedTime);
     }
 }

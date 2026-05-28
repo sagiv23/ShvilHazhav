@@ -22,8 +22,9 @@ import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.dialogs.FullImageDialog;
 import com.example.sagivproject.dialogs.UserDialog;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.example.sagivproject.services.IAuthService;
-import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.IUserService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +61,12 @@ public class UsersTableActivity extends BaseActivity {
     protected UsersTableAdapter adapter;
 
     @Inject
+    protected IAuthService authService;
+
+    @Inject
+    protected IUserService userService;
+
+    @Inject
     protected Provider<UserDialog> userDialogProvider;
 
     @Inject
@@ -88,7 +95,7 @@ public class UsersTableActivity extends BaseActivity {
             UserDialog dialog = userDialogProvider.get();
             dialog.setData(null, newUser -> {
                 showLoading();
-                databaseService.getAuthService().addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDate(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
+                authService.addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getBirthDate(), newUser.getEmail(), newUser.getPassword(), new IAuthService.AddUserCallback() {
                     @Override
                     public void onSuccess(User user) {
                         hideLoading();
@@ -124,7 +131,7 @@ public class UsersTableActivity extends BaseActivity {
                 UserDialog dialog = userDialogProvider.get();
                 dialog.setData(userCopy, updatedUser -> {
                     showLoading();
-                    databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
+                    authService.updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
                         @Override
                         public void onSuccess(User resultUser) {
                             hideLoading();
@@ -226,7 +233,7 @@ public class UsersTableActivity extends BaseActivity {
      */
     private void loadUsers() {
         showLoading();
-        databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
+        userService.getUserList(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> list) {
                 hideLoading();
@@ -257,7 +264,7 @@ public class UsersTableActivity extends BaseActivity {
     private void handleToggleAdmin(User user) {
         User.UserRole newRole = user.getRole() == User.UserRole.ADMIN ? User.UserRole.REGULAR : User.UserRole.ADMIN;
         showLoading();
-        databaseService.getUserService().updateUserRole(user.getId(), newRole, new IDatabaseService.DatabaseCallback<>() {
+        userService.updateUserRole(user.getId(), newRole, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();
@@ -298,7 +305,7 @@ public class UsersTableActivity extends BaseActivity {
      */
     private void handleDeleteUser(User user) {
         showLoading();
-        databaseService.getUserService().deleteUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
+        userService.deleteUser(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();

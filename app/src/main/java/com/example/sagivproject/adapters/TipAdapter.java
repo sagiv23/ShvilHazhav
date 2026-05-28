@@ -68,13 +68,7 @@ public class TipAdapter extends BaseAdapter<TipOfTheDay, TipAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TipOfTheDay tip = getItem(position);
 
-        String displayDate;
-        long millis = calendarUtil.parseDateFromDatabase(tip.getId());
-        if (millis != -1) {
-            displayDate = calendarUtil.formatDate(millis);
-        } else {
-            displayDate = "";
-        }
+        String displayDate = calendarUtil.formatDbDateToDisplay(tip.getId());
 
         if (displayDate.isEmpty()) {
             holder.tvDate.setVisibility(View.GONE);

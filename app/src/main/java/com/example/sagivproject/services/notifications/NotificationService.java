@@ -19,8 +19,7 @@ import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.screens.MainActivity;
 import com.example.sagivproject.screens.MedicationListActivity;
-
-import java.util.Calendar;
+import com.example.sagivproject.utils.CalendarUtil;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -43,12 +42,14 @@ public class NotificationService {
     private final Context context;
     private final NotificationManagerCompat manager;
     private final AlarmManager alarmManager;
+    private final CalendarUtil calendarUtil;
 
     @Inject
-    public NotificationService(@ApplicationContext Context context, AlarmManager alarmManager) {
+    public NotificationService(@ApplicationContext Context context, AlarmManager alarmManager, CalendarUtil calendarUtil) {
         this.context = context;
         this.manager = NotificationManagerCompat.from(context);
         this.alarmManager = alarmManager;
+        this.calendarUtil = calendarUtil;
 
         createChannels();
     }
@@ -99,16 +100,7 @@ public class NotificationService {
      * @param forceTomorrow If true, schedules for the next day regardless of the current time.
      */
     public void scheduleSpecificTime(Medication medication, String hourStr, boolean forceTomorrow) {
-        String[] time = hourStr.split(":");
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        if (forceTomorrow || calendar.before(Calendar.getInstance())) {
-            calendar.add(Calendar.DATE, 1);
-        }
+        long triggerTime = calendarUtil.getNextOccurrenceMillis(hourStr, forceTomorrow);
 
         Intent intent = new Intent(context, NotificationReceiver.class);
         intent.setAction(NotificationReceiver.ACTION_MEDICATION_ALARM);
@@ -124,12 +116,12 @@ public class NotificationService {
 
         if (alarmManager.canScheduleExactAlarms()) {
             try {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
             } catch (SecurityException e) {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
             }
         } else {
-            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
         }
     }
 

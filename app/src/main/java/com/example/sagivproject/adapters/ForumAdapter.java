@@ -188,16 +188,7 @@ public class ForumAdapter extends BaseAdapter<ForumMessage, ForumAdapter.ForumVi
 
         holder.txtMessage.setText(msg.getMessage());
 
-        String displayTime = msg.getTimestamp();
-        try {
-            long millis = calendarUtil.parseTimestampFromDatabase(msg.getTimestamp());
-            if (millis != -1) {
-                displayTime = calendarUtil.formatDate(millis, "dd/MM/yyyy HH:mm");
-            }
-        } catch (Exception ignored) {
-        }
-
-        holder.txtTime.setText(displayTime);
+        holder.txtTime.setText(calendarUtil.formatDbTimestampToDisplay(msg.getTimestamp()));
 
         String currentlySpeakingMsgId = listener != null ? listener.getCurrentlySpeakingMsgId() : null;
         boolean isThisSpeaking = msg.getId().equals(currentlySpeakingMsgId);

@@ -28,7 +28,9 @@ import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IMedicationService;
+import com.example.sagivproject.services.IStatsService;
 import com.example.sagivproject.services.notifications.NotificationService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -69,6 +71,10 @@ public class MedicationListActivity extends BaseActivity {
 
     @Inject
     protected CalendarUtil calendarUtil;
+    @Inject
+    protected IMedicationService medicationService;
+    @Inject
+    protected IStatsService statsService;
     @Inject
     protected MedicationListAdapter adapter;
     @Inject
@@ -195,7 +201,7 @@ public class MedicationListActivity extends BaseActivity {
      * Retrieves usage history for the current day to update the "Taken" status rows.
      */
     private void fetchTodayUsageLogs() {
-        DailyStats stats = user.getTodayStats();
+        DailyStats stats = user.getDailyStatsForDate(calendarUtil.getCurrentDate());
         List<MedicationUsage> todayLogs = stats.getMedicationUsageLogs();
         adapter.setLoggedTodayMedications(todayLogs);
     }
@@ -209,15 +215,15 @@ public class MedicationListActivity extends BaseActivity {
      */
     private void logMedicationStatus(Medication medication, String scheduledTime, MedicationStatus status) {
         String time = calendarUtil.formatDate(System.currentTimeMillis(), "HH:mm");
-        String usageId = databaseService.getMedicationService().generateUsageId();
+        String usageId = medicationService.generateUsageId();
         MedicationUsage usage = new MedicationUsage(usageId, medication.getId(), time, scheduledTime, status);
 
         showLoading();
-        databaseService.getStatsService().logMedicationUsage(uid, usage, new DatabaseCallback<>() {
+        statsService.logMedicationUsage(uid, usage, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();
-                DailyStats stats = user.getTodayStats();
+                DailyStats stats = user.getDailyStatsForDate(calendarUtil.getCurrentDate());
                 stats.addMedicationUsageLog(usage);
                 sharedPreferencesUtil.saveUser(user);
 
@@ -253,7 +259,7 @@ public class MedicationListActivity extends BaseActivity {
      */
     private void fetchMedicationsFromDB() {
         showLoading();
-        databaseService.getMedicationService().getUserMedicationList(uid, new DatabaseCallback<>() {
+        medicationService.getUserMedicationList(uid, new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<Medication> list) {
                 hideLoading();
@@ -292,10 +298,10 @@ public class MedicationListActivity extends BaseActivity {
      * Saves a new medication entry and configures its reminders.
      */
     private void saveMedication(Medication medication) {
-        String medicationId = databaseService.getMedicationService().generateMedicationId();
+        String medicationId = medicationService.generateMedicationId();
         medication.setId(medicationId);
         showLoading();
-        databaseService.getMedicationService().createNewMedication(uid, medication, new DatabaseCallback<>() {
+        medicationService.createNewMedication(uid, medication, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();
@@ -335,7 +341,7 @@ public class MedicationListActivity extends BaseActivity {
      */
     private void updateMedication(Medication med) {
         showLoading();
-        databaseService.getMedicationService().updateMedication(uid, med, new DatabaseCallback<>() {
+        medicationService.updateMedication(uid, med, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();
@@ -360,7 +366,7 @@ public class MedicationListActivity extends BaseActivity {
      */
     private void deleteMedicationById(Medication medication) {
         showLoading();
-        databaseService.getMedicationService().deleteMedication(uid, medication.getId(), new DatabaseCallback<>() {
+        medicationService.deleteMedication(uid, medication.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();

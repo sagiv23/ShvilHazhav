@@ -41,6 +41,9 @@ public class RegisterActivity extends BaseActivity {
     @Inject
     protected Validator validator;
 
+    @Inject
+    protected IAuthService authService;
+
     /**
      * Input fields for user personal details and credentials.
      */
@@ -83,7 +86,7 @@ public class RegisterActivity extends BaseActivity {
         }
 
         showLoading();
-        databaseService.getAuthService().register(firstName, lastName, birthDate, email, password, new IAuthService.RegisterCallback() {
+        authService.register(firstName, lastName, birthDate, email, password, new IAuthService.RegisterCallback() {
             @Override
             public void onSuccess(User user) {
                 hideLoading();

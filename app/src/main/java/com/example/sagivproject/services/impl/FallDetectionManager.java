@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.IEmergencyService;
 import com.example.sagivproject.services.notifications.NotificationService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -62,7 +62,7 @@ public class FallDetectionManager extends Service implements SensorEventListener
     private static final long MIN_TIME_BETWEEN_ALERTS = 30000;
 
     @Inject
-    protected IDatabaseService databaseService;
+    protected IEmergencyService emergencyService;
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
     @Inject
@@ -187,7 +187,7 @@ public class FallDetectionManager extends Service implements SensorEventListener
         if (user == null) return;
         List<EmergencyContact> contacts = new ArrayList<>(user.getEmergencyContacts().values());
         if (!contacts.isEmpty()) {
-            databaseService.getEmergencyService().sendEmergencyAlert(getApplicationContext(), contacts, locationUrl, null);
+            emergencyService.sendEmergencyAlert(getApplicationContext(), contacts, locationUrl, null);
         }
     }
 

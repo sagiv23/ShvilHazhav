@@ -17,10 +17,11 @@ import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.example.sagivproject.services.IMemoryGameService;
 import com.example.sagivproject.services.ITTSService;
 import com.example.sagivproject.services.ITTSService.TTSListener;
+import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.utils.CalendarUtil;
 
 import java.text.MessageFormat;
@@ -52,6 +53,10 @@ public class GameHomeScreenActivity extends BaseActivity {
      */
     @Inject
     protected ITTSService ttsService;
+    @Inject
+    protected IUserService userService;
+    @Inject
+    protected IMemoryGameService gameService;
     @Inject
     protected LeaderboardAdapter adapter;
     private Button btnFindEnemy, btnCancelFindEnemy, btnSpeak;
@@ -177,7 +182,7 @@ public class GameHomeScreenActivity extends BaseActivity {
      * Fetches current user data from the database to refresh win/game counts.
      */
     private void loadStats() {
-        databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
+        userService.getUser(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
                 if (updatedUser != null) {
@@ -213,7 +218,7 @@ public class GameHomeScreenActivity extends BaseActivity {
      * Fetches all users and populates the leaderboard adapter, sorted by total wins.
      */
     private void setupLeaderboard() {
-        databaseService.getUserService().getUserList(new IDatabaseService.DatabaseCallback<>() {
+        userService.getUserList(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> users) {
                 if (users != null) {
@@ -262,7 +267,7 @@ public class GameHomeScreenActivity extends BaseActivity {
      */
     private void findEnemy() {
         updateUI(SearchState.SEARCHING);
-        databaseService.getGameService().findOrCreateRoom(user, new IDatabaseService.DatabaseCallback<>() {
+        gameService.findOrCreateRoom(user, new DatabaseCallback<>() {
             @Override
             public void onCompleted(GameRoom room) {
                 if (room != null) {
@@ -284,9 +289,9 @@ public class GameHomeScreenActivity extends BaseActivity {
      */
     private void cancelSearch() {
         if (currentRoom != null) {
-            databaseService.getGameService().removeRoomListener(currentRoom.getId());
+            gameService.removeRoomListener(currentRoom.getId());
             if ("waiting".equals(currentRoom.getStatus()) && user.getId().equals(currentRoom.getPlayer1Uid()))
-                databaseService.getGameService().cancelRoom(currentRoom.getId(), null);
+                gameService.cancelRoom(currentRoom.getId(), null);
         }
         currentRoom = null;
         updateUI(SearchState.IDLE);
@@ -303,7 +308,7 @@ public class GameHomeScreenActivity extends BaseActivity {
             return;
         }
 
-        databaseService.getGameService().listenToRoomStatus(roomId, new IMemoryGameService.IRoomStatusCallback() {
+        gameService.listenToRoomStatus(roomId, new IMemoryGameService.IRoomStatusCallback() {
             @Override
             public void onRoomStarted(GameRoom startedRoom) {
                 if (gameStarted) return;

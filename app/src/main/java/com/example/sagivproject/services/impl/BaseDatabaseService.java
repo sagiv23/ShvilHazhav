@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.Idable;
-import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -81,7 +81,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param item     The entity to create or overwrite.
      * @param callback The callback to be invoked upon completion.
      */
-    protected void create(@NotNull final T item, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) {
+    protected void create(@NotNull final T item, @Nullable final DatabaseCallback<Void> callback) {
         writeData(path + "/" + item.getId(), item, callback);
     }
 
@@ -91,7 +91,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param id       The ID of the entity to retrieve.
      * @param callback The callback to be invoked with the result.
      */
-    protected void get(@NotNull final String id, final @NotNull IDatabaseService.DatabaseCallback<T> callback) {
+    protected void get(@NotNull final String id, final @NotNull DatabaseCallback<T> callback) {
         getData(path + "/" + id, callback);
     }
 
@@ -100,7 +100,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      *
      * @param callback The callback to be invoked with the list of results.
      */
-    protected void getAll(final @NotNull IDatabaseService.DatabaseCallback<List<T>> callback) {
+    protected void getAll(final @NotNull DatabaseCallback<List<T>> callback) {
         getDataList(path, callback);
     }
 
@@ -110,7 +110,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param id       The ID of the entity to delete.
      * @param callback The callback to be invoked upon completion.
      */
-    protected void delete(@NotNull final String id, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) {
+    protected void delete(@NotNull final String id, @Nullable final DatabaseCallback<Void> callback) {
         deleteData(path + "/" + id, callback);
     }
 
@@ -121,7 +121,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param function The function to apply to the current value of the entity.
      * @param callback The callback to be invoked with the updated entity.
      */
-    protected void update(@NotNull final String id, final @NotNull UnaryOperator<T> function, @Nullable final IDatabaseService.DatabaseCallback<T> callback) {
+    protected void update(@NotNull final String id, final @NotNull UnaryOperator<T> function, @Nullable final DatabaseCallback<T> callback) {
         runTransaction(path + "/" + id, currentValue -> {
             if (currentValue == null) return null;
             return function.apply(currentValue);
@@ -145,7 +145,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param data     The data to write.
      * @param callback The callback to be invoked upon completion.
      */
-    protected void writeData(@NotNull final String fullPath, @NotNull final Object data, final @Nullable IDatabaseService.DatabaseCallback<Void> callback) {
+    protected void writeData(@NotNull final String fullPath, @NotNull final Object data, final @Nullable DatabaseCallback<Void> callback) {
         readData(fullPath).setValue(data, (error, ref) -> {
             if (callback == null) return;
             if (error != null) {
@@ -162,7 +162,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param fullPath The full path to delete from.
      * @param callback The callback to be invoked upon completion.
      */
-    protected void deleteData(@NotNull final String fullPath, @Nullable final IDatabaseService.DatabaseCallback<Void> callback) {
+    protected void deleteData(@NotNull final String fullPath, @Nullable final DatabaseCallback<Void> callback) {
         readData(fullPath).removeValue((error, ref) -> {
             if (callback == null) return;
             if (error != null) {
@@ -179,7 +179,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param fullPath The full path to read from.
      * @param callback The callback to be invoked with the result.
      */
-    protected void getData(@NotNull final String fullPath, @NotNull final IDatabaseService.DatabaseCallback<T> callback) {
+    protected void getData(@NotNull final String fullPath, @NotNull final DatabaseCallback<T> callback) {
         readData(fullPath).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data at " + fullPath, task.getException());
@@ -208,7 +208,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param fullPath The full path to read from.
      * @param callback The callback to be invoked with the list of results.
      */
-    protected void getDataList(@NotNull final String fullPath, @NotNull final IDatabaseService.DatabaseCallback<List<T>> callback) {
+    protected void getDataList(@NotNull final String fullPath, @NotNull final DatabaseCallback<List<T>> callback) {
         readData(fullPath).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data list from " + fullPath, task.getException());
@@ -241,7 +241,7 @@ public abstract class BaseDatabaseService<T extends Idable> {
      * @param function The function to apply to the current value of the entity.
      * @param callback The callback to be invoked upon completion.
      */
-    protected void runTransaction(@NotNull final String fullPath, @NotNull final UnaryOperator<T> function, @Nullable final IDatabaseService.DatabaseCallback<T> callback) {
+    protected void runTransaction(@NotNull final String fullPath, @NotNull final UnaryOperator<T> function, @Nullable final DatabaseCallback<T> callback) {
         readData(fullPath).runTransaction(new Transaction.Handler() {
             @NonNull
             @Override

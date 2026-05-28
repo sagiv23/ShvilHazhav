@@ -18,7 +18,8 @@ import com.example.sagivproject.adapters.ForumAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IForumService;
 import com.example.sagivproject.services.ITTSService;
 import com.example.sagivproject.services.ITTSService.TTSListener;
 
@@ -51,6 +52,10 @@ public class ForumActivity extends BaseActivity {
      */
     @Inject
     protected ITTSService ttsService;
+
+    @Inject
+    protected IForumService forumService;
+
     @Inject
     protected ForumAdapter adapter;
     private RecyclerView recycler;
@@ -132,7 +137,7 @@ public class ForumActivity extends BaseActivity {
             @Override
             public void onClick(ForumMessage message) {
                 showLoading();
-                databaseService.getForumService().deleteMessage(message.getId(), categoryId, new DatabaseCallback<>() {
+                forumService.deleteMessage(message.getId(), categoryId, new DatabaseCallback<>() {
                     @Override
                     public void onCompleted(Void data) {
                         hideLoading();
@@ -211,13 +216,13 @@ public class ForumActivity extends BaseActivity {
         isLoadingOlder = true;
         String oldestTimestamp = currentMessages.get(0).getTimestamp();
 
-        databaseService.getForumService().loadOlderMessages(categoryId, oldestTimestamp, 20, new DatabaseCallback<>() {
+        forumService.loadOlderMessages(categoryId, oldestTimestamp, 20, new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ForumMessage> list) {
                 if (list.isEmpty()) {
                     hasMoreOlder = false;
                 } else {
-                    adapter.setSenderMap(databaseService.getForumService().getUserCache());
+                    adapter.setSenderMap(forumService.getUserCache());
                     adapter.addOlderMessages(list);
                 }
                 isLoadingOlder = false;
@@ -241,7 +246,7 @@ public class ForumActivity extends BaseActivity {
      * </p>
      */
     private void loadMessages() {
-        databaseService.getForumService().listenToMessages(categoryId, new DatabaseCallback<>() {
+        forumService.listenToMessages(categoryId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ForumMessage> latestMessages) {
                 if (latestMessages == null) return;
@@ -254,7 +259,7 @@ public class ForumActivity extends BaseActivity {
                 boolean wasAtBottom = isLastItemVisible();
                 List<ForumMessage> currentList = mergeMessages(adapter.getItemList(), latestMessages, wasAtBottom);
 
-                adapter.setSenderMap(databaseService.getForumService().getUserCache());
+                adapter.setSenderMap(forumService.getUserCache());
                 adapter.setData(currentList);
 
                 if (wasAtBottom) {
@@ -279,7 +284,7 @@ public class ForumActivity extends BaseActivity {
 
         User currentUser = sharedPreferencesUtil.getUser();
 
-        databaseService.getForumService().sendMessage(Objects.requireNonNull(currentUser), text, categoryId, new DatabaseCallback<>() {
+        forumService.sendMessage(Objects.requireNonNull(currentUser), text, categoryId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void data) {
                 edtMessage.setText("");
@@ -404,14 +409,14 @@ public class ForumActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        databaseService.getForumService().clearUserCache();
+        forumService.clearUserCache();
         loadMessages();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        databaseService.getForumService().stopListeningToMessages(categoryId);
+        forumService.stopListeningToMessages(categoryId);
         ttsService.stop();
     }
 

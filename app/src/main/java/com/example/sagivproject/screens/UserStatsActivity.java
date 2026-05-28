@@ -28,7 +28,9 @@ import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.GraphData;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IMedicationService;
+import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.ui.SimpleXYGraphView;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.google.android.material.button.MaterialButton;
@@ -72,6 +74,10 @@ public class UserStatsActivity extends BaseActivity {
      */
     @Inject
     protected CalendarUtil calendarUtil;
+    @Inject
+    protected IUserService userService;
+    @Inject
+    protected IMedicationService medicationService;
     @Inject
     protected GraphAdapter graphAdapter;
     @Inject
@@ -242,7 +248,7 @@ public class UserStatsActivity extends BaseActivity {
         if (loggedInUser.isAdmin()) {
             findViewById(R.id.card_user_selector).setVisibility(View.VISIBLE);
             showLoading();
-            databaseService.getUserService().getUserList(new DatabaseCallback<>() {
+            userService.getUserList(new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(List<User> list) {
                     hideLoading();
@@ -310,7 +316,7 @@ public class UserStatsActivity extends BaseActivity {
     private void fetchLatestUserData() {
         final String requestedUserId = currentUser.getId();
         showLoading();
-        databaseService.getUserService().getUser(requestedUserId, new DatabaseCallback<>() {
+        userService.getUser(requestedUserId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
                 hideLoading();
@@ -401,7 +407,7 @@ public class UserStatsActivity extends BaseActivity {
             ConfirmDialog dialog = confirmDialogProvider.get();
             dialog.setData("מחיקת תיעוד", "האם למחוק תיעוד זה?", "מחק", "בטל", () -> {
                 showLoading();
-                databaseService.getMedicationService().deleteMedicationUsageLog(currentUser.getId(), filteredDate, usage.getId(), new DatabaseCallback<>() {
+                medicationService.deleteMedicationUsageLog(currentUser.getId(), filteredDate, usage.getId(), new DatabaseCallback<>() {
                     @Override
                     public void onCompleted(Void object) {
                         hideLoading();
@@ -427,7 +433,7 @@ public class UserStatsActivity extends BaseActivity {
     private void loadMedicationLogs() {
         final String requestedUserId = currentUser.getId();
         showLoading();
-        databaseService.getMedicationService().getMedicationUsageLogs(requestedUserId, new DatabaseCallback<>() {
+        medicationService.getMedicationUsageLogs(requestedUserId, new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<MedicationUsage> list) {
                 hideLoading();
@@ -463,7 +469,7 @@ public class UserStatsActivity extends BaseActivity {
         ConfirmDialog dialog = confirmDialogProvider.get();
         dialog.setData("איפוס היסטוריה", "האם לאפס את כל ההיסטוריה?", "אפס הכל", "בטל", () -> {
             showLoading();
-            databaseService.getMedicationService().clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
+            medicationService.clearMedicationUsageLogs(currentUser.getId(), new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void object) {
                     hideLoading();
@@ -492,7 +498,7 @@ public class UserStatsActivity extends BaseActivity {
         ConfirmDialog dialog = confirmDialogProvider.get();
         dialog.setData("איפוס יום", "האם לאפס את התיעוד ליום זה?", "אפס יום", "בטל", () -> {
             showLoading();
-            databaseService.getMedicationService().clearMedicationUsageLogsForDate(currentUser.getId(), filteredDate, new DatabaseCallback<>() {
+            medicationService.clearMedicationUsageLogsForDate(currentUser.getId(), filteredDate, new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void object) {
                     hideLoading();

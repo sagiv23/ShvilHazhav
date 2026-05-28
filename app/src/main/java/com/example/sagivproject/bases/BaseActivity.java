@@ -40,7 +40,6 @@ import com.example.sagivproject.screens.AdminPageActivity;
 import com.example.sagivproject.screens.LandingActivity;
 import com.example.sagivproject.screens.LoginActivity;
 import com.example.sagivproject.screens.MainActivity;
-import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.ui.AppMenuFragment;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
@@ -72,11 +71,6 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
      */
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
-    /**
-     * The central database service façade.
-     */
-    @Inject
-    protected IDatabaseService databaseService;
     /**
      * The root layout for the navigation drawer.
      */

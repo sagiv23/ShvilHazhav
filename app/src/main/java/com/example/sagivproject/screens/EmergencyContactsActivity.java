@@ -24,8 +24,10 @@ import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IEmergencyService;
 import com.example.sagivproject.services.IFallDetectionService;
+import com.example.sagivproject.services.IUserService;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
@@ -61,6 +63,12 @@ public class EmergencyContactsActivity extends BaseActivity {
      */
     @Inject
     protected IFallDetectionService fallDetectionService;
+
+    @Inject
+    protected IUserService userService;
+
+    @Inject
+    protected IEmergencyService emergencyService;
 
     @Inject
     protected EmergencyContactsAdapter adapter;
@@ -129,7 +137,7 @@ public class EmergencyContactsActivity extends BaseActivity {
                 EmergencyContactDialog dialog = emergencyContactDialogProvider.get();
                 dialog.setData(contact, updatedContact -> {
                     showLoading();
-                    databaseService.getEmergencyService().updateContact(user.getId(), updatedContact, new IDatabaseService.DatabaseCallback<>() {
+                    emergencyService.updateContact(user.getId(), updatedContact, new DatabaseCallback<>() {
                         @Override
                         public void onCompleted(Void object) {
                             hideLoading();
@@ -154,7 +162,7 @@ public class EmergencyContactsActivity extends BaseActivity {
             @Override
             public void onDelete(EmergencyContact contact) {
                 showLoading();
-                databaseService.getEmergencyService().deleteContact(user.getId(), contact.getId(), new IDatabaseService.DatabaseCallback<>() {
+                emergencyService.deleteContact(user.getId(), contact.getId(), new DatabaseCallback<>() {
                     @Override
                     public void onCompleted(Void object) {
                         hideLoading();
@@ -251,7 +259,7 @@ public class EmergencyContactsActivity extends BaseActivity {
     private void loadUserFromDatabase() {
         if (user == null) return;
         showLoading();
-        databaseService.getUserService().getUser(user.getId(), new IDatabaseService.DatabaseCallback<>() {
+        userService.getUser(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User dbUser) {
                 hideLoading();
@@ -303,7 +311,7 @@ public class EmergencyContactsActivity extends BaseActivity {
      */
     private void addEmergencyContact(String firstName, String lastName, String phoneNumber) {
         showLoading();
-        databaseService.getEmergencyService().addContact(user.getId(), firstName, lastName, phoneNumber, new IDatabaseService.DatabaseCallback<>() {
+        emergencyService.addContact(user.getId(), firstName, lastName, phoneNumber, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();
@@ -404,7 +412,7 @@ public class EmergencyContactsActivity extends BaseActivity {
         if (user == null) return;
         List<EmergencyContact> contacts = new ArrayList<>(user.getEmergencyContacts().values());
         showLoading();
-        databaseService.getEmergencyService().sendEmergencyAlert(EmergencyContactsActivity.this, contacts, locationUrl, new IDatabaseService.DatabaseCallback<>() {
+        emergencyService.sendEmergencyAlert(EmergencyContactsActivity.this, contacts, locationUrl, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();

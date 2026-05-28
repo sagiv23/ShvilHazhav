@@ -17,12 +17,13 @@ import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IStatsService;
+import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -59,6 +60,12 @@ public class MathProblemsActivity extends BaseActivity {
 
     @Inject
     protected CalendarUtil calendarUtil;
+
+    @Inject
+    protected IUserService userService;
+
+    @Inject
+    protected IStatsService statsService;
 
     /**
      * UI components for performance tracking and problem display.
@@ -146,7 +153,7 @@ public class MathProblemsActivity extends BaseActivity {
      */
     private void fetchLatestStats() {
         showLoading();
-        databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
+        userService.getUser(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
                 hideLoading();
@@ -289,32 +296,18 @@ public class MathProblemsActivity extends BaseActivity {
         String today = calendarUtil.getCurrentDate();
 
         if (userAnswer == correctAnswer) {
-            getTodayStats(today).addMathCorrect();
+            user.getDailyStatsForDate(today).addMathCorrect();
             showFeedback(true);
             generateProblem();
-            databaseService.getStatsService().updateDailyMathStats(user.getId(), true);
+            statsService.updateDailyMathStats(user.getId(), true);
         } else {
-            getTodayStats(today).addMathWrong();
+            user.getDailyStatsForDate(today).addMathWrong();
             showFeedback(false);
-            databaseService.getStatsService().updateDailyMathStats(user.getId(), false);
+            statsService.updateDailyMathStats(user.getId(), false);
         }
 
         sharedPreferencesUtil.saveUser(user);
         updateStatsUI();
-    }
-
-    /**
-     * Retrieves the daily statistics for today, creating a new entry if necessary.
-     *
-     * @param date Today's date string.
-     * @return The {@link DailyStats} object for the current date.
-     */
-    private DailyStats getTodayStats(String date) {
-        if (user.getDailyStats() == null) user.setDailyStats(new HashMap<>());
-        if (!user.getDailyStats().containsKey(date)) {
-            user.getDailyStats().put(date, new DailyStats());
-        }
-        return user.getDailyStats().get(date);
     }
 
     /**

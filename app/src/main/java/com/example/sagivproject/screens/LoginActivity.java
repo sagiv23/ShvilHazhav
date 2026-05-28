@@ -33,6 +33,9 @@ public class LoginActivity extends BaseActivity {
     @Inject
     protected Validator validator;
 
+    @Inject
+    protected IAuthService authService;
+
     /**
      * Form input fields for user credentials.
      */
@@ -66,7 +69,7 @@ public class LoginActivity extends BaseActivity {
         }
 
         showLoading();
-        databaseService.getAuthService().login(email, password, new IAuthService.LoginCallback() {
+        authService.login(email, password, new IAuthService.LoginCallback() {
             @Override
             public void onSuccess(User user) {
                 hideLoading();

@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.ForumMessage;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.example.sagivproject.services.IForumService;
 import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.utils.CalendarUtil;

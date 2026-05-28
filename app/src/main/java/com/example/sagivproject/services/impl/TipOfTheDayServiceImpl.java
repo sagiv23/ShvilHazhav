@@ -1,7 +1,7 @@
 package com.example.sagivproject.services.impl;
 
 import com.example.sagivproject.models.TipOfTheDay;
-import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.example.sagivproject.services.ITipOfTheDayService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.google.firebase.database.FirebaseDatabase;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
  * <p>
  * This class manages the persistence and retrieval of the "Tip of the Day" in the
  * Firebase Realtime Database. It ensures that only one tip is saved per day
- * by using a date-based ID ("yyyymmdd") and Firebase transactions to prevent overwrites.
+ * by using a date-based ID ("yyyy-MM-dd") and Firebase transactions to prevent overwrites.
  * </p>
  */
 public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> implements ITipOfTheDayService {
@@ -43,7 +43,7 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      * @param callback The callback invoked with the found {@link TipOfTheDay} or null.
      */
     @Override
-    public void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
+    public void getTipForToday(DatabaseCallback<TipOfTheDay> callback) {
         String today = calendarUtil.getCurrentDate();
         get(today, callback);
     }
@@ -54,18 +54,18 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      * @param callback The callback invoked with the list of {@link TipOfTheDay} objects.
      */
     @Override
-    public void getAllTips(IDatabaseService.DatabaseCallback<List<TipOfTheDay>> callback) {
+    public void getAllTips(DatabaseCallback<List<TipOfTheDay>> callback) {
         getAll(callback);
     }
 
     /**
      * Retrieves a specific tip by its date ID.
      *
-     * @param dateId   The date ID (yyyymmdd).
+     * @param dateId   The date ID (yyyy-MM-dd).
      * @param callback The callback invoked with the found {@link TipOfTheDay} or null.
      */
     @Override
-    public void getTipByDate(String dateId, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
+    public void getTipByDate(String dateId, DatabaseCallback<TipOfTheDay> callback) {
         get(dateId, callback);
     }
 
@@ -80,27 +80,27 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
      * @param callback The callback invoked with the final tip stored in the database.
      */
     @Override
-    public void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback) {
+    public void saveTipIfNotExists(TipOfTheDay tip, DatabaseCallback<TipOfTheDay> callback) {
         runTransaction(TIP_OF_THE_DAY_PATH + "/" + tip.getId(), currentTip -> Objects.requireNonNullElse(currentTip, tip), callback);
     }
 
     @Override
-    public void saveTip(TipOfTheDay tip, IDatabaseService.DatabaseCallback<Void> callback) {
+    public void saveTip(TipOfTheDay tip, DatabaseCallback<Void> callback) {
         create(tip, callback);
     }
 
     @Override
-    public void deleteTip(String dateId, IDatabaseService.DatabaseCallback<Void> callback) {
+    public void deleteTip(String dateId, DatabaseCallback<Void> callback) {
         delete(dateId, callback);
     }
 
     @Override
-    public void getAllInspirations(IDatabaseService.DatabaseCallback<List<TipOfTheDay>> callback) {
+    public void getAllInspirations(DatabaseCallback<List<TipOfTheDay>> callback) {
         getDataList(INSPIRATIONS_PATH, callback);
     }
 
     @Override
-    public void saveInspiration(TipOfTheDay inspiration, IDatabaseService.DatabaseCallback<Void> callback) {
+    public void saveInspiration(TipOfTheDay inspiration, DatabaseCallback<Void> callback) {
         if (inspiration.getId() == null) {
             inspiration.setId(databaseReference.child(INSPIRATIONS_PATH).push().getKey());
         }
@@ -108,7 +108,7 @@ public class TipOfTheDayServiceImpl extends BaseDatabaseService<TipOfTheDay> imp
     }
 
     @Override
-    public void deleteInspiration(String id, IDatabaseService.DatabaseCallback<Void> callback) {
+    public void deleteInspiration(String id, DatabaseCallback<Void> callback) {
         deleteData(INSPIRATIONS_PATH + "/" + id, callback);
     }
 }

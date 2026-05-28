@@ -12,7 +12,9 @@ import com.example.sagivproject.adapters.MemoryGameLogAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.GameRoom;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IMemoryGameService;
+import com.example.sagivproject.services.IUserService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +45,12 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
     @Inject
     protected MemoryGameLogAdapter adapter;
 
+    @Inject
+    protected IUserService userService;
+
+    @Inject
+    protected IMemoryGameService gameService;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +72,7 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        databaseService.getGameService().stopAllRoomsRealtime();
+        gameService.stopAllRoomsRealtime();
     }
 
     /**
@@ -72,7 +80,7 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
      */
     private void fetchUsersAndListenToGames() {
         showLoading();
-        databaseService.getUserService().getUserList(new DatabaseCallback<>() {
+        userService.getUserList(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> userList) {
                 hideLoading();
@@ -96,7 +104,7 @@ public class MemoryGameLogsTableActivity extends BaseActivity {
      * Establishes a persistent, real-time listener for all game room updates in the database.
      */
     private void listenToGamesRealtime() {
-        databaseService.getGameService().getAllRoomsRealtime(new DatabaseCallback<>() {
+        gameService.getAllRoomsRealtime(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<GameRoom> allRooms) {
                 if (allRooms != null)

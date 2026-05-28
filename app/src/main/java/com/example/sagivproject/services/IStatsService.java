@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.MedicationUsage;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 /**
  * An interface that defines the contract for operations related to tracking user activity statistics.

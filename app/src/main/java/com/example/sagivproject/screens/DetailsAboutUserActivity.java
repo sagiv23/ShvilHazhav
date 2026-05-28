@@ -20,8 +20,9 @@ import com.example.sagivproject.dialogs.FullImageDialog;
 import com.example.sagivproject.dialogs.ProfileImageDialog;
 import com.example.sagivproject.dialogs.UserDialog;
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.example.sagivproject.services.IAuthService;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -60,6 +61,12 @@ public class DetailsAboutUserActivity extends BaseActivity {
      */
     @Inject
     protected CalendarUtil calendarUtil;
+
+    @Inject
+    protected IUserService userService;
+
+    @Inject
+    protected IAuthService authService;
 
     @Inject
     protected Provider<UserDialog> userDialogProvider;
@@ -183,7 +190,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
     private void loadUserFromDatabase() {
         if (user == null) return;
         showLoading();
-        databaseService.getUserService().getUser(user.getId(), new DatabaseCallback<>() {
+        userService.getUser(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User dbUser) {
                 hideLoading();
@@ -239,7 +246,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         UserDialog dialog = userDialogProvider.get();
         dialog.setData(user, updatedUser -> {
             showLoading();
-            databaseService.getAuthService().updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
+            authService.updateUser(updatedUser, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getBirthDate(), updatedUser.getEmail(), updatedUser.getPassword(), new IAuthService.UpdateUserCallback() {
                 @Override
                 public void onSuccess(User resultUser) {
                     hideLoading();
@@ -304,7 +311,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
         imgUserProfile.setImageResource(R.drawable.ic_user);
 
         showLoading();
-        databaseService.getUserService().updateUser(user, new DatabaseCallback<>() {
+        userService.updateUser(user, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();
@@ -337,7 +344,7 @@ public class DetailsAboutUserActivity extends BaseActivity {
      */
     private void saveProfileImage() {
         showLoading();
-        databaseService.getUserService().updateUser(user, new DatabaseCallback<>() {
+        userService.updateUser(user, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();

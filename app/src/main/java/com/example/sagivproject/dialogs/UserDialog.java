@@ -116,7 +116,7 @@ public class UserDialog extends BaseDialog {
             inputPassword.setText(user.getPassword());
             birthDate = user.getBirthDate();
             if (birthDate != null && !birthDate.isEmpty()) {
-                inputBirthDate.setText(calendarUtil.formatDate(calendarUtil.parseDateFromDatabase(birthDate)));
+                inputBirthDate.setText(calendarUtil.formatDbDateToDisplay(birthDate));
             }
         } else {
             txtTitle.setText(R.string.add_user);

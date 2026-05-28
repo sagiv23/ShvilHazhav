@@ -12,7 +12,9 @@ import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
 import com.example.sagivproject.models.MedicationUsage.MedicationStatus;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IMedicationService;
+import com.example.sagivproject.services.IStatsService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
@@ -50,7 +52,9 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Inject
     NotificationService notificationService;
     @Inject
-    IDatabaseService databaseService;
+    IMedicationService medicationService;
+    @Inject
+    IStatsService statsService;
     @Inject
     SharedPreferencesUtil sharedPreferencesUtil;
 
@@ -91,7 +95,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         User user = sharedPreferencesUtil.getUser();
         if (user == null || user.getId() == null) return;
 
-        databaseService.getMedicationService().getUserMedicationList(user.getId(), new IDatabaseService.DatabaseCallback<>() {
+        medicationService.getUserMedicationList(user.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<Medication> medications) {
                 if (medications != null) {
@@ -168,13 +172,13 @@ public class NotificationReceiver extends BroadcastReceiver {
             MedicationStatus status = MedicationStatus.valueOf(statusStr);
             String timeNow = calendarUtil.formatDate(System.currentTimeMillis(), "HH:mm");
 
-            String usageId = databaseService.getMedicationService().generateUsageId();
+            String usageId = medicationService.generateUsageId();
             MedicationUsage usage = new MedicationUsage(usageId, medicationId, timeNow, hourStr, status);
 
-            databaseService.getStatsService().logMedicationUsage(user.getId(), usage, new IDatabaseService.DatabaseCallback<>() {
+            statsService.logMedicationUsage(user.getId(), usage, new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void object) {
-                    user.getTodayStats().addMedicationUsageLog(usage);
+                    user.getDailyStatsForDate(calendarUtil.getCurrentDate()).addMedicationUsageLog(usage);
                     sharedPreferencesUtil.saveUser(user);
                 }
 

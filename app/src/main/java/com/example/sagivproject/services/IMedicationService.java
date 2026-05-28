@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.Medication;
 import com.example.sagivproject.models.MedicationUsage;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 
 import java.util.List;
 

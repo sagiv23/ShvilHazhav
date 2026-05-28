@@ -23,7 +23,8 @@ import com.example.sagivproject.adapters.MedicationImagesTableAdapter;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.dialogs.FullImageDialog;
 import com.example.sagivproject.models.ImageData;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IImageService;
 import com.example.sagivproject.utils.ImageUtil;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -57,6 +58,9 @@ public class MedicationImagesTableActivity extends BaseActivity {
     private final List<ImageData> allImages = new ArrayList<>();
     @Inject
     protected ImageUtil imageUtil;
+
+    @Inject
+    protected IImageService imageService;
 
     @Inject
     protected MedicationImagesTableAdapter adapter;
@@ -151,7 +155,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
      */
     private void loadImages() {
         showLoading();
-        databaseService.getImageService().getAllImages(new DatabaseCallback<>() {
+        imageService.getAllImages(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ImageData> list) {
                 hideLoading();
@@ -198,7 +202,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
                 String newId = "card" + (allImages.size() + 1);
                 ImageData newImg = new ImageData(newId, base64);
                 showLoading();
-                databaseService.getImageService().createImage(newImg, new DatabaseCallback<>() {
+                imageService.createImage(newImg, new DatabaseCallback<>() {
                     @Override
                     public void onCompleted(Void object) {
                         hideLoading();
@@ -226,7 +230,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
      */
     private void deleteImageAndReorder(ImageData imageToDelete) {
         showLoading();
-        databaseService.getImageService().deleteImage(imageToDelete.getId(), new DatabaseCallback<>() {
+        imageService.deleteImage(imageToDelete.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();
@@ -251,7 +255,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
             allImages.get(i).setId("card" + (i + 1));
 
         showLoading();
-        databaseService.getImageService().updateAllImages(allImages, new DatabaseCallback<>() {
+        imageService.updateAllImages(allImages, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 hideLoading();

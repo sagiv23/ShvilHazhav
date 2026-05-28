@@ -27,9 +27,10 @@ import com.example.sagivproject.dialogs.ConfirmDialog;
 import com.example.sagivproject.dialogs.TipDialog;
 import com.example.sagivproject.models.TipOfTheDay;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.example.sagivproject.services.ITTSService;
 import com.example.sagivproject.services.ITTSService.TTSListener;
+import com.example.sagivproject.services.ITipOfTheDayService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.google.android.material.tabs.TabLayout;
 import com.google.common.util.concurrent.FutureCallback;
@@ -43,7 +44,6 @@ import com.google.firebase.ai.type.GenerateContentResponse;
 import com.google.firebase.ai.type.GenerativeBackend;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -92,6 +92,8 @@ public class TipOfTheDayActivity extends BaseActivity {
      */
     @Inject
     protected TipAdapter tipAdapter;
+    @Inject
+    protected ITipOfTheDayService tipOfTheDayService;
     @Inject
     protected Provider<TipDialog> tipDialogProvider;
     @Inject
@@ -273,11 +275,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         }
 
         cvTipCalendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            Calendar selectedCal = Calendar.getInstance();
-            selectedCal.set(year, month, dayOfMonth, 0, 0, 0);
-            selectedCal.set(Calendar.MILLISECOND, 0);
-
-            long millis = selectedCal.getTimeInMillis();
+            long millis = calendarUtil.getMillisFromDate(year, month, dayOfMonth);
             String dbDate = calendarUtil.formatDate(millis, CalendarUtil.DATABASE_DATE_FORMAT);
             String formattedDate = calendarUtil.formatDate(millis, CalendarUtil.DEFAULT_DATE_FORMAT);
 
@@ -310,7 +308,7 @@ public class TipOfTheDayActivity extends BaseActivity {
      */
     private void fetchAllTips() {
         showLoading();
-        databaseService.getTipOfTheDayService().getAllTips(new IDatabaseService.DatabaseCallback<>() {
+        tipOfTheDayService.getAllTips(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<TipOfTheDay> result) {
                 hideLoading();
@@ -361,8 +359,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         Typeface typeface = ResourcesCompat.getFont(this, R.font.text_hebrew);
 
         for (String monthKey : currentMonthKeys) {
-            String[] parts = monthKey.split("-");
-            String label = parts[1] + "/" + parts[0];
+            String label = calendarUtil.formatMonthKeyForDisplay(monthKey);
 
             TabLayout.Tab tab = tabLayoutMonths.newTab();
             if (typeface != null) {
@@ -421,17 +418,13 @@ public class TipOfTheDayActivity extends BaseActivity {
      * @param monthKey The month key in yyyy-MM format.
      */
     private void updateCalendarToMonth(String monthKey) {
-        try {
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM", java.util.Locale.getDefault());
-            java.util.Date date = sdf.parse(monthKey);
-            if (date != null) {
-                CalendarView cv = findViewById(R.id.cv_tip_calendar);
-                cv.animate().alpha(0f).setDuration(200).withEndAction(() -> {
-                    cv.setDate(date.getTime(), true, true);
-                    cv.animate().alpha(1f).setDuration(200).start();
-                }).start();
-            }
-        } catch (Exception ignored) {
+        long timeMillis = calendarUtil.parseMonthKey(monthKey);
+        if (timeMillis != -1) {
+            CalendarView cv = findViewById(R.id.cv_tip_calendar);
+            cv.animate().alpha(0f).setDuration(200).withEndAction(() -> {
+                cv.setDate(timeMillis, true, true);
+                cv.animate().alpha(1f).setDuration(200).start();
+            }).start();
         }
     }
 
@@ -440,7 +433,7 @@ public class TipOfTheDayActivity extends BaseActivity {
      * Updates the UI to show a random inspiration and populates the admin list if active.
      */
     private void fetchAllInspirations() {
-        databaseService.getTipOfTheDayService().getAllInspirations(new IDatabaseService.DatabaseCallback<>() {
+        tipOfTheDayService.getAllInspirations(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<TipOfTheDay> result) {
                 allInspirationsList = result != null ? new ArrayList<>(result) : new ArrayList<>();
@@ -478,7 +471,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         dialog.setInspirationMode(true);
         dialog.setData(inspiration, updatedInspiration -> {
             showLoading();
-            databaseService.getTipOfTheDayService().saveInspiration(updatedInspiration, new IDatabaseService.DatabaseCallback<>() {
+            tipOfTheDayService.saveInspiration(updatedInspiration, new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void result) {
                     hideLoading();
@@ -505,7 +498,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         ConfirmDialog dialog = confirmDialogProvider.get();
         dialog.setData("מחיקת השראה", "האם למחוק השראה זו?", "מחק", "ביטול", () -> {
             showLoading();
-            databaseService.getTipOfTheDayService().deleteInspiration(inspiration.getId(), new IDatabaseService.DatabaseCallback<>() {
+            tipOfTheDayService.deleteInspiration(inspiration.getId(), new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void result) {
                     hideLoading();
@@ -544,7 +537,7 @@ public class TipOfTheDayActivity extends BaseActivity {
             displaySelectedTip(foundTip, formattedDate);
         } else {
             showLoading();
-            databaseService.getTipOfTheDayService().getTipByDate(dateId, new IDatabaseService.DatabaseCallback<>() {
+            tipOfTheDayService.getTipByDate(dateId, new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(TipOfTheDay result) {
                     hideLoading();
@@ -594,7 +587,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         dialog.setInspirationMode(false);
         dialog.setData(tip, existingDates, updatedTip -> {
             showLoading();
-            databaseService.getTipOfTheDayService().saveTip(updatedTip, new IDatabaseService.DatabaseCallback<>() {
+            tipOfTheDayService.saveTip(updatedTip, new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void result) {
                     hideLoading();
@@ -622,7 +615,7 @@ public class TipOfTheDayActivity extends BaseActivity {
         ConfirmDialog dialog = confirmDialogProvider.get();
         dialog.setData("מחיקת טיפ", "האם אתה בטוח שברצונך למחוק את הטיפ הזה?", "מחק", "ביטול", () -> {
             showLoading();
-            databaseService.getTipOfTheDayService().deleteTip(tip.getId(), new IDatabaseService.DatabaseCallback<>() {
+            tipOfTheDayService.deleteTip(tip.getId(), new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void result) {
                     hideLoading();
@@ -718,7 +711,7 @@ public class TipOfTheDayActivity extends BaseActivity {
      */
     private void checkDailyTip() {
         showLoading();
-        databaseService.getTipOfTheDayService().getTipForToday(new IDatabaseService.DatabaseCallback<>() {
+        tipOfTheDayService.getTipForToday(new DatabaseCallback<>() {
             @Override
             public void onCompleted(TipOfTheDay result) {
                 hideLoading();
@@ -762,7 +755,7 @@ public class TipOfTheDayActivity extends BaseActivity {
                 TipOfTheDay newTip = new TipOfTheDay(text, today);
 
                 String finalText = text;
-                databaseService.getTipOfTheDayService().saveTipIfNotExists(newTip, new IDatabaseService.DatabaseCallback<>() {
+                tipOfTheDayService.saveTipIfNotExists(newTip, new DatabaseCallback<>() {
                     @Override
                     public void onCompleted(TipOfTheDay finalResult) {
                         hideLoading();

@@ -10,7 +10,10 @@ import androidx.annotation.Nullable;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IUserService;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -29,12 +32,12 @@ public class SplashActivity extends BaseActivity {
      * Minimum duration in milliseconds to display the splash screen.
      */
     private static final long SPLASH_DELAY = 3000;
-
     /**
      * UI thread handler for scheduling the transition.
      */
     private final Handler handler = new Handler(Looper.getMainLooper());
-
+    @Inject
+    protected IUserService userService;
     /**
      * Reusable runnable for performing the navigation logic.
      */
@@ -68,7 +71,7 @@ public class SplashActivity extends BaseActivity {
             return;
         }
 
-        databaseService.getUserService().getUser(cachedUser.getId(), new DatabaseCallback<>() {
+        userService.getUser(cachedUser.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(User user) {
                 if (user != null) {

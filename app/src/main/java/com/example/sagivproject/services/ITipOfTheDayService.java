@@ -17,14 +17,14 @@ public interface ITipOfTheDayService {
      *
      * @param callback The callback invoked with the {@link TipOfTheDay} or null if not yet created.
      */
-    void getTipForToday(IDatabaseService.DatabaseCallback<TipOfTheDay> callback);
+    void getTipForToday(DatabaseCallback<TipOfTheDay> callback);
 
     /**
      * Retrieves all tips stored in the database.
      *
      * @param callback The callback invoked with the list of {@link TipOfTheDay} objects.
      */
-    void getAllTips(IDatabaseService.DatabaseCallback<List<TipOfTheDay>> callback);
+    void getAllTips(DatabaseCallback<List<TipOfTheDay>> callback);
 
     /**
      * Retrieves a specific tip by its date ID.
@@ -32,7 +32,7 @@ public interface ITipOfTheDayService {
      * @param dateId   The date ID (yyyy-MM-dd).
      * @param callback The callback invoked with the found {@link TipOfTheDay} or null.
      */
-    void getTipByDate(String dateId, IDatabaseService.DatabaseCallback<TipOfTheDay> callback);
+    void getTipByDate(String dateId, DatabaseCallback<TipOfTheDay> callback);
 
     /**
      * Persists a daily tip in the database using a transaction to prevent overwriting existing entries.
@@ -40,7 +40,7 @@ public interface ITipOfTheDayService {
      * @param tip      The {@link TipOfTheDay} object to save.
      * @param callback The callback invoked with the final tip stored in the database.
      */
-    void saveTipIfNotExists(TipOfTheDay tip, IDatabaseService.DatabaseCallback<TipOfTheDay> callback);
+    void saveTipIfNotExists(TipOfTheDay tip, DatabaseCallback<TipOfTheDay> callback);
 
     /**
      * Creates or updates a tip in the database.
@@ -48,7 +48,7 @@ public interface ITipOfTheDayService {
      * @param tip      The tip to save.
      * @param callback The callback to be invoked upon completion.
      */
-    void saveTip(TipOfTheDay tip, IDatabaseService.DatabaseCallback<Void> callback);
+    void saveTip(TipOfTheDay tip, DatabaseCallback<Void> callback);
 
     /**
      * Deletes a tip from the database by its date ID.
@@ -56,14 +56,14 @@ public interface ITipOfTheDayService {
      * @param dateId   The date ID (yyyy-MM-dd).
      * @param callback The callback to be invoked upon completion.
      */
-    void deleteTip(String dateId, IDatabaseService.DatabaseCallback<Void> callback);
+    void deleteTip(String dateId, DatabaseCallback<Void> callback);
 
     /**
      * Retrieves all custom inspirations from the database.
      *
      * @param callback The callback invoked with the list of inspirations.
      */
-    void getAllInspirations(IDatabaseService.DatabaseCallback<List<TipOfTheDay>> callback);
+    void getAllInspirations(DatabaseCallback<List<TipOfTheDay>> callback);
 
     /**
      * Saves a new or updated inspiration.
@@ -71,7 +71,7 @@ public interface ITipOfTheDayService {
      * @param inspiration The inspiration object.
      * @param callback    The callback to be invoked upon completion.
      */
-    void saveInspiration(TipOfTheDay inspiration, IDatabaseService.DatabaseCallback<Void> callback);
+    void saveInspiration(TipOfTheDay inspiration, DatabaseCallback<Void> callback);
 
     /**
      * Deletes an inspiration by its ID.
@@ -79,5 +79,5 @@ public interface ITipOfTheDayService {
      * @param id       The inspiration ID.
      * @param callback The callback to be invoked upon completion.
      */
-    void deleteInspiration(String id, IDatabaseService.DatabaseCallback<Void> callback);
+    void deleteInspiration(String id, DatabaseCallback<Void> callback);
 }

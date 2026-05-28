@@ -4,11 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -193,14 +190,14 @@ public class User implements Idable {
      */
     @Exclude
     public int getAge() {
-        if (birthDate == null || birthDate.isEmpty()) return -1;
+        if (birthDate == null || birthDate.length() < 10) return -1;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Date date = sdf.parse(birthDate);
-            if (date == null) return -1;
+            int year = Integer.parseInt(birthDate.substring(0, 4));
+            int month = Integer.parseInt(birthDate.substring(5, 7)) - 1; // 0-based
+            int day = Integer.parseInt(birthDate.substring(8, 10));
 
             Calendar birth = Calendar.getInstance();
-            birth.setTime(date);
+            birth.set(year, month, day);
             Calendar today = Calendar.getInstance();
             int age = today.get(YEAR) - birth.get(YEAR);
 
@@ -294,18 +291,19 @@ public class User implements Idable {
     }
 
     /**
-     * Helper to get today's {@link DailyStats}. If it doesn't exist, a new entry is created.
+     * Helper to get {@link DailyStats} for a specific date. If it doesn't exist, a new entry is created.
      * Annotated with {@code @Exclude} to prevent storage in Firebase.
      *
-     * @return The DailyStats for today.
+     * @param date The date string (yyyy-MM-dd).
+     * @return The DailyStats for the given date.
      */
     @Exclude
-    public DailyStats getTodayStats() {
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        DailyStats stats = getDailyStats().get(today);
+    public DailyStats getDailyStatsForDate(String date) {
+        DailyStats stats = getDailyStats().get(date);
         if (stats == null) {
             stats = new DailyStats();
-            getDailyStats().put(today, stats);
+            stats.setId(date);
+            getDailyStats().put(date, stats);
         }
         return stats;
     }

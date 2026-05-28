@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.content.Context;
 
 import com.example.sagivproject.services.IAuthService;
-import com.example.sagivproject.services.IDatabaseService;
 import com.example.sagivproject.services.IEmergencyService;
 import com.example.sagivproject.services.IFallDetectionService;
 import com.example.sagivproject.services.IForumService;
@@ -16,7 +15,6 @@ import com.example.sagivproject.services.ITTSService;
 import com.example.sagivproject.services.ITipOfTheDayService;
 import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.services.impl.AuthServiceImpl;
-import com.example.sagivproject.services.impl.DatabaseService;
 import com.example.sagivproject.services.impl.EmergencyServiceImpl;
 import com.example.sagivproject.services.impl.FallDetectionServiceImpl;
 import com.example.sagivproject.services.impl.ForumServiceImpl;
@@ -97,16 +95,6 @@ public abstract class AppModule {
     public static AlarmManager provideAlarmManager(@ApplicationContext Context context) {
         return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
-
-    /**
-     * Binds the {@link IDatabaseService} interface to its implementation.
-     *
-     * @param databaseService The {@link DatabaseService} implementation.
-     * @return The bound interface.
-     */
-    @Binds
-    @Singleton
-    public abstract IDatabaseService bindDatabaseService(DatabaseService databaseService);
 
     /**
      * Binds the {@link IAuthService} interface to its implementation.

@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.example.sagivproject.models.DailyStats;
 import com.example.sagivproject.models.MedicationUsage;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.example.sagivproject.services.IStatsService;
 import com.example.sagivproject.utils.CalendarUtil;
 import com.google.firebase.database.FirebaseDatabase;

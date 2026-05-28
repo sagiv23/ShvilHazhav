@@ -17,7 +17,8 @@ import com.example.sagivproject.bases.BaseActivity;
 import com.example.sagivproject.dialogs.EditForumCategoryDialog;
 import com.example.sagivproject.models.ForumCategory;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
+import com.example.sagivproject.services.DatabaseCallback;
+import com.example.sagivproject.services.IForumService;
 
 import java.util.List;
 
@@ -42,6 +43,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class ForumCategoriesActivity extends BaseActivity {
     @Inject
     protected ForumCategoryAdapter adapter;
+
+    @Inject
+    protected IForumService forumService;
 
     @Inject
     protected Provider<EditForumCategoryDialog> editForumCategoryDialogProvider;
@@ -118,7 +122,7 @@ public class ForumCategoriesActivity extends BaseActivity {
      */
     private void loadCategories() {
         showLoading();
-        databaseService.getForumService().getCategories(new DatabaseCallback<>() {
+        forumService.getCategories(new DatabaseCallback<>() {
             @Override
             public void onCompleted(List<ForumCategory> data) {
                 hideLoading();
@@ -145,7 +149,7 @@ public class ForumCategoriesActivity extends BaseActivity {
      */
     private void addCategory(String name, EditText editText) {
         showLoading();
-        databaseService.getForumService().addCategory(name, new DatabaseCallback<>() {
+        forumService.addCategory(name, new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void data) {
                 hideLoading();
@@ -171,7 +175,7 @@ public class ForumCategoriesActivity extends BaseActivity {
         EditForumCategoryDialog dialog = editForumCategoryDialogProvider.get();
         dialog.setData(category, newName -> {
             showLoading();
-            databaseService.getForumService().updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
+            forumService.updateCategoryName(category.getId(), newName, new DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void data) {
                     hideLoading();
@@ -196,7 +200,7 @@ public class ForumCategoriesActivity extends BaseActivity {
      */
     private void deleteCategory(ForumCategory category) {
         showLoading();
-        databaseService.getForumService().deleteCategory(category.getId(), new DatabaseCallback<>() {
+        forumService.deleteCategory(category.getId(), new DatabaseCallback<>() {
             @Override
             public void onCompleted(Void data) {
                 hideLoading();

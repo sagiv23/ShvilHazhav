@@ -93,11 +93,8 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         holder.txtUserIsAdmin.setText(String.format("מנהל: %s", user.isAdmin() ? "כן" : "לא"));
 
         String birthDateStr = user.getBirthDate();
-        if (birthDateStr != null) {
-            long millis = calendarUtil.parseDateFromDatabase(birthDateStr);
-            if (millis != -1) {
-                birthDateStr = calendarUtil.formatDate(millis);
-            }
+        if (birthDateStr != null && !birthDateStr.isEmpty()) {
+            birthDateStr = calendarUtil.formatDbDateToDisplay(birthDateStr);
         } else {
             birthDateStr = "לא הוזן";
         }

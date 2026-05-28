@@ -1,8 +1,8 @@
 package com.example.sagivproject.services.impl;
 
 import com.example.sagivproject.models.User;
+import com.example.sagivproject.services.DatabaseCallback;
 import com.example.sagivproject.services.IAuthService;
-import com.example.sagivproject.services.IDatabaseService.DatabaseCallback;
 import com.example.sagivproject.services.IUserService;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
