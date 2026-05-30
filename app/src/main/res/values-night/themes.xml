@@ -9,50 +9,19 @@
         <item name="android:textColor">@color/text_color</item>
     </style>
 
+    <style name="Theme.SagivProject" parent="Theme.SagivProject.Light">
+        <!-- Night-specific professional tweaks can go here if needed -->
+    </style>
+
     <style name="AppTextInputLayoutStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/text_color</item>
-        <item name="boxStrokeWidthFocused">1dp</item>
-        <item name="hintTextColor">@color/text_color</item>
+        <item name="boxStrokeColor">@color/headline</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="hintTextColor">@color/headline</item>
     </style>
 
     <style name="AppTextInputEditTextStyle" parent="Widget.Material3.TextInputEditText.OutlinedBox">
         <item name="android:textColor">@color/text_color</item>
         <item name="android:fontFamily">@font/text_hebrew</item>
     </style>
-
-    <style name="TimePickerCustomTheme" parent="ThemeOverlay.Material3.MaterialTimePicker">
-        <!-- Dialog background -->
-        <item name="colorSurface">@color/background_color</item>
-        <item name="android:windowBackground">@color/background_color</item>
-        <item name="android:colorBackground">@color/background_color</item>
-
-        <!-- Header and active elements -->
-        <item name="colorPrimary">@color/headline</item>
-        <item name="colorOnPrimary">@color/buttons_text_color</item>
-        <item name="colorAccent">@color/headline</item>
-
-        <!-- Time input boxes -->
-        <item name="colorSecondaryContainer">@color/background_color_buttons</item>
-        <item name="colorOnSecondaryContainer">@color/text_color</item>
-
-        <!-- Clock face and labels -->
-        <item name="colorOnSurface">@color/text_color</item>
-        <item name="colorOnSurfaceVariant">@color/text_color</item>
-        <item name="android:textColorPrimary">@color/text_color</item>
-        <item name="android:textColorSecondary">@color/text_color</item>
-        <item name="colorOutline">@color/headline</item>
-
-        <!-- Buttons at the bottom -->
-        <item name="buttonBarPositiveButtonStyle">@style/TimePickerButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/TimePickerButtonStyle</item>
-    </style>
-
-    <style name="TimePickerButtonStyle" parent="Widget.Material3.Button.TextButton">
-        <item name="android:textColor">@color/headline</item>
-        <item name="android:fontFamily">@font/text_hebrew</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="Theme.SagivProject" parent="Theme.SagivProject.Light" />
 
 </resources>

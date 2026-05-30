@@ -1,5 +1,7 @@
 package com.example.sagivproject.screens;
 
+import static android.view.animation.AnimationUtils.loadAnimation;
+
 import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -128,6 +130,8 @@ public class DetailsAboutUserActivity extends BaseActivity {
         });
 
         setupLaunchers();
+
+        findViewById(R.id.btn_DetailsAboutUser_change_photo).startAnimation(loadAnimation(this, R.anim.floating_animation));
     }
 
     /**

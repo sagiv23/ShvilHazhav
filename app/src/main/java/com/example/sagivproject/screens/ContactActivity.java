@@ -1,5 +1,7 @@
 package com.example.sagivproject.screens;
 
+import static android.view.animation.AnimationUtils.loadAnimation;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +54,8 @@ public class ContactActivity extends BaseActivity {
         setupSocialButton(R.id.btnYoutube, "https://www.youtube.com/@Sagiv23");
         setupSocialButton(R.id.btnInstagram, "https://www.instagram.com/Sagiv23");
         setupSocialButton(R.id.btnGithub, "https://github.com/sagiv23");
+
+        findViewById(R.id.imgContactIcon).startAnimation(loadAnimation(this, R.anim.pulse));
     }
 
     /**

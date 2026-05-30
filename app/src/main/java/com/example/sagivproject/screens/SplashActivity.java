@@ -48,7 +48,31 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContent(R.layout.activity_splash, R.id.splashPage);
 
+        startAnimations();
         handler.postDelayed(navigateRunnable, SPLASH_DELAY);
+    }
+
+    private void startAnimations() {
+        android.view.View logo = findViewById(R.id.img_Splash_logo);
+        android.view.View title = findViewById(R.id.tv_Splash_Title);
+        android.view.View subtitle = findViewById(R.id.tv_Splash_Subtitle);
+
+        if (logo != null) {
+            logo.setAlpha(0f);
+            logo.setScaleX(0.9f);
+            logo.setScaleY(0.9f);
+            logo.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(1500).start();
+        }
+
+        if (title != null) {
+            title.setAlpha(0f);
+            title.animate().alpha(1f).setDuration(1000).setStartDelay(800).start();
+        }
+
+        if (subtitle != null) {
+            subtitle.setAlpha(0f);
+            subtitle.animate().alpha(1f).setDuration(1200).setStartDelay(1200).start();
+        }
     }
 
     @Override

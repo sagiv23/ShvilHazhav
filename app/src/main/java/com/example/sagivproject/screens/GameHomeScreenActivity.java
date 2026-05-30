@@ -1,5 +1,7 @@
 package com.example.sagivproject.screens;
 
+import static android.view.animation.AnimationUtils.loadAnimation;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -352,6 +354,7 @@ public class GameHomeScreenActivity extends BaseActivity {
             case SEARCHING:
                 TVStatusOfFindingEnemy.setText("מחפש יריב...");
                 TVStatusOfFindingEnemy.setVisibility(View.VISIBLE);
+                TVStatusOfFindingEnemy.startAnimation(loadAnimation(this, R.anim.pulse));
                 btnCancelFindEnemy.setVisibility(View.VISIBLE);
                 btnFindEnemy.setVisibility(View.GONE);
                 break;

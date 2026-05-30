@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.sagivproject.R;
 import com.example.sagivproject.utils.SharedPreferencesUtil;
 
 import javax.inject.Inject;
@@ -33,6 +34,12 @@ public abstract class BaseDialog extends DialogFragment {
      */
     @Inject
     protected SharedPreferencesUtil sharedPreferencesUtil;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FloatingDialogStyle);
+    }
 
     @NonNull
     @Override

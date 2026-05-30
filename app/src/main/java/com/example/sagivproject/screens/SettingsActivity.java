@@ -156,9 +156,14 @@ public class SettingsActivity extends BaseActivity {
         updateDarkModeText(switchDarkMode, isDarkMode);
 
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sharedPreferencesUtil.setDarkMode(isChecked);
-            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-            updateDarkModeText(switchDarkMode, isChecked);
+            if (buttonView.isPressed()) {
+                sharedPreferencesUtil.setDarkMode(isChecked);
+                int mode = isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+                if (AppCompatDelegate.getDefaultNightMode() != mode) {
+                    AppCompatDelegate.setDefaultNightMode(mode);
+                }
+                updateDarkModeText(switchDarkMode, isChecked);
+            }
         });
 
         // Individual permission toggles

@@ -306,7 +306,7 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
     }
 
     /**
-     * Sets a personalized greeting message in a TextView.
+     * Sets a personalized greeting message in a TextView with a professional fade-in.
      *
      * @param textViewId The ID of the TextView to update.
      */
@@ -315,14 +315,20 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
         if (user != null) {
             TextView textView = findViewById(textViewId);
             if (textView != null) {
+                textView.setAlpha(0f);
                 textView.setText(String.format("שלום %s", user.getFullName()));
+                textView.animate()
+                        .alpha(1f)
+                        .setDuration(1000)
+                        .setInterpolator(new android.view.animation.DecelerateInterpolator())
+                        .start();
             }
         }
     }
 
     /**
      * Navigates to a destination using a pre-configured Intent.
-     * Handles common logic like closing the drawer and applying animations.
+     * Handles common logic like closing the drawer and applying professional transitions.
      *
      * @param intent The intent to launch.
      */
@@ -332,7 +338,7 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
 
         closeDrawer();
 
-        // Prevent navigating to the same activity (unless clearing stack via flags)
+        // Prevent navigating to the same activity
         boolean clearStack = (intent.getFlags() & Intent.FLAG_ACTIVITY_CLEAR_TASK) != 0;
         if (intent.getComponent() != null &&
                 this.getClass().getName().equals(intent.getComponent().getClassName()) &&
@@ -340,8 +346,9 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
             return;
         }
 
+        // Professional Crossfade/Slide transition
         ActivityOptionsCompat options = ActivityOptionsCompat.makeCustomAnimation(
-                this, R.anim.slide_in_right, R.anim.slide_out_left);
+                this, android.R.anim.fade_in, android.R.anim.fade_out);
 
         startActivity(intent, options.toBundle());
     }
@@ -433,11 +440,16 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
      * Uses a counter to handle multiple concurrent loading processes.
      */
     protected void showLoading() {
+        if (isFinishing() || isDestroyed()) return;
+
         loadingCount++;
         if (loadingCount == 1) {
             if (currentLoadingDialog == null || !currentLoadingDialog.isAdded()) {
                 currentLoadingDialog = loadingDialogProvider.get();
-                currentLoadingDialog.show(getSupportFragmentManager(), "LoadingDialog");
+                // Ensure we don't show after state is saved to avoid crashes during config changes
+                if (!getSupportFragmentManager().isStateSaved()) {
+                    currentLoadingDialog.show(getSupportFragmentManager(), "LoadingDialog");
+                }
             }
         }
     }
@@ -450,7 +462,8 @@ public abstract class BaseActivity extends AppCompatActivity implements AppMenuF
         if (loadingCount <= 0) {
             loadingCount = 0;
             if (currentLoadingDialog != null && currentLoadingDialog.isAdded()) {
-                currentLoadingDialog.dismiss();
+                // Use dismissAllowingStateLoss to prevent crashes during theme switches or background returns
+                currentLoadingDialog.dismissAllowingStateLoss();
                 currentLoadingDialog = null;
             }
         }

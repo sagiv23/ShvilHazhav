@@ -211,6 +211,14 @@ public class AiActivity extends BaseActivity {
                     text = "לא התקבלה תשובה.";
                 }
                 displayTextWithAnimation(text);
+
+                // Add a subtle bounce animation to the card containing the answer
+                View card = findViewById(R.id.card_ai_container);
+                if (card != null) {
+                    card.animate().scaleX(1.02f).scaleY(1.02f).setDuration(200)
+                            .withEndAction(() -> card.animate().scaleX(1f).scaleY(1f).setDuration(200).start())
+                            .start();
+                }
             }
 
             @Override

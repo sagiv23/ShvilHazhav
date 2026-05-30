@@ -37,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:layoutAnimation="@anim/layout_pro_stagger"
                 android:orientation="vertical"
                 android:padding="20dp">
 

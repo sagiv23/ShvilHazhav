@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -109,7 +110,9 @@ public class MedicationListActivity extends BaseActivity {
         user = sharedPreferencesUtil.getUser();
         uid = Objects.requireNonNull(user).getId();
 
-        findViewById(R.id.btn_MedicationList_add_medication).setOnClickListener(v -> openMedicationDialog(null));
+        View btnAdd = findViewById(R.id.btn_MedicationList_add_medication);
+        btnAdd.setOnClickListener(v -> openMedicationDialog(null));
+        btnAdd.startAnimation(AnimationUtils.loadAnimation(this, R.anim.floating_animation));
 
         ViewPager2 viewPager_medications = findViewById(R.id.viewPager_medications);
 

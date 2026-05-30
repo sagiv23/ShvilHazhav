@@ -21,6 +21,29 @@
         <item name="android:forceDarkAllowed">true</item>
     </style>
 
+    <style name="FloatingDialogStyle" parent="Theme.Material3.DayNight.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.6</item>
+
+        <!-- Restore App Colors for Dialogs -->
+        <item name="colorPrimary">@color/background_color_nav</item>
+        <item name="colorOnPrimary">@color/nav_text_color</item>
+        <item name="colorSecondary">@color/background_color_buttons</item>
+        <item name="colorOnSecondary">@color/buttons_text_color</item>
+        <item name="colorSurface">@color/background_color</item>
+        <item name="colorOnSurface">@color/text_color</item>
+        <item name="colorOutline">@color/text_color</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
     <style name="AppPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@color/popup_background_color</item>
         <item name="android:textAppearance">@style/PopupMenuTextAppearance</item>
