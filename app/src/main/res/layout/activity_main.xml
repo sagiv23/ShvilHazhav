@@ -43,20 +43,21 @@
                     android:id="@+id/txt_home_Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/hello_dear_patient"
                     android:textColor="@color/headline"
-                    android:textSize="40sp" />
+                    android:textSize="42sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="20dp"
                     android:clickable="true"
                     android:focusable="true"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="@color/error"
                     app:strokeWidth="2dp">
 
@@ -65,24 +66,24 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="20dp">
 
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_marginBottom="12dp"
                             android:contentDescription="@string/icon_emergency_contacts"
                             android:src="@drawable/ic_emergency" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_home_to_emergency"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/emergency_contacts"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:strokeWidth="1dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -100,7 +101,7 @@
                         android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="16dp"
+                        app:cardCornerRadius="24dp"
                         app:cardElevation="4dp"
                         app:strokeColor="?attr/colorOutline"
                         app:strokeWidth="1dp">
@@ -113,21 +114,21 @@
                             android:padding="16dp">
 
                             <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginBottom="6dp"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:layout_marginBottom="12dp"
                                 android:contentDescription="@string/icon_medication"
                                 android:src="@drawable/ic_medication" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_home_to_MedicationList"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="64dp"
                                 android:fontFamily="@font/text_hebrew"
                                 android:text="@string/my_medications_list"
                                 android:textAllCaps="false"
                                 android:textSize="18sp"
-                                app:cornerRadius="30dp"
+                                app:cornerRadius="12dp"
                                 app:strokeWidth="1dp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -139,7 +140,7 @@
                         android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="16dp"
+                        app:cardCornerRadius="24dp"
                         app:cardElevation="4dp"
                         app:strokeColor="?attr/colorOutline"
                         app:strokeWidth="1dp">
@@ -152,21 +153,21 @@
                             android:padding="16dp">
 
                             <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginBottom="6dp"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:layout_marginBottom="12dp"
                                 android:contentDescription="@string/icon_forum"
                                 android:src="@drawable/ic_forum" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_home_to_forum_categories"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="64dp"
                                 android:fontFamily="@font/text_hebrew"
                                 android:text="@string/forum"
                                 android:textAllCaps="false"
                                 android:textSize="18sp"
-                                app:cornerRadius="30dp"
+                                app:cornerRadius="12dp"
                                 app:strokeWidth="1dp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -185,7 +186,7 @@
                         android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="16dp"
+                        app:cardCornerRadius="24dp"
                         app:cardElevation="4dp"
                         app:strokeColor="?attr/colorOutline"
                         app:strokeWidth="1dp">
@@ -198,21 +199,21 @@
                             android:padding="16dp">
 
                             <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginBottom="6dp"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:layout_marginBottom="12dp"
                                 android:contentDescription="@string/icon_ai_advisor"
                                 android:src="@drawable/ic_ai_assistant" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_home_to_Ai"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="64dp"
                                 android:fontFamily="@font/text_hebrew"
                                 android:text="@string/ai_advisor"
                                 android:textAllCaps="false"
                                 android:textSize="18sp"
-                                app:cornerRadius="30dp"
+                                app:cornerRadius="12dp"
                                 app:strokeWidth="1dp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -224,7 +225,7 @@
                         android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="16dp"
+                        app:cardCornerRadius="24dp"
                         app:cardElevation="4dp"
                         app:strokeColor="?attr/colorOutline"
                         app:strokeWidth="1dp">
@@ -237,21 +238,21 @@
                             android:padding="16dp">
 
                             <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginBottom="6dp"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:layout_marginBottom="12dp"
                                 android:contentDescription="@string/icon_game"
                                 android:src="@drawable/ic_memory_game" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_home_to_GameHomeScreen"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="64dp"
                                 android:fontFamily="@font/text_hebrew"
                                 android:text="@string/memory_game"
                                 android:textAllCaps="false"
                                 android:textSize="18sp"
-                                app:cornerRadius="30dp"
+                                app:cornerRadius="12dp"
                                 app:strokeWidth="1dp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -270,7 +271,7 @@
                         android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="16dp"
+                        app:cardCornerRadius="24dp"
                         app:cardElevation="4dp"
                         app:strokeColor="?attr/colorOutline"
                         app:strokeWidth="1dp">
@@ -283,21 +284,21 @@
                             android:padding="16dp">
 
                             <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginBottom="6dp"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:layout_marginBottom="12dp"
                                 android:contentDescription="@string/icon_game"
                                 android:src="@drawable/ic_math_game" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_home_to_MathProblems"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="64dp"
                                 android:fontFamily="@font/text_hebrew"
                                 android:text="@string/math_exercises"
                                 android:textAllCaps="false"
                                 android:textSize="18sp"
-                                app:cornerRadius="30dp"
+                                app:cornerRadius="12dp"
                                 app:strokeWidth="1dp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -309,7 +310,7 @@
                         android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="16dp"
+                        app:cardCornerRadius="24dp"
                         app:cardElevation="4dp"
                         app:strokeColor="?attr/colorOutline"
                         app:strokeWidth="1dp">
@@ -322,21 +323,21 @@
                             android:padding="16dp">
 
                             <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginBottom="6dp"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:layout_marginBottom="12dp"
                                 android:contentDescription="@string/icon_daily_tip"
                                 android:src="@drawable/ic_tip" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_home_to_TipOfTheDay"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="64dp"
                                 android:fontFamily="@font/text_hebrew"
                                 android:text="@string/daily_tip"
                                 android:textAllCaps="false"
                                 android:textSize="18sp"
-                                app:cornerRadius="30dp"
+                                app:cornerRadius="12dp"
                                 app:strokeWidth="1dp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -348,7 +349,7 @@
                     android:layout_marginBottom="32dp"
                     android:clickable="true"
                     android:focusable="true"
-                    app:cardCornerRadius="16dp"
+                    app:cardCornerRadius="24dp"
                     app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
                     app:strokeWidth="1dp">
@@ -358,24 +359,24 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="20dp">
 
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginBottom="12dp"
                             android:contentDescription="@string/statistics"
                             android:src="@drawable/ic_statistics" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_home_to_Stats"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/statistics"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:strokeWidth="1dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -391,7 +392,7 @@
             android:contentDescription="@string/emergency_contacts"
             android:src="@drawable/ic_emergency"
             app:backgroundTint="@color/error"
-            app:fabSize="normal"
+            app:fabCustomSize="60dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:tint="@color/text_color" />

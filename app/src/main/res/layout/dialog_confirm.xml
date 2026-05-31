@@ -22,17 +22,19 @@
             android:fontFamily="@font/headline_hebrew"
             android:gravity="center"
             android:textColor="@color/headline"
-            android:textSize="28sp"
+            android:textSize="32sp"
+            android:textStyle="bold"
             tools:text="כותרת דיאלוג" />
 
         <TextView
             android:id="@+id/txt_DialogConfirm_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="28dp"
             android:fontFamily="@font/text_hebrew"
             android:gravity="center"
-            android:textSize="20sp"
+            android:lineSpacingExtra="4dp"
+            android:textSize="22sp"
             tools:text="הודעה המפרטת את פעולת האישור או הביטול למשתמש." />
 
         <LinearLayout
@@ -43,29 +45,29 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_DialogConfirm_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/cancel"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_DialogConfirm_confirm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/confirm"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeWidth="1dp" />
         </LinearLayout>
     </LinearLayout>

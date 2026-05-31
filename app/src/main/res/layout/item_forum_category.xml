@@ -7,10 +7,10 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
     android:layoutDirection="rtl"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="8dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="4dp"
     app:strokeColor="?attr/colorOutline"
-    app:strokeWidth="1.5dp">
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,8 +23,9 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/headline_hebrew"
             android:gravity="center_vertical"
+            android:minHeight="48dp"
             android:textColor="@color/headline"
-            android:textSize="18sp"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_edit_category"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,10 +34,12 @@
 
         <ImageButton
             android:id="@+id/btn_edit_category"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/edit"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_edit"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -46,10 +49,12 @@
 
         <ImageButton
             android:id="@+id/btn_delete_category"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/delete"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

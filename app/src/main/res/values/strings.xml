@@ -32,6 +32,7 @@
 </string>
     <string name="icon_contact">אייקון צור קשר</string>
     <string name="full_name">שם מלא</string>
+    <string name="age">גיל</string>
     <string name="confirm">אישור</string>
     <string name="cancel">ביטול</string>
     <string name="welcome">ברוכים הבאים</string>
@@ -173,4 +174,5 @@
     <string name="inspiration_pool">מאגר השראות</string>
     <string name="creating_tip">יוצר טיפ באמצעות AI…</string>
     <string name="creating_inspiration">יוצר השראה באמצעות AI…</string>
+    <string name="loading_data">טוען נתונים, נא להמתין…</string>
 </resources>

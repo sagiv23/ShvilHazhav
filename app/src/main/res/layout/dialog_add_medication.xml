@@ -22,7 +22,8 @@
             android:gravity="center"
             android:text="@string/add_medication"
             android:textColor="@color/headline"
-            android:textSize="28sp" />
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -42,7 +43,7 @@
                 android:fontFamily="@font/text_hebrew"
                 android:hint="@string/medication_name"
                 android:inputType="text"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -63,7 +64,7 @@
                 android:fontFamily="@font/text_hebrew"
                 android:hint="@string/medication_type"
                 android:inputType="none"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -84,24 +85,28 @@
                 android:fontFamily="@font/text_hebrew"
                 android:hint="@string/details"
                 android:inputType="text"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="28dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_select_hours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/choose_hours_reminders"
                 android:textAllCaps="false"
-                android:textSize="18sp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_calendar"
+                app:iconGravity="textStart"
+                app:iconPadding="12dp"
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.chip.ChipGroup
@@ -122,28 +127,28 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_medication_cancel"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/cancel"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_medication_confirm"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
-                android:text="@string/add"
+                android:text="@string/save"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeWidth="1dp" />
         </LinearLayout>
     </LinearLayout>

@@ -7,17 +7,17 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
     android:layoutDirection="rtl"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="8dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="4dp"
     app:strokeColor="?attr/colorOutline"
-    app:strokeWidth="1.5dp">
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="20dp"
         android:weightSum="10">
 
         <TextView
@@ -30,7 +30,7 @@
             android:gravity="start|center_vertical"
             android:maxLines="1"
             android:textColor="@color/text_color"
-            android:textSize="18sp"
+            android:textSize="20sp"
             tools:text="שם פרטי + משפחה" />
 
         <TextView
@@ -41,8 +41,7 @@
             android:fontFamily="@font/text_hebrew"
             android:gravity="center"
             android:textColor="@color/headline"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:textSize="28sp"
             tools:text="5" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

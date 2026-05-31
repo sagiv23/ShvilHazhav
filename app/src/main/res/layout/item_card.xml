@@ -6,10 +6,10 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:layoutDirection="rtl"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="8dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="4dp"
     app:strokeColor="?attr/colorOutline"
-    app:strokeWidth="1.5dp">
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/text_english"
-            android:textSize="16sp"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,15 +46,15 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_ItemCard_delete"
             style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:padding="0dp"
             android:visibility="gone"
-            app:cornerRadius="20dp"
+            app:cornerRadius="24dp"
             app:icon="@drawable/ic_delete"
             app:iconGravity="textTop"
             app:iconPadding="0dp"
-            app:iconSize="20dp"
+            app:iconSize="24dp"
             app:iconTint="@color/error"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

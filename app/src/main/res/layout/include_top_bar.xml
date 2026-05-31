@@ -8,15 +8,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/background_color_nav">
+        android:layout_height="72dp"
+        android:background="@color/background_color_nav"
+        android:elevation="4dp">
 
         <ImageButton
             android:id="@+id/btn_open_drawer"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/main"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_menu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +34,8 @@
             android:fontFamily="@font/headline_hebrew"
             android:text="@string/app_name"
             android:textColor="@color/nav_text_color"
-            android:textSize="25sp"
+            android:textSize="28sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,6 +55,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:alpha="1"
         android:background="@color/text_color" />
 
 </LinearLayout>

@@ -42,20 +42,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/contact"
                     android:textColor="@color/headline"
-                    android:textSize="40sp" />
+                    android:textSize="42sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -66,20 +67,20 @@
 
                         <ImageView
                             android:id="@+id/imgContactIcon"
-                            android:layout_width="72dp"
-                            android:layout_height="72dp"
-                            android:layout_marginBottom="16dp"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginBottom="20dp"
                             android:contentDescription="@string/icon_contact"
                             android:src="@drawable/ic_contact_support" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginBottom="12dp"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
                             android:text="@string/mail_to_contact"
-                            android:textSize="25sp" />
+                            android:textSize="28sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -88,17 +89,24 @@
                             android:autoLink="email"
                             android:fontFamily="@font/text_english"
                             android:text="@string/mail"
-                            android:textColorLink="@color/error"
-                            android:textSize="20sp"
+                            android:textColorLink="@color/headline"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
+
+                        <com.google.android.material.divider.MaterialDivider
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            app:dividerColor="?attr/colorOutline" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
+                            android:lineSpacingExtra="4dp"
                             android:text="@string/contact_text"
-                            android:textSize="20sp" />
+                            android:textSize="22sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -108,10 +116,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
                     android:visibility="gone"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -122,48 +130,48 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnYoutube"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
                             android:layout_marginBottom="16dp"
                             android:fontFamily="@font/headline_english"
                             android:text="@string/youtube"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:icon="@drawable/ic_youtube"
                             app:iconGravity="textStart"
-                            app:iconPadding="12dp"
+                            app:iconPadding="20dp"
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnInstagram"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
                             android:layout_marginBottom="16dp"
                             android:fontFamily="@font/headline_english"
                             android:text="@string/instagram"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:icon="@drawable/ic_instagram"
                             app:iconGravity="textStart"
-                            app:iconPadding="12dp"
+                            app:iconPadding="20dp"
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnGithub"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
                             android:fontFamily="@font/headline_english"
                             android:text="@string/github"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:icon="@drawable/ic_github"
                             app:iconGravity="textStart"
-                            app:iconPadding="12dp"
+                            app:iconPadding="20dp"
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
                     </LinearLayout>

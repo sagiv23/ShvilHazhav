@@ -22,7 +22,8 @@
             android:gravity="center"
             android:text="@string/tip_of_the_day_admin"
             android:textColor="@color/headline"
-            android:textSize="28sp" />
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -46,14 +47,14 @@
                 android:fontFamily="@font/text_hebrew"
                 android:hint="@string/tip_date_hint"
                 android:inputType="none"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutTipContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="28dp"
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusBottomEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
@@ -73,7 +74,7 @@
                 android:hint="@string/tip_content"
                 android:inputType="textMultiLine"
                 android:minLines="3"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -85,28 +86,28 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnTipCancel"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/cancel"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnTipSave"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/save"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeWidth="1dp" />
         </LinearLayout>
     </LinearLayout>

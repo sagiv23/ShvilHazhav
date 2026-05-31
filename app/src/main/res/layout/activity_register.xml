@@ -42,20 +42,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/register"
                     android:textColor="@color/headline"
-                    android:textSize="40sp" />
+                    android:textSize="42sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -84,7 +85,7 @@
                                 android:fontFamily="@font/text_hebrew"
                                 android:hint="@string/first_name"
                                 android:inputType="textPersonName"
-                                android:textSize="20sp" />
+                                android:textSize="22sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -108,7 +109,7 @@
                                 android:fontFamily="@font/text_hebrew"
                                 android:hint="@string/last_name"
                                 android:inputType="textPersonName"
-                                android:textSize="20sp" />
+                                android:textSize="22sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -133,7 +134,7 @@
                                 android:focusable="false"
                                 android:fontFamily="@font/text_hebrew"
                                 android:hint="@string/birth_date"
-                                android:textSize="20sp" />
+                                android:textSize="22sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -158,13 +159,13 @@
                                 android:hint="@string/mail_address"
                                 android:inputType="textEmailAddress"
                                 android:textDirection="ltr"
-                                android:textSize="20sp" />
+                                android:textSize="22sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="24dp"
+                            android:layout_marginBottom="28dp"
                             android:fontFamily="@font/text_hebrew"
                             app:boxBackgroundMode="outline"
                             app:boxCornerRadiusBottomEnd="16dp"
@@ -182,19 +183,19 @@
                                 android:hint="@string/password"
                                 android:inputType="textPassword"
                                 android:textDirection="ltr"
-                                android:textSize="20sp" />
+                                android:textSize="22sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnRegister"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
                             android:layout_gravity="center"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/register"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:strokeWidth="1dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

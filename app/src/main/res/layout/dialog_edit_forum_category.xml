@@ -21,12 +21,13 @@
             android:gravity="center"
             android:text="@string/edit_category_name"
             android:textColor="@color/headline"
-            android:textSize="28sp" />
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="28dp"
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusBottomEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
@@ -41,7 +42,7 @@
                 android:fontFamily="@font/text_hebrew"
                 android:hint="@string/category_name"
                 android:inputType="textPersonName"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -53,28 +54,28 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditCategoryCancel"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/cancel"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditCategorySave"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/save"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeWidth="1dp" />
         </LinearLayout>
 

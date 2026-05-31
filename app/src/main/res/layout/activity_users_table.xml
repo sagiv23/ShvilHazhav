@@ -42,36 +42,37 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/users_table"
                     android:textColor="@color/headline"
-                    android:textSize="40sp" />
+                    android:textSize="42sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_UsersTable_add_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/text_hebrew"
                     android:text="@string/add_user"
                     android:textAllCaps="false"
-                    android:textSize="20sp"
-                    app:cornerRadius="30dp"
+                    android:textSize="22sp"
+                    app:cornerRadius="16dp"
                     app:icon="@drawable/ic_add"
                     app:iconGravity="textStart"
-                    app:iconPadding="12dp"
+                    app:iconPadding="16dp"
                     app:iconSize="28dp"
                     app:strokeWidth="1dp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    android:layout_marginBottom="20dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -85,18 +86,18 @@
                             android:layout_gravity="center"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/search_by"
-                            android:textSize="25sp" />
+                            android:textSize="28sp" />
 
                         <Spinner
                             android:id="@+id/spinner_UsersTable_search_type"
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:layout_marginTop="8dp" />
+                            android:layout_height="60dp"
+                            android:layout_marginTop="12dp" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="16dp"
                             android:fontFamily="@font/text_hebrew"
                             android:hint="@string/write_here"
                             app:boxBackgroundMode="outline"
@@ -112,7 +113,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/text_hebrew"
                                 android:inputType="text"
-                                android:textSize="20sp" />
+                                android:textSize="22sp" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -134,4 +135,3 @@
         android:layout_gravity="start" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
-

@@ -42,236 +42,222 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/settings"
                     android:textColor="@color/headline"
-                    android:textSize="40sp" />
+                    android:textSize="42sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="8dp">
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switch_dark_mode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:padding="20dp"
-                            android:paddingStart="20dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="12dp"
-                            android:switchPadding="20dp"
+                            android:minHeight="72dp"
+                            android:paddingHorizontal="16dp"
+                            android:switchPadding="16dp"
                             android:text="@string/dark_mode"
-                            android:textAlignment="viewStart"
-                            android:textSize="20sp" />
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/ic_settings" />
 
-                        <View
+                        <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.7"
-                            android:background="?attr/colorOnSurface" />
+                            android:layout_height="wrap_content"
+                            app:dividerInsetEnd="16dp"
+                            app:dividerInsetStart="16dp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switch_vibration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:padding="20dp"
-                            android:paddingStart="20dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="12dp"
-                            android:switchPadding="20dp"
+                            android:minHeight="72dp"
+                            android:paddingHorizontal="16dp"
+                            android:switchPadding="16dp"
                             android:text="@string/vibration"
-                            android:textAlignment="viewStart"
-                            android:textSize="20sp" />
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/ic_sound" />
 
-                        <View
+                        <com.google.android.material.divider.MaterialDivider
                             android:id="@+id/separator_vibration"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.7"
-                            android:background="?attr/colorOnSurface" />
+                            android:layout_height="wrap_content"
+                            app:dividerInsetEnd="16dp"
+                            app:dividerInsetStart="16dp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switch_notifications"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:padding="20dp"
-                            android:paddingStart="20dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="12dp"
-                            android:switchPadding="20dp"
+                            android:minHeight="72dp"
+                            android:paddingHorizontal="16dp"
+                            android:switchPadding="16dp"
                             android:text="@string/notifications_permission"
-                            android:textAlignment="viewStart"
-                            android:textSize="20sp" />
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/ic_tip" />
 
-                        <View
+                        <com.google.android.material.divider.MaterialDivider
                             android:id="@+id/separator_notifications"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.7"
-                            android:background="?attr/colorOnSurface" />
+                            android:layout_height="wrap_content"
+                            app:dividerInsetEnd="16dp"
+                            app:dividerInsetStart="16dp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switch_camera"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:padding="20dp"
-                            android:paddingStart="20dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="12dp"
-                            android:switchPadding="20dp"
+                            android:minHeight="72dp"
+                            android:paddingHorizontal="16dp"
+                            android:switchPadding="16dp"
                             android:text="@string/camera_permission"
-                            android:textAlignment="viewStart"
-                            android:textSize="20sp" />
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/ic_camera" />
 
-                        <View
+                        <com.google.android.material.divider.MaterialDivider
                             android:id="@+id/separator_camera"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.7"
-                            android:background="?attr/colorOnSurface" />
+                            android:layout_height="wrap_content"
+                            app:dividerInsetEnd="16dp"
+                            app:dividerInsetStart="16dp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switch_gallery"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:padding="20dp"
-                            android:paddingStart="20dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="12dp"
-                            android:switchPadding="20dp"
+                            android:minHeight="72dp"
+                            android:paddingHorizontal="16dp"
+                            android:switchPadding="16dp"
                             android:text="@string/gallery_permission"
-                            android:textAlignment="viewStart"
-                            android:textSize="20sp" />
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/ic_search" />
 
-                        <View
+                        <com.google.android.material.divider.MaterialDivider
                             android:id="@+id/separator_gallery"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.7"
-                            android:background="?attr/colorOnSurface" />
+                            android:layout_height="wrap_content"
+                            app:dividerInsetEnd="16dp"
+                            app:dividerInsetStart="16dp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switch_location"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:padding="20dp"
-                            android:paddingStart="20dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="12dp"
-                            android:switchPadding="20dp"
+                            android:minHeight="72dp"
+                            android:paddingHorizontal="16dp"
+                            android:switchPadding="16dp"
                             android:text="@string/location_permission"
-                            android:textAlignment="viewStart"
-                            android:textSize="20sp" />
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/ic_search" />
 
-                        <View
+                        <com.google.android.material.divider.MaterialDivider
                             android:id="@+id/separator_location"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.7"
-                            android:background="?attr/colorOnSurface" />
+                            android:layout_height="wrap_content"
+                            app:dividerInsetEnd="16dp"
+                            app:dividerInsetStart="16dp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switch_sms"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:padding="20dp"
-                            android:paddingStart="20dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="12dp"
-                            android:switchPadding="20dp"
+                            android:minHeight="72dp"
+                            android:paddingHorizontal="16dp"
+                            android:switchPadding="16dp"
                             android:text="@string/sms_permission"
-                            android:textAlignment="viewStart"
-                            android:textSize="20sp" />
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/ic_send" />
 
-                        <View
+                        <com.google.android.material.divider.MaterialDivider
                             android:id="@+id/separator_sms"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.7"
-                            android:background="?attr/colorOnSurface" />
+                            android:layout_height="wrap_content"
+                            app:dividerInsetEnd="16dp"
+                            app:dividerInsetStart="16dp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switch_contacts"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:padding="20dp"
-                            android:paddingStart="20dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="12dp"
-                            android:switchPadding="20dp"
+                            android:minHeight="72dp"
+                            android:paddingHorizontal="16dp"
+                            android:switchPadding="16dp"
                             android:text="@string/contacts_permission"
-                            android:textAlignment="viewStart"
-                            android:textSize="20sp" />
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/ic_users" />
 
-                        <View
+                        <com.google.android.material.divider.MaterialDivider
                             android:id="@+id/separator_fall_detection"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.7"
-                            android:background="?attr/colorOnSurface" />
+                            android:layout_height="wrap_content"
+                            app:dividerInsetEnd="16dp"
+                            app:dividerInsetStart="16dp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switch_fall_detection"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:padding="20dp"
-                            android:paddingStart="20dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="12dp"
-                            android:switchPadding="20dp"
+                            android:minHeight="72dp"
+                            android:paddingHorizontal="16dp"
+                            android:switchPadding="16dp"
                             android:text="@string/fall_detection"
-                            android:textAlignment="viewStart"
-                            android:textSize="20sp" />
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/ic_emergency" />
 
-                        <View
+                        <com.google.android.material.divider.MaterialDivider
                             android:id="@+id/separator_logout"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.7"
-                            android:background="?attr/colorOnSurface" />
+                            android:layout_height="wrap_content"
+                            app:dividerInsetEnd="16dp"
+                            app:dividerInsetStart="16dp" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_logout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="16dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_margin="16dp"
                             android:backgroundTint="@color/error"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/log_out"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
+                            app:icon="@drawable/ic_login"
+                            app:iconGravity="textStart"
+                            app:iconPadding="12dp"
+                            app:iconSize="28dp"
                             app:strokeWidth="1dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

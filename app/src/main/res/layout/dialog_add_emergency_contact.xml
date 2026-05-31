@@ -22,7 +22,8 @@
             android:gravity="center"
             android:text="@string/add_emergency_contact"
             android:textColor="@color/headline"
-            android:textSize="28sp" />
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -45,7 +46,7 @@
                 android:fontFamily="@font/text_hebrew"
                 android:hint="@string/first_name"
                 android:inputType="textPersonName"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -69,13 +70,13 @@
                 android:fontFamily="@font/text_hebrew"
                 android:hint="@string/last_name"
                 android:inputType="textPersonName"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="28dp"
             android:fontFamily="@font/text_hebrew"
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusBottomEnd="16dp"
@@ -93,7 +94,7 @@
                 android:fontFamily="@font/text_hebrew"
                 android:hint="@string/phone_number"
                 android:inputType="phone"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -105,28 +106,28 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_dialog_cancel_contact"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/cancel"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_dialog_save_contact"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/save"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                app:cornerRadius="30dp"
+                android:textSize="20sp"
+                app:cornerRadius="16dp"
                 app:strokeWidth="1dp" />
         </LinearLayout>
     </LinearLayout>

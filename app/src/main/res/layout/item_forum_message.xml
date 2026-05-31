@@ -115,7 +115,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ItemForumMessageTxtEmail"
-                tools:text="הודעה ארוכה מאוד שעלולה לחרוג מהמסך אם לא נגביל אותה כראוי באמצעות המאפיינים של ConstraintLayout" />
+                tools:text="הודעה" />
 
             <TextView
                 android:id="@+id/ItemForumMessageTxtTime"

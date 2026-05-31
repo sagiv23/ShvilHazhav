@@ -42,20 +42,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/log_in"
                     android:textColor="@color/headline"
-                    android:textSize="40sp" />
+                    android:textSize="42sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -66,7 +67,7 @@
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
+                            android:layout_marginBottom="20dp"
                             android:fontFamily="@font/text_hebrew"
                             app:boxBackgroundMode="outline"
                             app:boxCornerRadiusBottomEnd="16dp"
@@ -85,13 +86,13 @@
                                 android:hint="@string/mail_address"
                                 android:inputType="textEmailAddress"
                                 android:textDirection="ltr"
-                                android:textSize="20sp" />
+                                android:textSize="24sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
+                            android:layout_marginBottom="24dp"
                             android:fontFamily="@font/text_hebrew"
                             app:boxBackgroundMode="outline"
                             app:boxCornerRadiusBottomEnd="16dp"
@@ -110,20 +111,20 @@
                                 android:hint="@string/password"
                                 android:inputType="textPassword"
                                 android:textDirection="ltr"
-                                android:textSize="20sp" />
+                                android:textSize="24sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnLogin"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
                             android:layout_gravity="center"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/log_in"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:strokeWidth="1dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

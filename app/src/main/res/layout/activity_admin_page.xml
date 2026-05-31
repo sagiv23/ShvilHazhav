@@ -28,29 +28,30 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="12dp"
                 android:fontFamily="@font/headline_hebrew"
                 android:text="@string/admin_page"
                 android:textColor="@color/headline"
-                android:textSize="40sp" />
+                android:textSize="42sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txt_admin_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="24dp"
                 android:fontFamily="@font/text_hebrew"
                 android:text="@string/hello_admin"
-                android:textSize="30sp" />
+                android:textSize="32sp" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
                 app:strokeColor="?attr/colorOutline"
-                app:strokeWidth="1.5dp">
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -62,136 +63,136 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="24dp"
                         android:fontFamily="@font/text_hebrew"
                         android:gravity="center"
                         android:text="@string/admin_options"
-                        android:textSize="25sp" />
+                        android:textSize="28sp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_UsersTablePage"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/users_table"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
-                        app:cornerRadius="30dp"
+                        android:textSize="22sp"
+                        app:cornerRadius="16dp"
                         app:icon="@drawable/ic_users"
                         app:iconGravity="textStart"
-                        app:iconPadding="12dp"
+                        app:iconPadding="16dp"
                         app:iconSize="28dp"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_UserStats"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/statistics"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
-                        app:cornerRadius="30dp"
+                        android:textSize="22sp"
+                        app:cornerRadius="16dp"
                         app:icon="@drawable/ic_statistics"
                         app:iconGravity="textStart"
-                        app:iconPadding="12dp"
+                        app:iconPadding="16dp"
                         app:iconSize="28dp"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_MemoryGameLogsTablePage"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/memory_game_log_table"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
-                        app:cornerRadius="30dp"
+                        android:textSize="22sp"
+                        app:cornerRadius="16dp"
                         app:icon="@drawable/ic_memory_game"
                         app:iconGravity="textStart"
-                        app:iconPadding="12dp"
+                        app:iconPadding="16dp"
                         app:iconSize="28dp"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_MedicineImagesTablePage"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/medications_imgs_table"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
-                        app:cornerRadius="30dp"
+                        android:textSize="22sp"
+                        app:cornerRadius="16dp"
                         app:icon="@drawable/ic_medication"
                         app:iconGravity="textStart"
-                        app:iconPadding="12dp"
+                        app:iconPadding="16dp"
                         app:iconSize="28dp"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_ForumCategories"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/forum_admin"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
-                        app:cornerRadius="30dp"
+                        android:textSize="22sp"
+                        app:cornerRadius="16dp"
                         app:icon="@drawable/ic_forum"
                         app:iconGravity="textStart"
-                        app:iconPadding="12dp"
+                        app:iconPadding="16dp"
                         app:iconSize="28dp"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_TipOfTheDay"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/tip_of_the_day_admin"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
-                        app:cornerRadius="30dp"
+                        android:textSize="22sp"
+                        app:cornerRadius="16dp"
                         app:icon="@drawable/ic_tip"
                         app:iconGravity="textStart"
-                        app:iconPadding="12dp"
+                        app:iconPadding="16dp"
                         app:iconSize="28dp"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_DetailsAboutUser"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/user"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
-                        app:cornerRadius="30dp"
+                        android:textSize="22sp"
+                        app:cornerRadius="16dp"
                         app:icon="@drawable/ic_user"
                         app:iconGravity="textStart"
-                        app:iconPadding="12dp"
+                        app:iconPadding="16dp"
                         app:iconSize="28dp"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_admin_to_Settings"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:fontFamily="@font/text_hebrew"
                         android:text="@string/settings"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
-                        app:cornerRadius="30dp"
+                        android:textSize="22sp"
+                        app:cornerRadius="16dp"
                         app:icon="@drawable/ic_settings"
                         app:iconGravity="textStart"
-                        app:iconPadding="12dp"
+                        app:iconPadding="16dp"
                         app:iconSize="28dp"
                         app:strokeWidth="1dp" />
                 </LinearLayout>

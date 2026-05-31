@@ -42,21 +42,22 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/ai_advisor"
                     android:textColor="@color/headline"
-                    android:textSize="40sp" />
+                    android:textSize="42sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_ai_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -68,7 +69,7 @@
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
+                            android:layout_marginBottom="20dp"
                             android:fontFamily="@font/text_hebrew"
                             android:hint="@string/write_question_here"
                             app:boxBackgroundMode="outline"
@@ -87,23 +88,23 @@
                                 android:inputType="textMultiLine"
                                 android:lines="4"
                                 android:maxLines="6"
-                                android:minHeight="80dp"
+                                android:minHeight="100dp"
                                 android:scrollbars="vertical"
-                                android:textSize="20sp" />
+                                android:textSize="22sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_Ai_send_to_Ai"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/send_question"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:icon="@drawable/ic_send"
                             app:iconGravity="textStart"
-                            app:iconPadding="12dp"
+                            app:iconPadding="16dp"
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
 
@@ -112,30 +113,30 @@
                             style="?android:attr/progressBarStyleLarge"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="20dp"
                             android:visibility="gone" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_Ai_speak"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
+                            android:layout_marginTop="20dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/playback_answer"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
                             android:visibility="gone"
-                            app:cornerRadius="30dp"
+                            app:cornerRadius="16dp"
                             app:icon="@drawable/ic_sound"
                             app:iconGravity="textStart"
-                            app:iconPadding="12dp"
+                            app:iconPadding="16dp"
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="20dp"
                             android:fontFamily="@font/text_hebrew"
                             android:hint="@string/ai_answer"
                             app:boxBackgroundMode="outline"
@@ -153,9 +154,9 @@
                                 android:fontFamily="@font/text_hebrew"
                                 android:gravity="top|start"
                                 android:inputType="textMultiLine"
-                                android:minHeight="100dp"
+                                android:minHeight="120dp"
                                 android:text="@string/the_answer_is_here"
-                                android:textSize="20sp" />
+                                android:textSize="22sp" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

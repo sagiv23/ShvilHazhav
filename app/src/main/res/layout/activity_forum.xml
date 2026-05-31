@@ -26,17 +26,17 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_forum_back_to_categories"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/text_hebrew"
             android:text="@string/back"
             android:textAllCaps="false"
-            android:textSize="20sp"
-            app:cornerRadius="30dp"
+            android:textSize="22sp"
+            app:cornerRadius="16dp"
             app:icon="@drawable/ic_back"
             app:iconGravity="textStart"
-            app:iconPadding="8dp"
+            app:iconPadding="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/top_bar_include"
             app:strokeWidth="1dp" />
@@ -45,11 +45,12 @@
             android:id="@+id/txtForumTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/headline_hebrew"
             android:text="@string/forum"
             android:textColor="@color/headline"
-            android:textSize="40sp"
+            android:textSize="42sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_forum_back_to_categories" />
@@ -60,15 +61,15 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="8dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="4dp"
             app:layout_constraintBottom_toTopOf="@+id/layoutNewMessage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtForumTitle"
             app:strokeColor="?attr/colorOutline"
-            app:strokeWidth="1.5dp">
+            app:strokeWidth="1dp">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -89,7 +90,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/text_hebrew"
                     android:text="@string/there_are_no_messages"
-                    android:textSize="18sp"
+                    android:textSize="22sp"
                     android:visibility="gone"
                     tools:visibility="visible" />
 
@@ -98,13 +99,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/text_hebrew"
                     android:text="@string/new_messages"
                     android:textAllCaps="false"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:visibility="gone"
-                    app:cornerRadius="30dp"
+                    app:cornerRadius="20dp"
                     app:elevation="4dp" />
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -119,10 +120,10 @@
             android:fontFamily="@font/text_hebrew"
             android:hint="@string/write_message"
             app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="25dp"
-            app:boxCornerRadiusBottomStart="25dp"
-            app:boxCornerRadiusTopEnd="25dp"
-            app:boxCornerRadiusTopStart="25dp"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
             app:boxStrokeWidth="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_forum_send_message"
@@ -135,7 +136,7 @@
                 android:fontFamily="@font/text_hebrew"
                 android:inputType="textMultiLine"
                 android:maxLines="3"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -144,7 +145,7 @@
             android:layout_height="56dp"
             android:layout_marginEnd="16dp"
             android:contentDescription="@string/send_message"
-            app:cornerRadius="30dp"
+            app:cornerRadius="16dp"
             app:icon="@drawable/ic_send"
             app:iconGravity="textEnd"
             app:iconPadding="0dp"

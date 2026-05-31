@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import com.example.sagivproject.R;
 import com.example.sagivproject.bases.BaseAdapter;
 import com.example.sagivproject.models.User;
-import com.example.sagivproject.utils.CalendarUtil;
 import com.example.sagivproject.utils.ImageUtil;
 
 import java.util.List;
@@ -38,11 +37,6 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
     private final ImageUtil imageUtil;
 
     /**
-     * Utility for date formatting.
-     */
-    private final CalendarUtil calendarUtil;
-
-    /**
      * Listener for administrative actions on user records.
      */
     private OnUserActionListener listener;
@@ -51,12 +45,10 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
      * Constructs a new UsersTableAdapter.
      *
      * @param imageUtil    A utility class for loading and processing profile images.
-     * @param calendarUtil A utility for date formatting.
      */
     @Inject
-    public UsersTableAdapter(ImageUtil imageUtil, CalendarUtil calendarUtil) {
+    public UsersTableAdapter(ImageUtil imageUtil) {
         this.imageUtil = imageUtil;
-        this.calendarUtil = calendarUtil;
     }
 
     /**
@@ -91,14 +83,6 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         holder.txtUserFullName.setText(user.getFullName());
         holder.txtUserEmail.setText(user.getEmail());
         holder.txtUserIsAdmin.setText(String.format("מנהל: %s", user.isAdmin() ? "כן" : "לא"));
-
-        String birthDateStr = user.getBirthDate();
-        if (birthDateStr != null && !birthDateStr.isEmpty()) {
-            birthDateStr = calendarUtil.formatDbDateToDisplay(birthDateStr);
-        } else {
-            birthDateStr = "לא הוזן";
-        }
-        holder.txtUserBirthDate.setText(String.format("תאריך לידה: %s", birthDateStr));
 
         imageUtil.loadImage(user.getProfileImage(), holder.imgUserProfile);
 
@@ -170,7 +154,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
         /**
          * TextViews for name, email, role status, and birthdate.
          */
-        final TextView txtUserFullName, txtUserEmail, txtUserIsAdmin, txtUserBirthDate;
+        final TextView txtUserFullName, txtUserEmail, txtUserIsAdmin;
 
         /**
          * Buttons for administrative actions.
@@ -191,7 +175,6 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
             super(itemView);
             txtUserFullName = itemView.findViewById(R.id.txt_UserRow_fullName);
             txtUserEmail = itemView.findViewById(R.id.txt_UserRow_email);
-            txtUserBirthDate = itemView.findViewById(R.id.txt_UserRow_birthDate);
             txtUserIsAdmin = itemView.findViewById(R.id.txt_UserRow_IsAdmin);
             imgUserProfile = itemView.findViewById(R.id.img_UserRow_userProfile);
             btnDeleteUser = itemView.findViewById(R.id.btn_UserRow_DeleteUser);

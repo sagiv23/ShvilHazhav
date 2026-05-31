@@ -75,5 +75,7 @@ public class FullImageDialog extends BaseDialog {
         }
 
         dialogImage.setOnClickListener(v -> dismiss());
+
+        dialog.findViewById(R.id.btn_close_full_image).setOnClickListener(v -> dismiss());
     }
 }

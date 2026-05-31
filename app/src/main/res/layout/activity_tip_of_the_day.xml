@@ -43,11 +43,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/headline_hebrew"
                     android:text="@string/daily_tip"
                     android:textColor="@color/headline"
-                    android:textSize="40sp" />
+                    android:textSize="42sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_tip_of_the_day_date"
@@ -55,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/text_hebrew"
-                    android:textSize="25sp"
+                    android:textSize="28sp"
                     tools:text="23/11/2008" />
 
                 <com.google.android.material.card.MaterialCardView
@@ -63,10 +64,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -81,23 +82,24 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
-                            android:textSize="22sp"
+                            android:lineSpacingExtra="4dp"
+                            android:textSize="24sp"
                             tools:text="כאן יוצג הטיפ היומי" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_tip_speak"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="60dp"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="20dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/playback"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:icon="@drawable/ic_sound"
                             app:iconGravity="textStart"
-                            app:iconPadding="12dp"
+                            app:iconPadding="16dp"
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
 
@@ -109,10 +111,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -124,11 +126,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginBottom="12dp"
                             android:fontFamily="@font/headline_hebrew"
                             android:text="@string/inspiration_corner"
                             android:textColor="@color/headline"
-                            android:textSize="30sp" />
+                            android:textSize="36sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tv_tipOfTheDay_inspiration_content"
@@ -137,23 +140,24 @@
                             android:layout_marginTop="16dp"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
-                            android:textSize="20sp"
+                            android:lineSpacingExtra="4dp"
+                            android:textSize="24sp"
                             tools:text="כאן יופיע משפט השראה, סיפור קצר או בדיחה" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_inspiration_speak"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="60dp"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="20dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/playback"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:icon="@drawable/ic_sound"
                             app:iconGravity="textStart"
-                            app:iconPadding="12dp"
+                            app:iconPadding="16dp"
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
 
@@ -203,10 +207,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:visibility="gone"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="1.5dp">
+                    app:strokeWidth="1dp">
 
                     <CalendarView
                         android:id="@+id/cv_tip_calendar"
@@ -221,8 +225,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
                     android:visibility="gone"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
                     app:strokeColor="@color/headline"
                     app:strokeWidth="2dp">
 
@@ -233,14 +237,14 @@
 
                         <ImageButton
                             android:id="@+id/btn_close_selected_tip"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:contentDescription="@string/exit"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/ic_x"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/headline" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/tv_selected_tip_title"
@@ -249,7 +253,7 @@
                             android:fontFamily="@font/headline_hebrew"
                             android:text="@string/selected_tip"
                             android:textColor="@color/headline"
-                            android:textSize="28sp"
+                            android:textSize="32sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -260,8 +264,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
+                            android:textSize="24sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_selected_tip_title"
@@ -271,10 +274,11 @@
                             android:id="@+id/tv_selected_tip_content"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="20dp"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
-                            android:textSize="20sp"
+                            android:lineSpacingExtra="4dp"
+                            android:textSize="24sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_selected_tip_date"
@@ -283,16 +287,16 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_selected_tip_speak"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="20dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/playback"
                             android:textAllCaps="false"
-                            android:textSize="20sp"
-                            app:cornerRadius="30dp"
+                            android:textSize="22sp"
+                            app:cornerRadius="16dp"
                             app:icon="@drawable/ic_sound"
                             app:iconGravity="textStart"
-                            app:iconPadding="12dp"
+                            app:iconPadding="16dp"
                             app:iconSize="28dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -304,18 +308,18 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_tip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="32dp"
                     android:fontFamily="@font/text_hebrew"
                     android:text="@string/add_new_tip"
                     android:textAllCaps="false"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:visibility="gone"
-                    app:cornerRadius="30dp"
+                    app:cornerRadius="16dp"
                     app:icon="@drawable/ic_add"
                     app:iconGravity="textStart"
-                    app:iconPadding="12dp"
+                    app:iconPadding="20dp"
                     app:iconSize="28dp"
                     app:strokeWidth="1dp" />
 
@@ -335,7 +339,7 @@
                     android:layout_marginBottom="32dp"
                     android:fontFamily="@font/text_hebrew"
                     android:text="@string/no_tips_to_show"
-                    android:textSize="22sp"
+                    android:textSize="24sp"
                     android:visibility="gone" />
 
             </LinearLayout>
