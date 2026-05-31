@@ -143,7 +143,7 @@
                         <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dividerColor="@color/text_color"
+                            app:dividerColor="?attr/colorOutline"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 
@@ -164,6 +164,7 @@
                             android:id="@+id/separator_vibration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:dividerColor="?attr/colorOutline"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 
@@ -184,6 +185,7 @@
                             android:id="@+id/separator_notifications"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:dividerColor="?attr/colorOutline"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 
@@ -204,6 +206,7 @@
                             android:id="@+id/separator_camera"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:dividerColor="?attr/colorOutline"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 
@@ -224,6 +227,7 @@
                             android:id="@+id/separator_gallery"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:dividerColor="?attr/colorOutline"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 
@@ -244,6 +248,7 @@
                             android:id="@+id/separator_location"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:dividerColor="?attr/colorOutline"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 
@@ -264,6 +269,7 @@
                             android:id="@+id/separator_sms"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:dividerColor="?attr/colorOutline"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 
@@ -284,6 +290,7 @@
                             android:id="@+id/separator_fall_detection"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:dividerColor="?attr/colorOutline"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 
@@ -304,6 +311,7 @@
                             android:id="@+id/separator_logout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:dividerColor="?attr/colorOutline"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 
