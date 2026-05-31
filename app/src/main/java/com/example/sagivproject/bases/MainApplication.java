@@ -33,7 +33,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        boolean isDarkMode = sharedPreferencesUtil.isDarkMode();
-        AppCompatDelegate.setDefaultNightMode(isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        int themeMode = sharedPreferencesUtil.getThemeMode();
+        AppCompatDelegate.setDefaultNightMode(themeMode);
     }
 }

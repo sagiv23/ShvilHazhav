@@ -64,22 +64,86 @@
                         android:orientation="vertical"
                         android:padding="8dp">
 
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/switch_dark_mode"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawablePadding="20dp"
-                            android:fontFamily="@font/text_hebrew"
-                            android:minHeight="72dp"
-                            android:paddingHorizontal="16dp"
-                            android:switchPadding="16dp"
-                            android:text="@string/dark_mode"
-                            android:textSize="24sp"
-                            app:drawableStartCompat="@drawable/ic_settings" />
+                            android:orientation="vertical"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:id="@+id/tv_theme_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="20dp"
+                                android:fontFamily="@font/text_hebrew"
+                                android:gravity="center_vertical"
+                                android:minHeight="48dp"
+                                android:text="@string/dark_mode"
+                                android:textColor="@color/text_color"
+                                android:textSize="24sp"
+                                app:drawableStartCompat="@drawable/ic_settings" />
+
+                            <com.google.android.material.button.MaterialButtonToggleGroup
+                                android:id="@+id/toggle_group_theme"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                app:selectionRequired="true"
+                                app:singleSelection="true">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_theme_light"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/text_hebrew"
+                                    android:insetTop="0dp"
+                                    android:insetBottom="0dp"
+                                    android:padding="0dp"
+                                    android:text="@string/bright_mode"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp"
+                                    app:strokeColor="@color/text_color" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_theme_system"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/text_hebrew"
+                                    android:insetTop="0dp"
+                                    android:insetBottom="0dp"
+                                    android:padding="0dp"
+                                    android:text="@string/system_theme"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp"
+                                    app:strokeColor="@color/text_color" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_theme_dark"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/text_hebrew"
+                                    android:insetTop="0dp"
+                                    android:insetBottom="0dp"
+                                    android:padding="0dp"
+                                    android:text="@string/dark_mode"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp"
+                                    app:strokeColor="@color/text_color" />
+                            </com.google.android.material.button.MaterialButtonToggleGroup>
+                        </LinearLayout>
 
                         <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:dividerColor="@color/text_color"
                             app:dividerInsetEnd="16dp"
                             app:dividerInsetStart="16dp" />
 

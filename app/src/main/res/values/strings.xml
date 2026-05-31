@@ -110,6 +110,7 @@
     <string name="new_category_name">שם קטגוריה חדשה</string>
     <string name="forum_categories">קטגוריות קשר קרוב</string>
     <string name="inspiration_corner">פינת השראה</string>
+    <string name="system_theme">לפי מערכת</string>
     <string name="dark_mode">מצב כהה</string>
     <string name="bright_mode">מצב בהיר</string>
     <string name="choose_hours_reminders">בחר שעות תזכורת</string>

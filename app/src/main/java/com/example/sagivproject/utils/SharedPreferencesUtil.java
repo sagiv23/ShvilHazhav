@@ -23,7 +23,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 public class SharedPreferencesUtil {
     private static final String PREF_NAME = "com.example.sagivproject.PREFERENCE_FILE_KEY";
     private static final String KEY_USER = "user";
-    private static final String KEY_DARK_MODE = "dark_mode";
+    private static final String KEY_THEME_MODE = "theme_mode";
     private static final String KEY_FALL_DETECTION_ENABLED = "fall_detection_enabled";
 
     private final SharedPreferences sharedPreferences;
@@ -193,21 +193,22 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     * Checks the user's preferred theme setting.
+     * Retrieves the user's preferred theme mode.
      *
-     * @return true if Dark Mode is enabled.
+     * @return The theme mode constant (e.g., AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM).
      */
-    public boolean isDarkMode() {
-        return getBoolean(KEY_DARK_MODE, false);
+    public int getThemeMode() {
+        // Default to Follow System if not set
+        return getInt(KEY_THEME_MODE, -1);
     }
 
     /**
-     * Sets the user's preferred theme setting.
+     * Sets the user's preferred theme mode.
      *
-     * @param isDarkMode true to enable Dark Mode.
+     * @param mode The theme mode constant.
      */
-    public void setDarkMode(boolean isDarkMode) {
-        saveBoolean(KEY_DARK_MODE, isDarkMode);
+    public void setThemeMode(int mode) {
+        saveInt(KEY_THEME_MODE, mode);
     }
 
     /**

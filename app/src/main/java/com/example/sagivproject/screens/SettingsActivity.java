@@ -2,9 +2,12 @@ package com.example.sagivproject.screens;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -17,6 +20,8 @@ import com.example.sagivproject.dialogs.ConfirmDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
 import com.example.sagivproject.services.IFallDetectionService;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
@@ -47,10 +52,6 @@ public class SettingsActivity extends BaseActivity {
     @Inject
     protected Provider<ConfirmDialog> confirmDialogProvider;
 
-    /**
-     * UI switches for controlling various application preferences and permissions.
-     */
-    private SwitchMaterial switchDarkMode;
     private SwitchMaterial switchVibration, switchNotifications, switchCamera, switchGallery, switchLocation, switchSms, switchContacts;
     private SwitchMaterial switchFallDetection;
 
@@ -61,7 +62,8 @@ public class SettingsActivity extends BaseActivity {
         setupMenu();
 
         Button btnLogout = findViewById(R.id.btn_logout);
-        switchDarkMode = findViewById(R.id.switch_dark_mode);
+        MaterialButtonToggleGroup toggleGroupTheme = findViewById(R.id.toggle_group_theme);
+        setupThemeToggleColors();
         switchVibration = findViewById(R.id.switch_vibration);
         switchNotifications = findViewById(R.id.switch_notifications);
         switchCamera = findViewById(R.id.switch_camera);
@@ -151,18 +153,45 @@ public class SettingsActivity extends BaseActivity {
             if (separatorLogout != null) separatorLogout.setVisibility(View.VISIBLE);
         }
 
-        boolean isDarkMode = sharedPreferencesUtil.isDarkMode();
-        switchDarkMode.setChecked(isDarkMode);
-        updateDarkModeText(switchDarkMode, isDarkMode);
+        int currentTheme = sharedPreferencesUtil.getThemeMode();
+        TextView tvThemeLabel = findViewById(R.id.tv_theme_label);
 
-        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (buttonView.isPressed()) {
-                sharedPreferencesUtil.setDarkMode(isChecked);
-                int mode = isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
-                if (AppCompatDelegate.getDefaultNightMode() != mode) {
-                    AppCompatDelegate.setDefaultNightMode(mode);
+        if (currentTheme == AppCompatDelegate.MODE_NIGHT_YES) {
+            toggleGroupTheme.check(R.id.btn_theme_dark);
+            tvThemeLabel.setText(R.string.dark_mode);
+        } else if (currentTheme == AppCompatDelegate.MODE_NIGHT_NO) {
+            toggleGroupTheme.check(R.id.btn_theme_light);
+            tvThemeLabel.setText(R.string.bright_mode);
+        } else {
+            toggleGroupTheme.check(R.id.btn_theme_system);
+            tvThemeLabel.setText(R.string.system_theme);
+        }
+
+        toggleGroupTheme.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            View clickedButton = group.findViewById(checkedId);
+            if (isChecked && clickedButton != null && clickedButton.isPressed()) {
+                int mode;
+                int textRes;
+                if (checkedId == R.id.btn_theme_dark) {
+                    mode = AppCompatDelegate.MODE_NIGHT_YES;
+                    textRes = R.string.dark_mode;
+                } else if (checkedId == R.id.btn_theme_light) {
+                    mode = AppCompatDelegate.MODE_NIGHT_NO;
+                    textRes = R.string.bright_mode;
+                } else {
+                    mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+                    textRes = R.string.system_theme;
                 }
-                updateDarkModeText(switchDarkMode, isChecked);
+
+                tvThemeLabel.setText(textRes);
+
+                if (sharedPreferencesUtil.getThemeMode() != mode) {
+                    sharedPreferencesUtil.setThemeMode(mode);
+                    // Double check to prevent redundant calls
+                    if (AppCompatDelegate.getDefaultNightMode() != mode) {
+                        group.post(() -> AppCompatDelegate.setDefaultNightMode(mode));
+                    }
+                }
             }
         });
 
@@ -403,13 +432,49 @@ public class SettingsActivity extends BaseActivity {
     }
 
     /**
-     * Updates the text label of the Dark Mode switch.
+     * Sets up the background and text colors for the theme toggle buttons programmatically
+     * to avoid using an external XML selector file and ensure correct contrast.
      *
-     * @param switchDarkMode The switch component.
-     * @param isDarkMode     Current dark mode state.
      */
-    private void updateDarkModeText(SwitchMaterial switchDarkMode, boolean isDarkMode) {
-        switchDarkMode.setText(isDarkMode ? R.string.bright_mode : R.string.dark_mode);
+    private void setupThemeToggleColors() {
+        int[][] states = new int[][]{
+                new int[]{android.R.attr.state_checked}, // checked
+                new int[]{}                             // default
+        };
+
+        // Background colors: Primary button color when checked, transparent otherwise
+        int[] bgColors = new int[]{
+                ContextCompat.getColor(this, R.color.background_color_buttons),
+                Color.TRANSPARENT
+        };
+        ColorStateList bgSelector = new ColorStateList(states, bgColors);
+
+        // Text colors: Button text color when checked, normal text color otherwise
+        int[] textColors = new int[]{
+                ContextCompat.getColor(this, R.color.buttons_text_color),
+                ContextCompat.getColor(this, R.color.text_color)
+        };
+        ColorStateList textSelector = new ColorStateList(states, textColors);
+
+        MaterialButton btnLight = findViewById(R.id.btn_theme_light);
+        MaterialButton btnSystem = findViewById(R.id.btn_theme_system);
+        MaterialButton btnDark = findViewById(R.id.btn_theme_dark);
+
+        if (btnLight != null) {
+            btnLight.setBackgroundTintList(bgSelector);
+            btnLight.setTextColor(textSelector);
+            btnLight.setStrokeColor(textSelector);
+        }
+        if (btnSystem != null) {
+            btnSystem.setBackgroundTintList(bgSelector);
+            btnSystem.setTextColor(textSelector);
+            btnSystem.setStrokeColor(textSelector);
+        }
+        if (btnDark != null) {
+            btnDark.setBackgroundTintList(bgSelector);
+            btnDark.setTextColor(textSelector);
+            btnDark.setStrokeColor(textSelector);
+        }
     }
 
     /**
