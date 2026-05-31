@@ -12,8 +12,7 @@
         android:id="@+id/forumPage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layoutAnimation="@anim/layout_pro_stagger"
-        android:layoutDirection="rtl">
+        android:layoutAnimation="@anim/layout_pro_stagger">
 
         <include
             android:id="@+id/top_bar_include"
@@ -161,7 +160,6 @@
         android:id="@+id/drawer_menu_container"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:layoutDirection="rtl" />
+        android:layout_gravity="start" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

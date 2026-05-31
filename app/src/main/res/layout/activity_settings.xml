@@ -11,8 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settingsPage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="rtl">
+        android:layout_height="match_parent">
 
         <include
             android:id="@+id/top_bar_include"
@@ -68,7 +67,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:layoutDirection="rtl"
                             android:padding="20dp"
                             android:paddingStart="20dp"
                             android:paddingTop="12dp"
@@ -90,7 +88,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:layoutDirection="rtl"
                             android:padding="20dp"
                             android:paddingStart="20dp"
                             android:paddingTop="12dp"
@@ -113,7 +110,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:layoutDirection="rtl"
                             android:padding="20dp"
                             android:paddingStart="20dp"
                             android:paddingTop="12dp"
@@ -136,7 +132,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:layoutDirection="rtl"
                             android:padding="20dp"
                             android:paddingStart="20dp"
                             android:paddingTop="12dp"
@@ -159,7 +154,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:layoutDirection="rtl"
                             android:padding="20dp"
                             android:paddingStart="20dp"
                             android:paddingTop="12dp"
@@ -182,7 +176,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:layoutDirection="rtl"
                             android:padding="20dp"
                             android:paddingStart="20dp"
                             android:paddingTop="12dp"
@@ -205,7 +198,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:layoutDirection="rtl"
                             android:padding="20dp"
                             android:paddingStart="20dp"
                             android:paddingTop="12dp"
@@ -228,7 +220,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:layoutDirection="rtl"
                             android:padding="20dp"
                             android:paddingStart="20dp"
                             android:paddingTop="12dp"
@@ -251,7 +242,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/text_hebrew"
-                            android:layoutDirection="rtl"
                             android:padding="20dp"
                             android:paddingStart="20dp"
                             android:paddingTop="12dp"
@@ -293,7 +283,6 @@
         android:id="@+id/drawer_menu_container"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:layoutDirection="rtl" />
+        android:layout_gravity="start" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

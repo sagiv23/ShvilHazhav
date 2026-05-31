@@ -133,7 +133,7 @@ public class TipDialog extends BaseDialog {
                 layoutDate.setEndIconVisible(false);
             }
         } else {
-            txtTitle.setText(isInspirationMode ? "הוספת השראה חדשה" : "הוספת טיף חדש");
+            txtTitle.setText(isInspirationMode ? R.string.add_new_inspiration : R.string.add_new_tip);
             if (!isInspirationMode) {
                 inputDate.setOnClickListener(v -> calendarUtil.openDatePicker(requireContext(), selectedDateId, (millis, dbDate, dateStr) -> {
                     selectedDateId = dbDate;

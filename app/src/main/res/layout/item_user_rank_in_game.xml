@@ -28,7 +28,6 @@
             android:ellipsize="end"
             android:fontFamily="@font/headline_hebrew"
             android:gravity="start|center_vertical"
-            android:layoutDirection="rtl"
             android:maxLines="1"
             android:textColor="@color/text_color"
             android:textSize="18sp"

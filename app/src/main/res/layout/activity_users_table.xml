@@ -11,8 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/usersTablePage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="rtl">
+        android:layout_height="match_parent">
 
         <include
             android:id="@+id/top_bar_include"
@@ -132,8 +131,7 @@
         android:id="@+id/drawer_menu_container"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:layoutDirection="rtl" />
+        android:layout_gravity="start" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
 
