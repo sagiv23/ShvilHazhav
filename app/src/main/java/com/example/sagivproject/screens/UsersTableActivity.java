@@ -1,5 +1,7 @@
 package com.example.sagivproject.screens;
 
+import static android.view.animation.AnimationUtils.loadAnimation;
+
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -172,6 +174,7 @@ public class UsersTableActivity extends BaseActivity {
 
         editSearch = findViewById(R.id.edit_UsersTable_search);
         spinnerSearchType = findViewById(R.id.spinner_UsersTable_search_type);
+        findViewById(R.id.btn_UsersTable_add_user).startAnimation(loadAnimation(this, R.anim.floating_animation));
         setupSearch();
     }
 
@@ -179,7 +182,7 @@ public class UsersTableActivity extends BaseActivity {
      * Configures the search UI, including the type filter spinner and text listener.
      */
     private void setupSearch() {
-        String[] searchOptions = {"הכל", "שם פרטי", "שם משפחה", "אימייל", "מנהלים", "מטופלים"};
+        String[] searchOptions = {"שם פרטי", "שם משפחה", "אימייל", "מנהלים", "מטופלים", "הכל"};
         spinnerSearchType.setAdapter(createStyledSearchAdapter(searchOptions));
 
         editSearch.addTextChangedListener(new TextWatcher() {
@@ -200,7 +203,8 @@ public class UsersTableActivity extends BaseActivity {
         spinnerSearchType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
+                boolean isAll = position == 5;
+                if (isAll) {
                     editSearch.setText("");
                     editSearch.setEnabled(false);
                 } else {

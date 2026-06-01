@@ -1,5 +1,7 @@
 package com.example.sagivproject.screens;
 
+import static android.view.animation.AnimationUtils.loadAnimation;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sagivproject.R;
 import com.example.sagivproject.adapters.EmergencyContactsAdapter;
 import com.example.sagivproject.bases.BaseActivity;
+import com.example.sagivproject.dialogs.ConfirmDialog;
 import com.example.sagivproject.dialogs.EmergencyContactDialog;
 import com.example.sagivproject.models.EmergencyContact;
 import com.example.sagivproject.models.User;
@@ -76,6 +79,9 @@ public class EmergencyContactsActivity extends BaseActivity {
     @Inject
     protected Provider<EmergencyContactDialog> emergencyContactDialogProvider;
 
+    @Inject
+    protected Provider<ConfirmDialog> confirmDialogProvider;
+
     /**
      * Local reference to the user's profile and emergency contacts.
      */
@@ -107,19 +113,25 @@ public class EmergencyContactsActivity extends BaseActivity {
         findViewById(R.id.btn_enable_emergency_permissions).setOnClickListener(v ->
                 runWithPermissions(this::updatePermissionUI, Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION));
 
-        findViewById(R.id.btn_add_contact_dialog).setOnClickListener(v -> {
-            EmergencyContactDialog dialog = emergencyContactDialogProvider.get();
-            dialog.setData(null, contact -> addEmergencyContact(contact.getFirstName(), contact.getLastName(), contact.getPhoneNumber()));
-            dialog.show(getSupportFragmentManager(), "AddEmergencyContactDialog");
+        findViewById(R.id.fab_add_emergency_contact).setOnClickListener(v -> {
+            ConfirmDialog dialog = confirmDialogProvider.get();
+            dialog.setData("הוספת איש קשר", "בחר כיצד ברצונך להוסיף את איש הקשר:", "הוספה ידנית", "מאנשי הקשר", () -> {
+                // Manual add
+                EmergencyContactDialog contactDialog = emergencyContactDialogProvider.get();
+                contactDialog.setData(null, contact -> addEmergencyContact(contact.getFirstName(), contact.getLastName(), contact.getPhoneNumber()));
+                contactDialog.show(getSupportFragmentManager(), "AddEmergencyContactDialog");
+            }, () -> {
+                // From contacts
+                runWithPermission(Manifest.permission.READ_CONTACTS, () -> contactPickerLauncher.launch(null));
+            });
+            dialog.show(getSupportFragmentManager(), "AddContactSelectionDialog");
         });
-
-        findViewById(R.id.btn_pick_contact).setOnClickListener(v ->
-                runWithPermission(Manifest.permission.READ_CONTACTS, () -> contactPickerLauncher.launch(null))
-        );
 
         findViewById(R.id.btn_send_emergency_sms).setOnClickListener(v -> checkSmsAndLocationPermissions());
         findViewById(R.id.btn_call_109).setOnClickListener(v -> callEmergency());
         findViewById(R.id.btn_go_to_settings).setOnClickListener(v -> onNavigate(new Intent(this, SettingsActivity.class)));
+
+        findViewById(R.id.fab_add_emergency_contact).startAnimation(loadAnimation(this, R.anim.floating_animation));
 
         Button btnSkip = findViewById(R.id.btn_skip);
         isFromRegistration = getIntent().getBooleanExtra("isFromRegistration", false);

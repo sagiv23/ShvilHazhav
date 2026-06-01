@@ -306,23 +306,6 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_add_tip"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginBottom="32dp"
-                    android:fontFamily="@font/text_hebrew"
-                    android:text="@string/add_new_tip"
-                    android:textAllCaps="false"
-                    android:textSize="22sp"
-                    android:visibility="gone"
-                    app:cornerRadius="16dp"
-                    app:icon="@drawable/ic_add"
-                    app:iconGravity="textStart"
-                    app:iconPadding="20dp"
-                    app:iconSize="28dp"
-                    app:strokeWidth="1dp" />
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_all_tips"
                     android:layout_width="match_parent"
@@ -344,6 +327,41 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_add_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/text_hebrew"
+            android:text="@string/add_new_tip"
+            android:textColor="@color/background_color"
+            android:textSize="17sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/headline"
+            app:icon="@drawable/ic_add"
+            app:iconTint="@color/background_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_add_inspiration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/text_hebrew"
+            android:text="@string/add_new_inspiration"
+            android:textColor="@color/background_color"
+            android:textSize="17sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/headline"
+            app:icon="@drawable/ic_add"
+            app:iconTint="@color/background_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.fragment.app.FragmentContainerView

@@ -31,7 +31,6 @@ public class AdminPageActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContent(R.layout.activity_admin_page, R.id.adminPage);
-        setGreeting(R.id.txt_admin_title);
 
         findViewById(R.id.btn_admin_to_UsersTablePage).setOnClickListener(v -> onNavigate(new Intent(this, UsersTableActivity.class)));
         findViewById(R.id.btn_admin_to_UserStats).setOnClickListener(v -> onNavigate(new Intent(this, UserStatsActivity.class)));

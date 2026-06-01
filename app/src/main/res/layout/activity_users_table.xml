@@ -49,22 +49,7 @@
                     android:textSize="42sp"
                     android:textStyle="bold" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_UsersTable_add_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginBottom="24dp"
-                    android:fontFamily="@font/text_hebrew"
-                    android:text="@string/add_user"
-                    android:textAllCaps="false"
-                    android:textSize="22sp"
-                    app:cornerRadius="16dp"
-                    app:icon="@drawable/ic_add"
-                    app:iconGravity="textStart"
-                    app:iconPadding="16dp"
-                    app:iconSize="28dp"
-                    app:strokeWidth="1dp" />
-
+                <!-- Search Section -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,28 +63,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="24dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/text_hebrew"
-                            android:text="@string/search_by"
-                            android:textSize="28sp" />
-
-                        <Spinner
-                            android:id="@+id/spinner_UsersTable_search_type"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_marginTop="12dp" />
+                        android:padding="16dp">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="12dp"
                             android:fontFamily="@font/text_hebrew"
-                            android:hint="@string/write_here"
                             app:boxBackgroundMode="outline"
                             app:boxCornerRadiusBottomEnd="16dp"
                             app:boxCornerRadiusBottomStart="16dp"
@@ -107,13 +77,34 @@
                             app:boxCornerRadiusTopStart="16dp"
                             app:boxStrokeWidth="1dp">
 
+                            <Spinner
+                                android:id="@+id/spinner_UsersTable_search_type"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:paddingHorizontal="12dp"
+                                android:spinnerMode="dropdown" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/text_hebrew"
+                            android:hint="@string/write_here"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusBottomEnd="16dp"
+                            app:boxCornerRadiusBottomStart="16dp"
+                            app:boxCornerRadiusTopEnd="16dp"
+                            app:boxCornerRadiusTopStart="16dp"
+                            app:boxStrokeWidth="1dp"
+                            app:startIconDrawable="@drawable/ic_search">
+
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/edit_UsersTable_search"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/text_hebrew"
                                 android:inputType="text"
-                                android:textSize="22sp" />
+                                android:textSize="20sp" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -122,10 +113,25 @@
                     android:id="@+id/recycler_UsersTable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
-                    android:paddingBottom="32dp" />
+                    android:paddingBottom="80dp" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_UsersTable_add_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:contentDescription="@string/add_user"
+            android:src="@drawable/ic_add"
+            app:backgroundTint="@color/headline"
+            app:fabCustomSize="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/background_color" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.fragment.app.FragmentContainerView

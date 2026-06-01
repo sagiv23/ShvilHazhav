@@ -1,5 +1,7 @@
 package com.example.sagivproject.screens;
 
+import static android.view.animation.AnimationUtils.loadAnimation;
+
 import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
@@ -104,6 +106,7 @@ public class MedicationImagesTableActivity extends BaseActivity {
         });
 
         findViewById(R.id.btn_MedicineImagesTablePage_add).setOnClickListener(v -> checkGalleryPermission());
+        findViewById(R.id.btn_MedicineImagesTablePage_add).startAnimation(loadAnimation(this, R.anim.floating_animation));
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override

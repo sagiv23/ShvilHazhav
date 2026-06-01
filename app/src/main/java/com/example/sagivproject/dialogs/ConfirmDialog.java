@@ -34,6 +34,11 @@ public class ConfirmDialog extends BaseDialog {
     private Runnable onConfirm;
 
     /**
+     * The logic to execute when the user clicks the negative button.
+     */
+    private Runnable onCancel;
+
+    /**
      * Constructs a new ConfirmDialog.
      */
     @Inject
@@ -50,6 +55,20 @@ public class ConfirmDialog extends BaseDialog {
      * @param onConfirm   The Runnable to run upon confirmation.
      */
     public void setData(String title, String message, String confirmText, String cancelText, Runnable onConfirm) {
+        setData(title, message, confirmText, cancelText, onConfirm, null);
+    }
+
+    /**
+     * Configures the dialog with specific content and behavior, including a cancel action.
+     *
+     * @param title       The text to display in the dialog title.
+     * @param message     The descriptive body text.
+     * @param confirmText The label for the positive button (defaults to "אישור").
+     * @param cancelText  The label for the negative button (if null, the button is hidden).
+     * @param onConfirm   The Runnable to run upon confirmation.
+     * @param onCancel    The Runnable to run upon cancellation.
+     */
+    public void setData(String title, String message, String confirmText, String cancelText, Runnable onConfirm, Runnable onCancel) {
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
         args.putString(ARG_MESSAGE, message);
@@ -57,6 +76,7 @@ public class ConfirmDialog extends BaseDialog {
         args.putString(ARG_CANCEL_TEXT, cancelText);
         setArguments(args);
         this.onConfirm = onConfirm;
+        this.onCancel = onCancel;
     }
 
     @Override
@@ -84,7 +104,12 @@ public class ConfirmDialog extends BaseDialog {
         } else {
             btnCancel.setVisibility(View.VISIBLE);
             btnCancel.setText(cancelText);
-            btnCancel.setOnClickListener(v -> dismiss());
+            btnCancel.setOnClickListener(v -> {
+                if (onCancel != null) {
+                    onCancel.run();
+                }
+                dismiss();
+            });
         }
 
         btnConfirm.setOnClickListener(v -> {

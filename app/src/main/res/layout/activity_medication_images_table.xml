@@ -49,22 +49,7 @@
                     android:textSize="42sp"
                     android:textStyle="bold" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_MedicineImagesTablePage_add"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginBottom="24dp"
-                    android:fontFamily="@font/text_hebrew"
-                    android:text="@string/add_medication_img"
-                    android:textAllCaps="false"
-                    android:textSize="22sp"
-                    app:cornerRadius="16dp"
-                    app:icon="@drawable/ic_add"
-                    app:iconGravity="textStart"
-                    app:iconPadding="16dp"
-                    app:iconSize="28dp"
-                    app:strokeWidth="1dp" />
-
+                <!-- Search Section -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -95,7 +80,7 @@
                             android:fontFamily="@font/text_english"
                             android:inputType="text"
                             android:textDirection="ltr"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -106,9 +91,23 @@
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
-                    android:paddingBottom="32dp" />
+                    android:paddingBottom="80dp" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_MedicineImagesTablePage_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:contentDescription="@string/add_medication_img"
+            android:src="@drawable/ic_add"
+            app:backgroundTint="@color/headline"
+            app:fabCustomSize="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/background_color" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.fragment.app.FragmentContainerView

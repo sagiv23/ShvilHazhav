@@ -44,7 +44,7 @@ public class UsersTableAdapter extends BaseAdapter<User, UsersTableAdapter.UserV
     /**
      * Constructs a new UsersTableAdapter.
      *
-     * @param imageUtil    A utility class for loading and processing profile images.
+     * @param imageUtil A utility class for loading and processing profile images.
      */
     @Inject
     public UsersTableAdapter(ImageUtil imageUtil) {

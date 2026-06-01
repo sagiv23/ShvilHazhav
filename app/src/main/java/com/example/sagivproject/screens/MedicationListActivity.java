@@ -168,7 +168,7 @@ public class MedicationListActivity extends BaseActivity {
      * Initializes the search bar and filter logic.
      */
     private void setupSearch() {
-        String[] searchOptions = {"הכל", "שם תרופה", "סוג תרופה"};
+        String[] searchOptions = {"שם תרופה", "סוג תרופה", "הכל"};
         spinnerSearchType.setAdapter(createStyledSearchAdapter(searchOptions));
 
         editSearch.addTextChangedListener(new TextWatcher() {
@@ -189,8 +189,9 @@ public class MedicationListActivity extends BaseActivity {
         spinnerSearchType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                editSearch.setEnabled(position != 0);
-                if (position == 0) editSearch.setText("");
+                boolean isAll = position == 2;
+                editSearch.setEnabled(!isAll);
+                if (isAll) editSearch.setText("");
                 filterMedications(editSearch.getText().toString());
             }
 

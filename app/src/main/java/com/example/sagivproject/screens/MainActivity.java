@@ -28,7 +28,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContent(R.layout.activity_main, R.id.homePage);
         setupMenu();
-        setGreeting(R.id.txt_home_Title);
 
         setupClickListeners();
 

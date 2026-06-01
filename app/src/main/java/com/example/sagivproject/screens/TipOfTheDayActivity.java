@@ -1,5 +1,7 @@
 package com.example.sagivproject.screens;
 
+import static android.view.animation.AnimationUtils.loadAnimation;
+
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -32,6 +34,7 @@ import com.example.sagivproject.services.ITTSService;
 import com.example.sagivproject.services.ITTSService.TTSListener;
 import com.example.sagivproject.services.ITipOfTheDayService;
 import com.example.sagivproject.utils.CalendarUtil;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -119,6 +122,10 @@ public class TipOfTheDayActivity extends BaseActivity {
      */
     private TabLayout tabLayoutAdmin;
     /**
+     * FABs for adding content (Admin view).
+     */
+    private ExtendedFloatingActionButton fabAddTip, fabAddInspiration;
+    /**
      * Container view for the details of a selected tip.
      */
     private View cardSelectedTip;
@@ -174,13 +181,15 @@ public class TipOfTheDayActivity extends BaseActivity {
         View cardInspiration = findViewById(R.id.card_inspiration);
         View cardDailyTip = findViewById(R.id.card_daily_tip);
         cardSelectedTip = findViewById(R.id.card_selected_tip);
-        Button btnAddTip = findViewById(R.id.btn_add_tip);
         tvSelectedTipDate = findViewById(R.id.tv_selected_tip_date);
         tvSelectedTipContent = findViewById(R.id.tv_selected_tip_content);
         tvNoTipsError = findViewById(R.id.tv_no_tips_error);
         ImageButton btnCloseSelectedTip = findViewById(R.id.btn_close_selected_tip);
         tabLayoutAdmin = findViewById(R.id.tab_layout_admin);
         tabLayoutMonths = findViewById(R.id.tab_layout_months);
+
+        fabAddTip = findViewById(R.id.fab_add_tip);
+        fabAddInspiration = findViewById(R.id.fab_add_inspiration);
 
         User currentUser = sharedPreferencesUtil.getUser();
         boolean isAdmin = currentUser != null && currentUser.isAdmin();
@@ -189,7 +198,13 @@ public class TipOfTheDayActivity extends BaseActivity {
             cardInspiration.setVisibility(View.GONE);
             cardDailyTip.setVisibility(View.GONE);
             tabLayoutAdmin.setVisibility(View.VISIBLE);
-            btnAddTip.setVisibility(View.VISIBLE);
+
+            fabAddTip.show();
+            fabAddTip.startAnimation(loadAnimation(this, R.anim.floating_animation));
+            fabAddTip.setOnClickListener(v -> showEditTipDialog(null));
+
+            fabAddInspiration.hide();
+            fabAddInspiration.setOnClickListener(v -> showEditInspirationDialog(null));
 
             Typeface typeface = ResourcesCompat.getFont(this, R.font.text_hebrew);
             for (int i = 0; i < tabLayoutAdmin.getTabCount(); i++) {
@@ -234,7 +249,12 @@ public class TipOfTheDayActivity extends BaseActivity {
                         tabLayoutMonths.setVisibility(View.VISIBLE);
                         rvAllTips.setVisibility(View.VISIBLE);
                         findViewById(R.id.card_calendar).setVisibility(View.VISIBLE);
-                        btnAddTip.setText(R.string.add_new_tip);
+
+                        fabAddInspiration.hide();
+                        fabAddInspiration.clearAnimation();
+                        fabAddTip.show();
+                        fabAddTip.startAnimation(loadAnimation(TipOfTheDayActivity.this, R.anim.floating_animation));
+
                         tvNoTipsError.setText(R.string.no_tips_to_show);
                         if (!currentMonthKeys.isEmpty()) {
                             filterTipsByMonth(currentMonthKeys.get(tabLayoutMonths.getSelectedTabPosition()));
@@ -244,7 +264,12 @@ public class TipOfTheDayActivity extends BaseActivity {
                         tabLayoutMonths.setVisibility(View.GONE);
                         rvAllTips.setVisibility(View.VISIBLE);
                         findViewById(R.id.card_calendar).setVisibility(View.GONE);
-                        btnAddTip.setText(R.string.add_new_inspiration);
+
+                        fabAddTip.hide();
+                        fabAddTip.clearAnimation();
+                        fabAddInspiration.show();
+                        fabAddInspiration.startAnimation(loadAnimation(TipOfTheDayActivity.this, R.anim.floating_animation));
+
                         tvNoTipsError.setText("אין השראות להצגה");
                         tipAdapter.setData(allInspirationsList);
                         tvNoTipsError.setVisibility(allInspirationsList.isEmpty() ? View.VISIBLE : View.GONE);
@@ -262,6 +287,8 @@ public class TipOfTheDayActivity extends BaseActivity {
             });
         } else {
             findViewById(R.id.card_calendar).setVisibility(View.GONE);
+            fabAddTip.hide();
+            fabAddInspiration.hide();
         }
 
         fetchAllInspirations();
@@ -278,16 +305,7 @@ public class TipOfTheDayActivity extends BaseActivity {
             long millis = calendarUtil.getMillisFromDate(year, month, dayOfMonth);
             String dbDate = calendarUtil.formatDate(millis, CalendarUtil.DATABASE_DATE_FORMAT);
             String formattedDate = calendarUtil.formatDate(millis, CalendarUtil.DEFAULT_DATE_FORMAT);
-
             showTipForDate(dbDate, formattedDate);
-        });
-
-        btnAddTip.setOnClickListener(v -> {
-            if (tabLayoutAdmin.getSelectedTabPosition() == 0) {
-                showEditTipDialog(null);
-            } else {
-                showEditInspirationDialog(null);
-            }
         });
 
         btnCloseSelectedTip.setOnClickListener(v -> {
@@ -744,7 +762,6 @@ public class TipOfTheDayActivity extends BaseActivity {
 
         ListenableFuture<GenerateContentResponse> responseFuture = model.generateContent(content);
         Executor mainExecutor = ContextCompat.getMainExecutor(this);
-
         Futures.addCallback(responseFuture, new FutureCallback<>() {
             @Override
             public void onSuccess(GenerateContentResponse result) {
@@ -800,7 +817,6 @@ public class TipOfTheDayActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         ttsService.stop();
         if (currentlySpeakingId != null) {
             updateSpeakButton(currentlySpeakingId, false);
@@ -812,9 +828,7 @@ public class TipOfTheDayActivity extends BaseActivity {
      */
     @Override
     public void onDestroy() {
-        if (ttsService != null) {
-            ttsService.stop();
-        }
+        if (ttsService != null) ttsService.stop();
         super.onDestroy();
     }
 }

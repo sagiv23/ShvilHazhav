@@ -65,24 +65,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="24dp">
+                        android:padding="16dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/text_hebrew"
-                            android:text="@string/choose_user"
-                            android:textSize="28sp" />
-
-                        <Spinner
-                            android:id="@+id/spinner_user_selector"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_marginTop="12dp" />
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/text_hebrew"
+                            android:hint="@string/choose_user"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusBottomEnd="16dp"
+                            app:boxCornerRadiusBottomStart="16dp"
+                            app:boxCornerRadiusTopEnd="16dp"
+                            app:boxCornerRadiusTopStart="16dp"
+                            app:boxStrokeWidth="1dp"
+                            app:startIconDrawable="@drawable/ic_user">
+
+                            <Spinner
+                                android:id="@+id/spinner_user_selector"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:paddingHorizontal="12dp"
+                                android:spinnerMode="dropdown" />
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Graphs Section -->
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout_graphs"
                     android:layout_width="match_parent"
@@ -100,7 +108,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="32dp"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
@@ -110,7 +118,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <androidx.viewpager2.widget.ViewPager2
                             android:id="@+id/viewPager_graphs"
@@ -119,10 +127,21 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Medication Logs Section -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/headline_hebrew"
+                    android:text="@string/medication_log"
+                    android:textColor="@color/headline"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
+                    android:layout_marginBottom="24dp"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="4dp"
                     app:strokeColor="?attr/colorOutline"
@@ -134,26 +153,15 @@
                         android:orientation="vertical"
                         android:padding="20dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="20dp"
-                            android:fontFamily="@font/headline_hebrew"
-                            android:text="@string/medication_log"
-                            android:textColor="@color/headline"
-                            android:textSize="32sp" />
-
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_user_stats_open_calendar"
                             android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_marginHorizontal="8dp"
+                            android:layout_height="56dp"
                             android:layout_marginBottom="16dp"
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/choose_date"
                             android:textAllCaps="false"
-                            android:textSize="22sp"
+                            android:textSize="20sp"
                             app:cornerRadius="16dp"
                             app:icon="@drawable/ic_calendar"
                             app:iconGravity="textStart"
@@ -163,47 +171,40 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="80dp"
-                            android:layout_marginHorizontal="8dp"
-                            android:layout_marginBottom="24dp"
-                            android:orientation="horizontal"
-                            android:paddingVertical="10dp">
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_user_stats_clear_day"
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="54dp"
                                 android:layout_marginEnd="8dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/text_hebrew"
-                                android:insetTop="0dp"
-                                android:insetBottom="0dp"
                                 android:text="@string/reset_day"
                                 android:textAllCaps="false"
-                                android:textSize="18sp"
-                                app:cornerRadius="16dp"
+                                android:textSize="16sp"
+                                app:cornerRadius="12dp"
                                 app:strokeWidth="1dp" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_user_stats_clear_med_logs"
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="54dp"
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/text_hebrew"
-                                android:insetTop="0dp"
-                                android:insetBottom="0dp"
                                 android:text="@string/reset_history"
                                 android:textAllCaps="false"
-                                android:textSize="18sp"
-                                app:cornerRadius="16dp"
+                                android:textSize="16sp"
+                                app:cornerRadius="12dp"
                                 app:strokeWidth="1dp" />
                         </LinearLayout>
 
                         <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
                             android:layout_marginBottom="20dp"
                             app:dividerColor="?attr/colorOutline" />
 
@@ -211,30 +212,31 @@
                             android:id="@+id/txt_user_stats_selected_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
+                            android:layout_marginBottom="12dp"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
                             android:text="@string/show_all_history"
                             android:textColor="@color/headline"
-                            android:textSize="22sp"
+                            android:textSize="20sp"
                             android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/txt_user_stats_no_history"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:fontFamily="@font/text_hebrew"
                             android:gravity="center"
                             android:text="@string/no_history_to_show"
-                            android:textSize="22sp"
+                            android:textSize="20sp"
                             android:visibility="gone" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recycler_medication_logs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:clipToPadding="false"
                             android:nestedScrollingEnabled="false"
+                            android:paddingBottom="8dp"
                             tools:listitem="@layout/item_medication_usage" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
