@@ -9,7 +9,7 @@
         <item name="android:textColor">@color/text_color</item>
     </style>
 
-    <style name="Theme.SagivProject" parent="Theme.SagivProject.Light"></style>
+    <style name="Theme.SagivProject" parent="Theme.SagivProject.Light"> </style>
 
     <style name="AppTextInputLayoutStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/headline</item>
