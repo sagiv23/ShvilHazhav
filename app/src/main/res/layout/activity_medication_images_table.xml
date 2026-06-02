@@ -49,7 +49,6 @@
                     android:textSize="42sp"
                     android:textStyle="bold" />
 
-                <!-- Search Section -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

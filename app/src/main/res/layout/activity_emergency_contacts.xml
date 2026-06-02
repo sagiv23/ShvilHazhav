@@ -51,7 +51,6 @@
                     android:textSize="42sp"
                     android:textStyle="bold" />
 
-                <!-- Reminder Cards -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_notifications_reminder"
                     android:layout_width="match_parent"

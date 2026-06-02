@@ -90,7 +90,6 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Graphs Section -->
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout_graphs"
                     android:layout_width="match_parent"
@@ -127,7 +126,6 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Medication Logs Section -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

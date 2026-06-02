@@ -71,7 +71,6 @@
             </intent-filter>
         </receiver>
 
-
         <activity
             android:name=".screens.SplashActivity"
             android:exported="true"

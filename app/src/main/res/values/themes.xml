@@ -29,7 +29,6 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.6</item>
 
-        <!-- Restore App Colors for Dialogs -->
         <item name="colorPrimary">@color/background_color_nav</item>
         <item name="colorOnPrimary">@color/nav_text_color</item>
         <item name="colorSecondary">@color/background_color_buttons</item>
@@ -65,28 +64,23 @@
     </style>
 
     <style name="TimePickerCustomTheme" parent="ThemeOverlay.Material3.MaterialTimePicker">
-        <!-- Dialog background -->
         <item name="colorSurface">@color/background_color</item>
         <item name="android:windowBackground">@color/background_color</item>
         <item name="android:colorBackground">@color/background_color</item>
 
-        <!-- Header and active elements -->
         <item name="colorPrimary">@color/headline</item>
         <item name="colorOnPrimary">@color/buttons_text_color</item>
         <item name="colorAccent">@color/headline</item>
 
-        <!-- Time input boxes -->
         <item name="colorSecondaryContainer">@color/background_color_buttons</item>
         <item name="colorOnSecondaryContainer">@color/text_color</item>
 
-        <!-- Clock face and labels -->
         <item name="colorOnSurface">@color/text_color</item>
         <item name="colorOnSurfaceVariant">@color/text_color</item>
         <item name="android:textColorPrimary">@color/text_color</item>
         <item name="android:textColorSecondary">@color/text_color</item>
         <item name="colorOutline">@color/headline</item>
 
-        <!-- Buttons at the bottom -->
         <item name="buttonBarPositiveButtonStyle">@style/TimePickerButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/TimePickerButtonStyle</item>
     </style>

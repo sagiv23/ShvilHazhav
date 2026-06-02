@@ -10,7 +10,6 @@
     </style>
 
     <style name="Theme.SagivProject" parent="Theme.SagivProject.Light">
-        <!-- Night-specific professional tweaks can go here if needed -->
     </style>
 
     <style name="AppTextInputLayoutStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
