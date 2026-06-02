@@ -434,7 +434,6 @@ public class SettingsActivity extends BaseActivity {
     /**
      * Sets up the background and text colors for the theme toggle buttons programmatically
      * to avoid using an external XML selector file and ensure correct contrast.
-     *
      */
     private void setupThemeToggleColors() {
         int[][] states = new int[][]{
