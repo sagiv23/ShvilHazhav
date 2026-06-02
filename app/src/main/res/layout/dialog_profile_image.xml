@@ -85,6 +85,5 @@
             app:cornerRadius="16dp"
             app:strokeColor="?attr/colorOutline"
             app:strokeWidth="1dp" />
-
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -64,6 +64,5 @@
             android:textColor="@color/headline"
             android:textSize="18sp"
             tools:text="סטטוס: הסתיים" />
-
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

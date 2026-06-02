@@ -251,7 +251,6 @@
                             android:fontFamily="@font/text_hebrew"
                             android:text="@string/game_rules_text6"
                             android:textSize="22sp" />
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -323,5 +322,4 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

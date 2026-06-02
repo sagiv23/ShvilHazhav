@@ -380,7 +380,6 @@
                             app:strokeWidth="1dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -396,7 +395,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:tint="@color/text_color" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.fragment.app.FragmentContainerView
@@ -404,5 +402,4 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

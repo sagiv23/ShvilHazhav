@@ -252,7 +252,6 @@
                     app:iconPadding="12dp"
                     app:iconSize="24dp"
                     app:strokeWidth="1dp" />
-
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -262,5 +261,4 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

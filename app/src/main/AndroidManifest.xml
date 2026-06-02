@@ -13,16 +13,13 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
     <!-- הרשאות מיקום (עבור זיהוי נפילות ושליחת מיקום בחירום) -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
     <!-- הרשאות תקשורת ואנשי קשר -->
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <!-- הרשאות חומרה ומדיה -->
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- עבור אנדרואיד 13 ומעלה (במקום READ_EXTERNAL_STORAGE) -->
@@ -31,10 +28,8 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-
     <!-- הרשאות זיהוי פעילות (עבור זיהוי נפילות) -->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-
     <!-- הרשאות התראות ושירותי רקע -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -52,13 +47,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SagivProject">
-
         <service
             android:name=".services.impl.FallDetectionManager"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="health|location" />
-
         <receiver
             android:name=".services.notifications.NotificationReceiver"
             android:enabled="true"
@@ -80,7 +73,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".screens.MainActivity"
             android:exported="false" />
@@ -148,7 +140,5 @@
         <activity
             android:name=".screens.MedicationImagesTableActivity"
             android:exported="false" />
-
     </application>
-
 </manifest>

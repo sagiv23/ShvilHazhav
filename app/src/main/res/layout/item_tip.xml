@@ -86,7 +86,6 @@
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_delete" />
-
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

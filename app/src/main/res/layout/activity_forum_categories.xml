@@ -78,7 +78,6 @@
                     android:textSize="22sp"
                     android:visibility="gone"
                     tools:visibility="visible" />
-
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -133,5 +132,4 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

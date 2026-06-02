@@ -1,6 +1,6 @@
 """
 This module provides utility functions to clean up XML files by removing
-comments and excessive empty lines, while preserving the basic structure.
+comments and ALL empty lines.
 It recursively scans the project for .xml files and applies these cleanups.
 """
 
@@ -16,24 +16,11 @@ def remove_xml_comments(content):
 
 def remove_extra_empty_lines(content):
     """
-    Reduces multiple consecutive empty lines to a single empty line,
-    and removes leading/trailing empty lines.
+    Removes all empty lines from the content.
     """
     lines = content.splitlines()
-    new_lines = []
-    empty_count = 0
-
-    for line in lines:
-        if line.strip() == "":
-            empty_count += 1
-            if empty_count <= 1:
-                new_lines.append("")
-        else:
-            empty_count = 0
-            new_lines.append(line)
-
-    # Join lines and strip to remove leading/trailing blank lines
-    return "\n".join(new_lines).strip()
+    new_lines = [line for line in lines if line.strip() != ""]
+    return "\n".join(new_lines)
 
 def clean_xml_files(project_path):
     """
@@ -53,25 +40,21 @@ def clean_xml_files(project_path):
 
                 try:
                     with open(path, 'r', encoding='utf-8') as f:
-                        content = f.read()
+                        original_content = f.read()
 
                     # Apply cleanups
-                    original_content = content
-                    content = remove_xml_comments(content)
+                    content = remove_xml_comments(original_content)
                     content = remove_extra_empty_lines(content)
 
-                    # Only write back if changes were made
-                    if content != original_content.strip():
+                    # Only write back if the content has changed
+                    if content != original_content:
                         with open(path, 'w', encoding='utf-8') as f:
                             f.write(content)
-                            # Ensure file ends with a newline if it's not empty
-                            if content:
-                                f.write('\n')
 
                 except Exception as e:
                     print(f"Error processing {rel}: {e}")
 
-    print("\nDone! Cleaned XML comments and empty lines.")
+    print("\nDone! Cleaned XML comments and all empty lines.")
 
 if __name__ == "__main__":
     # Use the directory where the script is located as the project root

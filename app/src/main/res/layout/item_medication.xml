@@ -95,6 +95,5 @@
                 android:orientation="vertical"
                 android:paddingVertical="8dp" />
         </androidx.core.widget.NestedScrollView>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

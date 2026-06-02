@@ -102,7 +102,6 @@
                             app:iconPadding="16dp"
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -160,7 +159,6 @@
                             app:iconPadding="16dp"
                             app:iconSize="28dp"
                             app:strokeWidth="1dp" />
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -302,7 +300,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_selected_tip_content"
                             app:strokeWidth="1dp" />
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -324,7 +321,6 @@
                     android:text="@string/no_tips_to_show"
                     android:textSize="24sp"
                     android:visibility="gone" />
-
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -361,7 +357,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="visible" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.fragment.app.FragmentContainerView
@@ -369,5 +364,4 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

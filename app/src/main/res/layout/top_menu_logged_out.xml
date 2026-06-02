@@ -109,5 +109,4 @@
         app:iconPadding="16dp"
         app:iconSize="28dp"
         app:iconTint="@color/nav_text_color" />
-
 </LinearLayout>

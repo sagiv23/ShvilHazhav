@@ -149,7 +149,6 @@
                     android:text="@string/no_emergency_contacts"
                     android:textSize="24sp"
                     android:visibility="gone" />
-
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -229,5 +228,4 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

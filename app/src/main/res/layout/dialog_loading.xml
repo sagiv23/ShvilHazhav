@@ -35,7 +35,6 @@
                 android:text="@string/loading_data"
                 android:textColor="@color/text_color"
                 android:textSize="20sp" />
-
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

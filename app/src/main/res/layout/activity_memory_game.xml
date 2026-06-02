@@ -112,5 +112,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_game_header" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

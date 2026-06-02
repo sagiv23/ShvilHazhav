@@ -49,7 +49,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -57,5 +56,4 @@
         android:layout_height="1dp"
         android:alpha="1"
         android:background="@color/text_color" />
-
 </LinearLayout>

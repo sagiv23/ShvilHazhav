@@ -95,6 +95,5 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_add_admin" />
         </LinearLayout>
-
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
