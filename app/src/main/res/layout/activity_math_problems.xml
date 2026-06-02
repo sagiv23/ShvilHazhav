@@ -141,7 +141,7 @@
                             android:columnCount="4"
                             android:layoutDirection="ltr">
 
-                            -- Row 1 -->
+                            <!-- Row 1 -->
                             <com.google.android.material.button.MaterialButton
                                 android:layout_width="0dp"
                                 android:layout_height="80dp"
