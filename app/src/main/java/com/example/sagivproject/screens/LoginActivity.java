@@ -1,5 +1,6 @@
 package com.example.sagivproject.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -48,6 +49,8 @@ public class LoginActivity extends BaseActivity {
         setupMenu();
 
         findViewById(R.id.btnLogin).setOnClickListener(v -> tryLogin());
+        findViewById(R.id.tv_login_go_to_register).setOnClickListener(v -> onNavigate(new Intent(this, RegisterActivity.class)));
+
         editTextEmail = findViewById(R.id.edt_login_email);
         editTextPassword = findViewById(R.id.edt_login_password);
 

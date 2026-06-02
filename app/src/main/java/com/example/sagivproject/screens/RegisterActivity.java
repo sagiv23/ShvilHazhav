@@ -61,6 +61,8 @@ public class RegisterActivity extends BaseActivity {
         setupMenu();
 
         findViewById(R.id.btnRegister).setOnClickListener(v -> tryRegister());
+        findViewById(R.id.tv_register_go_to_login).setOnClickListener(v -> finish());
+
         editTextFirstName = findViewById(R.id.edt_register_first_name);
         editTextLastName = findViewById(R.id.edt_register_last_name);
         editTextBirthDate = findViewById(R.id.edt_register_birth_date);

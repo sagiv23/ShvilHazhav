@@ -176,4 +176,6 @@
     <string name="creating_tip">יוצר טיפ באמצעות AI…</string>
     <string name="creating_inspiration">יוצר השראה באמצעות AI…</string>
     <string name="loading_data">טוען נתונים, נא להמתין…</string>
+    <string name="dont_have_account">אין לך חשבון? הירשם כאן</string>
+    <string name="already_have_account">כבר יש לך חשבון? התחבר כאן</string>
 </resources>

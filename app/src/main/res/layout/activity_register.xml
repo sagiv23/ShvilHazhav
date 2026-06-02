@@ -197,6 +197,17 @@
                             android:textSize="22sp"
                             app:cornerRadius="16dp"
                             app:strokeWidth="1dp" />
+
+                        <TextView
+                            android:id="@+id/tv_register_go_to_login"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/text_hebrew"
+                            android:padding="8dp"
+                            android:text="@string/already_have_account"
+                            android:textSize="18sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
