@@ -53,7 +53,6 @@
     <string name="medication_name">שם התרופה</string>
     <string name="add_user">הוספת משתמש</string>
     <string name="write_here">הקלד כאן…</string>
-    <string name="search_by">חפש לפי:</string>
     <string name="edit_details">עריכת פרטים</string>
     <string name="find_enemy">מצא יריב</string>
     <string name="add_medication_img">הוספת תמונה של תרופה</string>
@@ -148,7 +147,6 @@
     <string name="emergency_sms_content">אני זקוק לעזרה בדחיפות! המיקום שלי: </string>
     <string name="no_emergency_contacts">לא הוגדרו אנשי קשר לחירום.</string>
     <string name="icon_emergency_contacts">אייקון אנשי קשר לחירום</string>
-    <string name="choose_from_contacts">בחירה מאנשי קשר</string>
     <string name="fall_detection">זיהוי נפילות</string>
     <string name="laster">מאוחר יותר</string>
     <string name="fall_detection_is_disabled">זיהוי נפילות אינו פעיל</string>
