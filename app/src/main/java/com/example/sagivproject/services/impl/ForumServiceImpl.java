@@ -87,7 +87,7 @@ public class ForumServiceImpl extends BaseDatabaseService<ForumMessage> implemen
     @Override
     public void sendMessage(User user, String text, String categoryId, @Nullable DatabaseCallback<Void> callback) {
         String path = getCategoryPath(categoryId);
-        String messageId = readData(path).push().getKey();
+        String messageId = generateId();
 
         if (messageId == null) {
             if (callback != null)

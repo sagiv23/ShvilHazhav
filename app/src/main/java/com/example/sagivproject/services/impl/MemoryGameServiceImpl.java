@@ -83,7 +83,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     @Inject
     public MemoryGameServiceImpl(FirebaseDatabase firebaseDatabase) {
         super(firebaseDatabase, ROOMS_PATH, GameRoom.class);
-        this.roomsReference = firebaseDatabase.getReference(ROOMS_PATH);
+        this.roomsReference = readData(ROOMS_PATH);
     }
 
     /**
@@ -148,7 +148,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
                 }
 
                 // 3. No suitable rooms found; create a new waiting room
-                String newRoomId = roomsReference.push().getKey();
+                String newRoomId = generateId();
                 if (newRoomId == null) return Transaction.abort();
 
                 GameRoom newRoom = new GameRoom(newRoomId, user);
@@ -235,54 +235,49 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
                 callback.onFailed(error.toException());
             }
         };
-        roomsReference.child(roomId).addValueEventListener(listener);
+        readData(ROOMS_PATH + "/" + roomId).addValueEventListener(listener);
         roomStatusListeners.put(roomId, listener);
     }
 
     @Override
     public void removeRoomListener(@NonNull String roomId) {
         ValueEventListener listener = roomStatusListeners.remove(roomId);
-        if (listener != null) roomsReference.child(roomId).removeEventListener(listener);
+        if (listener != null) readData(ROOMS_PATH + "/" + roomId).removeEventListener(listener);
     }
 
     @Override
     public void cancelRoom(@NonNull String roomId, @Nullable DatabaseCallback<Void> callback) {
-        roomsReference.child(roomId).runTransaction(new Transaction.Handler() {
-            @NonNull
+        runTransaction(ROOMS_PATH + "/" + roomId, room -> {
+            if (room != null && STATUS_WAITING.equals(room.getStatus()) && room.getPlayer2Uid() == null) {
+                return null; // Deletes the room node
+            }
+            return room;
+        }, (callback == null) ? null : new DatabaseCallback<>() {
             @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                GameRoom room = currentData.getValue(GameRoom.class);
-                if (room != null && STATUS_WAITING.equals(room.getStatus()) && room.getPlayer2Uid() == null) {
-                    currentData.setValue(null);
-                }
-                return Transaction.success(currentData);
+            public void onCompleted(GameRoom result) {
+                callback.onCompleted(null);
             }
 
             @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                if (callback != null) {
-                    if (error != null) callback.onFailed(error.toException());
-                    else callback.onCompleted(null);
-                }
+            public void onFailed(Exception e) {
+                callback.onFailed(e);
             }
         });
     }
 
     @Override
     public void initGameBoard(String roomId, List<Card> cards, String firstTurnUid, DatabaseCallback<Void> callback) {
-        Map<String, Object> roomUpdates = new HashMap<>();
-        roomUpdates.put(FIELD_CURRENT_TURN_UID, firstTurnUid);
-        roomUpdates.put(FIELD_STATUS, STATUS_PLAYING);
-        roomsReference.child(roomId).child(FIELD_CARDS).setValue(cards)
-                .addOnSuccessListener(aVoid -> roomsReference.child(roomId).updateChildren(roomUpdates, (error, ref) -> {
-                    if (callback != null) {
-                        if (error != null) callback.onFailed(error.toException());
-                        else callback.onCompleted(null);
-                    }
-                }))
-                .addOnFailureListener(e -> {
-                    if (callback != null) callback.onFailed(e);
-                });
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(FIELD_CURRENT_TURN_UID, firstTurnUid);
+        updates.put(FIELD_STATUS, STATUS_PLAYING);
+        updates.put(FIELD_CARDS, cards);
+
+        readData(ROOMS_PATH + "/" + roomId).updateChildren(updates, (error, ref) -> {
+            if (callback != null) {
+                if (error != null) callback.onFailed(error.toException());
+                else callback.onCompleted(null);
+            }
+        });
     }
 
     /**
@@ -314,20 +309,20 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
                 callback.onFailed(error.toException());
             }
         };
-        roomsReference.child(roomId).addValueEventListener(activeGameListener);
+        readData(ROOMS_PATH + "/" + roomId).addValueEventListener(activeGameListener);
     }
 
     @Override
     public void stopListeningToGame(String roomId) {
         if (activeGameListener != null) {
-            roomsReference.child(roomId).removeEventListener(activeGameListener);
+            readData(ROOMS_PATH + "/" + roomId).removeEventListener(activeGameListener);
             activeGameListener = null;
         }
     }
 
     @Override
     public void updateRoomField(String roomId, String field, Object value) {
-        roomsReference.child(roomId).child(field).setValue(value);
+        writeData(ROOMS_PATH + "/" + roomId + "/" + field, value, null);
     }
 
     /**
@@ -361,7 +356,7 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
 
     @Override
     public void finishGame(String roomId, String winnerUid, @Nullable DatabaseCallback<Boolean> callback) {
-        roomsReference.child(roomId).runTransaction(new Transaction.Handler() {
+        readData(ROOMS_PATH + "/" + roomId).runTransaction(new Transaction.Handler() {
             private boolean transitioned = false;
 
             @NonNull
@@ -403,9 +398,10 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
     @Override
     public void updateCardStatus(String roomId, int index, boolean revealed, boolean matched) {
         if (index < 0) return;
-        DatabaseReference cardRef = roomsReference.child(roomId).child(FIELD_CARDS).child(String.valueOf(index));
-        cardRef.child(FIELD_IS_REVEALED).setValue(revealed);
-        cardRef.child(FIELD_IS_MATCHED).setValue(matched);
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(FIELD_IS_REVEALED, revealed);
+        updates.put(FIELD_IS_MATCHED, matched);
+        readData(ROOMS_PATH + "/" + roomId + "/" + FIELD_CARDS + "/" + index).updateChildren(updates);
     }
 
     @Override
@@ -419,14 +415,14 @@ public class MemoryGameServiceImpl extends BaseDatabaseService<GameRoom> impleme
      */
     @Override
     public void setupForfeitOnDisconnect(String roomId, String opponentUid) {
-        DatabaseReference roomRef = roomsReference.child(roomId);
+        DatabaseReference roomRef = readData(ROOMS_PATH + "/" + roomId);
         roomRef.child(FIELD_STATUS).onDisconnect().setValue(STATUS_FINISHED);
         roomRef.child(FIELD_WINNER_UID).onDisconnect().setValue(opponentUid);
     }
 
     @Override
     public void removeForfeitOnDisconnect(String roomId) {
-        DatabaseReference roomRef = roomsReference.child(roomId);
+        DatabaseReference roomRef = readData(ROOMS_PATH + "/" + roomId);
         roomRef.child(FIELD_STATUS).onDisconnect().cancel();
         roomRef.child(FIELD_WINNER_UID).onDisconnect().cancel();
     }
